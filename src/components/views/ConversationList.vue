@@ -1,6 +1,6 @@
 <template>
     <div
-        class="conversation-list-page"
+        class="conversation-list-page messages-page"
         :class="[
             config.module_coordinate_by_message
                 ? 'module--coordinate-by-message'
@@ -21,8 +21,11 @@
                 <div class="col-sm-8 col-md-8" :class="{ 'hidden-xs': hide }">
                     <div class="conversation_list">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <div class="input-group">
+                            <li class="list-group-item messages-page__list-header">
+                                <h1 class="messages-page__title hidden-xs">
+                                    {{ $t('mensajes') }}
+                                </h1>
+                                <div class="input-group messages-page__search">
                                     <input
                                         v-jump:click="'btn-search'"
                                         v-model="textSearch"
@@ -47,14 +50,20 @@
                                         </button>
                                     </span>
                                 </div>
+                                <FilterChips
+                                    v-if="textSearch.length === 0"
+                                    v-model="messagesFilter"
+                                    class="messages-page__filters"
+                                    :options="messagesFilterChips"
+                                />
                             </li>
                             <template v-if="textSearch.length == 0">
                                 <Loading
                                     class="conversation_chat--chats"
-                                    :data="conversations"
+                                    :data="filteredConversations"
                                 >
                                     <li
-                                        v-for="conversation in conversations"
+                                        v-for="conversation in filteredConversations"
                                         class="list-group-item conversation_header"
                                         @click="
                                             onChangeConversation(conversation)
@@ -63,13 +72,31 @@
                                             unread: conversation.unread,
                                             active:
                                                 selectedId != null &&
-                                                conversation.id === selectedId
+                                                conversation.id === selectedId,
+                                            'conversation_header--group':
+                                                isTripGroupConversation(
+                                                    conversation
+                                                )
                                         }"
                                         :key="conversation.id"
                                     >
                                         <div class="media">
                                             <div class="media-left">
                                                 <div
+                                                    v-if="
+                                                        isTripGroupConversation(
+                                                            conversation
+                                                        )
+                                                    "
+                                                    class="conversation_image conversation_image--group circle-box"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-car"
+                                                    ></i>
+                                                </div>
+                                                <div
+                                                    v-else
                                                     class="conversation_image circle-box"
                                                     v-imgSrc:conversation="
                                                         conversation.image
@@ -127,17 +154,24 @@
                                                     }}
                                                 </span>
                                             </div>
-                                            <div
-                                                class="media-right"
-                                                v-if="conversation.last_message"
-                                            >
-                                                {{
-                                                    dayjs(
-                                                        conversation
-                                                            .last_message
-                                                            .created_at
-                                                    ).fromNow()
-                                                }}
+                                            <div class="media-right messages-page__row-meta">
+                                                <span
+                                                    v-if="conversation.last_message"
+                                                    class="conversation-time"
+                                                >
+                                                    {{
+                                                        dayjs(
+                                                            conversation
+                                                                .last_message
+                                                                .created_at
+                                                        ).fromNow()
+                                                    }}
+                                                </span>
+                                                <span
+                                                    v-if="conversation.unread"
+                                                    class="conversation_header__unread-dot"
+                                                    aria-hidden="true"
+                                                ></span>
                                             </div>
                                         </div>
                                     </li>
@@ -223,6 +257,7 @@ import { useActionbarsStore } from '../../stores/actionbars';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
+import FilterChips from '../elements/FilterChips.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
 import dayjs from '../../dayjs';
@@ -230,12 +265,17 @@ import {
     formatTripGroupChatTitle,
     isTripGroupConversation
 } from '../../utils/tripGroupChatTitle';
+import {
+    countConversationsByKind,
+    filterConversationsByKind
+} from '../../utils/conversationListFilter';
 
 export default {
     name: 'conversation-list',
     data() {
         return {
-            textSearch: ''
+            textSearch: '',
+            messagesFilter: 'all'
         };
     },
 
@@ -258,6 +298,32 @@ export default {
 
         hide() {
             return this.$route.meta.hide;
+        },
+        messagesFilterCounts() {
+            return countConversationsByKind(this.conversations);
+        },
+        messagesFilterChips() {
+            const counts = this.messagesFilterCounts;
+            return [
+                {
+                    id: 'all',
+                    label: `${this.$t('filtroMensajesTodos')} ${counts.all}`
+                },
+                {
+                    id: 'group',
+                    label: `${this.$t('filtroMensajesGrupales')} ${counts.group}`
+                },
+                {
+                    id: 'individual',
+                    label: `${this.$t('filtroMensajesIndividuales')} ${counts.individual}`
+                }
+            ];
+        },
+        filteredConversations() {
+            return filterConversationsByKind(
+                this.conversations,
+                this.messagesFilter
+            );
         }
     },
 
@@ -352,7 +418,8 @@ export default {
     components: {
         Loading,
         CoordinateTrip,
-        UserNameWithBadge
+        UserNameWithBadge,
+        FilterChips
     }
 };
 </script>

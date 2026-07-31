@@ -1,0 +1,200 @@
+/* Messages list + chat thread visual layer */
+.messages-page {
+    --messages-outgoing-bg: #e3f2f8;
+    --messages-incoming-bg: #ececec;
+    --messages-selected-bg: #e8f4fa;
+    --messages-accent: #016587;
+    --messages-page-bg: #f0f0f0;
+    font-family: var(--ds-font-family);
+}
+
+.messages-page__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    color: #222;
+}
+
+.messages-page__list-header {
+    border: none !important;
+    padding-bottom: 0.5rem;
+}
+
+.messages-page__search {
+    margin-bottom: 0.75rem;
+}
+
+.messages-page__filters {
+    margin-bottom: 0.5rem;
+    padding-left: 0;
+}
+
+.messages-page .conversation_header {
+    border-left: none;
+    border-right: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.messages-page .conversation_header.active,
+.messages-page .conversation_header.active:hover,
+.messages-page .conversation_header.active:focus {
+    background: var(--messages-selected-bg);
+}
+
+.messages-page .conversation_header.unread,
+.messages-page .conversation_header.unread:hover,
+.messages-page .conversation_header.unread:focus {
+    background: transparent;
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
+.messages-page .conversation_header.unread.active {
+    background: var(--messages-selected-bg);
+}
+
+.messages-page .conversation_image--group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f4fa;
+    color: var(--messages-accent);
+    font-size: 1.25rem;
+}
+
+.messages-page__row-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.messages-page .conversation-time {
+    font-size: 0.7rem;
+    color: #888;
+}
+
+.messages-page .conversation_header__unread-dot {
+    display: inline-block;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--messages-accent);
+}
+
+.messages-page .conversation-lastmessage {
+    color: #666;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+/* Thread bubbles */
+.messages-page .message-wrapper .message {
+    background: var(--messages-incoming-bg);
+    color: #222;
+    border-radius: 1rem;
+    border-bottom-left-radius: 0.25rem;
+    max-width: 85%;
+}
+
+.messages-page .message-wrapper-me .message {
+    background: var(--messages-outgoing-bg);
+    color: #222;
+    border-radius: 1rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.messages-page .message_meta {
+    color: #888;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.messages-page .message-day-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.75rem 0 1rem;
+}
+
+.messages-page .message-day-separator__label {
+    background: #f5f5f5;
+    color: #666;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.messages-page .conversation_user_header {
+    border: none;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.messages-page .conversation_user_header h2 {
+    font-size: 1.15rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    margin: 0;
+}
+
+.messages-page .conversation_user_header_title_row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.messages-page .message-composer {
+    border: none;
+    background: #fff;
+    padding: 0.75rem;
+}
+
+.messages-page .message-composer-editor-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    padding: 0.35rem 0.35rem 0.35rem 0.5rem;
+    background: #fff;
+}
+
+.messages-page .message-composer-editor {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.messages-page .message-composer-send {
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    background: var(--messages-accent);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.45;
+}
+
+.messages-page .message-composer-send.active {
+    opacity: 1;
+}
+
+.messages-page .message-composer-send:disabled {
+    opacity: 0.35;
+}
+
+@media only screen and (min-width: 768px) {
+    .messages-page .conversation-component.container {
+        background: transparent;
+    }
+
+    .messages-page .conversation_list,
+    .messages-page .conversation-container {
+        background: #fff;
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+}
