@@ -97,4 +97,11 @@ describe('TripCardShell.vue', () => {
     it('declares profile-click and detail-click emits', () => {
         expect(viewSource).toMatch(/emits:\s*\[[\s\S]*?'profile-click'[\s\S]*?'detail-click'[\s\S]*?\]/);
     });
+
+    it('adds no-driver modifier class when user is missing', () => {
+        expect(viewSource).toContain('trip-card-shell--no-driver');
+        expect(viewSource).toMatch(
+            /trip-card-shell--no-driver[\s\S]*!user|!user[\s\S]*trip-card-shell--no-driver/
+        );
+    });
 });

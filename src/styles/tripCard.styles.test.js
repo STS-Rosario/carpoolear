@@ -57,6 +57,14 @@ describe('trip card styles', () => {
         );
     });
 
+    it('compacts the header without :has for lightningcss minify compatibility', () => {
+        expect(css).not.toContain(':has(');
+        expect(css).toContain('.trip-card-shell--no-driver');
+        expect(css).toMatch(
+            /\.trip-card-shell--no-driver[\s\S]*\.trip-card-shell__seats[\s\S]*position:\s*static/
+        );
+    });
+
     it('is imported from main.css', () => {
         expect(mainCss).toContain('./components/trip-card.css');
     });
