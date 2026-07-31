@@ -117,7 +117,7 @@
                         :disabled="sending.message"
                         :title="$t('enviarMensaje')"
                     >
-                        <i class="fa fa-play" aria-hidden="true"></i>
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -447,11 +447,11 @@ export default {
     margin-top: 1.5rem;
 }
 #btn-send {
-    color: #ccc;
-    transition: color 200ms linear;
+    color: #fff;
+    transition: opacity 200ms linear, background-color 200ms linear;
 }
 #btn-send.active {
-    color: #333;
+    color: #fff;
 }
 .message-composer-editor-wrap {
     display: flex;

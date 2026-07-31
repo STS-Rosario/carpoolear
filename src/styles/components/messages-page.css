@@ -3,8 +3,9 @@
     --messages-outgoing-bg: #e3f2f8;
     --messages-incoming-bg: #ececec;
     --messages-selected-bg: #e8f4fa;
-    --messages-accent: #016587;
+    --messages-accent: var(--ds-action, #1e5f9e);
     --messages-page-bg: #f0f0f0;
+    --messages-shell-border: #d9d9d9;
     font-family: var(--ds-font-family);
 }
 
@@ -30,16 +31,35 @@
 }
 
 .messages-page .conversation_header {
-    border-left: none;
+    border-left: 3px solid transparent;
     border-right: none;
+    border-radius: 0;
     cursor: pointer;
     transition: background-color 0.15s ease;
+    color: #222;
+}
+
+.messages-page .conversation_header .media-heading,
+.messages-page .conversation_header .conversation-title,
+.messages-page .conversation_header .conversation-title a {
+    color: #222;
 }
 
 .messages-page .conversation_header.active,
 .messages-page .conversation_header.active:hover,
 .messages-page .conversation_header.active:focus {
     background: var(--messages-selected-bg);
+    border-color: #ddd;
+    border-left: 3px solid var(--messages-accent);
+    border-radius: 0 !important;
+    color: #222;
+}
+
+.messages-page .conversation_header.active .media-heading,
+.messages-page .conversation_header.active .conversation-title,
+.messages-page .conversation_header.active .conversation-title a,
+.messages-page .conversation_header.active .list-group-item-heading {
+    color: #222;
 }
 
 .messages-page .conversation_header.unread,
@@ -49,8 +69,12 @@
     font-weight: var(--ds-font-weight-bold, 700);
 }
 
-.messages-page .conversation_header.unread.active {
+.messages-page .conversation_header.unread.active,
+.messages-page .conversation_header.unread.active:hover,
+.messages-page .conversation_header.unread.active:focus {
     background: var(--messages-selected-bg);
+    border-left: 3px solid var(--messages-accent);
+    color: #222;
 }
 
 .messages-page .conversation_image--group {
@@ -128,12 +152,15 @@
     border: none;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
+    background: #fff;
 }
 
-.messages-page .conversation_user_header h2 {
+.messages-page .conversation_user_header h2,
+.messages-page .conversation_user_header h2 a {
     font-size: 1.15rem;
     font-weight: var(--ds-font-weight-bold, 700);
     margin: 0;
+    color: #222;
 }
 
 .messages-page .conversation_user_header_title_row {
@@ -161,6 +188,10 @@
     color: var(--messages-accent);
 }
 
+.messages-page .conversation-messages {
+    background: #fff;
+}
+
 .messages-page .message-composer {
     border: none;
     background: #fff;
@@ -172,7 +203,7 @@
     align-items: flex-end;
     gap: 0.5rem;
     border: 1px solid #ddd;
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     padding: 0.35rem 0.35rem 0.35rem 0.5rem;
     background: #fff;
 }
@@ -198,19 +229,25 @@
     flex: 0 0 auto;
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 50%;
+    border-radius: 0.35rem;
     border: none;
-    background: var(--messages-accent);
-    color: #fff !important;
+    background: var(--ds-action);
+    color: var(--ds-action-on, #fff) !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.45;
+    opacity: 1;
+}
+
+.messages-page .message-composer-send:not(.active),
+.messages-page #btn-send:not(.active) {
+    opacity: 0.55;
 }
 
 .messages-page .message-composer-send.active,
 .messages-page #btn-send.active {
     opacity: 1;
+    background: var(--ds-action);
 }
 
 .messages-page .message-composer-send:disabled {
@@ -222,10 +259,35 @@
         background: transparent;
     }
 
+    .messages-page .conversation-component > .row {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .messages-page__shell {
+        background: #fff;
+        border-left: 1px solid var(--messages-shell-border);
+        border-right: 1px solid var(--messages-shell-border);
+        border-top: 1px solid var(--messages-shell-border);
+        border-bottom: 1px solid var(--messages-shell-border);
+        border-radius: 0;
+        overflow: hidden;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     .messages-page .conversation_list,
     .messages-page .conversation-container {
         background: #fff;
-        border-radius: 0.75rem;
+        border-radius: 0;
         overflow: hidden;
+    }
+
+    .messages-page .conversation_list {
+        border-right: 1px solid var(--messages-shell-border);
+    }
+
+    .messages-page .conversation_chat > .list-group > .list-group-item {
+        background: #fff;
     }
 }

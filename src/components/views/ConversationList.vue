@@ -17,7 +17,7 @@
             class="conversation-component container"
             :class="config.enable_footer ? 'with-footer' : 'without-footer'"
         >
-            <div class="row">
+            <div class="row messages-page__shell">
                 <div class="col-sm-8 col-md-8" :class="{ 'hidden-xs': hide }">
                     <div class="conversation_list">
                         <ul class="list-group">
