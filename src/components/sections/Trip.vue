@@ -456,7 +456,7 @@ export default {
 .trip-seats-control__label {
     font-family: var(--ds-font-family);
     font-size: 0.9rem;
-    font-weight: var(--ds-font-weight-bold, 700);
+    font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-text-primary, #222);
 }
 
@@ -497,7 +497,7 @@ export default {
     color: var(--ds-destructive, #991b1b);
     font-family: var(--ds-font-family);
     font-size: 0.95rem;
-    font-weight: var(--ds-font-weight-bold, 700);
+    font-weight: var(--ds-font-weight-normal, 400);
     text-align: center;
     padding: 0.25rem;
     cursor: pointer;
