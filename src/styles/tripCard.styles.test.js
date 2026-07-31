@@ -29,6 +29,15 @@ describe('trip card styles', () => {
             /\.trip-card-shell__avatar\s*\{[\s\S]*width:\s*2\.25rem/
         );
         expect(css).toMatch(
+            /\.trip-card-shell__avatar\s*\{[\s\S]*background-size:\s*cover/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__avatar\s*\{[\s\S]*background-position:\s*center/
+        );
+        expect(css).not.toMatch(
+            /\.trip-card-shell__avatar\s*\{[^}]*\bbackground:\s*var\(--ds-input-disabled-bg\)/
+        );
+        expect(css).toMatch(
             /\.trip-card-shell__detail\s*\{[\s\S]*padding:\s*0\.375rem/
         );
     });

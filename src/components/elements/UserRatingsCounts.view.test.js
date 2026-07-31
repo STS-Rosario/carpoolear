@@ -15,7 +15,7 @@ describe('UserRatingsCounts.vue', () => {
         expect(viewSource).toContain('user-ratings-counts');
         expect(viewSource).toContain('user-ratings-counts__icon-slot');
         expect(viewSource).toContain('user-ratings-counts__icon-slot--neutral');
-        expect(viewSource).toMatch(
+        expect(viewSource).not.toMatch(
             /\.user-ratings-counts__icon-slot--neutral[\s\S]*padding-top:\s*0\.6em/
         );
         expect(viewSource).toContain('rate-neutral-icon');
@@ -26,7 +26,7 @@ describe('UserRatingsCounts.vue', () => {
         );
     });
 
-    it('uses profile-matching green and red icon colors with spaced icon-number pairs', () => {
+    it('keeps rating pairs compact with tight icon-to-number spacing and aligned icons', () => {
         expect(viewSource).toContain('user-ratings-counts__icon--positive');
         expect(viewSource).toContain('user-ratings-counts__icon--negative');
         expect(viewSource).toContain('color: #59b200');
@@ -34,10 +34,19 @@ describe('UserRatingsCounts.vue', () => {
         expect(viewSource).toContain('user-ratings-counts__pair--positive');
         expect(viewSource).toContain('user-ratings-counts__pair--negative');
         expect(viewSource).toMatch(
-            /\.user-ratings-counts__pair--positive[\s\S]*gap:\s*0\.65em/
+            /\.user-ratings-counts\s*\{[\s\S]*gap:\s*0\.4em/
         );
         expect(viewSource).toMatch(
-            /\.user-ratings-counts__pair--negative[\s\S]*margin-left:\s*0\.15em/
+            /\.user-ratings-counts__pair--positive[\s\S]*gap:\s*0\.25em/
+        );
+        expect(viewSource).toMatch(
+            /\.user-ratings-counts__pair--neutral[\s\S]*gap:\s*0\.25em/
+        );
+        expect(viewSource).toMatch(
+            /\.user-ratings-counts__pair--negative[\s\S]*gap:\s*0\.25em/
+        );
+        expect(viewSource).toMatch(
+            /\.user-ratings-counts__icon-slot--neutral\s*\{[\s\S]*padding-top:\s*0/
         );
     });
 
