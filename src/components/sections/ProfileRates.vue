@@ -87,13 +87,13 @@
                     class="edit-action edit-action-reference"
                     v-if="canWriteReference"
                 >
-                    <button
+                    <AppButton
                         v-if="!sendReferenceFormVisibility"
-                        class="btn btn-primary"
+                        variant="primary"
                         @click="showReferenceConfirmation"
                     >
                         {{ $t('enviarReferencia') }}
-                    </button>
+                    </AppButton>
                     <modal
                         v-if="referenceConfirmationVisibility"
                         name="reference-confirmation-modal"
@@ -231,6 +231,7 @@ import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
 import Spinner from '../Spinner.vue';
 import modal from '../Modal';
+import AppButton from '../ui/AppButton.vue';
 import dialogs from '../../services/dialogs.js';
 import {
     isNegativeRating,
@@ -468,7 +469,8 @@ export default {
         Loading,
         RateItem,
         Spinner,
-        modal
+        modal,
+        AppButton
     }
 };
 </script>
