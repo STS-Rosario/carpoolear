@@ -571,6 +571,16 @@ export default {
     position: absolute;
     top: -0.55rem;
     right: -0.85rem;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #e53935;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.15rem;
+    text-align: center;
 }
 .header_panel-right {
     display: flex !important;
