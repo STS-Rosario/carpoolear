@@ -93,6 +93,8 @@
     --ds-header-donate-hover-bg: #991B1B;
     --ds-header-donate-hover-border: #7F1D1D;
     --ds-header-bg: #1E5F9E;
+    --ds-header-mobile-padding-x: 1rem;
+    --ds-header-mobile-padding-y: 0.75rem;
 
     /* Inputs */
     --ds-input-bg: #FFFFFF;

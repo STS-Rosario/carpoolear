@@ -4,6 +4,7 @@
 @import url('./components/app-page-title.css');
 @import url('./components/app-info-card.css');
 @import url('./components/login-page.css');
+@import url('./components/header-mobile.css');
 @import url('./base.css');
 :root {
   --main-background: #F0F0F0;

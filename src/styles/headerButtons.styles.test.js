@@ -42,9 +42,20 @@ describe('HeaderApp header buttons and branding', () => {
     });
 
     it('shows a simplified mobile header with logo and Doná when the logo is visible', () => {
+        const headerMobileCss = fs.readFileSync(
+            path.resolve(__dirname, 'components/header-mobile.css'),
+            'utf8'
+        );
         expect(headerSource).toContain('mobile-header-bar--branded');
         expect(headerSource).toContain('showBrandedMobileHeader');
         expect(headerSource).toContain("'login'");
+        expect(headerMobileCss).toContain(
+            '.mobile-header-bar--branded.visible-xs'
+        );
+        expect(headerMobileCss).toMatch(
+            /\.mobile-header-bar--branded\.visible-xs\s*\{[^}]*display:\s*flex !important/
+        );
+        expect(headerMobileCss).toContain('var(--ds-header-mobile-padding-x)');
         expect(headerSource).toMatch(
             /showBrandedMobileHeader[\s\S]*header_logo/
         );

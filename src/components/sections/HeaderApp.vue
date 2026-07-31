@@ -569,34 +569,6 @@ export default {
     width: 26px;
     margin-left: 0.3em;
 }
-.mobile-header-bar--branded {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: nowrap;
-    gap: 0.75rem;
-    width: 100%;
-    min-height: 3rem;
-}
-.mobile-header-bar__brand {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
-    min-width: 0;
-}
-.mobile-header-bar__logo-link {
-    display: inline-flex;
-    align-items: center;
-}
-.mobile-header-bar__logo {
-    display: block;
-    height: 1.75rem;
-    width: auto;
-}
-.mobile-header-bar__donate {
-    flex: 0 0 auto;
-    margin-left: auto;
-}
 .header_logo-image {
     display: block;
     height: 2rem;
