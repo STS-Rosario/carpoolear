@@ -54,10 +54,6 @@
                 <AppPageTitle v-if="!(success && isMobile)">
                     {{ $t('RegistrarNuevoUsuario') }}
                 </AppPageTitle>
-                <div class="campos-obligatorios">
-                    {{ $t('camposObligatorios') }}
-                </div>
-                <br />
                 <AppInput
                     autofocus
                     ref="txt_name"
@@ -66,18 +62,10 @@
                     type="text"
                     id="txt_name"
                     v-model="name"
+                    :label="$t('nombre')"
                     :placeholder="$t('nombre')"
                     :error="nombreError.state ? nombreError.message : ''"
-                >
-                    <template #label>
-                        {{ $t('nombre') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="nombreError.state">
                     {{ nombreError.message }}
                 </span>
@@ -88,18 +76,10 @@
                     type="text"
                     id="txt_surename"
                     v-model="sureName"
+                    :label="$t('apellido')"
                     :placeholder="$t('apellido')"
                     :error="apellidoError.state ? apellidoError.message : ''"
-                >
-                    <template #label>
-                        {{ $t('apellido') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="apellidoError.state">
                     {{ apellidoError.message }}
                 </span>
@@ -115,18 +95,10 @@
                     spellcheck="false"
                     inputmode="email"
                     v-model="email"
+                    :label="$t('email')"
                     :placeholder="$t('email')"
                     :error="emailError.message"
-                >
-                    <template #label>
-                        {{ $t('email') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="emailError.state">
                     {{ emailError.message }}
                 </span>
@@ -138,23 +110,14 @@
                     type="text"
                     id="txt_email_verification"
                     v-model="emailVerification"
+                    :label="$t('emailVerification')"
                     :placeholder="$t('emailVerification')"
                     :error="emailVerificationError.state ? emailVerificationError.message : ''"
-                >
-                    <template #label>
-                        {{ $t('emailVerification') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="emailVerificationError.state">
                     {{ emailVerificationError.message }}
                 </span>
-                <!--<label for="">Fecha de nacimiento <span aria-label="Campo obligatorio" class="campo-obligatorio">*</span></label>
-        <DatePicker :model-value="birthday" ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>-->
+                <!-- Fecha de nacimiento field temporarily disabled -->
                 <span class="error" v-if="birthdayError.state">
                     {{ birthdayError.message }}
                 </span>
@@ -166,20 +129,12 @@
                     autocomplete="new-password"
                     v-model="password"
                     password
+                    :label="$t('password')"
                     :placeholder="$t('password')"
                     :error="passwordError.state ? passwordError.message : ''"
                     :show-password-label="$t('mostrarContrasena')"
                     :hide-password-label="$t('ocultarContrasena')"
-                >
-                    <template #label>
-                        {{ $t('password') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="passwordError.state">
                     {{ passwordError.message }}
                 </span>
@@ -191,20 +146,12 @@
                     autocomplete="new-password"
                     v-model="passwordConfirmation"
                     password
+                    :label="$t('ingresePassword')"
                     :placeholder="$t('ingresePassword')"
                     :error="passwordError.state ? passwordError.message : ''"
                     :show-password-label="$t('mostrarContrasena')"
                     :hide-password-label="$t('ocultarContrasena')"
-                >
-                    <template #label>
-                        {{ $t('ingresePassword') }}
-                        <span
-                            :aria-label="$t('campoObligatorio')"
-                            class="campo-obligatorio"
-                            >*</span
-                        >
-                    </template>
-                </AppInput>
+                />
                 <span class="error" v-if="passwordError.state">
                     {{ passwordError.message }}
                 </span>
@@ -240,11 +187,6 @@
                     <div class="form-group">
                         <label for="tipoDeCuenta">
                             {{ $t('tipoDeCuenta') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
                         </label>
                         <select
                             v-model="account_type"
@@ -266,11 +208,6 @@
                     <div class="form-group">
                         <label for="bancoDeCuenta">
                             {{ $t('bancoDeCuenta') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
                         </label>
                         <select
                             v-model="account_bank"
@@ -292,11 +229,6 @@
                     <div class="form-group">
                         <label for="accountNumber">
                             {{ $t('numeroDeCuenta') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
                         </label>
                         <input
                             v-model="account_number"
@@ -325,10 +257,7 @@
                             <router-link
                                 class="register-form__terms-link"
                                 :to="{ name: 'terms' }"
-                            >
-                                {{ $t('leidoTerminos2') }}
-                            </router-link>
-                            .
+                            >{{ $t('leidoTerminos2') }}</router-link>.
                         </label>
                     </div>
                     <AppButton
@@ -832,10 +761,6 @@ export default {
 </style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.campo-obligatorio,
-.campos-obligatorios {
-    color: red;
-}
 input[type='checkbox'] {
     width: auto;
 }

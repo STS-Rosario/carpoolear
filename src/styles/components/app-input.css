@@ -20,6 +20,7 @@
     position: relative;
     display: block;
     width: 100%;
+    line-height: 0;
 }
 
 .app-input__control-wrap--icon-left .app-input__control {
@@ -80,7 +81,8 @@
     box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.18);
 }
 
-.app-input__toggle {
+.app-input__toggle,
+.user-form .app-input__toggle {
     position: absolute;
     top: 0;
     right: 0;
@@ -105,7 +107,10 @@
 
 .app-input__toggle:hover,
 .app-input__toggle:focus,
-.app-input__toggle:active {
+.app-input__toggle:active,
+.user-form .app-input__toggle:hover,
+.user-form .app-input__toggle:focus,
+.user-form .app-input__toggle:active {
     margin: 0;
     padding: 0;
     border: 0;
@@ -140,12 +145,27 @@
     text-transform: none;
 }
 
-.user-form--inputs .app-input__control {
+.user-form.user-form--inputs .app-input__control,
+.user-form--inputs input.app-input__control[type='text'],
+.user-form--inputs input.app-input__control[type='email'],
+.user-form--inputs input.app-input__control[type='password'] {
     width: 100%;
+    margin: 0;
     margin-bottom: 0;
+    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
     border: 1px solid var(--ds-input-border);
-    line-height: 1.3;
+    border-radius: var(--ds-radius-input);
+    background: var(--ds-input-bg);
     color: var(--ds-input-text);
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.user-form.user-form--inputs
+    .app-input__control-wrap--password
+    .app-input__control {
+    padding-right: 2.75rem;
 }
 
 .user-form--inputs .app-input {

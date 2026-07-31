@@ -10,13 +10,6 @@
                 <img alt="" :src="bannerImageSrc" />
             </a>
         </template>
-        <div v-show="!user && isMobile">
-            <router-link :to="{ name: 'login' }" class="login_usuario">
-                {{ $t('ingresaORegistrate') }}
-                <span class="underline">{{ $t('aqui') }}</span>
-                {{ $t('paraComenzar') }}
-            </router-link>
-        </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
         <PendingFriendRequestsCard v-if="user" />
         <div

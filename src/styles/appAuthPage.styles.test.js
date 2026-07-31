@@ -5,10 +5,12 @@ import path from 'node:path';
 const authPageCssPath = path.resolve(__dirname, 'components/app-auth-page.css');
 const tokensPath = path.resolve(__dirname, 'design-tokens.css');
 const mainCssPath = path.resolve(__dirname, 'main.css');
+const baseCssPath = path.resolve(__dirname, 'base.css');
 
 const authPageCss = fs.readFileSync(authPageCssPath, 'utf8');
 const tokensCss = fs.readFileSync(tokensPath, 'utf8');
 const mainCss = fs.readFileSync(mainCssPath, 'utf8');
+const baseCss = fs.readFileSync(baseCssPath, 'utf8');
 
 describe('app auth page styles', () => {
     it('defines auth page background and card tokens', () => {
@@ -22,10 +24,19 @@ describe('app auth page styles', () => {
     });
 
     it('imports auth page styles after base.css so login overrides win', () => {
-        const baseIndex = mainCss.indexOf("./base.css");
-        const authIndex = mainCss.indexOf("./components/app-auth-page.css");
+        const baseIndex = mainCss.indexOf('./base.css');
+        const authIndex = mainCss.indexOf('./components/app-auth-page.css');
         expect(baseIndex).toBeGreaterThan(-1);
         expect(authIndex).toBeGreaterThan(baseIndex);
+    });
+
+    it('removes the legacy blue page gradient from base styles', () => {
+        expect(baseCss).toMatch(
+            /\.app-container\.blue\s*\{[^}]*background:\s*#ffffff/
+        );
+        expect(baseCss).not.toMatch(
+            /\.app-container\.blue\s*\{[^}]*linear-gradient\(135deg,\s*rgba\(1,\s*155,\s*225/
+        );
     });
 
     it('styles the auth page shell and card on desktop', () => {

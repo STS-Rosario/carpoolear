@@ -2095,14 +2095,10 @@
 
   .app-container.blue {
       min-height: 100vh;
-      background: rgba(1,155,225,1);
-      background: -moz-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
-      background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(1,155,225,1)), color-stop(100%, rgba(1,101,135,1)));
-      background: -webkit-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
-      background: -o-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
-      background: -ms-linear-gradient(-45deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
-      background: linear-gradient(135deg, rgba(1,155,225,1) 0%, rgba(1,101,135,1) 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#019be1', endColorstr='#016587', GradientType=1 );
+      background: #ffffff;
+      background-image: none;
+      filter: none;
+      color: var(--ds-text-primary);
   }
 
   .user-form {
@@ -2123,12 +2119,12 @@
   }
 
   .user-form .form > div:last-child{
-      color: white;
+      color: var(--ds-text-primary);
       margin-top: 1rem;
   }
 
   .user-form label {
-      color: white;
+      color: var(--ds-input-label);
       text-transform: uppercase;
       font-weight: 400;
   }
@@ -2139,10 +2135,6 @@
       margin-bottom: 20px;
       color: #036686;
       font-weight: 400;
-  }
-  .blue:not(.login):not(.register):not(.reset-password) h2,
-  .blue:not(.login):not(.register):not(.reset-password) p {
-      color: #fff;
   }
 
   .colum-rating {

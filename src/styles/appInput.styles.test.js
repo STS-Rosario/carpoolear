@@ -49,6 +49,15 @@ describe('app input styles', () => {
 
     it('overrides legacy user-form input styles inside auth forms', () => {
         expect(inputCss).toContain('.user-form--inputs .app-input__label');
-        expect(inputCss).toContain('.user-form--inputs .app-input__control');
+        expect(inputCss).toContain(
+            ".user-form--inputs input.app-input__control[type='password']"
+        );
+        expect(inputCss).toMatch(
+            /\.user-form--inputs input\.app-input__control\[type='password'\][\s\S]*margin-bottom:\s*0/
+        );
+        expect(inputCss).toContain('.user-form .app-input__toggle');
+        expect(inputCss).toMatch(
+            /\.user-form \.app-input__toggle[\s\S]*margin:\s*0/
+        );
     });
 });

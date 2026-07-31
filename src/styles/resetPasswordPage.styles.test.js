@@ -29,6 +29,13 @@ describe('reset password page styles', () => {
         expect(authPageCss).toContain('var(--ds-auth-field-max-width)');
     });
 
+    it('uses a white mobile reset-password background without the blue gradient', () => {
+        expect(resetPasswordCss).toMatch(
+            /@media \(max-width: 767px\)[\s\S]*\.app-container\.blue\.reset-password[\s\S]*background:\s*#ffffff/
+        );
+        expect(resetPasswordCss).toContain('background-image: none');
+    });
+
     it('imports reset password page styles from main.css', () => {
         expect(mainCss).toContain('./components/reset-password-page.css');
     });

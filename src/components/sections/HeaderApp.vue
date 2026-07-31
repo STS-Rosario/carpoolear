@@ -25,7 +25,16 @@
                     </router-link>
                 </div>
                 <AppButton
-                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    v-if="!logged"
+                    class="mobile-header-bar__donate"
+                    variant="header-create"
+                    size="sm"
+                    :to="{ name: 'login' }"
+                >
+                    {{ $t('iniciarSesion') }}
+                </AppButton>
+                <AppButton
+                    v-else-if="!shouldHideDonationOnIOSCapacitor(user)"
                     class="mobile-header-bar__donate"
                     variant="header-donate"
                     size="sm"

@@ -90,6 +90,9 @@ describe('HeaderApp header buttons and branding', () => {
             /showBrandedMobileHeader[\s\S]*header_logo/
         );
         expect(headerSource).toMatch(
+            /showBrandedMobileHeader[\s\S]*v-if="!logged"[\s\S]*variant="header-create"/
+        );
+        expect(headerSource).toMatch(
             /showBrandedMobileHeader[\s\S]*variant="header-donate"/
         );
     });

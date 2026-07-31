@@ -21,14 +21,14 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).not.toContain('icon="message"');
     });
 
-    it('shows a branded mobile header with logo and Doná when the logo is visible', () => {
+    it('shows a branded mobile header with logo and login or Doná', () => {
         expect(headerSource).toContain('mobile-header-bar--branded');
         expect(headerSource).toContain('showBrandedMobileHeader');
         expect(headerSource).toMatch(
             /showBrandedMobileHeader[\s\S]*header_logo/
         );
         expect(headerSource).toMatch(
-            /showBrandedMobileHeader[\s\S]*variant="header-donate"/
+            /showBrandedMobileHeader[\s\S]*v-if="!logged"[\s\S]*variant="header-create"[\s\S]*iniciarSesion/
         );
         expect(headerSource).toMatch(
             /showBrandedMobileHeader[\s\S]*variant="header-donate"/
