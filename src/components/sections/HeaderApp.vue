@@ -222,6 +222,9 @@
             <nav class="header_panel-center" v-if="logged" aria-label="main">
                 <router-link
                     class="header_nav-link"
+                    :class="{
+                        'header_nav-link--active': isDesktopNavActive('trips')
+                    }"
                     :to="{ name: 'trips', query: { clearSearch: 'true' } }"
                     v-on:click.native="tripsClick"
                 >
@@ -229,12 +232,19 @@
                 </router-link>
                 <router-link
                     class="header_nav-link"
+                    :class="{
+                        'header_nav-link--active': isDesktopNavActive('my-trips')
+                    }"
                     :to="{ name: 'my-trips' }"
                 >
                     {{ $t('misViajes') }}
                 </router-link>
                 <router-link
                     class="header_nav-link header_nav-messages"
+                    :class="{
+                        'header_nav-link--active':
+                            isDesktopNavActive('conversations')
+                    }"
                     :to="{ name: 'conversations-list' }"
                 >
                     {{ $t('mensajes') }}
@@ -456,6 +466,22 @@ export default {
             useTripsStore().tripsSearch({ is_passenger: false });
         },
 
+        isDesktopNavActive(section) {
+            const name = this.$route && this.$route.name;
+            if (section === 'trips') {
+                return name === 'trips';
+            }
+            if (section === 'my-trips') {
+                return name === 'my-trips';
+            }
+            if (section === 'conversations') {
+                return (
+                    name === 'conversations-list' || name === 'conversation-chat'
+                );
+            }
+            return false;
+        },
+
         onHeaderChange() {
             // console.log('header-change', this.title);
         },
@@ -518,12 +544,17 @@ export default {
     font-weight: 600;
     white-space: nowrap;
     text-transform: none;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid transparent;
 }
 .header_nav-link:hover,
 .header_nav-link:focus {
     color: #fff;
     text-decoration: none;
     opacity: 0.9;
+}
+.header_nav-link--active {
+    border-bottom: 2px solid #fff;
 }
 .header_nav-messages .badge {
     position: absolute;
