@@ -98,4 +98,14 @@ describe('profile page styles', () => {
             /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*font-size:\s*1\.25rem/
         );
     });
+
+    it('aligns profile trip role label with avatar and route', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-trip-card\s+\.trip-card-shell\s*\{[^}]*padding-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.profile-trip-card\s+\.trip-card-shell\s*\{[^}]*padding-top:\s*0/
+        );
+    });
 });
