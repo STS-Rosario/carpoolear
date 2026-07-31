@@ -98,7 +98,17 @@ describe('profile page styles', () => {
             /\.profile-page\s+h2[\s,][\s\S]*?\{[^}]*font-size:\s*var\(--ds-heading-h2-size/
         );
         expect(css).toMatch(
-            /\.trips\.container\s+h2[\s,][\s\S]*?\{[^}]*color:\s*var\(--ds-text-primary\)/
+            /\.trips\.container\s+h2:not\(\.trips-search__hero-title\)[\s,][\s\S]*?\{[^}]*color:\s*var\(--ds-text-primary\)/
+        );
+    });
+
+    it('keeps home desktop search hero title blue and centered', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.trips\.container\s+\.trips-search__hero-title\s*\{[^}]*color:\s*var\(--ds-action\)/
+        );
+        expect(css).toMatch(
+            /\.trips\.container\s+\.trips-search__hero-title\s*\{[^}]*text-align:\s*center/
         );
     });
 
