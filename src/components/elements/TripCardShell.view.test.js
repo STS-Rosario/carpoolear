@@ -57,7 +57,8 @@ describe('TripCardShell.vue', () => {
     });
 
     it('uses v-imgSrc:profile directive for the driver avatar', () => {
-        expect(viewSource).toContain('v-imgSrc:profile="user.image"');
+        expect(viewSource).toContain('v-imgSrc:profile="avatarImage"');
+        expect(viewSource).toMatch(/avatarImage\(\)\s*\{[\s\S]*user\.image/);
     });
 
     it('routes profile vs detail clicks separately', () => {

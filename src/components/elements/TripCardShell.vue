@@ -8,7 +8,7 @@
             >
                 <div
                     class="trip-card-shell__avatar circle-box"
-                    v-imgSrc:profile="user.image"
+                    v-imgSrc:profile="avatarImage"
                 ></div>
                 <div class="trip-card-shell__driver-info">
                     <div class="trip-card-shell__name">
@@ -139,6 +139,9 @@ export default {
     },
     emits: ['profile-click', 'detail-click'],
     computed: {
+        avatarImage() {
+            return this.user && this.user.image ? this.user.image : '';
+        },
         seatsTone() {
             return getSeatsPillTone(this.seatsAvailable);
         },

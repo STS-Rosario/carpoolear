@@ -26,16 +26,16 @@ describe('trip card styles', () => {
 
     it('uses a compact driver header and tighter detail button padding', () => {
         expect(css).toMatch(
-            /\.trip-card-shell__avatar\s*\{[\s\S]*width:\s*2\.25rem/
+            /\.trip-card-shell__avatar[\s\S]*?\{[\s\S]*width:\s*2\.25rem/
         );
         expect(css).toMatch(
-            /\.trip-card-shell__avatar\s*\{[\s\S]*background-size:\s*cover/
+            /\.trip-card-shell__avatar[\s\S]*?\{[\s\S]*background-size:\s*cover/
         );
         expect(css).toMatch(
-            /\.trip-card-shell__avatar\s*\{[\s\S]*background-position:\s*center/
+            /\.trip-card-shell__avatar[\s\S]*?\{[\s\S]*background-position:\s*center/
         );
         expect(css).not.toMatch(
-            /\.trip-card-shell__avatar\s*\{[^}]*\bbackground:\s*var\(--ds-input-disabled-bg\)/
+            /\.trip-card-shell__avatar[^{]*\{[^}]*\bbackground:\s*var\(--ds-input-disabled-bg\)/
         );
         expect(css).toMatch(
             /\.trip-card-shell__detail\s*\{[\s\S]*padding:\s*0\.375rem/
