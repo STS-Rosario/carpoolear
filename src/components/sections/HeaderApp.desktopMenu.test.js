@@ -44,10 +44,14 @@ describe('HeaderApp desktop menu', () => {
         expect(center).toContain("name: 'my-trips'");
         expect(center).toContain("name: 'conversations-list'");
         expect(center).toContain('header_nav-messages');
+        expect(center).toContain('header_nav-my-trips');
         expect(center).toContain('messagesCount');
+        expect(center).toContain('myTripsCount');
         expect(center).toContain('v-if="messagesCount > 0"');
+        expect(center).toContain('v-if="myTripsCount > 0"');
         expect(center).toMatch(/class="badge"/);
         expect(headerSource).toContain("messagesCount: 'messagesCount'");
+        expect(headerSource).toContain("myTripsCount: 'myTripsCount'");
     });
 
     it('underlines the nav link for the current page section', () => {
