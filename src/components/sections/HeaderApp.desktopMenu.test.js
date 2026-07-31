@@ -85,6 +85,9 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).toMatch(
             /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*color:\s*#fff/
         );
+        expect(headerSource).toMatch(
+            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*top:\s*calc\(-0\.55rem \+ 3px\)/
+        );
     });
 
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
