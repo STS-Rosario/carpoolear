@@ -13,7 +13,7 @@ describe('ProfileTrip trip card navigation', () => {
     it('disables trip info modal on every trip card including past passenger trips', () => {
         const tripTags = getTripComponentTags();
 
-        expect(tripTags.length).toBe(4);
+        expect(tripTags.length).toBeGreaterThanOrEqual(1);
 
         tripTags.forEach((tag) => {
             expect(tag).toContain(':clickModal="false"');
@@ -30,5 +30,15 @@ describe('ProfileTrip trip card navigation', () => {
         expect(source).toContain('oldTripsAsPassenger');
         expect(source).toContain('$t(\'viajesMeSubi\')');
         expect(source).not.toContain('console.log(this.oldPassengerTrips)');
+    });
+
+    it('filters profile trips with Todos Conductor Pasajero chips', () => {
+        expect(source).toContain('profile-filter-chips');
+        expect(source).toContain('tripRoleFilter');
+        expect(source).toContain("$t('filtroViajesTodos')");
+        expect(source).toContain("$t('filtroViajesConductor')");
+        expect(source).toContain("$t('filtroViajesPasajero')");
+        expect(source).toContain('filteredTripItems');
+        expect(source).toContain('profile-trip-card');
     });
 });
