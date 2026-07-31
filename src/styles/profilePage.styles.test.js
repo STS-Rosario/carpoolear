@@ -81,5 +81,8 @@ describe('profile page styles', () => {
         expect(css).toMatch(
             /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-trip-card\s+\.trip-card-shell__schedule\s*\{[^}]*flex-direction:\s*column/
         );
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-trip-card\s+\.trip-card-shell__schedule\s*\{[^}]*justify-content:\s*space-between/
+        );
     });
 });
