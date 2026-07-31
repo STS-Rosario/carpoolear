@@ -6,14 +6,17 @@ const viewPath = path.resolve(__dirname, 'TripCardShell.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('TripCardShell.vue', () => {
-    it('renders ratings thumbs, name badge, city and trip point text, seats and detail CTA', () => {
+    it('renders ratings thumbs, name badge, city, province and trip point text, seats and detail CTA', () => {
         expect(viewSource).toContain('UserRatingsCounts');
         expect(viewSource).toContain('UserNameWithBadge');
         expect(viewSource).not.toContain("$t('puntoDePartida')");
         expect(viewSource).not.toContain("$t('puntoDeLlegada')");
         expect(viewSource).toContain("$t('verDetalle')");
+        expect(viewSource).toContain('trip-card-shell__region');
         expect(viewSource).toContain('trip-card-shell__point');
+        expect(viewSource).toContain('fromRegion');
         expect(viewSource).toContain('fromPoint');
+        expect(viewSource).toContain('toRegion');
         expect(viewSource).toContain('toPoint');
         expect(viewSource).toContain('getSeatsPillTone');
         expect(viewSource).toContain('getSeatsPillLabel');
@@ -32,12 +35,12 @@ describe('TripCardShell.vue', () => {
         );
     });
 
-    it('shows city first then punto text below without i18n route labels', () => {
+    it('shows city, province, then punto text without i18n route labels', () => {
         expect(viewSource).toMatch(
-            /trip-card-shell__city[\s\S]*\{\{\s*fromCity\s*\}\}[\s\S]*trip-card-shell__point[\s\S]*fromPoint/
+            /trip-card-shell__city[\s\S]*\{\{\s*fromCity\s*\}\}[\s\S]*trip-card-shell__region[\s\S]*fromRegion[\s\S]*trip-card-shell__point[\s\S]*fromPoint/
         );
         expect(viewSource).toMatch(
-            /trip-card-shell__city[\s\S]*\{\{\s*toCity\s*\}\}[\s\S]*trip-card-shell__point[\s\S]*toPoint/
+            /trip-card-shell__city[\s\S]*\{\{\s*toCity\s*\}\}[\s\S]*trip-card-shell__region[\s\S]*toRegion[\s\S]*trip-card-shell__point[\s\S]*toPoint/
         );
     });
 
@@ -77,8 +80,10 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toMatch(/tripsCountLabel:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/seatsAvailable:\s*\{[\s\S]*?type:\s*Number/);
         expect(viewSource).toMatch(/fromCity:\s*\{[\s\S]*?type:\s*String/);
+        expect(viewSource).toMatch(/fromRegion:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/fromPoint:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/toCity:\s*\{[\s\S]*?type:\s*String/);
+        expect(viewSource).toMatch(/toRegion:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/toPoint:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/dateLabel:\s*\{[\s\S]*?type:\s*String/);
         expect(viewSource).toMatch(/timeLabel:\s*\{[\s\S]*?type:\s*String/);

@@ -15,6 +15,7 @@ describe('trip card styles', () => {
         expect(css).toContain('.trip-card-shell__seats--medium');
         expect(css).toContain('.trip-card-shell__seats--low');
         expect(css).toContain('.trip-card-shell__seats--full');
+        expect(css).toContain('.trip-card-shell__region');
         expect(css).toContain('.trip-card-shell__point');
         expect(css).toContain('.trip-card-shell__chip');
         expect(css).toContain('.trip-card-shell__detail');

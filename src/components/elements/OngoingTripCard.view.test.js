@@ -37,4 +37,13 @@ describe('OngoingTripCard.vue', () => {
         );
         expect(viewSource).toContain(':trips-count-label="driverTripsLabel"');
     });
+
+    it('passes city, province and punto labels to the shell', () => {
+        expect(viewSource).toContain(':from-city="locations.fromCity"');
+        expect(viewSource).toContain(':from-region="locations.fromRegion"');
+        expect(viewSource).toContain(':from-point="locations.fromPoint"');
+        expect(viewSource).toContain(':to-city="locations.toCity"');
+        expect(viewSource).toContain(':to-region="locations.toRegion"');
+        expect(viewSource).toContain(':to-point="locations.toPoint"');
+    });
 });

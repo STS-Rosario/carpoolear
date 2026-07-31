@@ -111,12 +111,14 @@ describe('Trip card redesign shell', () => {
         expect(source).toMatch(/shellUser\(\)\s*\{[\s\S]*?getUserImage/);
     });
 
-    it('passes ratings, trips count, cities, puntos and date labels to the shell', () => {
+    it('passes ratings, trips count, cities, provinces, puntos and date labels to the shell', () => {
         expect(source).toContain(':ratings="driverRatings"');
         expect(source).toContain(':trips-count-label="driverTripsLabel"');
         expect(source).toContain(':from-city="locationLabels.fromCity"');
+        expect(source).toContain(':from-region="locationLabels.fromRegion"');
         expect(source).toContain(':from-point="locationLabels.fromPoint"');
         expect(source).toContain(':to-city="locationLabels.toCity"');
+        expect(source).toContain(':to-region="locationLabels.toRegion"');
         expect(source).toContain(':to-point="locationLabels.toPoint"');
         expect(source).toContain(':date-label="cardDateLabel"');
         expect(source).toContain(':time-label="cardTimeLabel"');
