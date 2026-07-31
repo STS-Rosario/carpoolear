@@ -18,6 +18,9 @@ describe('trip card styles', () => {
         expect(css).toContain('.trip-card-shell__route-label');
         expect(css).toContain('.trip-card-shell__chip');
         expect(css).toContain('.trip-card-shell__detail');
+        expect(css).toMatch(
+            /\.trip-card-shell__header\s*\{[\s\S]*min-height:\s*2\.25rem/
+        );
     });
 
     it('is imported from main.css', () => {

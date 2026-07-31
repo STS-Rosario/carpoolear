@@ -15,6 +15,7 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+    min-height: 2.25rem;
     margin-bottom: 1rem;
     padding-right: 0.25rem;
 }
@@ -122,7 +123,7 @@
     left: 50%;
     width: 0.625rem;
     height: 0.625rem;
-    border: 2px solid var(--ds-neutral-solid);
+    border: 2px solid var(--ds-action);
     border-radius: 50%;
     background: transparent;
     transform: translateX(-50%);
@@ -135,7 +136,7 @@
     bottom: 0.375rem;
     left: 50%;
     width: 2px;
-    background: var(--ds-neutral-solid);
+    background: var(--ds-action);
     transform: translateX(-50%);
 }
 
@@ -146,7 +147,7 @@
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--ds-neutral-solid);
+    background: var(--ds-action);
     transform: translateX(-50%);
 }
 
@@ -169,7 +170,7 @@
     font-weight: var(--ds-font-weight-bold);
     line-height: 1.2;
     letter-spacing: 0.02em;
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--ds-text-muted);
 }
 
@@ -199,12 +200,16 @@
     gap: 0.375rem;
     padding: 0.375rem 0.625rem;
     border-radius: var(--ds-radius-button);
-    background: var(--ds-action-bg);
-    color: var(--ds-action-text);
+    background: #f0f0f0;
+    color: var(--ds-text-primary);
     font-size: 0.8125rem;
     font-weight: var(--ds-font-weight-bold);
     line-height: 1.2;
     white-space: nowrap;
+}
+
+.trip-card-shell__chip .fa {
+    color: var(--ds-action);
 }
 
 .trip-card-shell__footer {

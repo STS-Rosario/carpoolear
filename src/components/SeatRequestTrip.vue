@@ -75,15 +75,14 @@ export default {
     box-shadow: 0 0 4px 1px #ccc;
 }
 
-.seat-request-trip__card :deep(.card-trip) {
+.seat-request-trip__card :deep(.trip-card-shell) {
     flex: 1 1 auto;
     border-radius: 0;
     box-shadow: none;
     margin-bottom: 0;
-}
-
-.seat-request-trip__card :deep(.card-trip .card_heading) {
-    border-radius: 0.4em 0.4em 0.5em 0.5em;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
 }
 
 .seat-request-status {
