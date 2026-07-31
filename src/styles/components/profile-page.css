@@ -415,13 +415,32 @@
 .profile-trip-card {
     border: 1px solid #ddd;
     border-radius: 0.65rem;
-    padding: 0.85rem 1rem 1rem;
+    padding: 0.85rem 0.875rem 0.85rem;
     margin-bottom: 0;
     background: #fff;
     width: 100%;
     max-width: 100%;
     float: none;
     clear: both;
+}
+
+.profile-trip-card .trip-card-shell {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.profile-trip-card__role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #888;
+    font-size: 0.8rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    margin: 0 0 0.65rem;
+    padding: 0;
 }
 
 .profile-trip-card > [class*='col-'] {
@@ -438,16 +457,6 @@
     width: 100%;
     max-width: 100%;
     margin: 0;
-}
-
-.profile-trip-card__role {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: #888;
-    font-size: 0.8rem;
-    font-weight: var(--ds-font-weight-normal, 400);
-    margin-bottom: 0.65rem;
 }
 
 .profile-page .profile-trip-component {
