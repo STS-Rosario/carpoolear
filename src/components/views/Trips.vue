@@ -206,7 +206,13 @@
                             <h2 class="trips-section-heading">
                                 {{ $t('viajesDeMisAmigos') }}
                             </h2>
-                            <div class="trips-section__list trips-section__list--start row">
+                            <div
+                                class="trips-section__list row"
+                                :class="{
+                                    'trips-section__list--start':
+                                        friendTripsList.length < 4
+                                }"
+                            >
                                 <template
                                     v-for="(trip, index) in friendTripsList"
                                     :key="'friend-' + (trip.id != null ? trip.id : index)"
@@ -236,7 +242,13 @@
                             <h2 class="trips-section-heading">
                                 {{ $t('otrosViajes') }}
                             </h2>
-                            <div class="trips-section__list row">
+                            <div
+                                class="trips-section__list row"
+                                :class="{
+                                    'trips-section__list--start':
+                                        otherTripsList.length < 4
+                                }"
+                            >
                                 <template
                                     v-for="(trip, index) in otherTripsList"
                                     :key="'other-' + (trip.id != null ? trip.id : index)"
@@ -263,6 +275,10 @@
                     <div
                         v-else-if="otherTripsList.length"
                         class="trips-section__list row"
+                        :class="{
+                            'trips-section__list--start':
+                                otherTripsList.length < 4
+                        }"
                     >
                         <template
                             v-for="(trip, index) in otherTripsList"
@@ -283,7 +299,12 @@
                     </div>
                 </template>
                 <template v-else>
-                    <div class="trips-section__list row">
+                    <div
+                        class="trips-section__list row"
+                        :class="{
+                            'trips-section__list--start': trips.length < 4
+                        }"
+                    >
                     <template
                         v-for="(trip, index) in trips"
                         :key="trip.id != null ? trip.id : index"
