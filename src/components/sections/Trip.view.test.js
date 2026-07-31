@@ -139,3 +139,43 @@ describe('Trip card redesign shell', () => {
         expect(source).toContain('changeSeatsNumber');
     });
 });
+
+describe('Trip card future owner footer actions', () => {
+    const footerExtra = source.match(
+        /#footer-extra[\s\S]*?<\/template>/
+    )?.[0] || '';
+
+    it('stacks lugares libres, editar, chat grupal and cancelar after ver detalle', () => {
+        expect(footerExtra).toContain("$t('lugaresLibres')");
+        expect(footerExtra).toContain('trip-seats-control');
+        expect(footerExtra).toContain("$t('editarViaje')");
+        expect(footerExtra).toContain("$t('groupChatButton')");
+        expect(footerExtra).toContain('group_chat_conversation_id');
+        expect(footerExtra).toContain("$t('cancelarViaje')");
+        expect(footerExtra).toContain('deleteTrip');
+
+        const seatsIdx = footerExtra.indexOf("$t('lugaresLibres')");
+        const editIdx = footerExtra.indexOf("$t('editarViaje')");
+        const chatIdx = footerExtra.indexOf("$t('groupChatButton')");
+        const cancelIdx = footerExtra.indexOf("$t('cancelarViaje')");
+        expect(seatsIdx).toBeGreaterThan(-1);
+        expect(editIdx).toBeGreaterThan(seatsIdx);
+        expect(chatIdx).toBeGreaterThan(editIdx);
+        expect(cancelIdx).toBeGreaterThan(chatIdx);
+    });
+
+    it('removes icon-only eye edit trash controls from footer-extra', () => {
+        expect(footerExtra).not.toContain('fa-eye');
+        expect(footerExtra).not.toContain('fa-pencil');
+        expect(footerExtra).not.toContain('fa-trash');
+        expect(footerExtra).not.toContain('trip-inline-controls');
+    });
+
+    it('wires group chat navigation through openTripGroupChat', () => {
+        expect(source).toContain('openTripGroupChat');
+        expect(source).toContain('toGroupChat');
+        expect(source).toMatch(
+            /toGroupChat[\s\S]*?openTripGroupChat[\s\S]*?conversation-chat/
+        );
+    });
+});
