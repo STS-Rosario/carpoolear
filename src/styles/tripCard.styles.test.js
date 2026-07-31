@@ -57,11 +57,16 @@ describe('trip card styles', () => {
         );
     });
 
-    it('compacts the header without :has for lightningcss minify compatibility', () => {
-        expect(css).not.toContain(':has(');
-        expect(css).toContain('.trip-card-shell--no-driver');
+    it('lays out primary row and meta row without absolute seats', () => {
+        expect(css).toContain('.trip-card-shell__primary');
         expect(css).toMatch(
-            /\.trip-card-shell--no-driver[\s\S]*\.trip-card-shell__seats[\s\S]*position:\s*static/
+            /\.trip-card-shell__primary\s*\{[\s\S]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__meta\s*\{[\s\S]*flex-wrap:\s*nowrap/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__seats\s*\{[\s\S]*position:\s*static/
         );
     });
 

@@ -19,26 +19,17 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toContain('getSeatsPillLabel');
     });
 
-    it('matches trip-card-shell CSS structure classes', () => {
-        expect(viewSource).toContain('class="trip-card-shell"');
-        expect(viewSource).toContain('trip-card-shell__header');
-        expect(viewSource).toContain('trip-card-shell__driver');
-        expect(viewSource).toContain('trip-card-shell__avatar');
-        expect(viewSource).toContain('trip-card-shell__name');
-        expect(viewSource).toContain('trip-card-shell__meta');
-        expect(viewSource).toContain('trip-card-shell__trips');
-        expect(viewSource).toContain('trip-card-shell__seats');
-        expect(viewSource).toContain('trip-card-shell__divider');
-        expect(viewSource).toContain('trip-card-shell__body');
-        expect(viewSource).toContain('trip-card-shell__route');
-        expect(viewSource).toContain('trip-card-shell__route-graphic');
-        expect(viewSource).toContain('trip-card-shell__endpoint');
-        expect(viewSource).toContain('trip-card-shell__city');
-        expect(viewSource).toContain('trip-card-shell__point');
-        expect(viewSource).toContain('trip-card-shell__schedule');
-        expect(viewSource).toContain('trip-card-shell__chip');
-        expect(viewSource).toContain('trip-card-shell__footer');
-        expect(viewSource).toContain('trip-card-shell__detail');
+    it('puts avatar, name and seats on one primary row and ratings with viajes on a meta row', () => {
+        expect(viewSource).toContain('trip-card-shell__primary');
+        expect(viewSource).toMatch(
+            /trip-card-shell__primary[\s\S]*trip-card-shell__avatar[\s\S]*trip-card-shell__name[\s\S]*trip-card-shell__seats/
+        );
+        expect(viewSource).toMatch(
+            /trip-card-shell__meta[\s\S]*UserRatingsCounts[\s\S]*trip-card-shell__trips/
+        );
+        expect(viewSource).toMatch(
+            /trip-card-shell__primary[\s\S]*trip-card-shell__meta/
+        );
     });
 
     it('shows city first then punto text below without i18n route labels', () => {
