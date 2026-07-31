@@ -22,10 +22,11 @@ describe('Settings navigation', () => {
         expect(navSource).toContain('my-account-nav__section-toggle');
     });
 
-    it('renders logout as an outline button with a left sign-out icon', () => {
-        expect(navSource).toContain('account-logout-btn');
+    it('renders logout as a secondary button with a left sign-out icon', () => {
+        expect(navSource).toContain('AppButton');
+        expect(navSource).toContain('variant="secondary"');
         expect(navSource).toContain('my-account-nav__logout');
-        expect(navSource).toMatch(/my-account-nav__logout[\s\S]*fa-sign-out/);
+        expect(navSource).toMatch(/my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/);
         expect(navSource).not.toContain('my-account-nav__item--logout');
     });
 });

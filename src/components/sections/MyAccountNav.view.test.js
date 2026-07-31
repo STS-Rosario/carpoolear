@@ -40,10 +40,11 @@ describe('MyAccountNav desktop sidebar', () => {
         );
     });
 
-    it('styles logout as an outline button with a left sign-out icon', () => {
-        expect(navSource).toContain('account-logout-btn');
+    it('styles logout as a secondary button with a left sign-out icon', () => {
+        expect(navSource).toContain('AppButton');
+        expect(navSource).toContain('variant="secondary"');
         expect(navSource).toMatch(
-            /my-account-nav__logout[\s\S]*fa-sign-out/
+            /my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/
         );
         expect(navSource).not.toMatch(
             /\.my-account-nav__logout\s*\{[^}]*border-radius:\s*999px/
