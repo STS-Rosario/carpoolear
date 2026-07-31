@@ -57,4 +57,8 @@ describe('ConversationList.vue messages redesign', () => {
         expect(viewSource).toContain('conversation_header__unread-dot');
         expect(viewSource).toContain('isTripGroupConversation');
     });
+
+    it('wraps list and chat in a messages-page__shell', () => {
+        expect(viewSource).toContain('messages-page__shell');
+    });
 });
