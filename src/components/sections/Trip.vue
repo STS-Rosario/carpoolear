@@ -72,6 +72,13 @@
 
                 <template v-if="enableChangeSeats" #footer-extra>
                     <div class="trip-card-owner-actions">
+                        <AppButton
+                            variant="secondary"
+                            block
+                            @click.stop="goToDetail(true)"
+                        >
+                            {{ $t('editarViaje') }}
+                        </AppButton>
                         <div
                             v-if="!trip.is_passenger"
                             class="trip-seats-control"
@@ -103,13 +110,6 @@
                                 </button>
                             </div>
                         </div>
-                        <AppButton
-                            variant="secondary"
-                            block
-                            @click.stop="goToDetail(true)"
-                        >
-                            {{ $t('editarViaje') }}
-                        </AppButton>
                         <AppButton
                             v-if="showGroupChatButton"
                             variant="secondary"
@@ -445,9 +445,12 @@ export default {
 
 .trip-seats-control {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    width: 100%;
 }
 
 .trip-seats-control__label {
@@ -460,19 +463,23 @@ export default {
 .trip-seats-control__stepper {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.4rem;
 }
 
 .trip-seats-control .trip_seats-available_value {
-    min-width: 1.5rem;
+    min-width: 1.25rem;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .trip-seats-control .btn {
     background: #eee;
-    min-width: 2.5em;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.95rem;
+    line-height: 1;
 }
 
 .trip-seats-control .btn[disabled] {
