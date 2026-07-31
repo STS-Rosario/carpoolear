@@ -22,16 +22,22 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toContain('getSeatsPillLabel');
     });
 
-    it('puts avatar, name and seats on one primary row and ratings with viajes on a meta row', () => {
+    it('centers avatar beside name/seats and ratings/viajes rows', () => {
         expect(viewSource).toContain('trip-card-shell__primary');
         expect(viewSource).toMatch(
-            /trip-card-shell__primary[\s\S]*trip-card-shell__avatar[\s\S]*trip-card-shell__name[\s\S]*trip-card-shell__seats/
+            /trip-card-shell__driver[\s\S]*trip-card-shell__avatar[\s\S]*trip-card-shell__copy[\s\S]*trip-card-shell__primary/
+        );
+        expect(viewSource).toMatch(
+            /trip-card-shell__primary[\s\S]*trip-card-shell__name[\s\S]*trip-card-shell__seats/
         );
         expect(viewSource).toMatch(
             /trip-card-shell__meta[\s\S]*UserRatingsCounts[\s\S]*trip-card-shell__trips/
         );
         expect(viewSource).toMatch(
             /trip-card-shell__primary[\s\S]*trip-card-shell__meta/
+        );
+        expect(viewSource).not.toMatch(
+            /trip-card-shell__primary[\s\S]*trip-card-shell__avatar/
         );
     });
 

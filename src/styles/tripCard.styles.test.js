@@ -98,6 +98,19 @@ describe('trip card styles', () => {
         );
     });
 
+    it('vertically centers the avatar beside the driver copy rows', () => {
+        expect(css).toMatch(
+            /\.trip-card-shell__driver\s*\{[^}]*flex-direction:\s*row/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__driver\s*\{[^}]*align-items:\s*center/
+        );
+        expect(css).toContain('.trip-card-shell__copy');
+        expect(css).not.toMatch(
+            /\.trip-card-shell__meta\s*\{[^}]*padding-left:/
+        );
+    });
+
     it('is imported from main.css', () => {
         expect(mainCss).toContain('./components/trip-card.css');
     });
