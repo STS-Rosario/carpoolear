@@ -98,15 +98,15 @@
             </nav>
         </section>
 
-        <button
-            type="button"
-            class="account-logout-btn my-account__logout"
+        <AppButton
+            class="my-account__logout"
+            variant="secondary"
+            icon-left="fa fa-sign-out"
             v-if="!isFacebokApp"
             @click="logout"
         >
-            <i class="fa fa-sign-out" aria-hidden="true"></i>
-            <span>{{ $t('cerrarSesion') }}</span>
-        </button>
+            {{ $t('cerrarSesion') }}
+        </AppButton>
 
         <router-link
             class="my-account__delete"
@@ -135,13 +135,15 @@ import {
     syncLocaleToBackend
 } from '../../utils/userLocale.js';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
+import AppButton from '../ui/AppButton.vue';
 
 const userApi = new UserApi();
 
 export default {
     name: 'myAccount',
     components: {
-        UserRatingsCounts
+        UserRatingsCounts,
+        AppButton
     },
     computed: {
         ...mapState(useAuthStore, {

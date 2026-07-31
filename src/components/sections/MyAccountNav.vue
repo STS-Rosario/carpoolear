@@ -77,15 +77,15 @@
         </section>
 
         <div class="my-account-nav__actions">
-            <button
-                type="button"
-                class="account-logout-btn my-account-nav__logout"
+            <AppButton
+                class="my-account-nav__logout"
+                variant="secondary"
+                icon-left="fa fa-sign-out"
                 v-if="!isFacebokApp"
                 @click="logout"
             >
-                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                <span>{{ $t('cerrarSesion') }}</span>
-            </button>
+                {{ $t('cerrarSesion') }}
+            </AppButton>
             <router-link
                 class="my-account-nav__delete"
                 :to="deleteAccountRoute"
@@ -113,11 +113,15 @@ import {
     persistLocaleChoice,
     syncLocaleToBackend
 } from '../../utils/userLocale.js';
+import AppButton from '../ui/AppButton.vue';
 
 const userApi = new UserApi();
 
 export default {
     name: 'myAccountNav',
+    components: {
+        AppButton
+    },
     data() {
         return {
             manualExpandedSection: null

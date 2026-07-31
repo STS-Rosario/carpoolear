@@ -435,16 +435,18 @@
                     </div>
 
                     <div class="btn-container">
-                        <button
-                            class="btn btn-primary btn-donar-header"
-                            @click="grabar"
+                        <AppButton
+                            class="update-profile-save-btn"
+                            variant="primary"
+                            :loading="loading"
                             :disabled="loading"
+                            @click="grabar"
                         >
-                            <span v-if="!loading">{{
-                                $t('guardarCambios')
-                            }}</span>
-                            <spinner class="blue" v-if="loading"></spinner>
-                        </button>
+                            {{ $t('guardarCambios') }}
+                            <template #loading>
+                                <spinner class="blue"></spinner>
+                            </template>
+                        </AppButton>
                         <span
                             class="required-field-flag"
                             v-bind:class="{ 'required-field-info': isMobile }"
@@ -633,6 +635,7 @@ import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
@@ -1276,6 +1279,7 @@ export default {
         Uploadfile,
         SvgItem,
         Spinner,
+        AppButton,
         modal
     }
 };

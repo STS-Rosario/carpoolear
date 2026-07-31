@@ -1,0 +1,71 @@
+:root {
+    /* Action — primary interactive blues */
+    --ds-action: #1E5F9E;
+    --ds-action-hover: #0A426F;
+    --ds-action-active: #0A426F;
+    --ds-action-on: #FFFFFF;
+    --ds-action-bg: #EEF4FB;
+    --ds-action-text: #1E5F9E;
+    --ds-action-border: #1E5F9E;
+    --ds-link: #0D5590;
+
+    /* Brand */
+    --ds-brand: #D72521;
+
+    /* Success */
+    --ds-success-bg: #BCE7CC;
+    --ds-success-text: #147A42;
+    --ds-success-solid: #2D8A45;
+
+    /* Warning */
+    --ds-warning-bg: #FFECC8;
+    --ds-warning-text: #262626;
+    --ds-warning-solid: #D98C1D;
+
+    /* Error */
+    --ds-error-bg: #FDE8E8;
+    --ds-error-text: #7F1D1D;
+    --ds-error-solid: #C53036;
+
+    /* Neutral */
+    --ds-neutral-bg: #FFFFFF;
+    --ds-neutral-text: #171717;
+    --ds-neutral-solid: #605E59;
+
+    /* Info */
+    --ds-info-bg: #E1EFFA;
+    --ds-info-solid: #1E5F9E;
+    --ds-info-text: #22394B;
+
+    /* Text */
+    --ds-destructive: #991B1B;
+    --ds-text-primary: #171717;
+    --ds-text-secondary: #404040;
+    --ds-text-muted: #737373;
+
+    /* Button geometry & typography */
+    --ds-radius-button: 8px;
+    --ds-button-font-weight: 600;
+    --ds-button-line-height: 1.2;
+    --ds-button-gap: 0.5rem;
+    --ds-button-border-width: 1.5px;
+    --ds-focus-ring: 0 0 0 3px rgba(30, 95, 158, 0.22);
+    --ds-button-disabled-bg: #D9D7D2;
+    --ds-button-disabled-text: #FFFFFF;
+    --ds-button-disabled-border: #D9D7D2;
+
+    --ds-button-font-size-sm: 0.875rem;
+    --ds-button-font-size-md: 1rem;
+    --ds-button-font-size-lg: 1.125rem;
+
+    --ds-button-padding-y-sm: 0.5rem;
+    --ds-button-padding-x-sm: 0.875rem;
+    --ds-button-padding-y-md: 0.75rem;
+    --ds-button-padding-x-md: 1.25rem;
+    --ds-button-padding-y-lg: 0.875rem;
+    --ds-button-padding-x-lg: 1.5rem;
+
+    --ds-button-icon-only-sm: 2.25rem;
+    --ds-button-icon-only-md: 2.75rem;
+    --ds-button-icon-only-lg: 3.25rem;
+}
