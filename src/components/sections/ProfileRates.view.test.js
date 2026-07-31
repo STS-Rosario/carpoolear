@@ -114,4 +114,14 @@ describe('ProfileRates reference action', () => {
             /profile-filter-chip--\$\{chip\.id\}|`profile-filter-chip--\$\{chip\.id\}`/
         );
     });
+
+    it('uses AppButton primary for the write-reference action', () => {
+        expect(profileRatesSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(profileRatesSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?\$t\('enviarReferencia'\)[\s\S]*?<\/AppButton>/
+        );
+        expect(profileRatesSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?\$t\('enviarReferencia'\)/
+        );
+    });
 });
