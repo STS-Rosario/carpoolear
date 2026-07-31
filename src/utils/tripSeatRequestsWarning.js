@@ -1,3 +1,5 @@
+import { isUpcomingTrip } from './isUpcomingTrip.js';
+
 export function shouldShowTripSeatRequestsWarning(
     owner,
     passengerPendingCount,
@@ -11,7 +13,11 @@ export function shouldShowTripSeatRequestsWarning(
 }
 
 export function shouldShowDriverSeatRequestLimitWarning(owner, trip) {
-    return Boolean(owner) && Boolean(trip?.['seat_request_limit_reached']);
+    return (
+        Boolean(owner) &&
+        Boolean(trip?.['seat_request_limit_reached']) &&
+        isUpcomingTrip(trip)
+    );
 }
 
 export function shouldShowPassengerSeatRequestLimitMessage(owner, trip) {
