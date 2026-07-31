@@ -45,7 +45,24 @@ describe('HeaderApp desktop menu', () => {
         expect(center).toContain("name: 'conversations-list'");
         expect(center).toContain('header_nav-messages');
         expect(center).toContain('messagesCount');
+        expect(center).toContain('v-if="messagesCount > 0"');
+        expect(center).toMatch(/class="badge"/);
         expect(headerSource).toContain("messagesCount: 'messagesCount'");
+    });
+
+    it('underlines the nav link for the current page section', () => {
+        const center = headerSource.match(
+            /header_panel-center[\s\S]*?header_panel-right/
+        )[0];
+        expect(center).toContain("isDesktopNavActive('trips')");
+        expect(center).toContain("isDesktopNavActive('my-trips')");
+        expect(center).toContain("isDesktopNavActive('conversations')");
+        expect(headerSource).toMatch(
+            /isDesktopNavActive\s*\(\s*section\s*\)\s*\{/
+        );
+        expect(headerSource).toMatch(
+            /\.header_nav-link--active\s*\{[^}]*border-bottom:\s*2px\s+solid\s+#fff/
+        );
     });
 
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
