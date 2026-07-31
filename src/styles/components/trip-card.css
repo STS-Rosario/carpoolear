@@ -155,8 +155,9 @@
 
 .trip-card-shell__body {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
-    gap: 0.875rem;
+    gap: 0.75rem;
     flex: 1 1 auto;
     margin-bottom: 0.75rem;
 }
@@ -166,6 +167,7 @@
     flex: 1 1 auto;
     align-items: stretch;
     gap: 0.75rem;
+    width: 100%;
     min-width: 0;
 }
 
@@ -245,11 +247,12 @@
 
 .trip-card-shell__schedule {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
     flex: 0 0 auto;
-    align-self: stretch;
+    width: 100%;
 }
 
 .trip-card-shell__chip {
