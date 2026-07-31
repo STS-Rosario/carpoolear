@@ -448,7 +448,7 @@ export default {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 0.5rem 0.75rem;
     width: 100%;
 }
