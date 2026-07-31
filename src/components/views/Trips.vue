@@ -1193,7 +1193,7 @@ export default {
 <style scoped>
 .banner {
     display: block;
-    margin: -1em auto 1em;
+    margin: 0 auto 1em;
     text-align: center;
 }
 
