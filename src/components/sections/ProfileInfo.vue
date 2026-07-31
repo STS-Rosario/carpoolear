@@ -179,25 +179,34 @@
                     {{ $t('rechazar') }}
                 </button>
             </template>
-            <button
-                v-else-if="profile.friendship_state === 'friend'"
-                class="btn btn-primary"
-                :disabled="friendActionLoading"
-                v-on:click="onToggleTripAlerts()"
-            >
-                {{ tripAlertsButtonLabel }}
-            </button>
+            <template v-else-if="profile.friendship_state === 'friend'">
+                <AppButton
+                    variant="primary"
+                    @click="messageUser()"
+                >
+                    {{ $t('enviarMensaje') }}
+                </AppButton>
+                <AppButton
+                    variant="secondary"
+                    :disabled="friendActionLoading"
+                    @click="onToggleTripAlerts()"
+                >
+                    {{ tripAlertsButtonLabel }}
+                </AppButton>
+            </template>
         </div>
         <div
-            class="edit-action"
-            v-if="user && user.is_admin && profile.id !== user.id"
+            class="edit-action profile-friend-actions"
+            v-if="
+                user &&
+                user.is_admin &&
+                profile.id !== user.id &&
+                profile.friendship_state !== 'friend'
+            "
         >
-            <button
-                class="btn btn-primary btn-circle"
-                v-on:click="messageUser()"
-            >
+            <AppButton variant="primary" @click="messageUser()">
                 {{ $t('enviarMensaje') }}
-            </button>
+            </AppButton>
         </div>
     </div>
 </template>
@@ -211,8 +220,12 @@ import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
+    components: {
+        AppButton
+    },
     data() {
         return {
             friendActionLoading: false
@@ -442,10 +455,7 @@ export default {
     margin-top: 1.25rem;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.5rem;
-}
-
-.btn-primary {
-    display: inline-block;
 }
 </style>
