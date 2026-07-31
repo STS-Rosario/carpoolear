@@ -51,10 +51,22 @@ describe('trip card styles', () => {
             /\.trip-card-shell\s*\{[\s\S]*height:\s*100%/
         );
         expect(css).toMatch(
-            /\.trip-card-shell__footer\s*\{[\s\S]*margin-top:\s*auto/
+            /\.trips-section__list\.row[\s\S]*display:\s*flex/
+        );
+    });
+
+    it('puts leftover card height between origin and destination and spaces schedule chips', () => {
+        expect(css).toMatch(
+            /\.trip-card-shell__body\s*\{[^}]*flex:\s*1/
         );
         expect(css).toMatch(
-            /\.trips-section__list\.row[\s\S]*display:\s*flex/
+            /\.trip-card-shell__route-content\s*\{[^}]*justify-content:\s*space-between/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell__schedule\s*\{[^}]*justify-content:\s*space-between/
+        );
+        expect(css).not.toMatch(
+            /\.trip-card-shell__footer\s*\{[^}]*margin-top:\s*auto/
         );
     });
 
