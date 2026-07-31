@@ -30,4 +30,11 @@ describe('OngoingTripCard.vue', () => {
         expect(viewSource).toContain("name: 'profile'");
         expect(viewSource).toContain("name: 'detail_trip'");
     });
+
+    it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
+        expect(viewSource).toMatch(
+            /driverTripsLabel\(\)\s*\{[\s\S]*trips_count\s*==\s*null[\s\S]*perfilViajesParticipados[\s\S]*normalizeTripsCount/
+        );
+        expect(viewSource).toContain(':trips-count-label="driverTripsLabel"');
+    });
 });

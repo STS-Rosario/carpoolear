@@ -122,6 +122,12 @@ describe('Trip card redesign shell', () => {
         expect(source).toContain(':time-label="cardTimeLabel"');
     });
 
+    it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
+        expect(source).toMatch(
+            /driverTripsLabel\(\)\s*\{[\s\S]*trips_count\s*==\s*null[\s\S]*perfilViajesParticipados[\s\S]*normalizeTripsCount\(this\.trip\.user\.trips_count\)/
+        );
+    });
+
     it('keeps sellado legend, seat warning and seat controls as shell extras without visibility icons', () => {
         expect(source).toContain('#body-extra');
         expect(source).not.toContain('trip_visibility');
