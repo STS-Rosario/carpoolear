@@ -11,4 +11,16 @@ describe('Profile view', () => {
         expect(viewSource).toContain(':show-nav="isMyOwnProfile"');
         expect(viewSource).toContain('isMyOwnProfile');
     });
+
+    it('wraps tabs in profile-page shell with identity header above tabs', () => {
+        expect(viewSource).toContain('profile-page');
+        expect(viewSource).toContain('ProfileIdentityHeader');
+        expect(viewSource).toContain('profile-page__content-card');
+        const headerIndex = viewSource.indexOf('ProfileIdentityHeader');
+        const tabsetIndex = viewSource.indexOf('<tabset');
+        expect(headerIndex).toBeGreaterThan(-1);
+        expect(tabsetIndex).toBeGreaterThan(headerIndex);
+        expect(viewSource).not.toContain('Resumen');
+        expect(viewSource).not.toContain('viajesJuntos');
+    });
 });
