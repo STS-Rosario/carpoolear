@@ -82,6 +82,24 @@
         padding-left: 0;
         padding-right: 0;
     }
+
+    .app-container.blue.register .app-auth-page .register-form,
+    .app-container.blue.register .app-auth-page .user-form .form {
+        display: block;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .app-container.blue.register .app-auth-page .app-page-title,
+    .app-container.blue.register .app-auth-page .user-form h1 {
+        margin-top: 0;
+        margin-left: 0;
+        margin-bottom: 1.5rem;
+        display: block;
+        text-align: left;
+    }
 }
 
 @media (max-width: 767px) {

@@ -103,12 +103,9 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        get show () {
-                            const config = getAuthStore().appConfig;
-                            return config && config.trip_card_design === 'light';
-                        }
+                        show: true
                     },
-                    buttons: ['back']
+                    buttons: []
                 }
             },
             background: {

@@ -12,3 +12,17 @@ describe('login route header', () => {
         );
     });
 });
+
+describe('register route header', () => {
+    it('shows the desktop header logo and auth buttons on the register page', () => {
+        const registerRoute = routesSource.match(
+            /path:\s*'\/register'[\s\S]*?},\s*\{/
+        )?.[0];
+
+        expect(registerRoute).toBeTruthy();
+        expect(registerRoute).toMatch(/name:\s*'register'/);
+        expect(registerRoute).toMatch(/logo:\s*\{[\s\S]*show:\s*true/);
+        expect(registerRoute).toMatch(/buttons:\s*\[\s*\]/);
+        expect(registerRoute).not.toContain("buttons: ['back']");
+    });
+});

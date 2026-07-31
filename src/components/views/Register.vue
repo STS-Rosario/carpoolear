@@ -1,13 +1,10 @@
 <template>
-    <div class="register-component user-form user-form--inputs container">
-        <router-link v-if="!isMobile" :to="{ name: 'trips' }">
-            <img :src="carpoolear_logo" />
-        </router-link>
-        <!-- <img v-if="isMobile" :src="carpoolear_logo" /> -->
-        <h1 v-if="tripCardTheme !== 'light' && !(success && isMobile)">
-            {{ $t('RegistrarNuevoUsuario') }}
-        </h1>
-        <div class="form row" v-if="!success">
+    <div
+        class="register-component user-form user-form--inputs user-form--register container"
+        :class="{ 'user-form--register-mobile': isMobile }"
+    >
+        <AppAuthPage>
+        <div class="form row register-form" v-if="!success">
             <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
                 <div class="col-md-12">
                     <div class="text text-with">con</div>
@@ -53,10 +50,10 @@
                     </div>
                 </div>
             </div>
-            <h1 v-if="tripCardTheme === 'light' && !(success && isMobile)">
-                {{ $t('RegistrarNuevoUsuario') }}
-            </h1>
-            <div v-if="showRegisterForm">
+            <div v-if="showRegisterForm" class="register-form__main">
+                <AppPageTitle v-if="!(success && isMobile)">
+                    {{ $t('RegistrarNuevoUsuario') }}
+                </AppPageTitle>
                 <div class="campos-obligatorios">
                     {{ $t('camposObligatorios') }}
                 </div>
@@ -313,34 +310,44 @@
                         </span>
                     </div>
                 </div>
-                <div class="terms text-left">
-                    <input
-                        v-jump
-                        ref="ipt_terms"
-                        name="ipt_terms"
-                        type="checkbox"
-                        id="cbx_terms"
-                        v-model="termsAndConditions"
-                    />
-                    <label for="cbx_terms" class="label-cbx">
-                        {{ $t('leidoTerminos1') }}
-                        <router-link :to="{ name: 'terms' }">
-                            {{ $t('leidoTerminos2') }}
-                        </router-link>
-                        .
-                    </label>
-                    <button
+                <div class="register-form__terms terms text-left">
+                    <div class="register-form__terms-row">
+                        <input
+                            v-jump
+                            ref="ipt_terms"
+                            name="ipt_terms"
+                            type="checkbox"
+                            id="cbx_terms"
+                            v-model="termsAndConditions"
+                        />
+                        <label for="cbx_terms" class="register-form__terms-label">
+                            {{ $t('leidoTerminos1') }}
+                            <router-link
+                                class="register-form__terms-link"
+                                :to="{ name: 'terms' }"
+                            >
+                                {{ $t('leidoTerminos2') }}
+                            </router-link>
+                            .
+                        </label>
+                    </div>
+                    <AppButton
                         v-jump
                         ref="ipt_submit"
                         name="ipt_submit"
-                        @click="register"
-                        class="btn-primary btn-outline g-recaptcha"
+                        variant="primary"
+                        block
+                        class="register-form__submit g-recaptcha"
+                        :data-sitekey="RECAPTCHA_SITE_KEY"
                         :disabled="progress || !termsAndConditions"
-                        v-bind:data-sitekey="RECAPTCHA_SITE_KEY"
+                        :loading="progress"
+                        :label="$t('registrarme')"
+                        @click="register"
                     >
-                        <span v-if="!progress">{{ $t('registrarme') }}</span>
-                        <spinner class="blue" v-if="progress"></spinner>
-                    </button>
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
                 </div>
             </div>
 
@@ -376,6 +383,7 @@
                 }}
             </p>
         </div>
+        </AppAuthPage>
     </div>
 </template>
 
@@ -392,6 +400,9 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import AppInput from '../ui/AppInput.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppPageTitle from '../ui/AppPageTitle.vue';
+import AppAuthPage from '../ui/AppAuthPage.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
     IMAGE_UPLOAD_ACCEPT
@@ -421,11 +432,6 @@ export default {
             account_type: '',
             account_bank: '',
             termsAndConditions: false,
-            carpoolear_logo:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_logo.png',
             RECAPTCHA_SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY || '',
             progress: false,
             success: false,
@@ -462,9 +468,6 @@ export default {
         ...mapState(useProfileStore, {
             registerData: 'registerData'
         }),
-        tripCardTheme() {
-            return this.settings ? this.settings.trip_card_design : '';
-        },
         showRegisterForm() {
             return !this.settings.enable_facebook || this.showRegister;
         }
@@ -492,7 +495,10 @@ export default {
     components: {
         modal,
         Spinner,
-        AppInput
+        AppInput,
+        AppButton,
+        AppPageTitle,
+        AppAuthPage
     },
     methods: {
         ...mapActions(useAuthStore, {
@@ -833,14 +839,8 @@ export default {
 input[type='checkbox'] {
     width: auto;
 }
-a {
-    color: #42b983;
-}
-.terms {
+.register-form__terms {
     margin-top: 1.8rem;
-}
-.user-form a {
-    font-weight: bold;
 }
 span.error {
     display: block;
@@ -860,18 +860,8 @@ h2 {
 }
 
 @media only screen and (min-width: 768px) {
-    .user-form .btn-primary {
-        text-align: center;
-        max-width: 280px;
-        padding: 1em;
-        margin-bottom: 1em;
-    }
     h2 {
         color: #036686;
-    }
-    .terms button {
-        margin-left: 2rem;
-        text-align: right;
     }
     span.error {
         color: red;
