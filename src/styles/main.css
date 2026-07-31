@@ -6,6 +6,7 @@
 @import url('./components/login-page.css');
 @import url('./components/header-mobile.css');
 @import url('./base.css');
+@import url('./components/app-auth-page.css');
 :root {
   --main-background: #F0F0F0;
   --main-error:#D72521;

@@ -3,7 +3,7 @@
     align-items: center;
     gap: var(--ds-info-card-gap);
     width: 100%;
-    padding: 1rem var(--ds-info-card-padding-x);
+    padding: var(--ds-info-card-padding-y) var(--ds-info-card-padding-x);
     border-radius: var(--ds-radius-input);
     background: var(--ds-info-bg);
     color: var(--ds-text-primary);
@@ -54,7 +54,7 @@
 }
 
 .app-info-card__text strong {
-    font-weight: 700;
+    font-weight: var(--ds-font-weight-bold);
 }
 
 .blue .app-info-card .app-info-card__action {
@@ -69,7 +69,7 @@
     color: var(--ds-link);
     font-family: inherit;
     font-size: var(--ds-info-card-font-size);
-    font-weight: 500;
+    font-weight: var(--ds-link-font-weight);
     line-height: var(--ds-info-card-line-height);
     text-align: left;
     text-decoration: underline;

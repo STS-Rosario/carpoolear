@@ -1,0 +1,96 @@
+@media (min-width: 768px) {
+    .app-container.blue.login,
+    .app-container.blue.register,
+    .app-container.blue.reset-password {
+        background: var(--ds-auth-page-bg);
+        background-image: none;
+        filter: none;
+    }
+
+    .app-auth-page {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 2rem 1rem 3rem;
+        box-sizing: border-box;
+    }
+
+    .app-auth-page__card {
+        width: 100%;
+        max-width: var(--ds-auth-card-max-width);
+        padding: var(--ds-auth-card-padding-y) var(--ds-auth-card-padding-x);
+        border-radius: var(--ds-auth-card-radius);
+        background: var(--ds-auth-card-bg);
+        box-shadow: var(--ds-auth-card-shadow);
+        color: var(--ds-text-primary);
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .app-auth-page .app-page-title,
+    .app-auth-page .user-form h1 {
+        margin-top: 0;
+        margin-left: 0;
+        margin-bottom: 1.5rem;
+        display: block;
+        text-align: left;
+    }
+
+    .app-container.blue.login .app-auth-page .login-form,
+    .app-container.blue.login .app-auth-page .user-form .form {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .app-container.blue.login .app-auth-page .login-form > .login-box,
+    .app-container.blue.login .app-auth-page .login-form > .login-form__aside {
+        float: none;
+        width: 50%;
+        max-width: 50%;
+    }
+
+    .app-container.blue.login .app-auth-page .login-box {
+        border-right: solid 1px var(--ds-input-border);
+        padding-right: var(--ds-auth-column-gap);
+    }
+
+    .app-container.blue.login .app-auth-page .login-form__aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: var(--ds-auth-column-gap);
+    }
+
+    .app-container.blue.login .app-auth-page .login-form__aside .login-form__register-prompt {
+        margin: 0 0 2rem;
+        text-align: left;
+    }
+
+    .app-container.blue.login .app-auth-page .login-form::after {
+        display: none;
+    }
+
+    .user-form--login.container {
+        min-height: auto;
+        max-width: none;
+        text-align: left;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .app-auth-page,
+    .app-auth-page__card {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        max-width: none;
+    }
+}

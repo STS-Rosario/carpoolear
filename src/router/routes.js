@@ -84,9 +84,9 @@ export default [
             actionbar: {
                 header: {
                     logo: {
-                        show: false
+                        show: true
                     },
-                    buttons: ['clear']
+                    buttons: []
                 }
             },
             background: {

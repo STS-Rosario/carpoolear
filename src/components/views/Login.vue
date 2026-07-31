@@ -3,12 +3,7 @@
         class="user-form user-form--inputs user-form--login container"
         :class="{ 'user-form--login-mobile': isMobile }"
     >
-        <router-link v-if="isDesktop" :to="{ name: 'trips' }">
-            <img :src="carpoolear_logo" />
-        </router-link>
-        <AppPageTitle v-if="!(hasScroll && isMobile) && !loginCustomHeader">
-            {{ $t('iniciarSesion') }}
-        </AppPageTitle>
+        <AppAuthPage>
         <div class="login-header" v-if="loginCustomHeader">
             <div
                 class="col-sm-12 col-md-12"
@@ -47,8 +42,10 @@
             </div>
 
             <div class="login-box" :class="[righPanelclass]">
-                <div class="visual-trick">
-                    <form @submit.prevent="submitLogin">
+                <AppPageTitle v-if="!(hasScroll && isMobile) && !loginCustomHeader">
+                    {{ $t('iniciarSesion') }}
+                </AppPageTitle>
+                <form class="login-form__fields" @submit.prevent="submitLogin">
                         <AppInput
                             v-show="!loginCustomHeader"
                             ref="txt_user"
@@ -77,7 +74,6 @@
                             :hide-password-label="$t('ocultarContrasena')"
                         />
                         <router-link
-                            v-if="isMobile"
                             class="login-form__link login-form__forgot"
                             :to="{ name: 'reset-password' }"
                         >
@@ -112,30 +108,38 @@
                                 <spinner class="blue"></spinner>
                             </template>
                         </AppButton>
-                        <div
-                            v-if="isMobile"
-                            class="login-form__remember"
-                        >
+                        <div class="login-form__remember">
                             <input id="checkbox_remember" type="checkbox" />
                             <label for="checkbox_remember">{{
                                 $t('recordarMiCuenta')
                             }}</label>
                         </div>
-                    </form>
-                </div>
-                <div class="pass-options" v-if="isDesktop">
-                    <input id="checkbox_remember" type="checkbox" />
-                    <label for="checkbox_remember">{{
-                        $t('recordarme')
-                    }}</label>
-                    <span v-show="!loginCustomHeader">-</span>
+                </form>
+            </div>
+            <div
+                v-if="isDesktop"
+                class="login-form__aside"
+                :class="[righPanelclass]"
+            >
+                <p class="login-form__register-prompt">
+                    {{ $t('noTenesFace') }}
                     <router-link
-                        class="login-forget"
-                        :to="{ name: 'reset-password' }"
+                        class="login-form__link"
+                        :to="{ name: 'register' }"
                     >
-                        {{ $t('olvideContra') }}
+                        {{ $t('registrateAcaLink') }}
                     </router-link>
-                </div>
+                </p>
+                <AppInfoCard
+                    :action-label="$t('loginLegacyProvidersContact')"
+                    @action="openLegacyLoginModal"
+                >
+                    <template #text>
+                        <span
+                            v-html="$t('loginLegacyProvidersQuestion')"
+                        ></span>
+                    </template>
+                </AppInfoCard>
             </div>
             <div v-if="isMobile" class="login-form__footer col-sm-12 col-md-12">
                 <hr class="login-form__divider" />
@@ -161,86 +165,6 @@
                 </AppInfoCard>
             </div>
 
-            <div
-                class="login-box"
-                :class="[righPanelclass]"
-                v-show="!isShowLogin && isDesktop"
-            >
-                <div>
-                    <span class="register">
-                        {{ $t('noTenesFace') }}
-                        <router-link
-                            class="login-register"
-                            :to="{ name: 'register' }"
-                        >
-                            {{ $t('registrateAca') }}
-                        </router-link>
-                    </span>
-                </div>
-            </div>
-
-            <div
-                class="facebook-box"
-                :class="[righPanelclass]"
-                v-show="isDesktop"
-            >
-                <span class="register" v-show="isShowLogin">
-                    {{ $t('noTenesFace') }}>
-                    <router-link
-                        class="login-register"
-                        :to="{ name: 'register' }"
-                    >
-                        {{ $t('registrateAca') }}
-                    </router-link>
-                </span>
-                <button
-                    class="btn-primary btn-search btn-facebook btn-with-icon"
-                    @click="facebookLogin"
-                    :disabled="fbLoading"
-                    v-show="config.enable_facebook"
-                >
-                    <span class="btn-with-icon--icon">
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
-                    </span>
-                    <span class="btn-with-icon--label">
-                        <span v-if="!fbLoading">{{
-                            $t('ingresaConFace')
-                        }}</span>
-                        <spinner class="blue" v-if="fbLoading"></spinner>
-                    </span>
-                </button>
-                <div v-show="config.enable_facebook">
-                    {{ $t('alIngresarFace') }}
-                    <router-link :to="{ name: 'terms' }">{{
-                        $t('tyc')
-                    }}</router-link>
-                    .
-                </div>
-
-                <button
-                    class="btn btn-primary btn-search btn-apple btn-with-icon"
-                    @click="toggleModalLogin('apple')"
-                    :disabled="iosLoading"
-                    v-if="isApple"
-                >
-                    <span class="btn-with-icon--icon">
-                        <i class="fa fa-apple" aria-hidden="true"></i>
-                    </span>
-                    <span class="btn-with-icon--label">
-                        <span v-if="!iosLoading">{{
-                            $t('ingresaConApple')
-                        }}</span>
-                        <spinner class="blue" v-if="iosLoading"></spinner>
-                    </span>
-                </button>
-                <div v-show="isApple">
-                    {{ $t('alIngresarApple') }}
-                    <router-link :to="{ name: 'terms' }">{{
-                        $t('tyc')
-                    }}</router-link>
-                    .
-                </div>
-            </div>
             <modal
                 :name="'modal'"
                 v-if="showModalLogin"
@@ -280,6 +204,7 @@
                 </div></template>
             </modal>
         </div>
+        </AppAuthPage>
     </div>
 </template>
 <script>
@@ -296,6 +221,7 @@ import AppInput from '../ui/AppInput.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppPageTitle from '../ui/AppPageTitle.vue';
 import AppInfoCard from '../ui/AppInfoCard.vue';
+import AppAuthPage from '../ui/AppAuthPage.vue';
 import cache from '../../services/cache';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
@@ -313,11 +239,6 @@ export default {
             fbLoading: false,
             iosLoading: false,
             error: '',
-            carpoolear_logo:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_logo.png',
             hasScroll: false,
             isUnderstood: true,
             dontShowAgain: false,
@@ -537,7 +458,8 @@ export default {
         AppInput,
         AppButton,
         AppPageTitle,
-        AppInfoCard
+        AppInfoCard,
+        AppAuthPage
     }
 };
 </script>
@@ -553,10 +475,6 @@ export default {
     color: #eee;
 }
 
-.facebook-box {
-    margin-top: 0.5em !important;
-}
-
 .password-not {
     text-align: center;
     margin-top: 16px;
@@ -570,13 +488,6 @@ export default {
 
 label {
     margin-top: 0.3em;
-    font-weight: bold;
-}
-
-.login-forget {
-    font-weight: bold;
-    padding-left: 12px;
-    color: var(--secondary-background);
 }
 
 .password-field {
@@ -635,22 +546,6 @@ label {
     pointer-events: none;
 }
 
-/* .user-form .btn-primary.btn-facebook {
-  width: 90%;
-  margin: 1em auto;
-} */
-
-.description {
-    font-size: 11px;
-    text-transform: none;
-    color: #fff;
-    display: block;
-}
-
-.btn-facebook.btn-with-icon--icon {
-    background-color: var(--button-facebook-blue-left);
-}
-
 .register {
     font-weight: 300;
     font-size: 16px;
@@ -698,38 +593,6 @@ label {
         height: auto;
         margin: auto;
         margin-bottom: 1em;
-    }
-    .register {
-        color: #555;
-        margin-bottom: 1em;
-        padding: 0;
-        font-weight: 400;
-    }
-    .description {
-        display: inline;
-        padding-left: 0.4em;
-        color: rgb(1, 101, 135);
-    }
-    .visual-trick {
-        border-right: solid 1px #ccc;
-        padding-right: 4rem;
-    }
-    .user-form .btn-primary.btn-facebook {
-        width: 100%;
-        max-width: 280px;
-        margin: 0.5em 0 0.6em 0;
-    }
-    .user-form .btn-primary.btn-apple {
-        width: 100%;
-        max-width: 280px;
-        margin: 0.5em 0 0.6em 0;
-        border-color: black;
-    }
-    .register::before {
-        display: none;
-    }
-    .register::after {
-        display: none;
     }
 }
 

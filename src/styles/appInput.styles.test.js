@@ -36,6 +36,17 @@ describe('app input styles', () => {
         expect(inputCss).toContain('.app-input__hint--error');
     });
 
+    it('styles labels with design token size and line height', () => {
+        expect(inputCss).toMatch(
+            /\.app-input__label\s*\{[^}]*font-size:\s*var\(--ds-input-label-size\)/
+        );
+        expect(inputCss).toMatch(
+            /\.app-input__label\s*\{[^}]*line-height:\s*var\(--ds-input-label-line-height\)/
+        );
+        expect(tokensCss).toContain('--ds-input-label-size: 1rem');
+        expect(tokensCss).toContain('--ds-input-label-line-height: 1.125rem');
+    });
+
     it('overrides legacy user-form input styles inside auth forms', () => {
         expect(inputCss).toContain('.user-form--inputs .app-input__label');
         expect(inputCss).toContain('.user-form--inputs .app-input__control');

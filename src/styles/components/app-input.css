@@ -11,7 +11,7 @@
     display: block;
     color: var(--ds-input-label);
     font-size: var(--ds-input-label-size);
-    font-weight: 500;
+    font-weight: var(--ds-input-label-font-weight);
     line-height: var(--ds-input-label-line-height);
     text-transform: none;
 }
@@ -132,7 +132,7 @@
 
 .user-form--inputs .app-input__label {
     color: var(--ds-input-label);
-    font-weight: 500;
+    font-weight: var(--ds-input-label-font-weight);
     text-transform: none;
 }
 

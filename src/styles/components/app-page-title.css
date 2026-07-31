@@ -3,7 +3,7 @@
     color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
     font-size: var(--ds-page-title-size);
-    font-weight: 700;
+    font-weight: var(--ds-font-weight-bold);
     line-height: 1.15;
     text-align: left;
 }

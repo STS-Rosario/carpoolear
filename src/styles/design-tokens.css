@@ -48,15 +48,21 @@
     /* Typography — 16px root (1rem) */
     --ds-font-size-base: 1rem;
     --ds-page-title-size: 1.75rem;
-    --ds-input-label-line-height: 1rem;
+    --ds-input-label-line-height: 1.125rem;
     --ds-info-card-font-size: 1rem;
     --ds-info-card-line-height: 1.125rem;
     --ds-info-card-icon-size: 1.5rem;
     --ds-info-card-padding-x: 1.5rem;
+    --ds-info-card-padding-y: 2rem;
     --ds-info-card-gap: 1rem;
     --ds-info-card-icon-margin-x: 0.375rem;
+    --ds-register-prompt-font-size: 1.125rem;
+    --ds-register-prompt-line-height: 1.25rem;
 
     --ds-font-family: 'Barlow', sans-serif;
+    --ds-font-weight-normal: 400;
+    --ds-font-weight-bold: 700;
+    --ds-link-font-weight: 400;
 
     /* Button geometry & typography */
     --ds-radius-button: 8px;
@@ -102,6 +108,16 @@
     --ds-header-mobile-padding-x: 1rem;
     --ds-header-mobile-padding-y: 0.75rem;
 
+    /* Auth pages */
+    --ds-auth-page-bg: #F4F3F1;
+    --ds-auth-card-bg: #FFFFFF;
+    --ds-auth-card-radius: 20px;
+    --ds-auth-card-shadow: 3px 3px 7.3px 0 rgba(0, 0, 0, 0.05);
+    --ds-auth-card-padding-x: 2rem;
+    --ds-auth-card-padding-y: 2rem;
+    --ds-auth-card-max-width: 1200px;
+    --ds-auth-column-gap: 3rem;
+
     /* Inputs */
     --ds-input-bg: #FFFFFF;
     --ds-input-border: #D1D5DB;
@@ -118,7 +134,8 @@
     --ds-input-disabled-border: #E5E7EB;
     --ds-radius-input: 8px;
     --ds-input-font-size: 1rem;
-    --ds-input-label-size: 0.875rem;
+    --ds-input-label-size: 1rem;
+    --ds-input-label-font-weight: var(--ds-font-weight-normal);
     --ds-input-hint-size: 0.8125rem;
     --ds-input-padding-y: 0.75rem;
     --ds-input-padding-x: 1rem;

@@ -31,6 +31,9 @@ describe('design tokens', () => {
     it('defines shared button geometry and typography tokens', () => {
         expect(tokensCss).toContain('--ds-radius-button:');
         expect(tokensCss).toContain('--ds-button-font-weight:');
+        expect(tokensCss).toContain('--ds-font-weight-normal: 400');
+        expect(tokensCss).toContain('--ds-font-weight-bold: 700');
+        expect(tokensCss).toContain('--ds-link-font-weight: 400');
         expect(tokensCss).toContain('--ds-font-size-base:');
         expect(tokensCss).toContain('--ds-font-family:');
         expect(tokensCss).toContain('--ds-button-gap:');
