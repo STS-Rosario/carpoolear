@@ -435,6 +435,9 @@
                     </div>
 
                     <div class="btn-container">
+                        <span class="required-field-flag required-field-info">
+                            {{ $t('camposObligatorios') }}
+                        </span>
                         <AppButton
                             class="update-profile-save-btn"
                             variant="primary"
@@ -447,12 +450,6 @@
                                 <spinner class="blue"></spinner>
                             </template>
                         </AppButton>
-                        <span
-                            class="required-field-flag"
-                            v-bind:class="{ 'required-field-info': isMobile }"
-                        >
-                            {{ $t('camposObligatorios') }}
-                        </span>
                     </div>
                     <div
                         v-if="error"
@@ -1296,7 +1293,7 @@ export default {
 }
 .required-field-info {
     display: block;
-    padding: 1em 0;
+    padding: 0 0 1em;
 }
 .profile_image-container.error .circle-box {
     border: solid 2px red;

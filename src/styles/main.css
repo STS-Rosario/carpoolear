@@ -1,6 +1,6 @@
-@import url('design-tokens.css');
-@import url('components/app-button.css');
-@import url('base.css');
+@import url('./design-tokens.css');
+@import url('./components/app-button.css');
+@import url('./base.css');
 :root {
   --main-background: #F0F0F0;
   --main-font-color: #555;
