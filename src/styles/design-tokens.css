@@ -48,6 +48,8 @@
     /* Typography — 16px root (1rem) */
     --ds-font-size-base: 1rem;
     --ds-page-title-size: 1.75rem;
+    --ds-heading-h2-size: 1.5rem;
+    --ds-heading-h3-size: 1.25rem;
     --ds-input-label-line-height: 1.125rem;
     --ds-info-card-font-size: 1rem;
     --ds-info-card-line-height: 1.125rem;

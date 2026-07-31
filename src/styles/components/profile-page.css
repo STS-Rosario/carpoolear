@@ -415,13 +415,29 @@
     display: block;
 }
 
-.profile-page .profile-rates-component h2 {
+/* Section headings — login title voice, sized by tag (h2) */
+.profile-page h2,
+.profile-page .tabset h2,
+.trips.container h2 {
     margin: 1.25rem 0 0.75rem;
     color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-bold, 700);
-    font-size: 1.25rem;
+    font-size: var(--ds-heading-h2-size);
     line-height: 1.15;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
+}
+
+.profile-page h3,
+.trips.container h3 {
+    margin: 1rem 0 0.5rem;
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-bold, 700);
+    font-size: var(--ds-heading-h3-size);
+    line-height: 1.2;
     letter-spacing: normal;
     text-transform: none;
     text-align: left;
