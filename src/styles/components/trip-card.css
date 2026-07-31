@@ -1,7 +1,16 @@
+.trip {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .trip-card-shell {
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    padding: 1rem;
+    height: 100%;
+    padding: 0.875rem;
     border: 1px solid #e5e5e5;
     border-radius: var(--ds-radius-button);
     background: var(--ds-neutral-bg);
@@ -14,34 +23,45 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: 0.625rem;
     min-height: 2.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     padding-right: 0.25rem;
+}
+
+.trip-card-shell__header:not(:has(.trip-card-shell__driver)) {
+    justify-content: flex-end;
+    min-height: 0;
+    margin-bottom: 0.5rem;
+}
+
+.trip-card-shell__header:not(:has(.trip-card-shell__driver)) .trip-card-shell__seats {
+    position: static;
 }
 
 .trip-card-shell__driver {
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: 0.5rem;
     flex: 1 1 auto;
     min-width: 0;
+    padding-right: 5.5rem;
     cursor: pointer;
 }
 
 .trip-card-shell__avatar {
     flex: 0 0 auto;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 50%;
     overflow: hidden;
     background: var(--ds-input-disabled-bg);
 }
 
 .trip-card-shell__name {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: var(--ds-font-weight-bold);
-    line-height: 1.25;
+    line-height: 1.2;
     color: var(--ds-text-primary);
 }
 
@@ -49,11 +69,16 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    line-height: 1.25;
+    gap: 0.25rem;
+    margin-top: 0.125rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
     color: var(--ds-text-secondary);
+}
+
+.trip-card-shell__meta :deep(.user-ratings-counts) {
+    font-size: 0.75rem;
+    gap: 0.625em;
 }
 
 .trip-card-shell__trips {
@@ -67,9 +92,9 @@
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.375rem 0.625rem;
+    padding: 0.3rem 0.55rem;
     border-radius: 999px;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: var(--ds-font-weight-bold);
     line-height: 1.2;
     white-space: nowrap;
@@ -95,11 +120,18 @@
     color: var(--ds-text-muted);
 }
 
+.trip-card-shell__divider {
+    flex: 0 0 auto;
+    height: 1px;
+    margin: 0 0 0.75rem;
+    background: #e8e8e8;
+}
+
 .trip-card-shell__body {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.875rem;
+    margin-bottom: 0.75rem;
 }
 
 .trip-card-shell__route {
@@ -113,7 +145,7 @@
     position: relative;
     flex: 0 0 0.75rem;
     width: 0.75rem;
-    margin-top: 0.375rem;
+    margin-top: 0.35rem;
 }
 
 .trip-card-shell__route-graphic::before {
@@ -154,7 +186,7 @@
 .trip-card-shell__route-content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.875rem;
     flex: 1 1 auto;
     min-width: 0;
 }
@@ -165,15 +197,6 @@
     gap: 0.125rem;
 }
 
-.trip-card-shell__route-label {
-    font-size: 0.75rem;
-    font-weight: var(--ds-font-weight-bold);
-    line-height: 1.2;
-    letter-spacing: 0.02em;
-    text-transform: none;
-    color: var(--ds-text-muted);
-}
-
 .trip-card-shell__city {
     font-size: 1rem;
     font-weight: var(--ds-font-weight-bold);
@@ -181,8 +204,9 @@
     color: var(--ds-text-primary);
 }
 
-.trip-card-shell__region {
+.trip-card-shell__point {
     font-size: 0.875rem;
+    font-weight: var(--ds-font-weight-regular, 400);
     line-height: 1.25;
     color: var(--ds-text-muted);
 }
@@ -215,7 +239,8 @@
 .trip-card-shell__footer {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.625rem;
+    margin-top: auto;
 }
 
 .trip-card-shell__footer > [data-slot='actions-extra'],
@@ -231,7 +256,7 @@
     justify-content: center;
     width: 100%;
     box-sizing: border-box;
-    padding: var(--ds-button-padding-y-md) var(--ds-button-padding-x-md);
+    padding: 0.375rem var(--ds-button-padding-x-md);
     border: var(--ds-button-border-width) solid var(--ds-action);
     border-radius: var(--ds-radius-button);
     background: var(--ds-action);
@@ -239,7 +264,7 @@
     font-family: inherit;
     font-size: var(--ds-button-font-size-md);
     font-weight: var(--ds-button-font-weight);
-    line-height: var(--ds-button-line-height);
+    line-height: 1.25;
     text-align: center;
     cursor: pointer;
     transition:
@@ -258,4 +283,29 @@
 
 .trip-card-shell__detail:focus-visible {
     box-shadow: var(--ds-focus-ring);
+}
+
+/* Equal-height cards in trip list rows (Bootstrap 3 rows are float-based) */
+.trips-section__list.row,
+.trips-list .row,
+.app-container .trips-section__list.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.trips-section__list.row > [class*='col-'],
+.trips-list .row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+    float: none;
+    margin-bottom: 1rem;
+}
+
+.trips-section__list.row > [class*='col-'] > .trip,
+.trips-list .row > [class*='col-'] > .trip,
+.row > [class*='col-'] > .trip,
+.row > [class*='col-'].trip,
+.row > [class*='col-'].trip-needs-sellado {
+    height: 100%;
+    width: 100%;
 }

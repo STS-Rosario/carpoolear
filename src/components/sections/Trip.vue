@@ -25,48 +25,15 @@
                 :seats-available="seats_available"
                 :show-seats-pill="!trip.is_passenger"
                 :from-city="locationLabels.fromCity"
-                :from-region="locationLabels.fromRegion"
+                :from-point="locationLabels.fromPoint"
                 :to-city="locationLabels.toCity"
-                :to-region="locationLabels.toRegion"
+                :to-point="locationLabels.toPoint"
                 :date-label="cardDateLabel"
                 :time-label="cardTimeLabel"
                 @profile-click="goToProfile"
                 @detail-click="onShellDetailClick"
             >
                 <template #body-extra>
-                    <div class="trip_visibility">
-                        <span
-                            v-if="trip.friendship_type_id === 0"
-                            :title="$t('visibilidadSoloAmigos')"
-                        >
-                            <span
-                                class="tooltip"
-                                :title="$t('visibilidadSoloAmigos')"
-                                :data-tooltip="$t('soloAmigosTooltip')"
-                            >
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </span>
-                        </span>
-                        <span
-                            v-else-if="trip.friendship_type_id === 1"
-                            :title="$t('visibilidadAmigosDeAmigos')"
-                        >
-                            <i class="fa fa-users" aria-hidden="true"></i>
-                        </span>
-                        <span
-                            v-else-if="trip.friendship_type_id === 2"
-                            :title="$t('visibilidadPublico')"
-                        >
-                            <span
-                                class="tooltip-bottom"
-                                :title="$t('visibilidadPublico')"
-                                :data-tooltip="$t('publicoTooltip')"
-                            >
-                                <i class="fa fa-globe" aria-hidden="true"></i>
-                            </span>
-                        </span>
-                    </div>
-
                     <div
                         v-if="showWeeklyScheduleOnly"
                         class="trip-card-weekly-schedule"

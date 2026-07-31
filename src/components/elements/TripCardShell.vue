@@ -32,6 +32,8 @@
             </div>
         </div>
 
+        <div class="trip-card-shell__divider" aria-hidden="true"></div>
+
         <div class="trip-card-shell__body">
             <div class="trip-card-shell__route">
                 <div class="trip-card-shell__route-graphic">
@@ -39,18 +41,16 @@
                 </div>
                 <div class="trip-card-shell__route-content">
                     <div class="trip-card-shell__endpoint">
-                        <span class="trip-card-shell__route-label">{{
-                            $t('puntoDePartida')
-                        }}</span>
                         <span class="trip-card-shell__city">{{ fromCity }}</span>
-                        <span class="trip-card-shell__region">{{ fromRegion }}</span>
+                        <span v-if="fromPoint" class="trip-card-shell__point">{{
+                            fromPoint
+                        }}</span>
                     </div>
                     <div class="trip-card-shell__endpoint">
-                        <span class="trip-card-shell__route-label">{{
-                            $t('puntoDeLlegada')
-                        }}</span>
                         <span class="trip-card-shell__city">{{ toCity }}</span>
-                        <span class="trip-card-shell__region">{{ toRegion }}</span>
+                        <span v-if="toPoint" class="trip-card-shell__point">{{
+                            toPoint
+                        }}</span>
                     </div>
                 </div>
             </div>
@@ -67,6 +67,8 @@
         </div>
 
         <slot name="body-extra" />
+
+        <div class="trip-card-shell__divider" aria-hidden="true"></div>
 
         <div class="trip-card-shell__footer">
             <slot name="actions-extra" />
@@ -110,7 +112,7 @@ export default {
             type: String,
             default: ''
         },
-        fromRegion: {
+        fromPoint: {
             type: String,
             default: ''
         },
@@ -118,7 +120,7 @@ export default {
             type: String,
             default: ''
         },
-        toRegion: {
+        toPoint: {
             type: String,
             default: ''
         },

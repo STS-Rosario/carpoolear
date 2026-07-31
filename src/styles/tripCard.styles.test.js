@@ -29,7 +29,7 @@ describe('trip card styles', () => {
             /\.trip-card-shell__avatar\s*\{[\s\S]*width:\s*2\.25rem/
         );
         expect(css).toMatch(
-            /\.trip-card-shell__detail\s*\{[\s\S]*padding:\s*var\(--ds-button-padding-y-sm\)/
+            /\.trip-card-shell__detail\s*\{[\s\S]*padding:\s*0\.375rem/
         );
     });
 
@@ -42,6 +42,9 @@ describe('trip card styles', () => {
         );
         expect(css).toMatch(
             /\.trip-card-shell__footer\s*\{[\s\S]*margin-top:\s*auto/
+        );
+        expect(css).toMatch(
+            /\.trips-section__list\.row[\s\S]*display:\s*flex/
         );
     });
 
