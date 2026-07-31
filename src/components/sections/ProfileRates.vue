@@ -7,7 +7,10 @@
                     :key="chip.id"
                     type="button"
                     class="profile-filter-chip"
-                    :class="{ 'profile-filter-chip--active': ratingFilter === chip.id }"
+                    :class="[
+                        `profile-filter-chip--${chip.id}`,
+                        { 'profile-filter-chip--active': ratingFilter === chip.id }
+                    ]"
                     @click="ratingFilter = chip.id"
                 >
                     <i
