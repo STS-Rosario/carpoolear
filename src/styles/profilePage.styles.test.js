@@ -102,6 +102,16 @@ describe('profile page styles', () => {
         );
     });
 
+    it('rounds own and public profile header and content cards on desktop', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-page\s+\.profile-identity-header\s*\{[^}]*border-radius:\s*0\.75rem/
+        );
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-page\s+\.profile-page__content-card\s*\{[^}]*border-radius:\s*0\.75rem/
+        );
+    });
+
     it('aligns profile trip role label with avatar and route', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(
