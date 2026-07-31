@@ -143,6 +143,24 @@
     gap: 0.5rem 0.75rem;
 }
 
+.messages-page__trip-link {
+    color: var(--messages-accent);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.messages-page__trip-link:hover,
+.messages-page__trip-link:focus {
+    text-decoration: underline;
+    color: var(--messages-accent);
+}
+
+.messages-page .conversation-notifications-toggle {
+    padding-left: 0;
+    color: var(--messages-accent);
+}
+
 .messages-page .message-composer {
     border: none;
     background: #fff;
@@ -164,21 +182,25 @@
     min-width: 0;
 }
 
-.messages-page .message-composer-send {
+.messages-page .message-composer-send,
+.messages-page .message-composer-send.active,
+.messages-page #btn-send,
+.messages-page #btn-send.active {
     flex: 0 0 auto;
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
     border: none;
     background: var(--messages-accent);
-    color: #fff;
+    color: #fff !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     opacity: 0.45;
 }
 
-.messages-page .message-composer-send.active {
+.messages-page .message-composer-send.active,
+.messages-page #btn-send.active {
     opacity: 1;
 }
 

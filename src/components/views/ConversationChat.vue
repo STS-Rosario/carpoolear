@@ -3,7 +3,16 @@
         <div class="list-group">
             <div class="list-group-item conversation_user_header hidden-xs">
                 <template v-if="isGroupChat">
-                    <h2>{{ groupChatTitle }}</h2>
+                    <div class="conversation_user_header_title_row">
+                        <h2>{{ groupChatTitle }}</h2>
+                        <router-link
+                            v-if="groupTripId"
+                            class="messages-page__trip-link"
+                            :to="{ name: 'detail_trip', params: { id: groupTripId } }"
+                        >
+                            {{ $t('verDetalleViaje') }}
+                        </router-link>
+                    </div>
                     <ConversationParticipants :users="conversation.users" />
                     <button
                         type="button"
@@ -65,14 +74,26 @@
                         {{ $t('verMasMensajes') }}
                     </button>
                 </div>
-                <MessageView
-                    v-for="m in messages"
-                    :key="m.id"
-                    :message="m"
-                    :user="user"
-                    :users="conversation.users"
-                    :isGroupChat="isGroupChat"
-                ></MessageView>
+                <template
+                    v-for="item in messagesWithDaySeparators"
+                    :key="item.type === 'day' ? item.key : item.message.id"
+                >
+                    <div
+                        v-if="item.type === 'day'"
+                        class="message-day-separator"
+                    >
+                        <span class="message-day-separator__label">{{
+                            item.label
+                        }}</span>
+                    </div>
+                    <MessageView
+                        v-else
+                        :message="item.message"
+                        :user="user"
+                        :users="conversation.users"
+                        :isGroupChat="isGroupChat"
+                    ></MessageView>
+                </template>
             </div>
             <div class="list-group-item message-composer">
                 <div class="message-composer-editor-wrap">
@@ -131,6 +152,7 @@ import {
     getOtherParticipant,
     getOtherParticipantRatings
 } from '../../utils/conversationOtherUserRatings.js';
+import { buildMessagesWithDaySeparators } from '../../utils/chatMessageDaySeparators.js';
 
 export default {
     name: 'conversation-chat',
@@ -211,6 +233,19 @@ export default {
             return formatTripGroupChatTitle(
                 this.$t.bind(this),
                 this.conversation?.trip_date
+            );
+        },
+        groupTripId() {
+            return (
+                this.conversation?.trip?.id ||
+                this.conversation?.trip_id ||
+                null
+            );
+        },
+        messagesWithDaySeparators() {
+            return buildMessagesWithDaySeparators(
+                this.messages,
+                this.$t.bind(this)
             );
         }
     },

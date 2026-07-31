@@ -506,6 +506,8 @@ const messages = {
         filtroMensajesTodos: 'Todos',
         filtroMensajesGrupales: 'Grupales',
         filtroMensajesIndividuales: 'Individuales',
+        mensajeDiaHoy: 'Hoy',
+        mensajeDiaAyer: 'Ayer',
         perfilViajesParticipados: '{count} viajes',
         cambioFacebook:
             'Facebook cambió sus políticas y no podemos llevarte al perfil de esta persona, pero te ayudamos a buscarlo.',
@@ -2639,6 +2641,8 @@ const messages = {
         filtroMensajesTodos: 'Todos',
         filtroMensajesGrupales: 'Grupales',
         filtroMensajesIndividuales: 'Individuales',
+        mensajeDiaHoy: 'Hoy',
+        mensajeDiaAyer: 'Ayer',
         perfilViajesParticipados: '{count} viajes',
         compartirEnFacebook: 'Compartir en Facebook',
         compartirEnTwitter: 'Compartir en Twitter',
@@ -3585,6 +3589,8 @@ const messages = {
         filtroMensajesTodos: 'All',
         filtroMensajesGrupales: 'Groups',
         filtroMensajesIndividuales: 'Direct',
+        mensajeDiaHoy: 'Today',
+        mensajeDiaAyer: 'Yesterday',
         perfilViajesParticipados: '{count} trips',
         cambioFacebook:
             "Facebook changed its policies and we cannot take you to this person's profile, but we can help you search for them.",
