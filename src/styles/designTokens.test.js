@@ -22,14 +22,17 @@ describe('design tokens', () => {
         expect(tokensCss).toContain('--ds-warning-solid:');
         expect(tokensCss).toContain('--ds-error-solid:');
         expect(tokensCss).toContain('--ds-destructive:');
-        expect(tokensCss).toContain('--ds-text-primary:');
+        expect(tokensCss).toContain('--ds-text-primary: #22211F');
         expect(tokensCss).toContain('--ds-text-secondary:');
         expect(tokensCss).toContain('--ds-text-muted:');
+        expect(tokensCss).toContain('--main-font-color: var(--ds-text-primary)');
     });
 
     it('defines shared button geometry and typography tokens', () => {
         expect(tokensCss).toContain('--ds-radius-button:');
         expect(tokensCss).toContain('--ds-button-font-weight:');
+        expect(tokensCss).toContain('--ds-font-size-base:');
+        expect(tokensCss).toContain('--ds-font-family:');
         expect(tokensCss).toContain('--ds-button-gap:');
         expect(tokensCss).toContain('--ds-focus-ring:');
         expect(tokensCss).toContain('--ds-button-disabled-bg:');

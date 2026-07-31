@@ -381,6 +381,15 @@ export default {
             return true;
         },
         showBrandedMobileHeader() {
+            const authShellRoutes = [
+                'login',
+                'register',
+                'reset-password',
+                'reset-password-confirm'
+            ];
+            if (this.isMobile && authShellRoutes.includes(this.$route.name)) {
+                return true;
+            }
             return this.isMobile && this.showLogo;
         },
         isTripsPage() {
@@ -564,12 +573,15 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: nowrap;
     gap: 0.75rem;
+    width: 100%;
     min-height: 3rem;
 }
 .mobile-header-bar__brand {
     display: flex;
     align-items: center;
+    flex: 1 1 auto;
     min-width: 0;
 }
 .mobile-header-bar__logo-link {
@@ -582,7 +594,8 @@ export default {
     width: auto;
 }
 .mobile-header-bar__donate {
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    margin-left: auto;
 }
 .header_logo-image {
     display: block;

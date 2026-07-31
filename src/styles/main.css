@@ -1,9 +1,12 @@
 @import url('./design-tokens.css');
 @import url('./components/app-button.css');
+@import url('./components/app-input.css');
+@import url('./components/app-page-title.css');
+@import url('./components/app-info-card.css');
+@import url('./components/login-page.css');
 @import url('./base.css');
 :root {
   --main-background: #F0F0F0;
-  --main-font-color: #555;
   --main-error:#D72521;
   --medium-font-color: #666666;
   --soft-font-color: #BBBBBB;

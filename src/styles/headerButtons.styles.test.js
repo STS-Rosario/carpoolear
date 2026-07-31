@@ -44,6 +44,7 @@ describe('HeaderApp header buttons and branding', () => {
     it('shows a simplified mobile header with logo and Doná when the logo is visible', () => {
         expect(headerSource).toContain('mobile-header-bar--branded');
         expect(headerSource).toContain('showBrandedMobileHeader');
+        expect(headerSource).toContain("'login'");
         expect(headerSource).toMatch(
             /showBrandedMobileHeader[\s\S]*header_logo/
         );

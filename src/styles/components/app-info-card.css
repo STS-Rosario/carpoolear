@@ -1,0 +1,87 @@
+.app-info-card {
+    display: flex;
+    align-items: center;
+    gap: var(--ds-info-card-gap);
+    width: 100%;
+    padding: 1rem var(--ds-info-card-padding-x);
+    border-radius: var(--ds-radius-input);
+    background: var(--ds-info-bg);
+    color: var(--ds-text-primary);
+    text-align: left;
+}
+
+.blue .app-info-card,
+.blue .app-info-card p,
+.blue .app-info-card .app-info-card__text {
+    color: var(--ds-text-primary);
+}
+
+.app-info-card__icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    margin: 0 var(--ds-info-card-icon-margin-x);
+    line-height: 0;
+}
+
+.app-info-card__icon-image {
+    display: block;
+    width: var(--ds-info-card-icon-size);
+    height: var(--ds-info-card-icon-size);
+    background-color: var(--ds-info-solid);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+.app-info-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+}
+
+.app-info-card__text {
+    margin: 0;
+    color: var(--ds-text-primary);
+    font-size: var(--ds-info-card-font-size);
+    line-height: var(--ds-info-card-line-height);
+}
+
+.app-info-card__text strong {
+    font-weight: 700;
+}
+
+.blue .app-info-card .app-info-card__action {
+    color: var(--ds-link);
+}
+
+.app-info-card__action {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ds-link);
+    font-family: inherit;
+    font-size: var(--ds-info-card-font-size);
+    font-weight: 500;
+    line-height: var(--ds-info-card-line-height);
+    text-align: left;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.app-info-card__action:hover,
+.app-info-card__action:focus {
+    color: var(--ds-action-hover);
+    outline: none;
+}
+
+.app-info-card__action:focus-visible {
+    box-shadow: var(--ds-focus-ring);
+}

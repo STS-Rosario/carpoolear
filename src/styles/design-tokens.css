@@ -27,21 +27,36 @@
     --ds-error-text: #7F1D1D;
     --ds-error-solid: #C53036;
 
+    /* Text */
+    --ds-destructive: #991B1B;
+    --ds-text-primary: #22211F;
+    --ds-text-secondary: #404040;
+    --ds-text-muted: #737373;
+
+    /* Legacy body text alias — prefer --ds-text-primary in new code */
+    --main-font-color: var(--ds-text-primary);
+
     /* Neutral */
     --ds-neutral-bg: #FFFFFF;
-    --ds-neutral-text: #171717;
+    --ds-neutral-text: var(--ds-text-primary);
     --ds-neutral-solid: #605E59;
 
     /* Info */
     --ds-info-bg: #E1EFFA;
     --ds-info-solid: #1E5F9E;
-    --ds-info-text: #22394B;
 
-    /* Text */
-    --ds-destructive: #991B1B;
-    --ds-text-primary: #171717;
-    --ds-text-secondary: #404040;
-    --ds-text-muted: #737373;
+    /* Typography — 16px root (1rem) */
+    --ds-font-size-base: 1rem;
+    --ds-page-title-size: 1.75rem;
+    --ds-input-label-line-height: 1rem;
+    --ds-info-card-font-size: 1rem;
+    --ds-info-card-line-height: 1.125rem;
+    --ds-info-card-icon-size: 1.5rem;
+    --ds-info-card-padding-x: 1.5rem;
+    --ds-info-card-gap: 1rem;
+    --ds-info-card-icon-margin-x: 0.375rem;
+
+    --ds-font-family: 'Barlow', sans-serif;
 
     /* Button geometry & typography */
     --ds-radius-button: 8px;
@@ -78,4 +93,26 @@
     --ds-header-donate-hover-bg: #991B1B;
     --ds-header-donate-hover-border: #7F1D1D;
     --ds-header-bg: #1E5F9E;
+
+    /* Inputs */
+    --ds-input-bg: #FFFFFF;
+    --ds-input-border: #D1D5DB;
+    --ds-input-text: var(--ds-text-primary);
+    --ds-input-label: #404040;
+    --ds-input-hint: #737373;
+    --ds-input-placeholder: #737373;
+    --ds-input-focus-border: #1E5F9E;
+    --ds-input-focus-ring: 0 0 0 3px rgba(30, 95, 158, 0.22);
+    --ds-input-error-border: #991B1B;
+    --ds-input-error-text: #7F1D1D;
+    --ds-input-disabled-bg: #F3F4F6;
+    --ds-input-disabled-text: #A3A3A3;
+    --ds-input-disabled-border: #E5E7EB;
+    --ds-radius-input: 8px;
+    --ds-input-font-size: 1rem;
+    --ds-input-label-size: 0.875rem;
+    --ds-input-hint-size: 0.8125rem;
+    --ds-input-padding-y: 0.75rem;
+    --ds-input-padding-x: 1rem;
+    --ds-input-gap: 0.375rem;
 }

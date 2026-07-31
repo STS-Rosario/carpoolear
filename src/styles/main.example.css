@@ -24,7 +24,7 @@ html {
 body {
     background: var(--main-background);
     color: var(--main-font-color);
-    font-family: 'Roboto', 'Muli', sans-serif !important;
+    font-family: var(--ds-font-family) !important;
     font-weight: 400;
     padding: 0;
 }
@@ -1718,7 +1718,7 @@ textarea {
 
 .actionbar_title {
     font-size: 26px;
-    font-family: 'Muli';
+    font-family: var(--ds-font-family);
     font-weight: 300;
     margin-left: .5em;
 }

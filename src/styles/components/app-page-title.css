@@ -1,0 +1,13 @@
+.app-page-title {
+    margin: 0 0 1.5rem;
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-page-title-size);
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: left;
+}
+
+.user-form--login-mobile .app-page-title {
+    margin-top: 0.25rem;
+}

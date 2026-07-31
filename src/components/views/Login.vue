@@ -1,13 +1,15 @@
 <template>
-    <div class="user-form container">
+    <div
+        class="user-form user-form--inputs user-form--login container"
+        :class="{ 'user-form--login-mobile': isMobile }"
+    >
         <router-link v-if="isDesktop" :to="{ name: 'trips' }">
             <img :src="carpoolear_logo" />
         </router-link>
-        <div class="login-header">
-            <h1 v-if="!(hasScroll && isMobile)">
-                {{ $t('iniciarSesion') }}
-                <!-- <span class='brand' v-if="!loginCustomHeader">{{ $t('carpoolear') }}</span> -->
-            </h1>
+        <AppPageTitle v-if="!(hasScroll && isMobile) && !loginCustomHeader">
+            {{ $t('iniciarSesion') }}
+        </AppPageTitle>
+        <div class="login-header" v-if="loginCustomHeader">
             <div
                 class="col-sm-12 col-md-12"
                 v-show="isMobile && loginCustomHeader"
@@ -15,7 +17,7 @@
                 <img class="login-custom-header--logo" :src="app_logo" />
             </div>
         </div>
-        <div class="form row">
+        <div class="form row login-form">
             <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
                 {{ $t('recuperarDeFacebook') }}
                 <a :href="'mailto:' + config.admin_email">{{
@@ -45,53 +47,42 @@
             </div>
 
             <div class="login-box" :class="[righPanelclass]">
-                <label v-show="!loginCustomHeader" for="txt_user">{{
-                    $t('email')
-                }}</label>
                 <div class="visual-trick">
                     <form @submit.prevent="submitLogin">
-                        <input
-                            :placeholder="$t('loginUsuarioPlaceholder')"
+                        <AppInput
+                            v-show="!loginCustomHeader"
                             ref="txt_user"
+                            :label="$t('email')"
+                            v-model="email"
                             type="email"
                             id="txt_user"
                             name="email"
+                            :placeholder="$t('loginUsuarioPlaceholder')"
                             autocomplete="username"
                             autocapitalize="none"
                             autocorrect="off"
                             spellcheck="false"
                             inputmode="email"
-                            v-model="email"
-                            v-jump
                         />
-                        <label for="txt_password" v-show="isDesktop">{{
-                            $t('password')
-                        }}</label>
-                        <div class="password-field">
-                            <input
-                                :placeholder="$t('loginPasswordPlaceholder')"
-                                ref="txt_password"
-                                :type="showPassword ? 'text' : 'password'"
-                                id="txt_password"
-                                name="password"
-                                autocomplete="current-password"
-                                v-jump
-                                v-model="password"
-                            />
-                            <button
-                                type="button"
-                                id="btn_toggle_password"
-                                class="password-field__toggle"
-                                :aria-label="showPassword ? $t('ocultarContrasena') : $t('mostrarContrasena')"
-                                @click="togglePasswordVisibility"
-                            >
-                                <i
-                                    class="fa"
-                                    :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-                                    aria-hidden="true"
-                                ></i>
-                            </button>
-                        </div>
+                        <AppInput
+                            ref="txt_password"
+                            :label="$t('password')"
+                            v-model="password"
+                            password
+                            id="txt_password"
+                            name="password"
+                            :placeholder="$t('loginPasswordPlaceholder')"
+                            autocomplete="current-password"
+                            :show-password-label="$t('mostrarContrasena')"
+                            :hide-password-label="$t('ocultarContrasena')"
+                        />
+                        <router-link
+                            v-if="isMobile"
+                            class="login-form__link login-form__forgot"
+                            :to="{ name: 'reset-password' }"
+                        >
+                            {{ $t('olvideContraMobile') }}
+                        </router-link>
                         <div
                             class="alert alert-info"
                             role="alert"
@@ -106,17 +97,30 @@
                         >
                             {{ $t('usuarioBanneado') }}
                         </div>
-                        <button
+                        <AppButton
                             v-jump
                             ref="btn_login"
                             id="btn_login"
                             type="submit"
-                            class="btn btn-primary btn-shadowed-black"
-                            :disabled="loading"
+                            variant="primary"
+                            block
+                            class="login-form__submit"
+                            :loading="loading"
+                            :label="$t('iniciarSesion')"
                         >
-                            <span v-if="!loading">{{ $t('ingresar') }}</span>
-                            <spinner class="blue" v-if="loading"></spinner>
-                        </button>
+                            <template #loading>
+                                <spinner class="blue"></spinner>
+                            </template>
+                        </AppButton>
+                        <div
+                            v-if="isMobile"
+                            class="login-form__remember"
+                        >
+                            <input id="checkbox_remember" type="checkbox" />
+                            <label for="checkbox_remember">{{
+                                $t('recordarMiCuenta')
+                            }}</label>
+                        </div>
                     </form>
                 </div>
                 <div class="pass-options" v-if="isDesktop">
@@ -133,49 +137,30 @@
                     </router-link>
                 </div>
             </div>
-            <div style="col-sm-12" v-show="isMobile">
-                <router-link
-                    class="password-not"
-                    :to="{ name: 'reset-password' }"
-                >
-                    {{ $t('olvideContra') }}
-                </router-link>
-            </div>
-            <div class="col-sm-12 col-md-12" v-show="isMobile">
-                <span class="register" v-if="isMobile">
+            <div v-if="isMobile" class="login-form__footer col-sm-12 col-md-12">
+                <hr class="login-form__divider" />
+                <p class="login-form__register-prompt">
                     {{ $t('noTenesFace') }}
                     <router-link
-                        class="login-register"
+                        class="login-form__link"
                         :to="{ name: 'register' }"
                     >
-                        {{ $t('registrateAca') }}
+                        {{ $t('registrateAcaLink') }}
                     </router-link>
-                </span>
+                </p>
+                <hr class="login-form__divider" />
+                <AppInfoCard
+                    :action-label="$t('loginLegacyProvidersContact')"
+                    @action="openLegacyLoginModal"
+                >
+                    <template #text>
+                        <span
+                            v-html="$t('loginLegacyProvidersQuestion')"
+                        ></span>
+                    </template>
+                </AppInfoCard>
             </div>
 
-            <div
-                class="col-sm-12 col-md-12"
-                v-show="isMobile"
-            >
-                <hr />
-                <button
-                    class="btn btn-primary btn-search btn-apple btn-with-icon"
-                    @click="toggleModalLogin('apple')"
-                    :disabled="iosLoading"
-                    v-if="isApple"
-                >
-                    <span class="btn-with-icon--icon">
-                        <i class="fa fa-apple" aria-hidden="true"></i>
-                    </span>
-                    <span class="btn-with-icon--label">
-                        <span v-if="!iosLoading">{{
-                            $t('ingresaConApple')
-                        }}</span>
-                        <spinner class="blue" v-if="iosLoading"></spinner>
-                    </span>
-                </button>
-                <!-- <div class="fb-terms">{{ $t('alIngresarFacebook') }} <router-link :to="{name: 'terms'}">{{ $t('tyc') }}</router-link>.</div> -->
-            </div>
             <div
                 class="login-box"
                 :class="[righPanelclass]"
@@ -256,21 +241,6 @@
                     .
                 </div>
             </div>
-            <div class="col-sm-12 col-md-12">
-                <button
-                    class="btn btn-primary btn-search btn-facebook btn-with-icon"
-                    @click="toggleModalLogin('facebook')"
-                >
-                    <span class="btn-with-icon--icon">
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
-                    </span>
-                    <span class="btn-with-icon--label">
-                        <span v-if="!fbLoading">{{ $t('ingresaConFace') }}</span>
-                        <spinner class="blue" v-if="fbLoading"></spinner>
-                    </span>
-                </button>
-            </div>
-
             <modal
                 :name="'modal'"
                 v-if="showModalLogin"
@@ -322,6 +292,10 @@ import dialogs from '../../services/dialogs.js';
 import router from '../../router';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppPageTitle from '../ui/AppPageTitle.vue';
+import AppInfoCard from '../ui/AppInfoCard.vue';
 import cache from '../../services/cache';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
@@ -335,7 +309,6 @@ export default {
         return {
             email: '',
             password: '',
-            showPassword: false,
             loading: false,
             fbLoading: false,
             iosLoading: false,
@@ -429,8 +402,8 @@ export default {
             }
             this.showModalLogin = !this.showModalLogin;
         },
-        togglePasswordVisibility() {
-            this.showPassword = !this.showPassword;
+        openLegacyLoginModal() {
+            this.toggleModalLogin('facebook');
         },
         submitLogin() {
             if (this.loading) {
@@ -560,7 +533,11 @@ export default {
 
     components: {
         Spinner,
-        modal
+        modal,
+        AppInput,
+        AppButton,
+        AppPageTitle,
+        AppInfoCard
     }
 };
 </script>

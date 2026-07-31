@@ -344,7 +344,7 @@ export default {
     left: 20px;
     color: #999;
     font-size: 12px;
-    font-family: Arial, sans-serif;
+    font-family: 'Barlow', sans-serif;
 }
 
 .splash-image {

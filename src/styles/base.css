@@ -1,7 +1,6 @@
 /* iOS and Android Capacitor safe area fixes */
 :root {
     --main-background: #F0F0F0;
-    --main-font-color: #555;
     --main-error:#D72521;
     --medium-font-color: #666666;
     --soft-font-color: #BBBBBB;
@@ -24,7 +23,7 @@
     --calification-star-size: 14;
   }
   html {
-      font-size: 100%;
+      font-size: 16px;
       overflow-x: hidden;
       max-width: 100vw;
       position: relative;
@@ -40,7 +39,8 @@
   body {
       background: var(--main-background);
       color: var(--main-font-color);
-      font-family: 'Roboto', 'Muli', sans-serif !important;
+      font-family: var(--ds-font-family) !important;
+      font-size: var(--ds-font-size-base);
       font-weight: 400;
       overflow-x: hidden;
       max-width: 100vw;
@@ -1941,7 +1941,7 @@
 
   .mobile-header-bar__title {
       font-size: 26px;
-      font-family: 'Muli';
+      font-family: var(--ds-font-family);
       font-weight: 300;
       margin-left: .5em;
       max-width: 50%;
@@ -2140,8 +2140,8 @@
       color: #036686;
       font-weight: 400;
   }
-  .blue h2,
-  .blue p {
+  .blue:not(.login):not(.register):not(.reset-password) h2,
+  .blue:not(.login):not(.register):not(.reset-password) p {
       color: #fff;
   }
 
@@ -2227,7 +2227,7 @@
       margin: 0 10px;
   }
   .user-form button {
-      margin-top: 1em;
+      margin-top: 0.5rem;
   }
   .user-form .btn-primary {
       height: 56px;

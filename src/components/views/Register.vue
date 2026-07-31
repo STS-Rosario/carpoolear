@@ -1,5 +1,5 @@
 <template>
-    <div class="register-component user-form container">
+    <div class="register-component user-form user-form--inputs container">
         <router-link v-if="!isMobile" :to="{ name: 'trips' }">
             <img :src="carpoolear_logo" />
         </router-link>
@@ -61,62 +61,52 @@
                     {{ $t('camposObligatorios') }}
                 </div>
                 <br />
-                <label for="txt_name">
-                    {{ $t('nombre') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span>
-                    
-                </label>
-                <input
-                    :placeholder="$t('nombre')"
+                <AppInput
                     autofocus
-                    v-jump
                     ref="txt_name"
                     name="txt_name"
                     maxlength="25"
                     type="text"
                     id="txt_name"
                     v-model="name"
-                    :class="{ 'has-error': nombreError.state }"
-                />
+                    :placeholder="$t('nombre')"
+                    :error="nombreError.state ? nombreError.message : ''"
+                >
+                    <template #label>
+                        {{ $t('nombre') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="nombreError.state">
                     {{ nombreError.message }}
                 </span>
-                <label for="txt_surename">
-                    {{ $t('apellido') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span
-                    >
-                </label>
-                <input
-                    :placeholder="$t('apellido')"
-                    v-jump
+                <AppInput
                     ref="txt_surename"
                     name="txt_surename"
                     maxlength="25"
                     type="text"
                     id="txt_surename"
                     v-model="sureName"
-                    :class="{ 'has-error': apellidoError.state }"
-                />
+                    :placeholder="$t('apellido')"
+                    :error="apellidoError.state ? apellidoError.message : ''"
+                >
+                    <template #label>
+                        {{ $t('apellido') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="apellidoError.state">
                     {{ apellidoError.message }}
                 </span>
-                <label for="txt_email">
-                    {{ $t('email') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span
-                    >
-                </label>
-                <input
-                    :placeholder="$t('email')"
-                    v-jump
+                <AppInput
                     ref="txt_email"
                     name="txt_email"
                     maxlength="40"
@@ -128,31 +118,41 @@
                     spellcheck="false"
                     inputmode="email"
                     v-model="email"
-                    :class="{ 'has-error': emailError.state }"
-                />
+                    :placeholder="$t('email')"
+                    :error="emailError.message"
+                >
+                    <template #label>
+                        {{ $t('email') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="emailError.state">
                     {{ emailError.message }}
                 </span>
 
-                <label for="txt_email_verification">
-                    {{ $t('emailVerification') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span
-                    >
-                </label>
-                <input
-                    :placeholder="$t('emailVerification')"
-                    v-jump
+                <AppInput
                     ref="txt_email_verification"
                     name="txt_email_verification"
                     maxlength="40"
                     type="text"
                     id="txt_email_verification"
                     v-model="emailVerification"
-                    :class="{ 'has-error': emailVerificationError.state }"
-                />
+                    :placeholder="$t('emailVerification')"
+                    :error="emailVerificationError.state ? emailVerificationError.message : ''"
+                >
+                    <template #label>
+                        {{ $t('emailVerification') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="emailVerificationError.state">
                     {{ emailVerificationError.message }}
                 </span>
@@ -161,49 +161,53 @@
                 <span class="error" v-if="birthdayError.state">
                     {{ birthdayError.message }}
                 </span>
-                <label for="txt_password">
-                    {{ $t('password') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span
-                    >
-                </label>
-                <input
-                    :placeholder="$t('password')"
-                    v-jump
+                <AppInput
                     ref="txt_password"
                     name="txt_password"
                     maxlength="40"
-                    type="password"
                     id="txt_password"
                     autocomplete="new-password"
                     v-model="password"
-                    :class="{ 'has-error': passwordError.state }"
-                />
+                    password
+                    :placeholder="$t('password')"
+                    :error="passwordError.state ? passwordError.message : ''"
+                    :show-password-label="$t('mostrarContrasena')"
+                    :hide-password-label="$t('ocultarContrasena')"
+                >
+                    <template #label>
+                        {{ $t('password') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="passwordError.state">
                     {{ passwordError.message }}
                 </span>
-                <label for="txt_password_confirmation">
-                    {{ $t('ingresePassword') }}
-                    <span
-                        :aria-label="$t('campoObligatorio')"
-                        class="campo-obligatorio"
-                        >*</span
-                    >
-                </label>
-                <input
-                    :placeholder="$t('ingresePassword')"
-                    v-jump
+                <AppInput
                     ref="txt_password_confirmation"
                     name="txt_password_confirmation"
                     maxlength="40"
-                    type="password"
                     id="txt_password_confirmation"
                     autocomplete="new-password"
                     v-model="passwordConfirmation"
-                    :class="{ 'has-error': passwordError.state }"
-                />
+                    password
+                    :placeholder="$t('ingresePassword')"
+                    :error="passwordError.state ? passwordError.message : ''"
+                    :show-password-label="$t('mostrarContrasena')"
+                    :hide-password-label="$t('ocultarContrasena')"
+                >
+                    <template #label>
+                        {{ $t('ingresePassword') }}
+                        <span
+                            :aria-label="$t('campoObligatorio')"
+                            class="campo-obligatorio"
+                            >*</span
+                        >
+                    </template>
+                </AppInput>
                 <span class="error" v-if="passwordError.state">
                     {{ passwordError.message }}
                 </span>
@@ -387,6 +391,7 @@ import router from '../../router';
 import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
+import AppInput from '../ui/AppInput.vue';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
     IMAGE_UPLOAD_ACCEPT
@@ -486,7 +491,8 @@ export default {
     },
     components: {
         modal,
-        Spinner
+        Spinner,
+        AppInput
     },
     methods: {
         ...mapActions(useAuthStore, {

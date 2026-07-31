@@ -2,7 +2,6 @@
 
 :root {
     --main-background: #F0F0F0;
-    --main-font-color: #555;
     --main-error: #D72521;
     --medium-font-color: #666666;
     --soft-font-color: #BBBBBB;
@@ -28,7 +27,7 @@ html {
 body {
     background: var(--main-background);
     color: var(--main-font-color);
-    font-family: 'Roboto', 'Muli', sans-serif !important;
+    font-family: var(--ds-font-family) !important;
     font-weight: 400;
     padding: 0;
 }
@@ -2217,7 +2216,7 @@ textarea {
 
 .mobile-header-bar__title {
     font-size: 26px;
-    font-family: 'Muli';
+    font-family: var(--ds-font-family);
     font-weight: 300;
     margin-left: .5em;
 }
@@ -2396,8 +2395,8 @@ h2 {
     font-weight: 400;
 }
 
-.blue h2,
-.blue p {
+.blue:not(.login):not(.register):not(.reset-password) h2,
+.blue:not(.login):not(.register):not(.reset-password) p {
     color: #fff;
 }
 
@@ -2481,7 +2480,7 @@ textarea.has-error {
 }
 
 .user-form button {
-    margin-top: 1em;
+    margin-top: 0.5rem;
 }
 
 .user-form .btn-primary {
