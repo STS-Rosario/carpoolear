@@ -18,6 +18,7 @@ describe('app auth page styles', () => {
         expect(tokensCss).toContain('--ds-auth-card-shadow:');
         expect(tokensCss).toContain('--ds-auth-card-max-width: 1200px');
         expect(tokensCss).toContain('--ds-auth-column-gap:');
+        expect(tokensCss).toContain('--ds-auth-field-max-width: 30rem');
     });
 
     it('imports auth page styles after base.css so login overrides win', () => {
@@ -54,6 +55,15 @@ describe('app auth page styles', () => {
         expect(authPageCss).toContain('var(--ds-auth-column-gap)');
         expect(authPageCss).toMatch(
             /\.app-auth-page \.app-page-title[\s\S]*margin-left:\s*0/
+        );
+        expect(authPageCss).toMatch(
+            /\.user-form--inputs \.app-auth-page \.app-input[\s\S]*max-width:\s*var\(--ds-auth-field-max-width\)/
+        );
+        expect(authPageCss).toMatch(
+            /\.user-form--inputs \.app-auth-page \.app-button[\s\S]*width:\s*fit-content/
+        );
+        expect(authPageCss).toMatch(
+            /\.user-form--inputs \.app-auth-page \.app-button[\s\S]*max-width:\s*none/
         );
     });
 

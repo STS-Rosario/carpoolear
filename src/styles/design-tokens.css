@@ -117,6 +117,7 @@
     --ds-auth-card-padding-y: 2rem;
     --ds-auth-card-max-width: 1200px;
     --ds-auth-column-gap: 3rem;
+    --ds-auth-field-max-width: 30rem;
 
     /* Inputs */
     --ds-input-bg: #FFFFFF;

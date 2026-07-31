@@ -1,7 +1,18 @@
+.user-form--inputs .app-auth-page .app-input {
+    width: 100%;
+    max-width: var(--ds-auth-field-max-width);
+}
+
+.user-form--inputs .app-auth-page .app-button {
+    width: fit-content;
+    max-width: none;
+}
+
 @media (min-width: 768px) {
     .app-container.blue.login,
     .app-container.blue.register,
-    .app-container.blue.reset-password {
+    .app-container.blue.reset-password,
+    .app-container.blue.reset-password-confirm {
         background: var(--ds-auth-page-bg);
         background-image: none;
         filter: none;
@@ -99,6 +110,25 @@
         margin-bottom: 1.5rem;
         display: block;
         text-align: left;
+    }
+
+    .app-container.blue.reset-password .app-auth-page .reset-form,
+    .app-container.blue.reset-password .app-auth-page .user-form .form,
+    .app-container.blue.reset-password-confirm .app-auth-page .reset-form,
+    .app-container.blue.reset-password-confirm .app-auth-page .user-form .form {
+        display: block;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .user-form--reset-password.container {
+        min-height: auto;
+        max-width: none;
+        text-align: left;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 

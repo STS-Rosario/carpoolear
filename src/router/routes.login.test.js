@@ -26,3 +26,22 @@ describe('register route header', () => {
         expect(registerRoute).not.toContain("buttons: ['back']");
     });
 });
+
+describe('reset password route headers', () => {
+    it('shows the desktop header logo and auth buttons on reset password pages', () => {
+        const resetRoute = routesSource.match(
+            /path:\s*'\/reset-password'[\s\S]*?},\s*\{/
+        )?.[0];
+        const resetConfirmRoute = routesSource.match(
+            /path:\s*'\/reset-password\/:token'[\s\S]*?},\s*\{/
+        )?.[0];
+
+        expect(resetRoute).toMatch(/logo:\s*\{[\s\S]*show:\s*true/);
+        expect(resetRoute).toMatch(/buttons:\s*\[\s*\]/);
+        expect(resetRoute).not.toContain("buttons: ['back']");
+
+        expect(resetConfirmRoute).toMatch(/logo:\s*\{[\s\S]*show:\s*true/);
+        expect(resetConfirmRoute).toMatch(/buttons:\s*\[\s*\]/);
+        expect(resetConfirmRoute).not.toContain("buttons: ['back']");
+    });
+});
