@@ -424,10 +424,11 @@
     display: block;
 }
 
-/* Section headings — login title voice, sized by tag (h2) */
+/* Section headings — login title voice, sized by tag (h2).
+   Exclude the home search hero title (blue + centered). */
 .profile-page h2,
 .profile-page .tabset h2,
-.trips.container h2 {
+.trips.container h2:not(.trips-search__hero-title) {
     margin: 1.25rem 0 0.75rem;
     color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
@@ -437,6 +438,22 @@
     letter-spacing: normal;
     text-transform: none;
     text-align: left;
+}
+
+.trips.container .trips-search__hero {
+    text-align: center;
+}
+
+.trips.container .trips-search__hero-title {
+    margin: 0 0 0.5rem;
+    color: var(--ds-action);
+    font-family: var(--ds-font-family);
+    font-size: 2rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    line-height: 1.15;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: center;
 }
 
 .profile-page h3,
