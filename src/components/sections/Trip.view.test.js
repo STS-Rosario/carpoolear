@@ -150,9 +150,12 @@ describe('Trip card future owner footer actions', () => {
         expect(footerExtra).toContain('trip-seats-control');
         expect(footerExtra).toContain("$t('editarViaje')");
         expect(footerExtra).toContain("$t('groupChatButton')");
-        expect(footerExtra).toContain('group_chat_conversation_id');
+        expect(footerExtra).toContain('showGroupChatButton');
         expect(footerExtra).toContain("$t('cancelarViaje')");
         expect(footerExtra).toContain('deleteTrip');
+        expect(source).toMatch(
+            /showGroupChatButton\(\)\s*\{[\s\S]*group_chat_conversation_id/
+        );
 
         const seatsIdx = footerExtra.indexOf("$t('lugaresLibres')");
         const editIdx = footerExtra.indexOf("$t('editarViaje')");

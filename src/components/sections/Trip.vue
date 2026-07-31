@@ -71,93 +71,61 @@
                 </template>
 
                 <template v-if="enableChangeSeats" #footer-extra>
-                    <div class="row">
+                    <div class="trip-card-owner-actions">
                         <div
                             v-if="!trip.is_passenger"
-                            class="trip-seats-control col-xs-offset-2"
+                            class="trip-seats-control"
                         >
-                            <button
-                                :aria-label="$t('disminuirCantidadAsientos')"
-                                v-on:click.stop="changeSeatsNumber(-1)"
-                                :disabled="sending || trip.total_seats < 1"
-                                class="btn btn-default"
-                            >
-                                -
-                            </button>
-                            <span class="trip_seats-available_value">
-                                {{ seats_available }}
+                            <span class="trip-seats-control__label">
+                                {{ $t('lugaresLibres') }}
                             </span>
-                            <button
-                                :aria-label="$t('aumentarCantidadAsientos')"
-                                v-on:click.stop="changeSeatsNumber(1)"
-                                :disabled="sending || seats_available > 3"
-                                class="btn btn-default"
-                            >
-                                +
-                            </button>
-                            <span
-                                class="trip_seats-available_label"
-                                v-if="seats_available > 1"
-                            >
-                                <span
-                                    >{{ $t('Lugares') }}
-                                    {{ $t('libres') }}</span
+                            <div class="trip-seats-control__stepper">
+                                <button
+                                    type="button"
+                                    :aria-label="$t('disminuirCantidadAsientos')"
+                                    v-on:click.stop="changeSeatsNumber(-1)"
+                                    :disabled="sending || trip.total_seats < 1"
+                                    class="btn btn-default"
                                 >
-                            </span>
-                            <span
-                                class="trip_seats-available_label"
-                                v-if="seats_available === 1"
-                            >
-                                <span
-                                    >{{ $t('Lugar') }}
-                                    {{ $t('libre') }}</span
+                                    -
+                                </button>
+                                <span class="trip_seats-available_value">
+                                    {{ seats_available }}
+                                </span>
+                                <button
+                                    type="button"
+                                    :aria-label="$t('aumentarCantidadAsientos')"
+                                    v-on:click.stop="changeSeatsNumber(1)"
+                                    :disabled="sending || seats_available > 3"
+                                    class="btn btn-default"
                                 >
-                            </span>
-                            <span
-                                class="trip_seats-available_label"
-                                v-if="seats_available === 0"
-                            >
-                                {{ $t('Carpooleado') }}
-                            </span>
+                                    +
+                                </button>
+                            </div>
                         </div>
-                        <div class="trip-inline-controls row">
-                            <span class="col-xs-8">
-                                <button
-                                    v-on:click.stop="goToDetail(false)"
-                                    class="btn btn-default"
-                                    :aria-label="$t('verDetalleViaje')"
-                                >
-                                    <i
-                                        class="fa fa-eye"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                            </span>
-                            <span class="col-xs-8">
-                                <button
-                                    v-on:click.stop="goToDetail(true)"
-                                    class="btn btn-default"
-                                    :aria-label="$t('editarViaje')"
-                                >
-                                    <i
-                                        class="fa fa-pencil"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                            </span>
-                            <span class="col-xs-8">
-                                <button
-                                    v-on:click.stop="deleteTrip"
-                                    class="btn btn-default"
-                                    :aria-label="$t('eliminarViaje')"
-                                >
-                                    <i
-                                        class="fa fa-trash-o"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                            </span>
-                        </div>
+                        <AppButton
+                            variant="secondary"
+                            block
+                            @click.stop="goToDetail(true)"
+                        >
+                            {{ $t('editarViaje') }}
+                        </AppButton>
+                        <AppButton
+                            v-if="showGroupChatButton"
+                            variant="secondary"
+                            block
+                            icon-left="fa fa-comments"
+                            @click.stop="toGroupChat"
+                        >
+                            {{ $t('groupChatButton') }}
+                        </AppButton>
+                        <button
+                            type="button"
+                            class="trip-card-owner-actions__cancel"
+                            @click.stop="deleteTrip"
+                        >
+                            {{ $t('cancelarViaje') }}
+                        </button>
                     </div>
                 </template>
             </TripCardShell>
@@ -168,11 +136,13 @@
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useTripsStore } from '../../stores/trips';
+import { useConversationsStore } from '../../stores/conversations';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event.js';
 import tripDisplay from './TripDisplay';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import TripCardShell from '../elements/TripCardShell.vue';
+import AppButton from '../ui/AppButton.vue';
 import dayjs from '../../dayjs';
 import { userRatingsFromProfile } from '../../utils/tripRating';
 import { shouldShowSelladoPending } from '../../utils/tripSelladoDisplay';
@@ -219,6 +189,9 @@ export default {
         ...mapActions(useTripsStore, {
             changeSeats: 'changeSeats',
             remove: 'remove'
+        }),
+        ...mapActions(useConversationsStore, {
+            openTripGroupChat: 'openTripGroupChat'
         }),
         goToDetail: function (goToEdit) {
             if (goToEdit) {
@@ -328,6 +301,21 @@ export default {
                     });
             }
         },
+        toGroupChat() {
+            if (!this.trip?.group_chat_conversation_id) {
+                return;
+            }
+            this.openTripGroupChat(this.trip.id)
+                .then((conversation) => {
+                    this.$router.push({
+                        name: 'conversation-chat',
+                        params: { id: conversation.id }
+                    });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
         openModal() {
             this.showTrip = true;
         },
@@ -431,12 +419,16 @@ export default {
             return Boolean(
                 this.trip && this.trip.weekly_schedule && !this.trip.trip_date
             );
+        },
+        showGroupChatButton() {
+            return Boolean(this.trip && this.trip.group_chat_conversation_id);
         }
     },
     components: {
         tripDisplay,
         WeeklySchedule,
-        TripCardShell
+        TripCardShell,
+        AppButton
     },
     mounted() {
         this.seats_available = this.trip.seats_available;
@@ -444,42 +436,69 @@ export default {
 };
 </script>
 <style scoped>
+.trip-card-owner-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.trip-seats-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.trip-seats-control__label {
+    font-family: var(--ds-font-family);
+    font-size: 0.9rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    color: var(--ds-text-primary, #222);
+}
+
+.trip-seats-control__stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
 .trip-seats-control .trip_seats-available_value {
-    margin-right: 0.15em;
-    margin-left: 0.15em;
+    min-width: 1.5rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: var(--ds-font-weight-bold, 700);
 }
-.trip-seats-control .trip_seats-available_label {
-    position: static;
-    top: 0;
-    margin-left: 0.5em;
-}
-.trip-fill .trip-seats-control .trip_seats-available_label {
-    color: var(--trip-half-free-color);
-}
+
 .trip-seats-control .btn {
     background: #eee;
     min-width: 2.5em;
 }
+
 .trip-seats-control .btn[disabled] {
     opacity: 0.25;
 }
+
 .trip-seats-control .btn[disabled]:hover {
     background: #eee;
 }
-.trip-seats-control > * {
-    vertical-align: middle;
+
+.trip-card-owner-actions__cancel {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--ds-destructive, #991b1b);
+    font-family: var(--ds-font-family);
+    font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    text-align: center;
+    padding: 0.25rem;
+    cursor: pointer;
 }
-.trip-inline-controls .btn {
-    width: 100%;
-}
-.trip-inline-controls {
-    margin-top: 1em;
-}
-.trip-inline-controls .btn[disabled] {
-    opacity: 0.2;
-}
-.trip-inline-controls .btn[disabled]:hover {
-    background: #eee;
+
+.trip-card-owner-actions__cancel:hover,
+.trip-card-owner-actions__cancel:focus {
+    text-decoration: underline;
 }
 
 .trip-needs-sellado {
