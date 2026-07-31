@@ -22,6 +22,10 @@
     width: 100%;
 }
 
+.app-input__control-wrap--icon-left .app-input__control {
+    padding-left: 2.75rem;
+}
+
 .app-input__control-wrap--password .app-input__control {
     padding-right: 2.75rem;
 }

@@ -5,8 +5,17 @@
         </label>
         <div
             class="app-input__control-wrap"
-            :class="{ 'app-input__control-wrap--password': password }"
+            :class="{
+                'app-input__control-wrap--password': password,
+                'app-input__control-wrap--icon-left': hasIconLeft
+            }"
         >
+            <span v-if="hasIconLeft" class="app-input__icon" aria-hidden="true">
+                <slot name="iconLeft">
+                    <i v-if="iconLeft" :class="iconLeft"></i>
+                    <img v-else-if="iconImage" :src="iconImage" alt="" />
+                </slot>
+            </span>
             <input
                 ref="inputEl"
                 v-jump
@@ -85,6 +94,14 @@ export default {
         hidePasswordLabel: {
             type: String,
             default: 'Hide password'
+        },
+        iconLeft: {
+            type: String,
+            default: ''
+        },
+        iconImage: {
+            type: String,
+            default: ''
         }
     },
     emits: ['update:modelValue'],
@@ -100,6 +117,11 @@ export default {
         },
         hasLabel() {
             return Boolean(this.label || this.$slots.label);
+        },
+        hasIconLeft() {
+            return Boolean(
+                this.iconLeft || this.iconImage || this.$slots.iconLeft
+            );
         },
         hasError() {
             return Boolean(this.error);

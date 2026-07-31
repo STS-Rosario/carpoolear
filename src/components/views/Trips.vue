@@ -45,6 +45,35 @@
                 </button>
             </div>
         </div>
+        <div v-if="isMobile && !lookSearch" class="trips-mobile-home">
+            <div class="trips-mobile-home__role-grid">
+                <button
+                    type="button"
+                    class="trips-mobile-home__role-card"
+                    @click="openMobileSearch(false)"
+                >
+                    <i class="fa fa-car" aria-hidden="true"></i>
+                    <span>{{ $t('buscoConductor') }}</span>
+                </button>
+                <button
+                    type="button"
+                    class="trips-mobile-home__role-card"
+                    @click="openMobileSearch(true)"
+                >
+                    <img :src="pasajeroSearchIcon" alt="" />
+                    <span>{{ $t('buscoPasajeros') }}</span>
+                </button>
+            </div>
+            <AppButton
+                class="trips-mobile-home__create"
+                variant="primary"
+                block
+                icon-left="fa fa-plus"
+                :to="{ name: 'new-trip' }"
+            >
+                {{ $t('crearViaje') }}
+            </AppButton>
+        </div>
         <SearchBox
             :params="searchParams"
             v-on:trip-search="research"
@@ -53,6 +82,12 @@
         ></SearchBox>
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list">
+                <h2
+                    v-if="isMobile && !lookSearch"
+                    class="trips-mobile-home__heading"
+                >
+                    {{ $t('viajesPublicados') }}
+                </h2>
                 <modal
                     :name="'modal'"
                     v-if="showModal"
@@ -445,6 +480,8 @@ import {
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
+import AppButton from '../ui/AppButton.vue';
+import { useActionbarsStore } from '../../stores/actionbars';
 
 export default {
     name: 'trips',
@@ -461,7 +498,9 @@ export default {
             installAppEvent: null,
             donateValue: 0,
             hasNotificationPermission: false,
-            showNotificationWarning: true
+            showNotificationWarning: true,
+            pasajeroSearchIcon:
+                process.env.ROUTE_BASE + 'img/icono-pasajero-gris.png'
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -617,6 +656,7 @@ export default {
         research(params) {
             this.resultaOfSearch = true;
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.filtered = true;
             this.readySub = false;
             this.alreadySubscribe = false;
@@ -751,10 +791,49 @@ export default {
 
         onSearchButton() {
             console.log('onSearchButton');
+            this.openMobileSearch(false);
+        },
+
+        openMobileSearch(isPassenger) {
             this.lookSearch = true;
-            // this.setActionButton(['clear']);
+            this.$nextTick(() => {
+                if (this.$refs.searchBox) {
+                    this.$refs.searchBox.setPassengerMode(isPassenger);
+                }
+            });
+            this.setMobileSearchHeader(true);
             bus.on('backbutton', this.onBackBottom);
-            // Desactivo reaccionar al Scroll
+        },
+
+        setMobileSearchHeader(active) {
+            if (!this.isMobile) {
+                return;
+            }
+            const actionbarsStore = useActionbarsStore();
+            if (active) {
+                actionbarsStore.setTitle(this.$t('buscoTitulo'));
+                actionbarsStore.setHeaderButtons(['back']);
+                actionbarsStore.showHeaderLogo(false);
+                bus.off('back-click', this.onMobileSearchBack);
+                bus.on('back-click', this.onMobileSearchBack);
+                return;
+            }
+            actionbarsStore.setHeaderButtons(['search']);
+            actionbarsStore.showHeaderLogo(true);
+            let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
+            const config = this.appConfig;
+            if (config) {
+                appName = config.app_name ? config.app_name : config.name_app;
+            }
+            if (appName && appName.length) {
+                appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+            }
+            actionbarsStore.setTitle(appName);
+            bus.off('back-click', this.onMobileSearchBack);
+        },
+
+        onMobileSearchBack() {
+            this.onBackBottom();
         },
 
         onClearButton() {
@@ -763,6 +842,7 @@ export default {
             // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
             this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
@@ -784,6 +864,7 @@ export default {
         onBackBottom() {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
         },
         async onDonate() {
@@ -1112,7 +1193,7 @@ export default {
         Loading,
         SearchBox,
         modal,
-        DonationAmountPicker
+        AppButton
     }
 };
 </script>

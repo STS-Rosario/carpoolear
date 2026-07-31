@@ -1,0 +1,54 @@
+.app-segment-toggle {
+    display: flex;
+    width: 100%;
+    padding: 0.25rem;
+    border-radius: 12px;
+    background: #eceae6;
+    gap: 0.25rem;
+    box-sizing: border-box;
+}
+
+.app-segment-toggle__option {
+    flex: 1 1 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ds-action);
+    font-family: inherit;
+    font-size: var(--ds-font-size-base);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        color 0.15s ease;
+}
+
+.app-segment-toggle__option--active {
+    background: var(--ds-neutral-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    color: var(--ds-action);
+    font-weight: var(--ds-font-weight-bold);
+}
+
+.app-segment-toggle__icon {
+    font-size: 1rem;
+    color: var(--ds-action);
+}
+
+.app-segment-toggle__image {
+    width: 1.125rem;
+    height: 1.125rem;
+    object-fit: contain;
+}
+
+.app-segment-toggle__label {
+    text-align: center;
+}

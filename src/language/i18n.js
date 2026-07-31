@@ -879,6 +879,11 @@ const messages = {
         administracion: 'Administración',
         buscoConductor: 'Busco Conductor',
         buscoPasajero: 'Busco Pasajero',
+        encontraTuProximoViaje: 'Encontrá tu próximo viaje',
+        compartiAutoTagline:
+            'Compartí el auto, ahorrá dinero y cuidá el planeta',
+        viajesPublicados: 'Viajes Publicados',
+        buscoTitulo: 'Busco...',
         precioAsiento: 'Contribución por persona (incluído el conductor)',
         iniciarSesion: 'Iniciar sesión',
         ingresaCuenta: 'Ingresá con tu cuenta de',
@@ -3899,6 +3904,11 @@ const messages = {
         administracion: 'Administration',
         buscoConductor: 'Looking for <strong>Driver</strong>',
         buscoPasajero: 'Looking for Passengers',
+        encontraTuProximoViaje: 'Find your next trip',
+        compartiAutoTagline:
+            'Share the ride, save money, and care for the planet',
+        viajesPublicados: 'Published trips',
+        buscoTitulo: 'Search...',
         precioAsiento: 'Contribution per person (including the driver)',
         iniciarSesion: 'Log in',
         ingresaCuenta: 'Log in with your',

@@ -42,8 +42,16 @@
 }
 
 @media (max-width: 767px) {
+    .app-container.blue.register {
+        background: #ffffff;
+        background-image: none;
+        filter: none;
+        color: var(--ds-text-primary);
+    }
+
     .app-container.blue.register .user-form--register-mobile {
         padding-left: 1rem;
         padding-right: 1rem;
+        color: var(--ds-text-primary);
     }
 }

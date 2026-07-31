@@ -22,6 +22,13 @@ describe('register page styles', () => {
         );
     });
 
+    it('uses a white mobile register background without the blue gradient', () => {
+        expect(registerCss).toMatch(
+            /@media \(max-width: 767px\)[\s\S]*\.app-container\.blue\.register[\s\S]*background:\s*#ffffff/
+        );
+        expect(registerCss).toContain('background-image: none');
+    });
+
     it('imports register page styles from main.css', () => {
         expect(mainCss).toContain("./components/register-page.css");
     });
