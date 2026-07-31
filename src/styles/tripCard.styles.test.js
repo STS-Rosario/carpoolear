@@ -95,11 +95,12 @@ describe('trip card styles', () => {
     });
 
     it('left-aligns friend trip rows with a fixed gap', () => {
+        // Must beat .app-container .trips-section__list.row (space-between)
         expect(css).toMatch(
-            /\.trips-section__list--start\.row\s*\{[^}]*justify-content:\s*flex-start/
+            /\.app-container\s+\.trips-section__list--start\.row\s*\{[^}]*justify-content:\s*flex-start/
         );
         expect(css).toMatch(
-            /\.trips-section__list--start\.row\s*\{[^}]*column-gap:\s*1rem/
+            /\.app-container\s+\.trips-section__list--start\.row\s*\{[^}]*column-gap:\s*1rem/
         );
     });
 
