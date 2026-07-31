@@ -25,4 +25,11 @@ describe('RateItem.vue profile links', () => {
         expect(viewSource).toContain("name: 'profile'");
         expect(viewSource).toContain('userProfile: this.rate.from');
     });
+
+    it('labels the reply toggle with Responder i18n', () => {
+        expect(viewSource).toContain("$t('responder')");
+        expect(viewSource).toMatch(
+            /canReply[\s\S]*\$t\('responder'\)[\s\S]*fa-reply|canReply[\s\S]*fa-reply[\s\S]*\$t\('responder'\)/
+        );
+    });
 });
