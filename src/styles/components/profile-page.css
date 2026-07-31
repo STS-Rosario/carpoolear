@@ -90,8 +90,40 @@
 
 .profile-page .tabset .tab-pane.container {
     width: 100%;
+    max-width: 100%;
     padding-left: 0;
     padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+/* Nested Bootstrap .container uses viewport breakpoints (e.g. 1170px) and
+   overflows the 960px profile content card — force full-bleed of the card. */
+.profile-page .profile-rates-component.container,
+.profile-page .profile-trip-component.container,
+.profile-page .profile-info-component.container {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+.profile-page__content-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.profile-page .tab-content,
+.profile-page .tab-pane {
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 /* Identity header */
@@ -362,6 +394,10 @@
 .profile-page .profile-rates-component .referencias-section-description,
 .profile-page .profile-rates-component .alert {
     font-weight: var(--ds-font-weight-normal, 400);
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 /* Profile trip cards — neutralize Bootstrap col floats from Trip.vue */
@@ -421,6 +457,17 @@
     max-width: 100%;
     padding-left: 0;
     padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    float: none;
+}
+
+.profile-page .profile-rates-component .list-group,
+.profile-page .profile-info-panel {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 @media only screen and (min-width: 768px) {
@@ -494,6 +541,8 @@
         border-radius: 0.75rem;
         padding: 1.25rem 1.5rem 1.5rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     .profile-info-panel__tiles {
