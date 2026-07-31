@@ -347,6 +347,11 @@
     content: none;
 }
 
+.trips-section__list--start.row {
+    justify-content: flex-start;
+    column-gap: 1rem;
+}
+
 .trips-section__list.row > [class*='col-'],
 .trips-list .row > [class*='col-'] {
     display: flex;

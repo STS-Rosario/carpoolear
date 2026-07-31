@@ -206,7 +206,7 @@
                             <h2 class="trips-section-heading">
                                 {{ $t('viajesDeMisAmigos') }}
                             </h2>
-                            <div class="trips-section__list row">
+                            <div class="trips-section__list trips-section__list--start row">
                                 <template
                                     v-for="(trip, index) in friendTripsList"
                                     :key="'friend-' + (trip.id != null ? trip.id : index)"
