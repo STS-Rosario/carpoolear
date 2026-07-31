@@ -278,6 +278,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
+    margin-top: auto;
 }
 
 .trip-card-shell__footer > [data-slot='actions-extra'],
@@ -323,12 +324,27 @@
 }
 
 /* Equal-height cards in trip list rows (Bootstrap 3 rows are float-based) */
+.trips-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .trips-section__list.row,
 .trips-list .row,
 .app-container .trips-section__list.row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: stretch;
     box-sizing: border-box;
     padding-left: 0;
     padding-right: 0;
@@ -352,6 +368,7 @@
     column-gap: 1rem;
 }
 
+.trips-list > [class*='col-'],
 .trips-section__list.row > [class*='col-'],
 .trips-list .row > [class*='col-'] {
     display: flex;
@@ -362,6 +379,7 @@
     margin-bottom: 0;
 }
 
+.trips-list > [class*='col-'] > .trip,
 .trips-section__list.row > [class*='col-'] > .trip,
 .trips-list .row > [class*='col-'] > .trip,
 .row > [class*='col-'] > .trip,
@@ -372,6 +390,7 @@
 }
 
 @media (min-width: 1200px) {
+    .trips-list > .col-lg-6,
     .trips-section__list.row > .col-lg-6,
     .trips-list .row > .col-lg-6 {
         flex: 0 0 calc(25% - 0.75rem);
@@ -379,6 +398,7 @@
         max-width: calc(25% - 0.75rem);
     }
 
+    .trips-list > .col-lg-8,
     .trips-section__list.row > .col-lg-8,
     .trips-list .row > .col-lg-8 {
         flex: 0 0 calc(33.333% - 0.75rem);
@@ -388,6 +408,7 @@
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
+    .trips-list > .col-md-8,
     .trips-section__list.row > .col-md-8,
     .trips-list .row > .col-md-8 {
         flex: 0 0 calc(33.333% - 0.75rem);
@@ -395,6 +416,7 @@
         max-width: calc(33.333% - 0.75rem);
     }
 
+    .trips-list > .col-md-12,
     .trips-section__list.row > .col-md-12,
     .trips-list .row > .col-md-12 {
         flex: 0 0 calc(50% - 0.5rem);
@@ -404,6 +426,7 @@
 }
 
 @media (max-width: 991px) {
+    .trips-list > .col-sm-12,
     .trips-section__list.row > .col-sm-12,
     .trips-list .row > .col-sm-12 {
         flex: 0 0 100%;
