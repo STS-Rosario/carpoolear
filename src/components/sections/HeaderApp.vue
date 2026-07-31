@@ -585,7 +585,7 @@ export default {
 .header_notifications .badge {
     position: absolute;
     top: calc(-0.55rem + 3px);
-    right: calc(-0.85rem + 5px);
+    right: calc(-0.85rem + 9px);
     min-width: 1.15rem;
     height: 1.15rem;
     padding: 0 0.3rem;
