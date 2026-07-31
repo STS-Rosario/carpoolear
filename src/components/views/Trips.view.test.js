@@ -12,6 +12,15 @@ describe('Trips.vue app banner', () => {
         expect(viewSource).toContain('v-if="showAppBanner"');
     });
 
+    it('does not pull the account verification banner under the fixed header', () => {
+        expect(viewSource).toMatch(
+            /\.banner\s*\{[^}]*margin:\s*0\s+auto/
+        );
+        expect(viewSource).not.toMatch(
+            /\.banner\s*\{[^}]*margin:\s*-1em/
+        );
+    });
+
     it('resolves banner image URL for Capacitor bundled host', () => {
         expect(viewSource).toContain('bannerImageSrc');
         expect(viewSource).toContain('resolveCapacitorBundledHostUrl');
