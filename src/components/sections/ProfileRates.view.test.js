@@ -96,4 +96,16 @@ describe('ProfileRates reference action', () => {
         );
         expect(profileRatesSource).not.toMatch(/padding-bottom:\s*0\.3em/);
     });
+
+    it('filters ratings with chips Todas Positivas Neutras Negativas', () => {
+        expect(profileRatesSource).toContain('profile-filter-chips');
+        expect(profileRatesSource).toContain('profile-filter-chip');
+        expect(profileRatesSource).toContain('ratingFilter');
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesTodas')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesPositivas')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesNeutras')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesNegativas')");
+        expect(profileRatesSource).toContain('filteredRates');
+        expect(profileRatesSource).not.toContain('fa-smile');
+    });
 });
