@@ -1,0 +1,359 @@
+/* Public profile visual layer — scoped under .profile-page */
+
+.profile-page {
+    --profile-tab-active: var(--secondary-background, #016587);
+    --profile-tab-muted: #9a9a9a;
+    --profile-baseline: #d0d0d0;
+    --profile-card-bg: #fff;
+    --profile-canvas: #f0f0f0;
+    --profile-verified: #2e7d32;
+    --profile-privacy-bg: #e8f4f8;
+    --profile-chip-active: var(--secondary-background, #016587);
+    --profile-divider: #e6e6e6;
+}
+
+.profile-page .tabset > .nav-tabs {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    background-color: transparent;
+    border-bottom: 1px solid #d0d0d0;
+    z-index: 1;
+}
+
+.profile-page .tabset > .nav-tabs > li {
+    float: none;
+    width: auto;
+    flex: 1 1 0;
+    text-align: center;
+}
+
+.profile-page .tabset > .nav-tabs > li > a {
+    border: none;
+    color: var(--profile-tab-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.85rem 0.5rem;
+    background: transparent;
+}
+
+.profile-page .tabset > .nav-tabs > li > a:hover,
+.profile-page .tabset > .nav-tabs > li > a:focus {
+    border: none;
+    color: var(--profile-tab-active);
+    background: transparent;
+}
+
+.profile-page .tabset > .nav-tabs > li > a.active {
+    color: var(--profile-tab-active);
+    border-bottom: 4px solid var(--profile-tab-active);
+    margin-bottom: -1px;
+}
+
+.profile-page .tabset > .nav-tabs::after {
+    display: none;
+}
+
+.profile-page .tabset .nav > li > a.active::after {
+    display: none;
+}
+
+.profile-page .tabset > .tab-content {
+    margin-top: 0;
+    min-height: 0;
+    background: transparent;
+}
+
+.profile-page .tabset .tab-pane.container {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Identity header */
+.profile-identity-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.25rem 1rem 1rem;
+    background: var(--profile-card-bg);
+}
+
+.profile-identity-header__avatar {
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 0.85rem;
+}
+
+.profile-identity-header__name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 0.5rem;
+    line-height: 1.25;
+}
+
+.profile-identity-header__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--profile-verified);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.profile-identity-header__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem 0.65rem;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.profile-identity-header__stats-sep {
+    color: #bbb;
+}
+
+.profile-identity-header__ratings {
+    display: inline-flex;
+}
+
+/* Filter chips */
+.profile-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0 0.25rem;
+}
+
+.profile-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid #cfcfcf;
+    background: #f7f7f7;
+    color: #333;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+.profile-filter-chip--active {
+    background: var(--profile-chip-active);
+    border-color: var(--profile-chip-active);
+    color: #fff;
+}
+
+.profile-filter-chip__check {
+    font-size: 0.75rem;
+}
+
+/* Perfil content */
+.profile-info-panel {
+    padding: 0.25rem 0 1.5rem;
+}
+
+.profile-info-panel__section-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.profile-info-panel__bio {
+    margin: 0 0 1.25rem;
+    color: #333;
+    line-height: 1.45;
+    font-size: 0.95rem;
+}
+
+.profile-info-panel__tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.profile-info-panel__tile {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--profile-divider);
+}
+
+.profile-info-panel__tile-icon {
+    color: var(--profile-tab-active);
+    font-size: 1.25rem;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.profile-info-panel__tile-title {
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 0.15rem;
+    font-size: 0.95rem;
+}
+
+.profile-info-panel__tile-sub {
+    margin: 0;
+    color: #777;
+    font-size: 0.85rem;
+    line-height: 1.35;
+}
+
+.profile-info-panel__privacy {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: 1.25rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.65rem;
+    background: var(--profile-privacy-bg);
+    color: var(--profile-tab-active);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.profile-info-panel__privacy i {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+}
+
+/* Rating rows */
+.profile-rates-list .rate-item,
+.profile-rates-component .list-group-item {
+    border: none;
+    border-bottom: 1px solid var(--profile-divider);
+    background: transparent;
+    padding: 1rem 0;
+}
+
+/* Profile trip cards */
+.profile-trip-card {
+    border: 1px solid #ddd;
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem 1rem;
+    margin-bottom: 0.85rem;
+    background: #fff;
+}
+
+.profile-trip-card__role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #888;
+    font-size: 0.8rem;
+    margin-bottom: 0.65rem;
+}
+
+@media only screen and (min-width: 768px) {
+    .profile-page--public {
+        background: var(--profile-canvas);
+        padding: 1.5rem 1rem 2rem;
+        min-height: calc(100vh - 6rem);
+    }
+
+    .profile-page--public .profile-identity-header {
+        max-width: 960px;
+        margin: 0 auto 1rem;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 1.25rem;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-page--public .profile-identity-header__avatar {
+        margin-bottom: 0;
+        width: 6.5rem;
+        height: 6.5rem;
+        flex-shrink: 0;
+    }
+
+    .profile-page--public .profile-identity-header__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .profile-page--public .profile-identity-header__name-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .profile-page--public .profile-identity-header__name {
+        margin: 0;
+    }
+
+    .profile-page--public .profile-identity-header__verified {
+        margin-bottom: 0;
+        background: transparent;
+        border: 1px solid var(--profile-verified);
+        padding: 0.15rem 0.55rem;
+    }
+
+    .profile-page--public .profile-identity-header__stats {
+        justify-content: flex-start;
+    }
+
+    .profile-page--public .profile-page__content-card {
+        max-width: 960px;
+        margin: 0 auto;
+        background: var(--profile-card-bg);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-info-panel__tiles {
+        flex-direction: row;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .profile-info-panel__tile {
+        flex: 1 1 0;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+
+    .profile-info-panel__privacy {
+        /* hide on desktop mock or keep — mock desktop doesn't show it; keep for value */
+    }
+}
+
+/* Own profile inside settings column */
+.settings-component .profile-page .tabset > .nav-tabs {
+    width: 100%;
+}
