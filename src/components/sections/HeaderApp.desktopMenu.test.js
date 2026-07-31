@@ -109,4 +109,19 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).not.toContain('instagram_logo');
         expect(headerSource).not.toContain('facebook_logo');
     });
+
+    it('styles the notifications badge red and top-right on the bell', () => {
+        expect(headerSource).toMatch(
+            /\.header_notifications\s+\.badge\s*\{[^}]*background:\s*#e53935/
+        );
+        expect(headerSource).toMatch(
+            /\.header_notifications\s+\.badge\s*\{[^}]*position:\s*absolute/
+        );
+        expect(headerSource).toMatch(
+            /\.header_notifications\s+\.badge\s*\{[^}]*top:\s*calc\(-0\.55rem \+ 3px\)/
+        );
+        expect(headerSource).toMatch(
+            /\.header_notifications\s+\.badge\s*\{[^}]*right:\s*-0\.85rem/
+        );
+    });
 });
