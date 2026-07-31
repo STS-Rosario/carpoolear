@@ -74,6 +74,9 @@ describe('trip card styles', () => {
         expect(css).toMatch(
             /\.trip-card-shell__schedule\s*\{[^}]*flex-direction:\s*row/
         );
+        expect(css).toMatch(
+            /\.trip-card-shell__schedule\s*\{[^}]*justify-content:\s*space-between/
+        );
     });
 
     it('space-betweens trip cards across the full trips row width', () => {
