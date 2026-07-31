@@ -2885,7 +2885,7 @@
           margin-bottom: 1rem;
       }
       .view-container {
-          padding-top: 5.6rem;
+          padding-top: var(--app-header-offset, 5.6rem);
       }
   }
   @media only screen and (max-width: 1080px) {
