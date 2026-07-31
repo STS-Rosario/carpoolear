@@ -270,6 +270,49 @@
 }
 
 @media only screen and (min-width: 768px) {
+    .profile-identity-header {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 1.25rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .profile-identity-header__avatar {
+        margin-bottom: 0;
+        width: 6.5rem;
+        height: 6.5rem;
+        flex-shrink: 0;
+    }
+
+    .profile-identity-header__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .profile-identity-header__name-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .profile-identity-header__name {
+        margin: 0;
+    }
+
+    .profile-identity-header__verified {
+        margin-bottom: 0;
+    }
+
+    .profile-identity-header__stats {
+        justify-content: flex-start;
+    }
+
     .profile-page--public {
         background: var(--profile-canvas);
         padding: 1.5rem 1rem 2rem;
@@ -279,51 +322,15 @@
     .profile-page--public .profile-identity-header {
         max-width: 960px;
         margin: 0 auto 1rem;
-        flex-direction: row;
-        align-items: center;
-        text-align: left;
-        gap: 1.25rem;
         padding: 1.5rem;
         border-radius: 0.75rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     }
 
-    .profile-page--public .profile-identity-header__avatar {
-        margin-bottom: 0;
-        width: 6.5rem;
-        height: 6.5rem;
-        flex-shrink: 0;
-    }
-
-    .profile-page--public .profile-identity-header__body {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        flex: 1;
-        min-width: 0;
-    }
-
-    .profile-page--public .profile-identity-header__name-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.65rem;
-        margin-bottom: 0.35rem;
-    }
-
-    .profile-page--public .profile-identity-header__name {
-        margin: 0;
-    }
-
     .profile-page--public .profile-identity-header__verified {
-        margin-bottom: 0;
         background: transparent;
         border: 1px solid var(--profile-verified);
         padding: 0.15rem 0.55rem;
-    }
-
-    .profile-page--public .profile-identity-header__stats {
-        justify-content: flex-start;
     }
 
     .profile-page--public .profile-page__content-card {
@@ -346,10 +353,6 @@
         border: 1px solid #ddd;
         border-radius: 0.5rem;
         padding: 1rem;
-    }
-
-    .profile-info-panel__privacy {
-        /* hide on desktop mock or keep — mock desktop doesn't show it; keep for value */
     }
 }
 
