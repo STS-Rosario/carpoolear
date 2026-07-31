@@ -250,6 +250,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
     flex: 0 0 auto;
     width: 100%;
