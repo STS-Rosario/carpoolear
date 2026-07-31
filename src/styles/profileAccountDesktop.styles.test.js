@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const baseCssPath = path.resolve(__dirname, 'base.css');
+const profileCssPath = path.resolve(__dirname, 'components/profile-page.css');
 const baseCss = fs.readFileSync(baseCssPath, 'utf8');
+const profileCss = fs.readFileSync(profileCssPath, 'utf8');
 
 describe('profile account desktop layout', () => {
     it('keeps profile tabs and content inside the account settings column', () => {
@@ -21,15 +23,11 @@ describe('profile account desktop layout', () => {
         );
     });
 
-    it('lays out public profile info in a two-column grid below the tabs', () => {
-        expect(baseCss).toMatch(
-            /\.settings-component \.profile-info-component \.list-group\s*\{[\s\S]*display:\s*grid/
+    it('styles profile info tiles for desktop side-by-side layout', () => {
+        expect(profileCss).toContain('.profile-info-panel__tiles');
+        expect(profileCss).toMatch(
+            /\.profile-info-panel__tiles\s*\{[\s\S]*flex-direction:\s*row/
         );
-        expect(baseCss).toMatch(
-            /\.settings-component \.profile-info-component \.list-group\s*\{[\s\S]*grid-template-columns:\s*minmax\(180px, 230px\) minmax\(0, 1fr\)/
-        );
-        expect(baseCss).toMatch(
-            /\.settings-component \.profile-info-component \.profile-info--name\.desktop\s*\{[\s\S]*padding:\s*0 0 1rem/
-        );
+        expect(profileCss).toContain('.profile-info-panel__privacy');
     });
 });

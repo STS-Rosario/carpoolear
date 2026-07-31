@@ -7,41 +7,25 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
-describe('ProfileInfo ratings display', () => {
-    it('uses UserRatingsCounts for evenly spaced rating pairs', () => {
-        expect(viewSource).toContain('UserRatingsCounts');
-        expect(viewSource).toContain(':ratings="profileRatings"');
-        expect(viewSource).toContain('userRatingsFromProfile');
-        expect(viewSource).not.toContain('profile.neutral_ratings || 0');
-        expect(viewSource).toMatch(/\.profile-info--ratings\s*\{[\s\S]*justify-content:\s*center/);
-    });
-});
-
-describe('ProfileInfo member stats', () => {
-    it('shows member since and participated trips below rating counters', () => {
-        const ratingsIndex = viewSource.indexOf('profile-info--ratings');
-        const memberSinceIndex = viewSource.indexOf("$t('miembroDesde'");
-        const tripsIndex = viewSource.indexOf("$t('perfilViajesParticipados'");
-
-        expect(ratingsIndex).toBeGreaterThan(-1);
-        expect(memberSinceIndex).toBeGreaterThan(ratingsIndex);
-        expect(tripsIndex).toBeGreaterThan(memberSinceIndex);
-        expect(viewSource).toContain('formatMemberSinceMonthYear');
-        expect(viewSource).toContain('normalizeTripsCount');
-        expect(viewSource).toContain('profile-info--member-stats');
-        expect(viewSource).toMatch(/\.profile-info\s*\{[\s\S]*align-items:\s*center/);
-        expect(viewSource).toMatch(
-            /\.profile-info--member-stats\s*\{[\s\S]*text-align:\s*center/
-        );
+describe('ProfileInfo public panel', () => {
+    it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
+        expect(viewSource).toContain('profile-info-panel');
+        expect(viewSource).toContain("$t('sobreMi')");
+        expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
+        expect(viewSource).toContain("$t('contactoPrivacidadPerfil')");
+        expect(viewSource).not.toContain('UserRatingsCounts');
+        expect(viewSource).not.toContain('profile-info--ratings');
+        expect(viewSource).not.toContain('profile-info--member-stats');
+        expect(viewSource).not.toContain('circle-box profile');
+        expect(viewSource).not.toContain('fa-smile');
     });
 
-    it('keeps member stats copy in i18n', () => {
-        expect(i18nSource).toContain('miembroDesde');
-        expect(i18nSource).toContain('perfilViajesParticipados');
-        expect(i18nSource).toContain('Miembro desde: {date}');
-        expect(i18nSource).toContain('{count} viajes');
-        expect(i18nSource).toContain('Member since: {date}');
-        expect(i18nSource).toContain('{count} trips');
+    it('keeps profile panel copy in i18n', () => {
+        expect(i18nSource).toContain('sobreMi');
+        expect(i18nSource).toContain('identidadVerificadaTitulo');
+        expect(i18nSource).toContain('identidadVerificadaSub');
+        expect(i18nSource).toContain('contactoPrivacidadPerfil');
+        expect(i18nSource).toContain('usuarioVerificado');
     });
 });
 
