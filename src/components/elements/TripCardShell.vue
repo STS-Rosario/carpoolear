@@ -1,6 +1,9 @@
 <template>
-    <div class="trip-card-shell" @click="onRootClick">
-        <div class="trip-card-shell__header">
+    <div
+        class="trip-card-shell"
+        :class="{ 'trip-card-shell--no-driver': !user }"
+        @click="onRootClick"
+    >        <div class="trip-card-shell__header">
             <div
                 v-if="user"
                 class="trip-card-shell__driver"

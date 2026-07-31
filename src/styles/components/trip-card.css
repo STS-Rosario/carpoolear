@@ -29,13 +29,13 @@
     padding-right: 0.25rem;
 }
 
-.trip-card-shell__header:not(:has(.trip-card-shell__driver)) {
+.trip-card-shell--no-driver .trip-card-shell__header {
     justify-content: flex-end;
     min-height: 0;
     margin-bottom: 0.5rem;
 }
 
-.trip-card-shell__header:not(:has(.trip-card-shell__driver)) .trip-card-shell__seats {
+.trip-card-shell--no-driver .trip-card-shell__seats {
     position: static;
 }
 

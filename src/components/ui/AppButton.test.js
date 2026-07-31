@@ -7,7 +7,7 @@ const source = fs.readFileSync(componentPath, 'utf8');
 
 describe('AppButton', () => {
     it('supports variant, size, icon, unread, and loading props', () => {
-        expect(source).toContain("variant: {");
+        expect(source).toContain('variant: {');
         expect(source).toContain("'primary'");
         expect(source).toContain("'secondary'");
         expect(source).toContain("'tertiary'");
@@ -19,8 +19,8 @@ describe('AppButton', () => {
     });
 
     it('renders semantic button classes from variant and size', () => {
-        expect(source).toContain('`app-button--${this.variant}`');
-        expect(source).toContain('`app-button--${this.size}`');
+        expect(source).toMatch(/app-button--\$\{this\.variant\}/);
+        expect(source).toMatch(/app-button--\$\{this\.size\}/);
         expect(source).toContain('app-button--tertiary-destructive');
         expect(source).toContain('app-button--icon-only');
     });
