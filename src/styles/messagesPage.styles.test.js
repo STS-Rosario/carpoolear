@@ -48,8 +48,17 @@ describe('messages-page.css', () => {
         expect(css).toMatch(
             /\.messages-page__shell\s*\{[^}]*border-radius:\s*0/s
         );
+        expect(css).toMatch(
+            /\.messages-page__shell\s*\{[^}]*border-top:\s*none/s
+        );
+        expect(css).toMatch(
+            /\.messages-page__shell\s*\{[^}]*border-bottom:\s*none/s
+        );
         expect(css).not.toMatch(
             /\.messages-page \.conversation_list[\s\S]*border-radius:\s*0\.75rem/
+        );
+        expect(css).not.toMatch(
+            /\.messages-page \.conversation-container\s*\{[^}]*border:/s
         );
     });
 
@@ -69,10 +78,26 @@ describe('messages-page.css', () => {
             /\.message-composer-send[\s\S]*background:\s*var\(--ds-action\)/
         );
         expect(css).toMatch(
-            /\.message-composer-send[\s\S]*border-radius:\s*0\.35rem/
+            /\.message-composer-send[\s\S]*border-radius:\s*0/
         );
         expect(css).not.toMatch(
             /\.message-composer-send[\s\S]*border-radius:\s*50%/
+        );
+    });
+
+    it('keeps the message composer square and pinned to the bottom of the chat column', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.message-composer-editor-wrap\s*\{[^}]*border-radius:\s*0/s
+        );
+        expect(css).toMatch(
+            /\.message-composer\s*\{[^}]*border-radius:\s*0/s
+        );
+        expect(css).toContain(
+            '.messages-page .conversation_chat .message-composer'
+        );
+        expect(css).toMatch(
+            /\.conversation_chat \.message-composer[\s\S]*flex:\s*0 0 auto/
         );
     });
 });
