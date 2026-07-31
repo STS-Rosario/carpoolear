@@ -136,12 +136,18 @@ describe('Trips.vue friend-first trip sections', () => {
         );
     });
 
-    it('left-aligns friend trip cards instead of space-between', () => {
+    it('left-aligns trip lists with fewer than 4 cards, otherwise space-between', () => {
         expect(viewSource).toMatch(
-            /viajesDeMisAmigos[\s\S]*?trips-section__list--start/
+            /trips-section__list--start['"]?\s*:\s*friendTripsList\.length\s*<\s*4/
+        );
+        expect(viewSource).toMatch(
+            /trips-section__list--start['"]?\s*:\s*otherTripsList\.length\s*<\s*4/
+        );
+        expect(viewSource).toMatch(
+            /trips-section__list--start['"]?\s*:\s*trips\.length\s*<\s*4/
         );
         expect(viewSource).not.toMatch(
-            /otrosViajes[\s\S]*?trips-section__list--start/
+            /class="trips-section__list trips-section__list--start row"/
         );
     });
 
