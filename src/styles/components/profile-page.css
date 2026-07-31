@@ -563,6 +563,32 @@
         float: none;
         width: 100%;
     }
+
+    /* Profile Viajes: date/time as second column beside route */
+    .profile-trip-card .trip-card-shell__body {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .profile-trip-card .trip-card-shell__route {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .profile-trip-card .trip-card-shell__schedule {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 8.5rem;
+    }
+
+    .profile-trip-card .trip-card-shell__chip {
+        width: 100%;
+        justify-content: flex-start;
+    }
 }
 
 /* Own profile inside settings column */
