@@ -27,10 +27,11 @@ describe('shouldShowTripSeatRequestsWarning', () => {
 });
 
 describe('shouldShowDriverSeatRequestLimitWarning', () => {
-    it('returns true for owner when limit reached', () => {
+    it('returns true for owner when limit reached on an upcoming trip', () => {
         expect(
             shouldShowDriverSeatRequestLimitWarning(true, {
                 seat_request_limit_reached: true,
+                trip_date: '2099-01-01 12:00:00',
             })
         ).toBe(true);
     });
@@ -39,11 +40,22 @@ describe('shouldShowDriverSeatRequestLimitWarning', () => {
         expect(
             shouldShowDriverSeatRequestLimitWarning(false, {
                 seat_request_limit_reached: true,
+                trip_date: '2099-01-01 12:00:00',
             })
         ).toBe(false);
         expect(
             shouldShowDriverSeatRequestLimitWarning(true, {
                 seat_request_limit_reached: false,
+                trip_date: '2099-01-01 12:00:00',
+            })
+        ).toBe(false);
+    });
+
+    it('returns false for past trips even when limit is reached', () => {
+        expect(
+            shouldShowDriverSeatRequestLimitWarning(true, {
+                seat_request_limit_reached: true,
+                trip_date: '2020-01-01 12:00:00',
             })
         ).toBe(false);
     });
