@@ -13,6 +13,9 @@
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-text-primary, #333);
+    padding: 0.75rem 1rem 1.25rem;
+    background: var(--profile-canvas);
+    box-sizing: border-box;
 }
 
 .profile-page strong,
@@ -99,10 +102,11 @@
 }
 
 /* Nested Bootstrap .container uses viewport breakpoints (e.g. 1170px) and
-   overflows the 960px profile content card — force full-bleed of the card. */
+   overflows the profile content card — force full-bleed of the card. */
 .profile-page .profile-rates-component.container,
 .profile-page .profile-trip-component.container,
-.profile-page .profile-info-component.container {
+.profile-page .profile-info-component.container,
+.profile-page .trips.container {
     width: 100%;
     max-width: 100%;
     margin-left: 0;
@@ -117,6 +121,9 @@
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
+    padding: 0.75rem 1rem 1rem;
+    background: var(--profile-card-bg);
+    border-radius: 0.75rem;
 }
 
 .profile-page .tab-content,
@@ -126,7 +133,6 @@
     box-sizing: border-box;
 }
 
-/* Identity header */
 .profile-identity-header {
     display: flex;
     flex-direction: column;
@@ -136,6 +142,9 @@
     background: var(--profile-card-bg);
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-normal, 400);
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
 }
 
 .profile-identity-header__avatar {
@@ -574,6 +583,11 @@
 
     .profile-identity-header__stats {
         justify-content: flex-start;
+    }
+
+    .profile-page {
+        padding: 0;
+        background: transparent;
     }
 
     .profile-page .profile-identity-header {
