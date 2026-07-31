@@ -85,4 +85,17 @@ describe('profile page styles', () => {
             /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-trip-card\s+\.trip-card-shell__schedule\s*\{[^}]*justify-content:\s*space-between/
         );
     });
+
+    it('styles Referencias heading like login title but smaller and not uppercase', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*color:\s*var\(--ds-text-primary\)/
+        );
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*text-transform:\s*none/
+        );
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-rates-component\s+h2\s*\{[^}]*font-size:\s*1\.25rem/
+        );
+    });
 });
