@@ -94,6 +94,15 @@ describe('trip card styles', () => {
         );
     });
 
+    it('left-aligns friend trip rows with a fixed gap', () => {
+        expect(css).toMatch(
+            /\.trips-section__list--start\.row\s*\{[^}]*justify-content:\s*flex-start/
+        );
+        expect(css).toMatch(
+            /\.trips-section__list--start\.row\s*\{[^}]*column-gap:\s*1rem/
+        );
+    });
+
     it('lays out primary row and meta row without absolute seats', () => {
         expect(css).toContain('.trip-card-shell__primary');
         expect(css).toMatch(

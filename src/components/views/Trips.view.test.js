@@ -136,6 +136,15 @@ describe('Trips.vue friend-first trip sections', () => {
         );
     });
 
+    it('left-aligns friend trip cards instead of space-between', () => {
+        expect(viewSource).toMatch(
+            /viajesDeMisAmigos[\s\S]*?trips-section__list--start/
+        );
+        expect(viewSource).not.toMatch(
+            /otrosViajes[\s\S]*?trips-section__list--start/
+        );
+    });
+
     it('shows the donation banner before friend and other sections', () => {
         expect(viewSource).toContain('shouldShowSplitDonationPanel');
         expect(viewSource).toContain('trips-donation-banner');
