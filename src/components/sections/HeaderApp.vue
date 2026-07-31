@@ -567,7 +567,8 @@ export default {
     border-bottom: 2px solid #fff;
 }
 .header_nav-messages .badge,
-.header_nav-my-trips .badge {
+.header_nav-my-trips .badge,
+.header_notifications .badge {
     position: absolute;
     top: calc(-0.55rem + 3px);
     right: -0.85rem;
