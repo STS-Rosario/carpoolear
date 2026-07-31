@@ -145,7 +145,7 @@ describe('Trip card future owner footer actions', () => {
         /#footer-extra[\s\S]*?<\/template>/
     )?.[0] || '';
 
-    it('stacks lugares libres, editar, chat grupal and cancelar after ver detalle', () => {
+    it('stacks editar, lugares libres, chat grupal and cancelar after ver detalle', () => {
         expect(footerExtra).toContain("$t('lugaresLibres')");
         expect(footerExtra).toContain('trip-seats-control');
         expect(footerExtra).toContain("$t('editarViaje')");
@@ -157,14 +157,26 @@ describe('Trip card future owner footer actions', () => {
             /showGroupChatButton\(\)\s*\{[\s\S]*group_chat_conversation_id/
         );
 
-        const seatsIdx = footerExtra.indexOf("$t('lugaresLibres')");
         const editIdx = footerExtra.indexOf("$t('editarViaje')");
+        const seatsIdx = footerExtra.indexOf("$t('lugaresLibres')");
         const chatIdx = footerExtra.indexOf("$t('groupChatButton')");
         const cancelIdx = footerExtra.indexOf("$t('cancelarViaje')");
-        expect(seatsIdx).toBeGreaterThan(-1);
-        expect(editIdx).toBeGreaterThan(seatsIdx);
-        expect(chatIdx).toBeGreaterThan(editIdx);
+        expect(editIdx).toBeGreaterThan(-1);
+        expect(seatsIdx).toBeGreaterThan(editIdx);
+        expect(chatIdx).toBeGreaterThan(seatsIdx);
         expect(cancelIdx).toBeGreaterThan(chatIdx);
+    });
+
+    it('keeps lugares libres label on the same row as the seat stepper', () => {
+        expect(footerExtra).toMatch(
+            /trip-seats-control[\s\S]*trip-seats-control__label[\s\S]*trip-seats-control__stepper/
+        );
+        expect(source).toMatch(
+            /\.trip-seats-control\s*\{[^}]*flex-direction:\s*row/
+        );
+        expect(source).toMatch(
+            /\.trip-seats-control\s+\.btn\s*\{[^}]*min-width:\s*2rem/
+        );
     });
 
     it('removes icon-only eye edit trash controls from footer-extra', () => {
