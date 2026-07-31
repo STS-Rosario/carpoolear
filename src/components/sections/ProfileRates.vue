@@ -491,7 +491,7 @@ export default {
     margin-left: 0.6em;
 }
 .referencias-section-description {
-    margin: 0;
+    margin: 0 0 1rem;
     color: #666;
 }
 </style>
