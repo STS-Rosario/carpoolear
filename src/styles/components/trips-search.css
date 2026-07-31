@@ -2,6 +2,12 @@
     width: 100%;
 }
 
+.trips.container > .trips-search,
+.trips.container > .trips-list {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .trips-search__hero {
     margin: 0 0 1.5rem;
     text-align: center;

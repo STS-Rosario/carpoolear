@@ -316,6 +316,23 @@
 .app-container .trips-section__list.row {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    row-gap: 1rem;
+}
+
+.trips-section__list.row::before,
+.trips-section__list.row::after,
+.trips-list .row::before,
+.trips-list .row::after,
+.app-container .trips-section__list.row::before,
+.app-container .trips-section__list.row::after {
+    display: none;
+    content: none;
 }
 
 .trips-section__list.row > [class*='col-'],
@@ -323,7 +340,9 @@
     display: flex;
     flex-direction: column;
     float: none;
-    margin-bottom: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 0;
 }
 
 .trips-section__list.row > [class*='col-'] > .trip,
@@ -333,4 +352,45 @@
 .row > [class*='col-'].trip-needs-sellado {
     height: 100%;
     width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .trips-section__list.row > .col-lg-6,
+    .trips-list .row > .col-lg-6 {
+        flex: 0 0 calc(25% - 0.75rem);
+        width: calc(25% - 0.75rem);
+        max-width: calc(25% - 0.75rem);
+    }
+
+    .trips-section__list.row > .col-lg-8,
+    .trips-list .row > .col-lg-8 {
+        flex: 0 0 calc(33.333% - 0.75rem);
+        width: calc(33.333% - 0.75rem);
+        max-width: calc(33.333% - 0.75rem);
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .trips-section__list.row > .col-md-8,
+    .trips-list .row > .col-md-8 {
+        flex: 0 0 calc(33.333% - 0.75rem);
+        width: calc(33.333% - 0.75rem);
+        max-width: calc(33.333% - 0.75rem);
+    }
+
+    .trips-section__list.row > .col-md-12,
+    .trips-list .row > .col-md-12 {
+        flex: 0 0 calc(50% - 0.5rem);
+        width: calc(50% - 0.5rem);
+        max-width: calc(50% - 0.5rem);
+    }
+}
+
+@media (max-width: 991px) {
+    .trips-section__list.row > .col-sm-12,
+    .trips-list .row > .col-sm-12 {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+    }
 }
