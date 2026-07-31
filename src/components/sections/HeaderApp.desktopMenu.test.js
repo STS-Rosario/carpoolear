@@ -78,6 +78,15 @@ describe('HeaderApp desktop menu', () => {
         );
     });
 
+    it('styles Mis viajes and Mensajes unread badges with a red background', () => {
+        expect(headerSource).toMatch(
+            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*background(?:-color)?:\s*#e53935/
+        );
+        expect(headerSource).toMatch(
+            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*color:\s*#fff/
+        );
+    });
+
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
         expect(headerSource).toContain('header_panel-right');
         expect(headerSource).toContain('btn-create-trip');
