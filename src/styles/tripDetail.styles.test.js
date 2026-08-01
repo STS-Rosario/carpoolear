@@ -137,16 +137,15 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail__card\s*\{[^}]*background:\s*var\(--ds-card-bg/
         );
         expect(css).toContain('.trip-detail__detalle-grid');
-        expect(css).toContain('.trip-detail__seats-passengers');
-        expect(css).toContain('.trip-detail__price-cta');
+        expect(css).toContain('.trip-detail__actions-grid');
         expect(css).toMatch(
             /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
         );
         expect(css).toMatch(
-            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__seats-passengers\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__actions-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr\s*1fr/
         );
         expect(css).toMatch(
-            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__price-cta\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+            /\.trip-detail--desktop\s+\.trip-detail__lugares-col\s*\{[^}]*flex-direction:\s*column/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*background:\s*var\(--trip-detail-driver-bg/
