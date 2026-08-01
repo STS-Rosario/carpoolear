@@ -33,12 +33,21 @@
         <div class="trip-invite-friends__actions">
             <AppButton
                 variant="primary"
+                block
+                class="trip-invite-friends__invite"
+                data-testid="trip-invite-friends-submit"
                 :disabled="submitting || !selectedFriendIds.length"
                 @click="onSubmit"
             >
                 {{ $t('invitarAmigos') }}
             </AppButton>
-            <AppButton variant="secondary" @click="onClose">
+            <AppButton
+                variant="secondary"
+                block
+                class="trip-invite-friends__close"
+                data-testid="trip-invite-friends-close"
+                @click="onClose"
+            >
                 {{ $t('cerrar') }}
             </AppButton>
         </div>
@@ -170,8 +179,13 @@ export default {
 .trip-invite-friends__actions {
     margin-top: 1rem;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.trip-invite-friends__actions :deep(.app-button) {
+    width: 100%;
+    box-sizing: border-box;
 }
 </style>

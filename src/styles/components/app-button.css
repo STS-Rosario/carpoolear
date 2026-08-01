@@ -257,6 +257,12 @@ a.app-button:visited,
 .app-button--loading .app-button__spinner {
     position: absolute;
     inset: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
 }
 
 .app-button--header-create {

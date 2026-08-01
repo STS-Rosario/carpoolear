@@ -676,6 +676,7 @@
                 @click="onSubmit"
             >
                 {{ submitLabel }}
+                <template #loading>{{ savingLabel }}</template>
             </AppButton>
         </div>
     </div>
@@ -793,7 +794,13 @@ export default {
             return getIntermediatePoints(this.form.points);
         },
         submitLabel() {
+            if (this.form.saving) {
+                return this.savingLabel;
+            }
             return this.isEditTripFlow ? this.$t('actualizar') : this.$t('crearViaje');
+        },
+        savingLabel() {
+            return this.isEditTripFlow ? this.$t('guardando') : this.$t('creando');
         },
         totalPeople() {
             return Number(this.form.trip.total_seats) + 1;
