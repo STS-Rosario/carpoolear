@@ -48,8 +48,11 @@ describe('trip-detail.css', () => {
         expect(css).toContain('.trip-detail__chip');
     });
 
-    it('keeps distance, time and CO2 stats the same size on mobile', () => {
+    it('keeps distance, time and CO2 stats the same size and centered on mobile', () => {
         expect(css).toContain('.trip-detail--mobile .trip-detail__stats');
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__stats\s*\{[^}]*justify-content:\s*center/
+        );
         expect(css).toMatch(
             /\.trip-detail--mobile\.trip-detail-component\s+\.trip-stats\s*>\s*div\s*>\s*span:last-child[\s\S]*?font-size:\s*inherit/
         );
