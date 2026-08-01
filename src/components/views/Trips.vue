@@ -1351,6 +1351,7 @@ export default {
     background: var(--ds-card-bg);
     box-shadow: var(--ds-card-shadow);
     overflow: hidden;
+    margin-bottom: 0;
 }
 
 .panel-donar > .panel-body.panel-donar__body {
@@ -1446,5 +1447,11 @@ export default {
 .trips-donation-banner {
     width: 100%;
     margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .trips-donation-banner {
+        margin-bottom: 0;
+    }
 }
 </style>
