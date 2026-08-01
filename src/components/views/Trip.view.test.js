@@ -92,3 +92,34 @@ describe('Trip.vue driver seat request limit warning', () => {
         expect(viewSource).toContain('seat_request_limit_reached');
     });
 });
+
+describe('Trip.vue mobile trip-detail stack', () => {
+    it('uses trip-detail root and mobile stack section labels', () => {
+        expect(viewSource).toContain('trip-detail');
+        expect(viewSource).toContain('trip-detail__stack');
+        expect(viewSource).toContain("$t('tripDetailSection')");
+        expect(viewSource).toContain("$t('tripDetailDriverMessage')");
+        expect(viewSource).toContain("$t('tripDetailConditions')");
+        expect(viewSource).toContain("$t('tripDetailJoined')");
+    });
+
+    it('keeps map after CTAs in mobile markup', () => {
+        const mobileStack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        );
+        expect(mobileStack).not.toBeNull();
+        expect(mobileStack[0].indexOf('TripButtons')).toBeLessThan(
+            mobileStack[0].indexOf('trip-route-map')
+        );
+    });
+
+    it('adds trip-detail root classes with mobile modifier binding', () => {
+        expect(viewSource).toContain("'trip-detail--mobile': isMobile");
+    });
+
+    it('gates the mobile stack on isMobile, trip and not passengers view', () => {
+        expect(viewSource).toMatch(
+            /v-if="isMobile[^"]*trip[^"]*!isPassengersView"[\s\S]*?trip-detail__stack|trip-detail__stack[\s\S]*?v-if="isMobile/
+        );
+    });
+});
