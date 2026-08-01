@@ -7,7 +7,7 @@
         "
     >
         <div class="col-xs-24" v-if="displayPassengers.length">
-            <h4 class="title-margined trip-detail__section-title">
+            <h4 class="title-margined" :class="{ 'trip-detail__section-title': isMobile }">
                 <strong>{{ joinedTitle }}</strong>
             </h4>
             <div
@@ -93,6 +93,7 @@
 import { mapState, mapActions } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
 import { useConversationsStore } from '../../stores/conversations';
 import { usePassengerStore } from '../../stores/passenger';
 import router from '../../router';
@@ -117,8 +118,16 @@ export default {
             tripCardTheme: 'tripCardTheme',
             user: 'user'
         }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
+        }),
         joinedTitle() {
-            return this.sectionTitle || this.$t('tripDetailJoined');
+            if (this.sectionTitle) {
+                return this.sectionTitle;
+            }
+            return this.isMobile
+                ? this.$t('tripDetailJoined')
+                : this.$t('pasajerosSubidos');
         },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
