@@ -371,4 +371,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /syncStepToRoute\(step\)[\s\S]*typeof navigation\.catch === 'function'/
         );
     });
+
+    it('keeps the lucrar info icon beside the commitment title with a larger tooltip', () => {
+        expect(wizardSource).toMatch(
+            /\.trip_terms--lucrar-card__title\s*\{[^}]*flex:\s*0\s+1\s+auto/
+        );
+        expect(wizardSource).toMatch(
+            /\.trip_terms--lucrar-card__tooltip\[data-tooltip\]\.tooltip-bottom:before[\s\S]*?font-size:\s*(?:0\.9(?:375)?rem|1rem|14px|15px|16px)/
+        );
+    });
 });
