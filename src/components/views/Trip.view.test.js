@@ -130,12 +130,13 @@ describe('Trip.vue mobile trip-detail stack', () => {
     });
 
 
-    it('renders TripDetailRoute in DETALLE and keeps seats in the driver header', () => {
+    it('renders TripDetailRoute in DETALLE and keeps seats in the desktop lugares band', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
         expect(stack).toContain('<TripDetailRoute');
-        expect(stack).not.toMatch(/<TripSeats\s*\/>/);
+        expect(stack).toContain('trip-detail__lugares');
+        expect(stack).toContain('<TripSeats');
         expect(stack).not.toMatch(/<TripLocation\s*\/>/);
         expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
@@ -176,5 +177,43 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
         expect(viewSource).toContain('showModalRequestSeat');
         expect(viewSource).toContain('showModalPricing');
+    });
+});
+
+describe('Trip.vue desktop column bands', () => {
+    it('orders seats-passengers before price-cta before map in the stack', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        const seatsIdx = stack.indexOf('trip-detail__seats-passengers');
+        const priceIdx = stack.indexOf('trip-detail__price-cta');
+        const mapIdx = stack.indexOf('trip-route-map');
+        expect(seatsIdx).toBeGreaterThan(-1);
+        expect(priceIdx).toBeGreaterThan(seatsIdx);
+        expect(mapIdx).toBeGreaterThan(priceIdx);
+    });
+
+    it('splits DETALLE into main route and aside stats/condiciones', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        expect(stack).toContain('trip-detail__detalle-grid');
+        expect(stack).toContain('trip-detail__detalle-main');
+        expect(stack).toContain('trip-detail__detalle-aside');
+        expect(stack).toMatch(
+            /trip-detail__detalle-main[\s\S]*TripDetailRoute[\s\S]*trip-detail__detalle-aside[\s\S]*TripStats/
+        );
+    });
+
+    it('keeps mobile condiciones with price; desktop puts TripData in DETALLE aside and TripPrice in price-cta', () => {
+        expect(viewSource).toMatch(
+            /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripPrice[\s\S]*TripData/
+        );
+        expect(viewSource).toMatch(
+            /trip-detail__detalle-aside[\s\S]*v-if="!isMobile"[\s\S]*TripData|trip-detail__detalle-aside[\s\S]*TripData[\s\S]*v-if="!isMobile"/
+        );
+        expect(viewSource).toMatch(
+            /trip-detail__price-cta[\s\S]*TripPrice[\s\S]*TripButtons/
+        );
     });
 });
