@@ -1,6 +1,6 @@
 <template>
     <div class="row trip-stats" v-if="!trip.is_passenger && !isPassengersView">
-        <div class="trip-detail__stats" v-if="isMobile">
+        <div class="trip-detail__stats">
             <span>
                 {{ distanceString }}
                 <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
@@ -15,57 +15,12 @@
                 </abbr>
             </span>
         </div>
-        <template v-else>
-            <div>
-                <i
-                    class="fa fa-link"
-                    aria-hidden="true"
-                    v-if="tripCardTheme === 'light'"
-                ></i>
-                <span>{{ $t('distanciaARecorrer') }}</span>
-                <br v-if="tripCardTheme !== 'light'" />
-                <span>
-                    {{ distanceString }}
-                    <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
-                </span>
-            </div>
-            <div>
-                <i
-                    class="fa fa-clock-o"
-                    aria-hidden="true"
-                    v-if="tripCardTheme === 'light'"
-                ></i>
-                <span>{{ $t('tiempoEstimado') }}</span>
-                <br v-if="tripCardTheme !== 'light'" />
-                <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
-            </div>
-            <div>
-                <i
-                    class="fa fa-leaf"
-                    aria-hidden="true"
-                    v-if="tripCardTheme === 'light'"
-                ></i>
-                <span>
-                    {{ $t('huellaCarbono') }} (
-                    <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
-                    )
-                </span>
-                <br v-if="tripCardTheme !== 'light'" />
-                <span>
-                    {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
-                    <abbr :title="$t('kilogramosDioxidoCarbono')">
-                        kg CO<sub>2</sub> eq.
-                    </abbr>
-                </span>
-            </div>
-        </template>
     </div>
 </template>
 <script>
 import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
-import { useDeviceStore } from '../../stores/device';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripDate',
@@ -75,9 +30,6 @@ export default {
         }),
         ...mapState(useAuthStore, {
             tripCardTheme: 'tripCardTheme'
-        }),
-        ...mapState(useDeviceStore, {
-            isMobile: 'isMobile'
         }),
         distanceString() {
             return Math.floor(this.trip.distance / 1000);

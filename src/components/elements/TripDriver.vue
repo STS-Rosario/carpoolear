@@ -1,6 +1,6 @@
 <template>
     <div class="trip-driver">
-        <div class="trip-driver__mobile" v-if="isMobile && trip && trip.user">
+        <div class="trip-driver__mobile" v-if="trip && trip.user">
             <div class="trip-driver__mobile-top">
                 <router-link
                     class="trip-driver-profile-link trip_driver_img_container"

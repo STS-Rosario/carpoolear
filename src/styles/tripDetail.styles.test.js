@@ -7,6 +7,17 @@ const css = fs.readFileSync(
     'utf8'
 );
 
+/** Match a mobile rule that may also be dual-scoped with the desktop twin. */
+function dualRule(mobileSelector, bodySnippet) {
+    const esc = (s) =>
+        s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+    const mobile = esc(mobileSelector);
+    const desktop = esc(mobileSelector.replace(/--mobile/g, '--desktop'));
+    return new RegExp(
+        `${mobile}(?:\\s*,\\s*${desktop})?\\s*\\{[^}]*${bodySnippet}`
+    );
+}
+
 describe('trip-detail.css', () => {
     it('scopes mobile section labels and stack under .trip-detail', () => {
         expect(css).toContain('.trip-detail');
@@ -17,10 +28,9 @@ describe('trip-detail.css', () => {
         expect(css).toContain('.trip-detail__passengers');
     });
 
-    it('scopes base visual rules under .trip-detail--mobile so desktop keeps its own layout/colors', () => {
-        // Every declaration block outside the max-width media query must be
-        // scoped under .trip-detail--mobile, otherwise it would also apply to
-        // desktop trip detail (same markup classes, isMobile === false).
+    it('scopes shared visual rules under trip-detail mobile/desktop modifiers', () => {
+        // Shared visual rules before the first @media must include --mobile
+        // (often dual-scoped with --desktop). Unscoped rules would leak.
         const beforeMediaQuery = css.split('@media')[0];
         const ruleBlocks = beforeMediaQuery.match(/[^{}]+\{[^}]*\}/g) || [];
 
@@ -59,32 +69,50 @@ describe('trip-detail.css', () => {
 
     it('sizes section titles like province labels: 0.875rem regular weight', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__section-title\s*\{[^}]*font-size:\s*0\.875rem/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__section-title',
+                'font-size:\\s*0\\.875rem'
+            )
         );
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__section-title\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal,\s*400\)/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__section-title',
+                'font-weight:\\s*var\\(--ds-font-weight-normal,\\s*400\\)'
+            )
         );
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__region\s*\{[^}]*font-size:\s*0\.875rem/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__region',
+                'font-size:\\s*0\\.875rem'
+            )
         );
     });
 
     it('keeps contribution label in sentence case on mobile condiciones', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip_seats-available_label\s*\{[^}]*text-transform:\s*none/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__condiciones .trip_seats-available_label',
+                'text-transform:\\s*none'
+            )
         );
     });
 
     it('removes the dotted border under condiciones preferences on mobile', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip-data--container\s+\.trip-data\s*\{[^}]*border-bottom:\s*0/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__condiciones .trip-data--container .trip-data',
+                'border-bottom:\\s*0'
+            )
         );
     });
 
     it('keeps distance, time and CO2 stats the same size and centered on mobile', () => {
         expect(css).toContain('.trip-detail--mobile .trip-detail__stats');
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__stats\s*\{[^}]*justify-content:\s*center/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__stats',
+                'justify-content:\\s*center'
+            )
         );
         expect(css).toMatch(
             /\.trip-detail--mobile\.trip-detail-component\s+\.trip-stats\s*>\s*div\s*>\s*span:last-child[\s\S]*?font-size:\s*inherit/
@@ -145,7 +173,10 @@ describe('trip detail desktop card layout', () => {
 
     it('hides the TripPrice spacer div under desktop contribucion, mirroring the mobile rule', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip-seats\s*>\s*div\[style\*='height'\]\s*\{[^}]*display:\s*none\s*!important/
+            dualRule(
+                ".trip-detail--mobile .trip-detail__condiciones .trip-seats > div[style*='height']",
+                'display:\\s*none\\s*!important'
+            )
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__contribucion\s+\.trip-seats\s*>\s*div\[style\*='height'\]\s*\{[^}]*display:\s*none\s*!important/
@@ -171,16 +202,22 @@ describe('trip detail desktop card layout', () => {
 describe('trip detail card/stack nesting', () => {
     it('lets the card, not the inert single-child stack, govern the flex column of sections', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__card\s*\{[^}]*display:\s*flex/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__card',
+                'display:\\s*flex'
+            )
         );
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__card\s*\{[^}]*flex-direction:\s*column/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__card',
+                'flex-direction:\\s*column'
+            )
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__card\s*\{[^}]*display:\s*flex/
+            /\.trip-detail--desktop\s+\.trip-detail__card[\s\S]*?display:\s*flex/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__card\s*\{[^}]*flex-direction:\s*column/
+            /\.trip-detail--desktop\s+\.trip-detail__card[\s\S]*?flex-direction:\s*column/
         );
     });
 });
@@ -188,7 +225,10 @@ describe('trip detail card/stack nesting', () => {
 describe('trip detail mobile DETALLE gap', () => {
     it('tightens the detalle-grid gap on mobile so route/stats spacing matches the pre-shared-grid layout', () => {
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-detail__detalle-grid\s*\{[^}]*gap:\s*0\.75rem/
+            dualRule(
+                '.trip-detail--mobile .trip-detail__detalle-grid',
+                'gap:\\s*0\\.75rem'
+            )
         );
     });
 });
@@ -202,19 +242,19 @@ describe('trip detail desktop shares mobile visual language', () => {
             /\.trip-detail--desktop\s+\.trip-detail__route-graphic::before[\s\S]*?background:\s*var\(--ds-action/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__city\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+            /\.trip-detail--desktop\s+\.trip-detail__city[\s\S]*?font-weight:\s*var\(--ds-font-weight-bold/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__chip\s*\{[^}]*background:\s*var\(--trip-detail-chip-bg/
+            /\.trip-detail--desktop\s+\.trip-detail__chip[\s\S]*?background:\s*var\(--trip-detail-chip-bg/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__stats\s*\{[^}]*color:\s*var\(--ds-text-secondary/
+            /\.trip-detail--desktop\s+\.trip-detail__stats[\s\S]*?color:\s*var\(--ds-text-secondary/
         );
     });
 
     it('styles desktop condiciones preferences and contribución price like mobile', () => {
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__condiciones\s+\.trip-data\s+em\s*\{[^}]*float:\s*none/
+            /\.trip-detail--desktop\s+\.trip-detail__condiciones[\s\S]*?\.trip-data\s+em\s*\{[^}]*float:\s*none/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__contribucion\s+\.trip_seat-price_value-main\s*\{[^}]*font-size:\s*1\.5rem/
