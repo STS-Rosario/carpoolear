@@ -22,9 +22,7 @@
                     aria-hidden="true"
                     v-if="tripCardTheme === 'light'"
                 ></i>
-                <span v-if="tripCardTheme !== 'light'"
-                    >{{ $t('distanciaARecorrer') }}</span
-                >
+                <span>{{ $t('distanciaARecorrer') }}</span>
                 <br v-if="tripCardTheme !== 'light'" />
                 <span>
                     {{ distanceString }}
@@ -37,9 +35,7 @@
                     aria-hidden="true"
                     v-if="tripCardTheme === 'light'"
                 ></i>
-                <span v-if="tripCardTheme !== 'light'"
-                    >{{ $t('tiempoEstimado') }}</span
-                >
+                <span>{{ $t('tiempoEstimado') }}</span>
                 <br v-if="tripCardTheme !== 'light'" />
                 <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
             </div>
@@ -49,7 +45,7 @@
                     aria-hidden="true"
                     v-if="tripCardTheme === 'light'"
                 ></i>
-                <span v-if="tripCardTheme !== 'light'">
+                <span>
                     {{ $t('huellaCarbono') }} (
                     <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
                     )
