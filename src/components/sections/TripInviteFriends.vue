@@ -176,6 +176,13 @@ export default {
     margin: 0.4rem 0;
 }
 
+.trip-invite-friends__list label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
 .trip-invite-friends__actions {
     margin-top: 1rem;
     display: flex;
