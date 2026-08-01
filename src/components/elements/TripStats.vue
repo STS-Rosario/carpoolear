@@ -1,19 +1,34 @@
 <template>
     <div class="row trip-stats" v-if="!trip.is_passenger && !isPassengersView">
         <div class="trip-detail__stats">
-            <span>
-                {{ distanceString }}
-                <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
-            </span>
-            <span class="trip-detail__stats-sep">&middot;</span>
-            <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
-            <span class="trip-detail__stats-sep">&middot;</span>
-            <span>
-                {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
-                <abbr :title="$t('kilogramosDioxidoCarbono')">
-                    kg CO<sub>2</sub> eq.
-                </abbr>
-            </span>
+            <div class="trip-detail__stat">
+                <span class="trip-detail__stat-label">{{ $t('distancia') }}</span>
+                <span class="trip-detail__stat-value">
+                    {{ distanceString }}
+                    <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
+                </span>
+            </div>
+            <span class="trip-detail__stats-sep" aria-hidden="true">&middot;</span>
+            <div class="trip-detail__stat">
+                <span class="trip-detail__stat-label">{{
+                    $t('tripDetailStatDuration')
+                }}</span>
+                <span class="trip-detail__stat-value">
+                    {{ trip.estimated_time }} {{ $t('horas') }}
+                </span>
+            </div>
+            <span class="trip-detail__stats-sep" aria-hidden="true">&middot;</span>
+            <div class="trip-detail__stat">
+                <span class="trip-detail__stat-label">
+                    {{ $t('huellaCarbono') }} ({{ $t('aprox') }})
+                </span>
+                <span class="trip-detail__stat-value">
+                    {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
+                    <abbr :title="$t('kilogramosDioxidoCarbono')">
+                        kg CO<sub>2</sub> eq.
+                    </abbr>
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -23,7 +38,7 @@ import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 export default {
-    name: 'TripDate',
+    name: 'TripStats',
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
