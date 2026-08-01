@@ -124,4 +124,22 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*background:\s*var\(--trip-detail-driver-bg/
         );
     });
+
+    it('neutralizes TripSeats bootstrap offsets inside desktop trip detail', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-seats\s+\.trip_seats-available\s*\{[^}]*margin-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-seats\s+\.trip_seats-available\s*\{[^}]*width:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-seats\s+\.trip_seats-available\s*\{[^}]*float:\s*none/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-seats\s+\.trip_seats-available\s*\{[^}]*padding-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-seats\s+\.row\s*\{[^}]*margin:\s*0/
+        );
+    });
 });
