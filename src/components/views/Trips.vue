@@ -249,7 +249,7 @@
                             class="trips-section"
                         >
                             <h2 class="trips-section-heading">
-                                {{ $t('otrosViajes') }}
+                                {{ $t('viajesPublicados') }}
                             </h2>
                             <div
                                 class="trips-section__list row"

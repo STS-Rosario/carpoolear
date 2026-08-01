@@ -909,7 +909,7 @@ const messages = {
         encontraTuProximoViaje: 'Encontrá tu próximo viaje',
         compartiAutoTagline:
             'Compartí el auto, ahorrá dinero y cuidá el planeta',
-        viajesPublicados: 'Viajes Publicados',
+        viajesPublicados: 'Viajes publicados',
         buscoTitulo: 'Busco...',
         precioAsiento: 'Contribución por persona (incluído el conductor)',
         iniciarSesion: 'Iniciar sesión',

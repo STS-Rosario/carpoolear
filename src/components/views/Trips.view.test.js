@@ -122,7 +122,8 @@ describe('Trips.vue friend-first trip sections', () => {
     it('splits logged-in trip list into friend and other sections', () => {
         expect(viewSource).toContain('splitFriendTrips');
         expect(viewSource).toContain("$t('viajesDeMisAmigos')");
-        expect(viewSource).toContain("$t('otrosViajes')");
+        expect(viewSource).toContain("$t('viajesPublicados')");
+        expect(viewSource).not.toContain("$t('otrosViajes')");
         expect(viewSource).toContain('friendTripsList');
         expect(viewSource).toContain('otherTripsList');
     });
@@ -158,7 +159,7 @@ describe('Trips.vue friend-first trip sections', () => {
             /showSplitDonationPanel[\s\S]*?showFriendTripSections[\s\S]*?viajesDeMisAmigos/s
         );
         expect(viewSource).not.toMatch(
-            /friendTripsList[\s\S]*?panel-donar[\s\S]*?otrosViajes/s
+            /friendTripsList[\s\S]*?panel-donar[\s\S]*?viajesPublicados/s
         );
     });
 
@@ -191,7 +192,7 @@ describe('Trips.vue friend-first trip sections', () => {
     it('hides section headings when there are no friend trips', () => {
         expect(viewSource).toContain('showFriendTripSections');
         expect(viewSource).toMatch(
-            /v-if="showFriendTripSections"[\s\S]*?viajesDeMisAmigos[\s\S]*?otrosViajes/s
+            /v-if="showFriendTripSections"[\s\S]*?viajesDeMisAmigos[\s\S]*?viajesPublicados/s
         );
 
         const flatTripsListBlock = viewSource.match(
@@ -201,6 +202,7 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(flatTripsListBlock).toBeTruthy();
         expect(flatTripsListBlock).not.toContain('trips-section-heading');
         expect(flatTripsListBlock).not.toContain("$t('viajesDeMisAmigos')");
+        expect(flatTripsListBlock).not.toContain("$t('viajesPublicados')");
         expect(flatTripsListBlock).not.toContain("$t('otrosViajes')");
     });
 });
