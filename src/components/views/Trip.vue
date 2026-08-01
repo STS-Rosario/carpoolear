@@ -215,13 +215,15 @@
                         <div class="trip-detail__detalle-grid">
                             <div class="trip-detail__detalle-main">
                                 <TripDetailRoute />
+                            </div>
+                            <div class="trip-detail__detalle-stats">
                                 <TripStats />
                             </div>
-                            <div class="trip-detail__detalle-aside">
-                                <div
-                                    v-if="!isMobile"
-                                    class="trip-detail__condiciones"
-                                >
+                            <div
+                                v-if="!isMobile"
+                                class="trip-detail__detalle-aside"
+                            >
+                                <div class="trip-detail__condiciones">
                                     <h3 class="trip-detail__section-title">
                                         {{ $t('tripDetailConditions') }}
                                     </h3>

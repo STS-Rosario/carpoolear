@@ -198,19 +198,26 @@ describe('Trip.vue desktop column bands', () => {
         expect(stack).not.toContain('trip-detail__price-cta');
     });
 
-    it('splits DETALLE into main route+stats and aside condiciones', () => {
+    it('splits DETALLE into route, stats, and condiciones columns', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
         expect(stack).toContain('trip-detail__detalle-grid');
         expect(stack).toContain('trip-detail__detalle-main');
+        expect(stack).toContain('trip-detail__detalle-stats');
         expect(stack).toContain('trip-detail__detalle-aside');
         expect(stack).toMatch(
-            /trip-detail__detalle-main[\s\S]*TripDetailRoute[\s\S]*TripStats[\s\S]*trip-detail__detalle-aside/
+            /trip-detail__detalle-main[\s\S]*TripDetailRoute[\s\S]*trip-detail__detalle-stats[\s\S]*TripStats[\s\S]*trip-detail__detalle-aside/
         );
-        expect(stack).not.toMatch(
-            /trip-detail__detalle-aside[\s\S]*TripStats/
-        );
+        const main = stack.match(
+            /trip-detail__detalle-main[\s\S]*?(?=trip-detail__detalle-stats)/
+        )[0];
+        expect(main).toContain('TripDetailRoute');
+        expect(main).not.toContain('TripStats');
+        const aside = stack.match(
+            /trip-detail__detalle-aside[\s\S]*?(?=trip-detail__section|<\/section>)/
+        )[0];
+        expect(aside).not.toContain('TripStats');
     });
 
     it('hides the desktop lugares heading/column when TripSeats would render nothing', () => {
@@ -230,7 +237,7 @@ describe('Trip.vue desktop column bands', () => {
             /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripPrice[\s\S]*TripData/
         );
         expect(viewSource).toMatch(
-            /trip-detail__detalle-aside[\s\S]*v-if="!isMobile"[\s\S]*TripData|trip-detail__detalle-aside[\s\S]*TripData[\s\S]*v-if="!isMobile"/
+            /trip-detail__detalle-aside[\s\S]*TripData|v-if="!isMobile"[\s\S]*trip-detail__detalle-aside[\s\S]*TripData/
         );
         expect(viewSource).toMatch(
             /trip-detail__actions-grid[\s\S]*TripPrice[\s\S]*TripButtons/

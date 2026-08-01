@@ -139,7 +139,7 @@ describe('trip detail desktop card layout', () => {
         expect(css).toContain('.trip-detail__detalle-grid');
         expect(css).toContain('.trip-detail__actions-grid');
         expect(css).toMatch(
-            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr\s*1fr/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*display:\s*flex/
@@ -255,7 +255,19 @@ describe('trip detail labeled stats', () => {
             /\.trip-detail__stat-label[^{]*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
         );
         expect(css).toMatch(
+            /\.trip-detail--(?:mobile|desktop)\s+\.trip-detail__stats\s+\.trip-detail__stat-label\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+        );
+        expect(css).toMatch(
             /\.trip-detail--(?:mobile|desktop)\s+\.trip-detail__stats-sep\s*\{[^}]*align-self:\s*center/
+        );
+    });
+
+    it('stacks desktop stats vertically in the middle DETALLE column', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__detalle-stats\s+\.trip-detail__stats\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__detalle-stats\s+\.trip-detail__stats\s*\{[^}]*align-items:\s*flex-start/
         );
     });
 });
