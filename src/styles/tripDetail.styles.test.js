@@ -94,3 +94,34 @@ describe('trip-detail.css', () => {
         );
     });
 });
+
+describe('trip detail desktop card layout', () => {
+    it('defines desktop card shell and two-column grids', () => {
+        expect(css).toContain('.trip-detail--desktop');
+        expect(css).toContain('.trip-detail__card');
+        expect(css).toMatch(
+            /\.trip-detail__card\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
+        );
+        expect(css).toMatch(
+            /\.trip-detail__card\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow/
+        );
+        expect(css).toMatch(
+            /\.trip-detail__card\s*\{[^}]*background:\s*var\(--ds-card-bg/
+        );
+        expect(css).toContain('.trip-detail__detalle-grid');
+        expect(css).toContain('.trip-detail__seats-passengers');
+        expect(css).toContain('.trip-detail__price-cta');
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__seats-passengers\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__price-cta\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*background:\s*var\(--trip-detail-driver-bg/
+        );
+    });
+});
