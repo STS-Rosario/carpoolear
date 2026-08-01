@@ -137,10 +137,35 @@ describe('carFields', () => {
             })
         ).toEqual([
             { labelKey: 'marca', value: 'Toyota' },
-            { labelKey: 'modelo', value: 'Corolla' },
-            { labelKey: 'anio', value: '2020' },
+            { labelKey: 'modelo', value: 'Corolla 2020' },
             { labelKey: 'patente', value: 'AB123CD' }
         ]);
+    });
+
+    it('combines model and year on one modelo row', () => {
+        expect(
+            carDetailRows({
+                model_name: 'Gol',
+                year: 2015
+            })
+        ).toEqual([
+            { labelKey: 'marca', value: '' },
+            { labelKey: 'modelo', value: 'Gol 2015' },
+            { labelKey: 'patente', value: '' }
+        ]);
+
+        expect(
+            carDetailRows({
+                model_other: 'MiModelo',
+                year: ''
+            })[1]
+        ).toEqual({ labelKey: 'modelo', value: 'MiModelo' });
+
+        expect(
+            carDetailRows({
+                year: 2018
+            })[1]
+        ).toEqual({ labelKey: 'modelo', value: '2018' });
     });
 
     it('builds display label with catalog names', () => {

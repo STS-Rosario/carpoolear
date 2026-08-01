@@ -143,6 +143,13 @@ export function carDetailRows(car) {
         return [];
     }
 
+    const model = car.model_name || car.model_other || '';
+    const year =
+        car.year !== null && car.year !== undefined && car.year !== ''
+            ? String(car.year)
+            : '';
+    const modelWithYear = [model, year].filter(hasValue).join(' ');
+
     return [
         {
             labelKey: 'marca',
@@ -150,14 +157,7 @@ export function carDetailRows(car) {
         },
         {
             labelKey: 'modelo',
-            value: car.model_name || car.model_other || ''
-        },
-        {
-            labelKey: 'anio',
-            value:
-                car.year !== null && car.year !== undefined && car.year !== ''
-                    ? String(car.year)
-                    : ''
+            value: modelWithYear
         },
         {
             labelKey: 'patente',
