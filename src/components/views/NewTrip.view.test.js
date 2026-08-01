@@ -5,15 +5,41 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'NewTrip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-describe('NewTrip.vue foreign endpoints validation', () => {
-    it('validates foreign endpoints only at origin and destination', () => {
-        expect(viewSource).toContain(
-            "from '../../utils/tripForeignEndpointsValidation.js'"
-        );
-        expect(viewSource).toContain('hasTooManyForeignTripEndpoints');
+describe('NewTrip.vue page card shell', () => {
+    it('wraps content in a white card with Crear/Editar viaje heading', () => {
+        expect(viewSource).toContain('new-trip-page__card');
+        expect(viewSource).toContain('new-trip-page__heading');
         expect(viewSource).toMatch(
-            /validate\(\)[\s\S]*?hasTooManyForeignTripEndpoints\(\s*this\.points,\s*this\.config\.osm_country/s
+            /new-trip-page__card[\s\S]*new-trip-page__heading[\s\S]*crearViaje/
         );
+        expect(viewSource).toContain("$t('editarViaje')");
+        expect(viewSource).toMatch(
+            /\.new-trip-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(viewSource).toMatch(
+            /\.new-trip-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
+        expect(viewSource).not.toContain('title--desktop');
+    });
+
+    it('removes the legacy inner form card styling', () => {
+        expect(viewSource).toMatch(
+            /\.new-trip-component\s+\.form\s*\{[^}]*box-shadow:\s*none/s
+        );
+        expect(viewSource).toMatch(
+            /\.new-trip-component\s+\.form\s*\{[^}]*background:\s*transparent/s
+        );
+    });
+
+    it('keeps mobile create and return actions in document flow at the end of the form', () => {
+        expect(viewSource).toContain('trip-form-mobile-footer');
+        expect(viewSource).toMatch(
+            /\.trip-form-mobile-footer\s*\{[^}]*position:\s*static/s
+        );
+        expect(viewSource).not.toMatch(
+            /\.trip-form-mobile-footer\s*\{[^}]*position:\s*fixed/s
+        );
+        expect(viewSource).toContain("$t('cargarViajeRegreso')");
     });
 });
 
