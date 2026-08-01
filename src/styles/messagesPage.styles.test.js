@@ -78,7 +78,7 @@ describe('messages-page.css', () => {
             /\.message-composer-send[\s\S]*background:\s*var\(--ds-action\)/
         );
         expect(css).toMatch(
-            /\.message-composer-send[\s\S]*border-radius:\s*0/
+            /\.message-composer-send[\s\S]*border-radius:\s*0\.5rem/
         );
         expect(css).not.toMatch(
             /\.message-composer-send[\s\S]*border-radius:\s*50%/
@@ -88,9 +88,6 @@ describe('messages-page.css', () => {
     it('keeps the message composer square and pinned to the bottom of the chat column', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(
-            /\.message-composer-editor-wrap\s*\{[^}]*border-radius:\s*0/s
-        );
-        expect(css).toMatch(
             /\.message-composer\s*\{[^}]*border-radius:\s*0/s
         );
         expect(css).toContain(
@@ -98,6 +95,41 @@ describe('messages-page.css', () => {
         );
         expect(css).toMatch(
             /\.conversation_chat \.message-composer[\s\S]*flex:\s*0 0 auto/
+        );
+    });
+
+    it('removes top chrome gap, right-pane top border, and composer separator', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.conversation-component\.container\s*\{[^}]*padding-top:\s*0/s
+        );
+        expect(css).toMatch(
+            /\.messages-page__shell\s*>\s*\[class\*='col-'\]\s*\{[^}]*padding-left:\s*0/s
+        );
+        expect(css).toMatch(
+            /\.conversation_user_header[\s\S]*border-top:\s*none/
+        );
+        expect(css).toMatch(
+            /\.message-composer[\s\S]*border-top:\s*none/
+        );
+    });
+
+    it('overlays the send button on the markdown editor without a bordered chrome wrap', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.message-composer-editor-wrap\s*\{[^}]*position:\s*relative/s
+        );
+        expect(css).toMatch(
+            /\.message-composer-editor-wrap\s*\{[^}]*border:\s*none/s
+        );
+        expect(css).toMatch(
+            /\.message-composer-send[\s\S]*position:\s*absolute/
+        );
+        expect(css).toMatch(
+            /\.message-composer-send[\s\S]*bottom:/
+        );
+        expect(css).toMatch(
+            /\.message-composer-send[\s\S]*right:/
         );
     });
 });
