@@ -34,7 +34,9 @@ describe('IncomingFriendRequestCard.vue solicitudes row', () => {
         expect(viewSource).toContain('UserRatingsCounts');
         expect(viewSource).toContain('userRatingsFromProfile');
         expect(viewSource).toContain('tripsLabel');
-        expect(viewSource).toContain("$t('perfilViajesParticipados')");
+        expect(viewSource).toMatch(
+            /\$t\(\s*['"]perfilViajesParticipados['"]/
+        );
         expect(viewSource).toContain('normalizeTripsCount');
         expect(viewSource).toMatch(
             /incoming-friend-request-card__name-row[\s\S]*UserRatingsCounts[\s\S]*tripsLabel/
