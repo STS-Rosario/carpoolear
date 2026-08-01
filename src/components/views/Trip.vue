@@ -417,7 +417,6 @@
                         </div>
                     </section>
                     <TripPassengers :section-title="$t('tripDetailJoined')" />
-                    <TripShare />
                     <div class="trip-detail__cta">
                         <TripButtons
                             @deleteTrip="deleteTrip()"

@@ -19,11 +19,10 @@ describe('TripButtons.vue group chat', () => {
 
 describe('TripButtons.vue message/request hierarchy', () => {
     it('marks solicitar asiento secondary when both CTAs can show', () => {
-        expect(viewSource).toContain('btn-primary');
-        expect(viewSource).toMatch(
-            /class="btn(?:\s+trip-detail__cta-secondary)?"[\s\S]*?solicitarAsiento|solicitarAsiento[\s\S]*?class="btn"/
-        );
         expect(viewSource).toContain('trip-detail__cta-secondary');
+        expect(viewSource).toMatch(
+            /trip-detail__cta-secondary[\s\S]*?showMessageButton|showMessageButton[\s\S]*?trip-detail__cta-secondary/
+        );
     });
 
     it('only marks solicitar/reservar secondary when the message CTA is also visible', () => {
@@ -38,6 +37,14 @@ describe('TripButtons.vue message/request hierarchy', () => {
         expect(requestButtonMarkup).toContain('trip-detail__cta-secondary');
         expect(requestButtonMarkup).toContain('showMessageButton');
         expect(viewSource).toMatch(/v-if="showMessageButton"/);
+    });
+
+    it('uses AppButton primary for Enviar mensaje', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?block[\s\S]*?enviarMensaje|<AppButton[\s\S]*?enviarMensaje[\s\S]*?variant="primary"/
+        );
+        expect(viewSource).toContain("$emit('toMessages')");
     });
 });
 

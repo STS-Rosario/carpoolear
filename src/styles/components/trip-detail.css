@@ -289,6 +289,7 @@
 
 .trip-detail--mobile .trip-detail__cta .btn,
 .trip-detail--mobile .trip-detail__cta .btn-primary,
+.trip-detail--mobile .trip-detail__cta .app-button,
 .trip-detail--mobile .trip-detail__cta .trip-detail__cta-secondary {
     display: flex;
     align-items: center;
@@ -297,7 +298,8 @@
     box-sizing: border-box;
 }
 
-.trip-detail--mobile .trip-detail__cta .btn-primary {
+.trip-detail--mobile .trip-detail__cta .btn-primary,
+.trip-detail--mobile .trip-detail__cta .app-button--primary {
     border-radius: var(--ds-radius-button);
     font-family: inherit;
     font-size: var(--ds-button-font-size-md);

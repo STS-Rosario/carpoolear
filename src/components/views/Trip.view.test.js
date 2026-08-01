@@ -133,19 +133,14 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
 
-    it('includes TripShare between passengers and CTAs in the mobile stack', () => {
+    it('does not include TripShare in the mobile stack', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
-        expect(stack).toContain('<TripShare');
-
-        const passengersIdx = stack.indexOf('TripPassengers');
-        const shareIdx = stack.indexOf('TripShare');
-        const ctaIdx = stack.indexOf('trip-detail__cta"');
-
-        expect(passengersIdx).toBeGreaterThan(-1);
-        expect(shareIdx).toBeGreaterThan(passengersIdx);
-        expect(ctaIdx).toBeGreaterThan(shareIdx);
+        expect(stack).not.toContain('<TripShare');
+        expect(stack.indexOf('TripPassengers')).toBeLessThan(
+            stack.indexOf('trip-detail__cta')
+        );
     });
 
     it('gates the desktop white-background form wrapper off mobile while keeping carpoodatos modals available on mobile too', () => {

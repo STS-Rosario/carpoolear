@@ -24,18 +24,19 @@
                 <span v-else>{{ $t('cancelarViaje') }}</span>
             </a>
             <template v-if="showMessageButton">
-                <button
-                    class="btn btn-primary"
-                    @click="$emit('toMessages')"
+                <AppButton
                     v-if="!owner"
+                    variant="primary"
+                    block
                     :disabled="sendingStatus || seatRequestLimitReached"
+                    :loading="Boolean(sending && sending.sendMessageAction)"
+                    @click="$emit('toMessages')"
                 >
-                    <spinner
-                        class="blue"
-                        v-if="sending && sending.sendMessageAction"
-                    ></spinner>
-                    <span v-else>{{ $t('enviarMensaje') }}</span>
-                </button>
+                    {{ $t('enviarMensaje') }}
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
             </template>
             <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
@@ -166,18 +167,19 @@
         </div>
         <div class="buttons-container" v-if="isPassengersView && !owner">
             <template v-if="true">
-                <button
-                    class="btn btn-primary"
-                    @click="$emit('toMessages')"
+                <AppButton
                     v-if="!owner"
+                    variant="primary"
+                    block
                     :disabled="sendingStatus || seatRequestLimitReached"
+                    :loading="Boolean(sending && sending.sendMessageAction)"
+                    @click="$emit('toMessages')"
                 >
-                    <spinner
-                        class="blue"
-                        v-if="sending && sending.sendMessageAction"
-                    ></spinner>
-                    <span v-else>{{ $t('enviarMensaje') }}</span>
-                </button>
+                    {{ $t('enviarMensaje') }}
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
             </template>
         </div>
     </div>
@@ -189,6 +191,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
 import Transactions from '../views/transactions.vue';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 import { shouldShowLiveLocationShare } from '../../utils/ongoingTrip.js';
@@ -200,6 +203,11 @@ export default {
         return {};
     },
     props: ['sending'],
+    components: {
+        spinner,
+        AppButton,
+        Transactions
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -270,10 +278,6 @@ export default {
         isPassengersView() {
             return this.trip.is_passenger;
         }
-    },
-    components: {
-        spinner,
-        Transactions
     },
     methods: {
         isVoluntaryContributionSeatPrice,
