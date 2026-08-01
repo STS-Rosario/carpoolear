@@ -215,9 +215,9 @@
                         <div class="trip-detail__detalle-grid">
                             <div class="trip-detail__detalle-main">
                                 <TripDetailRoute />
+                                <TripStats />
                             </div>
                             <div class="trip-detail__detalle-aside">
-                                <TripStats />
                                 <div
                                     v-if="!isMobile"
                                     class="trip-detail__condiciones"

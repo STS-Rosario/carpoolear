@@ -405,6 +405,24 @@
     color: var(--ds-text-primary, #333);
 }
 
+.trip-detail--desktop .trip-detail__detalle-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.trip-detail--desktop .trip-detail__detalle-aside {
+    min-width: 0;
+}
+
+.trip-detail--mobile .trip-detail__detalle-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
 .trip-detail--desktop .trip-driver {
     background: var(--trip-detail-driver-bg);
     border-bottom: 1px solid #d6d4cf;
