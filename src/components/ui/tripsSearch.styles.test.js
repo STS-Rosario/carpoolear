@@ -66,4 +66,19 @@ describe('trips search redesign integration', () => {
             /\.trips\.container\s*>\s*\.trips-search,\s*\.trips\.container\s*>\s*\.trips-list\s*\{[^}]*padding-right:\s*0/
         );
     });
+
+    it('styles advanced filter selects like AppField inputs and aligns Esconder', () => {
+        expect(tripsSearchCss).toMatch(
+            /\.trips-search__advanced-content\s*\{[^}]*align-items:\s*flex-end/
+        );
+        expect(tripsSearchCss).toMatch(
+            /\.trips-search \.allow-preference-filter select\.form-control\s*\{[^}]*border-radius:\s*var\(--ds-radius-input\)/
+        );
+        expect(tripsSearchCss).toMatch(
+            /\.trips-search \.allow-preference-filter select\.form-control\s*\{[^}]*border:\s*1px solid var\(--ds-input-border\)/
+        );
+        expect(tripsSearchCss).toMatch(
+            /\.trips-search \.hide-carpooleado-select_wrapper\s*\{[^}]*align-items:\s*center/
+        );
+    });
 });

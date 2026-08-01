@@ -642,12 +642,13 @@ export default {
 .allow-preference-filter {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    min-width: 180px;
+    align-items: stretch;
+    gap: var(--ds-input-gap);
+    min-width: 11.25rem;
 }
 
 .allow-preference-filter label {
-    margin-bottom: 0.25em;
+    margin: 0;
 }
 
 .allow-preference-filter select {
