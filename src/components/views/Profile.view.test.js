@@ -23,4 +23,12 @@ describe('Profile view', () => {
         expect(viewSource).not.toContain('Resumen');
         expect(viewSource).not.toContain('viajesJuntos');
     });
+
+    it('deep-links Viajes / Perfil / Calificaciones via query and defaults to Perfil', () => {
+        expect(viewSource).toContain('resolveProfileTabIndex');
+        expect(viewSource).toContain("from '../../utils/profileDeepLinks'");
+        expect(viewSource).toContain('this.$route.query');
+        expect(viewSource).toContain('applyProfileDeepLink');
+        expect(viewSource).not.toContain('getRememberedTab');
+    });
 });
