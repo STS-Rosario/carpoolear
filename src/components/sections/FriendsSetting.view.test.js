@@ -39,9 +39,11 @@ describe('FriendsSetting.vue incoming friend requests', () => {
     it('renders incoming friend request cards with labeled accept and reject actions', () => {
         expect(viewSource).toContain('IncomingFriendRequestCard');
         expect(viewSource).toContain('incoming-friend-requests-list');
-        expect(viewSource).toContain('align-items: flex-start');
         expect(viewSource).toMatch(
-            /\.incoming-friend-requests-list[\s\S]*?width: 100%/
+            /\.incoming-friend-requests-list\s*\{[^}]*width:\s*100%/s
+        );
+        expect(viewSource).toMatch(
+            /\.incoming-friend-requests-list\s*\{[^}]*gap:\s*0/s
         );
         expect(viewSource).toContain('refreshFriendsData');
         expect(viewSource).toContain('activated()');
