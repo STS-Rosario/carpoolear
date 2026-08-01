@@ -40,43 +40,43 @@
             </template>
             <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
-                    <button
-                        class="btn"
-                        :class="{ 'trip-detail__cta-secondary': showMessageButton, 'btn-primary': !showMessageButton }"
+                    <AppButton
+                        :variant="showMessageButton ? 'secondary' : 'primary'"
+                        block
                         @click="$emit('onMakeRequest')"
                         v-if="canRequest && trip.seats_available > 0"
                         :disabled="sendingStatus || seatRequestLimitReached"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        :class="{ 'trip-detail__cta-secondary': showMessageButton }"
                     >
-                        <template v-if="sending && sending.requestAction">
+                        <template v-if="trip.user.autoaccept_requests">
+                            <template
+                                v-if="
+                                    config &&
+                                    config.module_trip_seats_payment
+                                "
+                            >
+                                {{ $t('reservar') }}
+                                <template
+                                    v-if="isVoluntaryContributionSeatPrice(trip.seat_price_cents)"
+                                    >{{ $t('loQueSePuedaAportar') }}</template
+                                >
+                                <template v-else>{{
+                                    $n(trip.seat_price_cents / 100, 'currency')
+                                }}</template>
+                            </template>
+                            <template v-else>{{ $t('reservar') }}</template>
+                        </template>
+                        <template
+                            v-else-if="config.module_coordinate_by_message"
+                        >
+                            {{ $t('enviarMensaje') }}
+                        </template>
+                        <template v-else>{{ $t('solicitarAsiento') }}</template>
+                        <template #loading>
                             <spinner class="blue"></spinner>
                         </template>
-                        <template v-else>
-                            <template v-if="trip.user.autoaccept_requests">
-                                <template
-                                    v-if="
-                                        config &&
-                                        config.module_trip_seats_payment
-                                    "
-                                >
-                                    {{ $t('reservar') }}
-                                    <template
-                                        v-if="isVoluntaryContributionSeatPrice(trip.seat_price_cents)"
-                                        >{{ $t('loQueSePuedaAportar') }}</template
-                                    >
-                                    <template v-else>{{
-                                        $n(trip.seat_price_cents / 100, 'currency')
-                                    }}</template>
-                                </template>
-                                <template v-else>{{ $t('reservar') }}</template>
-                            </template>
-                            <template
-                                v-else-if="config.module_coordinate_by_message"
-                            >
-                                {{ $t('enviarMensaje') }}
-                            </template>
-                            <template v-else>{{ $t('solicitarAsiento') }}</template>
-                        </template>
-                    </button>
+                    </AppButton>
                     <button
                         class="btn"
                         v-if="!canRequest"
