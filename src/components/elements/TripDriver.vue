@@ -48,7 +48,7 @@
                         </span>
                     </div>
                     <div
-                        v-if="membershipLabel || showResponseStats || licensePlate"
+                        v-if="membershipLabel || showResponseStats"
                         class="trip-driver__mobile-secondary"
                     >
                         <p
@@ -68,21 +68,18 @@
                             }}</template>
                         </p>
                         <p
-                            v-if="responseDelayLabel || licensePlate"
+                            v-if="responseDelayLabel"
                             class="trip-driver__mobile-line"
                         >
-                            <template v-if="responseDelayLabel">{{
-                                responseDelayLabel
-                            }}</template>
-                            <template v-if="responseDelayLabel && licensePlate">
-                                &nbsp;
-                            </template>
-                            <strong v-if="licensePlate">
-                                {{ $t('patente') }}: {{ licensePlate }}
-                            </strong>
+                            {{ responseDelayLabel }}
                         </p>
                     </div>
                 </div>
+                <TripCarDetails
+                    v-if="showDriverCarDetails"
+                    class="trip-driver__car"
+                    :car="trip.car"
+                />
             </div>
         </div>
         <div
@@ -254,6 +251,7 @@ import { useTripsStore } from '../../stores/trips';
 import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
+import TripCarDetails from './TripCarDetails.vue';
 import SvgItem from '../SvgItem';
 import UserRatingsCounts from './UserRatingsCounts.vue';
 import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
@@ -382,9 +380,21 @@ export default {
                 delay: this.averageDelay
             });
         },
-        licensePlate() {
-            const plate = this.trip?.car?.patente;
-            return plate ? String(plate) : '';
+        showDriverCarDetails() {
+            if (
+                !this.trip ||
+                this.trip.is_passenger ||
+                !this.trip.car ||
+                !this.trip.car.patente ||
+                !this.user
+            ) {
+                return false;
+            }
+            if (this.user.is_admin) {
+                return true;
+            }
+            // Viewer is a passenger (not the trip driver)
+            return this.user.id !== this.trip.user.id;
         },
         tripStars() {
             if (this.trip && this.trip.user) {
@@ -498,6 +508,25 @@ export default {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
+}
+.trip-driver__car {
+    flex: 0 0 auto;
+    margin-left: auto;
+    text-align: left;
+    color: var(--ds-text-primary, #333);
+}
+.trip-driver__car :deep(.trip-car-details) {
+    margin: 0;
+}
+.trip-driver__car :deep(.trip-car-details__title) {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+.trip-driver__car :deep(.trip-car-details__line) {
+    margin: 0 0 0.1em;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--ds-text-primary, #333);
 }
 .trip-driver__mobile .trip_driver_img_container {
     display: block;
