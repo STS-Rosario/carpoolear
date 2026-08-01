@@ -75,6 +75,12 @@ describe('trip-detail.css', () => {
         );
     });
 
+    it('removes the dotted border under condiciones preferences on mobile', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip-data--container\s+\.trip-data\s*\{[^}]*border-bottom:\s*0/
+        );
+    });
+
     it('keeps distance, time and CO2 stats the same size and centered on mobile', () => {
         expect(css).toContain('.trip-detail--mobile .trip-detail__stats');
         expect(css).toMatch(

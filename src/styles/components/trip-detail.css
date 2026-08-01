@@ -231,6 +231,8 @@
     flex-direction: column;
     gap: 0.4rem;
     margin: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
 }
 
 .trip-detail--mobile .trip-detail__condiciones .trip-data--subtitle {
