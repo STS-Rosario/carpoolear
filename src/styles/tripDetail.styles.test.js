@@ -142,4 +142,53 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail--desktop\s+\.trip-seats\s+\.row\s*\{[^}]*margin:\s*0/
         );
     });
+
+    it('hides the TripPrice spacer div under desktop contribucion, mirroring the mobile rule', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip-seats\s*>\s*div\[style\*='height'\]\s*\{[^}]*display:\s*none\s*!important/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__contribucion\s+\.trip-seats\s*>\s*div\[style\*='height'\]\s*\{[^}]*display:\s*none\s*!important/
+        );
+    });
+
+    it('neutralizes bootstrap row negative margins for desktop passengers and stats columns', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__joined\s+\.row\s*\{[^}]*margin-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__joined\s+\.row\s*\{[^}]*margin-right:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-stats\.row\s*\{[^}]*margin-left:\s*0/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-stats\.row\s*\{[^}]*margin-right:\s*0/
+        );
+    });
+});
+
+describe('trip detail card/stack nesting', () => {
+    it('lets the card, not the inert single-child stack, govern the flex column of sections', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__card\s*\{[^}]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__card\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__card\s*\{[^}]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__card\s*\{[^}]*flex-direction:\s*column/
+        );
+    });
+});
+
+describe('trip detail mobile DETALLE gap', () => {
+    it('tightens the detalle-grid gap on mobile so route/stats spacing matches the pre-shared-grid layout', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__detalle-grid\s*\{[^}]*gap:\s*0\.75rem/
+        );
+    });
 });
