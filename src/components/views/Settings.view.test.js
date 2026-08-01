@@ -43,6 +43,12 @@ describe('Settings navigation', () => {
         );
     });
 
+    it('does not render a layout page title for Verificación de cuenta so the in-card heading is used', () => {
+        expect(viewSource).not.toMatch(
+            /identity_validation['"]?\s*\)\s*return\s*['"]validarIdentidad['"]/
+        );
+    });
+
     it('does not render a layout page title for Autos so the in-card heading is used', () => {
         expect(viewSource).not.toMatch(
             /profile_cars['"]?\s*\)\s*return\s*['"]autos['"]/

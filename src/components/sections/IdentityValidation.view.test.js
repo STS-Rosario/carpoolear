@@ -20,6 +20,22 @@ describe('IdentityValidation mobile layout', () => {
     });
 });
 
+describe('IdentityValidation page card', () => {
+    it('wraps content in a white card with the page title inside', () => {
+        expect(viewSource).toContain('identity-validation-page__card');
+        expect(viewSource).toContain('identity-validation-page__heading');
+        expect(viewSource).toMatch(
+            /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
+        );
+        expect(viewSource).toMatch(
+            /\.identity-validation-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(viewSource).toMatch(
+            /\.identity-validation-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
+    });
+});
+
 describe('IdentityValidation admin review note contexts', () => {
     it('uses approval note helper in success banner', () => {
         expect(viewSource).toContain('displayableManualApprovalReviewNote');
