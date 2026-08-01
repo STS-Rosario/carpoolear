@@ -50,5 +50,11 @@ describe('Modal close behavior', () => {
         expect(source).toMatch(
             /\.modal-default-button\s*\{[^}]*color:\s*var\(--ds-action/
         );
+        expect(source).toMatch(
+            /\.modal-footer\s*\{[^}]*text-align:\s*center/
+        );
+        expect(source).toMatch(
+            /\.modal-default-button\s*\{[^}]*float:\s*none/
+        );
     });
 });

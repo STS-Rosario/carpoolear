@@ -168,10 +168,11 @@ export default {
 
 .modal-footer {
     flex-shrink: 0;
+    text-align: center;
 }
 
 .modal-default-button {
-    float: right;
+    float: none;
     font-size: 1.25rem;
     font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-action, #1e5f9e) !important;
