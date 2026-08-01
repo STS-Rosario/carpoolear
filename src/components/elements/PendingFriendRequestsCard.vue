@@ -1,7 +1,7 @@
 <template>
     <div class="pending-friend-requests" v-if="hasPending">
         <router-link
-            :to="{ name: 'friends_setting' }"
+            :to="FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE"
             class="pending-friend-requests-card"
         >
             <div class="pending-friend-requests-card__icon" aria-hidden="true">
@@ -28,9 +28,16 @@
 <script>
 import { mapState } from 'pinia';
 import { useFriendsStore } from '../../stores/friends';
+import { FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE } from '../../utils/friendsDeepLinks';
 
 export default {
     name: 'pending-friend-requests-card',
+
+    data() {
+        return {
+            FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE
+        };
+    },
 
     computed: {
         ...mapState(useFriendsStore, {

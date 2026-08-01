@@ -84,6 +84,7 @@ import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import dayjs from '../../dayjs';
 import { resolveTripDetailRoute } from '../../utils/notificationNavigation.js';
+import { FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE } from '../../utils/friendsDeepLinks';
 import {
     isNativePlatform,
     getNotificationPermissionStatus,
@@ -165,7 +166,7 @@ export default {
                 console.log(n.extras);
                 switch (n.extras.type) {
                     case 'friends':
-                        router.push({ name: 'friends_setting' });
+                        router.push(FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE);
                         break;
                     case 'subscription':
                         router.push({

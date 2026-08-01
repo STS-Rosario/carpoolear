@@ -165,6 +165,7 @@ import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 import FilterChips from '../elements/FilterChips.vue';
 import AppButton from '../ui/AppButton.vue';
+import { applyFriendsSettingDeepLink } from '../../utils/friendsDeepLinks';
 
 export default {
     name: 'friends_setting',
@@ -219,6 +220,21 @@ export default {
             cancelRequest: 'cancelRequest',
             delete: 'delete'
         }),
+
+        applyDeepLinkFromRoute() {
+            applyFriendsSettingDeepLink(this.$route.query || {}, {
+                setRequestsFilter: (value) => {
+                    this.requestsFilter = value;
+                },
+                activateTab: (index) => {
+                    this.$nextTick(() => {
+                        if (this.$refs.tabs) {
+                            this.$refs.tabs.activateTab(index);
+                        }
+                    });
+                }
+            });
+        },
 
         onTextChange() {
             this.search({ value: this.text });
@@ -278,11 +294,22 @@ export default {
         }
     },
 
+    watch: {
+        '$route.query': {
+            deep: true,
+            handler() {
+                this.applyDeepLinkFromRoute();
+            }
+        }
+    },
+
     mounted() {
+        this.applyDeepLinkFromRoute();
         this.refreshFriendsData();
     },
 
     activated() {
+        this.applyDeepLinkFromRoute();
         this.refreshFriendsData();
     },
     components: {
