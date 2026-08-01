@@ -266,13 +266,24 @@
                         :class="{ 'has-error': form.dateError.state }"
                         v-on:date_changed="form.changeDate"
                     ></DatePicker>
-                    <input
-                        type="time"
-                        v-maska="'##:##'"
-                        v-model="form.time"
-                        class="form-control form-control-with-icon form-control-time"
-                        :class="{ 'has-error': form.timeError.state }"
-                    />
+                    <div class="new-trip-wizard__time-field">
+                        <input
+                            ref="wizardTimeInput"
+                            type="time"
+                            v-maska="'##:##'"
+                            v-model="form.time"
+                            class="form-control form-control-with-icon form-control-time"
+                            :class="{ 'has-error': form.timeError.state }"
+                        />
+                        <button
+                            type="button"
+                            class="new-trip-wizard__time-caret"
+                            :aria-label="$t('hora')"
+                            @click="openWizardTimePicker"
+                        >
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
                 <WeeklySchedule
                     v-else-if="form.config.weekly_schedule"
@@ -859,6 +870,18 @@ export default {
     },
 
     methods: {
+        openWizardTimePicker() {
+            const input = this.$refs.wizardTimeInput;
+            if (!input) {
+                return;
+            }
+            if (typeof input.showPicker === 'function') {
+                input.showPicker();
+                return;
+            }
+            input.focus();
+            input.click();
+        },
         cancelDraftSave() {
             if (this.draftTimer) {
                 clearTimeout(this.draftTimer);
@@ -1281,8 +1304,11 @@ export default {
 .new-trip-wizard :deep(.carpoolear-vue-dp .dp__input) {
     border: 0;
     border-radius: var(--ds-radius-input, 8px);
-    background: transparent;
-    background-image: none !important;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20448%20512%27%20fill%3D%27%23555555%27%3E%3Cpath%20d%3D%27M152%2064H296V24C296%2010.7%20306.7%200%20320%200C333.3%200%20344%2010.7%20344%2024V64H384C419.3%2064%20448%2092.7%20448%20128V448C448%20483.3%20419.3%20512%20384%20512H64C28.7%20512%200%20483.3%200%20448V128C0%2092.7%2028.7%2064%2064%2064H104V24C104%2010.7%20114.7%200%20128%200C141.3%200%20152%2010.7%20152%2024V64zM48%20448C48%20456.8%2055.2%20464%2064%20464H384C392.8%20464%20400%20456.8%20400%20448V192H48V448z%27/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0.75rem center;
+    background-size: 1.1rem 1.1rem;
     color: var(--ds-input-text);
     font-size: var(--ds-input-font-size);
     line-height: 1.3;
@@ -1313,9 +1339,13 @@ export default {
     cursor: pointer;
 }
 
+.new-trip-wizard .trip_datetime .new-trip-wizard__time-field {
+    position: relative;
+}
+
 .new-trip-wizard .trip_datetime .form-control-time {
     padding-left: 2.75rem;
-    padding-right: var(--ds-input-padding-x);
+    padding-right: 2.5rem;
     background-position: 0.75rem center;
     background-size: 1.25rem 1.25rem;
     background-repeat: no-repeat;
@@ -1327,6 +1357,29 @@ export default {
 .new-trip-wizard .trip_datetime .form-control-time::-webkit-calendar-picker-indicator {
     opacity: 0;
     display: none;
+}
+
+.new-trip-wizard .trip_datetime .new-trip-wizard__time-caret {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ds-text-muted, #737373);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.new-trip-wizard .trip_datetime .new-trip-wizard__time-caret:focus-visible {
+    outline: 2px solid var(--ds-input-focus-border, #66afe9);
+    outline-offset: 2px;
+    border-radius: 2px;
 }
 
 .new-trip-wizard__subtitle {

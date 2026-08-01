@@ -303,4 +303,21 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /form-control-time::-webkit-calendar-picker-indicator[\s\S]*?(?:display:\s*none|opacity:\s*0)/
         );
     });
+
+    it('keeps a calendar icon on the date input in the schedule step', () => {
+        expect(wizardSource).toMatch(
+            /\.carpoolear-vue-dp\s+\.dp__input[\s\S]*?background-image:\s*url\(["']?data:image\/svg\+xml/
+        );
+        expect(wizardSource).not.toMatch(
+            /\.carpoolear-vue-dp\s+\.dp__input[\s\S]{0,400}?background-image:\s*none\s*!important/
+        );
+    });
+
+    it('opens the native time picker from a down-caret control', () => {
+        expect(wizardSource).toContain('fa-chevron-down');
+        expect(wizardSource).toContain('new-trip-wizard__time-caret');
+        expect(wizardSource).toContain('openWizardTimePicker');
+        expect(wizardSource).toContain('showPicker');
+        expect(wizardSource).toContain('ref="wizardTimeInput"');
+    });
 });
