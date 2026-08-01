@@ -19,6 +19,11 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).not.toContain("'publicarUnViajeCompartir'");
     });
 
+    it('does not show the share prompt above the action buttons', () => {
+        expect(componentSource).not.toContain('tripCreationSuccessSharePrompt');
+        expect(componentSource).not.toContain('trip-creation-success__prompt');
+    });
+
     it('vertically centers action buttons including the view-trip router-link', () => {
         expect(componentSource).toContain('.trip-creation-success__actions');
         expect(componentSource).toMatch(
