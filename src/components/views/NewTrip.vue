@@ -1,5 +1,9 @@
 <template>
     <div class="new-trip-component container new-trip-tooltips--left">
+        <div class="new-trip-page__card">
+            <h1 class="new-trip-page__heading">
+                {{ updatingTrip ? $t('editarViaje') : $t('crearViaje') }}
+            </h1>
         <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
             <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
             <p>{{ $t('podesHacerViajesGratis', { freeTrips: free_trips_amount }) }}</p>
@@ -14,12 +18,6 @@
         <div class="form form-trip">
             <div class="row">
                 <div :class="columnClass[0]">
-                    <h2
-                        class="title--desktop"
-                        v-if="tripCardTheme === 'light' && !isMobile"
-                    >
-                        {{ $t('crearViaje') }}
-                    </h2>
                     <fieldset
                         class="trip-type-selection"
                         v-if="tripCardTheme !== 'light'"
@@ -2034,6 +2032,7 @@
                 </span>
             </button>
         </div>
+        </div>
 
         <modal
             name="newtrip-rear-comfort-seats-conflict"
@@ -3994,11 +3993,6 @@ span.error.max-contribution-reminder {
 .trip_points--left {
     margin-left: 0.5rem;
 }
-.title--desktop {
-    margin-left: 0.5em;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-}
 @media only screen and (min-width: 768px) {
     .row-showReturnTrip hr {
         padding-top: 1em;
@@ -4260,14 +4254,15 @@ textarea.form-control {
 }
 
 .trip-form-mobile-footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 11;
-    bottom: calc(52px + env(safe-area-inset-bottom, 0px));
-    padding: 0.75rem 1rem;
-    background: var(--main-background, #fff);
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    position: static;
+    left: auto;
+    right: auto;
+    z-index: auto;
+    bottom: auto;
+    margin-top: 1rem;
+    padding: 1rem 0 0;
+    background: transparent;
+    box-shadow: none;
     border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
@@ -4279,6 +4274,43 @@ textarea.form-control {
     margin: 0 !important;
     width: 100%;
     min-width: 100%;
+}
+
+.new-trip-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.new-trip-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.new-trip-component .form {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .new-trip-component {
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .new-trip-component .form-trip {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
 }
 
 .trip-contribucion-recomendada-card {
