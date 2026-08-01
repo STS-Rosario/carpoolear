@@ -393,8 +393,7 @@
                         <h3 class="trip-detail__section-title">
                             {{ $t('tripDetailSection') }}
                         </h3>
-                        <TripLocation />
-                        <TripDate />
+                        <TripDetailRoute />
                         <TripStats />
                     </section>
                     <section
@@ -412,9 +411,10 @@
                         <h3 class="trip-detail__section-title">
                             {{ $t('tripDetailConditions') }}
                         </h3>
-                        <TripPrice />
-                        <TripSeats />
-                        <TripData />
+                        <div class="trip-detail__condiciones">
+                            <TripPrice />
+                            <TripData />
+                        </div>
                     </section>
                     <TripPassengers :section-title="$t('tripDetailJoined')" />
                     <TripShare />
@@ -476,6 +476,7 @@ import {
 } from '../../utils/tripPassengerMessageFlow.js';
 import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
+import TripDetailRoute from '../elements/TripDetailRoute';
 import TripDate from '../elements/TripDate';
 import TripSeats from '../elements/TripSeats';
 import TripPrice from '../elements/TripPrice';
@@ -1206,6 +1207,7 @@ export default {
         modal,
         TripLocation,
         TripDriver,
+        TripDetailRoute,
         TripDate,
         TripSeats,
         TripData,

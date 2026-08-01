@@ -3,10 +3,11 @@
    original layout, colors and CTA styling untouched. */
 
 .trip-detail.trip-detail--mobile {
-    --trip-detail-canvas: #f0f0f0;
-    --trip-detail-card-bg: #fff;
+    --trip-detail-canvas: #fff;
+    --trip-detail-driver-bg: #f0f0f0;
     --trip-detail-divider: #e6e6e6;
     --trip-detail-label: #888;
+    --trip-detail-chip-bg: #f3f3f3;
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-text-primary, #333);
@@ -21,12 +22,19 @@
     box-sizing: border-box;
 }
 
+.trip-detail--mobile .trip-driver {
+    background: var(--trip-detail-driver-bg);
+    box-sizing: border-box;
+}
+
 .trip-detail--mobile .trip-detail__section {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     width: 100%;
     box-sizing: border-box;
+    background: var(--trip-detail-canvas);
+    border-bottom: 1px solid var(--trip-detail-divider);
 }
 
 .trip-detail--mobile .trip-detail__section-title {
@@ -47,6 +55,117 @@
     font-weight: var(--ds-font-weight-normal, 400);
 }
 
+.trip-detail--mobile .trip-detail__detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.trip-detail--mobile .trip-detail__route {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.trip-detail--mobile .trip-detail__route-graphic {
+    position: relative;
+    flex: 0 0 0.75rem;
+    width: 0.75rem;
+    margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
+}
+
+.trip-detail--mobile .trip-detail__route-graphic::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    width: 2px;
+    transform: translateX(-50%);
+    background: var(--ds-action, #016587);
+}
+
+.trip-detail--mobile .trip-detail__route-marker {
+    position: absolute;
+    left: 50%;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    background: var(--trip-detail-canvas);
+    border: 2px solid var(--ds-action, #016587);
+}
+
+.trip-detail--mobile .trip-detail__route-marker--origin {
+    top: 0;
+}
+
+.trip-detail--mobile .trip-detail__route-marker--dest {
+    bottom: 0;
+    background: var(--ds-action, #016587);
+}
+
+.trip-detail--mobile .trip-detail__route-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.1rem;
+    min-width: 0;
+}
+
+.trip-detail--mobile .trip-detail__place {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+}
+
+.trip-detail--mobile .trip-detail__city {
+    font-size: 1.05rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    line-height: 1.2;
+    color: var(--ds-text-primary, #333);
+}
+
+.trip-detail--mobile .trip-detail__region {
+    font-size: 0.875rem;
+    color: var(--ds-text-secondary, #666);
+}
+
+.trip-detail--mobile .trip-detail__point {
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: var(--ds-text-secondary, #666);
+}
+
+.trip-detail--mobile .trip-detail__schedule {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.trip-detail--mobile .trip-detail__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 0.5rem;
+    background: var(--trip-detail-chip-bg);
+    color: var(--ds-text-primary, #333);
+    font-size: 0.875rem;
+    font-weight: var(--ds-font-weight-medium, 500);
+    line-height: 1.2;
+}
+
+.trip-detail--mobile .trip-detail__chip .fa {
+    color: var(--ds-action, #016587);
+}
+
 .trip-detail--mobile .trip-detail__stats {
     display: flex;
     flex-wrap: wrap;
@@ -63,12 +182,63 @@
     color: #bbb;
 }
 
+.trip-detail--mobile .trip-detail__condiciones {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 0.75rem 1rem;
+    align-items: start;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip-seats {
+    margin: 0;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip-seats > div[style*='height'] {
+    display: none !important;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .price-container,
+.trip-detail--mobile .trip-detail__condiciones .trip_seat-price_value-main {
+    text-align: left;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip_seat-price_value-main {
+    font-size: 1.5rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    color: var(--ds-text-primary, #333);
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip-data--container .trip-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip-data--subtitle {
+    display: none;
+}
+
+.trip-detail--mobile .trip-detail__condiciones .trip-data em {
+    float: none;
+    width: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-top: 0;
+    font-style: normal;
+    font-size: 0.875rem;
+    color: var(--ds-text-primary, #333);
+}
+
 .trip-detail--mobile .trip-detail__passengers {
     display: flex;
     flex-direction: column;
     gap: 0;
     width: 100%;
     box-sizing: border-box;
+    background: var(--trip-detail-canvas);
+    border-bottom: 1px solid var(--trip-detail-divider);
 }
 
 .trip-detail--mobile .trip-detail__passengers .list-item {
@@ -151,22 +321,30 @@
 }
 
 @media (max-width: 767px) {
+    body:has(.trip-detail--mobile),
+    #app:has(.trip-detail--mobile) {
+        background: #fff !important;
+    }
+
     .trip-detail--mobile,
     .trip-detail.trip-detail--mobile {
-        padding: 0.75rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
+        padding: 0 0 calc(5.5rem + env(safe-area-inset-bottom, 0px));
         background: var(--trip-detail-canvas);
     }
 
-    .trip-detail--mobile .trip-detail__stack,
-    .trip-detail.trip-detail--mobile .trip-detail__stack {
-        gap: 0.75rem;
+    .trip-detail--mobile .trip-driver,
+    .trip-detail.trip-detail--mobile .trip-driver {
+        padding: 1rem 1rem 0.9rem;
+        margin: 0;
     }
 
     .trip-detail--mobile .trip-detail__section,
-    .trip-detail.trip-detail--mobile .trip-detail__section {
-        padding: 0.85rem 1rem;
-        background: var(--trip-detail-card-bg);
-        border-radius: 0.75rem;
+    .trip-detail.trip-detail--mobile .trip-detail__section,
+    .trip-detail--mobile .trip-detail__passengers,
+    .trip-detail.trip-detail--mobile .trip-detail__passengers,
+    .trip-detail--mobile .trip-detail__cta,
+    .trip-detail.trip-detail--mobile .trip-detail__cta {
+        padding: 1rem;
     }
 
     .trip-detail--mobile .trip-detail__section-title,
@@ -174,27 +352,19 @@
         margin-bottom: 0.65rem;
     }
 
-    .trip-detail--mobile .trip-detail__passengers,
-    .trip-detail.trip-detail--mobile .trip-detail__passengers {
-        padding: 0.85rem 1rem;
-        background: var(--trip-detail-card-bg);
-        border-radius: 0.75rem;
-    }
-
-    .trip-detail--mobile .trip-detail__cta,
-    .trip-detail.trip-detail--mobile .trip-detail__cta {
-        padding: 0 0 0.25rem;
-    }
-
-    .trip-detail--mobile .trip-detail__stats,
-    .trip-detail.trip-detail--mobile .trip-detail__stats {
-        margin-top: 0.25rem;
+    .trip-detail--mobile .trip-share,
+    .trip-detail.trip-detail--mobile .trip-share,
+    .trip-detail--mobile .buttons_share,
+    .trip-detail.trip-detail--mobile .buttons_share {
+        padding: 0.75rem 1rem 0;
     }
 
     .trip-detail--mobile .trip-route-map,
     .trip-detail.trip-detail--mobile .trip-route-map {
-        margin-top: 0.25rem;
-        border-radius: 0.75rem;
-        overflow: hidden;
+        margin: 0;
+        width: 100% !important;
+        margin-left: 0 !important;
+        border-radius: 0;
+        border-top: 1px solid var(--trip-detail-divider);
     }
 }
