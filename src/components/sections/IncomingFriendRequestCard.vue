@@ -24,6 +24,19 @@
                 >
                     <i class="fa fa-shield" aria-hidden="true"></i>
                 </span>
+                <UserRatingsCounts :ratings="userRatings" />
+                <span
+                    v-if="tripsLabel"
+                    class="incoming-friend-request-card__trips-sep"
+                    aria-hidden="true"
+                    >|</span
+                >
+                <span
+                    v-if="tripsLabel"
+                    class="incoming-friend-request-card__trips"
+                >
+                    {{ tripsLabel }}
+                </span>
             </div>
             <div class="incoming-friend-request-card__meta">
                 <span
@@ -65,13 +78,19 @@
 
 <script>
 import AppButton from '../ui/AppButton.vue';
-import { getMembershipDuration } from '../../utils/profileMemberStats.js';
+import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
+import {
+    getMembershipDuration,
+    normalizeTripsCount
+} from '../../utils/profileMemberStats.js';
+import { userRatingsFromProfile } from '../../utils/tripRating';
 
 export default {
     name: 'incoming-friend-request-card',
 
     components: {
-        AppButton
+        AppButton,
+        UserRatingsCounts
     },
 
     props: {
@@ -97,6 +116,17 @@ export default {
                 (this.user.identity_validated ||
                     this.user.identity_validated_at)
             );
+        },
+        userRatings() {
+            return userRatingsFromProfile(this.user);
+        },
+        tripsLabel() {
+            if (!this.user || this.user.trips_count == null) {
+                return '';
+            }
+            return this.$t('perfilViajesParticipados', {
+                count: normalizeTripsCount(this.user.trips_count)
+            });
         },
         memberSinceLabel() {
             const duration = getMembershipDuration(this.user?.created_at);
@@ -163,8 +193,9 @@ export default {
 
 .incoming-friend-request-card__name-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.4rem 0.55rem;
     min-width: 0;
 }
 
@@ -191,6 +222,19 @@ export default {
     color: var(--ds-action, #1e5f9e);
     font-size: 0.95rem;
     line-height: 1;
+}
+
+.incoming-friend-request-card__trips-sep {
+    color: #bbb;
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+.incoming-friend-request-card__trips {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #666;
+    white-space: nowrap;
 }
 
 .incoming-friend-request-card__meta {
