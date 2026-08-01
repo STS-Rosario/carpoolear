@@ -156,13 +156,13 @@
             >
                 {{ $t('invitarAmigos') }}
             </AppButton>
-            <button
+            <AppButton
                 v-else-if="profile.friendship_state === 'pending_sent'"
-                class="btn btn-primary"
+                variant="primary"
                 disabled
             >
-                {{ $t('solicitudEnviada') }}
-            </button>
+                {{ $t('suSolicitudAmistadEnviada') }}
+            </AppButton>
             <template v-else-if="profile.friendship_state === 'pending_received'">
                 <button
                     class="btn btn-primary"

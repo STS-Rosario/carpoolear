@@ -952,6 +952,8 @@ const messages = {
         emailOContra: 'Email o password incorrecto.',
         solicitudEnviada:
             'Su solicitud ya fue enviada, aguarde un momento por favor.',
+        suSolicitudAmistadEnviada:
+            'Su solicitud ya fue enviada, aguarde a la respuesta del usuario.',
         correoUsado:
             'El correo asociado a su cuenta de Facebook, ya tiene asociada una cuenta en Carpoolear. Por favor, ingrese utilizando el login por email. Si no recuerda su clave, cliqueé en olvidé mi contraseña.',
         fecha: 'Fecha',
@@ -2822,6 +2824,8 @@ const messages = {
         buscarPersonas: 'Buscar personas',
         agregar: 'Agregar',
         solicitudEnviada: 'Solicitud enviada',
+        suSolicitudAmistadEnviada:
+            'Su solicitud ya fue enviada, aguarde a la respuesta del usuario.',
         noSeEncontraronContactos: 'No se encontraron contactos.',
         buscandoContactos: 'Buscando contactos..',
         donar: 'Donar',
@@ -4034,6 +4038,8 @@ const messages = {
         emailOContra: 'Incorrect email or password.',
         solicitudEnviada:
             'Your request has already been sent, please wait a moment.',
+        suSolicitudAmistadEnviada:
+            "Your request has already been sent, please wait for the user's response.",
         correoUsado:
             "The email associated with your Facebook account already has an associated Carpoolear account. Please log in using email login. If you don't remember your password, click on forgot password.",
         fecha: 'Date',

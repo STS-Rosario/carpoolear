@@ -64,13 +64,13 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain("friendship_state === 'pending_sent'");
         expect(viewSource).toContain("$t('suSolicitudAmistadEnviada')");
         expect(viewSource).toMatch(
-            /friendship_state === 'pending_sent'[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?suSolicitudAmistadEnviada[\s\S]*?<\/AppButton>/
+            /<AppButton[\s\S]*?friendship_state === 'pending_sent'[\s\S]*?variant="primary"[\s\S]*?suSolicitudAmistadEnviada[\s\S]*?<\/AppButton>/
         );
         expect(i18nSource).toContain(
             "suSolicitudAmistadEnviada: 'Su solicitud ya fue enviada, aguarde a la respuesta del usuario.'"
         );
-        expect(i18nSource).toContain(
-            "suSolicitudAmistadEnviada: 'Your request has already been sent, please wait for the user's response.'"
+        expect(i18nSource).toMatch(
+            /suSolicitudAmistadEnviada:\s*["']Your request has already been sent, please wait for the user'?s response\.["']/
         );
         expect(i18nSource).not.toMatch(
             /suSolicitudAmistadEnviada:[\s\S]*?aguarde un momento por favor/
