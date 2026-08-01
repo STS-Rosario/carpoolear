@@ -194,6 +194,7 @@
 
 .messages-page .message-composer {
     border: none;
+    border-radius: 0;
     background: #fff;
     padding: 0.75rem;
 }
@@ -203,7 +204,7 @@
     align-items: flex-end;
     gap: 0.5rem;
     border: 1px solid #ddd;
-    border-radius: 0.75rem;
+    border-radius: 0;
     padding: 0.35rem 0.35rem 0.35rem 0.5rem;
     background: #fff;
 }
@@ -229,7 +230,7 @@
     flex: 0 0 auto;
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 0.35rem;
+    border-radius: 0;
     border: none;
     background: var(--ds-action);
     color: var(--ds-action-on, #fff) !important;
@@ -268,8 +269,8 @@
         background: #fff;
         border-left: 1px solid var(--messages-shell-border);
         border-right: 1px solid var(--messages-shell-border);
-        border-top: 1px solid var(--messages-shell-border);
-        border-bottom: 1px solid var(--messages-shell-border);
+        border-top: none;
+        border-bottom: none;
         border-radius: 0;
         overflow: hidden;
         margin-left: 0;
@@ -283,11 +284,46 @@
         overflow: hidden;
     }
 
+    /* Column divider only — no outer framing on the chat pane */
     .messages-page .conversation_list {
         border-right: 1px solid var(--messages-shell-border);
     }
 
+    .messages-page .conversation-container,
+    .messages-page .conversation_chat,
+    .messages-page .conversation_chat > .list-group,
     .messages-page .conversation_chat > .list-group > .list-group-item {
+        border-left: none;
+        border-right: none;
         background: #fff;
+    }
+
+    .messages-page .conversation_chat > .list-group {
+        margin-bottom: 0;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .messages-page .conversation_user_header,
+    .messages-page .conversation-messages,
+    .messages-page .message-composer {
+        border-left: none !important;
+        border-right: none !important;
+        border-radius: 0 !important;
+    }
+
+    .messages-page .conversation_chat .message-composer {
+        flex: 0 0 auto;
+        margin-top: auto;
+        margin-bottom: 0;
+        border-top: 1px solid var(--messages-shell-border);
+        border-bottom: none;
+    }
+
+    .messages-page .conversation_chat .conversation-messages {
+        flex: 1 1 auto;
+        min-height: 0;
     }
 }
