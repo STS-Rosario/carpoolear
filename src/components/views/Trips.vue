@@ -176,21 +176,6 @@
                         class="panel panel-default panel-donar trips-donation-banner"
                     >
                         <div class="panel-body panel-donar__body">
-                            <div class="panel-donar__copy">
-                                <h2 v-html="$t('ayudanos')"></h2>
-                                <a
-                                    href="/donar"
-                                    target="_blank"
-                                    v-on:click.prevent="
-                                        onOpenLink(
-                                            'https://carpoolear.com.ar/donar?u=' +
-                                                user.id
-                                        )
-                                    "
-                                >
-                                    {{ $t('porQueDonar') }}
-                                </a>
-                            </div>
                             <AppButton
                                 class="btn-donar"
                                 variant="header-donate"
@@ -205,6 +190,38 @@
                                     />
                                 </template>
                             </AppButton>
+                            <i18n-t
+                                keypath="ayudanos"
+                                tag="h2"
+                                class="panel-donar__title"
+                            >
+                                <template #lead>
+                                    <strong>{{ $t('ayudanosLead') }}</strong>
+                                </template>
+                                <template #open>
+                                    <strong>{{ $t('ayudanosOpen') }}</strong>
+                                </template>
+                                <template #collab>
+                                    <strong>{{ $t('ayudanosCollab') }}</strong>
+                                </template>
+                                <template #nonprofit>
+                                    <strong>{{
+                                        $t('ayudanosNonprofit')
+                                    }}</strong>
+                                </template>
+                            </i18n-t>
+                            <a
+                                href="/donar"
+                                target="_blank"
+                                v-on:click.prevent="
+                                    onOpenLink(
+                                        'https://carpoolear.com.ar/donar?u=' +
+                                            user.id
+                                    )
+                                "
+                            >
+                                {{ $t('porQueDonar') }}
+                            </a>
                         </div>
                     </div>
                     <template v-if="showFriendTripSections">
@@ -339,21 +356,6 @@
                                 "
                             >
                                 <div class="panel-body panel-donar__body">
-                                    <div class="panel-donar__copy">
-                                        <h2 v-html="$t('ayudanos')"></h2>
-                                        <a
-                                            href="/donar"
-                                            target="_blank"
-                                            v-on:click.prevent="
-                                                onOpenLink(
-                                                    'https://carpoolear.com.ar/donar?u=' +
-                                                        user.id
-                                                )
-                                            "
-                                        >
-                                            {{ $t('porQueDonar') }}
-                                        </a>
-                                    </div>
                                     <AppButton
                                         class="btn-donar"
                                         variant="header-donate"
@@ -368,6 +370,44 @@
                                             />
                                         </template>
                                     </AppButton>
+                                    <i18n-t
+                                        keypath="ayudanos"
+                                        tag="h2"
+                                        class="panel-donar__title"
+                                    >
+                                        <template #lead>
+                                            <strong>{{
+                                                $t('ayudanosLead')
+                                            }}</strong>
+                                        </template>
+                                        <template #open>
+                                            <strong>{{
+                                                $t('ayudanosOpen')
+                                            }}</strong>
+                                        </template>
+                                        <template #collab>
+                                            <strong>{{
+                                                $t('ayudanosCollab')
+                                            }}</strong>
+                                        </template>
+                                        <template #nonprofit>
+                                            <strong>{{
+                                                $t('ayudanosNonprofit')
+                                            }}</strong>
+                                        </template>
+                                    </i18n-t>
+                                    <a
+                                        href="/donar"
+                                        target="_blank"
+                                        v-on:click.prevent="
+                                            onOpenLink(
+                                                'https://carpoolear.com.ar/donar?u=' +
+                                                    user.id
+                                            )
+                                        "
+                                    >
+                                        {{ $t('porQueDonar') }}
+                                    </a>
                                 </div>
                             </div>
                         </template>
@@ -1243,8 +1283,8 @@ export default {
 }
 
 .btn-donar {
-    flex-shrink: 0;
-    margin: 0;
+    float: right;
+    margin: 0 0 0.75rem 1rem;
 }
 
 .panel.panel-donar {
@@ -1256,19 +1296,13 @@ export default {
 }
 
 .panel-donar > .panel-body.panel-donar__body {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
+    display: block;
+    overflow: auto;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
 }
 
-.panel-donar__copy {
-    min-width: 0;
-    flex: 1 1 auto;
-}
-
-.panel.panel-default.panel-donar h2 {
+.panel.panel-default.panel-donar h2.panel-donar__title,
+.panel.panel-default.panel-donar .panel-donar__title {
     margin: 0 0 0.75rem;
     font-weight: var(--ds-font-weight-normal, 400);
     font-size: 1.25rem;
@@ -1276,7 +1310,8 @@ export default {
     color: var(--ds-action, #1e5f9e);
 }
 
-.panel.panel-default.panel-donar h2 :deep(strong) {
+.panel.panel-default.panel-donar .panel-donar__title :deep(strong),
+.panel.panel-default.panel-donar .panel-donar__title strong {
     font-weight: var(--ds-font-weight-bold, 700);
 }
 

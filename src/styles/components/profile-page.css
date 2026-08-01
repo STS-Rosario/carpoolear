@@ -429,7 +429,8 @@
     text-align: left;
 }
 
-.trips.container .panel-donar h2 {
+.trips.container .panel-donar h2,
+.trips.container .panel-donar .panel-donar__title {
     margin: 0 0 0.75rem;
     color: var(--ds-action);
     font-weight: var(--ds-font-weight-normal, 400);
@@ -437,7 +438,8 @@
     line-height: 1.35;
 }
 
-.trips.container .panel-donar h2 strong {
+.trips.container .panel-donar h2 strong,
+.trips.container .panel-donar .panel-donar__title strong {
     font-weight: var(--ds-font-weight-bold, 700);
 }
 

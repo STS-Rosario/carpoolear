@@ -168,19 +168,11 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toContain("gift.svg");
         expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
         expect(viewSource).toContain('panel-donar__body');
-        expect(viewSource).toContain('panel-donar__copy');
+        expect(viewSource).toContain('keypath="ayudanos"');
+        expect(viewSource).toContain('ayudanosLead');
+        expect(viewSource).toMatch(/\.btn-donar\s*\{[^}]*float:\s*right/);
         expect(viewSource).toMatch(
-            /\.panel-donar__body[\s\S]*?justify-content:\s*space-between/
-        );
-        expect(viewSource).toMatch(
-            /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal/
-        );
-        expect(viewSource).toMatch(
-            /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
-        );
-        expect(viewSource).toContain('v-html="$t(\'ayudanos\')"');
-        expect(viewSource).toMatch(
-            /\.panel\.panel-default\.panel-donar h2 :deep\(strong\)\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+            /\.panel-donar__body[\s\S]*?overflow:\s*auto/
         );
         expect(viewSource).toMatch(
             /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
