@@ -96,4 +96,17 @@ describe('HeaderApp header buttons and branding', () => {
             /showBrandedMobileHeader[\s\S]*variant="header-donate"/
         );
     });
+
+    it('keeps left padding on the non-branded mobile header and a smaller title', () => {
+        const baseCss = fs.readFileSync(
+            path.resolve(__dirname, 'base.css'),
+            'utf8'
+        );
+        expect(baseCss).toMatch(
+            /\.mobile-header-bar\s*\{[^}]*padding-left:\s*calc\(10px \+ env\(safe-area-inset-left\)\)/
+        );
+        expect(baseCss).toMatch(
+            /\.mobile-header-bar__title\s*\{[^}]*font-size:\s*1\.25rem/
+        );
+    });
 });

@@ -1918,10 +1918,10 @@
       box-sizing: border-box;
       padding-top: calc(4px + constant(safe-area-inset-top));
       padding-top: calc(4px + env(safe-area-inset-top));
-      padding-left: constant(safe-area-inset-left);
-      padding-left: env(safe-area-inset-left);
-      padding-right: constant(safe-area-inset-right);
-      padding-right: env(safe-area-inset-right);
+      padding-left: calc(10px + constant(safe-area-inset-left));
+      padding-left: calc(10px + env(safe-area-inset-left));
+      padding-right: calc(10px + constant(safe-area-inset-right));
+      padding-right: calc(10px + env(safe-area-inset-right));
   }
 
   .mobile-header-bar__section {
@@ -1940,7 +1940,7 @@
   }
 
   .mobile-header-bar__title {
-      font-size: 26px;
+      font-size: 1.25rem;
       font-family: var(--ds-font-family);
       font-weight: 300;
       margin-left: .5em;
