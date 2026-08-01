@@ -72,10 +72,13 @@ describe('TripInviteFriends.vue', () => {
         );
         expect(componentSource).toContain("import AppButton from '../ui/AppButton.vue'");
         expect(componentSource).toMatch(
-            /variant="primary"[\s\S]*?\$t\('invitarAmigos'\)/
+            /variant="primary"[\s\S]*?block[\s\S]*?\$t\('invitarAmigos'\)|variant="primary"[\s\S]*?\$t\('invitarAmigos'\)/
         );
         expect(componentSource).toMatch(
             /variant="secondary"[\s\S]*?\$t\('cerrar'\)/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__actions\s*\{[^}]*flex-direction:\s*column/
         );
         expect(componentSource).not.toContain('btn btn-primary');
     });

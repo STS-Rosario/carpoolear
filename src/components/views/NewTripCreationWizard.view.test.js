@@ -262,6 +262,16 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
+    it('shows Creando... on the submit button while the trip is saving', () => {
+        expect(wizardSource).toMatch(
+            /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/
+        );
+        expect(wizardSource).toContain(":loading=\"form.saving\"");
+        expect(wizardSource).toMatch(
+            /#loading[\s\S]*?savingLabel|savingLabel[\s\S]*?#loading/
+        );
+    });
+
     it('applies design-system input styles to form controls and textareas', () => {
         expect(wizardSource).toMatch(
             /\.new-trip-wizard[\s\S]*?\.form-control[\s\S]*?border:\s*1px\s+solid\s+var\(--ds-input-border/
