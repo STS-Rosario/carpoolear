@@ -719,6 +719,7 @@ import {
     resolveStepFromQuery
 } from '../../utils/tripCreationStepQuery.js';
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
+import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -849,19 +850,28 @@ export default {
     },
 
     mounted() {
-        if (this.isEditTripFlow) {
-            this.currentStep = STEP.ORIGIN;
-            this.maxVisitedStep = STEP.LAST_DETAILS;
+        const draft =
+            !this.isEditTripFlow && this.form.user?.id
+                ? loadTripCreationDraft(this.form.user.id)
+                : null;
+        const mount = getTripCreationWizardMountState({
+            isEdit: this.isEditTripFlow,
+            draft
+        });
+
+        if (mount.shouldRestoreDraft) {
+            this.restoreDraft();
+            this.revalidateVisitedSteps();
         } else {
-            const shouldResume =
-                this.$route.query.resumeDraft === '1' ||
-                loadTripCreationDraft(this.form.user?.id);
-            if (shouldResume && this.form.user?.id) {
-                this.restoreDraft();
-            }
+            this.currentStep = mount.currentStep;
+            this.maxVisitedStep = mount.maxVisitedStep;
         }
 
-        if (this.$route.query.step != null && this.$route.query.step !== '') {
+        if (
+            !mount.ignoreRouteStep &&
+            this.$route.query.step != null &&
+            this.$route.query.step !== ''
+        ) {
             this.applyStepFromRouteQuery();
         } else {
             this.syncStepToRoute(this.currentStep);

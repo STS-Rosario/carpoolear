@@ -34,6 +34,7 @@ import {
     getTripCreationStepLabelKey,
     isStepDisabledForPassenger
 } from '../../utils/tripCreationSteps.js';
+import { isTripCreationStepCompleted } from '../../utils/tripCreationWizardMount.js';
 
 export default {
     name: 'trip-creation-stepper',
@@ -76,8 +77,11 @@ export default {
         barClasses(step) {
             return {
                 'trip-creation-stepper__bar--active': step === this.currentStep,
-                'trip-creation-stepper__bar--completed':
-                    step < this.currentStep || step <= this.maxVisitedStep,
+                'trip-creation-stepper__bar--completed': isTripCreationStepCompleted(
+                    step,
+                    this.currentStep,
+                    this.maxVisitedStep
+                ),
                 'trip-creation-stepper__bar--disabled':
                     isStepDisabledForPassenger(step, this.isPassenger)
             };
@@ -85,8 +89,11 @@ export default {
         segmentClasses(step) {
             return {
                 'trip-creation-stepper__segment--active': step === this.currentStep,
-                'trip-creation-stepper__segment--completed':
-                    step < this.currentStep || step <= this.maxVisitedStep,
+                'trip-creation-stepper__segment--completed': isTripCreationStepCompleted(
+                    step,
+                    this.currentStep,
+                    this.maxVisitedStep
+                ),
                 'trip-creation-stepper__segment--disabled':
                     isStepDisabledForPassenger(step, this.isPassenger),
                 'trip-creation-stepper__segment--incomplete':
