@@ -96,7 +96,7 @@ export default {
 
 <style scoped>
 .trip-creation-draft {
-    margin: 0 auto 1.25rem;
+    margin: 1rem auto 1.25rem;
     max-width: 500px;
 }
 
