@@ -1138,14 +1138,15 @@ export default {
                 return;
             }
 
-            this.$router
-                .replace({
-                    query: {
-                        ...this.$route.query,
-                        step: nextStep
-                    }
-                })
-                .catch(() => {});
+            const navigation = this.$router.replace({
+                query: {
+                    ...this.$route.query,
+                    step: nextStep
+                }
+            });
+            if (navigation && typeof navigation.catch === 'function') {
+                navigation.catch(() => {});
+            }
         },
         onStepSelect(step) {
             if (

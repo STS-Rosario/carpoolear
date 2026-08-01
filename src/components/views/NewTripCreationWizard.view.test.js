@@ -365,4 +365,10 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /handleSaveFailure\(\)[\s\S]*carSelectionError[\s\S]*STEP\.CAR/
         );
     });
+
+    it('guards router replace when syncing wizard step to the URL', () => {
+        expect(wizardSource).toMatch(
+            /syncStepToRoute\(step\)[\s\S]*typeof navigation\.catch === 'function'/
+        );
+    });
 });
