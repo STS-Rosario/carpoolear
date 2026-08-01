@@ -233,6 +233,19 @@ describe('trip detail mobile DETALLE gap', () => {
     });
 });
 
+describe('trip detail labeled stats', () => {
+    it('stacks each stat label above its value and keeps middot separators', () => {
+        expect(css).toMatch(
+            /\.trip-detail--(?:mobile|desktop)\s+\.trip-detail__stat\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(css).toContain('.trip-detail__stat-label');
+        expect(css).toContain('.trip-detail__stat-value');
+        expect(css).toMatch(
+            /\.trip-detail--(?:mobile|desktop)\s+\.trip-detail__stats-sep\s*\{[^}]*align-self:\s*center/
+        );
+    });
+});
+
 describe('trip detail desktop page title', () => {
     it('styles a white page-header band above the card', () => {
         expect(css).toContain('.trip-detail__page-header');
