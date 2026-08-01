@@ -379,6 +379,23 @@ export default {
 .trip_actions .btn-primary {
     font-size: 12px;
     width: 100%;
+    background: var(--ds-action);
+    border-color: var(--ds-action);
+    color: var(--ds-action-on, #fff);
+}
+
+.trip_actions .btn-primary:hover:not(:disabled),
+.trip_actions .btn-primary:focus:not(:disabled) {
+    background: var(--ds-action-hover);
+    border-color: var(--ds-action-hover);
+    color: var(--ds-action-on, #fff);
+}
+
+.trip_actions .btn-primary:disabled {
+    background: var(--ds-action);
+    border-color: var(--ds-action);
+    color: var(--ds-action-on, #fff);
+    opacity: 0.55;
 }
 
 .trip_actions-contribution-warning {
