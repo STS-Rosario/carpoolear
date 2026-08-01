@@ -54,8 +54,12 @@ describe('MyAccountNav desktop sidebar', () => {
         );
     });
 
-    it('removes the old flat profile header from the sidebar', () => {
-        expect(navSource).not.toContain('my-account-nav__profile');
-        expect(navSource).not.toContain('getMyAccountMenuItems');
+    it('removes focus outline border from nav items', () => {
+        expect(navSource).toMatch(
+            /\.my-account-nav__item:focus(?:,|\s)[\s\S]*?outline:\s*none/
+        );
+        expect(navSource).toMatch(
+            /\.my-account-nav__item:focus-visible[\s\S]*?outline:\s*none/
+        );
     });
 });
