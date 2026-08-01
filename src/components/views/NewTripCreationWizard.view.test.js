@@ -320,4 +320,19 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('showPicker');
         expect(wizardSource).toContain('ref="wizardTimeInput"');
     });
+
+    it('shows punto partida only on origin and punto llegada only on destination', () => {
+        expect(wizardSource).toMatch(
+            /STEP\.ORIGIN[\s\S]*?TripPointDetailFields[\s\S]*?fields="partida"/
+        );
+        expect(wizardSource).toMatch(
+            /STEP\.DESTINATION[\s\S]*?TripPointDetailFields[\s\S]*?fields="llegada"/
+        );
+        expect(wizardSource).not.toMatch(
+            /STEP\.ORIGIN[\s\S]*?TripPointDetailFields[\s\S]*?fields="llegada"/
+        );
+        expect(wizardSource).not.toMatch(
+            /STEP\.ORIGIN[\s\S]*?TripPointDetailFields[\s\S]*?fields="both"/
+        );
+    });
 });

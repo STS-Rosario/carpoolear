@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     shouldShowTripPointDetailInputs,
+    shouldShowPuntoPartidaInput,
+    shouldShowPuntoLlegadaInput,
     validateTripPointDetails,
     applyTripPointDetailValidation,
     tripPointDetailContainsNumber
@@ -24,6 +26,46 @@ describe('tripPointDetailValidation', () => {
                     { json: { name: 'Cordoba' } }
                 ])
             ).toBe(true);
+        });
+    });
+
+    describe('shouldShowPuntoPartidaInput', () => {
+        it('returns true when origin city is selected', () => {
+            expect(
+                shouldShowPuntoPartidaInput([
+                    { json: { name: 'Rosario' } },
+                    { json: null }
+                ])
+            ).toBe(true);
+        });
+
+        it('returns false when origin city is missing', () => {
+            expect(
+                shouldShowPuntoPartidaInput([
+                    { json: null },
+                    { json: { name: 'Cordoba' } }
+                ])
+            ).toBe(false);
+        });
+    });
+
+    describe('shouldShowPuntoLlegadaInput', () => {
+        it('returns true when destination city is selected', () => {
+            expect(
+                shouldShowPuntoLlegadaInput([
+                    { json: { name: 'Rosario' } },
+                    { json: { name: 'Cordoba' } }
+                ])
+            ).toBe(true);
+        });
+
+        it('returns false when destination city is missing', () => {
+            expect(
+                shouldShowPuntoLlegadaInput([
+                    { json: { name: 'Rosario' } },
+                    { json: null }
+                ])
+            ).toBe(false);
         });
     });
 
