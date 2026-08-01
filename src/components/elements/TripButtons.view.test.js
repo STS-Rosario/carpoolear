@@ -71,4 +71,17 @@ describe('TripButtons.vue owner actions', () => {
             /class="btn btn-primary"[\s\S]*?\$t\('cancelarViaje'\)/
         );
     });
+
+    it('stacks owner Edit above Cancel in a column at all breakpoints', () => {
+        expect(viewSource).toMatch(
+            /\.buttons-container\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column/
+        );
+        expect(viewSource).not.toMatch(
+            /@media only screen and \(min-width: 768px\)\s*\{\s*\.buttons-container button:first-child\s*\{[^}]*margin-right:\s*1em/
+        );
+        const editIdx = viewSource.indexOf("$t('editarViaje')");
+        const cancelIdx = viewSource.indexOf("$t('cancelarViaje')");
+        expect(editIdx).toBeGreaterThan(-1);
+        expect(cancelIdx).toBeGreaterThan(editIdx);
+    });
 });
