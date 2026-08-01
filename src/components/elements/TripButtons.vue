@@ -48,7 +48,7 @@
             <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
                     <button
-                        class="btn btn-primary"
+                        class="btn trip-detail__cta-secondary"
                         @click="$emit('onMakeRequest')"
                         v-if="canRequest && trip.seats_available > 0"
                         :disabled="sendingStatus || seatRequestLimitReached"
