@@ -4,8 +4,35 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'FriendsSetting.vue');
 const friendApiPath = path.resolve(__dirname, '../../services/api/FriendApi.js');
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const friendApiSource = fs.readFileSync(friendApiPath, 'utf8');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+
+describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
+    it('uses Mis amigos title and Amigos/Solicitudes tabset like Perfil', () => {
+        expect(viewSource).toContain('friends-page');
+        expect(viewSource).toMatch(
+            /<h1 class="friends-page-heading">\{\{\s*\$t\('misAmigos'\)/
+        );
+        expect(viewSource).toContain('tabset');
+        expect(viewSource).toContain("$t('amigos')");
+        expect(viewSource).toContain("$t('solicitudes')");
+        expect(viewSource).toContain("keytabset=\"friends\"");
+    });
+
+    it('shows Recibidas/Enviadas FilterChips under Solicitudes with counts', () => {
+        expect(viewSource).toContain('FilterChips');
+        expect(viewSource).toContain('requestsFilter');
+        expect(viewSource).toContain('requestFilterOptions');
+        expect(viewSource).toContain("$t('filtroSolicitudesRecibidas')");
+        expect(viewSource).toContain("$t('filtroSolicitudesEnviadas')");
+        expect(i18nSource).toContain("filtroSolicitudesRecibidas: 'Recibidas'");
+        expect(i18nSource).toContain("filtroSolicitudesEnviadas: 'Enviadas'");
+        expect(i18nSource).toContain("filtroSolicitudesRecibidas: 'Received'");
+        expect(i18nSource).toContain("filtroSolicitudesEnviadas: 'Sent'");
+    });
+});
 
 describe('FriendsSetting.vue incoming friend requests', () => {
     it('renders incoming friend request cards with labeled accept and reject actions', () => {
@@ -43,7 +70,6 @@ describe('FriendsSetting.vue friends list', () => {
 
 describe('FriendsSetting.vue outgoing pending requests', () => {
     it('shows sent pending requests as inline-flex name chips with remove action', () => {
-        expect(viewSource).toContain("$t('solicitudesDeAmigoPendientes')");
         expect(viewSource).toContain('sentPendings');
         expect(viewSource).toContain('sentPending');
         expect(viewSource).toContain('cancelRequest');
@@ -53,28 +79,7 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(viewSource).toContain('sent-pending-chip__name');
         expect(viewSource).toContain('sent-pending-chip__remove');
         expect(viewSource).toContain('friends-page-heading');
-        expect(viewSource).toContain('friends-section-heading');
-        expect(viewSource).toContain('font-size: 1.625rem');
-        expect(viewSource).toContain('font-size: 1.375rem');
         expect(viewSource).not.toContain('sent-pending-heading');
-        const amigosH1 = viewSource.match(
-            /<h1 class="friends-page-heading">\{\{\s*\$t\('amigos'\)/
-        );
-        const sentPendingH2 = viewSource.match(
-            /<h2 class="friends-section-heading">\{\{\s*\$t\('solicitudesDeAmigoPendientes'\)/
-        );
-        const misAmigosH2 = viewSource.match(
-            /<h2 class="friends-section-heading">\{\{\s*\$t\('misAmigos'\)/
-        );
-        expect(amigosH1).toBeTruthy();
-        expect(sentPendingH2).toBeTruthy();
-        expect(misAmigosH2).toBeTruthy();
-        const amigosIndex = viewSource.indexOf('friends-page-heading');
-        const sentPendingTitleIndex = viewSource.indexOf(
-            "$t('solicitudesDeAmigoPendientes')"
-        );
-        expect(amigosIndex).toBeGreaterThan(-1);
-        expect(sentPendingTitleIndex).toBeGreaterThan(amigosIndex);
         expect(viewSource).toContain("$t('quitarSolicitudAmigo')");
         expect(viewSource).toContain('onCancelRequestClick');
         expect(viewSource).toContain('fa fa-times');
