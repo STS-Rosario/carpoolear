@@ -30,7 +30,7 @@
                             </span>
                         </div>
                         <div
-                            v-if="!trip.is_passenger"
+                            v-if="!trip.is_passenger && isMobile"
                             class="trip-driver__seats"
                             :class="'trip-driver__seats--' + seatsTone"
                         >

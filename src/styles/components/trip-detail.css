@@ -447,9 +447,59 @@
     min-width: 0;
 }
 
+.trip-detail--desktop .trip-detail__section.trip-detail__actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem 2rem;
+    align-items: start;
+}
+
 .trip-detail--desktop .trip-detail__contribucion,
 .trip-detail--desktop .trip-detail__cta {
     min-width: 0;
+}
+
+.trip-detail--desktop .trip-detail__lugares {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.trip-detail--desktop .trip-detail__seats-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1.65rem;
+    border-radius: 999px;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.trip-detail--desktop .trip-detail__seats-pill .fa {
+    font-size: 1.8rem;
+}
+
+.trip-detail--desktop .trip-detail__seats-pill--high {
+    background: var(--ds-success-bg);
+    color: var(--ds-success-text);
+}
+
+.trip-detail--desktop .trip-detail__seats-pill--medium {
+    background: var(--ds-warning-bg);
+    color: var(--ds-warning-solid);
+}
+
+.trip-detail--desktop .trip-detail__seats-pill--low {
+    background: var(--ds-error-bg);
+    color: var(--ds-error-solid);
+}
+
+.trip-detail--desktop .trip-detail__seats-pill--full {
+    background: var(--ds-input-disabled-bg);
+    color: var(--ds-text-muted);
 }
 
 .trip-detail--desktop .trip-driver {
@@ -472,13 +522,6 @@
     .trip-detail__detalle-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1.5rem 2rem;
-        align-items: start;
-    }
-
-    .trip-detail__actions-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem 2rem;
         align-items: start;
     }

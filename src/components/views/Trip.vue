@@ -279,7 +279,19 @@
                                     <h3 class="trip-detail__section-title">
                                         {{ $t('lugaresLibres') }}
                                     </h3>
-                                    <TripSeats />
+                                    <div
+                                        class="trip-detail__seats-pill"
+                                        :class="
+                                            'trip-detail__seats-pill--' +
+                                            seatsTone
+                                        "
+                                    >
+                                        <i
+                                            class="fa fa-user"
+                                            aria-hidden="true"
+                                        ></i>
+                                        {{ seatsLabel }}
+                                    </div>
                                 </div>
                                 <div class="trip-detail__joined">
                                     <TripPassengers
@@ -354,9 +366,12 @@ import {
     resolveRequestSeatModalConfirm,
     shouldShowPricingHint
 } from '../../utils/tripPassengerMessageFlow.js';
+import {
+    getSeatsPillLabel,
+    getSeatsPillTone
+} from '../../utils/tripCardDisplay.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
-import TripSeats from '../elements/TripSeats';
 import TripPrice from '../elements/TripPrice';
 import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
@@ -957,6 +972,12 @@ export default {
         },
         zoom() {
             return this.config.map_zoom;
+        },
+        seatsTone() {
+            return getSeatsPillTone(this.trip?.seats_available);
+        },
+        seatsLabel() {
+            return getSeatsPillLabel(this.trip?.seats_available, this.$t);
         }
     },
 
@@ -965,7 +986,6 @@ export default {
         modal,
         TripDriver,
         TripDetailRoute,
-        TripSeats,
         TripData,
         TripStats,
         TripPassengers,
