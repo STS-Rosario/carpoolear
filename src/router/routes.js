@@ -573,7 +573,7 @@ export default [
                             active_id: 'profile'
                         },
                         header: {
-                            titleKey: 'amigos',
+                            titleKey: 'misAmigos',
                             buttons: ['menu']
                         }
                     }

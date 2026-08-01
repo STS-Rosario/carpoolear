@@ -1,6 +1,5 @@
 <template>
     <div class="friends-component friends-page">
-        <h1 class="friends-page-heading">{{ $t('misAmigos') }}</h1>
         <tabset
             ref="tabs"
             keytabset="friends"
@@ -320,12 +319,6 @@ h1,
 h2 {
     margin-bottom: 0.4em;
 }
-.friends-page-heading {
-    color: #036686;
-    font-weight: 700;
-    font-size: 1.625rem;
-    line-height: 1.2;
-}
 .friends-section-heading {
     color: #036686;
     font-weight: 400;
@@ -421,9 +414,6 @@ h2 {
     }
 }
 @media only screen and (min-width: 767px) {
-    .friends-page-heading {
-        font-size: 2rem;
-    }
     .friends-section-heading {
         font-size: 1.625rem;
     }

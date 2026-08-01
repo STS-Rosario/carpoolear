@@ -12,7 +12,7 @@ export default {
         settingsIdentityPageTitleKey() {
             const n = this.$route.name;
             if (n === 'profile_update') return 'editarPerfil';
-            if (n === 'friends_setting') return 'amigos';
+            if (n === 'friends_setting') return 'misAmigos';
             if (n === 'identity_validation') return 'validarIdentidad';
             if (n === 'identity_validation_manual') return 'validacionManual';
             if (n === 'profile_cars') return 'autos';
