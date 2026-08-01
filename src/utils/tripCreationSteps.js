@@ -2,6 +2,11 @@ import dayjs from '../dayjs';
 import { activeCarsWithPlate, resolveTripCarId } from './userCars.js';
 import { getIntermediatePoints } from './tripCreationPoints.js';
 import { isTripPointDetailEmpty } from './tripPointDetailValidation.js';
+import {
+    isNegativeSeatPriceUnits,
+    parseSeatPriceInput
+} from './tripSeatPrice.js';
+import { exceedsMaximumSeatPrice } from './tripMaxPriceValidation.js';
 
 export const STEP = {
     ROLE: 1,
@@ -260,13 +265,51 @@ function validateCar({ isPassenger = false, cars = [], selectedCarId = null }) {
     };
 }
 
-function validateSeats({ totalSeats = 0, passengers = 0 }) {
+function validateSeats({
+    totalSeats = 0,
+    passengers = 0,
+    isPassenger = false,
+    seatPriceEnabled = false,
+    maxPriceEnabled = false,
+    price = '',
+    maximumSeatPriceCents = 0,
+    maximumTripPriceCents = 0
+}) {
     if (Number(totalSeats) < 1) {
         return { valid: false, errors: { seats: 'lugaresDisponibles' } };
     }
 
     if (Number(totalSeats) < Number(passengers)) {
         return { valid: false, errors: { seats: 'pasajerosSubidos' } };
+    }
+
+    if (!isPassenger && seatPriceEnabled) {
+        const seatP = parseSeatPriceInput(price);
+        if (seatP === null) {
+            return {
+                valid: false,
+                errors: { price: 'contribucionPorPersonaRequerida' }
+            };
+        }
+        if (isNegativeSeatPriceUnits(seatP)) {
+            return {
+                valid: false,
+                errors: { price: 'contribucionPorPersonaNegativa' }
+            };
+        }
+        if (
+            maxPriceEnabled &&
+            exceedsMaximumSeatPrice({
+                seatPriceUnits: seatP,
+                maximumSeatPriceCents,
+                maximumTripPriceCents
+            })
+        ) {
+            return {
+                valid: false,
+                errors: { price: 'precioMaximoExcedido' }
+            };
+        }
     }
 
     return { valid: true, errors: {} };

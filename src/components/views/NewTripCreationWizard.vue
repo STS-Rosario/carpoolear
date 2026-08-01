@@ -1047,7 +1047,16 @@ export default {
                 totalSeats: this.form.trip.total_seats,
                 passengers: this.form.passengers,
                 description: this.form.trip.description,
-                noLucrar: this.form.no_lucrar
+                noLucrar: this.form.no_lucrar,
+                seatPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_seat_price_enabled
+                ),
+                maxPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_max_price_enabled
+                ),
+                price: this.form.price,
+                maximumSeatPriceCents: this.form.maximum_seat_price_cents,
+                maximumTripPriceCents: this.form.maximum_trip_price_cents
             };
         },
         syncPuntoDetailErrors(errors = {}) {
@@ -1065,10 +1074,33 @@ export default {
                 this.form.puntoLlegadaError.state = false;
             }
         },
+        syncSeatPriceErrors(errors = {}) {
+            if (this.currentStep !== STEP.SEATS) {
+                return;
+            }
+
+            if (errors.price === 'precioMaximoExcedido') {
+                this.form.priceError.state = true;
+                this.form.priceError.message =
+                    this.form.getMaxContributionExceededMessage(
+                        this.form.maximum_seat_price_cents
+                    );
+                return;
+            }
+
+            if (errors.price) {
+                this.form.priceError.state = true;
+                this.form.priceError.message = this.$t(errors.price);
+                return;
+            }
+
+            this.form.priceError.state = false;
+        },
         validateCurrentStep() {
             const result = validateStep(this.currentStep, this.buildValidationContext());
             this.stepErrors = result.errors || {};
             this.syncPuntoDetailErrors(this.stepErrors);
+            this.syncSeatPriceErrors(this.stepErrors);
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
         },
