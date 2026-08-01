@@ -54,4 +54,38 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain("$t('tripCreationTemplateSaved')");
         expect(componentSource).toContain("$t('errorAlGuardar')");
     });
+
+    it('stacks trip actions in a column with Ver viaje primary and secondary share/return/template', () => {
+        const viewIdx = componentSource.indexOf('data-testid="trip-creation-view-trip"');
+        const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
+        const returnIdx = componentSource.indexOf('data-testid="trip-creation-return-trip"');
+        const templateIdx = componentSource.indexOf('data-testid="trip-creation-save-template"');
+
+        expect(viewIdx).toBeGreaterThan(-1);
+        expect(shareIdx).toBeGreaterThan(viewIdx);
+        expect(returnIdx).toBeGreaterThan(shareIdx);
+        expect(templateIdx).toBeGreaterThan(returnIdx);
+
+        expect(componentSource).toMatch(
+            /data-testid="trip-creation-view-trip"[\s\S]*?btn-primary/
+        );
+        expect(componentSource).toMatch(
+            /class="btn btn-default trip-creation-success__share"/
+        );
+        expect(componentSource).toMatch(
+            /class="btn btn-default trip-creation-success__return"/
+        );
+        expect(componentSource).toMatch(
+            /class="btn btn-default trip-creation-success__save-template"/
+        );
+        expect(componentSource).toMatch(
+            /trip-creation-success__return[\s\S]*?fa-arrow-left/
+        );
+        expect(componentSource).toMatch(
+            /trip-creation-success__save-template[\s\S]*?fa-bookmark/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column/
+        );
+    });
 });
