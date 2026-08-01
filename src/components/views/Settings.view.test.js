@@ -29,4 +29,17 @@ describe('Settings navigation', () => {
         expect(navSource).toMatch(/my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/);
         expect(navSource).not.toContain('my-account-nav__item--logout');
     });
+
+    it('uses Mis amigos as the friends page heading title key', () => {
+        expect(viewSource).toMatch(
+            /friends_setting['"]?\s*\)\s*return\s*['"]misAmigos['"]/
+        );
+        const routesSource = fs.readFileSync(
+            path.join(__dirname, '../../router/routes.js'),
+            'utf8'
+        );
+        expect(routesSource).toMatch(
+            /name:\s*'friends_setting'[\s\S]*?titleKey:\s*'misAmigos'/
+        );
+    });
 });

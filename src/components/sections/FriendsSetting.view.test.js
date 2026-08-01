@@ -10,10 +10,11 @@ const friendApiSource = fs.readFileSync(friendApiPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
 describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
-    it('uses Mis amigos title and Amigos/Solicitudes tabset like Perfil', () => {
+    it('uses Amigos/Solicitudes tabset without a blue page heading', () => {
         expect(viewSource).toContain('friends-page');
-        expect(viewSource).toMatch(
-            /<h1 class="friends-page-heading">\{\{\s*\$t\('misAmigos'\)/
+        expect(viewSource).not.toContain('friends-page-heading');
+        expect(viewSource).not.toMatch(
+            /<h1[^>]*>\{\{\s*\$t\('misAmigos'\)/
         );
         expect(viewSource).toContain('tabset');
         expect(viewSource).toContain("$t('amigos')");
@@ -78,7 +79,7 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(viewSource).toContain('sent-pending-chip');
         expect(viewSource).toContain('sent-pending-chip__name');
         expect(viewSource).toContain('sent-pending-chip__remove');
-        expect(viewSource).toContain('friends-page-heading');
+        expect(viewSource).not.toContain('friends-page-heading');
         expect(viewSource).not.toContain('sent-pending-heading');
         expect(viewSource).toContain("$t('quitarSolicitudAmigo')");
         expect(viewSource).toContain('onCancelRequestClick');

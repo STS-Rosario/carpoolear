@@ -33,4 +33,13 @@ describe('friends-page.css Amigos/Solicitudes tabs', () => {
         );
         expect(css).not.toMatch(/@media[^{]+\{[^}]*\.friends-page\s+\.tabset/s);
     });
+
+    it('renders Amigos and Solicitudes tab labels in bold', () => {
+        expect(css).toMatch(
+            /\.friends-page\s+\.tabset\s*>\s*\.nav-tabs\s*>\s*li\s*>\s*a\s*\{[^}]*font-weight:\s*(?:var\(--ds-font-weight-bold,\s*700\)|700|bold)/s
+        );
+        expect(css).toMatch(
+            /\.friends-page\s+\.tabset\s*>\s*\.nav-tabs\s*>\s*li\s*>\s*a\.active\s*\{[^}]*font-weight:\s*(?:var\(--ds-font-weight-bold,\s*700\)|700|bold)/s
+        );
+    });
 });
