@@ -17,6 +17,16 @@ describe('TripButtons.vue group chat', () => {
     });
 });
 
+describe('TripButtons.vue message/request hierarchy', () => {
+    it('marks solicitar asiento secondary when both CTAs can show', () => {
+        expect(viewSource).toContain('btn-primary');
+        expect(viewSource).toMatch(
+            /class="btn(?:\s+trip-detail__cta-secondary)?"[\s\S]*?solicitarAsiento|solicitarAsiento[\s\S]*?class="btn"/
+        );
+        expect(viewSource).toContain('trip-detail__cta-secondary');
+    });
+});
+
 describe('TripButtons.vue seat request limit', () => {
     it('disables message and request actions and shows passenger limit message', () => {
         expect(viewSource).toContain('shouldShowPassengerSeatRequestLimitMessage');
