@@ -210,7 +210,7 @@ describe('Trip.vue desktop column bands', () => {
         expect(mapIdx).toBeGreaterThan(priceIdx);
     });
 
-    it('splits DETALLE into main route and aside stats/condiciones', () => {
+    it('splits DETALLE into main route+stats and aside condiciones', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
@@ -218,7 +218,10 @@ describe('Trip.vue desktop column bands', () => {
         expect(stack).toContain('trip-detail__detalle-main');
         expect(stack).toContain('trip-detail__detalle-aside');
         expect(stack).toMatch(
-            /trip-detail__detalle-main[\s\S]*TripDetailRoute[\s\S]*trip-detail__detalle-aside[\s\S]*TripStats/
+            /trip-detail__detalle-main[\s\S]*TripDetailRoute[\s\S]*TripStats[\s\S]*trip-detail__detalle-aside/
+        );
+        expect(stack).not.toMatch(
+            /trip-detail__detalle-aside[\s\S]*TripStats/
         );
     });
 
