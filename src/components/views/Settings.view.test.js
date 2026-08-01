@@ -49,6 +49,12 @@ describe('Settings navigation', () => {
         );
     });
 
+    it('does not render a layout page title for Cambiar contraseña so the in-card heading is used', () => {
+        expect(viewSource).not.toMatch(
+            /profile_password['"]?\s*\)\s*return\s*['"]cambiarPassword['"]/
+        );
+    });
+
     it('does not render a layout page title for Autos so the in-card heading is used', () => {
         expect(viewSource).not.toMatch(
             /profile_cars['"]?\s*\)\s*return\s*['"]autos['"]/
