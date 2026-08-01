@@ -25,6 +25,20 @@ describe('TripButtons.vue message/request hierarchy', () => {
         );
         expect(viewSource).toContain('trip-detail__cta-secondary');
     });
+
+    it('only marks solicitar/reservar secondary when the message CTA is also visible', () => {
+        expect(viewSource).not.toMatch(/class="btn\s+trip-detail__cta-secondary"/);
+
+        const buttonStart = viewSource.indexOf('onMakeRequest');
+        const blockStart = viewSource.lastIndexOf('<button', buttonStart);
+        const blockEnd = viewSource.indexOf('</button>', buttonStart);
+        const requestButtonMarkup = viewSource.slice(blockStart, blockEnd);
+
+        expect(requestButtonMarkup).toContain(':class');
+        expect(requestButtonMarkup).toContain('trip-detail__cta-secondary');
+        expect(requestButtonMarkup).toContain('showMessageButton');
+        expect(viewSource).toMatch(/v-if="showMessageButton"/);
+    });
 });
 
 describe('TripButtons.vue seat request limit', () => {
