@@ -1304,6 +1304,12 @@ export default {
     text-align: center;
 }
 
+.donation-actions__btn.app-button--secondary {
+    min-height: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
 .donation-actions__btn :deep(.app-button__label) {
     display: flex;
     flex-direction: column;
