@@ -1,10 +1,11 @@
 <template>
     <div class="friends-component friends-page">
-        <tabset
-            ref="tabs"
-            keytabset="friends"
-            :rememberTab="true"
-        >
+        <div class="friends-page__card">
+            <tabset
+                ref="tabs"
+                keytabset="friends"
+                :rememberTab="true"
+            >
             <tab :header="$t('amigos')">
                 <div class="friends-toolbar form-inline-with-margin">
                     <div class="friend-form form-inline">
@@ -150,6 +151,7 @@
                 </div>
             </tab>
         </tabset>
+        </div>
     </div>
 </template>
 <script>
@@ -296,6 +298,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.friends-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
 h1,
 h2 {
     margin-top: 0;
