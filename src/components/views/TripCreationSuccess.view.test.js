@@ -22,7 +22,7 @@ describe('TripCreationSuccess.vue', () => {
     it('vertically centers action buttons including the view-trip router-link', () => {
         expect(componentSource).toContain('.trip-creation-success__actions .btn');
         expect(componentSource).toMatch(
-            /\.trip-creation-success__actions\s*\{[^}]*align-items:\s*center/
+            /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column[^}]*align-items:\s*stretch/
         );
         expect(componentSource).toMatch(
             /\.trip-creation-success__actions\s+\.btn\s*\{[^}]*display:\s*inline-flex[^}]*align-items:\s*center/
@@ -67,7 +67,7 @@ describe('TripCreationSuccess.vue', () => {
         expect(templateIdx).toBeGreaterThan(returnIdx);
 
         expect(componentSource).toMatch(
-            /data-testid="trip-creation-view-trip"[\s\S]*?btn-primary/
+            /class="btn btn-primary trip-creation-success__view"/
         );
         expect(componentSource).toMatch(
             /class="btn btn-default trip-creation-success__share"/

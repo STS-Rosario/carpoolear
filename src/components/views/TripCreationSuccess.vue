@@ -6,22 +6,22 @@
         <p class="trip-creation-success__prompt">{{ $t('tripCreationSuccessSharePrompt') }}</p>
 
         <div class="trip-creation-success__actions">
+            <router-link
+                :to="{ name: 'detail_trip', params: { id: trip.id } }"
+                class="btn btn-primary trip-creation-success__view"
+                data-testid="trip-creation-view-trip"
+            >
+                {{ $t('tripCreationViewTrip') }}
+            </router-link>
             <button
                 type="button"
-                class="btn btn-primary trip-creation-success__share"
+                class="btn btn-default trip-creation-success__share"
                 data-testid="trip-creation-share"
                 @click="onShare"
             >
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
                 {{ $t('tripCreationShareTrip') }}
             </button>
-            <router-link
-                :to="{ name: 'detail_trip', params: { id: trip.id } }"
-                class="btn btn-default trip-creation-success__view"
-                data-testid="trip-creation-view-trip"
-            >
-                {{ $t('tripCreationViewTrip') }}
-            </router-link>
             <button
                 v-if="!trip.is_passenger && !trip.parent_trip_id"
                 type="button"
@@ -29,6 +29,7 @@
                 data-testid="trip-creation-return-trip"
                 @click="$emit('start-return-trip')"
             >
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 {{ $t('cargarViajeRegreso') }}
             </button>
             <button
@@ -38,6 +39,7 @@
                 data-testid="trip-creation-save-template"
                 @click="openSaveTemplateModal"
             >
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
                 {{ $t('tripCreationSaveTemplate') }}
             </button>
         </div>
@@ -315,11 +317,12 @@ export default {
 
 .trip-creation-success__actions {
     display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
+    align-items: stretch;
+    max-width: 500px;
+    margin: 0 auto 2rem;
 }
 
 .trip-creation-success__actions .btn {
@@ -327,9 +330,13 @@ export default {
     align-items: center;
     justify-content: center;
     line-height: 1.5;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.trip-creation-success__share i {
+.trip-creation-success__share i,
+.trip-creation-success__return i,
+.trip-creation-success__save-template i {
     margin-right: 0.35rem;
 }
 
