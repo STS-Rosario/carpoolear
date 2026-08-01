@@ -20,12 +20,9 @@ describe('TripCreationSuccess.vue', () => {
     });
 
     it('vertically centers action buttons including the view-trip router-link', () => {
-        expect(componentSource).toContain('.trip-creation-success__actions .btn');
+        expect(componentSource).toContain('.trip-creation-success__actions');
         expect(componentSource).toMatch(
             /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column[^}]*align-items:\s*stretch/
-        );
-        expect(componentSource).toMatch(
-            /\.trip-creation-success__actions\s+\.btn\s*\{[^}]*display:\s*inline-flex[^}]*align-items:\s*center/
         );
     });
 
@@ -66,24 +63,20 @@ describe('TripCreationSuccess.vue', () => {
         expect(returnIdx).toBeGreaterThan(shareIdx);
         expect(templateIdx).toBeGreaterThan(returnIdx);
 
+        expect(componentSource).toContain("import AppButton from '../ui/AppButton.vue'");
         expect(componentSource).toMatch(
-            /class="btn btn-primary trip-creation-success__view"/
+            /variant="primary"[\s\S]*?data-testid="trip-creation-view-trip"/
         );
         expect(componentSource).toMatch(
-            /class="btn btn-default trip-creation-success__share"/
+            /variant="secondary"[\s\S]*?data-testid="trip-creation-share"[\s\S]*?icon-left="fa fa-share-alt"/
         );
         expect(componentSource).toMatch(
-            /class="btn btn-default trip-creation-success__return"/
+            /variant="secondary"[\s\S]*?data-testid="trip-creation-return-trip"[\s\S]*?icon-left="fa fa-arrow-left"/
         );
         expect(componentSource).toMatch(
-            /class="btn btn-default trip-creation-success__save-template"/
+            /variant="secondary"[\s\S]*?data-testid="trip-creation-save-template"[\s\S]*?icon-left="fa fa-bookmark"/
         );
-        expect(componentSource).toMatch(
-            /trip-creation-success__return[\s\S]*?fa-arrow-left/
-        );
-        expect(componentSource).toMatch(
-            /trip-creation-success__save-template[\s\S]*?fa-bookmark/
-        );
+        expect(componentSource).not.toContain('btn btn-primary');
         expect(componentSource).toMatch(
             /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column/
         );

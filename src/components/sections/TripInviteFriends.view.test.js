@@ -70,12 +70,14 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toMatch(
             /\.trip-invite-friends__prompt\s*\{[^}]*font-size:\s*1\.(?:125|25)rem/
         );
+        expect(componentSource).toContain("import AppButton from '../ui/AppButton.vue'");
         expect(componentSource).toMatch(
-            /class="btn btn-primary"[\s\S]*?\$t\('invitarAmigos'\)/
+            /variant="primary"[\s\S]*?\$t\('invitarAmigos'\)/
         );
         expect(componentSource).toMatch(
-            /class="btn btn-default"[\s\S]*?\$t\('cerrar'\)/
+            /variant="secondary"[\s\S]*?\$t\('cerrar'\)/
         );
+        expect(componentSource).not.toContain('btn btn-primary');
     });
 });
 

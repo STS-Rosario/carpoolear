@@ -30,6 +30,12 @@ describe('NewTrip.vue page card shell', () => {
         expect(viewSource).not.toContain('title--desktop');
     });
 
+    it('hides the Crear viaje heading on the success screen', () => {
+        expect(viewSource).toMatch(
+            /v-if="!showWizardSuccess"[\s\S]*?new-trip-page__heading|new-trip-page__heading[\s\S]*?v-if="!showWizardSuccess"/
+        );
+    });
+
     it('removes the legacy inner form card styling', () => {
         expect(viewSource).toMatch(
             /\.new-trip-component\s+\.form\s*\{[^}]*box-shadow:\s*none/s
