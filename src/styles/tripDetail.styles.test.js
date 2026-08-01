@@ -163,7 +163,7 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail--desktop\s+\.trip-detail__seats-pill\s*\{[^}]*font-size:\s*1\.125rem/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn(?:-primary)?\s*\{[^}]*width:\s*fit-content|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary\s*\{[^}]*width:\s*fit-content|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn,\s*\n\s*\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary[\s\S]*?width:\s*fit-content/
+            /\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn(?:-primary)?\s*\{[^}]*width:\s*100%|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary\s*\{[^}]*width:\s*100%|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn,\s*\n\s*\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary[\s\S]*?width:\s*100%|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn,\s*\n\s*\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary,\s*\n\s*\.trip-detail--desktop\s+\.trip-detail__cta\s+\.app-button[\s\S]*?width:\s*100%/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*background:\s*var\(--trip-detail-driver-bg/

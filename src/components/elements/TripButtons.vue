@@ -334,16 +334,19 @@ export default {
 };
 </script>
 <style scoped>
-.buttons-container button:first-child {
-    margin-right: 0;
-}
-.buttons-container button {
-    margin-bottom: 0.4em;
-}
 .buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4em;
     text-align: center;
     margin-top: 1em;
     padding-bottom: 2rem;
+}
+.buttons-container .app-button,
+.buttons-container .btn {
+    width: 100%;
+    box-sizing: border-box;
 }
 .live-location-share-btn__icon {
     transform: rotate(90deg);
@@ -362,9 +365,6 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
-    .buttons-container button:first-child {
-        margin-right: 1em;
-    }
     .buttons-container {
         margin-top: 1.5em;
     }

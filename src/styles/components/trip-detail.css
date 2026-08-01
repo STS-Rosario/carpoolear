@@ -783,10 +783,10 @@
 .trip-detail--desktop .trip-detail__cta .btn-primary,
 .trip-detail--desktop .trip-detail__cta .app-button,
 .trip-detail--desktop .trip-detail__cta .trip-detail__cta-secondary {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: fit-content;
+    width: 100%;
     box-sizing: border-box;
 }
 
