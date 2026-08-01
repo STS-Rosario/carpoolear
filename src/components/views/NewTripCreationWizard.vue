@@ -100,7 +100,7 @@
                         {{ $t('origenOdestino') }} {{ form.config.country_name }}
                     </label>
                 </div>
-                <div class="trip_point location-autocomplete" :class="{ 'trip-error': form.points[0].error.state }">
+                <div class="trip_point location-autocomplete origin" :class="{ 'trip-error': form.points[0].error.state }">
                     <autocomplete
                         :placeholder="form.$t('origen')"
                         name="wizard-origin"
@@ -141,7 +141,7 @@
                     {{ $t('tripCreationStepDestinationQuestion') }}
                 </h3>
                 <div
-                    class="trip_point location-autocomplete"
+                    class="trip_point location-autocomplete destiny"
                     :class="{ 'trip-error': lastPoint.error.state }"
                 >
                     <autocomplete
@@ -1244,6 +1244,17 @@ export default {
     line-height: 1.3;
     padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
     box-shadow: none;
+}
+
+.new-trip-wizard :deep(.form-control.form-control-with-icon),
+.new-trip-wizard :deep(.form-control.form-control-map-autocomplete) {
+    padding-left: 2.75rem;
+}
+
+.new-trip-wizard :deep(.form-control.form-control-map-autocomplete) {
+    background-repeat: no-repeat;
+    background-position: 0.75rem center;
+    background-size: 1.25rem 1.25rem;
 }
 
 .new-trip-wizard :deep(.form-control:focus),
