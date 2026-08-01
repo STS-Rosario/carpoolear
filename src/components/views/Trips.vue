@@ -1290,17 +1290,26 @@ export default {
 
 .donation-actions {
     display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     margin-top: 1rem;
 }
 
 .donation-actions__btn {
-    flex: 1 1 0;
+    width: 100%;
     min-height: 4.5rem;
     flex-direction: column;
     gap: 0.25rem;
     white-space: normal;
     text-align: center;
+}
+
+.donation-actions__btn :deep(.app-button__label) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    line-height: 1.25;
 }
 
 .donation-actions__label {
@@ -1312,6 +1321,17 @@ export default {
     font-size: 0.85em;
     font-weight: var(--ds-font-weight-normal, 400);
     line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .donation-actions {
+        flex-direction: row;
+    }
+
+    .donation-actions__btn {
+        flex: 1 1 0;
+        width: auto;
+    }
 }
 
 .btn-donar {

@@ -268,5 +268,11 @@ describe('Trips.vue donation modal', () => {
         );
         expect(viewSource).not.toContain('btn-unica-vez');
         expect(viewSource).not.toContain('btn-mensualmente');
+        expect(viewSource).toMatch(
+            /\.donation-actions\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(viewSource).toMatch(
+            /\.donation-actions__btn :deep\(\.app-button__label\)\s*\{[^}]*flex-direction:\s*column/
+        );
     });
 });
