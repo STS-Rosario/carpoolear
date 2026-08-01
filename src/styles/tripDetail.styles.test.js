@@ -241,6 +241,9 @@ describe('trip detail labeled stats', () => {
         expect(css).toContain('.trip-detail__stat-label');
         expect(css).toContain('.trip-detail__stat-value');
         expect(css).toMatch(
+            /\.trip-detail__stat-label[^{]*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+        );
+        expect(css).toMatch(
             /\.trip-detail--(?:mobile|desktop)\s+\.trip-detail__stats-sep\s*\{[^}]*align-self:\s*center/
         );
     });
