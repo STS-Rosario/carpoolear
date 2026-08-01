@@ -263,7 +263,10 @@
                         <section
                             class="trip-detail__section trip-detail__seats-passengers"
                         >
-                            <div class="trip-detail__lugares">
+                            <div
+                                v-if="tripCardTheme === 'light' || !trip.is_passenger"
+                                class="trip-detail__lugares"
+                            >
                                 <h3 class="trip-detail__section-title">
                                     {{ $t('lugaresLibres') }}
                                 </h3>
@@ -918,7 +921,8 @@ export default {
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
-            config: 'appConfig'
+            config: 'appConfig',
+            tripCardTheme: 'tripCardTheme'
         }),
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
