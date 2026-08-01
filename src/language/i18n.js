@@ -2663,7 +2663,7 @@ const messages = {
         compartirPlataforma:
             'Apalan-car: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
-        contribucionPorPersona: 'Contribución combustible y peaje por persona',
+        contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
         loQueSePuedaAportar: 'Lo que se pueda aportar',
         verContribucionReferenciaTramo:
