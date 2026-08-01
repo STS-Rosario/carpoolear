@@ -479,6 +479,7 @@ export default {
     components: {
         SvgItem,
         UserRatingsCounts,
+        TripCarDetails,
         TripDate,
         TripDescription
     },
