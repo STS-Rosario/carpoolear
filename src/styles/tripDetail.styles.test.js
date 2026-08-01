@@ -145,6 +145,9 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*display:\s*flex/
         );
         expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*flex-direction:\s*row/
+        );
+        expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*justify-content:\s*space-between/
         );
         expect(css).toMatch(

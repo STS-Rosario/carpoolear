@@ -449,6 +449,7 @@
 
 .trip-detail--desktop .trip-detail__section.trip-detail__actions-grid {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     gap: 1.5rem;
