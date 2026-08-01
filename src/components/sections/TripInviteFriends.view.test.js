@@ -61,6 +61,22 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('resolveTripInviteFriendsClose');
         expect(componentSource).toContain('v-if="showPrompt"');
     });
+
+    it('styles invite prompt larger and bold with primary invite and secondary close', () => {
+        expect(componentSource).toContain('trip-invite-friends__prompt');
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__prompt\s*\{[^}]*font-weight:\s*700/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__prompt\s*\{[^}]*font-size:\s*1\.(?:125|25)rem/
+        );
+        expect(componentSource).toMatch(
+            /class="btn btn-primary"[\s\S]*?\$t\('invitarAmigos'\)/
+        );
+        expect(componentSource).toMatch(
+            /class="btn btn-default"[\s\S]*?\$t\('cerrar'\)/
+        );
+    });
 });
 
 describe('Trip.vue TripInviteFriends integration', () => {
