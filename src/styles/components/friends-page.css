@@ -1,0 +1,85 @@
+/* Friends page (Mis amigos) — Amigos / Solicitudes tabs match Perfil underlines */
+.friends-page {
+    --friends-tab-active: var(--secondary-background, #016587);
+    --friends-tab-muted: #9a9a9a;
+}
+
+.friends-page .tabset > .nav-tabs {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    background-color: transparent;
+    border-bottom: 1px solid #d0d0d0;
+    z-index: 1;
+}
+
+.friends-page .tabset > .nav-tabs > li {
+    float: none;
+    width: auto;
+    flex: 1 1 0;
+    text-align: center;
+}
+
+.friends-page .tabset > .nav-tabs > li > a {
+    border: none;
+    color: var(--friends-tab-muted);
+    font-family: var(--ds-font-family);
+    font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    padding: 0.85rem 0.5rem;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.friends-page .tabset > .nav-tabs > li > a:hover,
+.friends-page .tabset > .nav-tabs > li > a:focus,
+.friends-page .tabset > .nav-tabs > li > a:focus-visible {
+    border: none;
+    color: var(--friends-tab-active);
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.friends-page .tabset > .nav-tabs > li > a.active {
+    color: var(--friends-tab-active);
+    border-bottom: 4px solid var(--friends-tab-active);
+    margin-bottom: -1px;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.friends-page .tabset > .nav-tabs::after {
+    display: none;
+}
+
+.friends-page .tabset .nav > li > a.active::after {
+    display: none;
+}
+
+.friends-page .tabset > .tab-content {
+    margin-top: 0;
+    min-height: 0;
+}
+
+.friends-page .tabset .tab-pane.container {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Override settings-component red active underline (desktop + mobile) */
+.settings-component .friends-page .tabset > .nav-tabs {
+    width: 100%;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+.settings-component .friends-page .tabset > .nav-tabs > li > a.active {
+    color: var(--friends-tab-active);
+    border-bottom: 4px solid var(--friends-tab-active);
+    margin-bottom: -1px;
+}

@@ -84,7 +84,7 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(viewSource).toContain('onCancelRequestClick');
         expect(viewSource).toContain('fa fa-times');
         const sentPendingSection = viewSource.match(
-            /id="sent-pending-list"[\s\S]*?<\/div>\s*<template #loading/
+            /id="sent-pending-list"[\s\S]*?<\/div>\s*<template #(?:no-data|loading)/
         )?.[0];
         expect(sentPendingSection).toBeTruthy();
         expect(sentPendingSection).not.toContain('FriendCard');

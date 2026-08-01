@@ -14,6 +14,7 @@
 @import url('./base.css');
 @import url('./components/filter-chips.css');
 @import url('./components/messages-page.css');
+@import url('./components/friends-page.css');
 @import url('./components/profile-page.css');
 @import url('./components/app-auth-page.css');
 :root {

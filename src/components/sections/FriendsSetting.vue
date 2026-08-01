@@ -1,136 +1,156 @@
 <template>
-    <div class="friends-component">
-        <h1 class="friends-page-heading">{{ $t('amigos') }}</h1>
-        <div class="clearfix">
-            <Loading :data="pendings" :hideOnEmpty="true">
-                <template #title
-                    ><h2 class="friends-section-heading">{{
-                        $t('solicitudesDeAmistad')
-                    }}</h2></template
-                >
-                <div id="incoming-friend-requests-list" class="incoming-friend-requests-list">
-                    <IncomingFriendRequestCard
-                        v-for="user in pendings"
-                        :key="user.id"
-                        :user="user"
-                        :id-requesting="idRequesting"
-                        @accept="onAcceptClick"
-                        @reject="onRejectClick"
-                    />
-                </div>
-                <template #no-data><p class="alert alert-warning" role="alert">
-                    {{ $t('noHaySolicitudesNuevas') }}
-                </p></template>
-                <template #loading><p class="alert alert-info" role="alert">
-                    <img
-                        :src="$publicImg('loader.gif')"
-                        alt=""
-                        class="ajax-loader"
-                    />
-                    {{ $t('cargandoSolicitudes') }}
-                </p></template>
-            </Loading>
-        </div>
-
-        <div class="clearfix">
-            <Loading :data="sentPendings" :hideOnEmpty="true">
-                <template #title
-                    ><h2 class="friends-section-heading">{{
-                        $t('solicitudesDeAmigoPendientes')
-                    }}</h2></template
-                >
-                <div id="sent-pending-list" class="sent-pending-list">
-                    <div
-                        v-for="user in sentPendings"
-                        :key="user.id"
-                        class="sent-pending-chip"
-                    >
-                        <router-link
-                            class="sent-pending-chip__name"
-                            :to="{
-                                name: 'profile',
-                                params: {
-                                    id: user.id,
-                                    userProfile: user,
-                                    activeTab: 1
-                                }
-                            }"
-                        >
-                            {{ user.name }}
-                        </router-link>
-                        <button
-                            type="button"
-                            class="sent-pending-chip__remove"
-                            :aria-label="$t('quitarSolicitudAmigo')"
-                            :disabled="idRequesting == user.id"
-                            @click="onCancelRequestClick(user)"
-                        >
-                            <i
-                                v-if="idRequesting != user.id"
-                                class="fa fa-times"
-                                aria-hidden="true"
-                            ></i>
-                            <span v-else>{{ $t('enProceso') }}</span>
-                        </button>
+    <div class="friends-component friends-page">
+        <h1 class="friends-page-heading">{{ $t('misAmigos') }}</h1>
+        <tabset
+            ref="tabs"
+            keytabset="friends"
+            :rememberTab="true"
+        >
+            <tab :header="$t('amigos')">
+                <div class="friends-toolbar form-inline-with-margin">
+                    <div class="friend-form form-inline">
+                        <div class="form-group">
+                            <label for="input-name">{{
+                                $t('filtrarPorNombre')
+                            }}</label>
+                            <input
+                                v-on:input="onTextChange"
+                                v-model="text"
+                                type="text"
+                                class="form-control"
+                                id="input-name"
+                                :placeholder="$t('ingresarNombre')"
+                            />
+                        </div>
                     </div>
+                    <router-link
+                        :to="{ name: 'friends_search' }"
+                        tag="button"
+                        class="btn btn-primary search-more"
+                    >
+                        {{ $t('buscarNuevosAmigos') }}
+                    </router-link>
                 </div>
-                <template #loading
-                    ><p class="alert alert-info" role="alert">
-                        <img
-                            :src="$publicImg('loader.gif')"
-                            alt=""
-                            class="ajax-loader"
+                <Loading :data="friends">
+                    <div id="friends-list" class="friends-list">
+                        <FriendRequestCard
+                            v-for="user in friends"
+                            :key="user.id"
+                            :user="user"
+                            :id-requesting="idRequesting"
+                            @delete="onDeleteClick"
                         />
-                        {{ $t('cargandoSolicitudes') }}
-                    </p></template
-                >
-            </Loading>
-        </div>
-        <h2 class="friends-section-heading">{{ $t('misAmigos') }}</h2>
-        <div class="friends-toolbar form-inline-with-margin">
-            <div class="friend-form form-inline">
-                <div class="form-group">
-                    <label for="input-name">{{ $t('filtrarPorNombre') }}</label>
-                    <input
-                        v-on:input="onTextChange"
-                        v-model="text"
-                        type="text"
-                        class="form-control"
-                        id="input-name"
-                        :placeholder="$t('ingresarNombre')"
-                    />
+                    </div>
+                    <template #no-data
+                        ><p class="alert alert-warning" role="alert">
+                            {{ noResult }}
+                        </p></template
+                    >
+                    <template #loading
+                        ><p class="alert alert-info" role="alert">
+                            <img
+                                :src="$publicImg('loader.gif')"
+                                alt=""
+                                class="ajax-loader"
+                            />
+                            {{ $t('cargandoAmigos') }}
+                        </p></template
+                    >
+                </Loading>
+            </tab>
+            <tab :header="$t('solicitudes')">
+                <FilterChips
+                    v-model="requestsFilter"
+                    :options="requestFilterOptions"
+                />
+                <div v-if="requestsFilter === 'recibidas'" class="clearfix">
+                    <Loading :data="pendings">
+                        <div
+                            id="incoming-friend-requests-list"
+                            class="incoming-friend-requests-list"
+                        >
+                            <IncomingFriendRequestCard
+                                v-for="user in pendings"
+                                :key="user.id"
+                                :user="user"
+                                :id-requesting="idRequesting"
+                                @accept="onAcceptClick"
+                                @reject="onRejectClick"
+                            />
+                        </div>
+                        <template #no-data
+                            ><p class="alert alert-warning" role="alert">
+                                {{ $t('noHaySolicitudesNuevas') }}
+                            </p></template
+                        >
+                        <template #loading
+                            ><p class="alert alert-info" role="alert">
+                                <img
+                                    :src="$publicImg('loader.gif')"
+                                    alt=""
+                                    class="ajax-loader"
+                                />
+                                {{ $t('cargandoSolicitudes') }}
+                            </p></template
+                        >
+                    </Loading>
                 </div>
-            </div>
-            <router-link
-                :to="{ name: 'friends_search' }"
-                tag="button"
-                class="btn btn-primary search-more"
-            >
-                {{ $t('buscarNuevosAmigos') }}
-            </router-link>
-        </div>
-        <Loading :data="friends">
-            <div id="friends-list" class="friends-list">
-                <FriendRequestCard
-                    v-for="user in friends"
-                    :key="user.id"
-                    :user="user"
-                    :id-requesting="idRequesting"
-                    @delete="onDeleteClick"
-                />
-            </div>
-            <template #no-data><p class="alert alert-warning" role="alert">
-                {{ noResult }}
-            </p></template>
-            <template #loading><p class="alert alert-info" role="alert">
-                <img
-                    :src="$publicImg('loader.gif')"
-                    alt=""
-                    class="ajax-loader"
-                />
-                {{ $t('cargandoAmigos') }}
-            </p></template>
-        </Loading>
+                <div v-else class="clearfix">
+                    <Loading :data="sentPendings">
+                        <div id="sent-pending-list" class="sent-pending-list">
+                            <div
+                                v-for="user in sentPendings"
+                                :key="user.id"
+                                class="sent-pending-chip"
+                            >
+                                <router-link
+                                    class="sent-pending-chip__name"
+                                    :to="{
+                                        name: 'profile',
+                                        params: {
+                                            id: user.id,
+                                            userProfile: user,
+                                            activeTab: 1
+                                        }
+                                    }"
+                                >
+                                    {{ user.name }}
+                                </router-link>
+                                <button
+                                    type="button"
+                                    class="sent-pending-chip__remove"
+                                    :aria-label="$t('quitarSolicitudAmigo')"
+                                    :disabled="idRequesting == user.id"
+                                    @click="onCancelRequestClick(user)"
+                                >
+                                    <i
+                                        v-if="idRequesting != user.id"
+                                        class="fa fa-times"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span v-else>{{ $t('enProceso') }}</span>
+                                </button>
+                            </div>
+                        </div>
+                        <template #no-data
+                            ><p class="alert alert-warning" role="alert">
+                                {{ $t('noHaySolicitudesNuevas') }}
+                            </p></template
+                        >
+                        <template #loading
+                            ><p class="alert alert-info" role="alert">
+                                <img
+                                    :src="$publicImg('loader.gif')"
+                                    alt=""
+                                    class="ajax-loader"
+                                />
+                                {{ $t('cargandoSolicitudes') }}
+                            </p></template
+                        >
+                    </Loading>
+                </div>
+            </tab>
+        </tabset>
     </div>
 </template>
 <script>
@@ -139,13 +159,17 @@ import { useFriendsStore } from '../../stores/friends';
 import Loading from '../Loading.vue';
 import IncomingFriendRequestCard from './IncomingFriendRequestCard.vue';
 import FriendRequestCard from './FriendRequestCard';
+import Tab from '../elements/Tab';
+import Tabset from '../elements/Tabset';
+import FilterChips from '../elements/FilterChips.vue';
 
 export default {
     name: 'friends_setting',
     data() {
         return {
             text: '',
-            idRequesting: 0
+            idRequesting: 0,
+            requestsFilter: 'recibidas'
         };
     },
     computed: {
@@ -154,6 +178,25 @@ export default {
             pendings: 'pendings',
             sentPendings: 'sentPendings'
         }),
+
+        requestFilterOptions() {
+            const receivedCount = Array.isArray(this.pendings)
+                ? this.pendings.length
+                : 0;
+            const sentCount = Array.isArray(this.sentPendings)
+                ? this.sentPendings.length
+                : 0;
+            return [
+                {
+                    id: 'recibidas',
+                    label: `${this.$t('filtroSolicitudesRecibidas')} ${receivedCount}`
+                },
+                {
+                    id: 'enviadas',
+                    label: `${this.$t('filtroSolicitudesEnviadas')} ${sentCount}`
+                }
+            ];
+        },
 
         noResult() {
             if (this.text.length) {
@@ -242,7 +285,10 @@ export default {
     components: {
         Loading,
         IncomingFriendRequestCard,
-        FriendRequestCard
+        FriendRequestCard,
+        Tab,
+        Tabset,
+        FilterChips
     }
 };
 </script>
