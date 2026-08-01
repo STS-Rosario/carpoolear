@@ -320,4 +320,17 @@ describe('NewTrip.vue incomplete car completion', () => {
             /if \(requiresDriverPlate\(this\.trip\)\) \{[\s\S]*?const tripCar = this\.resolveDriverCarForTrip\(\);[\s\S]*?!isCarComplete\(tripCar\)[\s\S]*?this\.showCompleteCarModal = true;/s
         );
     });
+
+    it('strips empty stops before save without calling trip-info via calcRoute', () => {
+        expect(viewSource).toMatch(
+            /async save\(\)[\s\S]*?this\.removeEmptyIntermediatePoints\(\);/
+        );
+        expect(viewSource).toMatch(
+            /removeEmptyIntermediatePoints\(\)\s*\{[\s\S]*?this\.points = removeEmptyIntermediatePoints\(this\.points\);[\s\S]*?\}/
+        );
+        const methodMatch = viewSource.match(
+            /removeEmptyIntermediatePoints\(\)\s*\{[\s\S]*?\n\s{8}\}/
+        );
+        expect(methodMatch?.[0] || '').not.toContain('calcRoute');
+    });
 });
