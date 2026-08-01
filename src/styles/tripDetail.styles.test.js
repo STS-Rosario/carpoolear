@@ -45,10 +45,13 @@ describe('trip-detail.css', () => {
             /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?background:\s*var\(--trip-detail-driver-bg/
         );
         expect(css).toMatch(
-            /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?border-top:\s*1px\s+solid\s+#d6d4cf/
+            /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?border-top:\s*0/
         );
         expect(css).toMatch(
             /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?border-bottom:\s*1px\s+solid\s+#d6d4cf/
+        );
+        expect(css).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.trip-detail--mobile\s+\.trip-driver[\s\S]*?margin:\s*0\s+-10px/
         );
         expect(css).toContain('.trip-detail__route');
         expect(css).toContain('.trip-detail__chip');
