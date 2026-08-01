@@ -31,16 +31,16 @@
         </div>
         <p v-else class="text-muted">{{ $t('noTienesNingunAmigoAun') }}</p>
         <div class="trip-invite-friends__actions">
-            <button
-                class="btn btn-primary"
+            <AppButton
+                variant="primary"
                 :disabled="submitting || !selectedFriendIds.length"
                 @click="onSubmit"
             >
                 {{ $t('invitarAmigos') }}
-            </button>
-            <button class="btn btn-default" @click="onClose">
+            </AppButton>
+            <AppButton variant="secondary" @click="onClose">
                 {{ $t('cerrar') }}
-            </button>
+            </AppButton>
         </div>
     </div>
 </template>
@@ -48,6 +48,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useFriendsStore } from '../../stores/friends';
+import AppButton from '../ui/AppButton.vue';
 import TripApi from '../../services/api/Trips';
 import dialogs from '../../services/dialogs.js';
 import {
@@ -59,6 +60,10 @@ const tripApi = new TripApi();
 
 export default {
     name: 'trip_invite_friends',
+
+    components: {
+        AppButton
+    },
 
     props: {
         tripId: {
@@ -164,9 +169,9 @@ export default {
 
 .trip-invite-friends__actions {
     margin-top: 1rem;
-}
-
-.trip-invite-friends__actions .btn + .btn {
-    margin-left: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="new-trip-component container new-trip-tooltips--left">
         <div class="new-trip-page__card">
-            <h1 class="new-trip-page__heading">
+            <h1 v-if="!showWizardSuccess" class="new-trip-page__heading">
                 {{ updatingTrip ? $t('editarViaje') : $t('crearViaje') }}
             </h1>
             <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">

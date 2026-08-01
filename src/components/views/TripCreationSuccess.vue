@@ -6,42 +6,47 @@
         <p class="trip-creation-success__prompt">{{ $t('tripCreationSuccessSharePrompt') }}</p>
 
         <div class="trip-creation-success__actions">
-            <router-link
-                :to="{ name: 'detail_trip', params: { id: trip.id } }"
-                class="btn btn-primary trip-creation-success__view"
+            <AppButton
+                variant="primary"
+                block
+                class="trip-creation-success__view"
                 data-testid="trip-creation-view-trip"
+                :to="{ name: 'detail_trip', params: { id: trip.id } }"
             >
                 {{ $t('tripCreationViewTrip') }}
-            </router-link>
-            <button
-                type="button"
-                class="btn btn-default trip-creation-success__share"
+            </AppButton>
+            <AppButton
+                variant="secondary"
+                block
+                class="trip-creation-success__share"
                 data-testid="trip-creation-share"
+                icon-left="fa fa-share-alt"
                 @click="onShare"
             >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
                 {{ $t('tripCreationShareTrip') }}
-            </button>
-            <button
+            </AppButton>
+            <AppButton
                 v-if="!trip.is_passenger && !trip.parent_trip_id"
-                type="button"
-                class="btn btn-default trip-creation-success__return"
+                variant="secondary"
+                block
+                class="trip-creation-success__return"
                 data-testid="trip-creation-return-trip"
+                icon-left="fa fa-arrow-left"
                 @click="$emit('start-return-trip')"
             >
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 {{ $t('cargarViajeRegreso') }}
-            </button>
-            <button
+            </AppButton>
+            <AppButton
                 v-if="canSaveTemplate"
-                type="button"
-                class="btn btn-default trip-creation-success__save-template"
+                variant="secondary"
+                block
+                class="trip-creation-success__save-template"
                 data-testid="trip-creation-save-template"
+                icon-left="fa fa-bookmark"
                 @click="openSaveTemplateModal"
             >
-                <i class="fa fa-bookmark" aria-hidden="true"></i>
                 {{ $t('tripCreationSaveTemplate') }}
-            </button>
+            </AppButton>
         </div>
 
         <modal
@@ -99,15 +104,14 @@
                 </div>
             </template>
             <template #footer>
-                <button
-                    type="button"
-                    class="btn btn-primary"
+                <AppButton
+                    variant="primary"
                     data-testid="trip-creation-template-save"
                     :disabled="!canConfirmSaveTemplate"
                     @click="onSaveTemplate"
                 >
                     {{ $t('guardar') }}
-                </button>
+                </AppButton>
             </template>
         </modal>
 
@@ -123,6 +127,7 @@
 <script>
 import { mapState } from 'pinia';
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
+import AppButton from '../ui/AppButton.vue';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import { useAuthStore } from '../../stores/auth';
@@ -141,6 +146,7 @@ export default {
 
     components: {
         TripInviteFriends,
+        AppButton,
         modal
     },
 
@@ -325,19 +331,9 @@ export default {
     margin: 0 auto 2rem;
 }
 
-.trip-creation-success__actions .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.5;
+.trip-creation-success__actions .app-button {
     width: 100%;
     box-sizing: border-box;
-}
-
-.trip-creation-success__share i,
-.trip-creation-success__return i,
-.trip-creation-success__save-template i {
-    margin-right: 0.35rem;
 }
 
 .trip-creation-success__invite {
