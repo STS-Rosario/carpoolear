@@ -208,6 +208,18 @@ describe('Trip.vue desktop column bands', () => {
         );
     });
 
+    it('hides the desktop lugares heading/column when TripSeats would render nothing', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        const desktopBlock = stack.match(
+            /<template v-else>[\s\S]*?<\/template>/
+        )[0];
+        expect(desktopBlock).toMatch(
+            /v-if="tripCardTheme === 'light' \|\| !trip\.is_passenger"\s*\n\s*class="trip-detail__lugares"/
+        );
+    });
+
     it('keeps mobile condiciones with price; desktop puts TripData in DETALLE aside and TripPrice in price-cta', () => {
         expect(viewSource).toMatch(
             /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripPrice[\s\S]*TripData/
