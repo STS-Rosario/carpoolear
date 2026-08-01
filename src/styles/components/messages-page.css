@@ -102,10 +102,11 @@
 
 .messages-page .conversation_header__unread-dot {
     display: inline-block;
-    width: 0.55rem;
-    height: 0.55rem;
+    width: 0.625rem;
+    height: 0.625rem;
     border-radius: 50%;
     background: var(--messages-accent);
+    flex-shrink: 0;
 }
 
 .messages-page .conversation-lastmessage {

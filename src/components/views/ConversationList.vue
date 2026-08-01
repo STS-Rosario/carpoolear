@@ -168,7 +168,12 @@
                                                     }}
                                                 </span>
                                                 <span
-                                                    v-if="conversation.unread"
+                                                    v-if="
+                                                        conversation.unread ||
+                                                        isSelectedConversation(
+                                                            conversation
+                                                        )
+                                                    "
                                                     class="conversation_header__unread-dot"
                                                     aria-hidden="true"
                                                 ></span>
@@ -330,6 +335,13 @@ export default {
     methods: {
         dayjs,
         isTripGroupConversation,
+        isSelectedConversation(conversation) {
+            return (
+                this.selectedId != null &&
+                conversation &&
+                conversation.id === this.selectedId
+            );
+        },
         conversationTitle(conversation) {
             if (isTripGroupConversation(conversation)) {
                 return formatTripGroupChatTitle(
