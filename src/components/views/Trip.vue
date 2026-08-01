@@ -194,200 +194,6 @@
                         </div>
                     </div></template>
                 </modal>
-                <!-- legacy desktop removed; see trip-detail desktop redesign -->
-                <div class="row form" v-if="false">
-                    <div
-                        ref="rightPanel"
-                        class="white-background"
-                        :class="themeClasses"
-                    >
-                        <div class="row">
-                            <div
-                                :class="columnClass[0]"
-                                class="column"
-                                v-if="
-                                    columnComponent[0] &&
-                                    columnComponent[0].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[0]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                            <div
-                                :class="columnClass[1]"
-                                class="column"
-                                v-if="
-                                    columnComponent[1] &&
-                                    columnComponent[1].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[1]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                            <div
-                                :class="columnClass[2]"
-                                class="column"
-                                v-if="
-                                    columnComponent[2] &&
-                                    columnComponent[2].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[2]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                        </div>
-                        <TripButtons
-                            @deleteTrip="deleteTrip()"
-                            @toMessages="toMessages()"
-                            @toGroupChat="toGroupChat()"
-                            @onMakeRequest="onMakeRequest()"
-                            @cancelRequest="cancelRequest()"
-                            :sending="sending"
-                            :isPassengersView="isPassengersView"
-                        />
-                        <TripStats v-if="tripCardTheme === 'light'" />
-                    </div>
-                    <div
-                        :style="calculatedHeight"
-                        class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container"
-                        v-if="!isPassengersView && tripCardTheme !== 'light'"
-                    >
-                        <TripDriver />
-                    </div>
-
-                    <div
-                        class="col-xs-24 structure-div"
-                        v-if="!isPassengersView"
-                    >
-                        <div
-                            class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"
-                            v-if="matchingUsers && matchingUsers.length > 0"
-                        >
-                            <div>
-                                <div v-if="owner">
-                                    <h3 class="title-margined">
-                                        {{ $t('matcheosDelViaje') }}
-                                    </h3>
-                                    <div class="row matching-user-list">
-                                        <div
-                                            v-for="p in matchingUsers"
-                                            class="list-item col-sm-24"
-                                            v-bind:key="p.id"
-                                        >
-                                            <div class="passenger-match">
-                                                <input
-                                                    type="checkbox"
-                                                    v-model="
-                                                        selectedMatchingUser
-                                                    "
-                                                    v-bind:id="p.id"
-                                                    v-bind:value="p.id"
-                                                />
-                                                <span
-                                                    @click="toUserProfile(p)"
-                                                    class="trip_driver_img circle-box passenger trip_passenger_image"
-                                                    v-imgSrc:profile="p.image"
-                                                ></span>
-                                                <a
-                                                    href="#"
-                                                    @click="toUserProfile(p)"
-                                                    class="trip_passenger_name"
-                                                >
-                                                    {{ p.name }}
-                                                </a>
-                                                <button
-                                                    @click="toUserMessages(p)"
-                                                    :aria-label="$t('irAMensajes')"
-                                                    class="trip_passenger-chat"
-                                                >
-                                                    <i
-                                                        class="fa fa-comments"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <small>
-                                                    {{ $t('viajaEl') }}
-                                                    {{
-                                                        dayjs(p.tripMatch.trip_date).format('DD/MM')
-                                                    }}
-                                                    <strong>
-                                                        {{
-                                                            dayjs(p.tripMatch.trip_date).format('HH:mm')
-                                                        }}
-                                                    </strong>
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div
-                                            class="form-inline col-xs-24 send_to_all-form"
-                                        >
-                                            <div class="input-group">
-                                                <label
-                                                    for="message_all"
-                                                    class="sr-only"
-                                                >
-                                                    {{ $t('mensajeParaUsuariosSeleccionados') }}
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="message_all"
-                                                    class="form-control"
-                                                    :placeholder="$t('enviaASeleccionados')"
-                                                    v-model="messageToUsers"
-                                                />
-                                                <span class="input-group-btn">
-                                                    <button
-                                                        class="btn btn-success"
-                                                        @click="onSendToAll"
-                                                    >
-                                                        <i
-                                                            class="fa fa-arrow-right"
-                                                            aria-hidden="true"
-                                                        ></i>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                            <!-- /input-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            ref="tripMapEl"
-                            class="trip-route-map"
-                            style="
-                                width: calc(100% + 20px);
-                                height: 461px;
-                                overflow: hidden;
-                                margin-left: -10px;
-                                z-index: 0;
-                            "
-                        ></div>
-                    </div>
-                </div>
                 <div
                     v-if="trip && !isPassengersView"
                     class="trip-detail__stack"
@@ -539,16 +345,12 @@ import {
     resolveRequestSeatModalConfirm,
     shouldShowPricingHint
 } from '../../utils/tripPassengerMessageFlow.js';
-import TripLocation from '../elements/TripLocation';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
-import TripDate from '../elements/TripDate';
 import TripSeats from '../elements/TripSeats';
 import TripPrice from '../elements/TripPrice';
 import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
-import TripDescription from '../elements/TripDescription';
-import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 
@@ -593,9 +395,6 @@ export default {
                     location: null
                 }
             ],
-            matchingUsers: [],
-            messageToUsers: '',
-            selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -603,8 +402,7 @@ export default {
             showModalPricing: false,
             paymentBrickRendering: false,
             acceptPassengerValue: 0,
-            acceptPricing: 0,
-            calculatedHeight: {}
+            acceptPricing: 0
         };
     },
 
@@ -616,7 +414,6 @@ export default {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation',
             selectConversation: 'select',
-            sendToAll: 'sendToAll',
             openTripGroupChat: 'openTripGroupChat'
         }),
         ...mapActions(usePassengerStore, {
@@ -625,7 +422,6 @@ export default {
         }),
         ...mapActions(useTripsStore, {
             remove: 'remove',
-            searchMatchers: 'searchMatchers',
             searchAgain: 'searchAgain'
         }),
         ...mapActions(useProfileStore, {
@@ -634,17 +430,6 @@ export default {
         ...mapActions(useMyTripsStore, {
             removeTrip: 'removeTrip'
         }),
-        calculateHeight() {
-            this.$nextTick(() => {
-                this.calculatedHeight = !this.isMobile
-                    ? {
-                          'min-height': this.$refs.rightPanel
-                              ? this.$refs.rightPanel.clientHeight + 'px'
-                              : '440px'
-                      }
-                    : {};
-            });
-        },
         profileComplete() {
             if (
                 !this.user.image ||
@@ -682,26 +467,12 @@ export default {
                     // this.trip = trip;
                     this.points = trip.points;
                     var self = this;
-                    this.calculateHeight();
                     this.$nextTick(function () { self.enablePayment(); });
                     self.$nextTick(() => {
                         self.$nextTick(() => {
                             self.syncTripRouteMap();
                         });
                     });
-                    if (this.owner) {
-                        this.searchMatchers({ trip: this.trip }).then(
-                            (users) => {
-                                this.matchingUsers = users;
-                                if (users && users.length) {
-                                    this.selectedMatchingUser = users.map(
-                                        (u) => u.id
-                                    );
-                                    // console.log('selectedMatchingUser', users);
-                                }
-                            }
-                        );
-                    }
                 })
                 .catch((error) => {
                     console.log('Error loading trip:', error);
@@ -822,17 +593,6 @@ export default {
                 .finally(() => {
                     this.sending.groupChatAction = false;
                 });
-        },
-
-        toUserProfile(user) {
-            router.replace({
-                name: 'profile',
-                params: {
-                    id: user.id,
-                    userProfile: user,
-                    activeTab: 1
-                }
-            });
         },
 
         onMakeRequest() {
@@ -1026,31 +786,6 @@ export default {
                 }
             }
         },
-        onSendToAll() {
-            if (this.$redirectToIdentityValidationIfRequired()) return;
-            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
-            let users = this.matchingUsers.filter(
-                (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
-            );
-            if (this.messageToUsers && users && users.length) {
-                this.sendToAll({
-                    message: this.messageToUsers,
-                    users: users
-                })
-                    .then(() => {
-                        this.messageToUsers = '';
-                        dialogs.message(this.$t('mensajeEnviado'));
-                    })
-                    .catch((error) => {
-                        if (this.$checkError(error, 'identity_validation_required')) {
-                            this.$router.push({ name: 'identity_validation' });
-                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
-                                estado: 'error'
-                            });
-                        }
-                    });
-            }
-        },
         onModalClose() {
             if (this.acceptPassengerValue) {
                 let data = {
@@ -1116,10 +851,6 @@ export default {
     mounted() {
         this.loadTrip();
         bus.on('back-click', this.onBackClick);
-        bus.on('calculate-height', this.calculateHeight);
-        this.$nextTick(() => {
-            this.calculateHeight();
-        });
 
         // Load Mercado Pago SDK if not already loaded
         if (typeof MercadoPago === 'undefined') {
@@ -1136,15 +867,11 @@ export default {
     beforeUnmount() {
         this.destroyTripRouteMap();
         bus.off('back-click', this.onBackClick);
-        bus.off('calculate-height', this.calculateHeight);
     },
 
     watch: {
         id: function (value) {
             this.loadTrip();
-        },
-        resolutionWidth: function () {
-            this.calculateHeight();
         },
         trip: {
             deep: true,
@@ -1185,58 +912,14 @@ export default {
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
-            config: 'appConfig',
-            tripCardTheme: 'tripCardTheme'
+            config: 'appConfig'
         }),
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
         }),
         ...mapState(useDeviceStore, {
-            isMobile: 'isMobile',
-            resolution: 'resolution'
+            isMobile: 'isMobile'
         }),
-        resolutionWidth() {
-            return this.resolution.width;
-        },
-        themeClasses() {
-            return this.tripCardTheme === 'light'
-                ? 'col-xs-24'
-                : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
-        },
-        columnClass() {
-            return this.tripCardTheme === 'light'
-                ? [
-                      'col-sm-8 col-md-8 col-lg-7',
-                      'col-sm-9 col-md-10 col-lg-11',
-                      'col-sm-7 col-md-6 col-lg-5'
-                  ]
-                : ['col-sm-14 col-md-14', 'col-sm-10 col-md-10'];
-        },
-        columnComponent() {
-            if (this.tripCardTheme === 'light' && this.isMobile) {
-                return [
-                    [TripDriver, TripLocation],
-                    [
-                        TripData,
-                        TripStats,
-                        TripDescription,
-                        TripShare,
-                        TripPassengers
-                    ]
-                ];
-            } else if (this.tripCardTheme === 'light') {
-                return [
-                    [TripDriver, TripDescription],
-                    [TripLocation, TripDate,TripPrice, TripSeats, TripPassengers],
-                    [TripData]
-                ];
-            } else {
-                return [
-                    [TripLocation, TripDate, TripPrice, TripSeats],
-                    [TripData, TripStats, TripShare, TripPassengers]
-                ];
-            }
-        },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
@@ -1270,15 +953,11 @@ export default {
     components: {
         svgItem,
         modal,
-        TripLocation,
         TripDriver,
         TripDetailRoute,
-        TripDate,
         TripSeats,
         TripData,
         TripStats,
-        TripDescription,
-        TripShare,
         TripPassengers,
         TripButtons,
         TripPrice
@@ -1305,163 +984,16 @@ export default {
     font-weight: 500;
     text-decoration: underline;
 }
-.trip-detail-component .structure-div {
-    margin-top: 1rem;
-    z-index: 0;
-    position: relative;
-    min-height: 418px;
-    /* overflow: hidden; */
-    top: 0;
-}
 .trip-route-map :deep(.leaflet-container) {
     height: 100%;
     width: 100%;
 }
-.trip-detail-component .driver-container {
-    margin-top: 0;
-}
-.trip-detail-component .driver-container::after {
-    top: -23px;
-    left: 4.4em;
-    border: solid transparent;
-    content: ' ';
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(136, 183, 213, 0);
-    border-bottom-color: var(--secondary-background);
-    border-width: 12px;
-    margin-left: -12px;
-    z-index: 1;
-}
 .container {
     padding-top: 0;
-}
-.trip-detail-component .column {
-    padding: 0 4em;
-}
-.trip-detail-component .column:first-of-type {
-    padding: 0 1em;
-}
-.trip-detail-component .white-background {
-    padding-top: 1.1rem;
-}
-.matcheo-passengers {
-    background: #fff;
-    box-shadow: 0 0 4px 1px #ccc;
-    border-radius: 0.4em;
-    position: absolute;
-    left: 1em;
-    top: 1em;
-    max-height: 400px;
-    z-index: 100;
-}
-.matcheo-passengers h3 {
-    font-size: 1.4em;
-}
-.matcheo-passengers .list-item {
-    border: 0;
-}
-.matcheo-passengers .list-item .trip_passenger_name {
-    color: var(--trip-mostly-free-color);
-    font-weight: bold;
-}
-.matcheo-passengers .passenger-match {
-    margin: 0 0.5em;
-    padding: 0.5em 0;
-}
-.passenger-match input {
-    margin-right: 1em;
-}
-.passenger-match button {
-    color: var(--secondary-background);
-}
-
-.passenger-match .trip_driver_img.circle-box.passenger {
-    border: 2px solid var(--trip-almost-fill-color);
-}
-.send_to_all-form {
-    padding: 1em;
-}
-.form-inline .input-group {
-    width: 100%;
-}
-.send_to_all-form .btn {
-    min-width: 100%;
-}
-.matching-user-list {
-    max-height: 270px;
-    overflow-y: auto;
-}
-.matching-user-list small {
-    margin-left: 50px;
-}
-.matching-user-list .list-item:after {
-    content: ' ';
-    display: block;
-    width: 90%;
-    margin: 0 auto;
-    border-bottom: 1px solid #ccc;
-    margin-top: 0.5rem;
-}
-@media only screen and (min-width: 400px) and (max-width: 767px) {
-    .trip-detail-component .structure-div {
-        top: -15px;
-    }
 }
 @media only screen and (min-width: 768px) {
     .container {
         padding-top: 1.5em;
-    }
-    .trip-detail-component .white-background {
-        padding-top: 0;
-        min-height: 440px;
-    }
-    .trip-detail-component .driver-container {
-        margin-top: 0;
-    }
-    .trip-detail-component .driver-container::after {
-        top: 36px;
-        right: -23px;
-        left: unset;
-        border-color: rgba(136, 183, 213, 0);
-        border-left-color: var(--secondary-background);
-        border-width: 12px;
-        margin-left: -12px;
-        z-index: 1;
-    }
-    .trip-detail-component .structure-div {
-        margin-top: 0;
-        margin-bottom: 2rem;
-    }
-    .trip-detail-component .column,
-    .trip-detail-component .column:first-of-type {
-        padding: 2em 1em 2em 1em;
-    }
-}
-@media only screen and (max-width: 768px) {
-    .trip-detail-component .driver-container {
-        border-radius: 0;
-    }
-    .trip-detail-component .structure-div {
-        overflow: visible;
-        padding: 0;
-        margin-bottom: 3.5em;
-    }
-    .matcheo-passengers {
-        position: static;
-        left: 0;
-        top: 0;
-        max-height: auto;
-        float: none;
-        margin: 1.5rem 0 -1rem 0;
-        border-radius: 0;
-        padding-bottom: 1em;
-    }
-    .matcheo-passengers .title-margined {
-        margin: 0;
-        padding: 1em 0;
     }
 }
 #walletBrick_container {
