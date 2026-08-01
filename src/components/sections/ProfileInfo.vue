@@ -147,15 +147,15 @@
             class="edit-action profile-friend-actions"
             v-if="user && profile.id !== user.id && showFriendActions"
         >
-            <button
+            <AppButton
                 v-if="profile.friendship_state === 'none'"
-                class="btn btn-primary"
+                variant="primary"
+                icon-left="fa fa-user"
                 :disabled="friendActionLoading"
-                v-on:click="onInviteFriend()"
+                @click="onInviteFriend()"
             >
-                <i class="fa fa-user" aria-hidden="true"></i>
                 {{ $t('invitarAmigos') }}
-            </button>
+            </AppButton>
             <button
                 v-else-if="profile.friendship_state === 'pending_sent'"
                 class="btn btn-primary"
