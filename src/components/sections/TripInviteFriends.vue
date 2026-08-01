@@ -151,6 +151,13 @@ export default {
 </script>
 
 <style scoped>
+.trip-invite-friends__prompt {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
 .trip-invite-friends__friend {
     margin: 0.4rem 0;
 }
