@@ -46,13 +46,158 @@
                         {{ $t('tripSeatRequestsDriverWarning') }}
                     </router-link>
                 </div>
-                <div class="row form">
+                <modal
+                    :name="'modal'"
+                    v-if="showModalRequestSeat"
+                    @close="onModalClose"
+                    :title="$t('carpoodatos')"
+                    :body="'Body'"
+                >
+                    <template #header><h3>
+                        <span>{{ $t('carpoodatos') }}</span>
+                        <i
+                            v-on:click="onModalClose"
+                            class="fa fa-times float-right-close"
+                        ></i>
+                    </h3></template>
+                    <template #body><div>
+                        <div class="text-left carpoodatos">
+                            <p>
+                                {{ $t('carpoodatosAntesSolicitud') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosCompromisoViaje') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosCalificarCancelar') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosNoPidasAsiento') }}
+                            </p>
+                            <p>
+                                <span>{{ $t('mesaAyudaContactoLead') }}</span>
+                                <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
+                            </p>
+                        </div>
+                        <div
+                            class="check"
+                            style="margin-bottom: 10px"
+                        >
+                            <label class="check-inline">
+                                <input
+                                    type="checkbox"
+                                    name="acceptPassengerValor"
+                                    value="0"
+                                    v-model="acceptPassengerValue"
+                                />
+                                <span
+                                    >{{ $t('noVolverAMostrarMensaje') }}</span
+                                >
+                            </label>
+                        </div>
+                        <div class="text-center">
+                            <template
+                                v-if="
+                                    config.module_coordinate_by_message
+                                "
+                            >
+                                <button
+                                    class="btn btn-primary"
+                                    @click="toMakeRequest"
+                                    v-if="!owner"
+                                >
+                                    {{ $t('enviarMensaje') }}
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button
+                                    class="btn btn-primary"
+                                    @click="toMessages"
+                                    v-if="!owner"
+                                >
+                                    {{ $t('enviarMensaje') }}
+                                </button>
+                                <button
+                                    class="btn btn-primary"
+                                    @click="toMakeRequest"
+                                >
+                                    {{ $t('solicitarAsiento') }}
+                                </button>
+                            </template>
+                        </div>
+                    </div></template>
+                </modal>
+                <modal
+                    :name="'modal'"
+                    v-if="showModalPricing"
+                    @close="onModalClose"
+                    :title="$t('carpoodatos')"
+                    :body="'Body'"
+                >
+                    <template #header><h3>
+                        <span>{{ $t('carpoodatos') }}</span>
+                        <i
+                            v-on:click="onModalClose"
+                            class="fa fa-times float-right-close"
+                        ></i>
+                    </h3></template>
+                    <template #body><div>
+                        <div class="text-left carpoodatos">
+                            <p>
+                                {{ $t('carpoodatosAntesConfirmar') }}
+                            </p>
+                            <ul>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet1') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet2') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet3') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet4') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet5') }}</li>
+                            </ul>
+                            <p>
+                                {{ $t('carpoodatosContribucionMaxima') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosContribucionComprobantes') }}
+                            </p>
+                            <p>
+                                <span>{{ $t('carpoodatosAntesConfirmarDudaLead') }}</span>
+                                <router-link :to="{ name: 'tickets' }">{{ $t('carpoodatosAntesConfirmarDudaLink') }}</router-link>{{ $t('carpoodatosAntesConfirmarDudaTail') }}
+                            </p>
+                        </div>
+                        <div
+                            class="check"
+                            style="margin-bottom: 10px"
+                        >
+                            <label class="check-inline">
+                                <input
+                                    type="checkbox"
+                                    name="acceptPricing"
+                                    value="0"
+                                    v-model="acceptPricing"
+                                />
+                                <span
+                                    >{{ $t('noVolverAMostrarMensaje') }}</span
+                                >
+                            </label>
+                        </div>
+                        <div class="text-center">
+                            <button
+                                class="btn btn-primary"
+                                @click="toMessageForce"
+                                v-if="!owner"
+                            >
+                                {{ $t('enviarMensaje') }}
+                            </button>
+                        </div>
+                    </div></template>
+                </modal>
+                <div class="row form" v-if="!isMobile">
                     <div
                         ref="rightPanel"
                         class="white-background"
                         :class="themeClasses"
                     >
-                        <div class="row" v-if="!isMobile">
+                        <div class="row">
                             <div
                                 :class="columnClass[0]"
                                 class="column"
@@ -105,153 +250,7 @@
                                 </template>
                             </div>
                         </div>
-                            <modal
-                                :name="'modal'"
-                                v-if="showModalRequestSeat"
-                                @close="onModalClose"
-                                :title="$t('carpoodatos')"
-                                :body="'Body'"
-                            >
-                                <template #header><h3>
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3></template>
-                                <template #body><div>
-                                    <div class="text-left carpoodatos">
-                                        <p>
-                                            {{ $t('carpoodatosAntesSolicitud') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosCompromisoViaje') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosCalificarCancelar') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosNoPidasAsiento') }}
-                                        </p>
-                                        <p>
-                                            <span>{{ $t('mesaAyudaContactoLead') }}</span>
-                                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="check"
-                                        style="margin-bottom: 10px"
-                                    >
-                                        <label class="check-inline">
-                                            <input
-                                                type="checkbox"
-                                                name="acceptPassengerValor"
-                                                value="0"
-                                                v-model="acceptPassengerValue"
-                                            />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <template
-                                            v-if="
-                                                config.module_coordinate_by_message
-                                            "
-                                        >
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMakeRequest"
-                                                v-if="!owner"
-                                            >
-                                                {{ $t('enviarMensaje') }}
-                                            </button>
-                                        </template>
-                                        <template v-else>
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMessages"
-                                                v-if="!owner"
-                                            >
-                                                {{ $t('enviarMensaje') }}
-                                            </button>
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMakeRequest"
-                                            >
-                                                {{ $t('solicitarAsiento') }}
-                                            </button>
-                                        </template>
-                                    </div>
-                                </div></template>
-                            </modal>
-                            <modal
-                                :name="'modal'"
-                                v-if="showModalPricing"
-                                @close="onModalClose"
-                                :title="$t('carpoodatos')"
-                                :body="'Body'"
-                            >
-                                <template #header><h3>
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3></template>
-                                <template #body><div>
-                                    <div class="text-left carpoodatos">
-                                        <p>
-                                            {{ $t('carpoodatosAntesConfirmar') }}
-                                        </p>
-                                        <ul>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet1') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet2') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet3') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet4') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet5') }}</li>
-                                        </ul>
-                                        <p>
-                                            {{ $t('carpoodatosContribucionMaxima') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosContribucionComprobantes') }}
-                                        </p>
-                                        <p>
-                                            <span>{{ $t('carpoodatosAntesConfirmarDudaLead') }}</span>
-                                            <router-link :to="{ name: 'tickets' }">{{ $t('carpoodatosAntesConfirmarDudaLink') }}</router-link>{{ $t('carpoodatosAntesConfirmarDudaTail') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="check"
-                                        style="margin-bottom: 10px"
-                                    >
-                                        <label class="check-inline">
-                                            <input
-                                                type="checkbox"
-                                                name="acceptPricing"
-                                                value="0"
-                                                v-model="acceptPricing"
-                                            />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button
-                                            class="btn btn-primary"
-                                            @click="toMessageForce"
-                                            v-if="!owner"
-                                        >
-                                            {{ $t('enviarMensaje') }}
-                                        </button>
-                                    </div>
-                                </div></template>
-                            </modal>
                         <TripButtons
-                            v-if="!isMobile"
                             @deleteTrip="deleteTrip()"
                             @toMessages="toMessages()"
                             @toGroupChat="toGroupChat()"
@@ -260,21 +259,19 @@
                             :sending="sending"
                             :isPassengersView="isPassengersView"
                         />
-                        <TripStats
-                            v-if="!isMobile && tripCardTheme === 'light'"
-                        />
+                        <TripStats v-if="tripCardTheme === 'light'" />
                     </div>
                     <div
                         :style="calculatedHeight"
                         class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container"
-                        v-if="!isMobile && !isPassengersView && tripCardTheme !== 'light'"
+                        v-if="!isPassengersView && tripCardTheme !== 'light'"
                     >
                         <TripDriver />
                     </div>
 
                     <div
                         class="col-xs-24 structure-div"
-                        v-if="!isMobile && !isPassengersView"
+                        v-if="!isPassengersView"
                     >
                         <div
                             class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"
@@ -420,6 +417,7 @@
                         <TripData />
                     </section>
                     <TripPassengers :section-title="$t('tripDetailJoined')" />
+                    <TripShare />
                     <div class="trip-detail__cta">
                         <TripButtons
                             @deleteTrip="deleteTrip()"
