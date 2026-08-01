@@ -288,4 +288,19 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /\.new-trip-wizard__role-card--active\s*\{[^}]*border-color:\s*var\(--primary-color/
         );
     });
+
+    it('avoids double borders on date and fixes time icon padding', () => {
+        expect(wizardSource).toMatch(
+            /\.date-picker\s+\.picker\.form-control[\s\S]*?\.dp__input[\s\S]*?border:\s*0/
+        );
+        expect(wizardSource).toMatch(
+            /\.date-picker--cross\)?\s*\{[^}]*transform:\s*translateY\(-50%\)/
+        );
+        expect(wizardSource).toMatch(
+            /\.form-control-time[\s\S]*?padding-left:\s*(?:2\.5rem|2\.75rem|3rem)/
+        );
+        expect(wizardSource).toMatch(
+            /form-control-time::-webkit-calendar-picker-indicator[\s\S]*?(?:display:\s*none|opacity:\s*0)/
+        );
+    });
 });

@@ -1255,27 +1255,78 @@ export default {
     --dp-font-family: var(--ds-font-family, inherit);
     --dp-font-size: var(--ds-input-font-size);
     --dp-text-color: var(--ds-input-text);
-    --dp-input-padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    --dp-input-padding: var(--ds-input-padding-y) 2.25rem
+        var(--ds-input-padding-y) 2.5rem;
+    --dp-input-icon-padding: 0;
 }
 
-.new-trip-wizard :deep(.date-picker .picker.form-control),
-.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input) {
+.new-trip-wizard :deep(.date-picker .picker.form-control) {
+    position: relative;
     border: 1px solid var(--ds-input-border);
     border-radius: var(--ds-radius-input, 8px);
     background-color: var(--ds-input-bg);
+    background-image: none;
     color: var(--ds-input-text);
-    font-size: var(--ds-input-font-size);
-    line-height: 1.3;
-    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    padding: 0;
     box-shadow: none;
     min-height: 0;
 }
 
-.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input:focus),
-.new-trip-wizard :deep(.date-picker .picker.form-control:focus) {
+.new-trip-wizard :deep(.date-picker .picker.form-control:focus-within) {
     outline: none;
     border-color: var(--ds-input-focus-border);
     box-shadow: var(--ds-input-focus-ring);
+}
+
+.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input) {
+    border: 0;
+    border-radius: var(--ds-radius-input, 8px);
+    background: transparent;
+    background-image: none !important;
+    color: var(--ds-input-text);
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y) 2.25rem var(--ds-input-padding-y)
+        2.5rem;
+    box-shadow: none;
+    min-height: 0;
+}
+
+.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input:focus) {
+    outline: none;
+    border: 0;
+    box-shadow: none;
+}
+
+.new-trip-wizard :deep(.date-picker--cross) {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    z-index: 2;
+    color: var(--ds-text-muted, #737373);
+    line-height: 1;
+}
+
+.new-trip-wizard :deep(.date-picker--cross i) {
+    color: inherit;
+    cursor: pointer;
+}
+
+.new-trip-wizard .trip_datetime .form-control-time {
+    padding-left: 2.75rem;
+    padding-right: var(--ds-input-padding-x);
+    background-position: 0.75rem center;
+    background-size: 1.25rem 1.25rem;
+    background-repeat: no-repeat;
+    background-color: var(--ds-input-bg);
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.new-trip-wizard .trip_datetime .form-control-time::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    display: none;
 }
 
 .new-trip-wizard__subtitle {
