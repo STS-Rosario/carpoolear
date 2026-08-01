@@ -53,7 +53,7 @@ describe('ProfileInfo friend actions', () => {
             "import AppButton from '../ui/AppButton.vue'"
         );
         expect(viewSource).toMatch(
-            /friendship_state === 'none'[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?onInviteFriend[\s\S]*?invitarAmigos[\s\S]*?<\/AppButton>/
+            /<AppButton[\s\S]*?friendship_state === 'none'[\s\S]*?variant="primary"[\s\S]*?onInviteFriend[\s\S]*?invitarAmigos[\s\S]*?<\/AppButton>/
         );
         expect(viewSource).not.toMatch(
             /friendship_state === 'none'[\s\S]*?class="btn btn-primary"[\s\S]*?invitarAmigos/
