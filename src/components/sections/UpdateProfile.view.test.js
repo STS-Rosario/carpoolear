@@ -76,6 +76,63 @@ describe('UpdateProfile desktop identity layout', () => {
     });
 });
 
+describe('UpdateProfile page card', () => {
+    it('wraps content in a white card with the page title inside', () => {
+        expect(viewSource).toContain('update-profile-page__card');
+        expect(viewSource).toContain('update-profile-page__heading');
+        expect(viewSource).toMatch(
+            /update-profile-page__card[\s\S]*update-profile-page__heading[\s\S]*\$t\('editarPerfil'\)/
+        );
+        expect(viewSource).toMatch(
+            /\.update-profile-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(viewSource).toMatch(
+            /\.update-profile-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
+    });
+
+    it('removes the legacy inner form card styling', () => {
+        expect(viewSource).toMatch(
+            /\.update-profile-component\s+\.form\s*\{[^}]*box-shadow:\s*none/s
+        );
+        expect(viewSource).toMatch(
+            /\.update-profile-component\s+\.form\s*\{[^}]*background:\s*transparent/s
+        );
+        expect(viewSource).toMatch(
+            /\.update-profile-component\s+\.form\s*\{[^}]*padding:\s*0/s
+        );
+    });
+});
+
+describe('UpdateProfile AppInput fields', () => {
+    it('uses AppInput for core profile text fields', () => {
+        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
+        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-name"/);
+        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-email"/);
+        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-dni"/);
+        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-telefono"/);
+        expect(viewSource).not.toMatch(
+            /id="input-name"[\s\S]*?class="form-control"/
+        );
+    });
+
+    it('uses AppTextarea for the description field', () => {
+        expect(viewSource).toContain(
+            "import AppTextarea from '../ui/AppTextarea.vue'"
+        );
+        expect(viewSource).toMatch(/<AppTextarea[\s\S]*?id="input-description"/);
+        expect(viewSource).not.toMatch(/<textarea[\s\S]*?v-model="user\.description"/);
+    });
+
+    it('offsets the datos públicos checkbox 5px to the right', () => {
+        expect(viewSource).toContain('update-profile-datos-publicos');
+        expect(viewSource).toContain("$t('datosVisiblesCheck')");
+        expect(viewSource).toMatch(
+            /\.update-profile-datos-publicos[\s\S]*?margin-left:\s*5px/
+        );
+    });
+});
+
 describe('UpdateProfile delete account entry point', () => {
     it('opens the delete modal from the route query instead of an inline button', () => {
         expect(viewSource).toContain('DELETE_ACCOUNT_QUERY');

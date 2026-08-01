@@ -55,6 +55,12 @@ describe('Settings navigation', () => {
         );
     });
 
+    it('does not render a layout page title for Editar perfil so the in-card heading is used', () => {
+        expect(viewSource).not.toMatch(
+            /profile_update['"]?\s*\)\s*return\s*['"]editarPerfil['"]/
+        );
+    });
+
     it('does not render a layout page title for Autos so the in-card heading is used', () => {
         expect(viewSource).not.toMatch(
             /profile_cars['"]?\s*\)\s*return\s*['"]autos['"]/
