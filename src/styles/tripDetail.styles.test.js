@@ -276,6 +276,18 @@ describe('trip detail desktop page title', () => {
             /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*border-radius:\s*0/
         );
     });
+
+    it('sizes the driver avatar to the height of the driver info block', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver__mobile-top\s*\{[^}]*align-items:\s*stretch/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*height:\s*100%/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/
+        );
+    });
 });
 
 describe('trip detail desktop shares mobile visual language', () => {
