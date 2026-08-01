@@ -1,6 +1,8 @@
-/* Trip detail mobile visual layer — scoped under .trip-detail */
+/* Trip detail mobile visual layer — scoped under .trip-detail--mobile so
+   desktop trip detail (same component, isMobile === false) keeps its
+   original layout, colors and CTA styling untouched. */
 
-.trip-detail {
+.trip-detail.trip-detail--mobile {
     --trip-detail-canvas: #f0f0f0;
     --trip-detail-card-bg: #fff;
     --trip-detail-divider: #e6e6e6;
@@ -11,7 +13,7 @@
     box-sizing: border-box;
 }
 
-.trip-detail__stack {
+.trip-detail--mobile .trip-detail__stack {
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -19,7 +21,7 @@
     box-sizing: border-box;
 }
 
-.trip-detail__section {
+.trip-detail--mobile .trip-detail__section {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -27,7 +29,7 @@
     box-sizing: border-box;
 }
 
-.trip-detail__section-title {
+.trip-detail--mobile .trip-detail__section-title {
     margin: 0 0 0.5rem;
     font-size: 0.7rem;
     font-weight: var(--ds-font-weight-bold, 700);
@@ -37,7 +39,7 @@
     line-height: 1.2;
 }
 
-.trip-detail__driver-message {
+.trip-detail--mobile .trip-detail__driver-message {
     margin: 0;
     color: var(--ds-text-primary, #333);
     font-size: 0.95rem;
@@ -45,7 +47,7 @@
     font-weight: var(--ds-font-weight-normal, 400);
 }
 
-.trip-detail__stats {
+.trip-detail--mobile .trip-detail__stats {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -57,11 +59,11 @@
     color: var(--ds-text-secondary, #666);
 }
 
-.trip-detail__stats-sep {
+.trip-detail--mobile .trip-detail__stats-sep {
     color: #bbb;
 }
 
-.trip-detail__passengers {
+.trip-detail--mobile .trip-detail__passengers {
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -69,7 +71,7 @@
     box-sizing: border-box;
 }
 
-.trip-detail__passengers .list-item {
+.trip-detail--mobile .trip-detail__passengers .list-item {
     display: flex;
     align-items: center;
     gap: 0.65rem;
@@ -77,12 +79,12 @@
     border-top: 1px solid var(--trip-detail-divider);
 }
 
-.trip-detail__passengers .list-item:first-of-type {
+.trip-detail--mobile .trip-detail__passengers .list-item:first-of-type {
     border-top: none;
     padding-top: 0;
 }
 
-.trip-detail__passengers .trip_passenger_image {
+.trip-detail--mobile .trip-detail__passengers .trip_passenger_image {
     flex: 0 0 auto;
     width: 2.25rem;
     height: 2.25rem;
@@ -95,7 +97,7 @@
     background-size: cover;
 }
 
-.trip-detail__passengers .trip_passenger_name {
+.trip-detail--mobile .trip-detail__passengers .trip_passenger_name {
     flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
@@ -107,7 +109,7 @@
     white-space: nowrap;
 }
 
-.trip-detail__cta {
+.trip-detail--mobile .trip-detail__cta {
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
@@ -115,9 +117,9 @@
     box-sizing: border-box;
 }
 
-.trip-detail__cta .btn,
-.trip-detail__cta .btn-primary,
-.trip-detail__cta .trip-detail__cta-secondary {
+.trip-detail--mobile .trip-detail__cta .btn,
+.trip-detail--mobile .trip-detail__cta .btn-primary,
+.trip-detail--mobile .trip-detail__cta .trip-detail__cta-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -125,14 +127,14 @@
     box-sizing: border-box;
 }
 
-.trip-detail__cta .btn-primary {
+.trip-detail--mobile .trip-detail__cta .btn-primary {
     border-radius: var(--ds-radius-button);
     font-family: inherit;
     font-size: var(--ds-button-font-size-md);
     font-weight: var(--ds-button-font-weight);
 }
 
-.trip-detail__cta-secondary {
+.trip-detail--mobile .trip-detail__cta-secondary {
     border: var(--ds-button-border-width) solid var(--ds-action);
     border-radius: var(--ds-radius-button);
     background: transparent;
@@ -142,8 +144,8 @@
     font-weight: var(--ds-button-font-weight);
 }
 
-.trip-detail__cta-secondary:hover,
-.trip-detail__cta-secondary:focus {
+.trip-detail--mobile .trip-detail__cta-secondary:hover,
+.trip-detail--mobile .trip-detail__cta-secondary:focus {
     background: rgba(1, 101, 135, 0.06);
     color: var(--ds-action);
 }
