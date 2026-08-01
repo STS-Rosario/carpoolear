@@ -1,6 +1,7 @@
 import dayjs from '../dayjs';
 import { activeCarsWithPlate, resolveTripCarId } from './userCars.js';
 import { getIntermediatePoints } from './tripCreationPoints.js';
+import { isTripPointDetailEmpty } from './tripPointDetailValidation.js';
 
 export const STEP = {
     ROLE: 1,
@@ -149,16 +150,26 @@ export function validateStep(step, context = {}) {
     }
 }
 
-function validateOrigin({ points = [] }) {
+function validateOrigin({ points = [], puntoPartida = '' }) {
     const origin = points[0];
-    const valid = Boolean(origin && origin.json);
-    return {
-        valid,
-        errors: valid ? {} : { origin: 'localidadValida' }
-    };
+    if (!origin || !origin.json) {
+        return {
+            valid: false,
+            errors: { origin: 'localidadValida' }
+        };
+    }
+
+    if (isTripPointDetailEmpty(puntoPartida)) {
+        return {
+            valid: false,
+            errors: { puntoPartida: 'puntoPartidaRequerido' }
+        };
+    }
+
+    return { valid: true, errors: {} };
 }
 
-function validateDestination({ points = [] }) {
+function validateDestination({ points = [], puntoLlegada = '' }) {
     const destination = lastPoint(points);
     if (!destination || !destination.json) {
         return { valid: false, errors: { destination: 'localidadValida' } };
@@ -167,6 +178,13 @@ function validateDestination({ points = [] }) {
     const origin = points[0];
     if (origin && origin.json && origin.name === destination.name) {
         return { valid: false, errors: { destination: 'origenDestinoDistintos' } };
+    }
+
+    if (isTripPointDetailEmpty(puntoLlegada)) {
+        return {
+            valid: false,
+            errors: { puntoLlegada: 'puntoLlegadaRequerido' }
+        };
     }
 
     return { valid: true, errors: {} };

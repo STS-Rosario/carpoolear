@@ -348,11 +348,11 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
     it('requires punto partida and llegada before leaving origin and destination steps', () => {
         expect(wizardSource).toContain('puntoPartida: this.form.trip.punto_partida');
         expect(wizardSource).toContain('puntoLlegada: this.form.trip.punto_llegada');
+        expect(wizardSource).toContain('syncPuntoDetailErrors');
         expect(wizardSource).toMatch(
-            /validateCurrentStep\(\)[\s\S]*puntoPartidaError/
+            /validateCurrentStep\(\)[\s\S]*syncPuntoDetailErrors/
         );
-        expect(wizardSource).toMatch(
-            /validateCurrentStep\(\)[\s\S]*puntoLlegadaError/
-        );
+        expect(wizardSource).toContain('puntoPartidaError');
+        expect(wizardSource).toContain('puntoLlegadaError');
     });
 });

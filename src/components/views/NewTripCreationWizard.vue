@@ -1034,6 +1034,8 @@ export default {
         buildValidationContext() {
             return {
                 points: this.form.points,
+                puntoPartida: this.form.trip.punto_partida,
+                puntoLlegada: this.form.trip.punto_llegada,
                 useWeeklySchedule: this.form.useWeeklySchedule,
                 weeklySchedule: this.form.weeklySchedule,
                 weeklyScheduleTime: this.form.weeklyScheduleTime,
@@ -1048,9 +1050,25 @@ export default {
                 noLucrar: this.form.no_lucrar
             };
         },
+        syncPuntoDetailErrors(errors = {}) {
+            if (errors.puntoPartida) {
+                this.form.puntoPartidaError.state = true;
+                this.form.puntoPartidaError.message = this.$t(errors.puntoPartida);
+            } else if (this.currentStep === STEP.ORIGIN) {
+                this.form.puntoPartidaError.state = false;
+            }
+
+            if (errors.puntoLlegada) {
+                this.form.puntoLlegadaError.state = true;
+                this.form.puntoLlegadaError.message = this.$t(errors.puntoLlegada);
+            } else if (this.currentStep === STEP.DESTINATION) {
+                this.form.puntoLlegadaError.state = false;
+            }
+        },
         validateCurrentStep() {
             const result = validateStep(this.currentStep, this.buildValidationContext());
             this.stepErrors = result.errors || {};
+            this.syncPuntoDetailErrors(this.stepErrors);
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
         },
