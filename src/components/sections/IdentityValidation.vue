@@ -1,5 +1,7 @@
 <template>
     <div class="identity-validation-component">
+        <div class="identity-validation-page__card">
+            <h1 class="identity-validation-page__heading">{{ $t('validarIdentidad') }}</h1>
         <div
             v-if="showVerificationSuccessBanner"
             class="identity-verification-success-banner"
@@ -424,6 +426,7 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 </template>
 
@@ -720,6 +723,24 @@ export default {
     padding: 0 0 1em 0;
     color: #333;
 }
+
+.identity-validation-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.identity-validation-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
 @media only screen and (max-width: 768px) {
     .identity-validation-component {
         padding: 1em;
