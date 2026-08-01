@@ -42,4 +42,10 @@ describe('friends-page.css Amigos/Solicitudes tabs', () => {
             /\.friends-page\s+\.tabset\s*>\s*\.nav-tabs\s*>\s*li\s*>\s*a\.active\s*\{[^}]*font-weight:\s*(?:var\(--ds-font-weight-bold,\s*700\)|700|bold)/s
         );
     });
+
+    it('removes the legacy left padding on the friends page', () => {
+        expect(css).toMatch(
+            /\.friends-page\.friends-component\s*\{[^}]*padding-left:\s*0/s
+        );
+    });
 });

@@ -10,13 +10,12 @@ const friendApiSource = fs.readFileSync(friendApiPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
 describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
-    it('uses Amigos/Solicitudes tabset without a blue page heading', () => {
+    it('places Mis amigos title inside the content card with Amigos/Solicitudes tabs', () => {
         expect(viewSource).toContain('friends-page');
-        expect(viewSource).not.toContain('friends-page-heading');
-        expect(viewSource).not.toMatch(
-            /<h1[^>]*>\{\{\s*\$t\('misAmigos'\)/
+        expect(viewSource).toContain('friends-page__heading');
+        expect(viewSource).toMatch(
+            /friends-page__card[\s\S]*friends-page__heading[\s\S]*\$t\('misAmigos'\)[\s\S]*tabset/
         );
-        expect(viewSource).toContain('tabset');
         expect(viewSource).toContain("$t('amigos')");
         expect(viewSource).toContain("$t('solicitudes')");
         expect(viewSource).toContain("keytabset=\"friends\"");

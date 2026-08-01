@@ -30,8 +30,8 @@ describe('Settings navigation', () => {
         expect(navSource).not.toContain('my-account-nav__item--logout');
     });
 
-    it('uses Mis amigos as the friends page heading title key', () => {
-        expect(viewSource).toMatch(
+    it('does not render a layout page title for Mis amigos so the in-card heading is used', () => {
+        expect(viewSource).not.toMatch(
             /friends_setting['"]?\s*\)\s*return\s*['"]misAmigos['"]/
         );
         const routesSource = fs.readFileSync(
