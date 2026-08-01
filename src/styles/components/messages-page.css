@@ -18,7 +18,8 @@
 
 .messages-page__list-header {
     border: none !important;
-    padding-bottom: 0.5rem;
+    border-top: none !important;
+    padding: 1rem 1rem 0.5rem;
 }
 
 .messages-page__search {
@@ -149,7 +150,8 @@
 }
 
 .messages-page .conversation_user_header {
-    border: none;
+    border: none !important;
+    border-top: none !important;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     background: #fff;
@@ -190,28 +192,34 @@
 
 .messages-page .conversation-messages {
     background: #fff;
+    border-top: none !important;
 }
 
 .messages-page .message-composer {
-    border: none;
+    border: none !important;
+    border-top: none !important;
     border-radius: 0;
     background: #fff;
     padding: 0.75rem;
 }
 
 .messages-page .message-composer-editor-wrap {
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
-    border: 1px solid #ddd;
+    position: relative;
+    display: block;
+    border: none;
     border-radius: 0;
-    padding: 0.35rem 0.35rem 0.35rem 0.5rem;
-    background: #fff;
+    padding: 0;
+    background: transparent;
 }
 
 .messages-page .message-composer-editor {
-    flex: 1 1 auto;
+    display: block;
+    width: 100%;
     min-width: 0;
+    border: 1px solid #ddd;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #fff;
 }
 
 .messages-page .message-composer-editor .toastui-editor-defaultUI,
@@ -223,14 +231,22 @@
     border-radius: 0;
 }
 
+.messages-page .message-composer-editor .toastui-editor-contents {
+    padding-right: 3.25rem;
+    padding-bottom: 2.75rem;
+}
+
 .messages-page .message-composer-send,
 .messages-page .message-composer-send.active,
 .messages-page #btn-send,
 .messages-page #btn-send.active {
-    flex: 0 0 auto;
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 3;
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 0;
+    border-radius: 0.5rem;
     border: none;
     background: var(--ds-action);
     color: var(--ds-action-on, #fff) !important;
@@ -238,6 +254,7 @@
     align-items: center;
     justify-content: center;
     opacity: 1;
+    padding: 0;
 }
 
 .messages-page .message-composer-send:not(.active),
@@ -258,9 +275,17 @@
 @media only screen and (min-width: 768px) {
     .messages-page .conversation-component.container {
         background: transparent;
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .messages-page .conversation-component > .row {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .messages-page__shell > [class*='col-'] {
         padding-left: 0;
         padding-right: 0;
     }
@@ -289,12 +314,36 @@
         border-right: 1px solid var(--messages-shell-border);
     }
 
+    .messages-page .conversation_list .list-group-item {
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+
+    .messages-page .conversation_list .list-group-item:first-child {
+        border-top: none !important;
+    }
+
+    .messages-page .conversation_list .conversation_header {
+        border-left: 3px solid transparent;
+    }
+
+    .messages-page .conversation_list .conversation_header.active,
+    .messages-page .conversation_list .conversation_header.active:hover,
+    .messages-page .conversation_list .conversation_header.active:focus,
+    .messages-page .conversation_list .conversation_header.unread.active,
+    .messages-page .conversation_list .conversation_header.unread.active:hover,
+    .messages-page .conversation_list .conversation_header.unread.active:focus {
+        border-left: 3px solid var(--messages-accent) !important;
+        border-radius: 0 !important;
+        margin-left: 0;
+    }
+
     .messages-page .conversation-container,
     .messages-page .conversation_chat,
     .messages-page .conversation_chat > .list-group,
     .messages-page .conversation_chat > .list-group > .list-group-item {
-        border-left: none;
-        border-right: none;
+        border-left: none !important;
+        border-right: none !important;
         background: #fff;
     }
 
@@ -309,6 +358,8 @@
     .messages-page .conversation_user_header,
     .messages-page .conversation-messages,
     .messages-page .message-composer {
+        border: none !important;
+        border-top: none !important;
         border-left: none !important;
         border-right: none !important;
         border-radius: 0 !important;
@@ -318,12 +369,21 @@
         flex: 0 0 auto;
         margin-top: auto;
         margin-bottom: 0;
-        border-top: 1px solid var(--messages-shell-border);
+        border-top: none !important;
         border-bottom: none;
     }
 
     .messages-page .conversation_chat .conversation-messages {
         flex: 1 1 auto;
         min-height: 0;
+    }
+
+    /* Selected row blue accent sits flush on the shell left edge */
+    .messages-page .conversation_header,
+    .messages-page .conversation_header.active,
+    .messages-page .conversation_header.active:hover,
+    .messages-page .conversation_header.active:focus {
+        margin-left: 0;
+        border-radius: 0 !important;
     }
 }

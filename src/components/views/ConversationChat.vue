@@ -454,20 +454,25 @@ export default {
     color: #fff;
 }
 .message-composer-editor-wrap {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
+    position: relative;
+    display: block;
 }
 .message-composer-editor {
-    flex: 1;
+    width: 100%;
     min-width: 0;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 0.75rem;
 }
 .message-composer-send {
-    flex-shrink: 0;
-    height: 36px;
-    min-width: 44px;
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 3;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    border-radius: 0.5rem;
+    padding: 0;
 }
 @media only screen and (max-width: 768px) {
     .list-group-item {
@@ -475,13 +480,13 @@ export default {
     }
     .message-composer {
         position: static;
-        border-top: 1px solid #ddd;
-        padding-left: 4px;
-        padding-right: 4px;
+        border-top: none;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     .message-composer-editor-wrap {
-        align-items: stretch;
-        gap: 4px;
+        position: relative;
+        display: block;
     }
     .message-composer-editor {
         overflow: hidden;
@@ -495,7 +500,9 @@ export default {
         border-radius: 0;
     }
     .message-composer-send {
-        height: 44px;
+        width: 2.75rem;
+        height: 2.75rem;
+        min-width: 2.75rem;
     }
     .btn,
     .btn-primary,
