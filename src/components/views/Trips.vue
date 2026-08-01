@@ -1265,7 +1265,8 @@ export default {
         Loading,
         SearchBox,
         modal,
-        AppButton
+        AppButton,
+        DonationAmountPicker
     }
 };
 </script>
