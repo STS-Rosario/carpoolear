@@ -3,7 +3,10 @@
         <template v-if="trip">
             <div
                 class="trip-detail-component trip-detail"
-                :class="{ 'trip-detail--mobile': isMobile }"
+                :class="{
+                    'trip-detail--mobile': isMobile,
+                    'trip-detail--desktop': !isMobile
+                }"
             >
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
                     <p>{{ $t('pagoFallo') }}</p>
@@ -191,7 +194,8 @@
                         </div>
                     </div></template>
                 </modal>
-                <div class="row form" v-if="!isMobile">
+                <!-- legacy desktop removed; see trip-detail desktop redesign -->
+                <div class="row form" v-if="false">
                     <div
                         ref="rightPanel"
                         class="white-background"
@@ -385,9 +389,10 @@
                     </div>
                 </div>
                 <div
-                    v-if="isMobile && trip && !isPassengersView"
+                    v-if="trip && !isPassengersView"
                     class="trip-detail__stack"
                 >
+                    <div class="trip-detail__card">
                     <TripDriver />
                     <section class="trip-detail__section">
                         <h3 class="trip-detail__section-title">
@@ -439,6 +444,7 @@
                             z-index: 0;
                         "
                     ></div>
+                    </div>
                 </div>
             </div>
         </template>
