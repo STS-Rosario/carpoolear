@@ -61,6 +61,19 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).not.toContain('cargarViajeRegreso');
     });
 
+    it('styles Preferencias del viaje title larger, bold, and spaced from cards', () => {
+        expect(wizardSource).toContain('new-trip-wizard__preferences-title');
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__preferences-title\s*\{[^}]*font-weight:\s*700/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__preferences-title\s*\{[^}]*font-size:\s*1\.(?:125|25)rem/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__preferences-title\s*\{[^}]*margin-bottom:\s*(?:0\.(?:75|875)|1(?:\.\d+)?)rem/
+        );
+    });
+
     it('styles the no-lucrar validation message prominently below the checkbox', () => {
         expect(wizardSource).toContain('new-trip-wizard__lucrar-error');
         expect(wizardSource).toContain('stepErrors.lastDetails');
