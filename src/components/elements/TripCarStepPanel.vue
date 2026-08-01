@@ -82,12 +82,24 @@ export default {
 .trip-car-step-panel__label {
     display: block;
     margin-bottom: 0.5rem;
+    color: var(--ds-input-label, #404040);
+    font-size: var(--ds-input-label-size, 1rem);
+    font-weight: var(--ds-input-label-font-weight, 400);
 }
 
 .trip-car-step-panel__edit-link {
     font-size: inherit;
     padding: 0;
     vertical-align: baseline;
+    font-weight: 700;
+    text-decoration: underline;
+    color: var(--ds-text-primary, #22211f);
+}
+
+.trip-car-step-panel__edit-link:hover,
+.trip-car-step-panel__edit-link:focus {
+    text-decoration: underline;
+    color: var(--ds-text-primary, #22211f);
 }
 
 .trip-car-step-panel__select {

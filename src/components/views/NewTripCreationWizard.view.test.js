@@ -236,3 +236,50 @@ describe('NewTrip.vue wizard integration', () => {
         );
     });
 });
+
+describe('NewTripCreationWizard.vue redesign styling', () => {
+    it('does not render the duplicate blue wizard title (page heading covers it)', () => {
+        expect(wizardSource).not.toContain('new-trip-wizard__title');
+        expect(wizardSource).not.toContain('wizardTitle');
+        expect(wizardSource).not.toContain("$t('crearViajeTitulo')");
+        expect(wizardSource).not.toContain("$t('tripCreationTitleDriver')");
+        expect(wizardSource).not.toContain("$t('tripCreationTitlePassenger')");
+    });
+
+    it('uses AppButton primary for Siguiente and Crear viaje / Actualizar', () => {
+        expect(wizardSource).toContain('AppButton');
+        expect(wizardSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?data-testid="trip-creation-next"/
+        );
+        expect(wizardSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?data-testid="trip-creation-submit"/
+        );
+        expect(wizardSource).not.toMatch(
+            /btn btn-primary btn-lg new-trip-wizard__next/
+        );
+        expect(wizardSource).not.toMatch(
+            /btn btn-primary btn-lg new-trip-wizard__submit/
+        );
+    });
+
+    it('applies design-system input styles to form controls and textareas', () => {
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard[\s\S]*?\.form-control[\s\S]*?border:\s*1px\s+solid\s+var\(--ds-input-border/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard[\s\S]*?\.form-control[\s\S]*?color:\s*var\(--ds-input-text/
+        );
+    });
+
+    it('keeps foreign-origin checkbox label in regular text color, not blue', () => {
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__allow-foreign[\s\S]*?label[\s\S]*?color:\s*var\(--ds-(?:text-primary|input-label)/
+        );
+    });
+
+    it('styles the schedule DatePicker to match other inputs', () => {
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard[\s\S]*?(?:\.date-picker|\.carpoolear-vue-dp|\.dp__input)[\s\S]*?--ds-input/
+        );
+    });
+});

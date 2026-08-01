@@ -16,4 +16,16 @@ describe('TripCarStepPanel.vue', () => {
     it('shows catalog-aware labels in the car select', () => {
         expect(componentSource).toContain('formatCarSelectLabel');
     });
+
+    it('uses regular label color and underlined bold editar autos link', () => {
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__label\s*\{[^}]*color:\s*var\(--ds-(?:input-label|text-primary)/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__edit-link\s*\{[^}]*font-weight:\s*(?:700|bold|var\(--ds-font-weight-bold)/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__edit-link\s*\{[^}]*text-decoration:\s*underline/
+        );
+    });
 });

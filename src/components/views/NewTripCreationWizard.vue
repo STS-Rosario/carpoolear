@@ -1,7 +1,5 @@
 <template>
     <div class="new-trip-wizard">
-        <h2 class="new-trip-wizard__title">{{ wizardTitle }}</h2>
-
         <TripCreationStepper
             :current-step="currentStep"
             :max-visited-step="maxVisitedStep"
@@ -643,27 +641,29 @@
             >
                 {{ $t('volver') }}
             </button>
-            <button
+            <AppButton
                 v-if="currentStep < STEP.LAST_DETAILS"
-                type="button"
-                class="btn btn-primary btn-lg new-trip-wizard__next"
+                variant="primary"
+                size="lg"
+                class="new-trip-wizard__next"
                 data-testid="trip-creation-next"
                 :disabled="isNextDisabled"
                 @click="goNext"
             >
                 {{ $t('siguiente') }}
-            </button>
-            <button
+            </AppButton>
+            <AppButton
                 v-else
-                type="button"
-                class="btn btn-primary btn-lg new-trip-wizard__submit"
+                variant="primary"
+                size="lg"
+                class="new-trip-wizard__submit"
                 data-testid="trip-creation-submit"
                 :disabled="form.saving"
+                :loading="form.saving"
                 @click="onSubmit"
             >
-                <spinner v-if="form.saving" class="blue"></spinner>
-                <span v-else>{{ submitLabel }}</span>
-            </button>
+                {{ submitLabel }}
+            </AppButton>
         </div>
     </div>
 </template>
@@ -678,8 +678,8 @@ import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import SvgItem from '../SvgItem';
-import spinner from '../Spinner.vue';
 import modal from '../Modal';
+import AppButton from '../ui/AppButton.vue';
 import {
     STEP,
     getNextStep,
@@ -718,8 +718,8 @@ export default {
         autocomplete,
         WeeklySchedule,
         SvgItem,
-        spinner,
-        modal
+        modal,
+        AppButton
     },
 
     inject: ['newTripForm'],
@@ -778,17 +778,6 @@ export default {
         },
         intermediatePoints() {
             return getIntermediatePoints(this.form.points);
-        },
-        wizardTitle() {
-            if (this.isEditTripFlow) {
-                return this.$t('editarViaje');
-            }
-            if (this.currentStep === STEP.ROLE) {
-                return this.$t('crearViajeTitulo');
-            }
-            return this.isPassenger
-                ? this.$t('tripCreationTitlePassenger')
-                : this.$t('tripCreationTitleDriver');
         },
         submitLabel() {
             return this.isEditTripFlow ? this.$t('actualizar') : this.$t('crearViaje');
@@ -1207,17 +1196,86 @@ export default {
 </script>
 
 <style scoped>
-.new-trip-wizard__title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
 @media (max-width: 767px) {
     .new-trip-wizard {
         padding-left: 1rem;
         padding-right: 1rem;
     }
+}
+
+.new-trip-wizard :deep(.form-control),
+.new-trip-wizard :deep(textarea.form-control),
+.new-trip-wizard :deep(select.form-control) {
+    display: block;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border: 1px solid var(--ds-input-border);
+    border-radius: var(--ds-radius-input, 8px);
+    background-color: var(--ds-input-bg);
+    color: var(--ds-input-text);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    box-shadow: none;
+}
+
+.new-trip-wizard :deep(.form-control:focus),
+.new-trip-wizard :deep(textarea.form-control:focus),
+.new-trip-wizard :deep(select.form-control:focus) {
+    outline: none;
+    border-color: var(--ds-input-focus-border);
+    box-shadow: var(--ds-input-focus-ring);
+}
+
+.new-trip-wizard :deep(.form-control::placeholder),
+.new-trip-wizard :deep(textarea.form-control::placeholder) {
+    color: var(--ds-input-placeholder);
+}
+
+.new-trip-wizard :deep(.control-label),
+.new-trip-wizard :deep(label) {
+    color: var(--ds-input-label);
+}
+
+.new-trip-wizard__allow-foreign label {
+    color: var(--ds-text-primary, #22211f) !important;
+}
+
+.new-trip-wizard :deep(.trip_terms_label),
+.new-trip-wizard :deep(.trip_terms label),
+.new-trip-wizard :deep(.trip_allow-foreign label) {
+    color: var(--ds-text-primary, #22211f) !important;
+}
+
+.new-trip-wizard :deep(.date-picker),
+.new-trip-wizard :deep(.carpoolear-vue-dp) {
+    width: 100%;
+    --dp-font-family: var(--ds-font-family, inherit);
+    --dp-font-size: var(--ds-input-font-size);
+    --dp-text-color: var(--ds-input-text);
+    --dp-input-padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+}
+
+.new-trip-wizard :deep(.date-picker .picker.form-control),
+.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input) {
+    border: 1px solid var(--ds-input-border);
+    border-radius: var(--ds-radius-input, 8px);
+    background-color: var(--ds-input-bg);
+    color: var(--ds-input-text);
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    box-shadow: none;
+    min-height: 0;
+}
+
+.new-trip-wizard :deep(.carpoolear-vue-dp .dp__input:focus),
+.new-trip-wizard :deep(.date-picker .picker.form-control:focus) {
+    outline: none;
+    border-color: var(--ds-input-focus-border);
+    box-shadow: var(--ds-input-focus-ring);
 }
 
 .new-trip-wizard__subtitle {
