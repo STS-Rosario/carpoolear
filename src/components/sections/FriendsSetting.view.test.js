@@ -22,6 +22,17 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
         expect(viewSource).toContain("keytabset=\"friends\"");
     });
 
+    it('wraps Amigos content in a white content card', () => {
+        expect(viewSource).toContain('friends-page__card');
+        expect(viewSource).toMatch(/friends-page__card[\s\S]*tabset/);
+        expect(viewSource).toMatch(
+            /\.friends-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(viewSource).toMatch(
+            /\.friends-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
+    });
+
     it('shows Recibidas/Enviadas FilterChips under Solicitudes with counts', () => {
         expect(viewSource).toContain('FilterChips');
         expect(viewSource).toContain('requestsFilter');
