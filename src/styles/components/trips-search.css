@@ -305,9 +305,9 @@
     .trips-search__card {
         padding: 1.5rem 2rem 1rem;
         margin-bottom: 1.5rem;
-        border-radius: var(--ds-auth-card-radius);
-        background: var(--ds-auth-card-bg);
-        box-shadow: var(--ds-auth-card-shadow);
+        border-radius: var(--ds-card-radius);
+        background: var(--ds-card-bg);
+        box-shadow: var(--ds-card-shadow);
     }
 
     .trips-search__toggle {

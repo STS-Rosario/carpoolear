@@ -11,9 +11,10 @@
     width: 100%;
     height: 100%;
     padding: 0.875rem;
-    border: 1px solid #e5e5e5;
-    border-radius: var(--ds-radius-button);
-    background: var(--ds-neutral-bg);
+    border: none;
+    border-radius: var(--ds-card-radius);
+    background: var(--ds-card-bg);
+    box-shadow: var(--ds-card-shadow);
     color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
     cursor: pointer;

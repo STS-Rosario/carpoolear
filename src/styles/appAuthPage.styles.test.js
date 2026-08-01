@@ -14,10 +14,17 @@ const baseCss = fs.readFileSync(baseCssPath, 'utf8');
 
 describe('app auth page styles', () => {
     it('defines auth page background and card tokens', () => {
+        expect(tokensCss).toContain('--ds-card-bg: #FFFFFF');
+        expect(tokensCss).toContain('--ds-card-radius: 20px');
+        expect(tokensCss).toContain('--ds-card-shadow:');
         expect(tokensCss).toContain('--ds-auth-page-bg: #F4F3F1');
-        expect(tokensCss).toContain('--ds-auth-card-bg: #FFFFFF');
-        expect(tokensCss).toContain('--ds-auth-card-radius: 20px');
-        expect(tokensCss).toContain('--ds-auth-card-shadow:');
+        expect(tokensCss).toContain('--ds-auth-card-bg: var(--ds-card-bg)');
+        expect(tokensCss).toContain(
+            '--ds-auth-card-radius: var(--ds-card-radius)'
+        );
+        expect(tokensCss).toContain(
+            '--ds-auth-card-shadow: var(--ds-card-shadow)'
+        );
         expect(tokensCss).toContain('--ds-auth-card-max-width: 1200px');
         expect(tokensCss).toContain('--ds-auth-column-gap:');
         expect(tokensCss).toContain('--ds-auth-field-max-width: 30rem');

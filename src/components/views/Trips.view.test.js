@@ -172,6 +172,15 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toMatch(
             /\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
         );
+        expect(viewSource).toMatch(
+            /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
+        );
+        expect(viewSource).toMatch(
+            /\.panel\.panel-donar\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow/
+        );
+        expect(viewSource).toMatch(
+            /\.panel\.panel-donar\s*\{[^}]*background:\s*var\(--ds-card-bg/
+        );
     });
 
     it('hides section headings when there are no friend trips', () => {

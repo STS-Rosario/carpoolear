@@ -110,11 +110,16 @@
     --ds-header-mobile-padding-x: 1rem;
     --ds-header-mobile-padding-y: 0.75rem;
 
+    /* Shared card surface (login, search, trip cards, donation, …) */
+    --ds-card-bg: #FFFFFF;
+    --ds-card-radius: 20px;
+    --ds-card-shadow: 3px 3px 7.3px 0 rgba(0, 0, 0, 0.05);
+
     /* Auth pages */
     --ds-auth-page-bg: #F4F3F1;
-    --ds-auth-card-bg: #FFFFFF;
-    --ds-auth-card-radius: 20px;
-    --ds-auth-card-shadow: 3px 3px 7.3px 0 rgba(0, 0, 0, 0.05);
+    --ds-auth-card-bg: var(--ds-card-bg);
+    --ds-auth-card-radius: var(--ds-card-radius);
+    --ds-auth-card-shadow: var(--ds-card-shadow);
     --ds-auth-card-padding-x: 2rem;
     --ds-auth-card-padding-y: 2rem;
     --ds-auth-card-max-width: 1200px;

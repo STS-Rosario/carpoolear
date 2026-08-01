@@ -23,6 +23,15 @@ describe('trip card styles', () => {
         expect(css).toMatch(
             /\.trip-card-shell__header\s*\{[\s\S]*min-height:\s*2\.25rem/
         );
+        expect(css).toMatch(
+            /\.trip-card-shell\s*\{[\s\S]*border-radius:\s*var\(--ds-card-radius/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell\s*\{[\s\S]*box-shadow:\s*var\(--ds-card-shadow/
+        );
+        expect(css).toMatch(
+            /\.trip-card-shell\s*\{[\s\S]*background:\s*var\(--ds-card-bg/
+        );
     });
 
     it('uses a compact driver header and tighter detail button padding', () => {

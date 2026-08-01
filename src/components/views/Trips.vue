@@ -1246,6 +1246,18 @@ export default {
     margin-top: 1em;
 }
 
+.panel.panel-donar {
+    border: none;
+    border-radius: var(--ds-card-radius);
+    background: var(--ds-card-bg);
+    box-shadow: var(--ds-card-shadow);
+    overflow: hidden;
+}
+
+.panel-donar > .panel-body {
+    padding: 1.25rem 1.5rem;
+}
+
 .panel-donar h2 {
     font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-action, #1e5f9e);
