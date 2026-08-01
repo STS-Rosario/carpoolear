@@ -225,6 +225,51 @@ describe('tripCreationSteps validateStep', () => {
         expect(validateStep(STEP.DESCRIPTION, { description: '' }).valid).toBe(false);
     });
 
+    it('requires contribution per person on seats step for drivers when enabled', () => {
+        expect(
+            validateStep(STEP.SEATS, {
+                totalSeats: 3,
+                passengers: 0,
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: ''
+            })
+        ).toEqual({
+            valid: false,
+            errors: { price: 'contribucionPorPersonaRequerida' }
+        });
+
+        expect(
+            validateStep(STEP.SEATS, {
+                totalSeats: 3,
+                passengers: 0,
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500'
+            }).valid
+        ).toBe(true);
+
+        expect(
+            validateStep(STEP.SEATS, {
+                totalSeats: 3,
+                passengers: 0,
+                isPassenger: true,
+                seatPriceEnabled: true,
+                price: ''
+            }).valid
+        ).toBe(true);
+
+        expect(
+            validateStep(STEP.SEATS, {
+                totalSeats: 3,
+                passengers: 0,
+                isPassenger: false,
+                seatPriceEnabled: false,
+                price: ''
+            }).valid
+        ).toBe(true);
+    });
+
     it('validates stops step with optional empty placeholders', () => {
         const withEmpty = [
             basePoints()[0],

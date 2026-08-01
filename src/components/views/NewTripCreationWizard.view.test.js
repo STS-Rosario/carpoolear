@@ -380,4 +380,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /\.trip_terms--lucrar-card__tooltip\[data-tooltip\]\.tooltip-bottom:before[\s\S]*?font-size:\s*(?:0\.9(?:375)?rem|1rem|14px|15px|16px)/
         );
     });
+
+    it('blocks seats next when contribution per person is required and empty', () => {
+        expect(wizardSource).toContain('seatPriceEnabled:');
+        expect(wizardSource).toContain('price: this.form.price');
+        expect(wizardSource).toContain('syncSeatPriceErrors');
+        expect(wizardSource).toMatch(
+            /validateCurrentStep\(\)[\s\S]*syncSeatPriceErrors/
+        );
+    });
 });
