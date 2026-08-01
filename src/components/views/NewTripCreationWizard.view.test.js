@@ -355,4 +355,14 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('puntoPartidaError');
         expect(wizardSource).toContain('puntoLlegadaError');
     });
+
+    it('on submit failure navigates to the car step when car selection is missing', () => {
+        expect(wizardSource).toMatch(
+            /async onSubmit\(\)[\s\S]*await this\.form\.save\(\)/
+        );
+        expect(wizardSource).toContain('handleSaveFailure');
+        expect(wizardSource).toMatch(
+            /handleSaveFailure\(\)[\s\S]*carSelectionError[\s\S]*STEP\.CAR/
+        );
+    });
 });

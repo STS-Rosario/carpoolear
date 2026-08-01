@@ -333,4 +333,10 @@ describe('NewTrip.vue incomplete car completion', () => {
         );
         expect(methodMatch?.[0] || '').not.toContain('calcRoute');
     });
+
+    it('shows a dialog when save stops because no car was selected', () => {
+        expect(viewSource).toMatch(
+            /carSelectionError\.message = this\.\$t\('seleccionaAuto'\);[\s\S]*?dialogs\.message\(this\.\$t\('seleccionaAuto'\)/
+        );
+    });
 });
