@@ -1258,8 +1258,11 @@ export default {
     padding: 1.25rem 1.5rem;
 }
 
-.panel-donar h2 {
+.panel.panel-default.panel-donar h2 {
+    margin: 0 0 0.75rem;
     font-weight: var(--ds-font-weight-normal, 400);
+    font-size: 1.25rem;
+    line-height: 1.35;
     color: var(--ds-action, #1e5f9e);
 }
 

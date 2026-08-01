@@ -167,10 +167,10 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toContain("gift.svg");
         expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
         expect(viewSource).toMatch(
-            /\.panel-donar h2\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal/
+            /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal/
         );
         expect(viewSource).toMatch(
-            /\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
+            /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
         );
         expect(viewSource).toMatch(
             /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
