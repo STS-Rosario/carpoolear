@@ -60,10 +60,10 @@ describe('ConversationList.vue messages redesign', () => {
 
     it('shows the round marker on the right for the selected conversation', () => {
         expect(viewSource).toContain('conversation_header__unread-dot');
-        expect(viewSource).toMatch(
-            /v-if="conversation\.unread\s*\|\|\s*isSelectedConversation\(conversation\)"/
-        );
         expect(viewSource).toContain('isSelectedConversation');
+        expect(viewSource).toMatch(
+            /conversation\.unread\s*\|\|\s*isSelectedConversation\s*\(\s*conversation\s*\)/
+        );
     });
 
     it('wraps list and chat in a messages-page__shell', () => {
