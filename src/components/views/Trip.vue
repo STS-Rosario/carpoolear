@@ -198,6 +198,14 @@
                     v-if="trip && !isPassengersView"
                     class="trip-detail__stack"
                 >
+                    <header
+                        v-if="!isMobile"
+                        class="trip-detail__page-header"
+                    >
+                        <h1 class="trip-detail__page-title">
+                            {{ $t('tripDetailPageTitle') }}
+                        </h1>
+                    </header>
                     <div class="trip-detail__card">
                     <TripDriver />
                     <section class="trip-detail__section">
