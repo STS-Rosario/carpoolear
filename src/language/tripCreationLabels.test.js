@@ -31,7 +31,6 @@ const KEYS = [
     'tripCreationStepLabelLastDetails',
     'tripCreationSuccessTitle',
     'tripCreationSuccessAllSet',
-    'tripCreationSuccessSharePrompt',
     'tripCreationShareTrip',
     'tripShareMessage',
     'tripCreationViewTrip',

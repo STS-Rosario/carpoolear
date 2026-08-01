@@ -3,7 +3,6 @@
         <h2 class="trip-creation-success__title">{{ $t('tripCreationSuccessTitle') }}</h2>
         <div class="trip-creation-success__emoji" aria-hidden="true">🥳</div>
         <p class="trip-creation-success__heading">{{ $t('tripCreationSuccessAllSet') }}</p>
-        <p class="trip-creation-success__prompt">{{ $t('tripCreationSuccessSharePrompt') }}</p>
 
         <div class="trip-creation-success__actions">
             <AppButton
@@ -314,10 +313,6 @@ export default {
 .trip-creation-success__heading {
     font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.trip-creation-success__prompt {
     margin-bottom: 1.5rem;
 }
 
