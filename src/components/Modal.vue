@@ -172,7 +172,10 @@ export default {
 
 .modal-default-button {
     float: right;
-    color: #91b64c !important;
+    font-size: 1.25rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-action, #1e5f9e) !important;
+    text-decoration: none !important;
 }
 
 /*

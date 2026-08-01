@@ -42,4 +42,13 @@ describe('Modal close behavior', () => {
             /\.modal-body\s*\{[\s\S]*?overflow-y:\s*auto/s
         );
     });
+
+    it('styles the footer Cerrar action larger and blue', () => {
+        expect(source).toMatch(
+            /\.modal-default-button\s*\{[^}]*font-size:\s*1\.25rem/
+        );
+        expect(source).toMatch(
+            /\.modal-default-button\s*\{[^}]*color:\s*var\(--ds-action/
+        );
+    });
 });
