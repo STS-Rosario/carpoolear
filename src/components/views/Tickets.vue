@@ -1,50 +1,97 @@
 <template>
-    <AccountSettingsLayout page-title-key="soporte">
-        <div class="container tickets-page">
-        <div class="mbot-10 create-ticket-cta">
-            <router-link class="btn btn-primary" :to="{ name: 'ticket-new' }">
-                {{ $t('crearNuevoTicketMesaAyuda') }}
-            </router-link>
-        </div>
+    <AccountSettingsLayout>
+        <div class="tickets-page">
+            <div class="tickets-page__card">
+                <h1 class="tickets-page__heading">{{ $t('soporte') }}</h1>
 
-        <p v-if="!safeTickets.length" class="alert alert-warning">{{ $t('noHayTicketsUsuarioMesaAyuda') }}</p>
+                <div class="create-ticket-cta">
+                    <AppButton
+                        variant="primary"
+                        :to="{ name: 'ticket-new' }"
+                    >
+                        {{ $t('crearNuevoTicketMesaAyuda') }}
+                    </AppButton>
+                </div>
 
-        <div v-else class="table-responsive">
-            <table class="table table-hover support-tickets-table support-tickets-table--compact">
-                <thead>
-                    <tr>
-                        <th class="support-tickets-table__subject">{{ capitalizeFirst($t('asuntoTicket')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('prioridad')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="ticket in safeTickets" :key="ticket.id">
-                        <td class="support-tickets-table__subject">
-                            <router-link :to="{ name: 'ticket-detail', params: { id: ticket.id } }">
-                                #{{ ticket.id }} - {{ ticket.subject }}
-                            </router-link>
-                        </td>
-                        <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
-                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
-                        <td class="support-tickets-table__narrow" :title="fullDate(ticket.updated_at)">{{ relativeDate(ticket.updated_at) }}</td>
-                        <td class="support-tickets-table__narrow">
-                            <span :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
-                        </td>
-                        <td class="support-tickets-table__narrow">{{ ticketCategoryLabel(ticket.type) }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                <p v-if="!safeTickets.length" class="alert alert-warning">
+                    {{ $t('noHayTicketsUsuarioMesaAyuda') }}
+                </p>
+
+                <div v-else class="table-responsive">
+                    <table
+                        class="table table-hover support-tickets-table support-tickets-table--compact"
+                    >
+                        <thead>
+                            <tr>
+                                <th class="support-tickets-table__subject">
+                                    {{ capitalizeFirst($t('asuntoTicket')) }}
+                                </th>
+                                <th class="support-tickets-table__narrow">
+                                    {{ capitalizeFirst($t('prioridad')) }}
+                                </th>
+                                <th class="support-tickets-table__narrow">
+                                    {{ capitalizeFirst($t('creado')) }}
+                                </th>
+                                <th class="support-tickets-table__narrow">
+                                    {{ capitalizeFirst($t('actualizado')) }}
+                                </th>
+                                <th class="support-tickets-table__narrow">
+                                    {{ capitalizeFirst($t('estado')) }}
+                                </th>
+                                <th class="support-tickets-table__narrow">
+                                    {{ capitalizeFirst($t('categoriaTicket')) }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ticket in safeTickets" :key="ticket.id">
+                                <td class="support-tickets-table__subject">
+                                    <router-link
+                                        :to="{
+                                            name: 'ticket-detail',
+                                            params: { id: ticket.id }
+                                        }"
+                                    >
+                                        #{{ ticket.id }} - {{ ticket.subject }}
+                                    </router-link>
+                                </td>
+                                <td class="support-tickets-table__narrow">
+                                    <span :class="priorityClass(ticket.priority)">{{
+                                        priorityLabel(ticket.priority)
+                                    }}</span>
+                                </td>
+                                <td
+                                    class="support-tickets-table__narrow"
+                                    :title="fullDate(ticket.created_at)"
+                                >
+                                    {{ relativeDate(ticket.created_at) }}
+                                </td>
+                                <td
+                                    class="support-tickets-table__narrow"
+                                    :title="fullDate(ticket.updated_at)"
+                                >
+                                    {{ relativeDate(ticket.updated_at) }}
+                                </td>
+                                <td class="support-tickets-table__narrow">
+                                    <span :class="statusClass(ticket.status)">{{
+                                        statusLabel(ticket.status)
+                                    }}</span>
+                                </td>
+                                <td class="support-tickets-table__narrow">
+                                    {{ ticketCategoryLabel(ticket.type) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </AccountSettingsLayout>
 </template>
 
 <script>
 import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import { mapActions, mapState } from 'pinia';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
@@ -54,7 +101,8 @@ import { USER_TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS } from '../../utils/
 export default {
     name: 'tickets',
     components: {
-        AccountSettingsLayout
+        AccountSettingsLayout,
+        AppButton
     },
     data() {
         return {
@@ -123,6 +171,23 @@ export default {
 
 <style scoped src="../../styles/supportTicketsTableCompact.css"></style>
 <style scoped>
+.tickets-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.tickets-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
 .create-ticket-cta {
     margin-bottom: 16px;
 }
@@ -142,5 +207,11 @@ export default {
 
 .support-tickets-table tbody tr:nth-child(odd) {
     background-color: #fafafa;
+}
+
+@media only screen and (max-width: 768px) {
+    .tickets-page {
+        padding: 1em;
+    }
 }
 </style>
