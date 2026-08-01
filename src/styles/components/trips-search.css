@@ -205,7 +205,7 @@
     margin: 0;
     box-sizing: border-box;
     border: 1px solid var(--ds-input-border);
-    border-radius: var(--ds-radius-input);
+    border-radius: var(--ds-radius-input) !important;
     background-color: var(--ds-input-bg);
     color: var(--ds-input-text);
     font-family: inherit;

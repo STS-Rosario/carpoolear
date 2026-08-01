@@ -72,7 +72,7 @@ describe('trips search redesign integration', () => {
             /\.trips-search__advanced-content\s*\{[^}]*align-items:\s*flex-end/
         );
         expect(tripsSearchCss).toMatch(
-            /\.trips-search \.allow-preference-filter select\.form-control\s*\{[^}]*border-radius:\s*var\(--ds-radius-input\)/
+            /\.trips-search \.allow-preference-filter select\.form-control\s*\{[^}]*border-radius:\s*var\(--ds-radius-input\)\s*!important/
         );
         expect(tripsSearchCss).toMatch(
             /\.trips-search \.allow-preference-filter select\.form-control\s*\{[^}]*border:\s*1px solid var\(--ds-input-border\)/
