@@ -1,6 +1,7 @@
 <template>
     <div class="friends-component friends-page">
         <div class="friends-page__card">
+            <h1 class="friends-page__heading">{{ $t('misAmigos') }}</h1>
             <tabset
                 ref="tabs"
                 keytabset="friends"
@@ -305,6 +306,13 @@ export default {
     background: var(--profile-card-bg, #fff);
     border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.friends-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
 }
 h1,
 h2 {

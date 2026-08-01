@@ -4,6 +4,10 @@
     --friends-tab-muted: #9a9a9a;
 }
 
+.friends-page.friends-component {
+    padding-left: 0;
+}
+
 .friends-page .tabset > .nav-tabs {
     position: relative;
     top: auto;
