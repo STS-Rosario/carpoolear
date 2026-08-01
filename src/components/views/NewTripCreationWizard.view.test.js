@@ -344,4 +344,15 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('location-autocomplete origin');
         expect(wizardSource).toContain('location-autocomplete destiny');
     });
+
+    it('requires punto partida and llegada before leaving origin and destination steps', () => {
+        expect(wizardSource).toContain('puntoPartida: this.form.trip.punto_partida');
+        expect(wizardSource).toContain('puntoLlegada: this.form.trip.punto_llegada');
+        expect(wizardSource).toMatch(
+            /validateCurrentStep\(\)[\s\S]*puntoPartidaError/
+        );
+        expect(wizardSource).toMatch(
+            /validateCurrentStep\(\)[\s\S]*puntoLlegadaError/
+        );
+    });
 });

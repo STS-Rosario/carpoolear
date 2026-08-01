@@ -124,7 +124,18 @@ describe('tripCreationSteps validateStep', () => {
     it('validates origin step', () => {
         const points = [{ name: '', json: null, error: { state: false } }, basePoints()[1]];
         expect(validateStep(STEP.ORIGIN, { points }).valid).toBe(false);
-        expect(validateStep(STEP.ORIGIN, { points: basePoints() }).valid).toBe(true);
+        expect(
+            validateStep(STEP.ORIGIN, {
+                points: basePoints(),
+                puntoPartida: ''
+            }).valid
+        ).toBe(false);
+        expect(
+            validateStep(STEP.ORIGIN, {
+                points: basePoints(),
+                puntoPartida: 'Terminal'
+            }).valid
+        ).toBe(true);
     });
 
     it('validates destination step', () => {
@@ -138,7 +149,25 @@ describe('tripCreationSteps validateStep', () => {
             { name: 'Rosario', json: { country: 'AR' }, error: { state: false } },
             { name: 'Rosario', json: { country: 'AR' }, error: { state: false } }
         ];
-        expect(validateStep(STEP.DESTINATION, { points: sameCity }).valid).toBe(false);
+        expect(
+            validateStep(STEP.DESTINATION, {
+                points: sameCity,
+                puntoLlegada: 'Centro'
+            }).valid
+        ).toBe(false);
+
+        expect(
+            validateStep(STEP.DESTINATION, {
+                points: basePoints(),
+                puntoLlegada: ''
+            }).valid
+        ).toBe(false);
+        expect(
+            validateStep(STEP.DESTINATION, {
+                points: basePoints(),
+                puntoLlegada: 'Centro'
+            }).valid
+        ).toBe(true);
     });
 
     it('validates schedule step for one-time trips', () => {
