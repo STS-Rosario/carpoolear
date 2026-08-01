@@ -1217,11 +1217,29 @@ export default {
                 this.form.trip.total_seats = next - 1;
             }
         },
-        onSubmit() {
+        async onSubmit() {
             if (!this.validateCurrentStep()) {
                 return;
             }
-            this.form.save();
+            await this.form.save();
+            if (this.form.saving || this.form.showWizardSuccess) {
+                return;
+            }
+            this.handleSaveFailure();
+        },
+        handleSaveFailure() {
+            if (this.form.carSelectionError?.state) {
+                this.setCurrentStep(STEP.CAR);
+                return;
+            }
+            if (this.form.showCompleteCarModal || this.form.showTripCarsModal) {
+                return;
+            }
+            this.revalidateVisitedSteps();
+            const firstIncomplete = this.incompleteSteps[0];
+            if (firstIncomplete) {
+                this.setCurrentStep(firstIncomplete);
+            }
         },
         setPassengerMode(value) {
             if (Number(this.form.trip.is_passenger) === value) {

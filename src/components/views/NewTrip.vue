@@ -1347,6 +1347,9 @@ export default {
             ) {
                 this.carSelectionError.state = true;
                 this.carSelectionError.message = this.$t('seleccionaAuto');
+                dialogs.message(this.$t('seleccionaAuto'), {
+                    estado: 'error'
+                });
                 return;
             }
             this.carSelectionError.state = false;
