@@ -76,7 +76,7 @@
         <Loading :data="trips" v-if="showingTrips">
             <div class="trips-list">
                 <h2
-                    v-if="isMobile && !lookSearch"
+                    v-if="isMobile && !lookSearch && !showSplitDonationPanel"
                     class="trips-mobile-home__heading"
                 >
                     {{ $t('viajesPublicados') }}
@@ -1284,7 +1284,7 @@ export default {
 
 .btn-donar {
     float: right;
-    margin: 0 0 0.75rem 1rem;
+    margin: 0 0 0.5rem 0.75rem;
 }
 
 .panel.panel-donar {
@@ -1297,8 +1297,14 @@ export default {
 
 .panel-donar > .panel-body.panel-donar__body {
     display: block;
-    overflow: auto;
+    overflow: visible;
     padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+}
+
+.panel-donar > .panel-body.panel-donar__body::after {
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .panel.panel-default.panel-donar h2.panel-donar__title,

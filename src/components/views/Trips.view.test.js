@@ -152,6 +152,13 @@ describe('Trips.vue friend-first trip sections', () => {
         );
     });
 
+    it('hides the mobile Viajes publicados heading above the donation card', () => {
+        expect(viewSource).toMatch(
+            /v-if="isMobile && !lookSearch && !showSplitDonationPanel"/
+        );
+        expect(viewSource).toContain('trips-mobile-home__heading');
+    });
+
     it('shows the donation banner before friend and other sections', () => {
         expect(viewSource).toContain('shouldShowSplitDonationPanel');
         expect(viewSource).toContain('trips-donation-banner');
@@ -172,7 +179,7 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toContain('ayudanosLead');
         expect(viewSource).toMatch(/\.btn-donar\s*\{[^}]*float:\s*right/);
         expect(viewSource).toMatch(
-            /\.panel-donar__body[\s\S]*?overflow:\s*auto/
+            /\.panel-donar__body[\s\S]*?overflow:\s*visible/
         );
         expect(viewSource).toMatch(
             /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
