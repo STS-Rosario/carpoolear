@@ -490,7 +490,7 @@
                     </span>
                 </div>
                 <div class="new-trip-wizard__last-section new-trip-wizard__last-section--preferences">
-                    <legend class="label-for-group">
+                    <legend class="label-for-group new-trip-wizard__preferences-title">
                         {{ $t('preferenciasViaje') }}
                     </legend>
                     <div class="preferences row trip-pref-cards">
@@ -1642,6 +1642,14 @@ export default {
 
 .new-trip-wizard__last-section--preferences {
     margin-top: 1.75rem;
+}
+
+.new-trip-wizard__preferences-title {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
 }
 
 .new-trip-wizard__lucrar-error {
