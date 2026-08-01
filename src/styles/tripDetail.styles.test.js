@@ -192,3 +192,35 @@ describe('trip detail mobile DETALLE gap', () => {
         );
     });
 });
+
+describe('trip detail desktop shares mobile visual language', () => {
+    it('styles route timeline, chips, and city/region on desktop like mobile', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__route[\s\S]*?display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__route-graphic::before[\s\S]*?background:\s*var\(--ds-action/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__city\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__chip\s*\{[^}]*background:\s*var\(--trip-detail-chip-bg/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__stats\s*\{[^}]*color:\s*var\(--ds-text-secondary/
+        );
+    });
+
+    it('styles desktop condiciones preferences and contribución price like mobile', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__condiciones\s+\.trip-data\s+em\s*\{[^}]*float:\s*none/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__contribucion\s+\.trip_seat-price_value-main\s*\{[^}]*font-size:\s*1\.5rem/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver\s+a[\s\S]*?color:\s*var\(--ds-text-primary/
+        );
+    });
+});

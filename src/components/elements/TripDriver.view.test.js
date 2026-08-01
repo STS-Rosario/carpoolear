@@ -45,9 +45,15 @@ describe('TripDriver profile navigation', () => {
     });
 });
 
-describe('TripDriver mobile trip-detail header', () => {
-    it('shows seats pill, membership, response stats, and patente when allowed', () => {
+describe('TripDriver trip-detail redesign header', () => {
+    it('shows the redesign driver band whenever trip.user exists (mobile and desktop)', () => {
         expect(source).toContain('trip-driver__mobile');
+        expect(source).toMatch(
+            /v-if="trip\s*&&\s*trip\.user"|v-if="trip && trip\.user"/
+        );
+        expect(source).not.toMatch(
+            /v-if="isMobile\s*&&\s*trip\s*&&\s*trip\.user"/
+        );
         expect(source).toContain('getSeatsPillLabel');
         expect(source).toContain('trip-driver__seats');
         expect(source).toContain('getMembershipDuration');

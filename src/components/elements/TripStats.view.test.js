@@ -5,20 +5,18 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'TripStats.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-describe('TripStats.vue desktop light-theme labels', () => {
-    it('always shows distance/time/co2 labels on desktop regardless of trip card theme', () => {
-        const desktopBranch = viewSource.match(
-            /<template v-else>([\s\S]*?)<\/template>/
-        )[1];
-
-        expect(desktopBranch).toMatch(
-            /<span>\s*\{\{\s*\$t\('distanciaARecorrer'\)\s*\}\}\s*<\/span>/
+describe('TripStats.vue redesign compact stats', () => {
+    it('uses the compact trip-detail__stats line for both breakpoints', () => {
+        expect(viewSource).toContain('trip-detail__stats');
+        expect(viewSource).toContain('trip-detail__stats-sep');
+        expect(viewSource).toMatch(
+            /class="trip-detail__stats"[\s\S]*?distanceString/
         );
-        expect(desktopBranch).toMatch(
-            /<span>\s*\{\{\s*\$t\('tiempoEstimado'\)\s*\}\}\s*<\/span>/
+        expect(viewSource).not.toMatch(
+            /class="trip-detail__stats"\s+v-if="isMobile"/
         );
-        expect(desktopBranch).toMatch(
-            /<span>\s*\{\{\s*\$t\('huellaCarbono'\)/
-        );
+        expect(viewSource).not.toContain("$t('distanciaARecorrer')");
+        expect(viewSource).not.toContain("$t('tiempoEstimado')");
+        expect(viewSource).not.toContain("$t('huellaCarbono')");
     });
 });
