@@ -1,8 +1,36 @@
 <template>
     <div class="trip-driver">
+        <div class="trip-driver__mobile" v-if="isMobile && trip && trip.user">
+            <router-link
+                class="trip-driver-profile-link trip_driver_img_container"
+                :to="driverProfileRoute"
+            >
+                <div
+                    class="trip_driver_img circle-box"
+                    v-imgSrc:profile="getUserImage"
+                ></div>
+            </router-link>
+            <div class="trip-driver__mobile-info">
+                <router-link
+                    class="trip-driver-profile-link trip-driver__mobile-name"
+                    :to="driverProfileRoute"
+                >
+                    <UserNameWithBadge :user="trip.user" />
+                </router-link>
+                <div class="trip-driver__mobile-meta">
+                    <UserRatingsCounts :ratings="driverRatings" />
+                    <span
+                        v-if="driverTripsLabel"
+                        class="trip-driver__mobile-trips"
+                    >
+                        &middot; {{ driverTripsLabel }}
+                    </span>
+                </div>
+            </div>
+        </div>
         <div
             class="panel-heading card_heading"
-            v-if="tripCardTheme === 'light'"
+            v-else-if="tripCardTheme === 'light'"
         >
             <div class="panel-title card-trip_title row">
                 <span class="trip-data--subtitle" v-if="!isMobile"
@@ -171,7 +199,9 @@ import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
 import UserRatingsCounts from './UserRatingsCounts.vue';
+import UserNameWithBadge from './UserNameWithBadge.vue';
 import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
+import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 
 export default {
     name: 'TripDriver',
@@ -215,6 +245,14 @@ export default {
             }
 
             return userRatingsFromProfile(this.trip.user);
+        },
+        driverTripsLabel() {
+            if (!this.trip?.user || this.trip.user.trips_count == null) {
+                return '';
+            }
+            return this.$t('perfilViajesParticipados', {
+                count: normalizeTripsCount(this.trip.user.trips_count)
+            });
         },
         tripStars() {
             if (this.trip && this.trip.user) {
@@ -299,6 +337,7 @@ export default {
     components: {
         SvgItem,
         UserRatingsCounts,
+        UserNameWithBadge,
         TripDate,
         TripDescription
     },
@@ -319,6 +358,35 @@ export default {
 };
 </script>
 <style scoped>
+.trip-driver__mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.trip-driver__mobile .trip_driver_img {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+}
+.trip-driver__mobile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+.trip-driver__mobile-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+.trip-driver__mobile-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    color: var(--ds-text-secondary, #666);
+    font-size: 0.85rem;
+}
 .trip-driver-profile-link {
     cursor: pointer;
     color: inherit;

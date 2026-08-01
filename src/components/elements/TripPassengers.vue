@@ -8,7 +8,7 @@
     >
         <div class="col-xs-24" v-if="displayPassengers.length">
             <h4 class="title-margined trip-detail__section-title">
-                <strong>{{ $t('tripDetailJoined') }}</strong>
+                <strong>{{ joinedTitle }}</strong>
             </h4>
             <div
                 v-for="p in displayPassengers"
@@ -103,6 +103,12 @@ export default {
     data() {
         return {};
     },
+    props: {
+        sectionTitle: {
+            type: String,
+            default: ''
+        }
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -111,6 +117,9 @@ export default {
             tripCardTheme: 'tripCardTheme',
             user: 'user'
         }),
+        joinedTitle() {
+            return this.sectionTitle || this.$t('tripDetailJoined');
+        },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
@@ -128,7 +137,6 @@ export default {
                 : [];
         }
     },
-    props: [],
     components: {},
     mounted() {
         this.calculateHeight();

@@ -1,44 +1,13 @@
 <template>
     <div class="row trip-stats" v-if="!trip.is_passenger && !isPassengersView">
-        <div>
-            <i
-                class="fa fa-link"
-                aria-hidden="true"
-                v-if="tripCardTheme === 'light'"
-            ></i>
-            <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >{{ $t('distanciaARecorrer') }}</span
-            >
-            <br v-if="tripCardTheme !== 'light'" />
+        <div class="trip-detail__stats" v-if="isMobile">
             <span>
                 {{ distanceString }}
                 <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
             </span>
-        </div>
-        <div>
-            <i
-                class="fa fa-clock-o"
-                aria-hidden="true"
-                v-if="tripCardTheme === 'light'"
-            ></i>
-            <span v-if="tripCardTheme !== 'light' || !isMobile"
-                >{{ $t('tiempoEstimado') }}</span
-            >
-            <br v-if="tripCardTheme !== 'light'" />
+            <span class="trip-detail__stats-sep">&middot;</span>
             <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
-        </div>
-        <div>
-            <i
-                class="fa fa-leaf"
-                aria-hidden="true"
-                v-if="tripCardTheme === 'light'"
-            ></i>
-            <span v-if="tripCardTheme !== 'light' || !isMobile">
-                {{ $t('huellaCarbono') }} (
-                <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
-                )
-            </span>
-            <br v-if="tripCardTheme !== 'light'" />
+            <span class="trip-detail__stats-sep">&middot;</span>
             <span>
                 {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
                 <abbr :title="$t('kilogramosDioxidoCarbono')">
@@ -46,6 +15,54 @@
                 </abbr>
             </span>
         </div>
+        <template v-else>
+            <div>
+                <i
+                    class="fa fa-link"
+                    aria-hidden="true"
+                    v-if="tripCardTheme === 'light'"
+                ></i>
+                <span v-if="tripCardTheme !== 'light'"
+                    >{{ $t('distanciaARecorrer') }}</span
+                >
+                <br v-if="tripCardTheme !== 'light'" />
+                <span>
+                    {{ distanceString }}
+                    <abbr :title="$t('kilometros')">{{ $t('km') }}</abbr>
+                </span>
+            </div>
+            <div>
+                <i
+                    class="fa fa-clock-o"
+                    aria-hidden="true"
+                    v-if="tripCardTheme === 'light'"
+                ></i>
+                <span v-if="tripCardTheme !== 'light'"
+                    >{{ $t('tiempoEstimado') }}</span
+                >
+                <br v-if="tripCardTheme !== 'light'" />
+                <span>{{ trip.estimated_time }} {{ $t('horas') }}</span>
+            </div>
+            <div>
+                <i
+                    class="fa fa-leaf"
+                    aria-hidden="true"
+                    v-if="tripCardTheme === 'light'"
+                ></i>
+                <span v-if="tripCardTheme !== 'light'">
+                    {{ $t('huellaCarbono') }} (
+                    <abbr :title="$t('aproximada')">{{ $t('aprox') }}</abbr>
+                    )
+                </span>
+                <br v-if="tripCardTheme !== 'light'" />
+                <span>
+                    {{ ((trip.distance / 1000) * 0.15).toFixed(2) }}
+                    <abbr :title="$t('kilogramosDioxidoCarbono')">
+                        kg CO<sub>2</sub> eq.
+                    </abbr>
+                </span>
+            </div>
+        </template>
     </div>
 </template>
 <script>

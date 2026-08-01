@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <template v-if="trip">
-            <div class="trip-detail-component">
+            <div
+                class="trip-detail-component trip-detail"
+                :class="{ 'trip-detail--mobile': isMobile }"
+            >
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
                     <p>{{ $t('pagoFallo') }}</p>
                     <p>{{ $t('viajeNoVisiblePagoFallo') }}</p>
@@ -49,7 +52,7 @@
                         class="white-background"
                         :class="themeClasses"
                     >
-                        <div class="row">
+                        <div class="row" v-if="!isMobile">
                             <div
                                 :class="columnClass[0]"
                                 class="column"
@@ -101,6 +104,7 @@
                                     ></component>
                                 </template>
                             </div>
+                        </div>
                             <modal
                                 :name="'modal'"
                                 v-if="showModalRequestSeat"
@@ -246,8 +250,8 @@
                                     </div>
                                 </div></template>
                             </modal>
-                        </div>
                         <TripButtons
+                            v-if="!isMobile"
                             @deleteTrip="deleteTrip()"
                             @toMessages="toMessages()"
                             @toGroupChat="toGroupChat()"
@@ -263,14 +267,14 @@
                     <div
                         :style="calculatedHeight"
                         class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container"
-                        v-if="!isPassengersView && tripCardTheme !== 'light'"
+                        v-if="!isMobile && !isPassengersView && tripCardTheme !== 'light'"
                     >
                         <TripDriver />
                     </div>
 
                     <div
                         class="col-xs-24 structure-div"
-                        v-if="!isPassengersView"
+                        v-if="!isMobile && !isPassengersView"
                     >
                         <div
                             class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"
@@ -382,6 +386,62 @@
                             "
                         ></div>
                     </div>
+                </div>
+                <div
+                    v-if="isMobile && trip && !isPassengersView"
+                    class="trip-detail__stack"
+                >
+                    <TripDriver />
+                    <section class="trip-detail__section">
+                        <h3 class="trip-detail__section-title">
+                            {{ $t('tripDetailSection') }}
+                        </h3>
+                        <TripLocation />
+                        <TripDate />
+                        <TripStats />
+                    </section>
+                    <section
+                        v-if="trip.description"
+                        class="trip-detail__section"
+                    >
+                        <h3 class="trip-detail__section-title">
+                            {{ $t('tripDetailDriverMessage') }}
+                        </h3>
+                        <p class="trip-detail__driver-message">
+                            {{ trip.description }}
+                        </p>
+                    </section>
+                    <section class="trip-detail__section">
+                        <h3 class="trip-detail__section-title">
+                            {{ $t('tripDetailConditions') }}
+                        </h3>
+                        <TripPrice />
+                        <TripSeats />
+                        <TripData />
+                    </section>
+                    <TripPassengers :section-title="$t('tripDetailJoined')" />
+                    <div class="trip-detail__cta">
+                        <TripButtons
+                            @deleteTrip="deleteTrip()"
+                            @toMessages="toMessages()"
+                            @toGroupChat="toGroupChat()"
+                            @onMakeRequest="onMakeRequest()"
+                            @cancelRequest="cancelRequest()"
+                            :sending="sending"
+                            :isPassengersView="isPassengersView"
+                        />
+                    </div>
+                    <div
+                        ref="tripMapEl"
+                        class="trip-route-map"
+                        style="
+                            width: calc(100% + 20px);
+                            height: 461px;
+                            overflow: hidden;
+                            margin-left: -10px;
+                            z-index: 0;
+                        "
+                    ></div>
                 </div>
             </div>
         </template>
