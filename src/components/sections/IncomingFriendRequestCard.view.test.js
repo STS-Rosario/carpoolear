@@ -30,6 +30,17 @@ describe('IncomingFriendRequestCard.vue solicitudes row', () => {
         expect(viewSource).toContain('incoming-friend-request-card__verified');
     });
 
+    it('shows ratings and trips next to the name', () => {
+        expect(viewSource).toContain('UserRatingsCounts');
+        expect(viewSource).toContain('userRatingsFromProfile');
+        expect(viewSource).toContain('tripsLabel');
+        expect(viewSource).toContain("$t('perfilViajesParticipados')");
+        expect(viewSource).toContain('normalizeTripsCount');
+        expect(viewSource).toMatch(
+            /incoming-friend-request-card__name-row[\s\S]*UserRatingsCounts[\s\S]*tripsLabel/
+        );
+    });
+
     it('uses tertiary destructive Rechazar and primary Aceptar AppButtons with icons', () => {
         expect(viewSource).toContain(
             "import AppButton from '../ui/AppButton.vue'"
