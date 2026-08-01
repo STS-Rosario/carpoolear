@@ -1,7 +1,6 @@
 <template>
     <div class="trip_location">
         <template v-if="trip.points.length >= 2">
-            <TripSeats v-if="tripCardTheme === 'light' && isMobile" />
             <div
                 class="row trip_location_from"
                 :class="{ 'trip_location_from--has-point-detail': trip.punto_partida }"
@@ -174,12 +173,10 @@
 </template>
 <script>
 import { mapState } from 'pinia';
-import { useDeviceStore } from '../../stores/device';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 import dayjs from '../../dayjs';
-import TripSeats from './TripSeats';
 import { googleInfoClean } from '../../filters';
 
 export default {
@@ -188,9 +185,6 @@ export default {
         return {};
     },
     computed: {
-        ...mapState(useDeviceStore, {
-            isMobile: 'isMobile'
-        }),
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
         }),
@@ -248,8 +242,7 @@ export default {
         }
     },
     components: {
-        svgItem,
-        TripSeats
+        svgItem
     }
 };
 </script>

@@ -14,3 +14,9 @@ describe('TripLocation punto partida and punto llegada', () => {
         expect(viewSource).toContain("$t('puntoDeLlegada')");
     });
 });
+
+describe('TripLocation mobile trip-detail stack', () => {
+    it('does not embed TripSeats so the mobile CONDICIONES section is the single source', () => {
+        expect(viewSource).not.toContain('TripSeats');
+    });
+});

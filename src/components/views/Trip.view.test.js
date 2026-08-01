@@ -122,4 +122,12 @@ describe('Trip.vue mobile trip-detail stack', () => {
             /v-if="isMobile[^"]*trip[^"]*!isPassengersView"[\s\S]*?trip-detail__stack|trip-detail__stack[\s\S]*?v-if="isMobile/
         );
     });
+
+    it('renders TripSeats exactly once inside the CONDICIONES section', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        const matches = stack.match(/<TripSeats\s*\/>/g) || [];
+        expect(matches.length).toBe(1);
+    });
 });
