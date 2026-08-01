@@ -6,21 +6,23 @@
             >
         </div>
         <div class="row trip-data">
-            <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
-                {{ $t('privacidadViaje') }}
-            </span>
-            <em v-if="trip.friendship_type_id == 2">
-                <i class="fa fa-globe" aria-hidden="true"></i>
-                {{ $t('publico') }}
-            </em>
-            <em v-if="trip.friendship_type_id == 1">
-                <i class="fa fa-users" aria-hidden="true"></i>
-                {{ $t('amigosamigos') }}
-            </em>
-            <em v-if="trip.friendship_type_id == 0">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                {{ $t('soloAmigos') }}
-            </em>
+            <template v-if="!isMobile">
+                <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
+                    {{ $t('privacidadViaje') }}
+                </span>
+                <em v-if="trip.friendship_type_id == 2">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    {{ $t('publico') }}
+                </em>
+                <em v-if="trip.friendship_type_id == 1">
+                    <i class="fa fa-users" aria-hidden="true"></i>
+                    {{ $t('amigosamigos') }}
+                </em>
+                <em v-if="trip.friendship_type_id == 0">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    {{ $t('soloAmigos') }}
+                </em>
+            </template>
             <span class="trip-data--subtitle" v-if="tripCardTheme === 'light'">
                 {{ $t('preferenciasViaje') }}
             </span>
@@ -59,6 +61,7 @@
 import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
+import { useDeviceStore } from '../../stores/device';
 import SvgItem from '../SvgItem';
 export default {
     name: 'TripData',
@@ -68,6 +71,9 @@ export default {
         }),
         ...mapState(useAuthStore, {
             tripCardTheme: 'tripCardTheme'
+        }),
+        ...mapState(useDeviceStore, {
+            isMobile: 'isMobile'
         }),
         isPassengersView() {
             return this.trip.is_passenger;
