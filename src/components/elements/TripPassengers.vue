@@ -1,14 +1,17 @@
 <template>
     <div
-        class="row passengers"
-        v-if="!trip.is_passenger && owner && acceptedPassengers.length"
+        class="row passengers trip-detail__passengers"
+        v-if="
+            displayPassengers.length ||
+            (owner && waitingForPaymentsPassengers.length)
+        "
     >
-        <div class="col-xs-24" v-if="owner && acceptedPassengers.length">
-            <h4 class="title-margined">
-                <strong>{{ $t('pasajerosSubidos') }}</strong>
+        <div class="col-xs-24" v-if="displayPassengers.length">
+            <h4 class="title-margined trip-detail__section-title">
+                <strong>{{ $t('tripDetailJoined') }}</strong>
             </h4>
             <div
-                v-for="p in acceptedPassengers"
+                v-for="p in displayPassengers"
                 class="list-item"
                 v-bind:key="p.id"
             >
@@ -22,9 +25,10 @@
                     @click="toUserProfile(p)"
                     class="trip_passenger_name"
                 >
-                    {{ p.user ? p.user.name : p.name }}
+                    {{ p.first_name }}
                 </a>
                 <a
+                    v-if="owner"
                     href="#"
                     @click="toUserMessages(p)"
                     :aria-label="$t('irAMensajes')"
@@ -33,6 +37,7 @@
                     <i class="fa fa-comments" aria-hidden="true"></i>
                 </a>
                 <button
+                    v-if="owner"
                     @click="removePassenger(p)"
                     class="trip_passenger-remove pull-right"
                     :aria-label="$t('bajarPasajeroViaje')"
@@ -40,11 +45,7 @@
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
             </div>
-            <div v-if="trip.passenger.length === 0">
-                {{ $t('aunNoHayPasajeros') }}
-            </div>
         </div>
-        <div v-else style="height: 2em"></div>
         <div
             class="col-xs-24"
             v-if="owner && waitingForPaymentsPassengers.length"
@@ -113,13 +114,11 @@ export default {
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
-        acceptedPassengers() {
-            console.log('acceptedPassengers', this.trip);
-            return this.trip.allPassengerRequest
-                ? this.trip.allPassengerRequest.filter(
-                      (item) => item.request_state === 1
-                  )
-                : [];
+        displayPassengers() {
+            if (Array.isArray(this.trip.passenger) && this.trip.passenger.length) {
+                return this.trip.passenger;
+            }
+            return [];
         },
         waitingForPaymentsPassengers() {
             return this.trip.allPassengerRequest
@@ -146,7 +145,22 @@ export default {
                 bus.emit('calculate-height');
             });
         },
-        toUserMessages(user) {
+        passengerUser(passenger) {
+            if (passenger.user) {
+                return passenger.user;
+            }
+            const passengerId = passenger.id;
+            const request = this.trip.allPassengerRequest?.find(
+                (item) =>
+                    item.user?.id === passengerId || item.id === passengerId
+            );
+            if (request?.user) {
+                return request.user;
+            }
+            return passenger;
+        },
+        toUserMessages(passenger) {
+            const user = this.passengerUser(passenger);
             this.lookConversation(user)
                 .then((conversation) => {
                     router.push({
@@ -159,7 +173,8 @@ export default {
                     this.sending = false;
                 });
         },
-        toUserProfile(user) {
+        toUserProfile(passenger) {
+            const user = this.passengerUser(passenger);
             router.replace({
                 name: 'profile',
                 params: {
@@ -169,7 +184,8 @@ export default {
                 }
             });
         },
-        removePassenger(user) {
+        removePassenger(passenger) {
+            const user = this.passengerUser(passenger);
             if (
                 window.confirm(
                     this.$t('seguroBajarPasajero')
@@ -190,7 +206,7 @@ export default {
         }
     },
     watch: {
-        acceptedPassengers() {
+        displayPassengers() {
             this.calculateHeight();
         },
         waitingForPaymentsPassengers() {
