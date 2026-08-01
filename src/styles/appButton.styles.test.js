@@ -46,4 +46,19 @@ describe('app button styles', () => {
             /\.app-button:hover[\s\S]*text-decoration:\s*none/
         );
     });
+
+    it('keeps icons inheriting button color with gap spacing from text', () => {
+        expect(buttonCss).toMatch(
+            /\.app-button\s*\{[^}]*gap:\s*var\(--ds-button-gap\)/s
+        );
+        expect(buttonCss).toMatch(
+            /\.app-button\s+\.app-button__icon(?:\s*>\s*\.fa|\s+\.fa|\s*,[\s\S]*?\.fa)*\s*\{[^}]*color:\s*inherit/s
+        );
+        expect(buttonCss).toMatch(
+            /\.app-button\s+\.app-button__icon(?:[\s\S]*?)\.fa[\s\S]*?\{[^}]*float:\s*none/s
+        );
+        expect(buttonCss).toMatch(
+            /\.app-button\s+\.app-button__icon(?:[\s\S]*?)\.fa[\s\S]*?\{[^}]*width:\s*auto/s
+        );
+    });
 });
