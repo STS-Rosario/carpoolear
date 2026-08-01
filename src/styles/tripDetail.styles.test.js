@@ -139,7 +139,13 @@ describe('trip detail desktop card layout', () => {
         expect(css).toContain('.trip-detail__detalle-grid');
         expect(css).toContain('.trip-detail__actions-grid');
         expect(css).toMatch(
-            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr\s*1fr/
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*flex-direction:\s*row/
+        );
+        expect(css).toMatch(
+            /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*justify-content:\s*space-between/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*display:\s*flex/

@@ -431,14 +431,17 @@
     flex-direction: column;
     gap: 0.85rem;
     min-width: 0;
+    flex: 0 1 auto;
 }
 
 .trip-detail--desktop .trip-detail__detalle-aside {
     min-width: 0;
+    flex: 0 1 auto;
 }
 
 .trip-detail--desktop .trip-detail__detalle-stats {
     min-width: 0;
+    flex: 0 1 auto;
 }
 
 .trip-detail--desktop .trip-detail__detalle-stats .trip-detail__stats {
@@ -550,10 +553,11 @@
 
 @media (min-width: 768px) {
     .trip-detail__detalle-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1.5rem 2rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: start;
+        gap: 1.5rem 2rem;
     }
 }
 
