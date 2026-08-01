@@ -1334,13 +1334,13 @@ export default {
 }
 
 .new-trip-wizard__role-card--active {
-    border-color: var(--primary-color, #d72521);
-    background: rgba(215, 37, 33, 0.06);
+    border-color: var(--ds-action, #1e5f9e);
+    background: var(--ds-action-bg, rgba(30, 95, 158, 0.06));
 }
 
 .new-trip-wizard__role-card-icon {
     font-size: 2rem;
-    color: var(--primary-color, #d72521);
+    color: var(--ds-action, #1e5f9e);
 }
 
 .new-trip-wizard__role-card-image {

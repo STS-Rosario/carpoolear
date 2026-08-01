@@ -277,9 +277,15 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    it('styles the schedule DatePicker to match other inputs', () => {
+    it('styles active role cards with design-system blue, not brand red', () => {
         expect(wizardSource).toMatch(
-            /\.new-trip-wizard[\s\S]*?(?:\.date-picker|\.carpoolear-vue-dp|\.dp__input)[\s\S]*?--ds-input/
+            /\.new-trip-wizard__role-card--active\s*\{[^}]*border-color:\s*var\(--ds-action/
+        );
+        expect(wizardSource).toMatch(
+            /\.new-trip-wizard__role-card-icon\s*\{[^}]*color:\s*var\(--ds-action/
+        );
+        expect(wizardSource).not.toMatch(
+            /\.new-trip-wizard__role-card--active\s*\{[^}]*border-color:\s*var\(--primary-color/
         );
     });
 });
