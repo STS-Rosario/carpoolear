@@ -32,6 +32,14 @@ describe('Notifications view', () => {
         expect(viewSource).toContain("name: 'identity_validation'");
     });
 
+    it('routes friends notifications to Solicitudes Recibidas', () => {
+        expect(viewSource).toContain("case 'friends':");
+        expect(viewSource).toContain('FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE');
+        expect(viewSource).toContain(
+            'router.push(FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE)'
+        );
+    });
+
     it('routes identity_validation_manual notifications to manual validation upload page', () => {
         expect(viewSource).toContain("case 'identity_validation_manual':");
         expect(viewSource).toContain("name: 'identity_validation_manual'");

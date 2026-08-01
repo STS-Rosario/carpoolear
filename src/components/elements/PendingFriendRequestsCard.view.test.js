@@ -6,7 +6,7 @@ const viewPath = path.resolve(__dirname, 'PendingFriendRequestsCard.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('PendingFriendRequestsCard', () => {
-    it('uses compact centered card styling and links to friends settings', () => {
+    it('uses compact centered card styling and links to Solicitudes Recibidas', () => {
         expect(viewSource).toContain('pending-friend-requests');
         expect(viewSource).toContain('max-width: 500px');
         expect(viewSource).toContain('max-width: 50px');
@@ -15,7 +15,8 @@ describe('PendingFriendRequestsCard', () => {
         expect(viewSource).toContain("$t('tenesInvitacionesAmigosAntesClick')");
         expect(viewSource).toContain("$t('clickAca')");
         expect(viewSource).toContain("$t('paraVerlasInvitacionesAmigos')");
-        expect(viewSource).toContain("name: 'friends_setting'");
+        expect(viewSource).toContain('FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE');
+        expect(viewSource).toContain(':to="FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE"');
     });
 
     it('is hidden when there are no pending invitations', () => {

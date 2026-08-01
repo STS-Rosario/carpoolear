@@ -43,6 +43,13 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
         expect(i18nSource).toContain("filtroSolicitudesRecibidas: 'Received'");
         expect(i18nSource).toContain("filtroSolicitudesEnviadas: 'Sent'");
     });
+
+    it('applies tab and filter query deep links for Solicitudes Recibidas', () => {
+        expect(viewSource).toContain('applyFriendsSettingDeepLink');
+        expect(viewSource).toContain("from '../../utils/friendsDeepLinks'");
+        expect(viewSource).toContain('this.$route.query');
+        expect(viewSource).toContain('activateTab');
+    });
 });
 
 describe('FriendsSetting.vue incoming friend requests', () => {
