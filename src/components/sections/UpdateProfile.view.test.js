@@ -112,7 +112,10 @@ describe('UpdateProfile AppInput fields', () => {
         expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-dni"/);
         expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-telefono"/);
         expect(viewSource).not.toMatch(
-            /id="input-name"[\s\S]*?class="form-control"/
+            /<input[\s\S]*?id="input-name"[\s\S]*?class="form-control"/
+        );
+        expect(viewSource).not.toMatch(
+            /<input[\s\S]*?id="input-email"[\s\S]*?class="form-control"/
         );
     });
 

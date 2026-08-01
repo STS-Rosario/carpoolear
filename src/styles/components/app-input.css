@@ -72,6 +72,12 @@
     cursor: not-allowed;
 }
 
+textarea.app-input__control {
+    min-height: 6rem;
+    line-height: 1.4;
+    resize: vertical;
+}
+
 .app-input--error .app-input__control {
     border-color: var(--ds-input-error-border);
 }

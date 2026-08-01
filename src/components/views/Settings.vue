@@ -11,7 +11,6 @@ export default {
     computed: {
         settingsIdentityPageTitleKey() {
             const n = this.$route.name;
-            if (n === 'profile_update') return 'editarPerfil';
             if (n === 'identity_validation_manual') return 'validacionManual';
             return null;
         }
