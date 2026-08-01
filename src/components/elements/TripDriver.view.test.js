@@ -62,9 +62,24 @@ describe('TripDriver trip-detail redesign header', () => {
         expect(source).toContain('getMembershipDuration');
         expect(source).toContain('respondeMensajesPorcentaje');
         expect(source).toContain('tiempoPromedioRespuesta');
-        expect(source).toContain('licensePlate');
-        expect(source).toContain("$t('patente')");
+        expect(source).not.toContain('licensePlate');
+        expect(source).toContain('showDriverCarDetails');
+        expect(source).toContain('TripCarDetails');
+        expect(source).toContain('trip-driver__car');
+        expect(source).toMatch(/user\.is_admin|is_admin/);
         expect(source).toMatch(/trip\?\.car\?\.patente|trip\.car/);
+    });
+
+    it('shows TripCarDetails on the right for passengers and admins instead of inline patente', () => {
+        expect(source).toMatch(
+            /trip-driver__mobile-info[\s\S]*TripCarDetails[\s\S]*trip-driver__car|TripCarDetails[\s\S]*class="trip-driver__car"/
+        );
+        expect(source).toMatch(
+            /v-if="showDriverCarDetails"[\s\S]*TripCarDetails|TripCarDetails[\s\S]*v-if="showDriverCarDetails"/
+        );
+        expect(source).not.toMatch(
+            /\$t\('patente'\)\s*\}\}: \{\{\s*licensePlate/
+        );
     });
 
     it('shows the Usuario verificado pill next to the driver name', () => {
