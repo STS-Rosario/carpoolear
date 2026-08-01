@@ -17,3 +17,13 @@ describe('TripPassengers.vue public joined list', () => {
         expect(src).toMatch(/v-if="owner"/);
     });
 });
+
+describe('TripPassengers.vue desktop heading', () => {
+    it('falls back to pasajerosSubidos and only forces the mobile section-title class on mobile', () => {
+        expect(src).toContain("$t('pasajerosSubidos')");
+        expect(src).toMatch(/isMobile/);
+        expect(src).not.toMatch(
+            /class="title-margined trip-detail__section-title"/
+        );
+    });
+});
