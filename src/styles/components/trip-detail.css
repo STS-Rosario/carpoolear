@@ -495,3 +495,14 @@
     margin: 0;
     border-radius: 0;
 }
+
+.trip-detail--desktop .trip-seats .trip_seats-available {
+    float: none;
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.trip-detail--desktop .trip-seats .row {
+    margin: 0;
+}
