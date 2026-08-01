@@ -23,13 +23,13 @@
                             />
                         </div>
                     </div>
-                    <router-link
+                    <AppButton
+                        class="search-more"
+                        variant="primary"
                         :to="{ name: 'friends_search' }"
-                        tag="button"
-                        class="btn btn-primary search-more"
                     >
                         {{ $t('buscarNuevosAmigos') }}
-                    </router-link>
+                    </AppButton>
                 </div>
                 <Loading :data="friends">
                     <div id="friends-list" class="friends-list">
@@ -162,6 +162,7 @@ import FriendRequestCard from './FriendRequestCard';
 import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 import FilterChips from '../elements/FilterChips.vue';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
     name: 'friends_setting',
@@ -288,16 +289,14 @@ export default {
         FriendRequestCard,
         Tab,
         Tabset,
-        FilterChips
+        FilterChips,
+        AppButton
     }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.btn-primary {
-    padding: 0.8em;
-}
 h1,
 h2 {
     margin-top: 0;
