@@ -178,6 +178,10 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toMatch(
             /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
         );
+        expect(viewSource).toContain('v-html="$t(\'ayudanos\')"');
+        expect(viewSource).toMatch(
+            /\.panel\.panel-default\.panel-donar h2 :deep\(strong\)\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-bold/
+        );
         expect(viewSource).toMatch(
             /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
         );

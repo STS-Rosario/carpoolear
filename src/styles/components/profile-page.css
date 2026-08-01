@@ -437,6 +437,10 @@
     line-height: 1.35;
 }
 
+.trips.container .panel-donar h2 strong {
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
 .trips.container .trips-search__hero {
     text-align: center;
     margin-top: 1rem;

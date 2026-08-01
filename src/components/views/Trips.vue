@@ -177,7 +177,7 @@
                     >
                         <div class="panel-body panel-donar__body">
                             <div class="panel-donar__copy">
-                                <h2>{{ $t('ayudanos') }}</h2>
+                                <h2 v-html="$t('ayudanos')"></h2>
                                 <a
                                     href="/donar"
                                     target="_blank"
@@ -340,7 +340,7 @@
                             >
                                 <div class="panel-body panel-donar__body">
                                     <div class="panel-donar__copy">
-                                        <h2>{{ $t('ayudanos') }}</h2>
+                                        <h2 v-html="$t('ayudanos')"></h2>
                                         <a
                                             href="/donar"
                                             target="_blank"
@@ -1274,6 +1274,10 @@ export default {
     font-size: 1.25rem;
     line-height: 1.35;
     color: var(--ds-action, #1e5f9e);
+}
+
+.panel.panel-default.panel-donar h2 :deep(strong) {
+    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .ios-safari-warning {

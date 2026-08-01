@@ -254,7 +254,7 @@ const messages = {
         MENSUAL: 'MENSUAL',
         cancelaCuando: 'cancelá cuando quieras',
         ayudanos:
-            'Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro',
+            '<strong>Ayudanos</strong> a seguir siendo una <strong>plataforma abierta</strong>, <strong>colaborativa</strong> y <strong>sin fines de lucro</strong>',
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
         porQueDonar: 'Por qué donar a Carpoolear',
         oCreandoUnaCuentaCon: 'o creando una cuenta con',
@@ -1990,7 +1990,7 @@ const messages = {
         MENSUAL: 'MENSUAL',
         cancelaCuando: 'cancelá cuando quieras',
         ayudanos:
-            'Ayudanos a seguir siendo una plataforma abierta, colaborativa y sin fines de lucro',
+            '<strong>Ayudanos</strong> a seguir siendo una <strong>plataforma abierta</strong>, <strong>colaborativa</strong> y <strong>sin fines de lucro</strong>',
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
         porQueDonar: 'Por qué donar a Apalan-car',
         resultadosCercanos: 'Resultados cercanos',
@@ -3354,7 +3354,7 @@ const messages = {
         MENSUAL: 'MONTHLY',
         cancelaCuando: 'cancel anytime',
         ayudanos:
-            'Help us continue being an open, collaborative, and non-profit platform',
+            '<strong>Help us</strong> continue being an <strong>open</strong>, <strong>collaborative</strong>, and <strong>non-profit</strong> platform',
         oNuestrasRedesSociales: 'or our social networks.',
         porQueDonar: 'Why donate to Carpoolear',
         oCreandoUnaCuentaCon: 'or by creating an account with',
