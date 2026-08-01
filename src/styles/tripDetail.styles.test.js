@@ -44,8 +44,26 @@ describe('trip-detail.css', () => {
         expect(css).toMatch(
             /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?background:\s*var\(--trip-detail-driver-bg/
         );
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?border-top:\s*1px\s+solid\s+#d6d4cf/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?border-bottom:\s*1px\s+solid\s+#d6d4cf/
+        );
         expect(css).toContain('.trip-detail__route');
         expect(css).toContain('.trip-detail__chip');
+    });
+
+    it('sizes section titles like province labels: 0.875rem regular weight', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__section-title\s*\{[^}]*font-size:\s*0\.875rem/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__section-title\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal,\s*400\)/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__region\s*\{[^}]*font-size:\s*0\.875rem/
+        );
     });
 
     it('keeps distance, time and CO2 stats the same size and centered on mobile', () => {

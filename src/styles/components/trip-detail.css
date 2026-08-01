@@ -24,6 +24,8 @@
 
 .trip-detail--mobile .trip-driver {
     background: var(--trip-detail-driver-bg);
+    border-top: 1px solid #d6d4cf;
+    border-bottom: 1px solid #d6d4cf;
     box-sizing: border-box;
 }
 
@@ -39,8 +41,8 @@
 
 .trip-detail--mobile .trip-detail__section-title {
     margin: 0 0 0.5rem;
-    font-size: 0.7rem;
-    font-weight: var(--ds-font-weight-bold, 700);
+    font-size: 0.875rem;
+    font-weight: var(--ds-font-weight-normal, 400);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--trip-detail-label);
