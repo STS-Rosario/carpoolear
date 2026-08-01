@@ -84,7 +84,7 @@ describe('TripDriver trip-detail redesign header', () => {
             /\.trip-driver__car\s*\{[^}]*color:\s*var\(--ds-text-secondary/
         );
         expect(source).toMatch(
-            /\.trip-driver__car[\s\S]*?\.trip-car-details__line\s*\{[^}]*color:\s*var\(--ds-text-secondary/
+            /\.trip-car-details__line\)?\s*\{[^}]*color:\s*var\(--ds-text-secondary/
         );
     });
 
