@@ -247,10 +247,13 @@ export default {
     text-decoration: none;
 }
 .my-account-nav__item:hover,
-.my-account-nav__item:focus {
+.my-account-nav__item:focus,
+.my-account-nav__item:focus-visible {
     color: #111;
     text-decoration: none;
     background: #f7f7f7;
+    outline: none;
+    box-shadow: none;
 }
 .my-account-nav__item--active {
     background: #f0f0f0;
