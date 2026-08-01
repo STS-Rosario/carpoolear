@@ -66,5 +66,8 @@ describe('TripDriver mobile trip-detail header', () => {
         expect(source).toMatch(
             /trip-driver__mobile-name-row[\s\S]*trip-driver__mobile-name[\s\S]*trip-driver__verified/
         );
+        expect(source).toMatch(
+            /\.trip-driver__mobile-name\s*\{[^}]*flex:\s*1\s+1\s+auto/
+        );
     });
 });

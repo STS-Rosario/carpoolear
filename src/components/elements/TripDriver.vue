@@ -27,6 +27,14 @@
                             <i class="fa fa-check" aria-hidden="true"></i>
                             {{ $t('usuarioVerificado') }}
                         </span>
+                        <div
+                            v-if="!trip.is_passenger"
+                            class="trip-driver__seats"
+                            :class="'trip-driver__seats--' + seatsTone"
+                        >
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {{ seatsLabel }}
+                        </div>
                     </div>
                     <div class="trip-driver__mobile-meta">
                         <UserRatingsCounts :ratings="driverRatings" />
@@ -72,14 +80,6 @@
                             </strong>
                         </p>
                     </div>
-                </div>
-                <div
-                    v-if="!trip.is_passenger"
-                    class="trip-driver__seats"
-                    :class="'trip-driver__seats--' + seatsTone"
-                >
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    {{ seatsLabel }}
                 </div>
             </div>
         </div>
@@ -515,33 +515,34 @@ export default {
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.2rem;
     min-width: 0;
     text-align: left;
 }
 .trip-driver__mobile-name-row {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.4rem;
-    max-width: 100%;
+    width: 100%;
     min-width: 0;
 }
 .trip-driver__mobile-name {
-    display: inline;
-    max-width: 100%;
+    display: block;
+    flex: 1 1 auto;
     min-width: 0;
     font-size: 1.05rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
     text-align: left;
+    overflow-wrap: anywhere;
 }
 .trip-driver__verified {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
     flex: 0 0 auto;
+    margin-top: 0.1rem;
     padding: 0.15rem 0.5rem;
     border-radius: 999px;
     background: #e8f5e9;
@@ -556,7 +557,8 @@ export default {
     align-items: center;
     gap: 0.35rem;
     flex: 0 0 auto;
-    margin-left: auto;
+    margin-top: 0.05rem;
+    margin-left: 0;
     padding: 0.3rem 0.55rem;
     border-radius: 999px;
     font-size: 0.75rem;
