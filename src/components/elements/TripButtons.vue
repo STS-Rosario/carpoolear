@@ -4,25 +4,28 @@
             class="buttons-container"
             v-if="!isPassengersView || (isPassengersView && owner)"
         >
-            <router-link
-                class="btn btn-primary"
+            <AppButton
                 v-if="owner && !expired"
+                variant="primary"
+                block
                 :to="{ name: 'update-trip', params: { id: trip.id } }"
             >
-                {{ $t('editar') }}
-            </router-link>
-            <a
-                class="btn btn-primary"
+                {{ $t('editarViaje') }}
+            </AppButton>
+            <AppButton
                 v-if="owner && !expired"
-                @click="$emit('deleteTrip')"
+                variant="tertiary"
+                tone="destructive"
+                block
                 :disabled="sendingStatus"
+                :loading="Boolean(sending && sending.deleteAction)"
+                @click="$emit('deleteTrip')"
             >
-                <spinner
-                    class="blue"
-                    v-if="sending && sending.deleteAction"
-                ></spinner>
-                <span v-else>{{ $t('cancelarViaje') }}</span>
-            </a>
+                {{ $t('cancelarViaje') }}
+                <template #loading>
+                    <spinner class="blue"></spinner>
+                </template>
+            </AppButton>
             <template v-if="showMessageButton">
                 <AppButton
                     v-if="!owner"

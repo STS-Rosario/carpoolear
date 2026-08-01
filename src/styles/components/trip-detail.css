@@ -318,6 +318,18 @@
     font-weight: var(--ds-button-font-weight);
 }
 
+.trip-detail--mobile .trip-detail__cta .app-button--tertiary-destructive {
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    text-decoration: none;
+}
+
+.trip-detail--mobile .trip-detail__cta .app-button--tertiary-destructive:hover,
+.trip-detail--mobile .trip-detail__cta .app-button--tertiary-destructive:focus {
+    text-decoration: underline;
+}
+
 .trip-detail--mobile .trip-detail__cta-secondary {
     border: var(--ds-button-border-width) solid var(--ds-action);
     border-radius: var(--ds-radius-button);
