@@ -135,6 +135,13 @@ describe('profile page styles', () => {
         );
     });
 
+    it('adds mobile bottom padding so content clears the footer bar', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.profile-page\s*\{[^}]*padding-bottom:\s*calc\([^)]*safe-area-inset-bottom/
+        );
+    });
+
     it('aligns profile trip role label with avatar and route', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(
