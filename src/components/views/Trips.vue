@@ -176,12 +176,20 @@
                         class="panel panel-default panel-donar trips-donation-banner"
                     >
                         <div class="panel-body">
-                            <button
-                                class="btn btn-success pull-right btn-donar"
+                            <AppButton
+                                class="btn-donar pull-right"
+                                variant="header-donate"
                                 @click="onDonate"
                             >
                                 {{ $t('donar') }}
-                            </button>
+                                <template #iconRight>
+                                    <img
+                                        :src="$publicImg('gift.svg')"
+                                        alt=""
+                                        class="app-button__gift-icon"
+                                    />
+                                </template>
+                            </AppButton>
                             <h2>{{ $t('ayudanos') }}</h2>
 
                             <a
@@ -330,12 +338,20 @@
                                 "
                             >
                                 <div class="panel-body">
-                                    <button
-                                        class="btn btn-success pull-right btn-donar"
+                                    <AppButton
+                                        class="btn-donar pull-right"
+                                        variant="header-donate"
                                         @click="onDonate"
                                     >
                                         {{ $t('donar') }}
-                                    </button>
+                                        <template #iconRight>
+                                            <img
+                                                :src="$publicImg('gift.svg')"
+                                                alt=""
+                                                class="app-button__gift-icon"
+                                            />
+                                        </template>
+                                    </AppButton>
                                     <h2>{{ $t('ayudanos') }}</h2>
 
                                     <a
@@ -1228,8 +1244,11 @@ export default {
     margin-left: 2em;
     margin-right: 2em;
     margin-top: 1em;
-    padding: 1em 2em;
-    font-size: 1.3em;
+}
+
+.panel-donar h2 {
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-action, #1e5f9e);
 }
 
 .ios-safari-warning {

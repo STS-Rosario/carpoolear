@@ -20,6 +20,8 @@ describe('header button variants', () => {
         expect(tokensCss).toContain('--ds-header-outline-text:');
         expect(tokensCss).toContain('--ds-header-donate-bg:');
         expect(tokensCss).toContain('--ds-header-donate-border:');
+        expect(tokensCss).toMatch(/--ds-header-donate-bg:\s*#5cb85c;/);
+        expect(tokensCss).toMatch(/--ds-header-donate-border:\s*#4cae4c;/);
     });
 
     it('defines desktop header vertical padding token', () => {

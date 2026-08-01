@@ -162,6 +162,18 @@ describe('Trips.vue friend-first trip sections', () => {
         );
     });
 
+    it('styles the donation banner with blue ayuda text and green header-donate button', () => {
+        expect(viewSource).toContain('variant="header-donate"');
+        expect(viewSource).toContain("gift.svg");
+        expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
+        expect(viewSource).toMatch(
+            /\.panel-donar h2\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal/
+        );
+        expect(viewSource).toMatch(
+            /\.panel-donar h2\s*\{[^}]*color:\s*var\(--ds-action/
+        );
+    });
+
     it('hides section headings when there are no friend trips', () => {
         expect(viewSource).toContain('showFriendTripSections');
         expect(viewSource).toMatch(

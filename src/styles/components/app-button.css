@@ -308,8 +308,8 @@ a.app-button:visited,
 }
 
 .app-button--header-donate:active:not(:disabled):not([aria-disabled='true']) {
-    background: var(--ds-destructive);
-    border-color: var(--ds-destructive);
+    background: #398439;
+    border-color: #398439;
     color: var(--ds-action-on);
 }
 
