@@ -6,18 +6,35 @@ const viewPath = path.resolve(__dirname, 'Tickets.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Tickets list view', () => {
-    it('shows soporte page title via account settings layout', () => {
+    it('uses account settings layout without a layout page title so the in-card heading is used', () => {
         expect(viewSource).toContain('AccountSettingsLayout');
-        expect(viewSource).toContain('page-title-key="soporte"');
+        expect(viewSource).not.toContain('page-title-key="soporte"');
+    });
+
+    it('wraps content in a white card with the page title inside', () => {
+        expect(viewSource).toContain('tickets-page__card');
+        expect(viewSource).toContain('tickets-page__heading');
+        expect(viewSource).toMatch(
+            /tickets-page__card[\s\S]*tickets-page__heading[\s\S]*\$t\('soporte'\)/
+        );
+        expect(viewSource).toMatch(
+            /\.tickets-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(viewSource).toMatch(
+            /\.tickets-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
     });
 
     it('shows empty-state message when user has no support tickets', () => {
         expect(viewSource).toContain("$t('noHayTicketsUsuarioMesaAyuda')");
     });
 
-    it('includes create support ticket button linking to new ticket page', () => {
-        expect(viewSource).toContain("$t('crearNuevoTicketMesaAyuda')");
-        expect(viewSource).toContain("name: 'ticket-new'");
+    it('uses AppButton primary for Crear nuevo ticket linking to the new ticket page', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?:to="\{ name: 'ticket-new' \}"[\s\S]*?crearNuevoTicketMesaAyuda[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
     });
 
     it('orders thead subject first then priority then dates and status with category last', () => {
