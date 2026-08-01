@@ -23,15 +23,7 @@
                 ></spinner>
                 <span v-else>{{ $t('cancelarViaje') }}</span>
             </a>
-            <template
-                v-if="
-                    !owner &&
-                    !expired &&
-                    (!canRequest ||
-                        !config.module_coordinate_by_message ||
-                        (config.module_coordinate_by_message && isPassenger))
-                "
-            >
+            <template v-if="showMessageButton">
                 <button
                     class="btn btn-primary"
                     @click="$emit('toMessages')"
@@ -48,7 +40,8 @@
             <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
                     <button
-                        class="btn trip-detail__cta-secondary"
+                        class="btn"
+                        :class="{ 'trip-detail__cta-secondary': showMessageButton, 'btn-primary': !showMessageButton }"
                         @click="$emit('onMakeRequest')"
                         v-if="canRequest && trip.seats_available > 0"
                         :disabled="sendingStatus || seatRequestLimitReached"
@@ -239,6 +232,16 @@ export default {
         },
         canRequest() {
             return !this.owner && !this.trip.request;
+        },
+        showMessageButton() {
+            return (
+                !this.owner &&
+                !this.expired &&
+                (!this.canRequest ||
+                    !this.config.module_coordinate_by_message ||
+                    (this.config.module_coordinate_by_message &&
+                        this.isPassenger))
+            );
         },
         seatRequestLimitReached() {
             return Boolean(this.trip && this.trip.seat_request_limit_reached);
