@@ -13,20 +13,22 @@
                 </router-link>
                 <div class="trip-driver__mobile-info">
                     <div class="trip-driver__mobile-name-row">
-                        <router-link
-                            class="trip-driver-profile-link trip-driver__mobile-name"
-                            :to="driverProfileRoute"
-                        >
-                            {{ trip.user.name }}
-                        </router-link>
-                        <span
-                            v-if="isDriverVerified"
-                            class="trip-driver__verified"
-                            :title="$t('identidadValidadaTooltip')"
-                        >
-                            <i class="fa fa-check" aria-hidden="true"></i>
-                            {{ $t('usuarioVerificado') }}
-                        </span>
+                        <div class="trip-driver__mobile-name-cluster">
+                            <router-link
+                                class="trip-driver-profile-link trip-driver__mobile-name"
+                                :to="driverProfileRoute"
+                            >
+                                {{ trip.user.name }}
+                            </router-link>
+                            <span
+                                v-if="isDriverVerified"
+                                class="trip-driver__verified"
+                                :title="$t('usuarioVerificado')"
+                                :aria-label="$t('usuarioVerificado')"
+                            >
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </span>
+                        </div>
                         <div
                             v-if="!trip.is_passenger"
                             class="trip-driver__seats"
@@ -523,34 +525,33 @@ export default {
 .trip-driver__mobile-name-row {
     display: flex;
     align-items: flex-start;
-    gap: 0.4rem;
+    gap: 0.5rem;
     width: 100%;
     min-width: 0;
 }
-.trip-driver__mobile-name {
-    display: block;
+.trip-driver__mobile-name-cluster {
     flex: 1 1 auto;
     min-width: 0;
+    max-width: 100%;
+    line-height: 1.25;
+}
+.trip-driver__mobile-name {
+    display: inline;
     font-size: 1.05rem;
     font-weight: 700;
     line-height: 1.25;
     text-align: left;
     overflow-wrap: anywhere;
+    margin-right: 0.35rem;
 }
 .trip-driver__verified {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    flex: 0 0 auto;
-    margin-top: 0.1rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    background: #e8f5e9;
+    justify-content: center;
+    vertical-align: middle;
     color: #2e7d32;
-    font-size: 0.7rem;
-    font-weight: 500;
-    line-height: 1.2;
-    white-space: nowrap;
+    font-size: 1rem;
+    line-height: 1;
 }
 .trip-driver__seats {
     display: inline-flex;

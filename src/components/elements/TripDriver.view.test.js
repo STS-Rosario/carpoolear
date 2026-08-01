@@ -60,14 +60,16 @@ describe('TripDriver mobile trip-detail header', () => {
 
     it('shows the Usuario verificado pill next to the driver name', () => {
         expect(source).toContain('trip-driver__mobile-name-row');
+        expect(source).toContain('trip-driver__mobile-name-cluster');
         expect(source).toContain('isDriverVerified');
         expect(source).toContain('trip-driver__verified');
         expect(source).toContain("$t('usuarioVerificado')");
         expect(source).toMatch(
-            /trip-driver__mobile-name-row[\s\S]*trip-driver__mobile-name[\s\S]*trip-driver__verified/
+            /trip-driver__mobile-name-cluster[\s\S]*trip-driver__mobile-name[\s\S]*trip-driver__verified/
         );
         expect(source).toMatch(
-            /\.trip-driver__mobile-name\s*\{[^}]*flex:\s*1\s+1\s+auto/
+            /\.trip-driver__mobile-name-cluster\s*\{[^}]*flex:\s*1\s+1\s+auto/
         );
+        expect(source).toContain('fa-check-circle');
     });
 });
