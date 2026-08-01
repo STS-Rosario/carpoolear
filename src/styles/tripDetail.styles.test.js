@@ -69,6 +69,12 @@ describe('trip-detail.css', () => {
         );
     });
 
+    it('keeps contribution label in sentence case on mobile condiciones', () => {
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-detail__condiciones\s+\.trip_seats-available_label\s*\{[^}]*text-transform:\s*none/
+        );
+    });
+
     it('keeps distance, time and CO2 stats the same size and centered on mobile', () => {
         expect(css).toContain('.trip-detail--mobile .trip-detail__stats');
         expect(css).toMatch(

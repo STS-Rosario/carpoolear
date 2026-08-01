@@ -1225,7 +1225,7 @@ const messages = {
         compartirPlataforma:
             'Carpoolear: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
-        contribucionPorPersona: 'Contribución combustible y peaje por persona',
+        contribucionPorPersona: 'Contribución por persona',
         porPersona: 'por persona',
         loQueSePuedaAportar: 'Lo que se pueda aportar',
         verContribucionReferenciaTramo:
@@ -4307,7 +4307,7 @@ const messages = {
         publicarUnViajeCompartir: 'Post a trip to share on Carpoolear',
         compartirPlataforma: 'Carpoolear: platform to share car rides',
         estoyEnMovil: "I'm on mobile",
-        contribucionPorPersona: 'Fuel and toll contribution per person',
+        contribucionPorPersona: 'Contribution per person',
         porPersona: 'per person',
         loQueSePuedaAportar: 'Whatever you can contribute',
         verContribucionReferenciaTramo:

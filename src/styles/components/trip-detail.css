@@ -222,6 +222,10 @@
     color: var(--ds-text-primary, #333);
 }
 
+.trip-detail--mobile .trip-detail__condiciones .trip_seats-available_label {
+    text-transform: none;
+}
+
 .trip-detail--mobile .trip-detail__condiciones .trip-data--container .trip-data {
     display: flex;
     flex-direction: column;
