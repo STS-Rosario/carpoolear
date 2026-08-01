@@ -42,6 +42,12 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('inviteAllFriends');
     });
 
+    it('keeps spacing between invite checkboxes and friend names', () => {
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__list\s+label\s*\{[^}]*gap:\s*(?:0\.[4-9]|0\.5|0\.75|1)rem|\.trip-invite-friends__list\s+label\s+input\[type=['"]checkbox['"]\]\s*\{[^}]*margin-right:\s*(?:0\.[4-9]|0\.5|0\.75|1)(?:rem|em)/
+        );
+    });
+
     it('submits selected friends through TripApi inviteFriends', () => {
         expect(componentSource).toContain('inviteFriends');
         expect(componentSource).toContain('onSubmit');
