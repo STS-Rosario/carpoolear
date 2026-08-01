@@ -155,32 +155,15 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
 
-    it('does not include TripShare in the mobile stack', () => {
+    it('does not include TripShare in the trip-detail stack', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
-        const mobileBlock = stack.match(
-            /<template v-if="isMobile">[\s\S]*?<\/template>/
-        )[0];
-        expect(mobileBlock).not.toContain('<TripShare');
+        expect(stack).not.toContain('<TripShare');
+        expect(stack).not.toContain('trip-detail__share');
+        expect(viewSource).not.toMatch(/import TripShare from/);
         expect(stack.indexOf('TripPassengers')).toBeLessThan(
             stack.indexOf('trip-detail__cta')
-        );
-    });
-
-    it('restores TripShare in the desktop band, after price-cta and before the map', () => {
-        const stack = viewSource.match(
-            /trip-detail__stack[\s\S]*?trip-route-map/
-        )[0];
-        const desktopBlock = stack.match(
-            /<template v-else>[\s\S]*?<\/template>/
-        )[0];
-        expect(desktopBlock).toContain('<TripShare');
-        expect(desktopBlock.indexOf('trip-detail__price-cta')).toBeLessThan(
-            desktopBlock.indexOf('<TripShare')
-        );
-        expect(desktopBlock.indexOf('<TripShare')).toBeLessThan(
-            desktopBlock.lastIndexOf('</template>')
         );
     });
 
