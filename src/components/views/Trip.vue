@@ -304,11 +304,6 @@
                                 />
                             </div>
                         </section>
-                        <section
-                            class="trip-detail__section trip-detail__share"
-                        >
-                            <TripShare />
-                        </section>
                     </template>
 
                     <div
@@ -369,7 +364,6 @@ import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
-import TripShare from '../elements/TripShare';
 
 import { useHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -978,8 +972,7 @@ export default {
         TripStats,
         TripPassengers,
         TripButtons,
-        TripPrice,
-        TripShare
+        TripPrice
     },
 
     props: ['id', 'location']
