@@ -34,4 +34,17 @@ describe('trip-detail.css', () => {
         expect(css).toContain('.trip-detail--mobile .trip-detail__cta-secondary');
         expect(css).toContain('.trip-detail--mobile .trip-detail__passengers');
     });
+
+    it('uses a white page canvas with a grey driver header band', () => {
+        expect(css).toMatch(
+            /\.trip-detail(?:\.trip-detail)?--mobile[\s\S]*?--trip-detail-canvas:\s*#fff/
+        );
+        expect(css).toContain('--trip-detail-driver-bg');
+        expect(css).toContain('.trip-detail--mobile .trip-driver');
+        expect(css).toMatch(
+            /\.trip-detail--mobile\s+\.trip-driver[\s\S]*?background:\s*var\(--trip-detail-driver-bg/
+        );
+        expect(css).toContain('.trip-detail__route');
+        expect(css).toContain('.trip-detail__chip');
+    });
 });

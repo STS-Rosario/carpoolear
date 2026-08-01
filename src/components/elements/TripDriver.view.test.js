@@ -44,3 +44,17 @@ describe('TripDriver profile navigation', () => {
         );
     });
 });
+
+describe('TripDriver mobile trip-detail header', () => {
+    it('shows seats pill, membership, response stats, and patente when allowed', () => {
+        expect(source).toContain('trip-driver__mobile');
+        expect(source).toContain('getSeatsPillLabel');
+        expect(source).toContain('trip-driver__seats');
+        expect(source).toContain('getMembershipDuration');
+        expect(source).toContain('respondeMensajesPorcentaje');
+        expect(source).toContain('tiempoPromedioRespuesta');
+        expect(source).toContain('licensePlate');
+        expect(source).toContain("$t('patente')");
+        expect(source).toMatch(/trip\?\.car\?\.patente|trip\.car/);
+    });
+});

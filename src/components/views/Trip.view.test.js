@@ -123,12 +123,14 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-    it('renders TripSeats exactly once inside the CONDICIONES section', () => {
+    it('renders TripDetailRoute in DETALLE and keeps seats in the driver header', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
-        const matches = stack.match(/<TripSeats\s*\/>/g) || [];
-        expect(matches.length).toBe(1);
+        expect(stack).toContain('<TripDetailRoute');
+        expect(stack).not.toMatch(/<TripSeats\s*\/>/);
+        expect(stack).not.toMatch(/<TripLocation\s*\/>/);
+        expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
 
     it('includes TripShare between passengers and CTAs in the mobile stack', () => {
