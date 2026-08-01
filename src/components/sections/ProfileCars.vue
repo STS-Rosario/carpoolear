@@ -1,8 +1,7 @@
 <template>
     <div class="profile-cars">
-        <h1 class="profile-cars__heading visible-xs-block">{{ $t('autos') }}</h1>
-
         <div class="profile-cars__card">
+            <h1 class="profile-cars__heading">{{ $t('autos') }}</h1>
             <CarsEditorPanel
                 :prompt-incomplete-on-load="true"
                 form-modal-name="profile-car-form"
@@ -35,7 +34,8 @@ export default {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 1rem;
-    color: #036686;
+    line-height: 1.3;
+    color: #333;
 }
 
 .profile-cars__card {

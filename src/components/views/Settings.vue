@@ -15,7 +15,6 @@ export default {
             if (n === 'friends_setting') return 'misAmigos';
             if (n === 'identity_validation') return 'validarIdentidad';
             if (n === 'identity_validation_manual') return 'validacionManual';
-            if (n === 'profile_cars') return 'autos';
             if (n === 'profile_password') return 'cambiarPassword';
             return null;
         }
