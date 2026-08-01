@@ -49,9 +49,17 @@ describe('TripInviteFriends.vue', () => {
 
     it('emits close instead of persisting dismiss preference', () => {
         expect(componentSource).toContain("emits: ['close']");
-        expect(componentSource).toContain("$emit('close')");
+        expect(componentSource).toContain('resolveTripInviteFriendsClose');
+        expect(componentSource).toContain('dismiss()');
         expect(componentSource).not.toContain('dismiss_trip_invite_');
         expect(componentSource).not.toContain('noVolverAMostrarInvitarAmigos');
+    });
+
+    it('supports modal emit close and success-screen trip detail navigation', () => {
+        expect(componentSource).toContain('closeBehavior');
+        expect(componentSource).toContain('TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR');
+        expect(componentSource).toContain('resolveTripInviteFriendsClose');
+        expect(componentSource).toContain('v-if="showPrompt"');
     });
 });
 
@@ -79,11 +87,18 @@ describe('TripSeats.vue TripInviteFriends integration', () => {
         expect(tripSeatsSource).toContain("query.inviteFriends !== '1'");
         expect(tripSeatsSource).toContain('delete nextQuery.inviteFriends');
     });
+
+    it('closes invite modal through TripInviteFriends close emit', () => {
+        expect(tripSeatsSource).toContain('@close="onInviteFriendsModalClose"');
+        expect(tripSeatsSource).not.toContain('close-behavior="trip-detail"');
+    });
 });
 
-describe('NewTrip.vue post-create invite friends redirect', () => {
-    it('uses tripDetailRouteAfterCreate for post-create navigation', () => {
-        expect(newTripViewSource).toContain('tripDetailRouteAfterCreate');
+describe('NewTrip.vue post-create success flow', () => {
+    it('shows embedded invite friends on the trip creation success screen', () => {
+        expect(newTripViewSource).toContain('TripCreationSuccess');
+        expect(newTripViewSource).toContain('showWizardSuccess');
+        expect(newTripViewSource).toContain('clearTripCreationDraft');
         expect(newTripViewSource).toContain('viajeYaPublicado');
     });
 });
