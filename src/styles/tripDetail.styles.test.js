@@ -16,4 +16,22 @@ describe('trip-detail.css', () => {
         expect(css).toContain('.trip-detail__cta .btn-primary');
         expect(css).toContain('.trip-detail__passengers');
     });
+
+    it('scopes base visual rules under .trip-detail--mobile so desktop keeps its own layout/colors', () => {
+        // Every declaration block outside the max-width media query must be
+        // scoped under .trip-detail--mobile, otherwise it would also apply to
+        // desktop trip detail (same markup classes, isMobile === false).
+        const beforeMediaQuery = css.split('@media')[0];
+        const ruleBlocks = beforeMediaQuery.match(/[^{}]+\{[^}]*\}/g) || [];
+
+        expect(ruleBlocks.length).toBeGreaterThan(0);
+        ruleBlocks.forEach((block) => {
+            const selector = block.split('{')[0];
+            expect(selector).toContain('.trip-detail--mobile');
+        });
+
+        expect(css).toContain('.trip-detail.trip-detail--mobile');
+        expect(css).toContain('.trip-detail--mobile .trip-detail__cta-secondary');
+        expect(css).toContain('.trip-detail--mobile .trip-detail__passengers');
+    });
 });
