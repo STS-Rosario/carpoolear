@@ -181,6 +181,16 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toMatch(/trip-creation-wizard-step-\$\{currentStep\}/);
     });
 
+    it('starts fresh create at step 1 and resumes draft without stale step query jumps', () => {
+        expect(wizardSource).toContain('getTripCreationWizardMountState');
+        expect(wizardSource).toMatch(
+            /mounted\(\)[\s\S]*getTripCreationWizardMountState[\s\S]*ignoreRouteStep/
+        );
+        expect(wizardSource).toMatch(
+            /mounted\(\)[\s\S]*shouldRestoreDraft[\s\S]*restoreDraft/
+        );
+    });
+
     it('detects edit flow from route id before trip data finishes loading', () => {
         expect(wizardSource).toContain('isEditTripFlow');
         expect(wizardSource).toMatch(
