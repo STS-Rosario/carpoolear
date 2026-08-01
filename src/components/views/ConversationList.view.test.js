@@ -58,6 +58,14 @@ describe('ConversationList.vue messages redesign', () => {
         expect(viewSource).toContain('isTripGroupConversation');
     });
 
+    it('shows the round marker on the right for the selected conversation', () => {
+        expect(viewSource).toContain('conversation_header__unread-dot');
+        expect(viewSource).toMatch(
+            /v-if="conversation\.unread\s*\|\|\s*isSelectedConversation\(conversation\)"/
+        );
+        expect(viewSource).toContain('isSelectedConversation');
+    });
+
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
