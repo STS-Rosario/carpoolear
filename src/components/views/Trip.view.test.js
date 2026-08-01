@@ -99,17 +99,17 @@ describe('Trip.vue shared trip-detail stack', () => {
         expect(viewSource).toContain("'trip-detail--desktop': !isMobile");
     });
 
-    it('shows a desktop-only white page title above the trip card', () => {
+    it('shows a desktop-only white page title as the first band inside the trip card', () => {
         expect(viewSource).toContain('trip-detail__page-header');
         expect(viewSource).toContain("$t('tripDetailPageTitle')");
         expect(viewSource).toMatch(
-            /v-if="!isMobile"[\s\S]*?trip-detail__page-header[\s\S]*?tripDetailPageTitle/
+            /trip-detail__card[\s\S]*?v-if="!isMobile"[\s\S]*?trip-detail__page-header[\s\S]*?tripDetailPageTitle[\s\S]*TripDriver/
         );
-        const stack = viewSource.match(
-            /trip-detail__stack[\s\S]*?trip-detail__card/
+        const card = viewSource.match(
+            /trip-detail__card[\s\S]*?TripDriver/
         )[0];
-        expect(stack.indexOf('trip-detail__page-header')).toBeLessThan(
-            stack.indexOf('trip-detail__card')
+        expect(card.indexOf('trip-detail__page-header')).toBeLessThan(
+            card.indexOf('TripDriver')
         );
     });
 

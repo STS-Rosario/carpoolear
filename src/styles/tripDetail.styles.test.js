@@ -250,13 +250,25 @@ describe('trip detail labeled stats', () => {
 });
 
 describe('trip detail desktop page title', () => {
-    it('styles a white page-header band above the card', () => {
+    it('styles a white page-header band inside the card, with a square grey driver band below', () => {
         expect(css).toContain('.trip-detail__page-header');
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__page-header\s*\{[^}]*background:\s*(#fff|var\(--trip-detail-canvas|#ffffff)/
         );
+        expect(css).not.toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__page-header\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow/
+        );
+        expect(css).not.toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__page-header\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
+        );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__page-title\s*\{[^}]*font-size:\s*1\.5rem/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*border-top:\s*1px\s+solid\s+#d6d4cf/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*border-radius:\s*0/
         );
     });
 });
