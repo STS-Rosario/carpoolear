@@ -30,5 +30,11 @@ describe('AppTextarea styles', () => {
         expect(inputCss).toMatch(
             /textarea\.app-input__control\s*\{[^}]*resize:\s*vertical/s
         );
+        expect(inputCss).toMatch(
+            /textarea\.app-input__control\s*\{[^}]*background:\s*var\(--ds-input-bg\)/s
+        );
+        expect(inputCss).toMatch(
+            /textarea\.app-input__control\s*\{[^}]*border:\s*1px solid var\(--ds-input-border\)/s
+        );
     });
 });

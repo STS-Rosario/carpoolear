@@ -74,8 +74,15 @@
 
 textarea.app-input__control {
     min-height: 6rem;
+    height: auto;
     line-height: 1.4;
     resize: vertical;
+    border: 1px solid var(--ds-input-border);
+    border-radius: var(--ds-radius-input);
+    background: var(--ds-input-bg);
+    color: var(--ds-input-text);
+    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    font-size: var(--ds-input-font-size);
 }
 
 .app-input--error .app-input__control {
