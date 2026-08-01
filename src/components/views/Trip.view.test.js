@@ -130,4 +130,44 @@ describe('Trip.vue mobile trip-detail stack', () => {
         const matches = stack.match(/<TripSeats\s*\/>/g) || [];
         expect(matches.length).toBe(1);
     });
+
+    it('includes TripShare between passengers and CTAs in the mobile stack', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        expect(stack).toContain('<TripShare');
+
+        const passengersIdx = stack.indexOf('TripPassengers');
+        const shareIdx = stack.indexOf('TripShare');
+        const ctaIdx = stack.indexOf('trip-detail__cta"');
+
+        expect(passengersIdx).toBeGreaterThan(-1);
+        expect(shareIdx).toBeGreaterThan(passengersIdx);
+        expect(ctaIdx).toBeGreaterThan(shareIdx);
+    });
+
+    it('gates the desktop white-background form wrapper off mobile while keeping carpoodatos modals available on mobile too', () => {
+        expect(viewSource).toMatch(/class="row form"[\s\S]{0,40}v-if="!isMobile"/);
+
+        const whiteBackgroundIdx = viewSource.indexOf(
+            'class="white-background"'
+        );
+        const tripButtonsDesktopIdx = viewSource.indexOf(
+            '<TripButtons',
+            whiteBackgroundIdx
+        );
+        const betweenWhiteBackgroundAndTripButtons = viewSource.slice(
+            whiteBackgroundIdx,
+            tripButtonsDesktopIdx
+        );
+
+        expect(betweenWhiteBackgroundAndTripButtons).not.toContain(
+            'showModalRequestSeat'
+        );
+        expect(betweenWhiteBackgroundAndTripButtons).not.toContain(
+            'showModalPricing'
+        );
+        expect(viewSource).toContain('showModalRequestSeat');
+        expect(viewSource).toContain('showModalPricing');
+    });
 });
