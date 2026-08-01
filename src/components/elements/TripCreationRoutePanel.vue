@@ -3,20 +3,38 @@
         <h4 class="trip-creation-route-panel__title">
             {{ $t('tripCreationRouteDetails') }}
         </h4>
-        <ul class="no-bullet trip_information trip_information--light">
-            <li class="list_item">
-                <div class="label-soft">{{ $t('distanciaARecorrer') }}</div>
-                <div>{{ distanceString }}</div>
-            </li>
-            <li class="list_item">
-                <div class="label-soft">{{ $t('tiempoEstimado') }}</div>
-                <div>{{ estimatedTimeString }}</div>
-            </li>
-            <li class="list_item">
-                <div class="label-soft">{{ $t('huellaCarbono') }}</div>
-                <div>{{ co2String }}</div>
-            </li>
-        </ul>
+        <div class="trip-creation-route-panel__stats">
+            <div class="trip-creation-route-panel__stat">
+                <span class="trip-creation-route-panel__stat-label">{{
+                    $t('distanciaARecorrer')
+                }}</span>
+                <span class="trip-creation-route-panel__stat-value">{{
+                    distanceString
+                }}</span>
+            </div>
+            <span class="trip-creation-route-panel__stats-sep" aria-hidden="true"
+                >&middot;</span
+            >
+            <div class="trip-creation-route-panel__stat">
+                <span class="trip-creation-route-panel__stat-label">{{
+                    $t('tiempoEstimado')
+                }}</span>
+                <span class="trip-creation-route-panel__stat-value">{{
+                    estimatedTimeString
+                }}</span>
+            </div>
+            <span class="trip-creation-route-panel__stats-sep" aria-hidden="true"
+                >&middot;</span
+            >
+            <div class="trip-creation-route-panel__stat">
+                <span class="trip-creation-route-panel__stat-label">{{
+                    $t('huellaCarbono')
+                }}</span>
+                <span class="trip-creation-route-panel__stat-value">{{
+                    co2String
+                }}</span>
+            </div>
+        </div>
         <div
             ref="mapEl"
             class="trip-creation-route-panel__map"
@@ -204,6 +222,41 @@ export default {
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
+}
+
+.trip-creation-route-panel__stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.trip-creation-route-panel__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+.trip-creation-route-panel__stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ds-text-secondary, #666);
+}
+
+.trip-creation-route-panel__stat-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--ds-text-primary, #333);
+}
+
+.trip-creation-route-panel__stats-sep {
+    color: #bbb;
+    font-size: 1rem;
+    line-height: 1;
 }
 
 .trip-creation-route-panel__map {
