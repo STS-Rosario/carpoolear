@@ -11,13 +11,32 @@ describe('getTripCreationWizardMountState', () => {
             shouldRestoreDraft: false,
             currentStep: STEP.ROLE,
             maxVisitedStep: STEP.ROLE,
-            ignoreRouteStep: true
+            ignoreRouteStep: true,
+            allowDraftPersist: true
         });
     });
 
-    it('resumes an in-progress draft at the draft current step', () => {
+    it('does not auto-resume a draft unless resumeDraft is requested', () => {
         expect(
             getTripCreationWizardMountState({
+                draft: {
+                    currentStep: STEP.LAST_DETAILS,
+                    maxVisitedStep: STEP.LAST_DETAILS
+                }
+            })
+        ).toEqual({
+            shouldRestoreDraft: false,
+            currentStep: STEP.ROLE,
+            maxVisitedStep: STEP.ROLE,
+            ignoreRouteStep: true,
+            allowDraftPersist: false
+        });
+    });
+
+    it('resumes an in-progress draft only when resumeDraft is requested', () => {
+        expect(
+            getTripCreationWizardMountState({
+                resumeDraft: true,
                 draft: {
                     currentStep: STEP.SEATS,
                     maxVisitedStep: STEP.DESCRIPTION
@@ -27,7 +46,8 @@ describe('getTripCreationWizardMountState', () => {
             shouldRestoreDraft: true,
             currentStep: STEP.SEATS,
             maxVisitedStep: STEP.DESCRIPTION,
-            ignoreRouteStep: true
+            ignoreRouteStep: true,
+            allowDraftPersist: true
         });
     });
 
@@ -36,7 +56,8 @@ describe('getTripCreationWizardMountState', () => {
             shouldRestoreDraft: false,
             currentStep: STEP.ORIGIN,
             maxVisitedStep: STEP.LAST_DETAILS,
-            ignoreRouteStep: false
+            ignoreRouteStep: false,
+            allowDraftPersist: false
         });
     });
 });

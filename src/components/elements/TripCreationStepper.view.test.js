@@ -45,5 +45,11 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).not.toMatch(
             /trip-creation-stepper__bar--completed':\s*[\s\S]*?step\s*<\s*this\.currentStep\s*\|\|\s*step\s*<=\s*this\.maxVisitedStep/
         );
+        expect(componentSource).toMatch(
+            /\.trip-creation-stepper__bar--completed\s*\{[^}]*background:\s*#4caf50/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-creation-stepper__bar--active\s*\{[^}]*background:\s*#e0e0e0|\.trip-creation-stepper__bar--active\s*\{[^}]*background:\s*#bdbdbd/
+        );
     });
 });

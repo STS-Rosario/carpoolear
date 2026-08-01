@@ -2,23 +2,26 @@ import { STEP } from './tripCreationSteps.js';
 
 /**
  * Initial wizard position for create vs edit vs in-progress draft.
- * Fresh create always starts at step 1 and must ignore a stale step query.
- * An existing draft resumes at the draft's current step (last place the user left off).
+ * Fresh create (and deep links like ?step=9 without resumeDraft) always start at
+ * step 1 and ignore a stale step query. Drafts resume only when Continuar sets
+ * resumeDraft=1, so an abandoned local draft cannot open Detalles by URL alone.
  */
 export function getTripCreationWizardMountState({
     isEdit = false,
-    draft = null
+    draft = null,
+    resumeDraft = false
 } = {}) {
     if (isEdit) {
         return {
             shouldRestoreDraft: false,
             currentStep: STEP.ORIGIN,
             maxVisitedStep: STEP.LAST_DETAILS,
-            ignoreRouteStep: false
+            ignoreRouteStep: false,
+            allowDraftPersist: false
         };
     }
 
-    if (draft) {
+    if (resumeDraft && draft) {
         const currentStep = Number(draft.currentStep) || STEP.ROLE;
         const maxVisitedStep = Math.max(
             Number(draft.maxVisitedStep) || currentStep,
@@ -28,7 +31,8 @@ export function getTripCreationWizardMountState({
             shouldRestoreDraft: true,
             currentStep,
             maxVisitedStep,
-            ignoreRouteStep: true
+            ignoreRouteStep: true,
+            allowDraftPersist: true
         };
     }
 
@@ -36,13 +40,15 @@ export function getTripCreationWizardMountState({
         shouldRestoreDraft: false,
         currentStep: STEP.ROLE,
         maxVisitedStep: STEP.ROLE,
-        ignoreRouteStep: true
+        ignoreRouteStep: true,
+        // Keep an existing draft for Continuar; do not overwrite it from a fresh session
+        allowDraftPersist: !draft
     };
 }
 
 /**
- * Stepper bars: green for finished steps only (visited and not the current one).
- * The current step uses the active style separately.
+ * Stepper bars: green only for finished steps (visited and not current).
+ * The current step uses the active style separately and stays neutral grey until finished.
  */
 export function isTripCreationStepCompleted(step, currentStep, maxVisitedStep) {
     return step <= maxVisitedStep && step !== currentStep;

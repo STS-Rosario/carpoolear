@@ -184,10 +184,13 @@ describe('NewTripCreationWizard.vue', () => {
     it('starts fresh create at step 1 and resumes draft without stale step query jumps', () => {
         expect(wizardSource).toContain('getTripCreationWizardMountState');
         expect(wizardSource).toMatch(
+            /getTripCreationWizardMountState\(\{[\s\S]*resumeDraft:/
+        );
+        expect(wizardSource).toMatch(
             /mounted\(\)[\s\S]*getTripCreationWizardMountState[\s\S]*ignoreRouteStep/
         );
         expect(wizardSource).toMatch(
-            /mounted\(\)[\s\S]*shouldRestoreDraft[\s\S]*restoreDraft/
+            /shouldRestoreDraft[\s\S]*restoreDraft/
         );
     });
 

@@ -762,7 +762,8 @@ export default {
             syncingStepFromRoute: false,
             showTemplateModal: false,
             availableTemplates: [],
-            selectedTemplateName: ''
+            selectedTemplateName: '',
+            allowDraftPersist: true
         };
     },
 
@@ -828,6 +829,11 @@ export default {
                 return;
             }
 
+            if (!this.isEditTripFlow && step > this.maxVisitedStep) {
+                this.syncStepToRoute(this.currentStep);
+                return;
+            }
+
             this.syncingStepFromRoute = true;
             this.setCurrentStep(step, { syncUrl: false });
             this.syncingStepFromRoute = false;
@@ -850,33 +856,7 @@ export default {
     },
 
     mounted() {
-        const draft =
-            !this.isEditTripFlow && this.form.user?.id
-                ? loadTripCreationDraft(this.form.user.id)
-                : null;
-        const mount = getTripCreationWizardMountState({
-            isEdit: this.isEditTripFlow,
-            draft
-        });
-
-        if (mount.shouldRestoreDraft) {
-            this.restoreDraft();
-            this.revalidateVisitedSteps();
-        } else {
-            this.currentStep = mount.currentStep;
-            this.maxVisitedStep = mount.maxVisitedStep;
-        }
-
-        if (
-            !mount.ignoreRouteStep &&
-            this.$route.query.step != null &&
-            this.$route.query.step !== ''
-        ) {
-            this.applyStepFromRouteQuery();
-        } else {
-            this.syncStepToRoute(this.currentStep);
-        }
-
+        this.initializeWizardNavigation();
         this.refreshAvailableTemplates();
     },
 
@@ -889,6 +869,41 @@ export default {
     },
 
     methods: {
+        initializeWizardNavigation() {
+            const draft =
+                !this.isEditTripFlow && this.form.user?.id
+                    ? loadTripCreationDraft(this.form.user.id)
+                    : null;
+            const mount = getTripCreationWizardMountState({
+                isEdit: this.isEditTripFlow,
+                draft,
+                resumeDraft: this.$route.query.resumeDraft === '1'
+            });
+
+            this.allowDraftPersist = mount.allowDraftPersist;
+
+            if (mount.shouldRestoreDraft) {
+                this.restoreDraft();
+                this.revalidateVisitedSteps();
+            } else if (!this.isEditTripFlow) {
+                this.currentStep = mount.currentStep;
+                this.maxVisitedStep = mount.maxVisitedStep;
+                this.incompleteSteps = [];
+            } else {
+                this.currentStep = mount.currentStep;
+                this.maxVisitedStep = mount.maxVisitedStep;
+            }
+
+            if (
+                !mount.ignoreRouteStep &&
+                this.$route.query.step != null &&
+                this.$route.query.step !== ''
+            ) {
+                this.applyStepFromRouteQuery();
+            } else {
+                this.syncStepToRoute(this.currentStep);
+            }
+        },
         openWizardTimePicker() {
             const input = this.$refs.wizardTimeInput;
             if (!input) {
@@ -910,6 +925,7 @@ export default {
         scheduleDraftSave() {
             if (
                 !this.draftSavingEnabled ||
+                !this.allowDraftPersist ||
                 this.isEditTripFlow ||
                 this.form.saving
             ) {
@@ -921,6 +937,7 @@ export default {
         persistDraft() {
             if (
                 !this.draftSavingEnabled ||
+                !this.allowDraftPersist ||
                 this.isEditTripFlow ||
                 !this.form.user?.id ||
                 this.form.saving

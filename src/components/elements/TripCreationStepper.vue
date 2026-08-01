@@ -137,7 +137,10 @@ export default {
     background: #e0e0e0;
 }
 
-.trip-creation-stepper__bar--active,
+.trip-creation-stepper__bar--active {
+    background: #e0e0e0;
+}
+
 .trip-creation-stepper__bar--completed {
     background: #4caf50;
 }
