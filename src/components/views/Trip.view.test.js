@@ -45,7 +45,7 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
 
     it('links the pricing carpoodatos modal to mesa de ayuda', () => {
         const pricingModal = viewSource.match(
-            /showModalPricing[\s\S]*?matcheosDelViaje/
+            /showModalPricing[\s\S]*?trip-detail__stack/
         )[0];
 
         const pricingMesaAyudaLinkPattern =
@@ -58,7 +58,7 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
 
     it('lists coordination topics in the pricing carpoodatos modal', () => {
         const pricingModal = viewSource.match(
-            /showModalPricing[\s\S]*?matcheosDelViaje/
+            /showModalPricing[\s\S]*?trip-detail__stack/
         )[0];
 
         expect(pricingModal).toContain("$t('carpoodatosAntesConfirmarBullet1')");
@@ -151,30 +151,14 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-    it('hides the legacy desktop form wrapper while keeping carpoodatos modals available', () => {
-        expect(viewSource).toMatch(
-            /legacy desktop removed; see trip-detail desktop redesign/
-        );
-        expect(viewSource).toMatch(/class="row form"[\s\S]{0,40}v-if="false"/);
-
-        const whiteBackgroundIdx = viewSource.indexOf(
-            'class="white-background"'
-        );
-        const tripButtonsDesktopIdx = viewSource.indexOf(
-            '<TripButtons',
-            whiteBackgroundIdx
-        );
-        const betweenWhiteBackgroundAndTripButtons = viewSource.slice(
-            whiteBackgroundIdx,
-            tripButtonsDesktopIdx
-        );
-
-        expect(betweenWhiteBackgroundAndTripButtons).not.toContain(
-            'showModalRequestSeat'
-        );
-        expect(betweenWhiteBackgroundAndTripButtons).not.toContain(
-            'showModalPricing'
-        );
+    it('does not render the legacy desktop column-tree form row', () => {
+        expect(viewSource).not.toMatch(/class="row form"/);
+        expect(viewSource).not.toContain('white-background');
+        expect(viewSource).not.toContain('legacy desktop removed');
+        expect(viewSource).not.toContain('<TripLocation');
+        expect(viewSource).not.toContain('columnComponent');
+        expect(viewSource).not.toContain('columnClass');
+        expect(viewSource).not.toContain('themeClasses');
         expect(viewSource).toContain('showModalRequestSeat');
         expect(viewSource).toContain('showModalPricing');
     });
