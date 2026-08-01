@@ -325,7 +325,14 @@ h2 {
     font-size: 1.375rem;
     line-height: 1.25;
 }
-.incoming-friend-requests-list,
+.incoming-friend-requests-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0;
+    margin-bottom: 1.25rem;
+}
 .friends-list {
     display: flex;
     flex-direction: column;

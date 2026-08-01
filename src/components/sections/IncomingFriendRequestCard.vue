@@ -10,41 +10,69 @@
             ></div>
         </router-link>
         <div class="incoming-friend-request-card__body">
-            <router-link
-                class="incoming-friend-request-card__name"
-                :to="profileRoute"
-            >
-                {{ user.name }}
-            </router-link>
-            <p class="incoming-friend-request-card__hint">
-                {{ $t('deseaSerTuAmigo') }}
-            </p>
-            <div class="incoming-friend-request-card__actions">
-                <button
-                    type="button"
-                    class="btn btn-accept-request"
-                    :disabled="isRequesting"
-                    @click="$emit('accept', user)"
+            <div class="incoming-friend-request-card__name-row">
+                <router-link
+                    class="incoming-friend-request-card__name"
+                    :to="profileRoute"
                 >
-                    <span v-if="!isRequesting">{{ $t('aceptar') }}</span>
-                    <span v-else>{{ $t('enProceso') }}</span>
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-reject-request"
-                    :disabled="isRequesting"
-                    @click="$emit('reject', user)"
+                    {{ user.name }}
+                </router-link>
+                <span
+                    v-if="isVerified"
+                    class="incoming-friend-request-card__verified"
+                    :title="$t('usuarioVerificado')"
                 >
-                    {{ $t('rechazar') }}
-                </button>
+                    <i class="fa fa-shield" aria-hidden="true"></i>
+                </span>
             </div>
+            <div class="incoming-friend-request-card__meta">
+                <span
+                    v-if="memberSinceLabel"
+                    class="incoming-friend-request-card__member-since"
+                >
+                    {{ memberSinceLabel }}
+                </span>
+                <router-link
+                    class="incoming-friend-request-card__profile-link"
+                    :to="profileRoute"
+                >
+                    {{ $t('verPerfil') }}
+                </router-link>
+            </div>
+        </div>
+        <div class="incoming-friend-request-card__actions">
+            <AppButton
+                variant="tertiary"
+                tone="destructive"
+                icon-right="fa fa-times"
+                :disabled="isRequesting"
+                @click="$emit('reject', user)"
+            >
+                {{ $t('rechazar') }}
+            </AppButton>
+            <AppButton
+                variant="primary"
+                icon-right="fa fa-check"
+                :disabled="isRequesting"
+                @click="$emit('accept', user)"
+            >
+                <span v-if="!isRequesting">{{ $t('aceptar') }}</span>
+                <span v-else>{{ $t('enProceso') }}</span>
+            </AppButton>
         </div>
     </div>
 </template>
 
 <script>
+import AppButton from '../ui/AppButton.vue';
+import { getMembershipDuration } from '../../utils/profileMemberStats.js';
+
 export default {
     name: 'incoming-friend-request-card',
+
+    components: {
+        AppButton
+    },
 
     props: {
         user: {
@@ -63,6 +91,32 @@ export default {
         isRequesting() {
             return this.idRequesting === this.user.id;
         },
+        isVerified() {
+            return !!(
+                this.user &&
+                (this.user.identity_validated ||
+                    this.user.identity_validated_at)
+            );
+        },
+        memberSinceLabel() {
+            const duration = getMembershipDuration(this.user?.created_at);
+            if (!duration) {
+                return '';
+            }
+            if (duration.unit === 'years') {
+                return duration.count === 1
+                    ? this.$t('miembroHaceUnAnio')
+                    : this.$t('miembroHaceAnios', { count: duration.count });
+            }
+            if (duration.unit === 'months') {
+                return duration.count === 1
+                    ? this.$t('miembroHaceUnMes')
+                    : this.$t('miembroHaceMeses', { count: duration.count });
+            }
+            return duration.count === 1
+                ? this.$t('miembroHaceUnDia')
+                : this.$t('miembroHaceDias', { count: duration.count });
+        },
         profileRoute() {
             return {
                 name: 'profile',
@@ -80,16 +134,14 @@ export default {
 <style scoped>
 .incoming-friend-request-card {
     display: flex;
-    align-items: flex-start;
-    align-self: flex-start;
-    gap: 1rem;
-    width: fit-content;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
     max-width: 100%;
     margin: 0;
-    padding: 1rem 1.1rem;
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 0 4px 1px #ccc;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e5e5;
+    background: transparent;
 }
 
 .incoming-friend-request-card__avatar {
@@ -98,22 +150,34 @@ export default {
 }
 
 .incoming-friend-request-card__photo {
-    width: 50px;
-    height: 50px;
-    max-width: 50px;
-    max-height: 50px;
+    width: 48px;
+    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
 }
 
 .incoming-friend-request-card__body {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.incoming-friend-request-card__name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
 }
 
 .incoming-friend-request-card__name {
     display: inline-block;
-    font-size: 1.25rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1rem;
     font-weight: 700;
-    line-height: 1.25;
-    color: inherit;
+    line-height: 1.3;
+    color: #222;
     text-decoration: none;
 }
 
@@ -122,40 +186,60 @@ export default {
     text-decoration: underline;
 }
 
-.incoming-friend-request-card__hint {
-    margin: 0.35rem 0 0.85rem;
+.incoming-friend-request-card__verified {
+    flex-shrink: 0;
+    color: var(--ds-action, #1e5f9e);
     font-size: 0.95rem;
-    line-height: 1.35;
-    color: #555;
+    line-height: 1;
+}
+
+.incoming-friend-request-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 0.2rem;
+}
+
+.incoming-friend-request-card__member-since {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #888;
+}
+
+.incoming-friend-request-card__profile-link {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--ds-action, #1e5f9e);
+    text-decoration: none;
+}
+
+.incoming-friend-request-card__profile-link:hover,
+.incoming-friend-request-card__profile-link:focus {
+    text-decoration: underline;
 }
 
 .incoming-friend-request-card__actions {
     display: flex;
+    flex-shrink: 0;
     flex-wrap: wrap;
-    gap: 0.6rem;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-left: auto;
 }
 
-.incoming-friend-request-card__actions .btn {
-    min-width: 7.5rem;
-    padding: 0.75rem 1.2rem;
-    border-radius: 4px;
-    border: 0;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-}
+@media only screen and (max-width: 640px) {
+    .incoming-friend-request-card {
+        flex-wrap: wrap;
+    }
 
-.btn-reject-request {
-    color: #fff;
-    background-color: #d72521;
-}
-
-.btn-reject-request:hover:not(:disabled),
-.btn-reject-request:focus:not(:disabled) {
-    color: #fff;
-    background-color: #b81f1c;
-}
-
-.btn-reject-request:disabled {
-    opacity: 0.7;
+    .incoming-friend-request-card__actions {
+        width: 100%;
+        margin-left: 0;
+        padding-left: calc(48px + 0.85rem);
+        justify-content: flex-start;
+    }
 }
 </style>
