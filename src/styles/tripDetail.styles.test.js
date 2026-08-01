@@ -142,16 +142,19 @@ describe('trip detail desktop card layout', () => {
             /@media\s*\(min-width:\s*768px\)[\s\S]*\.trip-detail__detalle-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*display:\s*grid/
+            /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*display:\s*flex/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*grid-template-columns:\s*1fr\s*1fr\s*1fr/
+            /\.trip-detail--desktop\s+\.trip-detail__section\.trip-detail__actions-grid\s*\{[^}]*justify-content:\s*space-between/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__lugares-col\s*\{[^}]*flex-direction:\s*column/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-detail__seats-pill\s*\{[^}]*font-size:\s*2\.25rem/
+            /\.trip-detail--desktop\s+\.trip-detail__seats-pill\s*\{[^}]*font-size:\s*1\.125rem/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn(?:-primary)?\s*\{[^}]*width:\s*fit-content|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary\s*\{[^}]*width:\s*fit-content|\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn,\s*\n\s*\.trip-detail--desktop\s+\.trip-detail__cta\s+\.btn-primary[\s\S]*?width:\s*fit-content/
         );
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-driver\s*\{[^}]*background:\s*var\(--trip-detail-driver-bg/
