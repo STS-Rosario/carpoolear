@@ -93,6 +93,22 @@ describe('Trip.vue driver seat request limit warning', () => {
     });
 });
 
+describe('Trip.vue shared trip-detail stack', () => {
+    it('binds mobile and desktop trip-detail modifiers', () => {
+        expect(viewSource).toContain("'trip-detail--mobile': isMobile");
+        expect(viewSource).toContain("'trip-detail--desktop': !isMobile");
+    });
+
+    it('shows the redesign stack for any breakpoint when trip is loaded', () => {
+        expect(viewSource).toMatch(
+            /v-if="trip\s*&&\s*!isPassengersView"[\s\S]*?trip-detail__stack|trip-detail__stack[\s\S]*?v-if="trip\s*&&\s*!isPassengersView"/
+        );
+        expect(viewSource).not.toMatch(
+            /v-if="isMobile\s*&&\s*trip\s*&&\s*!isPassengersView"/
+        );
+    });
+});
+
 describe('Trip.vue mobile trip-detail stack', () => {
     it('uses trip-detail root and mobile stack section labels', () => {
         expect(viewSource).toContain('trip-detail');
@@ -113,15 +129,6 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-    it('adds trip-detail root classes with mobile modifier binding', () => {
-        expect(viewSource).toContain("'trip-detail--mobile': isMobile");
-    });
-
-    it('gates the mobile stack on isMobile, trip and not passengers view', () => {
-        expect(viewSource).toMatch(
-            /v-if="isMobile[^"]*trip[^"]*!isPassengersView"[\s\S]*?trip-detail__stack|trip-detail__stack[\s\S]*?v-if="isMobile/
-        );
-    });
 
     it('renders TripDetailRoute in DETALLE and keeps seats in the driver header', () => {
         const stack = viewSource.match(
@@ -143,8 +150,11 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-    it('gates the desktop white-background form wrapper off mobile while keeping carpoodatos modals available on mobile too', () => {
-        expect(viewSource).toMatch(/class="row form"[\s\S]{0,40}v-if="!isMobile"/);
+    it('hides the legacy desktop form wrapper while keeping carpoodatos modals available', () => {
+        expect(viewSource).toMatch(
+            /legacy desktop removed; see trip-detail desktop redesign/
+        );
+        expect(viewSource).toMatch(/class="row form"[\s\S]{0,40}v-if="false"/);
 
         const whiteBackgroundIdx = viewSource.indexOf(
             'class="white-background"'
