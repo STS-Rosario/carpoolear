@@ -171,6 +171,12 @@ input[type="checkbox"] {
     vertical-align: -2px;
     transform: scale(1.4);
     margin-left: 8px;
+    accent-color: #555;
+}
+
+.checkbox label,
+label:has(> input[type="checkbox"]) {
+    color: #555;
 }
 .btn-full-width {
   width: 100%;
