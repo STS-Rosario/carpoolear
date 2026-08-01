@@ -1272,7 +1272,6 @@ export default {
 
         removeEmptyIntermediatePoints() {
             this.points = removeEmptyIntermediatePoints(this.points);
-            this.calcRoute();
         },
         getSaveInfo(tripObj, estimatedTime, useWeeklySchedule = this.useWeeklySchedule, weeklyScheduleTime = this.weeklyScheduleTime) {
             const resolvedPoints = filterTripPointsForSave(tripObj.points);
