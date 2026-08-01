@@ -53,3 +53,22 @@ describe('TripButtons.vue seat request limit', () => {
         );
     });
 });
+
+describe('TripButtons.vue owner actions', () => {
+    it('uses AppButton primary for Editar viaje and tertiary destructive for Cancelar viaje', () => {
+        expect(viewSource).toContain("$t('editarViaje')");
+        expect(viewSource).toContain("$t('cancelarViaje')");
+        expect(viewSource).toMatch(
+            /variant="primary"[\s\S]*?\$t\('editarViaje'\)/
+        );
+        expect(viewSource).toMatch(
+            /variant="tertiary"[\s\S]*?tone="destructive"[\s\S]*?\$t\('cancelarViaje'\)/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?\$t\('editar'\)/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?\$t\('cancelarViaje'\)/
+        );
+    });
+});
