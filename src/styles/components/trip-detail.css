@@ -440,6 +440,18 @@
     min-width: 0;
 }
 
+.trip-detail--desktop .trip-detail__lugares-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.trip-detail--desktop .trip-detail__contribucion,
+.trip-detail--desktop .trip-detail__cta {
+    min-width: 0;
+}
+
 .trip-detail--desktop .trip-driver {
     background: var(--trip-detail-driver-bg);
     border-top: 1px solid #d6d4cf;
@@ -448,8 +460,7 @@
 }
 
 .trip-detail__detalle-grid,
-.trip-detail__seats-passengers,
-.trip-detail__price-cta {
+.trip-detail__actions-grid {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -465,16 +476,9 @@
         align-items: start;
     }
 
-    .trip-detail__seats-passengers {
+    .trip-detail__actions-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem 2rem;
-        align-items: start;
-    }
-
-    .trip-detail__price-cta {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 1.5rem 2rem;
         align-items: start;
     }

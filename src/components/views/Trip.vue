@@ -269,26 +269,24 @@
                     </template>
                     <template v-else>
                         <section
-                            class="trip-detail__section trip-detail__seats-passengers"
+                            class="trip-detail__section trip-detail__actions-grid"
                         >
-                            <div
-                                v-if="tripCardTheme === 'light' || !trip.is_passenger"
-                                class="trip-detail__lugares"
-                            >
-                                <h3 class="trip-detail__section-title">
-                                    {{ $t('lugaresLibres') }}
-                                </h3>
-                                <TripSeats />
+                            <div class="trip-detail__lugares-col">
+                                <div
+                                    v-if="tripCardTheme === 'light' || !trip.is_passenger"
+                                    class="trip-detail__lugares"
+                                >
+                                    <h3 class="trip-detail__section-title">
+                                        {{ $t('lugaresLibres') }}
+                                    </h3>
+                                    <TripSeats />
+                                </div>
+                                <div class="trip-detail__joined">
+                                    <TripPassengers
+                                        :section-title="$t('tripDetailJoined')"
+                                    />
+                                </div>
                             </div>
-                            <div class="trip-detail__joined">
-                                <TripPassengers
-                                    :section-title="$t('tripDetailJoined')"
-                                />
-                            </div>
-                        </section>
-                        <section
-                            class="trip-detail__section trip-detail__price-cta"
-                        >
                             <div class="trip-detail__contribucion">
                                 <TripPrice />
                             </div>
