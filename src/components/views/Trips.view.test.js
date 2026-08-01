@@ -261,4 +261,12 @@ describe('Trips.vue donation modal', () => {
         expect(viewSource).not.toContain('value="2000"');
         expect(viewSource).not.toContain('value="10000"');
     });
+
+    it('puts Mensual primary before Única vez secondary', () => {
+        expect(viewSource).toMatch(
+            /donation-actions[\s\S]*?variant="primary"[\s\S]*?onDonateMonthly[\s\S]*?variant="secondary"[\s\S]*?onDonateOnceTime/s
+        );
+        expect(viewSource).not.toContain('btn-unica-vez');
+        expect(viewSource).not.toContain('btn-mensualmente');
+    });
 });

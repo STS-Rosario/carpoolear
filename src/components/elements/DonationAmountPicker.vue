@@ -80,7 +80,8 @@ export default {
 }
 
 .donation-usage-note {
-    font-size: 0.95em;
+    /* Match .radio > label > span tier labels in donation modals */
+    font-size: 1.4em;
     color: #555;
     margin-bottom: 12px;
     line-height: 1.45;

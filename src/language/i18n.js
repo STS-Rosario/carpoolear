@@ -250,8 +250,8 @@ const messages = {
         donaA: 'Doná a Carpoolear',
         donaACarpoolear: 'Doná a Carpoolear',
         proyectoDe: 'un proyecto de',
-        unicaVez: 'ÚNICA VEZ',
-        MENSUAL: 'MENSUAL',
+        unicaVez: 'Única vez',
+        MENSUAL: 'Mensual',
         cancelaCuando: 'cancelá cuando quieras',
         ayudanos:
             '{lead} a seguir siendo una {open}, {collab} y {nonprofit}',
@@ -1990,8 +1990,8 @@ const messages = {
         paraComenzar: '',
         donaA: 'Doná a Apalan-car',
         proyectoDe: 'un proyecto de',
-        unicaVez: 'ÚNICA VEZ',
-        MENSUAL: 'MENSUAL',
+        unicaVez: 'Única vez',
+        MENSUAL: 'Mensual',
         cancelaCuando: 'cancelá cuando quieras',
         ayudanos:
             '{lead} a seguir siendo una {open}, {collab} y {nonprofit}',
@@ -3358,8 +3358,8 @@ const messages = {
         donaA: 'Donate to Carpoolear',
         donaACarpoolear: 'Donate to Carpoolear',
         proyectoDe: 'a project by',
-        unicaVez: 'ONE TIME',
-        MENSUAL: 'MONTHLY',
+        unicaVez: 'One time',
+        MENSUAL: 'Monthly',
         cancelaCuando: 'cancel anytime',
         ayudanos:
             '{lead} continue being an {open}, {collab}, and {nonprofit} platform',

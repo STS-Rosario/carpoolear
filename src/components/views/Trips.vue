@@ -113,21 +113,26 @@
                                 }}</span>
                             </label>
                         </DonationAmountPicker>
-                        <div>
-                            <button
-                                class="btn btn-success btn-unica-vez"
+                        <div class="donation-actions">
+                            <AppButton
+                                class="donation-actions__btn"
+                                variant="primary"
+                                @click="onDonateMonthly"
+                            >
+                                <span class="donation-actions__label">
+                                    {{ $t('MENSUAL') }}
+                                </span>
+                                <span class="donation-actions__hint">
+                                    ({{ $t('cancelaCuando') }})
+                                </span>
+                            </AppButton>
+                            <AppButton
+                                class="donation-actions__btn"
+                                variant="secondary"
                                 @click="onDonateOnceTime"
                             >
                                 {{ $t('unicaVez') }}
-                            </button>
-                            <button
-                                class="btn btn-info btn-mensualmente"
-                                @click="onDonateMonthly"
-                            >
-                                {{ $t('MENSUAL') }}
-                                <br />
-                                ( {{ $t('cancelaCuando') }})
-                            </button>
+                            </AppButton>
                         </div>
                     </div></template>
                 </modal>
@@ -1281,6 +1286,32 @@ export default {
     border: 1px solid #999;
     width: 100%;
     max-width: 934px;
+}
+
+.donation-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.donation-actions__btn {
+    flex: 1 1 0;
+    min-height: 4.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: normal;
+    text-align: center;
+}
+
+.donation-actions__label {
+    display: block;
+}
+
+.donation-actions__hint {
+    display: block;
+    font-size: 0.85em;
+    font-weight: var(--ds-font-weight-normal, 400);
+    line-height: 1.2;
 }
 
 .btn-donar {

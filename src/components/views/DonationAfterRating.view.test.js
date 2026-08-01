@@ -20,6 +20,9 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain("$t('unicaVez')");
         expect(viewSource).toContain("$t('MENSUAL')");
         expect(viewSource).toContain("$t('cancelaCuando')");
+        expect(viewSource).toMatch(
+            /donation-actions[\s\S]*?variant="primary"[\s\S]*?onDonateMonthly[\s\S]*?variant="secondary"[\s\S]*?onDonateOnceTime/s
+        );
         expect(viewSource).toContain("$t('conoceMasDonar')");
         expect(viewSource).toContain('onDonateOnceTime');
         expect(viewSource).toContain('onDonateMonthly');
