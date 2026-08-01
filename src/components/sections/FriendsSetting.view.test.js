@@ -100,6 +100,18 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(toolbarSection).toContain("$t('filtrarPorNombre')");
         expect(toolbarSection).toContain("$t('buscarNuevosAmigos')");
     });
+
+    it('uses AppButton primary for Buscar nuevos amigos', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?buscarNuevosAmigos[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary search-more"/
+        );
+    });
 });
 
 describe('FriendApi outgoing pending requests', () => {
