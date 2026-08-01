@@ -1293,6 +1293,13 @@ export default {
     color: var(--ds-input-label);
 }
 
+.new-trip-wizard :deep(span.error) {
+    display: block;
+    color: var(--main-error, #d72521);
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
 .new-trip-wizard__allow-foreign label {
     color: var(--ds-text-primary, #22211f) !important;
 }

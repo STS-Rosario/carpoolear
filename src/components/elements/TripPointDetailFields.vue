@@ -148,6 +148,15 @@ export default {
     margin-top: 0.5rem;
 }
 
+.trip_point-detail .error {
+    display: block;
+    margin-top: 0.35rem;
+    margin-bottom: 0.4em;
+    color: var(--main-error, #d72521);
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
 .trip_point-detail-warning {
     margin: 0.35rem 0 0;
     color: #856404;
