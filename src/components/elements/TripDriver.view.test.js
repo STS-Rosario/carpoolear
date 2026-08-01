@@ -57,4 +57,14 @@ describe('TripDriver mobile trip-detail header', () => {
         expect(source).toContain("$t('patente')");
         expect(source).toMatch(/trip\?\.car\?\.patente|trip\.car/);
     });
+
+    it('shows the Usuario verificado pill next to the driver name', () => {
+        expect(source).toContain('trip-driver__mobile-name-row');
+        expect(source).toContain('isDriverVerified');
+        expect(source).toContain('trip-driver__verified');
+        expect(source).toContain("$t('usuarioVerificado')");
+        expect(source).toMatch(
+            /trip-driver__mobile-name-row[\s\S]*trip-driver__mobile-name[\s\S]*trip-driver__verified/
+        );
+    });
 });

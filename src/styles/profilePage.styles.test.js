@@ -135,6 +135,22 @@ describe('profile page styles', () => {
         );
     });
 
+    it('keeps the Usuario verificado pill next to the name on mobile and desktop', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-identity-header__name-row\s*\{[^}]*display:\s*flex/
+        );
+        expect(css).toMatch(
+            /\.profile-identity-header__name-row\s*\{[^}]*align-items:\s*center/
+        );
+        expect(css).toMatch(
+            /\.profile-identity-header__name\s*\{[^}]*margin:\s*0/
+        );
+        expect(css).toMatch(
+            /\.profile-identity-header__verified\s*\{[^}]*margin:\s*0/
+        );
+    });
+
     it('adds mobile bottom padding so content clears the footer bar', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(

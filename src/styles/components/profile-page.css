@@ -156,11 +156,20 @@
     margin-bottom: 0.85rem;
 }
 
+.profile-identity-header__name-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .profile-identity-header__name {
     font-size: 1.35rem;
     font-weight: var(--ds-font-weight-bold, 700);
     color: #222;
-    margin: 0 0 0.5rem;
+    margin: 0;
     line-height: 1.25;
 }
 
@@ -174,7 +183,7 @@
     color: var(--profile-verified);
     font-size: 0.75rem;
     font-weight: var(--ds-font-weight-normal, 400);
-    margin-bottom: 0.75rem;
+    margin: 0;
 }
 
 .profile-identity-header__stats {
@@ -570,19 +579,9 @@
     }
 
     .profile-identity-header__name-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
+        justify-content: flex-start;
         gap: 0.65rem;
         margin-bottom: 0.35rem;
-    }
-
-    .profile-identity-header__name {
-        margin: 0;
-    }
-
-    .profile-identity-header__verified {
-        margin-bottom: 0;
     }
 
     .profile-identity-header__stats {

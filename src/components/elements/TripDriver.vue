@@ -12,21 +12,21 @@
                     ></div>
                 </router-link>
                 <div class="trip-driver__mobile-info">
-                    <div class="trip-driver__mobile-primary">
+                    <div class="trip-driver__mobile-name-row">
                         <router-link
                             class="trip-driver-profile-link trip-driver__mobile-name"
                             :to="driverProfileRoute"
                         >
-                            <UserNameWithBadge :user="trip.user" />
+                            {{ trip.user.name }}
                         </router-link>
-                        <div
-                            v-if="!trip.is_passenger"
-                            class="trip-driver__seats"
-                            :class="'trip-driver__seats--' + seatsTone"
+                        <span
+                            v-if="isDriverVerified"
+                            class="trip-driver__verified"
+                            :title="$t('identidadValidadaTooltip')"
                         >
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            {{ seatsLabel }}
-                        </div>
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                            {{ $t('usuarioVerificado') }}
+                        </span>
                     </div>
                     <div class="trip-driver__mobile-meta">
                         <UserRatingsCounts :ratings="driverRatings" />
@@ -37,35 +37,50 @@
                             &middot; {{ driverTripsLabel }}
                         </span>
                     </div>
+                    <div
+                        v-if="membershipLabel || showResponseStats || licensePlate"
+                        class="trip-driver__mobile-secondary"
+                    >
+                        <p
+                            v-if="membershipLabel || responsePercentLabel"
+                            class="trip-driver__mobile-line"
+                        >
+                            <template v-if="membershipLabel">{{
+                                membershipLabel
+                            }}</template>
+                            <template
+                                v-if="membershipLabel && responsePercentLabel"
+                            >
+                                &nbsp;&middot;&nbsp;
+                            </template>
+                            <template v-if="responsePercentLabel">{{
+                                responsePercentLabel
+                            }}</template>
+                        </p>
+                        <p
+                            v-if="responseDelayLabel || licensePlate"
+                            class="trip-driver__mobile-line"
+                        >
+                            <template v-if="responseDelayLabel">{{
+                                responseDelayLabel
+                            }}</template>
+                            <template v-if="responseDelayLabel && licensePlate">
+                                &nbsp;
+                            </template>
+                            <strong v-if="licensePlate">
+                                {{ $t('patente') }}: {{ licensePlate }}
+                            </strong>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div
-                v-if="membershipLabel || showResponseStats || licensePlate"
-                class="trip-driver__mobile-secondary"
-            >
-                <p v-if="membershipLabel || responsePercentLabel" class="trip-driver__mobile-line">
-                    <template v-if="membershipLabel">{{ membershipLabel }}</template>
-                    <template v-if="membershipLabel && responsePercentLabel">
-                        &nbsp;&middot;&nbsp;
-                    </template>
-                    <template v-if="responsePercentLabel">{{
-                        responsePercentLabel
-                    }}</template>
-                </p>
-                <p
-                    v-if="responseDelayLabel || licensePlate"
-                    class="trip-driver__mobile-line"
+                <div
+                    v-if="!trip.is_passenger"
+                    class="trip-driver__seats"
+                    :class="'trip-driver__seats--' + seatsTone"
                 >
-                    <template v-if="responseDelayLabel">{{
-                        responseDelayLabel
-                    }}</template>
-                    <template v-if="responseDelayLabel && licensePlate">
-                        &nbsp;
-                    </template>
-                    <strong v-if="licensePlate">
-                        {{ $t('patente') }}: {{ licensePlate }}
-                    </strong>
-                </p>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    {{ seatsLabel }}
+                </div>
             </div>
         </div>
         <div
@@ -239,7 +254,6 @@ import TripDate from './TripDate';
 import TripDescription from './TripDescription';
 import SvgItem from '../SvgItem';
 import UserRatingsCounts from './UserRatingsCounts.vue';
-import UserNameWithBadge from './UserNameWithBadge.vue';
 import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
 import {
     getMembershipDuration,
@@ -292,6 +306,13 @@ export default {
             }
 
             return userRatingsFromProfile(this.trip.user);
+        },
+        isDriverVerified() {
+            const driver = this.trip?.user;
+            return !!(
+                driver &&
+                (driver.identity_validated || driver.identity_validated_at)
+            );
         },
         driverTripsLabel() {
             if (!this.trip?.user || this.trip.user.trips_count == null) {
@@ -446,7 +467,6 @@ export default {
     components: {
         SvgItem,
         UserRatingsCounts,
-        UserNameWithBadge,
         TripDate,
         TripDescription
     },
@@ -477,30 +497,59 @@ export default {
     align-items: flex-start;
     gap: 0.75rem;
 }
+.trip-driver__mobile .trip_driver_img_container {
+    display: block;
+    flex: 0 0 auto;
+    float: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
 .trip-driver__mobile .trip_driver_img {
     width: 3rem;
     height: 3rem;
     flex-shrink: 0;
+    margin: 0;
 }
 .trip-driver__mobile-info {
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.2rem;
     min-width: 0;
+    text-align: left;
 }
-.trip-driver__mobile-primary {
+.trip-driver__mobile-name-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    max-width: 100%;
     min-width: 0;
 }
 .trip-driver__mobile-name {
-    flex: 1 1 auto;
+    display: inline;
+    max-width: 100%;
     min-width: 0;
     font-size: 1.05rem;
     font-weight: 700;
     line-height: 1.2;
+    text-align: left;
+}
+.trip-driver__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 0 0 auto;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.7rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 .trip-driver__seats {
     display: inline-flex;
@@ -543,12 +592,14 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
+    width: 100%;
 }
 .trip-driver__mobile-line {
     margin: 0;
     font-size: 0.75rem;
     line-height: 1.35;
     color: var(--ds-text-secondary, #666);
+    text-align: left;
 }
 .trip-driver__mobile-line strong {
     color: var(--ds-text-primary, #333);
