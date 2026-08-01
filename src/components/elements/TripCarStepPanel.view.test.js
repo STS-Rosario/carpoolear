@@ -28,4 +28,19 @@ describe('TripCarStepPanel.vue', () => {
             /\.trip-car-step-panel__edit-link\s*\{[^}]*text-decoration:\s*underline/
         );
     });
+
+    it('styles the car select like the trip-search dropdown', () => {
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__select\s*\{[^}]*appearance:\s*none/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__select\s*\{[^}]*border:\s*1px\s+solid\s+var\(--ds-input-border/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__select\s*\{[^}]*background-image:\s*url\(/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__select\s*\{[^}]*padding:[^}]*2\.5rem/
+        );
+    });
 });

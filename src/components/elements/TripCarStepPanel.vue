@@ -103,6 +103,39 @@ export default {
 }
 
 .trip-car-step-panel__select {
-    margin-bottom: 0.75rem;
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 0.75rem;
+    box-sizing: border-box;
+    border: 1px solid var(--ds-input-border);
+    border-radius: var(--ds-radius-input, 8px) !important;
+    background-color: var(--ds-input-bg);
+    color: var(--ds-input-text);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y) 2.5rem var(--ds-input-padding-y)
+        var(--ds-input-padding-x);
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23737373' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 0.75rem 0.5rem;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.trip-car-step-panel__select:focus {
+    outline: none;
+    border-color: var(--ds-input-focus-border);
+    box-shadow: var(--ds-input-focus-ring);
+}
+
+.trip-car-step-panel__select.has-error {
+    border-color: var(--ds-input-error-border, #991b1b);
 }
 </style>
