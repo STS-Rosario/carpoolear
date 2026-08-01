@@ -40,6 +40,7 @@ import MyTrips from './MyTrips';
 import ProfileTrip from '../sections/ProfileTrip';
 import bus from '../../services/bus-event.js';
 import router from '../../router';
+import { resolveProfileTabIndex } from '../../utils/profileDeepLinks';
 
 export default {
     components: {
@@ -98,6 +99,18 @@ export default {
             setProfileByID: 'setUserByID',
             fetchBadges: 'fetchBadges'
         }),
+        applyProfileDeepLink() {
+            const index = resolveProfileTabIndex({
+                query: (this.$route && this.$route.query) || {},
+                activeTab: this.activeTab,
+                hash: (this.$route && this.$route.hash) || ''
+            });
+            this.$nextTick(() => {
+                if (this.$refs.tabs) {
+                    this.$refs.tabs.activateTab(index);
+                }
+            });
+        },
         updateProfile() {
             if (this.id === 'me' || this.id === this.user.id) {
                 // this.setTitle('Mi Perfil');
@@ -128,25 +141,13 @@ export default {
     },
     watch: {
         $route: function () {
+            this.applyProfileDeepLink();
             this.updateProfile();
         }
     },
 
     mounted() {
-        let index = 1;
-        if (
-            router.history &&
-            router.history.current &&
-            router.history.current.hash
-        ) {
-            index = parseInt(router.history.current.hash.replace('#', ''), 10);
-        }
-        if (this.activeTab) {
-            index = parseInt(this.activeTab, 10);
-        } else {
-            index = this.$refs.tabs.getRememberedTab(1);
-        }
-        this.$refs.tabs.activateTab(index);
+        this.applyProfileDeepLink();
         this.updateProfile();
         bus.on('back-click', this.onBackClick);
     },
