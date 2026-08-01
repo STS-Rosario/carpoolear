@@ -96,4 +96,19 @@ describe('TripDriver trip-detail redesign header', () => {
         );
         expect(source).toContain('fa-check-circle');
     });
+
+    it('sizes the desktop avatar to stretch with the adjacent content height', () => {
+        expect(source).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip-driver__mobile-top\s*\{[^}]*display:\s*grid/
+        );
+        expect(source).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip_driver_img_container\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/
+        );
+        expect(source).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip_driver_img\s*\{[^}]*position:\s*absolute/
+        );
+        expect(source).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip_driver_img\s*\{[^}]*max-height:\s*none/
+        );
+    });
 });

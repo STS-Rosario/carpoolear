@@ -676,6 +676,39 @@ export default {
     }
 }
 @media only screen and (min-width: 768px) {
+    .trip-driver__mobile-top {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: stretch;
+        column-gap: 0.75rem;
+    }
+    .trip-driver__mobile .trip_driver_img_container {
+        position: relative;
+        display: block;
+        grid-column: 1;
+        height: 100%;
+        width: auto;
+        aspect-ratio: 1 / 1;
+        flex: none;
+        align-self: stretch;
+        justify-self: start;
+    }
+    .trip-driver__mobile .trip_driver_img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+    }
+    .trip-driver__mobile-info {
+        grid-column: 2;
+    }
+    .trip-driver__car {
+        grid-column: 3;
+        margin-left: 0;
+    }
     .driver-profile div.row:last-child {
         min-height: 11rem;
     }

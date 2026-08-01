@@ -282,13 +282,16 @@ describe('trip detail desktop page title', () => {
 
     it('sizes the driver avatar to the height of the driver info block', () => {
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-driver__mobile-top\s*\{[^}]*align-items:\s*stretch/
+            /\.trip-detail--desktop\s+\.trip-driver__mobile-top\s*\{[^}]*display:\s*grid/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*height:\s*100%/
+            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img_container\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/
         );
         expect(css).toMatch(
-            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*aspect-ratio:\s*1\s*\/\s*1/
+            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*position:\s*absolute/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-driver__mobile\s+\.trip_driver_img\s*\{[^}]*max-height:\s*none/
         );
     });
 });
