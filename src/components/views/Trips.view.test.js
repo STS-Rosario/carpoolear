@@ -166,6 +166,11 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(viewSource).toContain('variant="header-donate"');
         expect(viewSource).toContain("gift.svg");
         expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
+        expect(viewSource).toContain('panel-donar__body');
+        expect(viewSource).toContain('panel-donar__copy');
+        expect(viewSource).toMatch(
+            /\.panel-donar__body[\s\S]*?justify-content:\s*space-between/
+        );
         expect(viewSource).toMatch(
             /\.panel\.panel-default\.panel-donar h2\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-normal/
         );

@@ -175,9 +175,24 @@
                         v-if="showSplitDonationPanel"
                         class="panel panel-default panel-donar trips-donation-banner"
                     >
-                        <div class="panel-body">
+                        <div class="panel-body panel-donar__body">
+                            <div class="panel-donar__copy">
+                                <h2>{{ $t('ayudanos') }}</h2>
+                                <a
+                                    href="/donar"
+                                    target="_blank"
+                                    v-on:click.prevent="
+                                        onOpenLink(
+                                            'https://carpoolear.com.ar/donar?u=' +
+                                                user.id
+                                        )
+                                    "
+                                >
+                                    {{ $t('porQueDonar') }}
+                                </a>
+                            </div>
                             <AppButton
-                                class="btn-donar pull-right"
+                                class="btn-donar"
                                 variant="header-donate"
                                 @click="onDonate"
                             >
@@ -190,20 +205,6 @@
                                     />
                                 </template>
                             </AppButton>
-                            <h2>{{ $t('ayudanos') }}</h2>
-
-                            <a
-                                href="/donar"
-                                target="_blank"
-                                v-on:click.prevent="
-                                    onOpenLink(
-                                        'https://carpoolear.com.ar/donar?u=' +
-                                            user.id
-                                    )
-                                "
-                            >
-                                {{ $t('porQueDonar') }}
-                            </a>
                         </div>
                     </div>
                     <template v-if="showFriendTripSections">
@@ -337,9 +338,24 @@
                                     0
                                 "
                             >
-                                <div class="panel-body">
+                                <div class="panel-body panel-donar__body">
+                                    <div class="panel-donar__copy">
+                                        <h2>{{ $t('ayudanos') }}</h2>
+                                        <a
+                                            href="/donar"
+                                            target="_blank"
+                                            v-on:click.prevent="
+                                                onOpenLink(
+                                                    'https://carpoolear.com.ar/donar?u=' +
+                                                        user.id
+                                                )
+                                            "
+                                        >
+                                            {{ $t('porQueDonar') }}
+                                        </a>
+                                    </div>
                                     <AppButton
-                                        class="btn-donar pull-right"
+                                        class="btn-donar"
                                         variant="header-donate"
                                         @click="onDonate"
                                     >
@@ -352,20 +368,6 @@
                                             />
                                         </template>
                                     </AppButton>
-                                    <h2>{{ $t('ayudanos') }}</h2>
-
-                                    <a
-                                        href="/donar"
-                                        target="_blank"
-                                        v-on:click.prevent="
-                                            onOpenLink(
-                                                'https://carpoolear.com.ar/donar?u=' +
-                                                    user.id
-                                            )
-                                        "
-                                    >
-                                        {{ $t('porQueDonar') }}
-                                    </a>
                                 </div>
                             </div>
                         </template>
@@ -1241,9 +1243,8 @@ export default {
 }
 
 .btn-donar {
-    margin-left: 2em;
-    margin-right: 2em;
-    margin-top: 1em;
+    flex-shrink: 0;
+    margin: 0;
 }
 
 .panel.panel-donar {
@@ -1254,8 +1255,17 @@ export default {
     overflow: hidden;
 }
 
-.panel-donar > .panel-body {
+.panel-donar > .panel-body.panel-donar__body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
     padding: 1.25rem 1.5rem;
+}
+
+.panel-donar__copy {
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .panel.panel-default.panel-donar h2 {
