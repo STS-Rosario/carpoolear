@@ -87,20 +87,34 @@
     font-size: 1.25rem;
 }
 
+.messages-page .conversation_header .media {
+    display: flex;
+    align-items: stretch;
+}
+
 .messages-page__row-meta {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.35rem;
+    justify-content: flex-start;
+    align-self: stretch;
+    min-width: 2.5rem;
+    padding-right: 0.15rem;
     white-space: nowrap;
 }
 
 .messages-page .conversation-time {
     font-size: 0.7rem;
     color: #888;
+    line-height: 1.2;
 }
 
 .messages-page .conversation_header__unread-dot {
+    position: absolute;
+    top: 50%;
+    right: 0.15rem;
+    transform: translateY(-50%);
     display: inline-block;
     width: 0.625rem;
     height: 0.625rem;

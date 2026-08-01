@@ -66,6 +66,23 @@ describe('ConversationList.vue messages redesign', () => {
         );
     });
 
+    it('vertically centers the unread marker in the row meta', () => {
+        const cssPath = path.resolve(
+            __dirname,
+            '../../styles/components/messages-page.css'
+        );
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.conversation_header__unread-dot\s*\{[^}]*top:\s*50%/s
+        );
+        expect(css).toMatch(
+            /\.conversation_header__unread-dot\s*\{[^}]*transform:\s*translateY\(-50%\)/s
+        );
+        expect(css).toMatch(
+            /\.messages-page__row-meta\s*\{[^}]*position:\s*relative/s
+        );
+    });
+
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
