@@ -514,7 +514,7 @@ export default {
     flex: 0 0 auto;
     margin-left: auto;
     text-align: left;
-    color: var(--ds-text-primary, #333);
+    color: var(--ds-text-secondary, #666);
 }
 .trip-driver__car :deep(.trip-car-details) {
     margin: 0;
@@ -527,7 +527,7 @@ export default {
     margin: 0 0 0.1em;
     font-size: 0.8125rem;
     line-height: 1.35;
-    color: var(--ds-text-primary, #333);
+    color: var(--ds-text-secondary, #666);
 }
 .trip-driver__mobile .trip_driver_img_container {
     display: block;

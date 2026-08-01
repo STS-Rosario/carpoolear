@@ -80,6 +80,12 @@ describe('TripDriver trip-detail redesign header', () => {
         expect(source).not.toMatch(
             /\$t\('patente'\)\s*\}\}: \{\{\s*licensePlate/
         );
+        expect(source).toMatch(
+            /\.trip-driver__car\s*\{[^}]*color:\s*var\(--ds-text-secondary/
+        );
+        expect(source).toMatch(
+            /\.trip-driver__car[\s\S]*?\.trip-car-details__line\s*\{[^}]*color:\s*var\(--ds-text-secondary/
+        );
     });
 
     it('shows the Usuario verificado pill next to the driver name', () => {
