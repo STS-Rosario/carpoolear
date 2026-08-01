@@ -114,6 +114,7 @@
                 </div>
                 <TripPointDetailFields
                     :points="form.points"
+                    fields="partida"
                     :punto-partida="form.trip.punto_partida"
                     :punto-llegada="form.trip.punto_llegada"
                     :punto-partida-error="form.puntoPartidaError"
@@ -166,6 +167,7 @@
                 </div>
                 <TripPointDetailFields
                     :points="form.points"
+                    fields="llegada"
                     :punto-partida="form.trip.punto_partida"
                     :punto-llegada="form.trip.punto_llegada"
                     :punto-partida-error="form.puntoPartidaError"

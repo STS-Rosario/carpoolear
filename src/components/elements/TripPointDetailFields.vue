@@ -1,6 +1,7 @@
 <template>
     <div v-if="visible" class="trip-point-details">
         <div
+            v-if="showPuntoPartida"
             class="form-group trip_point-detail"
             :class="{ 'trip-error': puntoPartidaError.state }"
         >
@@ -28,6 +29,7 @@
             </p>
         </div>
         <div
+            v-if="showPuntoLlegada"
             class="form-group trip_point-detail"
             :class="{ 'trip-error': puntoLlegadaError.state }"
         >
@@ -60,6 +62,8 @@
 <script>
 import {
     shouldShowTripPointDetailInputs,
+    shouldShowPuntoPartidaInput,
+    shouldShowPuntoLlegadaInput,
     tripPointDetailContainsNumber
 } from '../../utils/tripPointDetailValidation.js';
 
@@ -69,6 +73,11 @@ export default {
         points: {
             type: Array,
             required: true
+        },
+        fields: {
+            type: String,
+            default: 'both',
+            validator: (value) => ['both', 'partida', 'llegada'].includes(value)
         },
         puntoPartida: {
             type: String,
@@ -93,7 +102,25 @@ export default {
     },
     emits: ['update:puntoPartida', 'update:puntoLlegada'],
     computed: {
+        showPuntoPartida() {
+            if (this.fields === 'llegada') {
+                return false;
+            }
+            return shouldShowPuntoPartidaInput(this.points);
+        },
+        showPuntoLlegada() {
+            if (this.fields === 'partida') {
+                return false;
+            }
+            return shouldShowPuntoLlegadaInput(this.points);
+        },
         visible() {
+            if (this.fields === 'partida') {
+                return this.showPuntoPartida;
+            }
+            if (this.fields === 'llegada') {
+                return this.showPuntoLlegada;
+            }
             return shouldShowTripPointDetailInputs(this.points);
         },
         puntoPartidaId() {
