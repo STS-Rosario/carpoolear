@@ -336,4 +336,12 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(destinationBlock).toContain('fields="llegada"');
         expect(destinationBlock).not.toContain('fields="partida"');
     });
+
+    it('keeps left padding on map autocomplete so pin icons do not overlap text', () => {
+        expect(wizardSource).toMatch(
+            /\.form-control-map-autocomplete[\s\S]*?padding-left:\s*(?:2\.5rem|2\.75rem|3rem)/
+        );
+        expect(wizardSource).toContain('location-autocomplete origin');
+        expect(wizardSource).toContain('location-autocomplete destiny');
+    });
 });
