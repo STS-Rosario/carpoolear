@@ -57,4 +57,13 @@ describe('Modal close behavior', () => {
             /\.modal-default-button\s*\{[^}]*float:\s*none/
         );
     });
+
+    it('removes grey header and footer divider bars', () => {
+        expect(source).toMatch(
+            /\.modal-header\s*\{[^}]*border-bottom:\s*none/
+        );
+        expect(source).toMatch(
+            /\.modal-footer\s*\{[^}]*border-top:\s*none/
+        );
+    });
 });

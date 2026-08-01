@@ -137,6 +137,7 @@ export default {
 .modal-header {
     position: relative;
     flex-shrink: 0;
+    border-bottom: none;
 }
 
 .modal-header-with-close {
@@ -169,6 +170,7 @@ export default {
 .modal-footer {
     flex-shrink: 0;
     text-align: center;
+    border-top: none;
 }
 
 .modal-default-button {
