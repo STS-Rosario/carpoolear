@@ -32,4 +32,10 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain('v-if="showPuntoPartida"');
         expect(viewSource).toContain('v-if="showPuntoLlegada"');
     });
+
+    it('styles validation errors in red', () => {
+        expect(viewSource).toMatch(
+            /\.error\s*\{[^}]*color:\s*(?:red|var\(--main-error)/
+        );
+    });
 });
