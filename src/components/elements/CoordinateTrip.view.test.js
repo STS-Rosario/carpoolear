@@ -53,4 +53,16 @@ describe('CoordinateTrip.vue', () => {
             /v-if="conversation\.return_trip && !isTripGroupConversation\(conversation\)"/
         );
     });
+
+    it('styles seat request buttons with design-system primary action blue', () => {
+        expect(viewSource).toMatch(
+            /\.trip_actions\s+\.btn-primary\s*\{[^}]*background:\s*var\(--ds-action\)/s
+        );
+        expect(viewSource).toMatch(
+            /\.trip_actions\s+\.btn-primary\s*\{[^}]*border-color:\s*var\(--ds-action\)/s
+        );
+        expect(viewSource).not.toMatch(
+            /\.trip_actions\s+\.btn-primary\s*\{[^}]*background:\s*var\(--trip-almost-fill-color\)/s
+        );
+    });
 });
