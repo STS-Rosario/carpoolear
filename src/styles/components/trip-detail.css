@@ -14,6 +14,11 @@
 }
 
 .trip-detail--mobile .trip-detail__stack {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trip-detail--mobile .trip-detail__card {
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -60,6 +65,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
+}
+
+.trip-detail--mobile .trip-detail__detalle-grid {
+    gap: 0.75rem;
 }
 
 .trip-detail--mobile .trip-detail__route {
@@ -417,6 +426,9 @@
 }
 
 .trip-detail--desktop .trip-detail__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
     width: 100%;
     box-sizing: border-box;
     background: var(--ds-card-bg);
@@ -426,10 +438,7 @@
 }
 
 .trip-detail--desktop .trip-detail__stack {
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    gap: 0;
 }
 
 .trip-detail--desktop .trip-driver {
@@ -505,4 +514,18 @@
 
 .trip-detail--desktop .trip-seats .row {
     margin: 0;
+}
+
+.trip-detail--desktop .trip-detail__contribucion .trip-seats > div[style*='height'] {
+    display: none !important;
+}
+
+.trip-detail--desktop .trip-detail__joined .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.trip-detail--desktop .trip-stats.row {
+    margin-left: 0;
+    margin-right: 0;
 }
