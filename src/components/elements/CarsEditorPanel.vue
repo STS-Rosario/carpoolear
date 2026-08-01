@@ -26,36 +26,38 @@
                     </span>
                 </div>
                 <div class="cars-editor-panel__actions">
-                    <button
-                        type="button"
-                        class="btn btn-default btn-sm cars-editor-panel__action-btn"
+                    <AppButton
+                        class="cars-editor-panel__action-btn"
+                        variant="secondary"
+                        size="sm"
+                        icon-left="fa fa-pencil"
                         @click="openEditCar(car)"
                     >
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
                         {{ $t('editar') }}
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-danger btn-sm cars-editor-panel__action-btn"
+                    </AppButton>
+                    <AppButton
+                        class="cars-editor-panel__action-btn"
+                        variant="danger"
+                        size="sm"
+                        icon-left="fa fa-trash-o"
                         @click="deleteCar(car)"
                     >
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{ $t('accionEliminar') }}
-                    </button>
+                    </AppButton>
                 </div>
             </li>
         </ul>
 
         <p v-else class="cars-editor-panel__empty">{{ $t('autosSinRegistros') }}</p>
 
-        <button
-            type="button"
-            class="btn btn-primary cars-editor-panel__add cars-editor-panel__action-btn"
+        <AppButton
+            class="cars-editor-panel__add cars-editor-panel__action-btn"
+            variant="primary"
+            icon-left="fa fa-plus"
             @click="openAddCar"
         >
-            <i class="fa fa-plus" aria-hidden="true"></i>
             {{ $t('agregarAuto') }}
-        </button>
+        </AppButton>
 
         <modal v-if="showForm" :name="formModalName" @close="closeForm">
             <template #header>
@@ -76,14 +78,13 @@
                 <p v-if="formError" class="error">{{ formError }}</p>
             </template>
             <template #footer>
-                <button
-                    type="button"
-                    class="btn btn-primary"
+                <AppButton
+                    variant="primary"
                     :disabled="saving"
                     @click="saveCar"
                 >
                     {{ $t('guardar') }}
-                </button>
+                </AppButton>
             </template>
         </modal>
     </div>
@@ -93,6 +94,7 @@
 import { mapActions, mapState } from 'pinia';
 import modal from '../Modal';
 import CarForm from './CarForm.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useCarsStore } from '../../stores/car';
 import { useCarCatalogStore } from '../../stores/carCatalog';
 import dialogs from '../../services/dialogs.js';
@@ -113,7 +115,8 @@ export default {
     name: 'cars-editor-panel',
     components: {
         modal,
-        CarForm
+        CarForm,
+        AppButton
     },
     props: {
         active: {
@@ -353,10 +356,6 @@ export default {
     min-width: max-content;
     white-space: nowrap;
     overflow: visible;
-}
-
-.cars-editor-panel__action-btn .fa {
-    margin-right: 0.35em;
 }
 
 .cars-editor-panel__add {
