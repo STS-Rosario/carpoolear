@@ -1951,7 +1951,7 @@ hr {
 }
 
 .trip_terms--lucrar-card__title {
-    flex: 1 1 0;
+    flex: 0 1 auto;
     min-width: 0;
     font-weight: 700;
     font-size: 1.125rem;
@@ -2077,6 +2077,9 @@ textarea.form-control {
     :deep(.trip_terms--lucrar-card__tooltip[data-tooltip].tooltip-bottom:before) {
     min-width: min(28rem, 92vw);
     max-width: min(36rem, 92vw);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    text-align: left;
 }
 
 .new-trip-tooltips--left :deep([data-tooltip].tooltip-bottom:hover:before),
