@@ -210,10 +210,18 @@ a.app-button:visited,
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    float: none;
+    width: auto;
+    color: inherit;
 }
 
-.app-button__icon > .fa {
+.app-button .app-button__icon > .fa,
+.app-button .app-button__icon .fa {
+    float: none;
+    width: auto;
+    color: inherit;
     font-size: 1em;
+    line-height: 1;
 }
 
 .app-button__label {
