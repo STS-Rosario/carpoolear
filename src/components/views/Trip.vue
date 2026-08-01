@@ -398,8 +398,23 @@
                         <h3 class="trip-detail__section-title">
                             {{ $t('tripDetailSection') }}
                         </h3>
-                        <TripDetailRoute />
-                        <TripStats />
+                        <div class="trip-detail__detalle-grid">
+                            <div class="trip-detail__detalle-main">
+                                <TripDetailRoute />
+                            </div>
+                            <div class="trip-detail__detalle-aside">
+                                <TripStats />
+                                <div
+                                    v-if="!isMobile"
+                                    class="trip-detail__condiciones"
+                                >
+                                    <h3 class="trip-detail__section-title">
+                                        {{ $t('tripDetailConditions') }}
+                                    </h3>
+                                    <TripData />
+                                </div>
+                            </div>
+                        </div>
                     </section>
                     <section
                         v-if="trip.description"
@@ -412,36 +427,81 @@
                             {{ trip.description }}
                         </p>
                     </section>
-                    <section class="trip-detail__section">
-                        <h3 class="trip-detail__section-title">
-                            {{ $t('tripDetailConditions') }}
-                        </h3>
-                        <div class="trip-detail__condiciones">
-                            <TripPrice />
-                            <TripData />
-                        </div>
-                    </section>
-                    <TripPassengers :section-title="$t('tripDetailJoined')" />
-                    <div class="trip-detail__cta">
-                        <TripButtons
-                            @deleteTrip="deleteTrip()"
-                            @toMessages="toMessages()"
-                            @toGroupChat="toGroupChat()"
-                            @onMakeRequest="onMakeRequest()"
-                            @cancelRequest="cancelRequest()"
-                            :sending="sending"
-                            :isPassengersView="isPassengersView"
+
+                    <template v-if="isMobile">
+                        <section class="trip-detail__section">
+                            <h3 class="trip-detail__section-title">
+                                {{ $t('tripDetailConditions') }}
+                            </h3>
+                            <div class="trip-detail__condiciones">
+                                <TripPrice />
+                                <TripData />
+                            </div>
+                        </section>
+                        <TripPassengers
+                            :section-title="$t('tripDetailJoined')"
                         />
-                    </div>
+                        <div class="trip-detail__cta">
+                            <TripButtons
+                                @deleteTrip="deleteTrip()"
+                                @toMessages="toMessages()"
+                                @toGroupChat="toGroupChat()"
+                                @onMakeRequest="onMakeRequest()"
+                                @cancelRequest="cancelRequest()"
+                                :sending="sending"
+                                :isPassengersView="isPassengersView"
+                            />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <section
+                            class="trip-detail__section trip-detail__seats-passengers"
+                        >
+                            <div class="trip-detail__lugares">
+                                <h3 class="trip-detail__section-title">
+                                    {{ $t('lugaresLibres') }}
+                                </h3>
+                                <TripSeats />
+                            </div>
+                            <div class="trip-detail__joined">
+                                <TripPassengers
+                                    :section-title="$t('tripDetailJoined')"
+                                />
+                            </div>
+                        </section>
+                        <section
+                            class="trip-detail__section trip-detail__price-cta"
+                        >
+                            <div class="trip-detail__contribucion">
+                                <TripPrice />
+                            </div>
+                            <div class="trip-detail__cta">
+                                <TripButtons
+                                    @deleteTrip="deleteTrip()"
+                                    @toMessages="toMessages()"
+                                    @toGroupChat="toGroupChat()"
+                                    @onMakeRequest="onMakeRequest()"
+                                    @cancelRequest="cancelRequest()"
+                                    :sending="sending"
+                                    :isPassengersView="isPassengersView"
+                                />
+                            </div>
+                        </section>
+                    </template>
+
                     <div
                         ref="tripMapEl"
                         class="trip-route-map"
-                        style="
-                            width: calc(100% + 20px);
-                            height: 461px;
-                            overflow: hidden;
-                            margin-left: -10px;
-                            z-index: 0;
+                        :style="
+                            isMobile
+                                ? {
+                                      width: 'calc(100% + 20px)',
+                                      height: '461px',
+                                      overflow: 'hidden',
+                                      marginLeft: '-10px',
+                                      zIndex: 0
+                                  }
+                                : undefined
                         "
                     ></div>
                     </div>
