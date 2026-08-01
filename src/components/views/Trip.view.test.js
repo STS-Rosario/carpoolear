@@ -144,13 +144,15 @@ describe('Trip.vue mobile trip-detail stack', () => {
     });
 
 
-    it('renders TripDetailRoute in DETALLE and keeps seats in the desktop lugares band', () => {
+    it('renders TripDetailRoute in DETALLE and a seats pill in the desktop lugares band', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
         expect(stack).toContain('<TripDetailRoute');
         expect(stack).toContain('trip-detail__lugares');
-        expect(stack).toContain('<TripSeats');
+        expect(stack).toContain('trip-detail__seats-pill');
+        expect(stack).toContain('seatsLabel');
+        expect(stack).not.toMatch(/trip-detail__lugares[\s\S]*?<TripSeats/);
         expect(stack).not.toMatch(/<TripLocation\s*\/>/);
         expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
@@ -190,7 +192,7 @@ describe('Trip.vue desktop column bands', () => {
         expect(actionsIdx).toBeGreaterThan(-1);
         expect(mapIdx).toBeGreaterThan(actionsIdx);
         expect(stack).toMatch(
-            /trip-detail__actions-grid[\s\S]*trip-detail__lugares-col[\s\S]*TripSeats[\s\S]*trip-detail__joined[\s\S]*TripPassengers[\s\S]*trip-detail__contribucion[\s\S]*TripPrice[\s\S]*trip-detail__cta[\s\S]*TripButtons/
+            /trip-detail__actions-grid[\s\S]*trip-detail__lugares-col[\s\S]*trip-detail__seats-pill[\s\S]*trip-detail__joined[\s\S]*TripPassengers[\s\S]*trip-detail__contribucion[\s\S]*TripPrice[\s\S]*trip-detail__cta[\s\S]*TripButtons/
         );
         expect(stack).not.toContain('trip-detail__seats-passengers');
         expect(stack).not.toContain('trip-detail__price-cta');

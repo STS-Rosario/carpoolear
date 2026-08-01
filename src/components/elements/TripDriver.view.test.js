@@ -56,6 +56,9 @@ describe('TripDriver trip-detail redesign header', () => {
         );
         expect(source).toContain('getSeatsPillLabel');
         expect(source).toContain('trip-driver__seats');
+        expect(source).toMatch(
+            /v-if="!trip\.is_passenger\s*&&\s*isMobile"|v-if="isMobile\s*&&\s*!trip\.is_passenger"/
+        );
         expect(source).toContain('getMembershipDuration');
         expect(source).toContain('respondeMensajesPorcentaje');
         expect(source).toContain('tiempoPromedioRespuesta');
