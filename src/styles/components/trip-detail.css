@@ -545,6 +545,20 @@
     text-transform: none;
 }
 
+.trip-detail--desktop .trip-detail__lugares .trip_seats-available_value {
+    color: var(--ds-text-primary, #333);
+    font-size: 1.75rem;
+    line-height: 1.1;
+}
+
+.trip-detail--desktop .trip-detail__lugares .trip_seats-available_label {
+    color: var(--ds-text-secondary, #666);
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: 1.3;
+    position: static;
+}
+
 .trip-detail--desktop .trip-detail__driver-message {
     margin: 0;
     color: var(--ds-text-primary, #333);

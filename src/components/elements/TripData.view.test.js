@@ -12,12 +12,12 @@ describe('TripData trip car display', () => {
 });
 
 describe('TripData trip visibility', () => {
-    it('hides friendship/visibility rows on mobile trip detail', () => {
-        expect(viewSource).toContain('isMobile');
-        expect(viewSource).toMatch(
-            /v-if="!isMobile"[\s\S]*?friendship_type_id|friendship_type_id[\s\S]*?v-if="!isMobile"/
-        );
-        expect(viewSource).toContain("$t('publico')");
+    it('omits friendship/visibility rows so condiciones match the redesign preferences list', () => {
+        expect(viewSource).not.toContain('friendship_type_id');
+        expect(viewSource).not.toContain("$t('publico')");
+        expect(viewSource).not.toContain("$t('privacidadViaje')");
         expect(viewSource).toContain("$t('nofumar')");
+        expect(viewSource).toContain("$t('noanimales')");
+        expect(viewSource).toContain("$t('noninos')");
     });
 });

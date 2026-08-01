@@ -262,5 +262,8 @@ describe('trip detail desktop shares mobile visual language', () => {
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-driver\s+a[\s\S]*?color:\s*var\(--ds-text-primary/
         );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__lugares\s+\.trip_seats-available_value\s*\{[^}]*color:\s*var\(--ds-text-primary/
+        );
     });
 });
