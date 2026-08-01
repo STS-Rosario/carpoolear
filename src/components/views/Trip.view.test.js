@@ -99,6 +99,20 @@ describe('Trip.vue shared trip-detail stack', () => {
         expect(viewSource).toContain("'trip-detail--desktop': !isMobile");
     });
 
+    it('shows a desktop-only white page title above the trip card', () => {
+        expect(viewSource).toContain('trip-detail__page-header');
+        expect(viewSource).toContain("$t('tripDetailPageTitle')");
+        expect(viewSource).toMatch(
+            /v-if="!isMobile"[\s\S]*?trip-detail__page-header[\s\S]*?tripDetailPageTitle/
+        );
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-detail__card/
+        )[0];
+        expect(stack.indexOf('trip-detail__page-header')).toBeLessThan(
+            stack.indexOf('trip-detail__card')
+        );
+    });
+
     it('shows the redesign stack for any breakpoint when trip is loaded', () => {
         expect(viewSource).toMatch(
             /v-if="trip\s*&&\s*!isPassengersView"[\s\S]*?trip-detail__stack|trip-detail__stack[\s\S]*?v-if="trip\s*&&\s*!isPassengersView"/

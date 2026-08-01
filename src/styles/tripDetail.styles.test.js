@@ -233,6 +233,18 @@ describe('trip detail mobile DETALLE gap', () => {
     });
 });
 
+describe('trip detail desktop page title', () => {
+    it('styles a white page-header band above the card', () => {
+        expect(css).toContain('.trip-detail__page-header');
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__page-header\s*\{[^}]*background:\s*(#fff|var\(--trip-detail-canvas|#ffffff)/
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__page-title\s*\{[^}]*font-size:\s*1\.5rem/
+        );
+    });
+});
+
 describe('trip detail desktop shares mobile visual language', () => {
     it('styles route timeline, chips, and city/region on desktop like mobile', () => {
         expect(css).toMatch(
