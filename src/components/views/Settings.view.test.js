@@ -42,4 +42,10 @@ describe('Settings navigation', () => {
             /name:\s*'friends_setting'[\s\S]*?titleKey:\s*'misAmigos'/
         );
     });
+
+    it('does not render a layout page title for Autos so the in-card heading is used', () => {
+        expect(viewSource).not.toMatch(
+            /profile_cars['"]?\s*\)\s*return\s*['"]autos['"]/
+        );
+    });
 });
