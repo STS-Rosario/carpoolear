@@ -4,7 +4,9 @@
             <admin-nav></admin-nav>
         </aside>
         <div class="admin-layout-content">
-            <slot></slot>
+            <div class="admin-layout-card">
+                <slot></slot>
+            </div>
         </div>
     </div>
 </template>
@@ -47,6 +49,31 @@ export default {
     -webkit-overflow-scrolling: touch;
 }
 
+.admin-layout-card {
+    background: var(--ds-card-bg);
+    border-radius: var(--ds-card-radius);
+    box-shadow: var(--ds-card-shadow);
+    padding: 1.25rem 1.5rem;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.admin-layout-card :deep(.app-page-title),
+.admin-layout-card :deep(h2) {
+    margin: 0 0 1.25rem;
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-page-title-size);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: 1.15;
+}
+
+.admin-layout-card :deep(h3) {
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-bold);
+}
+
 .admin-layout-content :deep(.container) {
     width: 100%;
     max-width: none;
@@ -79,6 +106,10 @@ export default {
         flex: none;
         width: 100%;
         max-width: none;
+    }
+
+    .admin-layout-card {
+        padding: 1rem;
     }
 }
 </style>
