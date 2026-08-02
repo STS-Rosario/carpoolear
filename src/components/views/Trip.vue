@@ -705,6 +705,18 @@ export default {
             router.back();
         },
 
+        syncTripDetailMobilePageClass(forceOff) {
+            if (typeof document === 'undefined' || !document.body) {
+                return;
+            }
+            const enabled =
+                forceOff === false ? false : Boolean(this.isMobile);
+            document.body.classList.toggle(
+                'trip-detail-mobile-page',
+                enabled
+            );
+        },
+
         destroyTripRouteMap() {
             if (this._tripRoutingControl && this._tripLeafletMap) {
                 try {
@@ -871,6 +883,7 @@ export default {
 
     mounted() {
         this.loadTrip();
+        this.syncTripDetailMobilePageClass();
         bus.on('back-click', this.onBackClick);
 
         // Load Mercado Pago SDK if not already loaded
@@ -887,10 +900,14 @@ export default {
 
     beforeUnmount() {
         this.destroyTripRouteMap();
+        this.syncTripDetailMobilePageClass(false);
         bus.off('back-click', this.onBackClick);
     },
 
     watch: {
+        isMobile: function () {
+            this.syncTripDetailMobilePageClass();
+        },
         id: function (value) {
             this.loadTrip();
         },
