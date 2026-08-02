@@ -61,4 +61,15 @@ describe('ConversationChat.vue user ratings', () => {
             /isGroupChat[\s\S]*verDetalleViaje[\s\S]*trip/s
         );
     });
+
+    it('links the private chat participant name to their profile', () => {
+        expect(viewSource).toContain('otherUserProfileRoute');
+        expect(viewSource).toMatch(
+            /<h2>[\s\S]*?<router-link[\s\S]*?:to="otherUserProfileRoute"[\s\S]*?conversation\.title[\s\S]*?<\/router-link>[\s\S]*?<\/h2>/
+        );
+        expect(viewSource).toContain('getOtherParticipant');
+        expect(viewSource).toMatch(
+            /otherUserProfileRoute[\s\S]*name:\s*'profile'/
+        );
+    });
 });
