@@ -134,6 +134,7 @@
                     <div
                         v-if="!autoSearch && !isMobile"
                         class="trips-search__submit"
+                        data-testid="trips-search-submit"
                     >
                         <AppButton
                             variant="primary"
@@ -283,6 +284,7 @@
             <div
                 v-if="isMobile && !autoSearch"
                 class="trips-search__submit trips-search__submit--mobile"
+                data-testid="trips-search-submit"
             >
                 <AppButton
                     variant="primary"
