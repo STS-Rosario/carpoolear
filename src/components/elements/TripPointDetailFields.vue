@@ -2,25 +2,18 @@
     <div v-if="visible" class="trip-point-details">
         <div
             v-if="showPuntoPartida"
-            class="form-group trip_point-detail"
+            class="trip_point-detail"
             :class="{ 'trip-error': puntoPartidaError.state }"
         >
-            <label :for="puntoPartidaId" class="control-label">{{
-                $t('puntoDePartida')
-            }}</label>
-            <input
+            <AppInput
+                :label="$t('puntoDePartida')"
                 :id="puntoPartidaId"
-                type="text"
-                class="form-control"
-                :class="{ 'has-error': puntoPartidaError.state }"
                 :placeholder="$t('barrioOPuntoEncuentroPublico')"
-                :value="puntoPartida"
+                :model-value="puntoPartida"
                 maxlength="255"
-                @input="$emit('update:puntoPartida', $event.target.value)"
+                :error="puntoPartidaError.state ? puntoPartidaError.message : ''"
+                @update:modelValue="$emit('update:puntoPartida', $event)"
             />
-            <span class="error" v-if="puntoPartidaError.state">{{
-                puntoPartidaError.message
-            }}</span>
             <p
                 v-if="showPuntoPartidaPersonalAddressWarning"
                 class="trip_point-detail-warning"
@@ -30,25 +23,18 @@
         </div>
         <div
             v-if="showPuntoLlegada"
-            class="form-group trip_point-detail"
+            class="trip_point-detail"
             :class="{ 'trip-error': puntoLlegadaError.state }"
         >
-            <label :for="puntoLlegadaId" class="control-label">{{
-                $t('puntoDeLlegada')
-            }}</label>
-            <input
+            <AppInput
+                :label="$t('puntoDeLlegada')"
                 :id="puntoLlegadaId"
-                type="text"
-                class="form-control"
-                :class="{ 'has-error': puntoLlegadaError.state }"
                 :placeholder="$t('barrioOPuntoEncuentroPublico')"
-                :value="puntoLlegada"
+                :model-value="puntoLlegada"
                 maxlength="255"
-                @input="$emit('update:puntoLlegada', $event.target.value)"
+                :error="puntoLlegadaError.state ? puntoLlegadaError.message : ''"
+                @update:modelValue="$emit('update:puntoLlegada', $event)"
             />
-            <span class="error" v-if="puntoLlegadaError.state">{{
-                puntoLlegadaError.message
-            }}</span>
             <p
                 v-if="showPuntoLlegadaPersonalAddressWarning"
                 class="trip_point-detail-warning"
@@ -60,6 +46,7 @@
 </template>
 
 <script>
+import AppInput from '../ui/AppInput.vue';
 import {
     shouldShowTripPointDetailInputs,
     shouldShowPuntoPartidaInput,
@@ -69,6 +56,9 @@ import {
 
 export default {
     name: 'TripPointDetailFields',
+    components: {
+        AppInput
+    },
     props: {
         points: {
             type: Array,

@@ -387,16 +387,19 @@
                         class="trip_price"
                         v-if="!isPassenger && form.config.module_seat_price_enabled"
                     >
-                        <label class="label-for-group">{{ $t('precioAsiento') }}</label>
-                        <input
+                        <AppInput
                             type="number"
                             v-model="form.price"
-                            class="form-control form-control-with-icon form-control-price"
+                            :label="$t('precioAsiento')"
                             min="0"
-                            :class="{ 'has-error': form.priceError.state }"
-                            @input="form.onOutboundPriceFieldInput"
+                            icon-left="fa fa-usd"
+                            :error="
+                                form.priceError.state
+                                    ? form.priceError.message
+                                    : ''
+                            "
+                            @update:modelValue="form.onOutboundPriceFieldInput"
                         />
-                        <span class="error" v-if="form.priceError.state">{{ form.priceError.message }}</span>
                     </div>
                     <span class="error" v-if="form.seatsError.state">{{ form.seatsError.message }}</span>
                 </div>
@@ -407,12 +410,15 @@
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepDescriptionQuestion') }}
                 </h3>
-                <textarea
+                <AppTextarea
+                    class="new-trip-wizard__description"
                     maxlength="2000"
                     v-model="form.trip.description"
-                    class="form-control new-trip-wizard__description"
                     :placeholder="$t('placeholderComentarioPasajeros')"
-                ></textarea>
+                    :error="
+                        form.commentError.state ? form.commentError.message : ''
+                    "
+                />
                 <div v-if="!isPassenger" class="checkbox-trip-autoaccept-friends">
                     <input
                         type="checkbox"
@@ -423,7 +429,6 @@
                         {{ $t('aceptarPedidosAmigosAutomaticamente') }}
                     </label>
                 </div>
-                <span class="error" v-if="form.commentError.state">{{ form.commentError.message }}</span>
                 <span class="error" v-if="stepErrors.description">{{ $t(stepErrors.description) }}</span>
             </template>
 
@@ -694,6 +699,8 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import SvgItem from '../SvgItem';
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import {
     STEP,
     getNextStep,
@@ -734,7 +741,9 @@ export default {
         WeeklySchedule,
         SvgItem,
         modal,
-        AppButton
+        AppButton,
+        AppInput,
+        AppTextarea
     },
 
     inject: ['newTripForm'],
