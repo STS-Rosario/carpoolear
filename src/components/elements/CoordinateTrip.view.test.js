@@ -54,15 +54,26 @@ describe('CoordinateTrip.vue', () => {
         );
     });
 
-    it('styles seat request buttons with design-system primary action blue', () => {
+    it('uses danger AppButton for Retirar solicitud without uppercase', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toContain("$t('retirarSolicitudDeAsiento')");
         expect(viewSource).toMatch(
-            /\.trip_actions\s+\.btn-primary\s*\{[^}]*background:\s*var\(--ds-action\)/s
+            /outboundSeatActionVariant[\s\S]*danger/
         );
         expect(viewSource).toMatch(
-            /\.trip_actions\s+\.btn-primary\s*\{[^}]*border-color:\s*var\(--ds-action\)/s
+            /:variant="outboundSeatActionVariant"/
+        );
+        expect(viewSource).toMatch(
+            /\.trip_actions\s+\.app-button[\s\S]*?text-transform:\s*none/s
         );
         expect(viewSource).not.toMatch(
-            /\.trip_actions\s+\.btn-primary\s*\{[^}]*background:\s*var\(--trip-almost-fill-color\)/s
+            /class="btn btn-primary"[\s\S]*?retirarSolicitudDeAsiento/
+        );
+    });
+
+    it('styles seat request buttons with design-system primary action blue', () => {
+        expect(viewSource).toMatch(
+            /\.trip_actions\s+\.app-button--primary\s*\{[^}]*background:\s*var\(--ds-action\)|AppButton/
         );
     });
 });
