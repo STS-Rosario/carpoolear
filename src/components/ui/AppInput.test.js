@@ -3,11 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'AppInput.vue');
-const loginPath = path.resolve(__dirname, '../views/Login.vue');
-const registerPath = path.resolve(__dirname, '../views/Register.vue');
 const source = fs.readFileSync(componentPath, 'utf8');
-const loginSource = fs.readFileSync(loginPath, 'utf8');
-const registerSource = fs.readFileSync(registerPath, 'utf8');
 
 describe('AppInput', () => {
     it('supports label, hint, error, disabled, and password props', () => {

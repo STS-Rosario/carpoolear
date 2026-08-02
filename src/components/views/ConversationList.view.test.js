@@ -74,6 +74,13 @@ describe('ConversationList.vue messages redesign', () => {
             '../../styles/components/messages-page.css'
         );
         const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toContain('conversation_header__unread-dot');
+        expect(css).toMatch(
+            /\.conversation_header__unread-dot\s*\{[^}]*top:\s*50%/s
+        );
+        expect(css).toMatch(
+            /\.conversation_header__unread-dot\s*\{[^}]*transform:\s*translateY\(-50%\)/s
+        );
     });
 
     it('wraps list and chat in a messages-page__shell', () => {
