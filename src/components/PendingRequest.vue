@@ -312,7 +312,8 @@ export default {
     align-items: flex-start;
     gap: 1rem;
     box-sizing: border-box;
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
     background: var(--ds-card-bg);
     border-radius: var(--ds-card-radius);
     box-shadow: var(--ds-card-shadow);
@@ -332,7 +333,7 @@ export default {
 }
 
 .pending-request-card__message {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
     width: auto;
 }
