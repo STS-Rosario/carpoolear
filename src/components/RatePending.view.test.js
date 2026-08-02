@@ -74,3 +74,16 @@ describe('RatePending.vue submit CTA', () => {
         );
     });
 });
+
+describe('RatePending.vue comment field', () => {
+    it('uses AppTextarea for the rating comment field', () => {
+        expect(viewSource).toContain(
+            "import AppTextarea from './ui/AppTextarea.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppTextarea[\s\S]*?v-model="comment"[\s\S]*?ratePendingIncluyaUnComentario/
+        );
+        expect(viewSource).not.toMatch(/<textarea[\s\S]*?rate_comment/);
+        expect(viewSource).not.toContain('class="rate_comment"');
+    });
+});

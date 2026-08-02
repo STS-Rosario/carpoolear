@@ -52,4 +52,15 @@ describe('RateItem.vue reply CTAs', () => {
             /class="btn btn-primary"[\s\S]*?rateItemCancelar/
         );
     });
+
+    it('uses AppTextarea for the reply comment field', () => {
+        expect(viewSource).toContain(
+            "import AppTextarea from './ui/AppTextarea.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppTextarea[\s\S]*?id="reply"[\s\S]*?v-model="comment"[\s\S]*?rateItemResponderALaCalificacion/
+        );
+        expect(viewSource).not.toMatch(/<textarea[\s\S]*?v-model="comment"/);
+        expect(viewSource).not.toContain('label-reply');
+    });
 });
