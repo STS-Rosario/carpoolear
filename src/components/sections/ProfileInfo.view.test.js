@@ -4,8 +4,13 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'ProfileInfo.vue');
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const profilePageCssPath = path.resolve(
+    __dirname,
+    '../../styles/components/profile-page.css'
+);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const profilePageCss = fs.readFileSync(profilePageCssPath, 'utf8');
 
 describe('ProfileInfo public panel', () => {
     it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
@@ -30,6 +35,24 @@ describe('ProfileInfo public panel', () => {
         );
         expect(viewSource).toContain('profile-info-panel__tile-icon-wrap--verified');
         expect(viewSource).toContain('profile-info-panel__tile-icon--verified');
+    });
+
+    it('centers tile icons and beats legacy floated profile icons', () => {
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon\s*\{[^}]*float:\s*none/
+        );
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap\s*\{[^}]*align-items:\s*center/
+        );
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap\s*\{[^}]*justify-content:\s*center/
+        );
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap--verified\s*\{[^}]*background:/
+        );
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon--verified\s*\{[^}]*color:/
+        );
     });
 
     it('always shows response tile when the conversation delay module is on', () => {
