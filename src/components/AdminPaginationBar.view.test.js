@@ -34,4 +34,16 @@ describe('AdminPaginationBar component', () => {
         expect(componentSource).not.toContain('form-control');
         expect(componentSource).not.toContain('btn btn-default');
     });
+
+    it('sizes the bar and per-page field to content width', () => {
+        expect(componentSource).toMatch(
+            /\.admin-pagination-bar\s*\{[^}]*width:\s*(fit-content|auto)/
+        );
+        expect(componentSource).toMatch(
+            /\.admin-pagination-bar__per-page\s*\{[^}]*width:\s*(fit-content|auto)/
+        );
+        expect(componentSource).not.toMatch(
+            /\.admin-pagination-bar\s*\{[^}]*width:\s*100%/
+        );
+    });
 });

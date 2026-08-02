@@ -99,4 +99,21 @@ describe('AdminUserDetail view', () => {
         expect(source).not.toContain('btn btn-default');
         expect(source).not.toContain('btn btn-primary');
     });
+
+    it('spaces AppButton clusters with flex gap instead of legacy .btn margins', () => {
+        expect(source).toMatch(
+            /\.user-admin-view-nav\s*\{[^}]*display:\s*flex/
+        );
+        expect(source).toMatch(
+            /\.user-admin-view-actions\s*\{[^}]*display:\s*flex/
+        );
+        expect(source).toMatch(
+            /\.user-admin-view-nav\s*\{[^}]*gap:\s*/
+        );
+        expect(source).toMatch(
+            /\.user-admin-view-actions\s*\{[^}]*gap:\s*/
+        );
+        expect(source).not.toContain('.user-admin-view-nav .btn');
+        expect(source).not.toContain('.user-admin-view-actions .btn');
+    });
 });
