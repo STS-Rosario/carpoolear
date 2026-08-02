@@ -103,6 +103,22 @@ describe('TripButtons.vue owner actions', () => {
         expect(before).not.toContain('text-transform');
     });
 
+    it('uses danger AppButton to withdraw a pending seat request', () => {
+        const labelIdx = viewSource.indexOf(
+            "$t('retirarSolicitudDeAsiento')"
+        );
+        expect(labelIdx).toBeGreaterThan(-1);
+        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
+        expect(before).toContain('<AppButton');
+        expect(before).toContain('variant="danger"');
+        expect(before).toContain('!canRequest');
+        expect(before).toContain("$emit('cancelRequest')");
+        expect(viewSource).not.toContain("$t('solicitadoRetirar')");
+        expect(viewSource).not.toMatch(
+            /class="btn"[^>]*>[\s\S]*?solicitadoRetirar/
+        );
+    });
+
     it('uses secondary multiline AppButton for live location share', () => {
         const labelIdx = viewSource.indexOf(
             "$t('compartirUbicacionTiempoReal')"
