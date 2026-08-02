@@ -101,14 +101,16 @@
                     </label>
                 </div>
                 <div class="trip_point location-autocomplete origin" :class="{ 'trip-error': form.points[0].error.state }">
-                    <autocomplete
-                        :placeholder="form.$t('origen')"
-                        name="wizard-origin"
-                        :model-value="form.points[0].name"
-                        v-on:place_changed="(data) => form.getPlace(0, data)"
-                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                        :country="form.allowForeignPoints ? null : 'AR'"
-                    ></autocomplete>
+                    <AppField icon-left="fa fa-map-marker">
+                        <autocomplete
+                            :placeholder="form.$t('origen')"
+                            name="wizard-origin"
+                            :model-value="form.points[0].name"
+                            v-on:place_changed="(data) => form.getPlace(0, data)"
+                            :classes="'new-trip-wizard__autocomplete-input'"
+                            :country="form.allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                    </AppField>
                     <span class="error" v-if="form.points[0].error.state">{{ form.points[0].error.message }}</span>
                     <span class="error" v-if="stepErrors.origin">{{ $t(stepErrors.origin) }}</span>
                 </div>
@@ -144,14 +146,16 @@
                     class="trip_point location-autocomplete destiny"
                     :class="{ 'trip-error': lastPoint.error.state }"
                 >
-                    <autocomplete
-                        :placeholder="form.$t('destino')"
-                        name="wizard-destination"
-                        :model-value="lastPoint.name"
-                        v-on:place_changed="(data) => form.getPlace(form.points.length - 1, data)"
-                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                        :country="form.allowForeignPoints ? null : 'AR'"
-                    ></autocomplete>
+                    <AppField icon-left="fa fa-map-marker">
+                        <autocomplete
+                            :placeholder="form.$t('destino')"
+                            name="wizard-destination"
+                            :model-value="lastPoint.name"
+                            v-on:place_changed="(data) => form.getPlace(form.points.length - 1, data)"
+                            :classes="'new-trip-wizard__autocomplete-input'"
+                            :country="form.allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                    </AppField>
                     <span class="error" v-if="lastPoint.error.state">{{ lastPoint.error.message }}</span>
                     <span class="error" v-if="stepErrors.destination">{{ $t(stepErrors.destination) }}</span>
                 </div>
@@ -199,14 +203,16 @@
                     class="trip_point location-autocomplete new-trip-wizard__stop"
                     :class="{ 'trip-error': point.error.state }"
                 >
-                    <autocomplete
-                        :placeholder="form.$t('ingresePuntoIntermedio')"
-                        :name="`wizard-stop-${index}`"
-                        :model-value="point.name"
-                        v-on:place_changed="(data) => form.getPlace(intermediateIndex(index), data)"
-                        :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                        :country="form.allowForeignPoints ? null : 'AR'"
-                    ></autocomplete>
+                    <AppField icon-left="fa fa-map-marker">
+                        <autocomplete
+                            :placeholder="form.$t('ingresePuntoIntermedio')"
+                            :name="`wizard-stop-${index}`"
+                            :model-value="point.name"
+                            v-on:place_changed="(data) => form.getPlace(intermediateIndex(index), data)"
+                            :classes="'new-trip-wizard__autocomplete-input'"
+                            :country="form.allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                    </AppField>
                     <button
                         type="button"
                         class="btn btn-link new-trip-wizard__remove-stop"
@@ -262,12 +268,14 @@
                     </button>
                 </div>
                 <div v-if="!form.useWeeklySchedule" class="trip_datetime">
-                    <DatePicker
-                        :model-value="form.dateAnswer"
-                        :minDate="form.minDate"
-                        :class="{ 'has-error': form.dateError.state }"
-                        v-on:date_changed="form.changeDate"
-                    ></DatePicker>
+                    <AppField class="new-trip-wizard__date-field">
+                        <DatePicker
+                            :model-value="form.dateAnswer"
+                            :minDate="form.minDate"
+                            :class="{ 'has-error': form.dateError.state }"
+                            v-on:date_changed="form.changeDate"
+                        ></DatePicker>
+                    </AppField>
                     <div class="new-trip-wizard__time-field">
                         <AppInput
                             ref="wizardTimeInput"
@@ -1367,15 +1375,8 @@ export default {
     box-shadow: none;
 }
 
-.new-trip-wizard :deep(.form-control.form-control-with-icon),
-.new-trip-wizard :deep(.form-control.form-control-map-autocomplete) {
+.new-trip-wizard :deep(.form-control.form-control-with-icon) {
     padding-left: 2.75rem;
-}
-
-.new-trip-wizard :deep(.form-control.form-control-map-autocomplete) {
-    background-repeat: no-repeat;
-    background-position: 0.75rem center;
-    background-size: 1.25rem 1.25rem;
 }
 
 .new-trip-wizard :deep(.form-control:focus),
