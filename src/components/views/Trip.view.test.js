@@ -88,6 +88,11 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
         expect(css).not.toMatch(
             /\.carpoodatos\s+p\s*,\s*\.carpoodatos\s+ul\s*\{[\s\S]*?font-size:\s*11px/
         );
+
+        const liBlock = css.match(/\.carpoodatos\s+li\s*\{[\s\S]*?\}/);
+        expect(liBlock).not.toBeNull();
+        expect(liBlock[0]).toMatch(/font-size:\s*0\.9rem/);
+        expect(liBlock[0]).toMatch(/line-height:\s*1\.5/);
     });
 });
 
