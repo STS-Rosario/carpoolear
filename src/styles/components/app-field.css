@@ -87,7 +87,8 @@
 }
 
 .app-field .osm-autocomplete,
-.app-field .date-picker {
+.app-field .date-picker,
+.app-field .catalog-combobox {
     width: 100%;
 }
 

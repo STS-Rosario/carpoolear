@@ -2,7 +2,7 @@
     <div class="catalog-combobox" :class="{ 'is-open': open }">
         <input
             type="text"
-            class="form-control catalog-combobox__input"
+            class="catalog-combobox__input"
             :value="displayValue"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -190,11 +190,32 @@ export default {
 }
 
 .catalog-combobox__input {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
     color: #333;
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.catalog-combobox__input:focus {
+    outline: none;
+}
+
+.catalog-combobox__input:disabled {
+    color: var(--ds-input-disabled-text, #737373);
+    background: transparent;
+    cursor: not-allowed;
 }
 
 .catalog-combobox__input::placeholder {
-    color: var(--soft-font-color, #bbb);
+    color: var(--ds-input-placeholder, #737373);
 }
 
 .catalog-combobox__list {
