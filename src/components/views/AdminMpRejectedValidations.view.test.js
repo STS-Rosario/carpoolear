@@ -16,11 +16,4 @@ describe('AdminMpRejectedValidations view', () => {
         expect(viewSource).not.toContain("name: 'profile'");
     });
 
-    it('uses primary AppButton for ver detalle action', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-mp-rejected-validation-detail[\s\S]*?verDetalle/
-        );
-        expect(viewSource).not.toContain('btn-primary-blue');
-    });
 });

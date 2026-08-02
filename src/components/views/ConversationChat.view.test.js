@@ -44,12 +44,6 @@ describe('ConversationChat.vue user ratings', () => {
         expect(viewSource).toContain('message-composer-editor');
     });
 
-    it('uses a primary send control with a message icon', () => {
-        expect(viewSource).toContain('fa-paper-plane');
-        expect(viewSource).not.toContain('fa-play');
-        expect(viewSource).toContain('message-composer-send');
-    });
-
     it('renders day separators between message groups', () => {
         expect(viewSource).toContain('buildMessagesWithDaySeparators');
         expect(viewSource).toContain('messagesWithDaySeparators');

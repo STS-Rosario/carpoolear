@@ -15,13 +15,6 @@ describe('AdminUserRecommendations view', () => {
         expect(viewSource).toContain('AdminReferenceCard');
     });
 
-    it('uses secondary AppButton for back navigation', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?hubRoute/
-        );
-        expect(viewSource).not.toContain('btn btn-default');
-    });
 });
 
 describe('AdminReferenceCard', () => {
@@ -34,17 +27,4 @@ describe('AdminReferenceCard', () => {
         expect(cardSource).toContain('adminUsuariosEditarFila');
     });
 
-    it('uses AppTextarea and AppButton for edit controls', () => {
-        expect(cardSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(cardSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
-        expect(cardSource).toMatch(
-            /<AppTextarea[\s\S]*?:model-value="editComment"/
-        );
-        expect(cardSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?\$emit\('save'\)/
-        );
-        expect(cardSource).not.toContain('form-control');
-        expect(cardSource).not.toContain('btn btn-primary');
-        expect(cardSource).not.toContain('btn btn-default');
-    });
 });

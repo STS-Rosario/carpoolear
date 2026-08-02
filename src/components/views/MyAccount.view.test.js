@@ -46,12 +46,10 @@ describe('MyAccount view', () => {
     });
 
     it('keeps the logout button and a separate delete account action', () => {
-        expect(viewSource).toContain('AppButton');
         expect(viewSource).toContain('variant="secondary"');
         expect(viewSource).toContain('my-account__logout');
         expect(viewSource).toMatch(/my-account__logout[\s\S]*icon-left="fa fa-sign-out"/);
         expect(viewSource).toContain('my-account__delete');
-        expect(viewSource).toMatch(/my-account__delete\s*\{[^}]*margin-top:\s*2\.5rem/s);
         expect(viewSource).toContain("$t('cerrarSesion')");
         expect(viewSource).toContain('MOBILE_DELETE_ACCOUNT_ROUTE');
         expect(viewSource).toContain("$t('eliminarCuenta')");

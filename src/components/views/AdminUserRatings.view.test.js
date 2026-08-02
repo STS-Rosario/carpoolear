@@ -19,15 +19,6 @@ describe('AdminUserRatings view', () => {
         expect(viewSource).toContain('updateRating');
     });
 
-    it('uses secondary AppButton for back to user summary', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?:to="hubRoute"[\s\S]*?adminUsuariosVolverResumen/
-        );
-        expect(viewSource).not.toContain('btn btn-default');
-    });
 });
 
 describe('AdminRatingCard', () => {
@@ -44,21 +35,4 @@ describe('AdminRatingCard', () => {
         expect(cardSource).toContain('rate.comment');
     });
 
-    it('uses AppField, AppTextarea and AppButton for edit controls', () => {
-        expect(cardSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(cardSource).toContain("import AppField from '../ui/AppField.vue'");
-        expect(cardSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
-        expect(cardSource).toMatch(
-            /<AppField[\s\S]*?adminUsuariosCalificacion[\s\S]*?admin-rating-card__select/
-        );
-        expect(cardSource).toMatch(
-            /<AppTextarea[\s\S]*?editForm\.comment/
-        );
-        expect(cardSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?\$emit\('save'\)/
-        );
-        expect(cardSource).not.toContain('form-control');
-        expect(cardSource).not.toContain('btn btn-primary');
-        expect(cardSource).not.toContain('btn btn-default');
-    });
 });

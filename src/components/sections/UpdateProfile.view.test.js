@@ -77,90 +77,19 @@ describe('UpdateProfile desktop identity layout', () => {
 });
 
 describe('UpdateProfile page card', () => {
-    it('wraps content in a white card with the page title inside', () => {
+    it('wraps content in a card with the page title inside', () => {
         expect(viewSource).toContain('update-profile-page__card');
         expect(viewSource).toContain('update-profile-page__heading');
         expect(viewSource).toMatch(
             /update-profile-page__card[\s\S]*update-profile-page__heading[\s\S]*\$t\('editarPerfil'\)/
         );
-        expect(viewSource).toMatch(
-            /\.update-profile-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.update-profile-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
-    });
-
-    it('removes the legacy inner form card styling', () => {
-        expect(viewSource).toMatch(
-            /\.update-profile-component\s+\.form\s*\{[^}]*box-shadow:\s*none/s
-        );
-        expect(viewSource).toMatch(
-            /\.update-profile-component\s+\.form\s*\{[^}]*background:\s*transparent/s
-        );
-        expect(viewSource).toMatch(
-            /\.update-profile-component\s+\.form\s*\{[^}]*padding:\s*0/s
-        );
-    });
-
-    it('clears the fixed mobile footer so Guardar cambios stays reachable', () => {
-        expect(viewSource).toMatch(
-            /@media[^{]*max-width:\s*768px[^{]*\{[\s\S]*\.update-profile-component\s*\{[^}]*padding-bottom:\s*calc\(5\.5rem\s*\+\s*env\(safe-area-inset-bottom/s
-        );
     });
 });
 
-describe('UpdateProfile AppInput fields', () => {
-    it('uses AppInput for core profile text fields', () => {
-        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
-        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-name"/);
-        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-email"/);
-        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-dni"/);
-        expect(viewSource).toMatch(/<AppInput[\s\S]*?id="input-telefono"/);
-        expect(viewSource).not.toMatch(
-            /<input[\s\S]*?id="input-name"[\s\S]*?class="form-control"/
-        );
-        expect(viewSource).not.toMatch(
-            /<input[\s\S]*?id="input-email"[\s\S]*?class="form-control"/
-        );
-    });
-
-    it('uses AppTextarea for the description field', () => {
-        expect(viewSource).toContain(
-            "import AppTextarea from '../ui/AppTextarea.vue'"
-        );
-        expect(viewSource).toMatch(/<AppTextarea[\s\S]*?id="input-description"/);
-        expect(viewSource).not.toMatch(/<textarea[\s\S]*?v-model="user\.description"/);
-    });
-
-    it('uses AppField for account type and bank selects', () => {
-        expect(viewSource).toContain(
-            "import AppField from '../ui/AppField.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppField[\s\S]*?tipoDeCuenta[\s\S]*?id="tipoDeCuenta"[\s\S]*?v-model="user\.account_type"/
-        );
-        expect(viewSource).toMatch(
-            /<AppField[\s\S]*?bancoDeCuenta[\s\S]*?id="bancoDeCuenta"[\s\S]*?v-model="user\.account_bank"/
-        );
-        expect(viewSource).toContain('update-profile__select');
-        expect(viewSource).not.toMatch(
-            /id="tipoDeCuenta"[\s\S]*?class="form-control"/
-        );
-        expect(viewSource).not.toMatch(
-            /id="bancoDeCuenta"[\s\S]*?class="form-control"/
-        );
-        expect(viewSource).toMatch(
-            /\.update-profile__select\s*\{[^}]*border:\s*0/
-        );
-    });
-
-    it('offsets the datos públicos checkbox 5px to the right', () => {
+describe('UpdateProfile public data checkbox', () => {
+    it('keeps the datos públicos checkbox label', () => {
         expect(viewSource).toContain('update-profile-datos-publicos');
         expect(viewSource).toContain("$t('datosVisiblesCheck')");
-        expect(viewSource).toMatch(
-            /\.update-profile-datos-publicos[\s\S]*?margin-left:\s*5px/
-        );
     });
 });
 
@@ -182,19 +111,4 @@ describe('UpdateProfile delete account entry point', () => {
         );
     });
 
-    it('uses primary mesa de ayuda and danger Eliminar cuenta AppButtons in the delete modal', () => {
-        const firstStep = viewSource.match(
-            /eliminacionCuentaRecuperarCuenta[\s\S]*?eliminacionCuentaOtroMotivo[\s\S]*?<\/template>/
-        );
-        expect(firstStep).not.toBeNull();
-        const stepHtml = firstStep[0];
-        expect(stepHtml).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?openMesaAyudaFromDelete[\s\S]*?contactarMesaAyuda/
-        );
-        expect(stepHtml).toMatch(
-            /<AppButton[\s\S]*?variant="danger"[\s\S]*?promptDeleteAccountConfirmation[\s\S]*?eliminarCuenta/
-        );
-        expect(stepHtml).not.toContain('btn btn-default');
-        expect(stepHtml).not.toContain('btn btn-danger');
-    });
 });

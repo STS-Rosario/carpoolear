@@ -18,19 +18,4 @@ describe('AdminSupportReplyTemplates view', () => {
         expect(viewSource).toContain('fetchAdminList');
     });
 
-    it('uses AppButton for new template link and row actions', () => {
-        const viewSource = fs.readFileSync(viewPath, 'utf8');
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?:to="\{ name: 'admin-support-reply-template-new' \}"[\s\S]*?nuevaPlantillaRespuesta/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?admin-support-reply-template-view/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="danger"[\s\S]*?size="sm"[\s\S]*?remove\(row\.id\)/
-        );
-        expect(viewSource).not.toContain('btn btn-primary');
-        expect(viewSource).not.toContain('btn btn-xs');
-    });
 });

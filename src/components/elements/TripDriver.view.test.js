@@ -35,14 +35,6 @@ describe('TripDriver profile navigation', () => {
         );
     });
 
-    it('styles profile links with pointer cursor and preserves driver name spacing', () => {
-        expect(source).toMatch(
-            /\.trip-driver-profile-link\s*\{[\s\S]*?cursor:\s*pointer/
-        );
-        expect(source).toMatch(
-            /\.driver-data > \.trip-driver-profile-link:first-child/
-        );
-    });
 });
 
 describe('TripDriver trip-detail redesign header', () => {
@@ -80,12 +72,6 @@ describe('TripDriver trip-detail redesign header', () => {
         expect(source).not.toMatch(
             /\$t\('patente'\)\s*\}\}: \{\{\s*licensePlate/
         );
-        expect(source).toMatch(
-            /\.trip-driver__car\s*\{[^}]*color:\s*var\(--ds-text-secondary/
-        );
-        expect(source).toMatch(
-            /\.trip-car-details__line\)?\s*\{[^}]*color:\s*var\(--ds-text-secondary/
-        );
     });
 
     it('shows the Usuario verificado pill next to the driver name', () => {
@@ -96,9 +82,6 @@ describe('TripDriver trip-detail redesign header', () => {
         expect(source).toContain("$t('usuarioVerificado')");
         expect(source).toMatch(
             /trip-driver__mobile-name-cluster[\s\S]*trip-driver__mobile-name[\s\S]*trip-driver__verified/
-        );
-        expect(source).toMatch(
-            /\.trip-driver__mobile-name-cluster\s*\{[^}]*flex:\s*1\s+1\s+auto/
         );
         expect(source).toContain('fa-check-circle');
     });

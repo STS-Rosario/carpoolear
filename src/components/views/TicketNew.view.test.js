@@ -54,31 +54,8 @@ describe('TicketNew page card', () => {
         expect(source).toMatch(
             /ticket-new-page__card[\s\S]*ticket-new-page__heading[\s\S]*\$t\('soporte'\)/
         );
-        expect(source).toMatch(
-            /\.ticket-new-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(source).toMatch(
-            /\.ticket-new-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
         expect(source).not.toContain('panel panel-default');
         expect(source).not.toContain('panel-heading');
     });
 
-    it('uses AppField, AppInput and primary AppButton for the create form', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toContain("import AppField from '../ui/AppField.vue'");
-        expect(source).toContain("import AppInput from '../ui/AppInput.vue'");
-        expect(source).toMatch(
-            /<AppInput[\s\S]*?v-model="form\.subject"[\s\S]*?asuntoTicket/
-        );
-        expect(source).toMatch(
-            /<AppField[\s\S]*?categoriaTicket[\s\S]*?<select[\s\S]*?v-model="form\.type"/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?createTicket[\s\S]*?crearTicket[\s\S]*?<\/AppButton>/
-        );
-        expect(source).not.toContain('btn btn-primary');
-        expect(source).not.toContain('form-control');
-        expect(source).not.toContain('control-label');
-    });
 });

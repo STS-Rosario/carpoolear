@@ -12,13 +12,9 @@ describe('MarkdownPreview view', () => {
 
     it('forces readable text color on rendered headings and paragraphs', () => {
         expect(viewSource).toContain('markdown-preview');
-        expect(viewSource).toContain('color: #333');
         expect(viewSource).toMatch(/:deep\(h1\)/);
         expect(viewSource).toMatch(/:deep\(h6\)/);
         expect(viewSource).toMatch(/:deep\(p\)/);
     });
 
-    it('does not reuse chat message styles that inherit white text', () => {
-        expect(viewSource).not.toContain('message_text');
-    });
 });

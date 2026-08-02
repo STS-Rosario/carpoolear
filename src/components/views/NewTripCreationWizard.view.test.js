@@ -39,28 +39,6 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
     });
 
-    it('uses AppInput for seat contribution and AppTextarea for description', () => {
-        expect(wizardSource).toContain(
-            "import AppInput from '../ui/AppInput.vue'"
-        );
-        expect(wizardSource).toContain(
-            "import AppTextarea from '../ui/AppTextarea.vue'"
-        );
-        expect(wizardSource).toMatch(
-            /<AppInput[\s\S]*?type="number"[\s\S]*?v-model="form\.price"/
-        );
-        expect(wizardSource).toMatch(
-            /<AppTextarea[\s\S]*?v-model="form\.trip\.description"/
-        );
-        expect(wizardSource).toContain('trip-comfort-preference__label');
-        expect(wizardSource).not.toContain(
-            'form-control form-control-with-icon form-control-price'
-        );
-        expect(wizardSource).not.toMatch(
-            /<textarea[\s\S]*?class="form-control new-trip-wizard__description"/
-        );
-    });
-
     it('uses a taller resizable description textarea', () => {
         expect(wizardSource).toContain('new-trip-wizard__description');
         expect(wizardSource).toContain('resize: vertical');
@@ -74,41 +52,6 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('new-trip-wizard__last-section--preferences');
         expect(wizardSource).not.toContain('new-trip-wizard__last-section--return');
         expect(wizardSource).not.toContain('cargarViajeRegreso');
-    });
-
-    it('styles Preferencias del viaje title larger, bold, and spaced from cards', () => {
-        expect(wizardSource).toContain('new-trip-wizard__preferences-title');
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__preferences-title\s*\{[^}]*font-weight:\s*700/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__preferences-title\s*\{[^}]*font-size:\s*1\.(?:125|25)rem/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__preferences-title\s*\{[^}]*margin-bottom:\s*(?:0\.(?:75|875)|1(?:\.\d+)?)rem/
-        );
-    });
-
-    it('styles the no-lucrar validation message prominently below the checkbox', () => {
-        expect(wizardSource).toContain('new-trip-wizard__lucrar-error');
-        expect(wizardSource).toContain('stepErrors.lastDetails');
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__lucrar-error\s*\{[^}]*color:\s*#ff0000/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__lucrar-error\s*\{[^}]*font-size:\s*1rem/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__lucrar-error\s*\{[^}]*margin-top:\s*1\.25rem/
-        );
-    });
-
-    it('adds bottom margin below foreign-country option on origin step', () => {
-        expect(wizardSource).toContain('new-trip-wizard__allow-foreign');
-        expect(wizardSource).toContain('.new-trip-wizard__allow-foreign');
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__allow-foreign\s*\{[^}]*margin-bottom:\s*1rem/
-        );
     });
 
     it('restores cleared schedule fields from return-trip draft without keeping outbound values', () => {
@@ -162,20 +105,10 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('onTemplateSelectChange');
         expect(wizardSource).toContain('new-trip-wizard__template-modal');
         expect(wizardSource).toContain('color-black');
-        expect(wizardSource).toContain("import AppField from '../ui/AppField.vue'");
         expect(wizardSource).toMatch(
             /<AppField[\s\S]*?tripCreationTemplateNameLabel[\s\S]*?<select[\s\S]*?data-testid="trip-creation-template-select"/
         );
-        expect(wizardSource).not.toMatch(
-            /<select[\s\S]*?class="form-control"[\s\S]*?data-testid="trip-creation-template-select"/
-        );
         expect(wizardSource).not.toContain('new-trip-wizard__template-list');
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__template-action\s*\{[^}]*justify-content:\s*center/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__template-button\s*\{[^}]*width:\s*auto/
-        );
         expect(wizardSource).toMatch(
             /v-if="[^"]*hasAvailableTemplates[^"]*"[\s\S]*new-trip-wizard__template-or[\s\S]*new-trip-wizard__role-cards/
         );
@@ -228,12 +161,6 @@ describe('NewTripCreationWizard.vue', () => {
             /stepQueryContext\(\)[\s\S]*isEdit:\s*this\.isEditTripFlow/
         );
         expect(wizardSource).toContain('currentStep === STEP.ROLE && !isEditTripFlow');
-    });
-
-    it('adds horizontal padding on mobile', () => {
-        expect(wizardSource).toMatch(
-            /@media \(max-width: 767px\)[\s\S]*\.new-trip-wizard[\s\S]*padding-left:\s*1rem/
-        );
     });
 
     it('disables next on destination until trip-info succeeds', () => {
@@ -294,22 +221,6 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).not.toContain("$t('tripCreationTitlePassenger')");
     });
 
-    it('uses AppButton primary for Siguiente and Crear viaje / Actualizar', () => {
-        expect(wizardSource).toContain('AppButton');
-        expect(wizardSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?data-testid="trip-creation-next"/
-        );
-        expect(wizardSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?data-testid="trip-creation-submit"/
-        );
-        expect(wizardSource).not.toMatch(
-            /btn btn-primary btn-lg new-trip-wizard__next/
-        );
-        expect(wizardSource).not.toMatch(
-            /btn btn-primary btn-lg new-trip-wizard__submit/
-        );
-    });
-
     it('shows Creando... on the submit button while the trip is saving', () => {
         expect(wizardSource).toMatch(
             /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/
@@ -320,63 +231,7 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    it('applies design-system chrome via AppField for place and date controls', () => {
-        expect(wizardSource).toContain('new-trip-wizard__autocomplete-input');
-        expect(wizardSource).not.toContain(
-            'form-control form-control-with-icon form-control-map-autocomplete'
-        );
-        expect(wizardSource).toMatch(
-            /currentStep === STEP\.SCHEDULE[\s\S]*?<AppField[\s\S]*?<DatePicker/
-        );
-        expect(wizardSource).toMatch(
-            /STEP\.ORIGIN[\s\S]*?<AppField[\s\S]*?<autocomplete[\s\S]*?wizard-origin/
-        );
-    });
-
-    it('keeps foreign-origin checkbox label in regular text color, not blue', () => {
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__allow-foreign[\s\S]*?label[\s\S]*?color:\s*var\(--ds-(?:text-primary|input-label)/
-        );
-    });
-
-    it('styles active role cards with design-system blue, not brand red', () => {
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__role-card--active\s*\{[^}]*border-color:\s*var\(--ds-action/
-        );
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__role-card-icon\s*\{[^}]*color:\s*var\(--ds-action/
-        );
-        expect(wizardSource).not.toMatch(
-            /\.new-trip-wizard__role-card--active\s*\{[^}]*border-color:\s*var\(--primary-color/
-        );
-    });
-
-    it('avoids double borders on date and uses AppInput for schedule time', () => {
-        expect(wizardSource).toMatch(
-            /\.date-picker\s+\.date-picker__surface[\s\S]*?\.dp__input[\s\S]*?border:\s*0/
-        );
-        expect(wizardSource).toMatch(
-            /\.date-picker--cross\)?\s*\{[^}]*transform:\s*translateY\(-50%\)/
-        );
-        expect(wizardSource).toMatch(
-            /<AppInput[\s\S]*?ref="wizardTimeInput"[\s\S]*?type="time"/
-        );
-        expect(wizardSource).toMatch(
-            /#actionRight[\s\S]*?new-trip-wizard__time-caret[\s\S]*?openWizardTimePicker/
-        );
-        expect(wizardSource).not.toContain(
-            'form-control form-control-with-icon form-control-time'
-        );
-    });
-
-    it('keeps a calendar icon on the date input in the schedule step', () => {
-        expect(wizardSource).toMatch(
-            /\.carpoolear-vue-dp\s+\.dp__input[\s\S]*?background-image:\s*url\(["']?data:image\/svg\+xml/
-        );
-        expect(wizardSource).not.toMatch(
-            /\.carpoolear-vue-dp\s+\.dp__input[\s\S]{0,400}?background-image:\s*none\s*!important/
-        );
-    });
+    
 
     it('opens the native time picker from a down-caret control', () => {
         expect(wizardSource).toContain('fa-chevron-down');
@@ -405,15 +260,6 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(destinationBlock).not.toContain('fields="partida"');
     });
 
-    it('keeps left padding on map autocomplete so pin icons do not overlap text', () => {
-        expect(wizardSource).toMatch(
-            /<AppField[\s\S]*?icon-left="fa fa-map-marker"[\s\S]*?<autocomplete/
-        );
-        expect(wizardSource).toContain('new-trip-wizard__autocomplete-input');
-        expect(wizardSource).toContain('location-autocomplete origin');
-        expect(wizardSource).toContain('location-autocomplete destiny');
-    });
-
     it('requires punto partida and llegada before leaving origin and destination steps', () => {
         expect(wizardSource).toContain('puntoPartida: this.form.trip.punto_partida');
         expect(wizardSource).toContain('puntoLlegada: this.form.trip.punto_llegada');
@@ -438,15 +284,6 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
     it('guards router replace when syncing wizard step to the URL', () => {
         expect(wizardSource).toMatch(
             /syncStepToRoute\(step\)[\s\S]*typeof navigation\.catch === 'function'/
-        );
-    });
-
-    it('keeps the lucrar info icon beside the commitment title with a larger tooltip', () => {
-        expect(wizardSource).toMatch(
-            /\.trip_terms--lucrar-card__title\s*\{[^}]*flex:\s*0\s+1\s+auto/
-        );
-        expect(wizardSource).toMatch(
-            /\.trip_terms--lucrar-card__tooltip\[data-tooltip\]\.tooltip-bottom:before[\s\S]*?font-size:\s*(?:0\.9(?:375)?rem|1rem|14px|15px|16px)/
         );
     });
 

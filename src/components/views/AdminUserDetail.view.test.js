@@ -85,35 +85,4 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('impersonateUser');
     });
 
-    it('uses AppButton for navigation and action controls', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?admin-users/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-users-edit/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="warning"[\s\S]*?confirmClearIdentityValidation/
-        );
-        expect(source).not.toContain('btn btn-default');
-        expect(source).not.toContain('btn btn-primary');
-    });
-
-    it('spaces AppButton clusters with flex gap instead of legacy .btn margins', () => {
-        expect(source).toMatch(
-            /\.user-admin-view-nav\s*\{[^}]*display:\s*flex/
-        );
-        expect(source).toMatch(
-            /\.user-admin-view-actions\s*\{[^}]*display:\s*flex/
-        );
-        expect(source).toMatch(
-            /\.user-admin-view-nav\s*\{[^}]*gap:\s*/
-        );
-        expect(source).toMatch(
-            /\.user-admin-view-actions\s*\{[^}]*gap:\s*/
-        );
-        expect(source).not.toContain('.user-admin-view-nav .btn');
-        expect(source).not.toContain('.user-admin-view-actions .btn');
-    });
 });

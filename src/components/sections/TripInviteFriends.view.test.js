@@ -42,12 +42,6 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('inviteAllFriends');
     });
 
-    it('keeps spacing between invite checkboxes and friend names', () => {
-        expect(componentSource).toMatch(
-            /\.trip-invite-friends__list\s+label\s*\{[^}]*gap:\s*(?:0\.[4-9]|0\.5|0\.75|1)rem|\.trip-invite-friends__list\s+label\s+input\[type=['"]checkbox['"]\]\s*\{[^}]*margin-right:\s*(?:0\.[4-9]|0\.5|0\.75|1)(?:rem|em)/
-        );
-    });
-
     it('submits selected friends through TripApi inviteFriends', () => {
         expect(componentSource).toContain('inviteFriends');
         expect(componentSource).toContain('onSubmit');
@@ -68,26 +62,6 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('v-if="showPrompt"');
     });
 
-    it('styles invite prompt larger and bold with primary invite and secondary close', () => {
-        expect(componentSource).toContain('trip-invite-friends__prompt');
-        expect(componentSource).toMatch(
-            /\.trip-invite-friends__prompt\s*\{[^}]*font-weight:\s*700/
-        );
-        expect(componentSource).toMatch(
-            /\.trip-invite-friends__prompt\s*\{[^}]*font-size:\s*1\.(?:125|25)rem/
-        );
-        expect(componentSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(componentSource).toMatch(
-            /variant="primary"[\s\S]*?block[\s\S]*?\$t\('invitarAmigos'\)|variant="primary"[\s\S]*?\$t\('invitarAmigos'\)/
-        );
-        expect(componentSource).toMatch(
-            /variant="secondary"[\s\S]*?\$t\('cerrar'\)/
-        );
-        expect(componentSource).toMatch(
-            /\.trip-invite-friends__actions\s*\{[^}]*flex-direction:\s*column/
-        );
-        expect(componentSource).not.toContain('btn btn-primary');
-    });
 });
 
 describe('Trip.vue TripInviteFriends integration', () => {

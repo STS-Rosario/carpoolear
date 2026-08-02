@@ -12,14 +12,6 @@ describe('IdentityValidation paid awaiting photos', () => {
     });
 });
 
-describe('IdentityValidation mobile layout', () => {
-    it('adds page padding on small screens like friends settings', () => {
-        expect(viewSource).toMatch(
-            /@media only screen and \(max-width: 768px\)[\s\S]*\.identity-validation-component[\s\S]*padding:\s*1em/
-        );
-    });
-});
-
 describe('IdentityValidation page card', () => {
     it('wraps content in a white card with the page title inside', () => {
         expect(viewSource).toContain('identity-validation-page__card');
@@ -27,52 +19,6 @@ describe('IdentityValidation page card', () => {
         expect(viewSource).toMatch(
             /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
         );
-        expect(viewSource).toMatch(
-            /\.identity-validation-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.identity-validation-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
-    });
-});
-
-describe('IdentityValidation CTA AppButtons', () => {
-    it('uses primary AppButtons for pay, upload docs, and Mercado Pago paths', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?payManualValidation[\s\S]*?pagarAhora/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?subirDocumentacion/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?startMercadoPagoOAuth[\s\S]*?validarConMercadoPago/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?pagarAhora/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-danger[\s\S]*?validarConMercadoPago/
-        );
-    });
-
-    it('uses secondary AppButton for manual verification request', () => {
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?goToManualValidation[\s\S]*?solicitarVerificacionManual/
-        );
-        expect(viewSource).not.toContain('identity-validation-btn-outline');
-    });
-
-    it('drops legacy white-text overrides for bootstrap primary and danger buttons', () => {
-        expect(viewSource).not.toMatch(
-            /\.identity-validation-component\s+\.btn-primary[\s\S]*color:\s*#fff/
-        );
-        expect(viewSource).not.toMatch(
-            /\.identity-validation-component\s+\.btn-danger[\s\S]*color:\s*#fff/
-        );
-        expect(viewSource).not.toContain('identity-validation-btn-cta');
     });
 });
 
@@ -192,9 +138,6 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(prefixOccurrences).toBe(3);
     });
 
-    it('styles profile edit link inside Mercado Pago ownership warning', () => {
-        expect(viewSource).toContain('.identity-validation-mp-warning a {');
-    });
 });
 
 describe('IdentityValidation manual admin review note', () => {

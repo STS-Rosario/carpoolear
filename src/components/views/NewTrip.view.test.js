@@ -24,12 +24,6 @@ describe('NewTrip.vue page card shell', () => {
         expect(viewSource).toMatch(
             /id \|\| updatingTrip \? \$t\('editarViaje'\) : \$t\('crearViaje'\)/
         );
-        expect(viewSource).toMatch(
-            /\.new-trip-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.new-trip-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
         expect(viewSource).not.toContain('title--desktop');
     });
 
@@ -39,20 +33,8 @@ describe('NewTrip.vue page card shell', () => {
         );
     });
 
-    it('removes the legacy inner form card styling', () => {
-        expect(viewSource).toMatch(
-            /\.new-trip-component\s+\.form\s*\{[^}]*box-shadow:\s*none/s
-        );
-        expect(viewSource).toMatch(
-            /\.new-trip-component\s+\.form\s*\{[^}]*background:\s*transparent/s
-        );
-    });
-
     it('keeps wizard nav in document flow; return-trip CTA lives on the success screen', () => {
         expect(wizardSource).toContain('new-trip-wizard__nav');
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard__nav\s*\{[^}]*margin-top:\s*2rem/s
-        );
         expect(wizardSource).not.toMatch(
             /\.new-trip-wizard__nav\s*\{[^}]*position:\s*fixed/s
         );

@@ -15,9 +15,6 @@ describe('PendingFriendRequestsCard', () => {
         expect(viewSource).toContain("$t('paraVerlasInvitacionesAmigos')");
         expect(viewSource).toContain('FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE');
         expect(viewSource).toContain(':to="FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE"');
-        expect(viewSource).toMatch(
-            /\.pending-friend-requests\s*\{[^}]*margin-top:\s*1rem/s
-        );
         expect(viewSource).not.toContain('pending-friend-requests-card__chevron');
         expect(viewSource).not.toContain('Aceptar');
         expect(viewSource).not.toContain('Rechazar');

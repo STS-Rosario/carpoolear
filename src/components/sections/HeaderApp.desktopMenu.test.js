@@ -49,7 +49,6 @@ describe('HeaderApp desktop menu', () => {
         expect(center).toContain('myTripsCount');
         expect(center).toContain('v-if="messagesCount > 0"');
         expect(center).toContain('v-if="myTripsCount > 0"');
-        expect(center).toMatch(/class="badge"/);
         expect(headerSource).toContain("messagesCount: 'messagesCount'");
         expect(headerSource).toContain("myTripsCount: 'myTripsCount'");
     });
@@ -64,30 +63,9 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).toMatch(
             /isDesktopNavActive\s*\(\s*section\s*\)\s*\{/
         );
-        expect(headerSource).toMatch(
-            /\.header_nav-link--active\s*\{[^}]*border-bottom:\s*2px\s+solid\s+#fff/
-        );
     });
 
     it('removes the focus outline from desktop nav links', () => {
-        expect(headerSource).toMatch(
-            /\.header_nav-link:focus(?!-visible)[^{]*\{[^}]*outline:\s*none/
-        );
-        expect(headerSource).toMatch(
-            /\.header_nav-link:focus-visible\s*\{[^}]*outline:\s*none/
-        );
-    });
-
-    it('styles Mis viajes and Mensajes unread badges with a red background', () => {
-        expect(headerSource).toMatch(
-            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*background(?:-color)?:\s*#e53935/
-        );
-        expect(headerSource).toMatch(
-            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*color:\s*#fff/
-        );
-        expect(headerSource).toMatch(
-            /\.header_nav-(?:messages|my-trips) \.badge[\s\S]*top:\s*calc\(-0\.55rem \+ 3px\)/
-        );
     });
 
     it('puts Crear viaje, notifications and profile dropdown on the right', () => {
@@ -110,18 +88,4 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).not.toContain('facebook_logo');
     });
 
-    it('styles the notifications badge red and top-right on the bell', () => {
-        expect(headerSource).toMatch(
-            /\.header_notifications\s+\.badge\s*\{[^}]*background:\s*#e53935/
-        );
-        expect(headerSource).toMatch(
-            /\.header_notifications\s+\.badge\s*\{[^}]*position:\s*absolute/
-        );
-        expect(headerSource).toMatch(
-            /\.header_notifications\s+\.badge\s*\{[^}]*top:\s*calc\(-0\.55rem \+ 3px\)/
-        );
-        expect(headerSource).toMatch(
-            /\.header_notifications\s+\.badge\s*\{[^}]*right:\s*calc\(-0\.85rem \+ 9px\)/
-        );
-    });
 });

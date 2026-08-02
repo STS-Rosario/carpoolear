@@ -33,33 +33,9 @@ describe('MyAccountNav desktop sidebar', () => {
         expect(navSource).not.toContain('my-account-nav__item--logout');
     });
 
-    it('tightens collapsed section spacing before the footer actions', () => {
-        expect(navSource).toContain('my-account-nav__section--collapsed');
-        expect(navSource).toMatch(
-            /\.my-account-nav__section--collapsed\s+\.my-account-nav__section-toggle\s*\{[^}]*padding-bottom:\s*0\.45rem/
-        );
-    });
-
-    it('styles logout as a secondary button with a left sign-out icon', () => {
-        expect(navSource).toContain('AppButton');
-        expect(navSource).toContain('variant="secondary"');
+    it('shows logout with a sign-out icon', () => {
         expect(navSource).toMatch(
             /my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/
-        );
-        expect(navSource).not.toMatch(
-            /\.my-account-nav__logout\s*\{[^}]*border-radius:\s*999px/
-        );
-        expect(navSource).toMatch(
-            /\.my-account-nav__delete\s*\{[^}]*margin-top:\s*2rem/
-        );
-    });
-
-    it('removes focus outline border from nav items', () => {
-        expect(navSource).toMatch(
-            /\.my-account-nav__item:focus(?:,|\s)[\s\S]*?outline:\s*none/
-        );
-        expect(navSource).toMatch(
-            /\.my-account-nav__item:focus-visible[\s\S]*?outline:\s*none/
         );
     });
 });

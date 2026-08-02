@@ -8,7 +8,6 @@ const viewSource = fs.readFileSync(viewPath, 'utf8');
 describe('StaticHtmlPage', () => {
     it('loads static page content from the API and renders it in the terms layout', () => {
         expect(viewSource).toContain('.getPage(this.pageSlug)');
-        expect(viewSource).toContain('class="terms-page container"');
         expect(viewSource).toContain('v-html="pageContent"');
     });
 

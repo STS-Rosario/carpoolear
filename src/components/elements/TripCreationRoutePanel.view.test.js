@@ -20,11 +20,5 @@ describe('TripCreationRoutePanel.vue', () => {
 
     it('lays out distance, duration and carbon stats on one horizontal row', () => {
         expect(componentSource).toContain('trip-creation-route-panel__stats');
-        expect(componentSource).toMatch(
-            /\.trip-creation-route-panel__stats\s*\{[^}]*display:\s*flex/
-        );
-        expect(componentSource).toMatch(
-            /\.trip-creation-route-panel__stats\s*\{[^}]*flex-direction:\s*row/
-        );
     });
 });

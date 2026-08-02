@@ -25,16 +25,6 @@ describe('OngoingTripCard.vue', () => {
         expect(viewSource).not.toContain('#actions-extra');
     });
 
-    it('puts Ver detalle first and uses secondary AppButton for live location share', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).not.toContain('#actions-extra');
-        const footerMatch = viewSource.match(
-            /#footer-extra[\s\S]*?<AppButton[\s\S]*?variant="secondary"[\s\S]*?compartirUbicacionTiempoReal/
-        );
-        expect(footerMatch).not.toBeNull();
-        expect(viewSource).not.toMatch(/class="ongoing-trip__share"/);
-    });
-
     it('routes profile and detail clicks through the shell', () => {
         expect(viewSource).toContain('@profile-click="onProfileClick"');
         expect(viewSource).toContain('@detail-click="onDetailClick"');

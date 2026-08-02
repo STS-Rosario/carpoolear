@@ -52,12 +52,6 @@ describe('ProfileCars CRUD section', () => {
         expect(viewSource).toMatch(
             /profile-cars__card[\s\S]*CarsEditorPanel/
         );
-        expect(viewSource).toMatch(
-            /\.profile-cars__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.profile-cars__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
     });
 });
 

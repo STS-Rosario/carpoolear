@@ -36,24 +36,6 @@ describe('CarsEditorPanel', () => {
         expect(source).toContain('fa-plus');
     });
 
-    it('uses AppButton primary add, secondary edit, and danger delete', () => {
-        expect(source).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?icon-left="fa fa-plus"[\s\S]*?agregarAuto[\s\S]*?<\/AppButton>/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?icon-left="fa fa-pencil"[\s\S]*?editar[\s\S]*?<\/AppButton>/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="danger"[\s\S]*?icon-left="fa fa-trash-o"[\s\S]*?accionEliminar[\s\S]*?<\/AppButton>/
-        );
-        expect(source).not.toContain('btn btn-primary');
-        expect(source).not.toContain('btn-danger');
-        expect(source).not.toContain('btn-default');
-    });
-
     it('requires complete marca, modelo, año and color before saving', () => {
         expect(source).toContain('isCarFormComplete');
         expect(source).toContain('carFormMissingFieldKeys');

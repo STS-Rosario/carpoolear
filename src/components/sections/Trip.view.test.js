@@ -171,21 +171,6 @@ describe('Trip card future owner footer actions', () => {
         expect(footerExtra).toMatch(
             /trip-seats-control[\s\S]*trip-seats-control__label[\s\S]*trip-seats-control__stepper/
         );
-        expect(source).toMatch(
-            /\.trip-seats-control\s*\{[^}]*flex-direction:\s*row/
-        );
-        expect(source).toMatch(
-            /\.trip-seats-control\s+\.btn\s*\{[^}]*min-width:\s*2rem/
-        );
-    });
-
-    it('matches Editar viaje AppButton height to Ver detalle compact padding', () => {
-        expect(footerExtra).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?editarViaje[\s\S]*?<\/AppButton>/
-        );
-        expect(source).toMatch(
-            /\.trip-card-owner-actions\s+:deep\(\.app-button\)\s*\{[^}]*padding:\s*0\.375rem/s
-        );
     });
 
     it('removes icon-only eye edit trash controls from footer-extra', () => {

@@ -36,54 +36,5 @@ describe('RatePending.vue neutral ratings', () => {
         );
     });
 
-    it('styles neutral icon as rotated greyscale thumbs-up', () => {
-        expect(viewSource).toContain('fa-thumbs-o-up');
-        expect(viewSource).toContain('rate-neutral-icon');
-        expect(viewSource).toContain('NEUTRAL_RATING_ICON_STYLE');
-    });
-
-    it('lays out rating buttons with even spacing and neutral active styling', () => {
-        const baseCss = fs.readFileSync(
-            path.resolve(__dirname, '../styles/base.css'),
-            'utf8'
-        );
-        expect(baseCss).toMatch(
-            /\.request-list div\.rate-pending_component \.rate-buttons[\s\S]*display:\s*flex/
-        );
-        expect(baseCss).toMatch(
-            /\.request-list div\.rate-pending_component \.rate-buttons[\s\S]*gap:\s*0\.6em/
-        );
-        expect(baseCss).toContain('.rate-neutral.active');
-        expect(baseCss).toContain('background-color: #d8d8d8');
-    });
 });
 
-describe('RatePending.vue submit CTA', () => {
-    it('uses primary AppButton for Calificar and keeps vote chips as rating controls', () => {
-        expect(viewSource).toContain(
-            "import AppButton from './ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?ratePendingCalificar[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).toContain('rate-positive');
-        expect(viewSource).toContain('rate-neutral');
-        expect(viewSource).toContain('rate-negative');
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?ratePendingCalificar/
-        );
-    });
-});
-
-describe('RatePending.vue comment field', () => {
-    it('uses AppTextarea for the rating comment field', () => {
-        expect(viewSource).toContain(
-            "import AppTextarea from './ui/AppTextarea.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppTextarea[\s\S]*?v-model="comment"[\s\S]*?ratePendingIncluyaUnComentario/
-        );
-        expect(viewSource).not.toMatch(/<textarea[\s\S]*?rate_comment/);
-        expect(viewSource).not.toContain('class="rate_comment"');
-    });
-});

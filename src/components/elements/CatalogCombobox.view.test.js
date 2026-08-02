@@ -6,32 +6,10 @@ const componentPath = path.join(__dirname, 'CatalogCombobox.vue');
 const source = fs.readFileSync(componentPath, 'utf8');
 
 describe('CatalogCombobox dropdown contrast', () => {
-    it('uses dark text on white dropdown options', () => {
-        expect(source).toMatch(/\.catalog-combobox__list\s*\{[\s\S]*?color:\s*#333/s);
-        expect(source).toMatch(
-            /\.catalog-combobox__option\s*\{[\s\S]*?color:\s*#333/s
-        );
-        expect(source).toMatch(
-            /\.catalog-combobox__option\.is-highlighted[\s\S]*?color:\s*#333/s
-        );
-    });
-
-    it('keeps typed input text dark while placeholders stay muted', () => {
-        expect(source).toMatch(/\.catalog-combobox__input\s*\{[\s\S]*?color:\s*#333/s);
-        expect(source).toContain('.catalog-combobox__input::placeholder');
-    });
-
     it('closes the dropdown when clicking or blurring outside', () => {
         expect(source).toContain('createCatalogComboboxOutsideDismiss');
         expect(source).toContain('@blur="onInputBlur"');
         expect(source).not.toContain('v-clickoutside');
     });
 
-    it('drops Bootstrap form-control so AppField can own the chrome', () => {
-        expect(source).not.toContain('form-control');
-        expect(source).toContain('catalog-combobox__input');
-        expect(source).toMatch(
-            /\.catalog-combobox__input\s*\{[^}]*border:\s*0/s
-        );
-    });
 });

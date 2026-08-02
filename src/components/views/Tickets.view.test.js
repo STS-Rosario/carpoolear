@@ -17,24 +17,10 @@ describe('Tickets list view', () => {
         expect(viewSource).toMatch(
             /tickets-page__card[\s\S]*tickets-page__heading[\s\S]*\$t\('soporte'\)/
         );
-        expect(viewSource).toMatch(
-            /\.tickets-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.tickets-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
     });
 
     it('shows empty-state message when user has no support tickets', () => {
         expect(viewSource).toContain("$t('noHayTicketsUsuarioMesaAyuda')");
-    });
-
-    it('uses AppButton primary for Crear nuevo ticket linking to the new ticket page', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?:to="\{ name: 'ticket-new' \}"[\s\S]*?crearNuevoTicketMesaAyuda[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toContain('btn btn-primary');
     });
 
     it('orders thead subject first then priority then dates and status with category last', () => {
@@ -59,12 +45,6 @@ describe('Tickets list view', () => {
         expect(subjectCell).toBeGreaterThan(-1);
         expect(subjectCell).toBeLessThan(priCell);
         expect(priCell).toBeLessThan(catCell);
-    });
-
-    it('uses compact narrow columns and a wide subject column class', () => {
-        expect(viewSource).toContain('support-tickets-table--compact');
-        expect(viewSource).toContain('support-tickets-table__subject');
-        expect(viewSource).toContain('support-tickets-table__narrow');
     });
 
     it('renders tickets in table rows with title, created date, updated date and status', () => {

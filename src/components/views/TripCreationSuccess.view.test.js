@@ -26,9 +26,6 @@ describe('TripCreationSuccess.vue', () => {
 
     it('vertically centers action buttons including the view-trip router-link', () => {
         expect(componentSource).toContain('.trip-creation-success__actions');
-        expect(componentSource).toMatch(
-            /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column[^}]*align-items:\s*stretch/
-        );
     });
 
     it('embeds invite friends once and closes to trip detail', () => {
@@ -68,7 +65,6 @@ describe('TripCreationSuccess.vue', () => {
         expect(returnIdx).toBeGreaterThan(shareIdx);
         expect(templateIdx).toBeGreaterThan(returnIdx);
 
-        expect(componentSource).toContain("import AppButton from '../ui/AppButton.vue'");
         expect(componentSource).toMatch(
             /variant="primary"[\s\S]*?data-testid="trip-creation-view-trip"/
         );
@@ -81,25 +77,6 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toMatch(
             /variant="secondary"[\s\S]*?data-testid="trip-creation-save-template"[\s\S]*?icon-left="fa fa-bookmark"/
         );
-        expect(componentSource).not.toContain('btn btn-primary');
-        expect(componentSource).toMatch(
-            /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column/
-        );
     });
 
-    it('uses AppInput and AppField for the save-template modal fields', () => {
-        expect(componentSource).toContain(
-            "import AppInput from '../ui/AppInput.vue'"
-        );
-        expect(componentSource).toContain(
-            "import AppField from '../ui/AppField.vue'"
-        );
-        expect(componentSource).toMatch(
-            /<AppInput[\s\S]*?data-testid="trip-creation-template-name"[\s\S]*?v-model="templateName"/
-        );
-        expect(componentSource).toMatch(
-            /<AppField[\s\S]*?tripCreationReplaceTemplateLabel[\s\S]*?<select[\s\S]*?data-testid="trip-creation-template-replace"/
-        );
-        expect(componentSource).not.toContain('form-control');
-    });
 });

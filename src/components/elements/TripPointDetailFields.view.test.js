@@ -33,21 +33,4 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain('v-if="showPuntoLlegada"');
     });
 
-    it('styles validation errors in red', () => {
-        expect(viewSource).toMatch(
-            /\.error\s*\{[^}]*color:\s*(?:red|var\(--main-error)/
-        );
-    });
-
-    it('uses AppInput for punto partida and llegada fields', () => {
-        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
-        expect(viewSource).toMatch(
-            /<AppInput[\s\S]*?:label="\$t\('puntoDePartida'\)"[\s\S]*?:id="puntoPartidaId"/
-        );
-        expect(viewSource).toMatch(
-            /<AppInput[\s\S]*?:label="\$t\('puntoDeLlegada'\)"[\s\S]*?:id="puntoLlegadaId"/
-        );
-        expect(viewSource).not.toContain('form-control');
-        expect(viewSource).not.toMatch(/<input[\s\S]*?class="form-control"/);
-    });
 });

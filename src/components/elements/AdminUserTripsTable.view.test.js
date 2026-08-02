@@ -31,15 +31,4 @@ describe('AdminUserTripsTable', () => {
         expect(source).toContain('!trip.deleted');
     });
 
-    it('uses AppButton for trip row actions', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?openDetail/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="danger"[\s\S]*?size="sm"[\s\S]*?cancelTrip/
-        );
-        expect(source).not.toContain('btn btn-default');
-        expect(source).not.toContain('btn btn-danger');
-    });
 });

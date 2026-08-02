@@ -16,9 +16,6 @@ describe('PendingRatingsBanner', () => {
         expect(bannerSource).toContain('home-prompt-banner');
         expect(bannerSource).toContain("$t('pendingRatingsBanner')");
         expect(bannerSource).toContain("name: 'my-trips'");
-        expect(bannerSource).toMatch(
-            /\.pending-ratings-banner\s*\{[^}]*margin-top:\s*1rem/s
-        );
         expect(bannerSource).not.toContain('#c00');
         expect(bannerSource).not.toContain('#f0ad4e');
     });

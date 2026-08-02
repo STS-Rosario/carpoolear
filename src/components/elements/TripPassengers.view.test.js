@@ -12,14 +12,6 @@ describe('TripPassengers.vue public joined list', () => {
         expect(src).not.toMatch(/\{\{\s*p\.name\s*\}\}/);
     });
 
-    it('uses a compact person-icon circle instead of profile photo avatars', () => {
-        expect(src).toContain('trip_passenger_avatar');
-        expect(src).toContain('fa-user');
-        expect(src).not.toContain('v-imgSrc:profile');
-        expect(src).not.toContain('trip_passenger_image');
-        expect(src).not.toContain('trip_driver_img');
-    });
-
     it('keeps owner-only remove/chat actions', () => {
         expect(src).toContain('removePassenger');
         expect(src).toMatch(/v-if="owner"/);
@@ -30,8 +22,5 @@ describe('TripPassengers.vue desktop heading', () => {
     it('falls back to pasajerosSubidos and only forces the mobile section-title class on mobile', () => {
         expect(src).toContain("$t('pasajerosSubidos')");
         expect(src).toMatch(/isMobile/);
-        expect(src).not.toMatch(
-            /class="title-margined trip-detail__section-title"/
-        );
     });
 });

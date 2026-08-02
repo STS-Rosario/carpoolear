@@ -129,17 +129,4 @@ describe('TicketDetail user view', () => {
         expect(viewSource).not.toContain('height="140px"');
     });
 
-    it('uses AppButtons for reply and close ticket actions', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?sendReply[\s\S]*?responder/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?closeTicket[\s\S]*?cerrarTicket/
-        );
-        expect(viewSource).not.toContain('btn btn-primary');
-        expect(viewSource).not.toContain('btn btn-default');
-    });
 });

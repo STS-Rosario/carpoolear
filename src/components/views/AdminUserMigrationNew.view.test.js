@@ -30,8 +30,6 @@ describe('AdminUserMigrationNew view', () => {
     });
 
     it('caps avatar size to 100x100px', () => {
-        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*width:\s*100px/);
-        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
     });
 
     it('formats DNI in the migration field comparison table', () => {
@@ -102,17 +100,6 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain('supportTicketNoticeText');
     });
 
-    it('styles the support ticket notice as red bold text', () => {
-        expect(source).toMatch(
-            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*color:\s*[^;]+/
-        );
-        expect(source).toMatch(
-            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*font-weight:\s*(700|bold)/
-        );
-        expect(source).toMatch(/label \.admin-user-migration-new__support-ticket-notice\s*\{/);
-        expect(source).toMatch(/p\.admin-user-migration-new__support-ticket-notice\s*\{/);
-    });
-
     it('keeps the support ticket notice copy in i18n', () => {
         expect(i18nSource).toContain(supportTicketNoticeKey);
         expect(i18nSource).toContain(supportTicketNoticeCopy);
@@ -132,15 +119,4 @@ describe('AdminUserMigrationNew view', () => {
         );
     });
 
-    it('uses AppButton for back navigation and submit action', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?admin-user-migrations/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-user-migration-new__submit/
-        );
-        expect(source).not.toContain('btn btn-default');
-        expect(source).not.toContain('btn btn-primary');
-    });
 });

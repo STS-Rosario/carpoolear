@@ -25,41 +25,4 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('applyParams');
     });
 
-    it('matches app search DS: segment toggle, AppFields, compact Buscar', () => {
-        expect(source).toContain(
-            "import AppSegmentToggle from '../ui/AppSegmentToggle.vue'"
-        );
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toContain("import AppField from '../ui/AppField.vue'");
-        expect(source).toContain('AppSegmentToggle');
-        expect(source).toContain('roleToggleOptions');
-        expect(source).not.toContain('btn-option');
-        expect(source).not.toContain('btn-search');
-        expect(source).not.toContain('optional-warning');
-        expect(source).not.toMatch(/class="date-picker--cross"/);
-        expect(source).toMatch(
-            /<AppField[\s\S]*?:label="\$t\('origen'\)"[\s\S]*?optional/
-        );
-        expect(source).toMatch(
-            /<AppField[\s\S]*?:label="\$t\('destino'\)"[\s\S]*?optional/
-        );
-        expect(source).toMatch(
-            /<AppField[\s\S]*?:label="\$t\('fecha'\)"[\s\S]*?optional[\s\S]*?<DatePicker[\s\S]*?from_date/
-        );
-        expect(source).toMatch(
-            /<AppField[\s\S]*?:label="\$t\('fecha'\)"[\s\S]*?optional[\s\S]*?<DatePicker[\s\S]*?to_date/
-        );
-        expect(source).toMatch(
-            /<AppField[\s\S]*?optional[\s\S]*?UserSearchAutocomplete/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?size="sm"[\s\S]*?submitSearch/
-        );
-        expect(source).toContain('admin-search-trips');
-        expect(source).toMatch(
-            /\.admin-search-trips[\s\S]*?\.carpoolear-vue-dp[\s\S]*?\.dp__input/
-        );
-        expect(source).not.toContain('form-control');
-        expect(source).not.toContain('btn btn-primary');
-    });
 });

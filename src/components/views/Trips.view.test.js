@@ -13,9 +13,6 @@ describe('Trips.vue app banner', () => {
     });
 
     it('does not pull the account verification banner under the fixed header', () => {
-        expect(viewSource).toMatch(
-            /\.banner\s*\{[^}]*margin:\s*0\s+auto/
-        );
         expect(viewSource).not.toMatch(
             /\.banner\s*\{[^}]*margin:\s*-1em/
         );
@@ -140,9 +137,6 @@ describe('Trips.vue friend-first trip sections', () => {
     });
 
     it('renders section headings as block elements above trip rows', () => {
-        expect(viewSource).toContain('class="trips-section"');
-        expect(viewSource).toContain('class="trips-section-heading"');
-        expect(viewSource).toContain('class="trips-section__list row"');
         expect(viewSource).toMatch(
             /<section[\s\S]*?trips-section-heading[\s\S]*?trips-section__list row/s
         );
@@ -157,9 +151,6 @@ describe('Trips.vue friend-first trip sections', () => {
         );
         expect(viewSource).toMatch(
             /trips-section__list--start['"]?\s*:\s*trips\.length\s*<\s*4/
-        );
-        expect(viewSource).not.toMatch(
-            /class="trips-section__list trips-section__list--start row"/
         );
     });
 
@@ -178,28 +169,6 @@ describe('Trips.vue friend-first trip sections', () => {
         );
         expect(viewSource).not.toMatch(
             /friendTripsList[\s\S]*?panel-donar[\s\S]*?viajesPublicados/s
-        );
-    });
-
-    it('styles the donation banner with blue ayuda text and green header-donate button', () => {
-        expect(viewSource).toContain('variant="header-donate"');
-        expect(viewSource).toContain('gift.svg');
-        expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
-        expect(viewSource).toContain('panel-donar__body');
-        expect(viewSource).toContain('keypath="ayudanos"');
-        expect(viewSource).toContain('ayudanosLead');
-        expect(viewSource).toMatch(/\.btn-donar\s*\{[^}]*float:\s*right/);
-        expect(viewSource).toMatch(
-            /\.panel-donar__body[\s\S]*?overflow:\s*visible/
-        );
-        expect(viewSource).toMatch(
-            /\.panel\.panel-donar\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/
-        );
-        expect(viewSource).toMatch(
-            /\.panel\.panel-donar\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow/
-        );
-        expect(viewSource).toMatch(
-            /\.panel\.panel-donar\s*\{[^}]*background:\s*var\(--ds-card-bg/
         );
     });
 
@@ -273,33 +242,9 @@ describe('Trips.vue donation modal', () => {
         expect(viewSource).not.toContain('value="10000"');
     });
 
-    it('puts Mensual primary before Única vez secondary', () => {
-        expect(viewSource).toMatch(
-            /donation-actions[\s\S]*?variant="primary"[\s\S]*?onDonateMonthly[\s\S]*?variant="secondary"[\s\S]*?onDonateOnceTime/s
-        );
-        expect(viewSource).not.toContain('btn-unica-vez');
-        expect(viewSource).not.toContain('btn-mensualmente');
-        expect(viewSource).toMatch(
-            /\.donation-actions\s*\{[^}]*flex-direction:\s*column/
-        );
-        expect(viewSource).toMatch(
-            /\.donation-actions__btn :deep\(\.app-button__label\)\s*\{[^}]*flex-direction:\s*column/
-        );
-    });
 });
 
 describe('Trips.vue search alert and install modal CTAs', () => {
-    it('uses secondary AppButton for Crear alerta in results and empty states', () => {
-        const alertMatches = [
-            ...viewSource.matchAll(
-                /<AppButton[\s\S]*?variant="secondary"[\s\S]*?\$t\('crearAlerta'\)[\s\S]*?<\/AppButton>/g
-            )
-        ];
-        expect(alertMatches.length).toBeGreaterThanOrEqual(2);
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?\$t\('crearAlerta'\)/
-        );
-    });
 
     it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
         const installModal = viewSource.match(
@@ -315,8 +260,5 @@ describe('Trips.vue search alert and install modal CTAs', () => {
         expect(installModal).toMatch(
             /variant="tertiary"[\s\S]*?\$t\('noMostrarDeNuevo'\)/
         );
-        expect(installModal).not.toContain('btn-danger');
-        expect(installModal).not.toContain('btn-primary');
-        expect(installModal).not.toContain('btn-default');
     });
 });

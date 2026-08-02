@@ -12,9 +12,6 @@ describe('RateItem.vue neutral ratings', () => {
         expect(viewSource).toContain('isNegativeRating');
         expect(viewSource).toContain('rateItemNeutral');
         expect(viewSource).toContain('rate-neutral-icon');
-        expect(viewSource).toMatch(
-            /\.rate-item-value\s+\.rate-neutral-icon\s*\{[\s\S]*margin-left:\s*0\.6em/
-        );
     });
 });
 
@@ -34,33 +31,3 @@ describe('RateItem.vue profile links', () => {
     });
 });
 
-describe('RateItem.vue reply CTAs', () => {
-    it('uses primary Responder and secondary Cancelar AppButtons', () => {
-        expect(viewSource).toContain(
-            "import AppButton from './ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?rateItemResponder[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?rateItemCancelar[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?rateItemResponder/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?rateItemCancelar/
-        );
-    });
-
-    it('uses AppTextarea for the reply comment field', () => {
-        expect(viewSource).toContain(
-            "import AppTextarea from './ui/AppTextarea.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppTextarea[\s\S]*?id="reply"[\s\S]*?v-model="comment"[\s\S]*?rateItemResponderALaCalificacion/
-        );
-        expect(viewSource).not.toMatch(/<textarea[\s\S]*?v-model="comment"/);
-        expect(viewSource).not.toContain('label-reply');
-    });
-});

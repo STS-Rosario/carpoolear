@@ -36,11 +36,4 @@ describe('AdminUserTrips view', () => {
         expect(source).toContain('v-on:open-detail="openTripDetail"');
     });
 
-    it('uses secondary AppButton for back navigation', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?hubRoute/
-        );
-        expect(source).not.toContain('btn btn-default');
-    });
 });

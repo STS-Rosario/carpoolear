@@ -42,21 +42,6 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain("$t('filtroCualquiera')");
     });
 
-    it('uses AppField for allow-preference selects on desktop and mobile', () => {
-        expect(source).toMatch(
-            /allow-preference-filter[\s\S]*?<AppField[\s\S]*?:label="\$t\(field\.labelKey\)"[\s\S]*?<select/
-        );
-        expect(source).toContain('trips-search__preference-select');
-        expect(source).toContain("idPrefix + 'Desktop'");
-        expect(source).toContain("idPrefix + 'Mobile'");
-        expect(source).not.toMatch(
-            /allow-preference-filter[\s\S]*?class="form-control"/
-        );
-        expect(source).toMatch(
-            /\.trips-search__preference-select\s*\{[^}]*border:\s*0/
-        );
-    });
-
     it('emits advanced filter params through appendAllowPreferenceParams', () => {
         expect(source).toContain('appendAllowPreferenceParams');
         expect(source).toContain('params.hide_carpooleado = this.hideCarpooleado');

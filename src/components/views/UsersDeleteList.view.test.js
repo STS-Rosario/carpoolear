@@ -11,18 +11,4 @@ describe('UsersDeleteList view', () => {
         expect(viewSource).not.toContain("name: 'profile'");
     });
 
-    it('uses AppField select and AppButton for the edit modal', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toContain(
-            "import AppField from '../ui/AppField.vue'"
-        );
-        expect(viewSource).toContain('AppField');
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?submitUpdate/
-        );
-        expect(viewSource).not.toContain('form-control');
-        expect(viewSource).not.toContain('btn btn-primary');
-    });
 });

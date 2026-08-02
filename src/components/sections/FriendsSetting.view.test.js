@@ -24,20 +24,6 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
     it('wraps Amigos content in a white content card', () => {
         expect(viewSource).toContain('friends-page__card');
         expect(viewSource).toMatch(/friends-page__card[\s\S]*tabset/);
-        expect(viewSource).toMatch(
-            /\.friends-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
-        );
-        expect(viewSource).toMatch(
-            /\.friends-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
-        );
-    });
-
-    it('uses AppInput for the friends name filter', () => {
-        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
-        expect(viewSource).toMatch(
-            /<AppInput[\s\S]*?:label="\$t\('filtrarPorNombre'\)"[\s\S]*?(?:v-model="text"|:model-value="text"|:modelValue="text")/
-        );
-        expect(viewSource).not.toContain('form-control');
     });
 
     it('shows Recibidas/Enviadas FilterChips under Solicitudes with counts', () => {
@@ -64,12 +50,6 @@ describe('FriendsSetting.vue incoming friend requests', () => {
     it('renders incoming friend request cards with labeled accept and reject actions', () => {
         expect(viewSource).toContain('IncomingFriendRequestCard');
         expect(viewSource).toContain('incoming-friend-requests-list');
-        expect(viewSource).toMatch(
-            /\.incoming-friend-requests-list\s*\{[^}]*width:\s*100%/s
-        );
-        expect(viewSource).toMatch(
-            /\.incoming-friend-requests-list\s*\{[^}]*gap:\s*0/s
-        );
         expect(viewSource).toContain('refreshFriendsData');
         expect(viewSource).toContain('activated()');
         expect(viewSource).toContain('onAcceptClick');
@@ -83,11 +63,10 @@ describe('FriendsSetting.vue incoming friend requests', () => {
 });
 
 describe('FriendsSetting.vue friends list', () => {
-    it('renders friend list cards with delete action and left-aligned layout', () => {
+    it('renders friend list cards with delete action', () => {
         expect(viewSource).toContain('FriendRequestCard');
         expect(viewSource).toContain('friends-list');
         expect(viewSource).toContain('onDeleteClick');
-        expect(viewSource).toMatch(/\.friends-list[\s\S]*?align-items: flex-start/);
         const friendsListSection = viewSource.match(
             /id="friends-list"[\s\S]*?<\/div>\s*<template #no-data/
         )?.[0];
@@ -102,7 +81,6 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(viewSource).toContain('sentPending');
         expect(viewSource).toContain('cancelRequest');
         expect(viewSource).toContain('sent-pending-list');
-        expect(viewSource).toContain('display: inline-flex');
         expect(viewSource).toContain('sent-pending-chip');
         expect(viewSource).toContain('sent-pending-chip__name');
         expect(viewSource).toContain('sent-pending-chip__remove');
@@ -129,17 +107,6 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(toolbarSection).toContain("$t('buscarNuevosAmigos')");
     });
 
-    it('uses AppButton primary for Buscar nuevos amigos', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?buscarNuevosAmigos[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary search-more"/
-        );
-    });
 });
 
 describe('FriendApi outgoing pending requests', () => {

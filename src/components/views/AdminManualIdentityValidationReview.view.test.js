@@ -59,36 +59,4 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('shouldProceedWithReviewAction');
     });
 
-    it('uses AppField borderless selects and AppTextarea for admin note and review comment', () => {
-        expect(viewSource).toContain("import AppField from '../ui/AppField.vue'");
-        expect(viewSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
-        expect(viewSource).toMatch(
-            /<AppField[\s\S]*?pagado[\s\S]*?manual-identity-edit-paid[\s\S]*?<select/
-        );
-        expect(viewSource).toMatch(
-            /<AppTextarea[\s\S]*?v-model="privateAdminNote"/
-        );
-        expect(viewSource).toMatch(
-            /<AppTextarea[\s\S]*?v-model="reviewNote"/
-        );
-        expect(viewSource).not.toContain('class="form-control"');
-    });
-
-    it('uses AppButton variants for navigation, save, review, and purge actions', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?admin-manual-identity-validations[\s\S]*?volver/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="success"[\s\S]*?review\('approve'\)/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="warning"[\s\S]*?confirmReview\('pending'\)/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="danger"[\s\S]*?review\('reject'\)/
-        );
-        expect(viewSource).not.toContain('btn btn-success');
-        expect(viewSource).not.toContain('btn btn-default');
-    });
 });

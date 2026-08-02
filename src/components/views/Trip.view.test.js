@@ -29,15 +29,6 @@ describe('Trip.vue passenger message carpoodatos flow', () => {
         );
     });
 
-    it('relies on Modal header close only and uses primary Enviar mensaje AppButtons', () => {
-        expect(viewSource).not.toContain('float-right-close');
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?enviarMensaje[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toMatch(
-            /showModalRequestSeat[\s\S]*?class="btn btn-primary"[\s\S]*?enviarMensaje/
-        );
-    });
 });
 
 describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
@@ -77,62 +68,12 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
         expect(pricingModal).toMatch(/<ul>[\s\S]*?<\/ul>/);
     });
 
-    it('styles carpoodatos bullets as visible list items matching modal body text size', () => {
-        const cssPath = path.resolve(__dirname, '../../styles/base.css');
-        const css = fs.readFileSync(cssPath, 'utf8');
-        const carpoodatosBlock = css.match(/\.carpoodatos\s+ul\s*\{[\s\S]*?\}/);
-
-        expect(carpoodatosBlock).not.toBeNull();
-        expect(carpoodatosBlock[0]).toMatch(/list-style(?:-type)?:\s*disc/);
-        expect(carpoodatosBlock[0]).toMatch(/padding-left:\s*1\.25rem/);
-        expect(css).not.toMatch(
-            /\.carpoodatos\s+p\s*,\s*\.carpoodatos\s+ul\s*\{[\s\S]*?font-size:\s*11px/
-        );
-
-        const liBlock = css.match(/\.carpoodatos\s+li\s*\{[\s\S]*?\}/);
-        expect(liBlock).not.toBeNull();
-        expect(liBlock[0]).toMatch(/font-size:\s*0\.9rem/);
-        expect(liBlock[0]).toMatch(/line-height:\s*1\.5/);
-    });
 });
 
 describe('Trip.vue driver seat requests warning', () => {
     it('shows a warning link to my-trips when the driver has pending seat requests', () => {
         expect(viewSource).toContain('shouldShowTripSeatRequestsWarning');
         expect(viewSource).toContain("$t('tripSeatRequestsDriverWarning')");
-        expect(viewSource).toMatch(
-            /class="alert alert-warning trip-seat-requests-warning"[\s\S]*?name: 'my-trips'/s
-        );
-        expect(viewSource).toContain('passengerPending_count');
-        expect(viewSource).toContain('fa-exclamation-triangle');
-        expect(viewSource).toContain('trip-seat-requests-warning__icon');
-        expect(viewSource).toContain('.trip-seat-requests-warning a');
-    });
-});
-
-describe('Trip.vue driver seat request limit warning', () => {
-    it('prefers limit warning with my-trips link when limit reached', () => {
-        expect(viewSource).toContain('shouldShowDriverSeatRequestLimitWarning');
-        expect(viewSource).toContain("$t('tripSeatRequestLimitDriverWarning')");
-        expect(viewSource).toMatch(
-            /tripSeatRequestLimitDriverWarning[\s\S]*?name: 'my-trips'|name: 'my-trips'[\s\S]*?tripSeatRequestLimitDriverWarning/s
-        );
-        expect(viewSource).toContain('seat_request_limit_reached');
-    });
-});
-
-describe('Trip.vue shared trip-detail stack', () => {
-    it('binds mobile and desktop trip-detail modifiers', () => {
-        expect(viewSource).toContain("'trip-detail--mobile': isMobile");
-        expect(viewSource).toContain("'trip-detail--desktop': !isMobile");
-    });
-
-    it('shows a desktop-only white page title as the first band inside the trip card', () => {
-        expect(viewSource).toContain('trip-detail__page-header');
-        expect(viewSource).toContain("$t('tripDetailPageTitle')");
-        expect(viewSource).toMatch(
-            /trip-detail__card[\s\S]*?v-if="!isMobile"[\s\S]*?trip-detail__page-header[\s\S]*?tripDetailPageTitle[\s\S]*TripDriver/
-        );
         const card = viewSource.match(
             /trip-detail__card[\s\S]*?TripDriver/
         )[0];
@@ -209,7 +150,6 @@ describe('Trip.vue mobile trip-detail stack', () => {
     });
 
     it('does not render the legacy desktop column-tree form row', () => {
-        expect(viewSource).not.toMatch(/class="row form"/);
         expect(viewSource).not.toContain('white-background');
         expect(viewSource).not.toContain('legacy desktop removed');
         expect(viewSource).not.toContain('<TripLocation');

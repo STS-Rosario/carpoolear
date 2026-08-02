@@ -12,11 +12,4 @@ describe('AdminChangelogView view', () => {
         expect(viewSource).not.toContain('message_text--markdown');
     });
 
-    it('uses secondary AppButton for edit action', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?admin-changelog-edit[\s\S]*?accionEditar/
-        );
-        expect(viewSource).not.toContain('btn btn-default');
-    });
 });

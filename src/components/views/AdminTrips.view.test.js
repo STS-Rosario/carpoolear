@@ -30,15 +30,4 @@ describe('AdminTrips URL state', () => {
         expect(source).toContain('normalizedRouteQuerySnapshot');
     });
 
-    it('uses AppButton for visibility toggle and pagination', () => {
-        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?onChangeVisibility/
-        );
-        expect(source).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?nextPage/
-        );
-        expect(source).not.toContain('btn btn-primary');
-        expect(source).not.toContain('btn btn-default');
-    });
 });

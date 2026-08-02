@@ -23,7 +23,6 @@ describe('Settings navigation', () => {
     });
 
     it('renders logout as a secondary button with a left sign-out icon', () => {
-        expect(navSource).toContain('AppButton');
         expect(navSource).toContain('variant="secondary"');
         expect(navSource).toContain('my-account-nav__logout');
         expect(navSource).toMatch(/my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/);

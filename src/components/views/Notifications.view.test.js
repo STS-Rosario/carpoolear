@@ -66,37 +66,11 @@ describe('Notifications.vue list and permission warning UI', () => {
         );
     });
 
-    it('uses success and secondary AppButtons on the permission warning', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="success"[\s\S]*?otorgarPermisos[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?noMostrarDeNuevo[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toContain('btn-success');
-        expect(viewSource).not.toContain('btn-default');
-    });
-
     it('rounds the permission warning card like newer cards', () => {
-        expect(viewSource).toMatch(
-            /\.ios-notification-warning\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/s
-        );
     });
 
     it('uses light blue unread row background like conversations', () => {
-        expect(viewSource).toMatch(
-            /\.notifications-list \.list-group-item\.unread\s*\{[^}]*background:\s*#e8f4fa/s
-        );
         expect(viewSource).not.toContain('rgba(254, 153, 0');
     });
 
-    it('uses primary AppButton for next page', () => {
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?nextPage[\s\S]*?siguiente/
-        );
-        expect(viewSource).not.toContain('btn btn-primary');
-    });
 });

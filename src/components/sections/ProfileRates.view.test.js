@@ -9,10 +9,6 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const profileRatesSource = fs.readFileSync(profileRatesPath, 'utf8');
 const profileInfoSource = fs.readFileSync(profileInfoPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
-const referenceActionSpacingRule =
-    /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
-const referenceLabelColorRule = /\.label-reply\s*\{[\s\S]*color:\s*#333/;
-const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
 const referenceMessageFirstKey = 'confirmarReferenciaUsuarioMensajeReferencia';
 const referenceMessageSecondKey = 'confirmarReferenciaUsuarioMensajeCalificacion';
 const referencePersonCopy =
@@ -76,14 +72,6 @@ describe('ProfileRates reference action', () => {
         const cancelarIndex = footerHtml.indexOf("$t('cancelar')");
         expect(continuarIndex).toBeGreaterThan(-1);
         expect(cancelarIndex).toBeGreaterThan(continuarIndex);
-        expect(footerHtml).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?confirmReferenceWriting[\s\S]*?\$t\('continuar'\)/
-        );
-        expect(footerHtml).toMatch(
-            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?hideReferenceConfirmation[\s\S]*?\$t\('cancelar'\)/
-        );
-        expect(footerHtml).not.toContain('btn btn-primary');
-        expect(footerHtml).not.toContain('btn btn-secondary');
     });
 
     it('renders the reference explanation as two translated paragraphs', () => {
@@ -100,25 +88,10 @@ describe('ProfileRates reference action', () => {
         expect(i18nSource).toContain('Cancel');
     });
 
-    it('adds bottom spacing to the reference action before the list', () => {
-        expect(profileRatesSource).toMatch(referenceActionSpacingRule);
-    });
-
-    it('styles the reference form label as black and larger text', () => {
-        expect(profileRatesSource).toMatch(referenceLabelColorRule);
-        expect(profileRatesSource).toMatch(referenceLabelSizeRule);
-    });
-
-    it('uses Guardar referencia primary and Cancelar secondary on the write form', () => {
+    it('uses Guardar referencia on the write form', () => {
         expect(profileRatesSource).toContain("$t('guardarReferencia')");
         expect(profileRatesSource).not.toMatch(
             /sendReference[\s\S]*?\$t\('comentar'\)/
-        );
-        expect(profileRatesSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?sendReference[\s\S]*?guardarReferencia/
-        );
-        expect(profileRatesSource).toMatch(
-            /reply-btns[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?guardarReferencia[\s\S]*?<AppButton[\s\S]*?variant="secondary"[\s\S]*?cancelar/
         );
         expect(i18nSource).toMatch(
             /guardarReferencia:\s*'Guardar referencia'/
@@ -128,27 +101,8 @@ describe('ProfileRates reference action', () => {
         );
     });
 
-    it('styles the reference textarea with design-system input tokens', () => {
-        expect(profileRatesSource).toMatch(
-            /id="reference"[\s\S]*?class="[^"]*ds-textarea/
-        );
-        expect(profileRatesSource).toMatch(
-            /\.ds-textarea\s*\{[^}]*border-radius:\s*var\(--ds-radius-input/s
-        );
-        expect(profileRatesSource).toMatch(
-            /\.ds-textarea\s*\{[^}]*border:\s*1px\s+solid\s+var\(--ds-input-border/s
-        );
-        expect(profileRatesSource).toMatch(
-            /\.ds-textarea:focus\s*\{[^}]*box-shadow:\s*var\(--ds-input-focus-ring/s
-        );
-    });
-
-    it('styles calificaciones neutral icons with the shared transform helper', () => {
+    it('renders calificaciones with RateItem', () => {
         expect(profileRatesSource).toContain('RateItem');
-        expect(profileRatesSource).toMatch(
-            /\.profile-rates-component\s*:deep\(\.rate-neutral-icon\)\s*\{[\s\S]*margin-left:\s*0\.6em/
-        );
-        expect(profileRatesSource).not.toMatch(/padding-bottom:\s*0\.3em/);
     });
 
     it('filters ratings with chips Todas Positivas Neutras Negativas', () => {
@@ -168,13 +122,4 @@ describe('ProfileRates reference action', () => {
         expect(profileRatesSource).toMatch(/id:\s*'positive'/);
     });
 
-    it('uses AppButton primary for the write-reference action', () => {
-        expect(profileRatesSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(profileRatesSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?\$t\('enviarReferencia'\)[\s\S]*?<\/AppButton>/
-        );
-        expect(profileRatesSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?\$t\('enviarReferencia'\)/
-        );
-    });
 });

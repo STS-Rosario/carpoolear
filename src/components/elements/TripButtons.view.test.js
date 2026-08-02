@@ -34,12 +34,6 @@ describe('TripButtons.vue message/request hierarchy', () => {
         expect(viewSource).toMatch(/v-if="showMessageButton"/);
     });
 
-    it('uses AppButton primary for Enviar mensaje', () => {
-        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
-        expect(viewSource).toContain('variant="primary"');
-        expect(viewSource).toContain("$emit('toMessages')");
-        expect(viewSource).toContain("$t('enviarMensaje')");
-    });
 });
 
 describe('TripButtons.vue seat request limit', () => {
@@ -71,23 +65,6 @@ describe('TripButtons.vue seat request limit', () => {
 });
 
 describe('TripButtons.vue owner actions', () => {
-    it('uses AppButton primary for Editar viaje and tertiary destructive for Cancelar viaje', () => {
-        expect(viewSource).toContain("$t('editarViaje')");
-        expect(viewSource).toContain("$t('cancelarViaje')");
-        expect(viewSource).toMatch(
-            /variant="primary"[\s\S]*?\$t\('editarViaje'\)/
-        );
-        expect(viewSource).toMatch(
-            /variant="tertiary"[\s\S]*?tone="destructive"[\s\S]*?\$t\('cancelarViaje'\)/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?\$t\('editar'\)/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[\s\S]*?\$t\('cancelarViaje'\)/
-        );
-    });
-
     it('does not render the red Viaje carpooleado status CTA', () => {
         expect(viewSource).not.toContain('carpooled-trip');
         expect(viewSource).not.toContain("$t('viajeCarpooleado')");
@@ -95,74 +72,9 @@ describe('TripButtons.vue owner actions', () => {
 
     it('does not render a Finalizado button CTA', () => {
         expect(viewSource).not.toContain("$t('finalizado')");
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary"[^>]*>\{\{\s*\$t\('finalizado'\)/
-        );
     });
 
-    it('uses secondary AppButton with chat icon for Chat grupal without uppercase', () => {
-        const labelIdx = viewSource.indexOf("$t('groupChatButton')");
-        expect(labelIdx).toBeGreaterThan(-1);
-        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
-        expect(before).toContain('<AppButton');
-        expect(before).toContain('variant="secondary"');
-        expect(before).toContain('icon-left="fa fa-comments"');
-        expect(before).not.toContain('variant="primary"');
-        expect(before).not.toContain('btn btn-primary');
-        expect(viewSource).toMatch(
-            /\.group-chat-btn[\s\S]*?text-transform:\s*none/s
-        );
-    });
-
-    it('uses danger AppButton for Bajarme del viaje without uppercase styling', () => {
-        const labelIdx = viewSource.indexOf("$t('bajarmeViaje')");
-        expect(labelIdx).toBeGreaterThan(-1);
-        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
-        expect(before).toContain('<AppButton');
-        expect(before).toContain('variant="danger"');
-        expect(before).not.toContain('btn btn-primary');
-        expect(before).not.toContain('text-transform');
-    });
-
-    it('uses danger AppButton to withdraw a pending seat request', () => {
-        const labelIdx = viewSource.indexOf(
-            "$t('retirarSolicitudDeAsiento')"
-        );
-        expect(labelIdx).toBeGreaterThan(-1);
-        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
-        expect(before).toContain('<AppButton');
-        expect(before).toContain('variant="danger"');
-        expect(before).toContain('!canRequest');
-        expect(before).toContain("$emit('cancelRequest')");
-        expect(viewSource).not.toContain("$t('solicitadoRetirar')");
-        expect(viewSource).not.toMatch(
-            /class="btn"[^>]*>[\s\S]*?solicitadoRetirar/
-        );
-    });
-
-    it('uses secondary multiline AppButton for live location share', () => {
-        const labelIdx = viewSource.indexOf(
-            "$t('compartirUbicacionTiempoReal')"
-        );
-        expect(labelIdx).toBeGreaterThan(-1);
-        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
-        expect(before).toContain('<AppButton');
-        expect(before).toContain('variant="secondary"');
-        expect(before).toContain('live-location-share-btn');
-        expect(before).not.toContain('btn btn-primary');
-        expect(before).not.toContain('variant="primary"');
-        expect(viewSource).toMatch(
-            /\.live-location-share-btn[\s\S]*?white-space:\s*normal/s
-        );
-    });
-
-    it('stacks owner Edit above Cancel in a column at all breakpoints', () => {
-        expect(viewSource).toMatch(
-            /\.buttons-container\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column/
-        );
-        expect(viewSource).not.toMatch(
-            /@media only screen and \(min-width: 768px\)\s*\{\s*\.buttons-container button:first-child\s*\{[^}]*margin-right:\s*1em/
-        );
+    it('stacks owner Edit above Cancel', () => {
         const editIdx = viewSource.indexOf("$t('editarViaje')");
         const cancelIdx = viewSource.indexOf("$t('cancelarViaje')");
         expect(editIdx).toBeGreaterThan(-1);

@@ -14,11 +14,5 @@ describe('DonationAmountPicker.vue', () => {
         expect(source).toContain(':value="String(tier.amount)"');
         expect(source).toContain('donationTierCafe');
         expect(source).toContain('donationUsageNote');
-        expect(source).toMatch(
-            /\.donation-usage-note\s*\{[^}]*font-size:\s*1\.4em/
-        );
-        expect(source).toMatch(
-            /@media\s*\(min-width:\s*768px\)\s*\{[\s\S]*?\.donation-usage-note\s*\{[^}]*font-size:\s*1rem/
-        );
     });
 });

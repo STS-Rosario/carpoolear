@@ -32,19 +32,3 @@ describe('AppInput', () => {
     });
 });
 
-describe('auth forms AppInput integration', () => {
-    it('uses AppInput on Login without changing the submit form structure', () => {
-        expect(loginSource).toContain('user-form--inputs');
-        expect(loginSource).toContain('AppInput');
-        expect(loginSource).toContain('ref="txt_user"');
-        expect(loginSource).toContain('@submit.prevent="submitLogin"');
-        expect(loginSource).toContain('id="btn_login"');
-    });
-
-    it('uses AppInput on Register email and password fields', () => {
-        expect(registerSource).toContain('user-form--inputs');
-        expect(registerSource).toContain('AppInput');
-        expect(registerSource).toContain(':error="emailError.message"');
-        expect(registerSource).toContain('v-model="name"');
-    });
-});

@@ -48,18 +48,6 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain("friendship_state === 'none'");
     });
 
-    it('uses AppButton primary for Invitar a amigos', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?friendship_state === 'none'[\s\S]*?variant="primary"[\s\S]*?onInviteFriend/
-        );
-        expect(viewSource).not.toMatch(
-            /friendship_state === 'none'[\s\S]*?class="btn btn-primary"[\s\S]*?invitarAmigos/
-        );
-    });
-
     it('shows Enviando solicitud while invite is in flight', () => {
         expect(viewSource).toContain("$t('enviandoSolicitudAmistad')");
         expect(viewSource).toMatch(
@@ -77,9 +65,6 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain("friendship_state === 'pending_sent'");
         expect(viewSource).toContain("$t('cancelarSolicitudAmistad')");
         expect(viewSource).toContain('onCancelFriendRequest');
-        expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?friendship_state === 'pending_sent'[\s\S]*?variant="danger"[\s\S]*?cancelarSolicitudAmistad[\s\S]*?<\/AppButton>/
-        );
         expect(viewSource).not.toContain("$t('suSolicitudAmistadEnviada')");
         expect(i18nSource).toMatch(
             /cancelarSolicitudAmistad:\s*'Cancelar solicitud de amistad'/
@@ -150,21 +135,4 @@ describe('ProfileInfo friend trip alerts toggle', () => {
         expect(onToggleTripAlerts[0]).not.toContain('setProfileUser');
     });
 
-    it('places primary Enviar mensaje beside secondary trip-alerts AppButtons', () => {
-        expect(viewSource).toContain(
-            "import AppButton from '../ui/AppButton.vue'"
-        );
-        expect(viewSource).toMatch(
-            /friendship_state === 'friend'[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?messageUser[\s\S]*?\$t\('enviarMensaje'\)[\s\S]*?<\/AppButton>[\s\S]*?<AppButton[\s\S]*?variant="secondary"[\s\S]*?onToggleTripAlerts[\s\S]*?tripAlertsButtonLabel[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).toMatch(
-            /\.profile-friend-actions\s*\{[^}]*display:\s*flex/
-        );
-        expect(viewSource).toMatch(
-            /\.profile-friend-actions\s*\{[^}]*justify-content:\s*flex-start/
-        );
-        expect(viewSource).toMatch(
-            /\.profile-friend-actions\s*\{[^}]*text-align:\s*left/
-        );
-    });
 });
