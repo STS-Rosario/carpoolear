@@ -65,14 +65,12 @@
             </template>
         </p>
         <template v-if="!owner && !isTripGroupConversation(conversation)">
-            <button
+            <AppButton
                 :disabled="sending.trip || expiredTrip"
-                :style="
-                    !conversation.return_trip
-                        ? { float: 'none', width: '100%' }
-                        : {}
-                "
-                class="btn btn-primary"
+                :loading="Boolean(sending.trip)"
+                :variant="outboundSeatActionVariant"
+                block
+                class="trip_actions-seat-btn"
                 @click="
                     isPassengerTrip || conversation.trip.request === 'send'
                         ? cancelRequest(false)
@@ -86,12 +84,6 @@
                 <span v-else-if="conversation.trip.request === 'send'">
                     {{ $t('retirarSolicitudDeAsiento') }}
                     <template v-if="conversation.return_trip">{{ $t('deIda') }}</template>
-                </span>
-                <span v-else-if="sending.trip">
-                    <spinner
-                        class="blue"
-                        v-if="sending && sending.trip"
-                    ></spinner>
                 </span>
                 <span v-else-if="expiredTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
@@ -128,14 +120,20 @@
                         }})</strong
                     >
                 </template>
-            </button>
+                <template #loading>
+                    <spinner class="blue"></spinner>
+                </template>
+            </AppButton>
         </template>
         <template
             v-if="conversation.return_trip && !isTripGroupConversation(conversation)"
         >
-            <button
+            <AppButton
                 :disabled="sending.returnTrip || expiredReturnTrip"
-                class="btn btn-primary"
+                :loading="Boolean(sending.returnTrip)"
+                :variant="returnSeatActionVariant"
+                block
+                class="trip_actions-seat-btn"
                 @click="
                     isPassengerReturnTrip ||
                     conversation.return_trip.request === 'send'
@@ -148,9 +146,6 @@
                 >
                 <span v-else-if="conversation.return_trip.request === 'send'">
                     {{ $t('retirarSolicitudDeAsientoDeVuelta') }}
-                </span>
-                <span v-else-if="sending.returnTrip">
-                    <spinner class="blue" v-if="sending.returnTrip"></spinner>
                 </span>
                 <span v-else-if="expiredReturnTrip">{{ $t('viajeCarpooleado') }}</span>
                 <span v-else>
@@ -180,7 +175,10 @@
                         }})</strong
                     >
                 </template>
-            </button>
+                <template #loading>
+                    <spinner class="blue"></spinner>
+                </template>
+            </AppButton>
         </template>
     </div>
 </template>
@@ -192,6 +190,7 @@ import { useAuthStore } from '../../stores/auth';
 import { usePassengerStore } from '../../stores/passenger';
 import dialogs from '../../services/dialogs.js';
 import spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
 import dayjs from '../../dayjs';
 import { getConversationContributionWarningData } from '../../utils/conversationContributionWarning.js';
 import { getContributionWarningAmountPart } from '../../utils/contributionWarningAmountPart.js';
@@ -284,6 +283,24 @@ export default {
                 trip: this.conversation.trip,
                 webAppBaseUrl: resolveWebAppBaseUrl()
             });
+        },
+        outboundSeatActionVariant() {
+            if (
+                this.isPassengerTrip ||
+                this.conversation.trip?.request === 'send'
+            ) {
+                return 'danger';
+            }
+            return 'primary';
+        },
+        returnSeatActionVariant() {
+            if (
+                this.isPassengerReturnTrip ||
+                this.conversation.return_trip?.request === 'send'
+            ) {
+                return 'danger';
+            }
+            return 'primary';
         }
     },
     methods: {
@@ -370,32 +387,19 @@ export default {
         }
     },
     components: {
-        spinner
+        spinner,
+        AppButton
     }
 };
 </script>
 
 <style scoped>
-.trip_actions .btn-primary {
-    font-size: 12px;
+.trip_actions .app-button {
     width: 100%;
-    background: var(--ds-action);
-    border-color: var(--ds-action);
-    color: var(--ds-action-on, #fff);
-}
-
-.trip_actions .btn-primary:hover:not(:disabled),
-.trip_actions .btn-primary:focus:not(:disabled) {
-    background: var(--ds-action-hover);
-    border-color: var(--ds-action-hover);
-    color: var(--ds-action-on, #fff);
-}
-
-.trip_actions .btn-primary:disabled {
-    background: var(--ds-action);
-    border-color: var(--ds-action);
-    color: var(--ds-action-on, #fff);
-    opacity: 0.55;
+    text-transform: none;
+    white-space: normal;
+    font-size: 0.8125rem;
+    line-height: 1.3;
 }
 
 .trip_actions-contribution-warning {
@@ -454,13 +458,11 @@ export default {
         background-color: #f6f6f6;
         flex-shrink: 0;
     }
-    .trip_actions .btn-primary {
-        display: block;
+    .trip_actions .app-button {
+        display: flex;
         width: 100%;
-        font-size: 11px;
-        margin-bottom: 0;
+        font-size: 0.75rem;
         margin: 0;
-        padding: 0;
     }
     .trip_actions-detail {
         padding-bottom: 0.3em;
@@ -468,9 +470,14 @@ export default {
     }
 }
 @media only screen and (min-width: 1100px) {
-    .trip_actions .btn-primary {
+    .trip_actions .app-button {
         float: left;
         width: 50%;
+    }
+    .trip_actions .app-button.trip_actions-seat-btn:only-of-type,
+    .trip_actions .app-button:only-child {
+        float: none;
+        width: 100%;
     }
 }
 </style>
