@@ -172,6 +172,14 @@ describe('Trips.vue friend-first trip sections', () => {
         );
     });
 
+    it('renders the logged-out donation panel full-width so trip cards do not wrap beside it', () => {
+        const loggedOutDonation = viewSource.match(
+            /isDonationTime\(\)[\s\S]*?<div\s+class="panel panel-default panel-donar"/
+        )?.[0];
+        expect(loggedOutDonation).toBeTruthy();
+        expect(loggedOutDonation).toContain('class="col-xs-24"');
+    });
+
     it('hides section headings when there are no friend trips', () => {
         expect(viewSource).toContain('showFriendTripSections');
         expect(viewSource).toMatch(
