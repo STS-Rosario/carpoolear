@@ -206,16 +206,20 @@
                         :key="'desktop-' + field.idPrefix"
                         class="allow-preference-filter"
                     >
-                        <label :for="field.idPrefix + 'Desktop'">{{ $t(field.labelKey) }}</label>
-                        <select
-                            :id="field.idPrefix + 'Desktop'"
-                            v-model="$data[field.modelKey]"
-                            class="form-control"
+                        <AppField
+                            :label="$t(field.labelKey)"
+                            :label-for="field.idPrefix + 'Desktop'"
                         >
-                            <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                            <option value="yes">{{ $t('filtroPermitido') }}</option>
-                            <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                        </select>
+                            <select
+                                :id="field.idPrefix + 'Desktop'"
+                                v-model="$data[field.modelKey]"
+                                class="trips-search__preference-select"
+                            >
+                                <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
+                                <option value="yes">{{ $t('filtroPermitido') }}</option>
+                                <option value="no">{{ $t('filtroNoPermitido') }}</option>
+                            </select>
+                        </AppField>
                     </div>
                 </div>
             </div>
@@ -258,16 +262,20 @@
                         :key="'mobile-' + field.idPrefix"
                         class="allow-preference-filter"
                     >
-                        <label :for="field.idPrefix + 'Mobile'">{{ $t(field.labelKey) }}</label>
-                        <select
-                            :id="field.idPrefix + 'Mobile'"
-                            v-model="$data[field.modelKey]"
-                            class="form-control"
+                        <AppField
+                            :label="$t(field.labelKey)"
+                            :label-for="field.idPrefix + 'Mobile'"
                         >
-                            <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                            <option value="yes">{{ $t('filtroPermitido') }}</option>
-                            <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                        </select>
+                            <select
+                                :id="field.idPrefix + 'Mobile'"
+                                v-model="$data[field.modelKey]"
+                                class="trips-search__preference-select"
+                            >
+                                <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
+                                <option value="yes">{{ $t('filtroPermitido') }}</option>
+                                <option value="no">{{ $t('filtroNoPermitido') }}</option>
+                            </select>
+                        </AppField>
                     </div>
                 </div>
             </div>
@@ -647,12 +655,27 @@ export default {
     min-width: 11.25rem;
 }
 
-.allow-preference-filter label {
-    margin: 0;
+.allow-preference-filter :deep(.app-field) {
+    margin-bottom: 0;
 }
 
-.allow-preference-filter select {
+.trips-search__preference-select {
     width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.trips-search__preference-select:focus {
+    outline: none;
 }
 
 .swap-horizontal {
