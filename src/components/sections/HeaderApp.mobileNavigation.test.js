@@ -40,4 +40,13 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).toContain("item.id !== 'search'");
         expect(headerSource).toContain('mobileUtilityHeaderButtons');
     });
+
+    it('does not render the legacy mobile trips Ingresar btn-primary', () => {
+        expect(headerSource).not.toContain('btn-login-header');
+        expect(headerSource).not.toContain('Ingresar');
+        expect(headerSource).not.toContain('isTripsPage');
+        expect(headerSource).not.toMatch(
+            /btn btn-primary[\s\S]*:to="\{ name: 'login' \}"/
+        );
+    });
 });
