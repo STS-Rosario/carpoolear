@@ -347,7 +347,7 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    it('avoids double borders on date and fixes time icon padding', () => {
+    it('avoids double borders on date and uses AppInput for schedule time', () => {
         expect(wizardSource).toMatch(
             /\.date-picker\s+\.picker\.form-control[\s\S]*?\.dp__input[\s\S]*?border:\s*0/
         );
@@ -355,10 +355,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /\.date-picker--cross\)?\s*\{[^}]*transform:\s*translateY\(-50%\)/
         );
         expect(wizardSource).toMatch(
-            /\.form-control-time[\s\S]*?padding-left:\s*(?:2\.5rem|2\.75rem|3rem)/
+            /<AppInput[\s\S]*?ref="wizardTimeInput"[\s\S]*?type="time"/
         );
         expect(wizardSource).toMatch(
-            /form-control-time::-webkit-calendar-picker-indicator[\s\S]*?(?:display:\s*none|opacity:\s*0)/
+            /#actionRight[\s\S]*?new-trip-wizard__time-caret[\s\S]*?openWizardTimePicker/
+        );
+        expect(wizardSource).not.toContain(
+            'form-control form-control-with-icon form-control-time'
         );
     });
 
@@ -377,6 +380,9 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('openWizardTimePicker');
         expect(wizardSource).toContain('showPicker');
         expect(wizardSource).toContain('ref="wizardTimeInput"');
+        expect(wizardSource).toMatch(
+            /wizardTimeInput[\s\S]*?\$refs\.inputEl|inputEl[\s\S]*?showPicker/
+        );
     });
 
     it('shows punto partida only on origin and punto llegada only on destination', () => {
