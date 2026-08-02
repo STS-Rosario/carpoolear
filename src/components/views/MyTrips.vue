@@ -389,5 +389,10 @@ export default {
 <style scoped>
 h2 {
     font-weight: 300;
+    margin-top: 0;
+}
+
+.request-list {
+    margin-top: 0;
 }
 </style>
