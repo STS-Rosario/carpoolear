@@ -87,6 +87,14 @@
     color: #222;
 }
 
+@media only screen and (max-width: 767px) {
+    .messages-page .conversation_header.unread,
+    .messages-page .conversation_header.unread:hover,
+    .messages-page .conversation_header.unread:focus {
+        background: var(--messages-selected-bg);
+    }
+}
+
 .messages-page .conversation_image--group {
     display: flex;
     align-items: center;
