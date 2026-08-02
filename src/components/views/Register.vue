@@ -8,28 +8,27 @@
             <div v-if="settings.enable_facebook" v-show="!showRegisterForm">
                 <div class="col-md-12">
                     <div class="text text-with">con</div>
-                    <!-- <button ref="btn_show_register" id="btn_show_register" class="btn btn-primary btn-shadowed-black" @click="onShowRegister"> <span>{{ $t('ingresaEmail') }}</span></button> -->
-
-                    <button
+                    <AppButton
                         ref="btn_show_register"
                         id="btn_show_register"
-                        class="btn btn-primary btn-shadowed-black btn-with-icon btn-email"
+                        class="register-form__email-entry"
+                        variant="primary"
+                        block
                         @click="onShowRegister"
                     >
-                        <span class="btn-with-icon--icon">
+                        <template #iconLeft>
                             <i class="fa fa-envelope" aria-hidden="true"></i>
-                        </span>
-                        <span class="btn-with-icon--label">
-                            <span>{{ $t('ingresaEmail') }}</span>
-                        </span>
-                    </button>
+                        </template>
+                        {{ $t('ingresaEmail') }}
+                    </AppButton>
                 </div>
                 <div class="col-md-12">
                     <div class="text text-creating-with-fb">
                         {{ $t('creandoUnaCuenta') }}
                     </div>
                     <button
-                        class="btn btn-primary btn-search btn-facebook btn-with-icon"
+                        type="button"
+                        class="register-form__facebook-btn btn-facebook btn-with-icon"
                         @click="facebookLogin"
                         :disabled="fbLoading"
                     >
@@ -802,9 +801,12 @@ input[type='checkbox'] {
 input[type='file'] {
     color: white;
 }
-#btn_show_register {
-    border-color: #222;
-    background: #444;
+.register-form__email-entry {
+    margin-top: 0.5rem;
+}
+.register-form__facebook-btn {
+    margin-top: 0.5rem;
+    color: #fff;
 }
 .fb-terms {
     font-size: 0.9em;
