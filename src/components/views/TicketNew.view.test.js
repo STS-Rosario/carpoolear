@@ -41,3 +41,44 @@ describe('TicketNew view', () => {
         expect(source).toContain('focusPrefilledTicketEditorAtStart');
     });
 });
+
+describe('TicketNew page card', () => {
+    it('uses account settings layout without a layout page title so the in-card heading is used', () => {
+        expect(source).toContain('AccountSettingsLayout');
+        expect(source).not.toContain('page-title-key="soporte"');
+    });
+
+    it('wraps content in a white card with Mesa de ayuda as page title', () => {
+        expect(source).toContain('ticket-new-page__card');
+        expect(source).toContain('ticket-new-page__heading');
+        expect(source).toMatch(
+            /ticket-new-page__card[\s\S]*ticket-new-page__heading[\s\S]*\$t\('soporte'\)/
+        );
+        expect(source).toMatch(
+            /\.ticket-new-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
+        );
+        expect(source).toMatch(
+            /\.ticket-new-page__card\s*\{[^}]*border-radius:\s*0\.75rem/s
+        );
+        expect(source).not.toContain('panel panel-default');
+        expect(source).not.toContain('panel-heading');
+    });
+
+    it('uses AppField, AppInput and primary AppButton for the create form', () => {
+        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(source).toContain("import AppField from '../ui/AppField.vue'");
+        expect(source).toContain("import AppInput from '../ui/AppInput.vue'");
+        expect(source).toMatch(
+            /<AppInput[\s\S]*?v-model="form\.subject"[\s\S]*?asuntoTicket/
+        );
+        expect(source).toMatch(
+            /<AppField[\s\S]*?categoriaTicket[\s\S]*?<select[\s\S]*?v-model="form\.type"/
+        );
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?createTicket[\s\S]*?crearTicket[\s\S]*?<\/AppButton>/
+        );
+        expect(source).not.toContain('btn btn-primary');
+        expect(source).not.toContain('form-control');
+        expect(source).not.toContain('control-label');
+    });
+});
