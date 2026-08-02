@@ -33,3 +33,32 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('getTrip');
     });
 });
+
+describe('LiveLocationShare CTA AppButtons', () => {
+    it('uses primary AppButtons for start sharing and share sheet', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?startSharing[\s\S]*?compartirUbicacionTiempoReal/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?shareLiveUrl[\s\S]*?compartirUbicacionTiempoReal/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
+    });
+
+    it('uses secondary AppButton for copy URL', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?copyShareUrl[\s\S]*?liveLocationCopyUrl/
+        );
+        expect(viewSource).not.toContain('btn btn-default');
+    });
+
+    it('uses danger AppButton for stop sharing', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="danger"[\s\S]*?live-location-share__stop[\s\S]*?stopSharing[\s\S]*?liveLocationStopSharing/
+        );
+        expect(viewSource).not.toContain('btn btn-danger');
+    });
+});
