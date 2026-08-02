@@ -335,7 +335,7 @@
 }
 
 .profile-page .profile-info-component .profile-info-panel__tile-icon--verified {
-    color: #1b5e20;
+    color: var(--profile-verified, #2e7d32);
 }
 
 .profile-info-panel__tile-title {
