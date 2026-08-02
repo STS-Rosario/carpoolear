@@ -62,12 +62,12 @@
                 </div>
             </div>
             <div class="rate--comment-box" v-show="expanded">
-                <textarea
-                    maxlength="600"
-                    class="rate_comment"
+                <AppTextarea
                     v-model="comment"
+                    maxlength="600"
+                    rows="3"
                     :placeholder="$t('ratePendingIncluyaUnComentario')"
-                ></textarea>
+                />
                 <AppButton
                     variant="primary"
                     @click="makeVote"
@@ -92,12 +92,14 @@ import {
     getRequiredCommentMessageKey
 } from '../utils/tripRating';
 import AppButton from './ui/AppButton.vue';
+import AppTextarea from './ui/AppTextarea.vue';
 
 export default {
     name: 'rate-pending',
 
     components: {
-        AppButton
+        AppButton,
+        AppTextarea
     },
 
     data() {

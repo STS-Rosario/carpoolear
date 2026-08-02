@@ -131,9 +131,13 @@
             </div>
         </template>
         <div class="reply-box" v-if="showReply && canReply">
-            <label for="reply" class="label label-reply"
-                >{{ $t('rateItemResponderALaCalificacion') }}</label>
-            <textarea maxlength="260" v-model="comment" id="reply"></textarea>
+            <AppTextarea
+                id="reply"
+                v-model="comment"
+                :label="$t('rateItemResponderALaCalificacion')"
+                maxlength="260"
+                rows="3"
+            />
             <div class="reply-btns">
                 <AppButton variant="primary" @click="onReply">
                     {{ $t('rateItemResponder') }}
@@ -170,9 +174,11 @@ import {
     isPositiveRating
 } from '../utils/tripRating';
 import AppButton from './ui/AppButton.vue';
+import AppTextarea from './ui/AppTextarea.vue';
 export default {
     components: {
-        AppButton
+        AppButton,
+        AppTextarea
     },
     data() {
         return {
@@ -326,25 +332,9 @@ export default {
     gap: 0.6em;
     margin-top: 1em;
 }
-.label-reply {
-    display: block;
-    font-weight: bold;
-    margin-top: 1.5em;
-
-    padding: 0;
-    font-size: 0.9rem;
-    font-weight: bold;
-    line-height: 1.5em;
-    color: #333;
-    text-align: left;
-    border-radius: 0;
-}
 .reply-box {
     width: 100%;
     float: left;
-}
-textarea {
-    height: 6.6em;
 }
 .reply_comment_content[data-v-79e4aac3] {
     word-wrap: break-word;
