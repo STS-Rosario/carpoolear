@@ -158,6 +158,13 @@ describe('profile page styles', () => {
         );
     });
 
+    it('keeps profile info bottom padding compact inside the content card', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.profile-page\s+\.profile-info-component\s*\{[^}]*padding-bottom:\s*1rem/
+        );
+    });
+
     it('aligns profile trip role label with avatar and route', () => {
         const css = fs.readFileSync(cssPath, 'utf8');
         expect(css).toMatch(
