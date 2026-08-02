@@ -21,5 +21,9 @@ export function shouldShowDriverSeatRequestLimitWarning(owner, trip) {
 }
 
 export function shouldShowPassengerSeatRequestLimitMessage(owner, trip) {
-    return !owner && Boolean(trip?.['seat_request_limit_reached']);
+    return (
+        !owner &&
+        Boolean(trip?.['seat_request_limit_reached']) &&
+        !trip?.request
+    );
 }

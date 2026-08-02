@@ -31,7 +31,7 @@
                     v-if="!owner"
                     variant="primary"
                     block
-                    :disabled="sendingStatus || seatRequestLimitReached"
+                    :disabled="sendingStatus || (seatRequestLimitReached && canRequest)"
                     :loading="Boolean(sending && sending.sendMessageAction)"
                     @click="$emit('toMessages')"
                 >
@@ -171,7 +171,7 @@
                     v-if="!owner"
                     variant="primary"
                     block
-                    :disabled="sendingStatus || seatRequestLimitReached"
+                    :disabled="sendingStatus || (seatRequestLimitReached && canRequest)"
                     :loading="Boolean(sending && sending.sendMessageAction)"
                     @click="$emit('toMessages')"
                 >

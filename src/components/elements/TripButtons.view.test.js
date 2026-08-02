@@ -57,8 +57,15 @@ describe('TripButtons.vue seat request limit', () => {
         expect(viewSource).toContain(
             ':disabled="sendingStatus || (seatRequestLimitReached && canRequest)"'
         );
-        expect(viewSource).not.toMatch(
-            /showMessageButton[\s\S]*?:disabled="sendingStatus \|\| seatRequestLimitReached"/
+        const messageBlock = viewSource.match(
+            /v-if="showMessageButton"[\s\S]*?<\/template>/
+        )?.[0];
+        expect(messageBlock).toBeTruthy();
+        expect(messageBlock).toContain(
+            ':disabled="sendingStatus || (seatRequestLimitReached && canRequest)"'
+        );
+        expect(messageBlock).not.toContain(
+            ':disabled="sendingStatus || seatRequestLimitReached"'
         );
     });
 });
