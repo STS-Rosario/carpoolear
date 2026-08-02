@@ -32,5 +32,4 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain('v-if="showPuntoPartida"');
         expect(viewSource).toContain('v-if="showPuntoLlegada"');
     });
-
 });

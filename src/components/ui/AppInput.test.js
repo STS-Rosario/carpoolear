@@ -31,4 +31,3 @@ describe('AppInput', () => {
         expect(source).toContain('app-input__action-right');
     });
 });
-

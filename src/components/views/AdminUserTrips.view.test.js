@@ -35,5 +35,4 @@ describe('AdminUserTrips view', () => {
         expect(source).toContain('closeTripDetail');
         expect(source).toContain('v-on:open-detail="openTripDetail"');
     });
-
 });

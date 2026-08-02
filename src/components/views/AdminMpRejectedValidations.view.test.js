@@ -15,5 +15,4 @@ describe('AdminMpRejectedValidations view', () => {
         expect(viewSource).toContain('getAdminUserProfileRoute');
         expect(viewSource).not.toContain("name: 'profile'");
     });
-
 });

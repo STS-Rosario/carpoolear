@@ -30,7 +30,6 @@ describe('ConversationList.vue mobile chat ratings header', () => {
 });
 
 describe('ConversationList.vue mobile chat layout', () => {
-
     it('sizes mobile chat from measured header offset so the verification banner does not force page scroll', () => {
         const mobileStyles = getMobileStylesBlock();
         expect(mobileStyles).not.toMatch(
@@ -80,5 +79,4 @@ describe('ConversationList.vue messages redesign', () => {
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
-
 });

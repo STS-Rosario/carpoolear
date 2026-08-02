@@ -33,7 +33,6 @@ describe('TripButtons.vue message/request hierarchy', () => {
         );
         expect(viewSource).toMatch(/v-if="showMessageButton"/);
     });
-
 });
 
 describe('TripButtons.vue seat request limit', () => {

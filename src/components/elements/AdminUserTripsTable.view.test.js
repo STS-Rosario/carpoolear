@@ -30,5 +30,4 @@ describe('AdminUserTripsTable', () => {
         expect(source).toContain('cancelTrip');
         expect(source).toContain('!trip.deleted');
     });
-
 });

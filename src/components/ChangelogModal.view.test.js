@@ -64,5 +64,4 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toMatch(/v-if="!navigationMode"[\s\S]*changelog-modal-view-previous/);
         expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*@click[^"]*="openFromNavigation"/);
     });
-
 });

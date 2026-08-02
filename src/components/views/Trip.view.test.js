@@ -28,7 +28,6 @@ describe('Trip.vue passenger message carpoodatos flow', () => {
             /toMessageForce\(\)[\s\S]*?resolvePricingModalConfirm\(\)[\s\S]*?this\.toMessages\(true\);/
         );
     });
-
 });
 
 describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
@@ -67,7 +66,6 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
         expect(pricingModal).toContain("$t('carpoodatosContribucionComprobantes')");
         expect(pricingModal).toMatch(/<ul>[\s\S]*?<\/ul>/);
     });
-
 });
 
 describe('Trip.vue driver seat requests warning', () => {

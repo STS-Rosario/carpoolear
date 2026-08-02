@@ -12,5 +12,4 @@ describe('AdminUserMigrationsList view', () => {
         expect(source).toContain("$t('migracionId')");
         expect(source).toContain("$t('usuarioMantenido')");
     });
-
 });

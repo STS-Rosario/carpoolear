@@ -249,11 +249,9 @@ describe('Trips.vue donation modal', () => {
         expect(viewSource).not.toContain('value="2000"');
         expect(viewSource).not.toContain('value="10000"');
     });
-
 });
 
 describe('Trips.vue search alert and install modal CTAs', () => {
-
     it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
         const installModal = viewSource.match(
             /showModalInstallApp[\s\S]*?<\/modal>/

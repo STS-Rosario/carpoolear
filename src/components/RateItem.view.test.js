@@ -30,4 +30,3 @@ describe('RateItem.vue profile links', () => {
         );
     });
 });
-

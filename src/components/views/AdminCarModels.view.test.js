@@ -13,5 +13,4 @@ describe('AdminCarModels view', () => {
         expect(viewSource).toContain('deleteModel');
         expect(viewSource).toContain("$t('modelo')");
     });
-
 });

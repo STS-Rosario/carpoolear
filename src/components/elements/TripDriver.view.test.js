@@ -34,7 +34,6 @@ describe('TripDriver profile navigation', () => {
             /driver-data[\s\S]*?<router-link[\s\S]*?trip\.user\.name/
         );
     });
-
 });
 
 describe('TripDriver trip-detail redesign header', () => {

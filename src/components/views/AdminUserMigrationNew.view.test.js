@@ -118,5 +118,4 @@ describe('AdminUserMigrationNew view', () => {
             'The account of {name} (ID: {id}) is suspended so the migration cannot be performed'
         );
     });
-
 });

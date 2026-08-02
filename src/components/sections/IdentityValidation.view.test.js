@@ -137,7 +137,6 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         ).length;
         expect(prefixOccurrences).toBe(3);
     });
-
 });
 
 describe('IdentityValidation manual admin review note', () => {

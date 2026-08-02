@@ -14,7 +14,6 @@ describe('AdminUserRecommendations view', () => {
         expect(viewSource).toContain('updateReference');
         expect(viewSource).toContain('AdminReferenceCard');
     });
-
 });
 
 describe('AdminReferenceCard', () => {
@@ -26,5 +25,4 @@ describe('AdminReferenceCard', () => {
         expect(cardSource).toContain('reference.comment');
         expect(cardSource).toContain('adminUsuariosEditarFila');
     });
-
 });

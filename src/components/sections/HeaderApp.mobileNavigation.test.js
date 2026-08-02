@@ -55,5 +55,4 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).toContain("item.id !== 'search'");
         expect(headerSource).toContain('mobileUtilityHeaderButtons');
     });
-
 });

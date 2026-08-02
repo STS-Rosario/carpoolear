@@ -58,5 +58,4 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('confirmMarcarPendienteYaPendiente');
         expect(viewSource).toContain('shouldProceedWithReviewAction');
     });
-
 });

@@ -64,5 +64,4 @@ describe('CoordinateTrip.vue', () => {
         expect(outboundDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
         expect(returnDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
     });
-
 });

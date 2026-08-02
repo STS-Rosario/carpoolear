@@ -20,5 +20,4 @@ describe('AdminSupportTicketNew view', () => {
         expect(source).toContain('query.subject');
         expect(source).toContain('query.message');
     });
-
 });

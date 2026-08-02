@@ -36,5 +36,4 @@ describe('IncomingFriendRequestCard.vue solicitudes row', () => {
             /incoming-friend-request-card__name-row[\s\S]*UserRatingsCounts[\s\S]*tripsLabel/
         );
     });
-
 });

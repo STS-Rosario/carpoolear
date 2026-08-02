@@ -29,5 +29,4 @@ describe('AdminTrips URL state', () => {
     it('deduplicates route query serialization for list vs full URL', () => {
         expect(source).toContain('normalizedRouteQuerySnapshot');
     });
-
 });

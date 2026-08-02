@@ -24,5 +24,4 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('immediate: true');
         expect(source).toContain('applyParams');
     });
-
 });

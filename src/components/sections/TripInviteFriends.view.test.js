@@ -61,7 +61,6 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('resolveTripInviteFriendsClose');
         expect(componentSource).toContain('v-if="showPrompt"');
     });
-
 });
 
 describe('Trip.vue TripInviteFriends integration', () => {

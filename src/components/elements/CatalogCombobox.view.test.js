@@ -11,5 +11,4 @@ describe('CatalogCombobox dropdown contrast', () => {
         expect(source).toContain('@blur="onInputBlur"');
         expect(source).not.toContain('v-clickoutside');
     });
-
 });

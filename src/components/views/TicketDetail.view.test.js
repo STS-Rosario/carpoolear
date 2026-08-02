@@ -128,5 +128,4 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain(':class="supportTicketReplyEditorClass"');
         expect(viewSource).not.toContain('height="140px"');
     });
-
 });

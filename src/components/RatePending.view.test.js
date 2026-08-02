@@ -35,6 +35,4 @@ describe('RatePending.vue neutral ratings', () => {
             'El comentario no puede estar vacío para los votos neutrales.'
         );
     });
-
 });
-

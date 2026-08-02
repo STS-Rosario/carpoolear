@@ -14,5 +14,4 @@ describe('AdminCarBrands view', () => {
         expect(viewSource).toContain('triggerSync');
         expect(viewSource).toContain('fetchSyncStatus');
     });
-
 });

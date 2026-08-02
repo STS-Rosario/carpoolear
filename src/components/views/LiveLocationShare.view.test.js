@@ -33,4 +33,3 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('getTrip');
     });
 });
-

@@ -121,5 +121,4 @@ describe('ProfileRates reference action', () => {
         expect(profileRatesSource).toMatch(/id:\s*'all'/);
         expect(profileRatesSource).toMatch(/id:\s*'positive'/);
     });
-
 });

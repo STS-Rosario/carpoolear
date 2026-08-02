@@ -18,7 +18,6 @@ describe('AdminUserRatings view', () => {
         expect(viewSource).toContain('AdminRatingCard');
         expect(viewSource).toContain('updateRating');
     });
-
 });
 
 describe('AdminRatingCard', () => {
@@ -34,5 +33,4 @@ describe('AdminRatingCard', () => {
         expect(cardSource).toContain('rateItemNeutral');
         expect(cardSource).toContain('rate.comment');
     });
-
 });

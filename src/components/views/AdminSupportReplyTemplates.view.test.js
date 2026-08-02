@@ -17,5 +17,4 @@ describe('AdminSupportReplyTemplates view', () => {
         expect(viewSource).toContain("{{ $t('accionEliminar') }}");
         expect(viewSource).toContain('fetchAdminList');
     });
-
 });

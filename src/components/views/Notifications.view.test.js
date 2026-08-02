@@ -72,5 +72,4 @@ describe('Notifications.vue list and permission warning UI', () => {
     it('uses light blue unread row background like conversations', () => {
         expect(viewSource).not.toContain('rgba(254, 153, 0');
     });
-
 });

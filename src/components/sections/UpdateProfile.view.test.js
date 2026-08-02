@@ -110,5 +110,4 @@ describe('UpdateProfile delete account entry point', () => {
             /promptDeleteAccountConfirmation[\s\S]*confirmarEliminarCuentaMensaje[\s\S]*@click="deleteAccount"/
         );
     });
-
 });

@@ -231,8 +231,6 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    
-
     it('opens the native time picker from a down-caret control', () => {
         expect(wizardSource).toContain('fa-chevron-down');
         expect(wizardSource).toContain('new-trip-wizard__time-caret');

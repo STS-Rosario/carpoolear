@@ -38,6 +38,4 @@ describe('App custom splash', () => {
         expect(appSource).toContain('resolveSplashVersion');
         expect(appSource).toContain('SPLASH_WEB_BUILD_NUMBER');
     });
-
 });
-

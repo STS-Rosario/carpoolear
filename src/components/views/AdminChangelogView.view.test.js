@@ -11,5 +11,4 @@ describe('AdminChangelogView view', () => {
         expect(viewSource).toContain(':source="row.body_markdown');
         expect(viewSource).not.toContain('message_text--markdown');
     });
-
 });

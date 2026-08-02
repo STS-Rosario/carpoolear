@@ -41,5 +41,4 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('toggleSort(column.key)');
         expect(viewSource).not.toContain("@click=\"toggleSort('acciones')\"");
     });
-
 });

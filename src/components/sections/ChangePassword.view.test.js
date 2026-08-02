@@ -33,7 +33,6 @@ describe('ChangePassword page card', () => {
             /change-password-page__card[\s\S]*change-password-page__heading[\s\S]*\$t\('cambiarPassword'\)/
         );
     });
-
 });
 
 describe('change password route', () => {

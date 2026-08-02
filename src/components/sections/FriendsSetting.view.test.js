@@ -106,7 +106,6 @@ describe('FriendsSetting.vue outgoing pending requests', () => {
         expect(toolbarSection).toContain("$t('filtrarPorNombre')");
         expect(toolbarSection).toContain("$t('buscarNuevosAmigos')");
     });
-
 });
 
 describe('FriendApi outgoing pending requests', () => {

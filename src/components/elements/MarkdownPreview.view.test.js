@@ -16,5 +16,4 @@ describe('MarkdownPreview view', () => {
         expect(viewSource).toMatch(/:deep\(h6\)/);
         expect(viewSource).toMatch(/:deep\(p\)/);
     });
-
 });

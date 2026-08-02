@@ -10,5 +10,4 @@ describe('adminNav changelog link', () => {
         expect(navSource).toContain("name: 'admin-changelogs'");
         expect(navSource).toContain('adminNavChangelog');
     });
-
 });

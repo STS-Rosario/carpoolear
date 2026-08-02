@@ -11,5 +11,4 @@ describe('AdminChangelogs view', () => {
         expect(viewSource).toContain("name: 'admin-changelog-edit'");
         expect(viewSource).toContain('changelogVersion');
     });
-
 });

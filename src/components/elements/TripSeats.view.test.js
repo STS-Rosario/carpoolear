@@ -27,7 +27,6 @@ describe('TripSeats.vue zero available seats label', () => {
             /v-if="trip\.seats_available == 1"[\s\S]*?v-else[\s\S]*?\$t\('Lugares'\)[\s\S]*?\$t\('libres'\)/
         );
     });
-
 });
 
 describe('TripSeats.vue accepted passenger co-travelers', () => {
@@ -76,5 +75,4 @@ describe('TripSeats.vue invite friends placement', () => {
             /maybeOpenInviteFriendsFromQuery[\s\S]*inviteFriendsBlockedByUnpaidSellado/
         );
     });
-
 });

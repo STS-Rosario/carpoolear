@@ -78,5 +78,4 @@ describe('TripCreationSuccess.vue', () => {
             /variant="secondary"[\s\S]*?data-testid="trip-creation-save-template"[\s\S]*?icon-left="fa fa-bookmark"/
         );
     });
-
 });

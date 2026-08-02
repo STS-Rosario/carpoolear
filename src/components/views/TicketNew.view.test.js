@@ -57,5 +57,4 @@ describe('TicketNew page card', () => {
         expect(source).not.toContain('panel panel-default');
         expect(source).not.toContain('panel-heading');
     });
-
 });

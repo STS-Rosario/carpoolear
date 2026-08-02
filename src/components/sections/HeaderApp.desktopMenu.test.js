@@ -87,5 +87,4 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).not.toContain('instagram_logo');
         expect(headerSource).not.toContain('facebook_logo');
     });
-
 });

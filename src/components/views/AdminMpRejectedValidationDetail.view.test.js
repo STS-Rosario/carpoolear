@@ -23,7 +23,6 @@ describe('AdminMpRejectedValidationDetail view', () => {
         expect(viewSource).toContain("{{ $t('estado') }}:</strong>&nbsp;");
         expect(viewSource).toContain("{{ $t('revisionAdmin') }}:</strong>&nbsp;");
     });
-
 });
 
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');

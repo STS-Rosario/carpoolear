@@ -57,7 +57,7 @@ describe('ProfileInfo public panel', () => {
         expect(i18nSource).toContain('contactoPrivacidadPerfil');
         expect(i18nSource).toContain('usuarioVerificado');
         expect(i18nSource).toContain(
-            "Identidad no verificada"
+            'Identidad no verificada'
         );
         expect(i18nSource).toContain(
             'Este usuario aún debe verificar su identidad'
@@ -171,5 +171,4 @@ describe('ProfileInfo friend trip alerts toggle', () => {
         expect(onToggleTripAlerts[0]).toContain('setFriendTripAlertsEnabled');
         expect(onToggleTripAlerts[0]).not.toContain('setProfileUser');
     });
-
 });

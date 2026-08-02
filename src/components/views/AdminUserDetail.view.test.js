@@ -84,5 +84,4 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('!user.is_admin');
         expect(source).toContain('impersonateUser');
     });
-
 });

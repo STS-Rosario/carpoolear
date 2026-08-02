@@ -32,5 +32,4 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain("<router-link :to=\"{ name: 'admin-users-user', params: { userId: String(u.id) } }\">");
         expect(viewSource).not.toContain('@click="goToUser(u.id)"');
     });
-
 });

@@ -23,5 +23,4 @@ describe('UsersCrud admin edit view', () => {
             /<AppInput[\s\S]*?id="input-phone"[\s\S]*?v-on:paste="isNumber"/
         );
     });
-
 });

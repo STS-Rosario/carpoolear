@@ -12,5 +12,4 @@ describe('AdminCarColors view', () => {
         expect(viewSource).toContain('admin-car-color-swatch');
         expect(viewSource).toContain(':style="{ backgroundColor: row.hex }"');
     });
-
 });
