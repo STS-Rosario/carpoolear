@@ -7,7 +7,8 @@
             class="app-input__control-wrap"
             :class="{
                 'app-input__control-wrap--password': password,
-                'app-input__control-wrap--icon-left': hasIconLeft
+                'app-input__control-wrap--icon-left': hasIconLeft,
+                'app-input__control-wrap--action-right': hasActionRight
             }"
         >
             <span v-if="hasIconLeft" class="app-input__icon" aria-hidden="true">
@@ -41,6 +42,9 @@
                     aria-hidden="true"
                 ></i>
             </button>
+            <div v-if="hasActionRight" class="app-input__action-right">
+                <slot name="actionRight" />
+            </div>
         </div>
         <p
             v-if="displayMessage"
@@ -122,6 +126,9 @@ export default {
             return Boolean(
                 this.iconLeft || this.iconImage || this.$slots.iconLeft
             );
+        },
+        hasActionRight() {
+            return Boolean(this.$slots.actionRight);
         },
         hasError() {
             return Boolean(this.error);

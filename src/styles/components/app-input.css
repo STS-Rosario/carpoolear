@@ -31,6 +31,10 @@
     padding-right: 2.75rem;
 }
 
+.app-input__control-wrap--action-right .app-input__control {
+    padding-right: 2.75rem;
+}
+
 .app-input__control {
     display: block;
     width: 100%;
@@ -139,6 +143,18 @@ textarea.app-input__control {
 .app-input__toggle .fa {
     font-size: 1rem;
     pointer-events: none;
+}
+
+.app-input__action-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .app-input__hint {
