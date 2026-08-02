@@ -142,4 +142,11 @@ describe('messages-page.css', () => {
             /\.message-composer-editor \.toastui-editor-contents\s*\{[^}]*font-size:\s*16px/s
         );
     });
+
+    it('highlights unread conversation rows with light blue on mobile', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*?\.conversation_header\.unread[\s\S]*?background:\s*(?:var\(--messages-selected-bg\)|#e8f4fa)/s
+        );
+    });
 });

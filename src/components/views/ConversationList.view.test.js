@@ -27,14 +27,11 @@ describe('ConversationList.vue desktop chat height', () => {
 });
 
 describe('ConversationList.vue mobile chat ratings header', () => {
-    it('uses a taller mobile chat column when the header shows participant ratings', () => {
+    it('keeps the tall-header class when ratings are shown (offset measured from header)', () => {
         expect(viewSource).toContain(
             'conversation-list-page--mobile-chat--tall-header'
         );
         expect(viewSource).toContain('headerRatings');
-        expect(viewSource).toMatch(
-            /conversation-list-page--mobile-chat--tall-header[\s\S]*64px/s
-        );
     });
 });
 
@@ -48,8 +45,22 @@ describe('ConversationList.vue mobile chat layout', () => {
         expect(block).not.toBeNull();
         expect(block[0]).toMatch(/padding-left:\s*0/);
         expect(block[0]).toMatch(/padding-right:\s*0/);
+        expect(block[0]).toMatch(/padding-top:\s*0/);
         expect(block[0]).toMatch(/width:\s*100%/);
         expect(block[0]).toMatch(/max-width:\s*100%/);
+    });
+
+    it('sizes mobile chat from measured header offset so the verification banner does not force page scroll', () => {
+        const mobileStyles = getMobileStylesBlock();
+        expect(mobileStyles).toMatch(
+            /\.conversation-list-page--mobile-chat\s*\{[^}]*height:\s*calc\(100dvh\s*-\s*var\(--app-header-offset/s
+        );
+        expect(mobileStyles).not.toMatch(
+            /\.conversation-list-page--mobile-chat\s*\{[^}]*height:\s*calc\(100dvh\s*-\s*52px/s
+        );
+        expect(mobileStyles).not.toMatch(
+            /\.conversation-list-page--mobile-chat--tall-header\s*\{[^}]*64px/s
+        );
     });
 });
 
