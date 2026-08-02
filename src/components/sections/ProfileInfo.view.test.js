@@ -37,6 +37,11 @@ describe('ProfileInfo public panel', () => {
         expect(viewSource).toContain('profile-info-panel__tile-icon--verified');
     });
 
+    it('shows shield when verified and person icon when unverified', () => {
+        expect(viewSource).toMatch(/['"]fa-shield['"]:\s*isIdentityVerified/);
+        expect(viewSource).toMatch(/['"]fa-user['"]:\s*!isIdentityVerified/);
+    });
+
     it('centers tile icons and beats legacy floated profile icons', () => {
         expect(profilePageCss).toMatch(
             /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon\s*\{[^}]*float:\s*none/
