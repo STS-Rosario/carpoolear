@@ -213,6 +213,9 @@ input[type="checkbox"] {
 .checkbox label,
 label:has(> input[type="checkbox"]) {
     color: #555;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5em;
 }
 
 .btn-full-width {

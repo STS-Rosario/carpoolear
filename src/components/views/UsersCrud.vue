@@ -402,7 +402,6 @@
         >
             <template #header><h3>
                 <span>{{ confirmModalTitle }}</span>
-                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black">

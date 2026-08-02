@@ -25,12 +25,12 @@
 
                     <div class="modal-footer" v-if="!hideFooter">
                         <slot name="footer">
-                            <button
-                                class="modal-default-button btn btn-link"
+                            <AppButton
+                                variant="secondary"
                                 @click="$emit('close')"
                             >
                                 {{ $t('cerrar') }}
-                            </button>
+                            </AppButton>
                         </slot>
                     </div>
                 </div>
@@ -40,8 +40,13 @@
 </template>
 
 <script>
+import AppButton from './ui/AppButton.vue';
+
 export default {
     name: 'modal',
+    components: {
+        AppButton
+    },
     data() {
         return {
             // Avoid treating the same click that opened the modal (e.g. table row) as an outside click.
@@ -86,6 +91,15 @@ export default {
         },
         name: {
             required: false
+        },
+        // Absorb legacy unused attrs so they do not fall through as HTML title/body.
+        title: {
+            type: String,
+            default: ''
+        },
+        body: {
+            type: String,
+            default: ''
         }
     }
 };
@@ -134,6 +148,17 @@ export default {
     min-height: 0;
 }
 
+.modal-container :deep(p),
+.modal-container :deep(label),
+.modal-container :deep(h3),
+.modal-container :deep(li) {
+    color: #333333;
+}
+
+.modal-container :deep(a) {
+    color: var(--ds-action, #1e5f9e);
+}
+
 .modal-header {
     position: relative;
     flex-shrink: 0;
@@ -169,16 +194,12 @@ export default {
 
 .modal-footer {
     flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
     text-align: center;
     border-top: none;
-}
-
-.modal-default-button {
-    float: none;
-    font-size: 1.25rem;
-    font-weight: var(--ds-font-weight-normal, 400);
-    color: var(--ds-action, #1e5f9e) !important;
-    text-decoration: none !important;
 }
 
 /*

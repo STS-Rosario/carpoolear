@@ -446,10 +446,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('seguroEliminarCuenta') }}</span>
-                <i
-                    v-on:click="toggleModalDeleteAccount"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
@@ -528,10 +524,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('mesaAyuda') }}</span>
-                <i
-                    v-on:click="showMesaAyudaModal = false"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">
@@ -550,10 +542,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('errorAlGuardar') }}</span>
-                <i
-                    v-on:click="toggleBannedDniModal"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">
@@ -572,10 +560,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('datosEnUso') }}</span>
-                <i
-                    v-on:click="toggleDatosEnUsoModal"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">

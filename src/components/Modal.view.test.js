@@ -59,6 +59,11 @@ describe('Modal close behavior', () => {
         );
     });
 
+    it('declares legacy title/body props so they do not fall through as HTML attributes', () => {
+        expect(source).toMatch(/title:\s*\{[\s\S]*?type:\s*String/);
+        expect(source).toMatch(/body:\s*\{[\s\S]*?type:\s*String/);
+    });
+
     it('removes grey header and footer divider bars', () => {
         expect(source).toMatch(
             /\.modal-header\s*\{[^}]*border-bottom:\s*none/

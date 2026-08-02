@@ -66,10 +66,6 @@
                 >
                     <template #header><h3>
                         <span>{{ $t('editarPedidoEliminacion') }}</span>
-                        <i
-                            v-on:click="closeModal"
-                            class="fa fa-times float-right-close"
-                        ></i>
                     </h3></template>
                     <template #body><div>
                         <div class="text-left color-black">

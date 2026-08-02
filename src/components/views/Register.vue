@@ -287,10 +287,6 @@
             >
                 <template #header><h3>
                     <span>{{ $t('emailYaTomado') }}</span>
-                    <i
-                        v-on:click="toggleEmailTakenModal"
-                        class="fa fa-times float-right-close"
-                    ></i>
                 </h3></template>
                 <template #body><div>
                     <div class="text-left color-black login-modal">

@@ -53,15 +53,9 @@
                     :name="'modal'"
                     v-if="showModalRequestSeat"
                     @close="onModalClose"
-                    :title="$t('carpoodatos')"
-                    :body="'Body'"
                 >
                     <template #header><h3>
                         <span>{{ $t('carpoodatos') }}</span>
-                        <i
-                            v-on:click="onModalClose"
-                            class="fa fa-times float-right-close"
-                        ></i>
                     </h3></template>
                     <template #body><div>
                         <div class="text-left carpoodatos">
@@ -98,34 +92,34 @@
                                 >
                             </label>
                         </div>
-                        <div class="text-center">
+                        <div class="trip-detail__modal-actions">
                             <template
                                 v-if="
                                     config.module_coordinate_by_message
                                 "
                             >
-                                <button
-                                    class="btn btn-primary"
+                                <AppButton
+                                    variant="primary"
                                     @click="toMakeRequest"
                                     v-if="!owner"
                                 >
                                     {{ $t('enviarMensaje') }}
-                                </button>
+                                </AppButton>
                             </template>
                             <template v-else>
-                                <button
-                                    class="btn btn-primary"
+                                <AppButton
+                                    variant="primary"
                                     @click="toMessages"
                                     v-if="!owner"
                                 >
                                     {{ $t('enviarMensaje') }}
-                                </button>
-                                <button
-                                    class="btn btn-primary"
+                                </AppButton>
+                                <AppButton
+                                    variant="primary"
                                     @click="toMakeRequest"
                                 >
                                     {{ $t('solicitarAsiento') }}
-                                </button>
+                                </AppButton>
                             </template>
                         </div>
                     </div></template>
@@ -134,15 +128,9 @@
                     :name="'modal'"
                     v-if="showModalPricing"
                     @close="onModalClose"
-                    :title="$t('carpoodatos')"
-                    :body="'Body'"
                 >
                     <template #header><h3>
                         <span>{{ $t('carpoodatos') }}</span>
-                        <i
-                            v-on:click="onModalClose"
-                            class="fa fa-times float-right-close"
-                        ></i>
                     </h3></template>
                     <template #body><div>
                         <div class="text-left carpoodatos">
@@ -183,14 +171,14 @@
                                 >
                             </label>
                         </div>
-                        <div class="text-center">
-                            <button
-                                class="btn btn-primary"
+                        <div class="trip-detail__modal-actions">
+                            <AppButton
+                                variant="primary"
                                 @click="toMessageForce"
                                 v-if="!owner"
                             >
                                 {{ $t('enviarMensaje') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div></template>
                 </modal>
@@ -385,6 +373,7 @@ import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
+import AppButton from '../ui/AppButton.vue';
 
 import { useHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -1004,7 +993,8 @@ export default {
         TripStats,
         TripPassengers,
         TripButtons,
-        TripPrice
+        TripPrice,
+        AppButton
     },
 
     props: ['id', 'location']
@@ -1012,6 +1002,13 @@ export default {
 </script>
 
 <style scoped>
+.trip-detail__modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+}
+
 .trip-seat-requests-warning {
     display: flex;
     align-items: flex-start;

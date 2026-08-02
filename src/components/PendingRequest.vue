@@ -21,15 +21,9 @@
             :name="'modal'"
             v-if="showModalRequestSeat"
             @close="onModalClose"
-            :title="$t('pendingRequestCarpoodatos')"
-            :body="'Body'"
         >
             <template #header><h3>
                 <span>{{ $t('pendingRequestCarpoodatos') }}</span>
-                <i
-                    v-on:click="onModalClose"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left carpoodatos">
