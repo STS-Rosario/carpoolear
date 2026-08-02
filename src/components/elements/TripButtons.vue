@@ -80,18 +80,19 @@
                             <spinner class="blue"></spinner>
                         </template>
                     </AppButton>
-                    <button
-                        class="btn"
+                    <AppButton
                         v-if="!canRequest"
-                        @click="$emit('cancelRequest')"
+                        variant="danger"
+                        block
                         :disabled="sendingStatus"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        @click="$emit('cancelRequest')"
                     >
-                        <spinner
-                            class="blue"
-                            v-if="sending && sending.requestAction"
-                        ></spinner>
-                        <span v-else>{{ $t('solicitadoRetirar') }}</span>
-                    </button>
+                        {{ $t('retirarSolicitudDeAsiento') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
                 </template>
 
                 <template v-if="isPassenger">
