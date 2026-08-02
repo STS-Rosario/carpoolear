@@ -108,6 +108,7 @@
                     </template>
                 </span>
                 <template v-if="!sending.trip">
+                    {{ ' ' }}
                     <strong
                         >({{
                             dayjs(conversation.trip.trip_date).format('DD/MM/YYYY')
@@ -163,6 +164,7 @@
                     <template v-else>{{ $t('solicitarAsientoDeVuelta') }}</template>
                 </span>
                 <template v-if="!sending.returnTrip">
+                    {{ ' ' }}
                     <strong>
                         ({{
                             dayjs(conversation.return_trip.trip_date).format('DD/MM/YYYY')
