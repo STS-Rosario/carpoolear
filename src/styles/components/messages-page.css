@@ -180,6 +180,17 @@
     color: #222;
 }
 
+.messages-page .conversation_user_header__name-link {
+    color: var(--messages-accent);
+    text-decoration: none;
+}
+
+.messages-page .conversation_user_header__name-link:hover,
+.messages-page .conversation_user_header__name-link:focus {
+    text-decoration: underline;
+    color: var(--messages-accent);
+}
+
 .messages-page .conversation_user_header_title_row {
     display: flex;
     flex-wrap: wrap;

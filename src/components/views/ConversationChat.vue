@@ -28,8 +28,8 @@
                 </template>
                 <template v-else>
                 <router-link
-                    v-if="conversation.users.length === 2"
-                    :to="{ name: 'profile', params: userProfile() }"
+                    v-if="otherUserProfileRoute"
+                    :to="otherUserProfileRoute"
                     v-show="isMobile"
                 >
                     <div
@@ -38,14 +38,17 @@
                     ></div>
                 </router-link>
                 <div
-                    v-if="conversation.users.length === 2"
+                    v-if="otherUserProfileRoute"
                     class="conversation_user_header_title_row"
                 >
-                    <router-link
-                        :to="{ name: 'profile', params: userProfile() }"
-                    >
-                        <h2>{{ conversation.title }}</h2>
-                    </router-link>
+                    <h2>
+                        <router-link
+                            class="conversation_user_header__name-link"
+                            :to="otherUserProfileRoute"
+                        >
+                            {{ conversation.title }}
+                        </router-link>
+                    </h2>
                     <UserRatingsCounts :ratings="otherUserRatings" />
                 </div>
                 <h2 v-else>{{ conversation.title }}</h2>
@@ -215,6 +218,23 @@ export default {
                 this.user?.id
             );
         },
+        otherUserProfileRoute() {
+            const otherUser = getOtherParticipant(
+                this.conversation?.users,
+                this.user?.id
+            );
+            if (!otherUser?.id) {
+                return null;
+            }
+            return {
+                name: 'profile',
+                params: {
+                    id: otherUser.id,
+                    userProfile: otherUser,
+                    activeTab: 1
+                }
+            };
+        },
         lastConnectionFormatted() {
             const raw = this.lastConnectionRaw;
             if (raw == null || raw === '') {
@@ -267,13 +287,7 @@ export default {
         }),
 
         userProfile() {
-            let id = 0;
-            if (this.conversation.users[0].id === this.user.id) {
-                id = 1;
-            }
-            return {
-                id: this.conversation.users[id].id
-            };
+            return this.otherUserProfileRoute?.params || { id: 0 };
         },
 
         onEditorChange() {
@@ -370,7 +384,11 @@ export default {
             if (otherUser) {
                 this.setTitleLink({
                     name: 'profile',
-                    params: { id: otherUser.id }
+                    params: {
+                        id: otherUser.id,
+                        userProfile: otherUser,
+                        activeTab: 1
+                    }
                 });
             } else {
                 this.setTitleLink({});
