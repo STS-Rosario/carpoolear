@@ -320,12 +320,16 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    it('applies design-system input styles to form controls and textareas', () => {
-        expect(wizardSource).toMatch(
-            /\.new-trip-wizard[\s\S]*?\.form-control[\s\S]*?border:\s*1px\s+solid\s+var\(--ds-input-border/
+    it('applies design-system chrome via AppField for place and date controls', () => {
+        expect(wizardSource).toContain('new-trip-wizard__autocomplete-input');
+        expect(wizardSource).not.toContain(
+            'form-control form-control-with-icon form-control-map-autocomplete'
         );
         expect(wizardSource).toMatch(
-            /\.new-trip-wizard[\s\S]*?\.form-control[\s\S]*?color:\s*var\(--ds-input-text/
+            /currentStep === STEP\.SCHEDULE[\s\S]*?<AppField[\s\S]*?<DatePicker/
+        );
+        expect(wizardSource).toMatch(
+            /STEP\.ORIGIN[\s\S]*?<AppField[\s\S]*?<autocomplete[\s\S]*?wizard-origin/
         );
     });
 
@@ -403,8 +407,9 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
 
     it('keeps left padding on map autocomplete so pin icons do not overlap text', () => {
         expect(wizardSource).toMatch(
-            /\.form-control-map-autocomplete[\s\S]*?padding-left:\s*(?:2\.5rem|2\.75rem|3rem)/
+            /<AppField[\s\S]*?icon-left="fa fa-map-marker"[\s\S]*?<autocomplete/
         );
+        expect(wizardSource).toContain('new-trip-wizard__autocomplete-input');
         expect(wizardSource).toContain('location-autocomplete origin');
         expect(wizardSource).toContain('location-autocomplete destiny');
     });
