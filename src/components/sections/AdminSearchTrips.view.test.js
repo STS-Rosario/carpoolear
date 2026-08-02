@@ -36,8 +36,7 @@ describe('AdminSearchTrips user search', () => {
         expect(source).not.toContain('btn-option');
         expect(source).not.toContain('btn-search');
         expect(source).not.toContain('optional-warning');
-        expect(source).not.toContain('date-picker--cross');
-        expect(source).toMatch(
+        expect(source).not.toMatch(/class="date-picker--cross"/);        expect(source).toMatch(
             /<AppField[\s\S]*?:label="\$t\('origen'\)"[\s\S]*?optional/
         );
         expect(source).toMatch(

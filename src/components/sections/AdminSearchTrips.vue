@@ -1,80 +1,36 @@
 <template>
-    <div>
-        <div
-            class="row text-center foreignCountry-select foreignCountry-select-desktop"
-            v-show="!isMobile"
-        >
-            <div class="foreignCountry-select_wrapper">
-                <input
-                    type="checkbox"
-                    v-model="allowForeignPoints"
-                    id="cbxAllowForeignPoints"
-                    class="cbx"
-                />
-                <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
-                    {{ config ? config.country_name : '' }}
-                </label>
-                <span
-                    class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
-                ></span>
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
-            </div>
+    <div class="admin-search-trips">
+        <div class="admin-search-trips__foreign">
+            <input
+                type="checkbox"
+                v-model="allowForeignPoints"
+                id="adminCbxAllowForeignPoints"
+                class="cbx"
+            />
+            <label for="adminCbxAllowForeignPoints" class="cbx_label">
+                {{ $t('origenODestinoFueraDe') }}
+                {{ config ? config.country_name : '' }}
+            </label>
+            <span
+                class="tooltip-bottom"
+                :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+            ></span>
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
         </div>
-        <div class="row search-section">
-            <div class="col-xs-12 col-md-4">
-                <button
-                    class="btn btn-option"
-                    :class="{ active: !isPassenger }"
-                    @click="isPassenger = false"
-                >
-                    <!--<img alt="" :src="isPassenger ? chofer_logo_gris : chofer_logo_blanco" />-->
-                    <span class="fa fa-car" aria-hidden="true"></span>
-                    <span>{{ $t('conductor') }}</span>
-                </button>
-            </div>
-            <div class="col-xs-12 col-md-4">
-                <button
-                    class="btn btn-option"
-                    :class="{ active: isPassenger }"
-                    @click="isPassenger = true"
-                >
-                    <img
-                        alt=""
-                        :src="
-                            isPassenger
-                                ? pasajero_logo_blanco
-                                : pasajero_logo_gris
-                        "
-                    />
-                    <span>{{ $t('pasajero') }}</span>
-                </button>
-            </div>
-            <div
-                class="row text-center foreignCountry-select foreignCountry-select-mobile"
-                v-show="isMobile"
-            >
-                <div class="foreignCountry-select_wrapper">
-                    <input
-                        type="checkbox"
-                        v-model="allowForeignPoints"
-                        id="cbxAllowForeignPoints"
-                        class="cbx"
-                    />
-                    <label for="cbxAllowForeignPoints" class="cbx_label">
-                        {{ $t('origenODestinoFueraDe') }}
-                        {{ config ? config.country_name : '' }}
-                    </label>
-                    <span
-                        class="tooltip-bottom"
-                        :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
-                    ></span>
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </div>
-            </div>
 
-            <div class="col-xs-24 col-md-8 location-autocomplete origin">
+        <AppSegmentToggle
+            v-model="isPassenger"
+            class="admin-search-trips__toggle"
+            :options="roleToggleOptions"
+        />
+
+        <div class="admin-search-trips__fields">
+            <AppField
+                class="admin-search-trips__field admin-search-trips__field--origin"
+                :label="$t('origen')"
+                optional
+                icon-left="fa fa-map-marker"
+            >
                 <Autocomplete
                     :placeholder="$t('origen')"
                     name="from_town"
@@ -84,30 +40,40 @@
                     :classes="'admin-search-trips__autocomplete-input'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <div class="date-picker--cross">
-                    <i
-                        v-on:click="resetInput('from_town')"
-                        class="fa fa-times"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-                <div class="swap btn">
-                    <img
-                        alt="swap"
-                        class="swap-horizontal"
-                        :src="swap_horizontal"
-                        @click="swapCities"
-                    />
-                    <img
-                        alt="swap"
-                        class="swap-vertical"
-                        :src="swap_vertical"
-                        @click="swapCities"
-                    />
-                </div>
-            </div>
-            <div class="col-xs-24 col-md-8 location-autocomplete destiny">
+                <template #actionRight>
+                    <button
+                        type="button"
+                        class="admin-search-trips__clear"
+                        @click="resetInput('from_town')"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </template>
+            </AppField>
+
+            <button
+                type="button"
+                class="admin-search-trips__swap"
+                @click="swapCities"
+            >
+                <img
+                    alt=""
+                    class="swap-horizontal"
+                    :src="swap_horizontal"
+                />
+                <img
+                    alt=""
+                    class="swap-vertical"
+                    :src="swap_vertical"
+                />
+            </button>
+
+            <AppField
+                class="admin-search-trips__field admin-search-trips__field--destiny"
+                :label="$t('destino')"
+                optional
+                icon-left="fa fa-map-marker"
+            >
                 <Autocomplete
                     :placeholder="$t('destino')"
                     name="to_town"
@@ -117,62 +83,72 @@
                     :classes="'admin-search-trips__autocomplete-input'"
                     :country="allowForeignPoints ? null : 'AR'"
                 ></Autocomplete>
-                <div class="date-picker--cross">
-                    <i
-                        v-on:click="resetInput('to_town')"
-                        class="fa fa-times"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
+                <template #actionRight>
+                    <button
+                        type="button"
+                        class="admin-search-trips__clear"
+                        @click="resetInput('to_town')"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </template>
+            </AppField>
 
-            <div class="col-xs-24 col-md-4 no-padding">
-                <AppField>
-                    <DatePicker
-                        ref="datepicker"
-                        :model-value="from_date"
-                        :class="{ 'has-error': dateError.state }"
-                        v-on:date_changed="(date) => (this.from_date = date)"
-                    ></DatePicker>
-                </AppField>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
-            <div class="col-xs-24 col-md-4 no-padding">
-                <AppField>
-                    <DatePicker
-                        ref="datepicker"
-                        :model-value="to_date"
-                        :class="{ 'has-error': dateError.state }"
-                        v-on:date_changed="(date) => (this.to_date = date)"
-                    ></DatePicker>
-                </AppField>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
+            <AppField
+                class="admin-search-trips__field admin-search-trips__field--date"
+                :label="$t('fecha')"
+                optional
+                icon-left="fa fa-calendar"
+            >
+                <DatePicker
+                    ref="datepickerFrom"
+                    :model-value="from_date"
+                    :class="{ 'has-error': dateError.state }"
+                    v-on:date_changed="(date) => (from_date = date)"
+                ></DatePicker>
+            </AppField>
 
-            <div class="col-xs-24 col-md-8 location-autocomplete origin">
-                <div class="search-users">
-                    <UserSearchAutocomplete
-                        v-model="user"
-                        :placeholder="$t('escribeUnNombre')"
-                        :max-results="3"
-                        input-class="admin-search-trips__user-search-input"
-                    />
-                </div>
-                <div class="date-picker--cross">
-                    <i
-                        v-on:click="resetUser()"
-                        class="fa fa-times"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
+            <AppField
+                class="admin-search-trips__field admin-search-trips__field--date"
+                :label="$t('fecha')"
+                optional
+                icon-left="fa fa-calendar"
+            >
+                <DatePicker
+                    ref="datepickerTo"
+                    :model-value="to_date"
+                    :class="{ 'has-error': dateError.state }"
+                    v-on:date_changed="(date) => (to_date = date)"
+                ></DatePicker>
+            </AppField>
 
-            <div class="col-xs-24 col-md-8 col-lg-8">
+            <AppField
+                class="admin-search-trips__field admin-search-trips__field--user"
+                :label="$t('usuario')"
+                optional
+                icon-left="fa fa-user"
+            >
+                <UserSearchAutocomplete
+                    v-model="user"
+                    :placeholder="$t('escribeUnNombre')"
+                    :max-results="3"
+                    input-class="admin-search-trips__user-search-input"
+                />
+                <template #actionRight>
+                    <button
+                        type="button"
+                        class="admin-search-trips__clear"
+                        @click="resetUser()"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </template>
+            </AppField>
+
+            <div class="admin-search-trips__submit">
                 <AppButton
                     variant="primary"
-                    class="btn-search"
+                    size="sm"
                     @click="submitSearch"
                 >
                     {{ $t('buscar') }}
@@ -195,6 +171,7 @@ import Autocomplete from '../Autocomplete';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
+import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
 
 export default {
     name: 'search-trip',
@@ -223,15 +200,6 @@ export default {
                 state: ''
             },
             user: null,
-            chofer_logo_blanco:
-                process.env.ROUTE_BASE +
-                'img/icono-conductor-blanco.png',
-            pasajero_logo_blanco:
-                process.env.ROUTE_BASE + 'img/icono-pasajero-blanco.png',
-            chofer_logo_gris:
-                process.env.ROUTE_BASE + 'img/icono-conductor-gris.png',
-            pasajero_logo_gris:
-                process.env.ROUTE_BASE + 'img/icono-pasajero-gris.png',
             swap_horizontal:
                 process.env.ROUTE_BASE + 'img/flechas_horizontales.png',
             swap_vertical:
@@ -256,6 +224,20 @@ export default {
                     return acc;
                 }, {})
             );
+        },
+        roleToggleOptions() {
+            return [
+                {
+                    value: false,
+                    label: this.$t('comoConductor'),
+                    icon: 'fa fa-car'
+                },
+                {
+                    value: true,
+                    label: this.$t('comoPasajero'),
+                    icon: 'fa fa-user'
+                }
+            ];
         }
     },
     methods: {
@@ -385,7 +367,12 @@ export default {
             this.$refs['from_town'].input = '';
             this.resetInput('to_town');
             this.$refs['to_town'].input = '';
-            this.$refs.datepicker.clear();
+            if (this.$refs.datepickerFrom) {
+                this.$refs.datepickerFrom.clear();
+            }
+            if (this.$refs.datepickerTo) {
+                this.$refs.datepickerTo.clear();
+            }
         },
         onSearch(search, loading) {
             loading(true);
@@ -422,7 +409,8 @@ export default {
         loading,
         UserSearchAutocomplete,
         AppButton,
-        AppField
+        AppField,
+        AppSegmentToggle
     },
     watch: {
         paramsSignature: {
@@ -436,168 +424,184 @@ export default {
 </script>
 
 <style scoped>
-.search-section {
-    padding-left: 0;
-    padding-right: 0;
-}
-.search-section .btn-option {
-    width: 100%;
-    margin-bottom: 1em;
-}
-.search-users {
-    position: relative;
+.admin-search-trips {
+    margin-bottom: 1rem;
 }
 
-.admin-search-trips__user-search-input,
-.search-users-input {
-    line-height: 42px;
+.admin-search-trips__foreign {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
 }
 
-.origin :deep(.admin-search-trips__autocomplete-input) {
-    line-height: 22px;
-    border-color: var(--trip-half-free-color);
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QQeFSkEDUzeggAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAEdklEQVRYw62XS+hVVRTGf986ouTARw9KJfVvEYTRe9ADH5glgRIVlgMpbOYgaBoURU2CRkVRIKQNHKiEkNjA6A2BUEETaVT/wMLICgUN5X/W12Cfc+65lv97JA8c7r377r3X2mt96/vWlk8dhwXL+O8ngcA2SAgw9D4TOxA1VoXIbqUJxORnzqz/OkBQTBdnxowTSImpyiABrbNDrJcVszzKsq+KMdLFkJu/u5NmMShwCA80PtkByoG6aSFQFsvNmJptiqvZpOUyOWCLECR1k9/sTpw506SlvGF1eAllF6X/hQFJGAgq7BpJ6Mxf8M1bxPd7PuLU9MOeKeH34qkjun3HJu7eCfOvhoFp0KAqaEH3w0H4cOdPnPl9pSOITIgKqMGQCnTFVdPa8vaUb946yIdZHTC9gxw7APu32U5EQGRjtIFFqAUMGRVs3a+4+bEyJBp8xKVhoC05/30SDu38JUWH9lGOAwcNCBtgZk0c2nGGM78hlemtccMYPiZWATY6+hY++8fScEkJkdSAoyJcsBLZpExCBPXZ0/P9za6xaHZVo0twQBJ8v/egY4SLNFRL7niNpz4RL52Xtn+qXHrrG6loTCUVwHe7vsR144AvcCaxPQEDdim5V+c5sibVcKENT38spjaUsjQw/Rm8v9EtgWFwNRe9cE7diRs8lIqqBmBAJelRl1OEwWlQBVMbmgqpscAr7qd4MuIA1efH8aJ236obmkBEBViuircFhA3f//h5s4EwRtNfk4oGpYFdMNIadi/0l1AFwiQsXH4EF2MzynLS/VtPMP0FpIifv4IDj5/ANUUICjlpwfIj/YpqaRuPcDi7Gracf9OWTRx904Vmg3TAuT+vjT3rbQuHkHN0mibsuXrrpnBdUpZFJdGYnk9IAeWwuu3pEuwAZRLMEI1ISSacWNERjlXkWbc8UYy7CFlfJVMeRkQIWHInrFy7rSnz3rIkW2BldkFOarxq/TYtuauHgQtzrwEghCZ04PWv7LPVGMwRC3aR6LSbKkHrXt7XZ6AOA27BPYSImu7GrtGKNWjVA5s11uokERpHtgRTGzezYt0FYhKdJ63KDuSBUrcIvOWdw5q74HRhvDb0va0E9bwrf/Uj7x4eNS5ctDewPSAFvcV55Y1wz3ML1dZ6VNhQt3ggqO59dpkW3fAfAjAu8xqshm3O04Xf172Irr/vmVRCXeq9krAhVq7ZnmufHzWoPfDZ9QhTLRdIA8So6Y4dahZX+NHduz3/umOSu1jl/MUneWTP3qDq962dDEtVQysai8oEB3KsZov2ghZNUT2+d7WjgqxIoHryg2tYtBIkUjm0I5vkQHQ121ZtB4lVG9CDryvnQDz0hli+vgt91V5mhjw+dRzbF33TNZnt77p8Zj36/u17OGdwOyd78wa8szelLiDURRvFC4YSiOYSw7DGeLIWjN33erel9pYE1LgX8uHGB6hhjolSGevdkhpH5sRI5eye2Ol/RqCU0OiWK/XZL8cd6eZkw555GSLwL0KgZ1QTzhSDtv0HA/lOUhgOeYAAAAAASUVORK5CYII=') no-repeat center left white;
+.admin-search-trips__foreign .cbx,
+.admin-search-trips__foreign .cbx_label {
+    margin: 0;
+    vertical-align: middle;
 }
 
-.destiny :deep(.admin-search-trips__autocomplete-input) {
-    line-height: 22px;
-    border-color: var(--trip-mostly-free-color);
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QQeFSoMKLoFcwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAE50lEQVRYw6WXW4hVZRTH//+1z4MzqXmZcSZCJ51SGQQvoJZieAnEIDNF6sEyrJDoAr1ERAS+hNBDNU/dTLv4EkKkkCTWmDAviSBEUqCUjQ9qzWRZKs3Z37+H9e3L0ensY2447G9fzvetb631/621OXLlLCaPux1jHQLA0iC/zo8AwAAECObPggATJAOJysOaPw7xnMZFBAiQ4jNZbgSz900IUEuLVxsgxlMCwGAQwBAnN3dHNEJSnM5gSOL1TRpA+o7Z8Lp5LPKX4O5n5gPF27x5AwTLnFCERIAYcht8FKDoBQM9WAwtGVBr6oFrDRLxdzqML0/1Y3Doky8uXD2zLiAFBXS2zTy0YsZja9f2PofxtcnV6ZWt0UwFjd4IOHZ+P/Ycf+qXi+lv05NgqCcBVKNDJyVThrYuenvGkq5NLSVicwMEgAEpDMfP7cObxzarnJ++uOVqkQAmRFI3PL90Hxd3bYCgPD+g+JKxRRXEbP+rPoJdJ7afqynxRZjkO6cAKma/EUqFFCneP/HEuYv1Cw3JKPjiylVTmYTu+sOn+/FnfaQrtRQGQBJEwJAUu6dPSroXLo1e7Pr6p3d80VxVkWZRNZ60FQ6gDEeH9gxQhhAiGkT0Tli488Vlh7l3fcqXlh9iz4SFO8kkSsOVcfTMroHMVTkWFGEWDapMQinF1gPjNGp1JErynb68/CvOm7w6Whrw/fAAXhu8TzAW7lUNHz9wlZlhQgAdZ3lgqrVCYhR1UEDKNO4OmDdlJcAYABn6pq6C6OHJJg+swxcPDWRl67UAIAykA4lknMrw3fBAZh8E4OTwAGqqIcIzqsRKiM7oGG6EhM65zraeQ5TH1uQK6D+26Y+TwwMQUvzw+xG89e3mX+sMEIsa2dk2/UimApWwXTaiVkVqAljcvX7twZ/7lUow8xBc/ufSxJ2Da1SnGlhAEgye+3d3P7wqMHW1KHV3wSARZIDEqmrotL+nZ4vr3Qs+SGf9qGWQCe5uAkrldVPAkp5HvDIiALGiZkZmBay5DCUIht4JizCn494tjL1AGb+S54UYsWwAaOjrWLV51sSFcR8lHEUZIvKkuQeMYIzoptk79jp8LC+5FhonyfCcoo6Ns1/Zl3nQSnlPen1n9EQ1CeWp2Dd1BeZNXb3RpVaQKuM8I5ZFYEHHmgf7OlYCDNfnuewGGhI4930Hhm0L3v2svTb+MmlFiuQa91N7MuX84/Pf2++at7xryDsIFv1MdQjkJMxevm1cL+6/84VbklDYLxZnQ4J1s57t7m6bGVmf5o1NQxjifJUhcBcnTj8KgvDQXa9i9rTl23zRKD35eU7Hsm0b5u4ouiEmjZ11QEmuahHFCJARlIF0zD45/8Pdk5LOHxGcFMGAW2sdQ9vnf7TbSt0zy9jNI2IN0W+hLbdYvVySgqG7vQdPL907N2GCEATK8MzST2dMa78DhMGUXNNLNjlGrpz1+j7GL1XIxyH4OA2Cgt87cPp1PPp5TQdPvYEgIYR68f80/Oe85V9TA8J199JoWB0hjr8580HDtZT6OKglAyr6gRiCUO7jQmR50ecJBablZdNz4OY/zSwnYiFHllorr34sGcsbWLxFFWSllEVfF7ErOaozFkBZv6LGr6f//2XkPQDH+CrOWB7KhYYxUiQCW7Og+svIxure7JqOYQyEt/ht+C8WN+Pl02VYHAAAAABJRU5ErkJggg==') no-repeat center left white;
+.admin-search-trips__foreign .cbx_label {
+    margin-left: 0.35rem;
+    color: var(--ds-action, #00a3e0);
 }
 
-.autocomplete-users {
-    position: absolute;
-    top: 100%;
-    z-index: 100;
-    width: 100%;
+.admin-search-trips__toggle {
+    max-width: 32rem;
+    margin-bottom: 1rem;
+}
+
+.admin-search-trips__fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.admin-search-trips__field {
+    flex: 1 1 12rem;
+    min-width: 10rem;
+    margin-bottom: 0;
+}
+
+.admin-search-trips__field--date {
+    flex: 1 1 9rem;
+    max-width: 12rem;
+}
+
+.admin-search-trips__field--user {
+    flex: 1 1 12rem;
+}
+
+.admin-search-trips__swap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0 0.35rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.admin-search-trips__swap img {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.admin-search-trips__swap .swap-vertical {
+    display: none;
+}
+
+.admin-search-trips__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ds-action);
     cursor: pointer;
 }
 
-.btn-option {
-    height: 72px;
+.admin-search-trips__submit {
+    flex-shrink: 0;
+    padding-bottom: 0.15rem;
 }
-.btn-option .fa,
-.btn-option img {
-    width: 20px;
-    display: inline-block;
-    top: 10px;
-    margin-right: 0;
-    font-size: 20px;
+
+.admin-search-trips__field--origin :deep(.admin-search-trips__autocomplete-input) {
+    border-color: transparent;
+    color: var(--ds-input-text);
 }
-.btn-option span {
-    vertical-align: middle;
-    display: inline-block;
-    width: calc(100% - 30px);
+
+.admin-search-trips__field--destiny :deep(.admin-search-trips__autocomplete-input) {
+    border-color: transparent;
+    color: var(--ds-input-text);
 }
-.swap {
-    display: none;
+
+.admin-search-trips :deep(.admin-search-trips__user-search-input),
+.admin-search-trips :deep(.app-input__control.admin-search-trips__user-search-input) {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y, 0.75rem) 0;
+    width: 100%;
+    font-size: var(--ds-input-font-size, 1rem);
+    color: var(--ds-input-text, #22211f);
 }
-.swap-horizontal {
-    display: none;
+
+.admin-search-trips :deep(.carpoolear-vue-dp) {
+    width: 100%;
+    --dp-font-family: var(--ds-font-family);
+    --dp-font-size: var(--ds-input-font-size);
+    --dp-input-padding: var(--ds-input-padding-y) 2rem var(--ds-input-padding-y) 0;
+    --dp-input-icon-padding: 0;
 }
-.foreignCountry-select {
-    margin-bottom: 1em;
-}
-.foreignCountry-select-mobile {
+
+.admin-search-trips :deep(.carpoolear-vue-dp .dp__input_wrap) {
     width: 100%;
 }
-.foreignCountry-select-desktop .foreignCountry-select_wrapper {
-    margin-left: -10%;
+
+.admin-search-trips :deep(.app-field .carpoolear-vue-dp .dp__input) {
+    min-height: 0;
+    line-height: 1.3;
+    padding-top: var(--ds-input-padding-y);
+    padding-right: 2rem;
+    padding-bottom: var(--ds-input-padding-y);
+    padding-left: 0 !important;
+    border: 0;
+    background: transparent;
+    background-image: none !important;
+    box-shadow: none;
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-input-font-size);
+    font-weight: var(--ds-font-weight-normal);
+    color: var(--ds-input-text);
 }
-.cbx,
-.cbx_label {
-    vertical-align: middle;
-    margin: 0;
+
+.admin-search-trips :deep(.app-field .carpoolear-vue-dp .dp__input::placeholder) {
+    color: var(--ds-input-placeholder);
+    opacity: 1;
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-input-font-size);
+    font-weight: var(--ds-font-weight-normal);
 }
-.cbx_label {
-    margin-left: 0.5em;
+
+.admin-search-trips :deep(.date-picker .date-picker--cross) {
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    color: var(--ds-action);
 }
-.optional-warning {
-    font-size: 0.8em;
-    color: #999;
-    position: relative;
-    top: -0.8em;
-    clear: both;
+
+.admin-search-trips :deep(.date-picker .date-picker--cross i) {
+    color: var(--ds-action);
 }
-@media only screen and (min-width: 300px) {
-    .swap {
-        bottom: -6px;
-        left: -30px;
-        border-radius: 0;
-        position: absolute;
-        z-index: 1;
-        text-align: center;
-        cursor: pointer;
-        background-color: #eee;
-        box-sizing: border-box;
-        padding: 2px 6px 3px;
-        border: 1px solid #aaa;
-        display: inline-block;
-        margin: 0em;
-    }
-    .search-section {
-        margin-left: 30px;
-        padding-right: 15px;
-    }
+
+.admin-search-trips :deep(.date-picker__surface.picker) {
+    padding: 0;
 }
-@media only screen and (min-width: 429px) {
-    .btn-option {
-        height: initial;
+
+@media (max-width: 767px) {
+    .admin-search-trips__swap .swap-horizontal {
+        display: none;
     }
-    .btn-option img {
-        width: initial;
-        display: initial;
-        top: initial;
-        margin-right: 6px;
-    }
-    .btn-option span {
-        display: initial;
-        width: initial;
-    }
-}
-@media only screen and (min-width: 768px) {
-    .search-section {
-        padding-left: 0;
-        padding-right: 0;
-        width: calc(100% - 30px);
-    }
-}
-@media only screen and (min-width: 856px) {
-    .search-section {
-        width: 100%;
-        margin-left: 0;
-        padding-left: 0;
-    }
-}
-@media only screen and (min-width: 992px) {
-    .swap {
-        bottom: unset;
-        top: 20px;
-        right: -17px;
-        left: unset;
-    }
-    .btn-option {
-        height: 66px;
-        padding: 1em 0.4em;
-    }
-    .btn-option span {
-        vertical-align: middle;
-        display: inline-block;
-        width: calc(100% - 30px);
-    }
-    .btn-option img {
-        width: 20px;
-        display: inline-block;
-        top: 10px;
-        margin-right: 0;
-    }
-}
-@media only screen and (min-width: 992px) {
-    .swap-horizontal {
+
+    .admin-search-trips__swap .swap-vertical {
         display: block;
     }
-    .swap-vertical {
-        display: none;
+
+    .admin-search-trips__field--date {
+        max-width: none;
     }
 }
 </style>
