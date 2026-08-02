@@ -36,4 +36,15 @@ describe('conversationListFilter', () => {
             individual: 2
         });
     });
+
+    it('preserves null while conversations are loading so Loading can show', () => {
+        expect(filterConversationsByKind(null, 'all')).toBeNull();
+        expect(filterConversationsByKind(null, 'group')).toBeNull();
+        expect(filterConversationsByKind(undefined, 'individual')).toBeNull();
+        expect(countConversationsByKind(null)).toEqual({
+            all: 0,
+            group: 0,
+            individual: 0
+        });
+    });
 });
