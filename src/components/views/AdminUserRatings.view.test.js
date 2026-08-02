@@ -18,6 +18,16 @@ describe('AdminUserRatings view', () => {
         expect(viewSource).toContain('AdminRatingCard');
         expect(viewSource).toContain('updateRating');
     });
+
+    it('uses secondary AppButton for back to user summary', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?:to="hubRoute"[\s\S]*?adminUsuariosVolverResumen/
+        );
+        expect(viewSource).not.toContain('btn btn-default');
+    });
 });
 
 describe('AdminRatingCard', () => {
