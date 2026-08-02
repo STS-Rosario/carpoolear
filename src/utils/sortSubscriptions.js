@@ -8,8 +8,8 @@ export function sortSubscriptions(subscriptions) {
     }
 
     return [...subscriptions].sort((a, b) => {
-        const aRole = a && a.is_passenger == 1 ? 0 : 1;
-        const bRole = b && b.is_passenger == 1 ? 0 : 1;
+        const aRole = a && Number(a.is_passenger) === 1 ? 0 : 1;
+        const bRole = b && Number(b.is_passenger) === 1 ? 0 : 1;
         if (aRole !== bRole) {
             return aRole - bRole;
         }
