@@ -89,14 +89,14 @@
                 <div class="panel-heading">{{ $t('esperandoPagoValidacionManual') }}</div>
                 <div class="panel-body">
                     <p>{{ $t('debesPagarParaContinuar') }}</p>
-                    <button
-                        class="btn btn-primary"
+                    <AppButton
+                        variant="primary"
                         :disabled="loadingPreference"
+                        :loading="loadingPreference"
                         @click="payManualValidation"
                     >
-                        <span v-if="loadingPreference">{{ $t('guardando') }}</span>
-                        <span v-else>{{ $t('pagarAhora') }}</span>
-                    </button>
+                        {{ $t('pagarAhora') }}
+                    </AppButton>
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
@@ -208,16 +208,16 @@
                     <strong>{{ $t('estado') }}:</strong>
                     {{ $t('estadoEsperandoFotos') }}
                 </p>
-                <router-link
+                <AppButton
                     v-if="manualStatus.request_id"
+                    variant="primary"
                     :to="{
                         name: 'identity_validation_manual',
                         query: { request_id: manualStatus.request_id, payment_success: '1' }
                     }"
-                    class="btn btn-primary"
                 >
                     {{ $t('subirDocumentacion') }}
-                </router-link>
+                </AppButton>
             </div>
 
             <!-- Manual validation: approved (read-only summary) -->
@@ -310,16 +310,18 @@
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
+                            :loading="loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
-                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
-                        </button>
+                            {{ $t('validarConMercadoPago') }}
+                        </AppButton>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -339,15 +341,17 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        <AppButton
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </button>
+                        </AppButton>
                     </div>
                 </div>
             </div>
@@ -384,16 +388,18 @@
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
+                            :loading="loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
-                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
-                        </button>
+                            {{ $t('validarConMercadoPago') }}
+                        </AppButton>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -413,15 +419,17 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        <AppButton
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </button>
+                        </AppButton>
                     </div>
                 </div>
             </div>
@@ -459,13 +467,15 @@ import {
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
+import AppButton from '../ui/AppButton.vue';
 
 const EMPTY_WARNING_PARTS = { layout: null, leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
     components: {
-        IdentityValidationAdminReviewNote
+        IdentityValidationAdminReviewNote,
+        AppButton
     },
     data() {
         return {
@@ -804,26 +814,6 @@ export default {
 .identity-verification-success-banner__link:focus {
     color: #286090;
     text-decoration: none;
-}
-
-.identity-validation-component .btn-primary,
-.identity-validation-component .btn-danger {
-    color: #fff;
-}
-
-.identity-validation-component .btn-primary[disabled],
-.identity-validation-component .btn-danger[disabled] {
-    color: #fff;
-    opacity: 0.65;
-}
-
-.identity-validation-component .identity-validation-btn-outline {
-    color: #337ab7;
-}
-
-.identity-validation-component .identity-validation-btn-outline:hover,
-.identity-validation-component .identity-validation-btn-outline:focus {
-    color: #286090;
 }
 
 .identity-validation-component .alert {
@@ -1243,31 +1233,9 @@ export default {
     margin-bottom: 0.25rem;
 }
 
-.identity-validation-btn-cta {
+.identity-validation-choice-cta {
     text-transform: uppercase;
-    font-weight: 600;
     letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1.125rem;
-}
-
-.identity-validation-btn-outline {
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1.125rem;
-    background: #fff;
-    border: 2px solid #337ab7;
-    color: #337ab7;
-}
-
-.identity-validation-btn-outline:hover,
-.identity-validation-btn-outline:focus {
-    background: #f5f9fc;
-    border-color: #286090;
-    color: #286090;
-    text-decoration: none;
 }
 
 .identity-validation-hint {
