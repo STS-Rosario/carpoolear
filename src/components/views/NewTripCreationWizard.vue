@@ -1425,7 +1425,7 @@ export default {
     --dp-input-icon-padding: 0;
 }
 
-.new-trip-wizard :deep(.date-picker .picker.form-control) {
+.new-trip-wizard :deep(.date-picker .date-picker__surface) {
     position: relative;
     border: 1px solid var(--ds-input-border);
     border-radius: var(--ds-radius-input, 8px);
@@ -1437,7 +1437,7 @@ export default {
     min-height: 0;
 }
 
-.new-trip-wizard :deep(.date-picker .picker.form-control:focus-within) {
+.new-trip-wizard :deep(.date-picker .date-picker__surface:focus-within) {
     outline: none;
     border-color: var(--ds-input-focus-border);
     box-shadow: var(--ds-input-focus-ring);

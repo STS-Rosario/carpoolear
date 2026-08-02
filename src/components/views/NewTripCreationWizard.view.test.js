@@ -353,7 +353,7 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
 
     it('avoids double borders on date and uses AppInput for schedule time', () => {
         expect(wizardSource).toMatch(
-            /\.date-picker\s+\.picker\.form-control[\s\S]*?\.dp__input[\s\S]*?border:\s*0/
+            /\.date-picker\s+\.date-picker__surface[\s\S]*?\.dp__input[\s\S]*?border:\s*0/
         );
         expect(wizardSource).toMatch(
             /\.date-picker--cross\)?\s*\{[^}]*transform:\s*translateY\(-50%\)/

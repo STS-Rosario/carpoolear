@@ -318,7 +318,7 @@
     margin: 0;
 }
 
-.trips-search .date-picker .picker.form-control {
+.trips-search .date-picker .date-picker__surface {
     padding: 0;
     border: 0;
     background: transparent;

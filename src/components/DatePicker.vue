@@ -2,7 +2,7 @@
     <div class="date-picker">
         <div
             v-if="browser"
-            class="form-control picker"
+            class="date-picker__surface picker"
             :class="focus ? 'input-border' : ''"
         >
             <VueDatePicker
@@ -35,7 +35,7 @@
         </div>
         <div
             v-if="!browser"
-            class="form-control form-control-with-icon form-control-date"
+            class="date-picker__surface date-picker__surface--mobile"
         >
             <input
                 ref="mobileInput"
@@ -295,7 +295,7 @@ export default {
     }
 }
 
-.date-picker .picker.form-control .date-picker--cross {
+.date-picker .date-picker__surface.picker .date-picker--cross {
     color: #666;
     z-index: 2;
 }
@@ -322,25 +322,47 @@ export default {
     border: none;
     vertical-align: middle;
 }
-.form-control {
+.date-picker__surface {
     position: relative;
     vertical-align: middle;
     cursor: pointer;
 }
-.picker.form-control {
+.date-picker__surface.picker {
     padding: 0.1em 0.6em;
 }
 @media only screen and (min-width: 992px) {
-    .search-section .picker.form-control {
+    .search-section .date-picker__surface.picker {
         padding: 0.4em 0.6em;
     }
 }
-.input-border.form-control {
+.date-picker__surface.input-border {
     border-color: #66afe9;
     outline: 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
         0 0 8px rgba(102, 175, 233, 0.6);
 }
+
+.date-picker__surface--mobile {
+    display: block;
+    width: 100%;
+    height: 3em;
+    box-sizing: border-box;
+    padding: 0;
+    background: var(--ds-input-bg, #fff)
+        url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20448%20512%27%20fill%3D%27%23555555%27%3E%3Cpath%20d%3D%27M152%2064H296V24C296%2010.7%20306.7%200%20320%200C333.3%200%20344%2010.7%20344%2024V64H384C419.3%2064%20448%2092.7%20448%20128V448C448%20483.3%20419.3%20512%20384%20512H64C28.7%20512%200%20483.3%200%20448V128C0%2092.7%2028.7%2064%2064%2064H104V24C104%2010.7%20114.7%200%20128%200C141.3%200%20152%2010.7%20152%2024V64zM48%20448C48%20456.8%2055.2%20464%2064%20464H384C392.8%20464%20400%20456.8%20400%20448V192H48V448z%27/%3E%3C/svg%3E")
+        0.75rem center / 1.1rem 1.1rem no-repeat;
+}
+
+.date-picker__surface--mobile #datepicker-mobile {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 0;
+    padding-left: 2.5rem;
+    box-sizing: border-box;
+}
+
 @media only screen and (max-width: 991px) {
     .carpoolear-vue-dp .dp__menu {
         font-size: 1.6em;

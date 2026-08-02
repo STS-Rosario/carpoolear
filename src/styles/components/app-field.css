@@ -94,8 +94,8 @@
 
 .app-field .osm-autocomplete input,
 .app-field .date-picker input,
-.app-field .date-picker .picker,
-.app-field .date-picker .form-control-date {
+.app-field .date-picker .date-picker__surface,
+.app-field .date-picker .date-picker__surface--mobile {
     width: 100%;
     border: 0;
     border-radius: 0;
