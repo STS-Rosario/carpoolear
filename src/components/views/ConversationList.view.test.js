@@ -12,6 +12,20 @@ function getMobileStylesBlock() {
     return match ? match[1] : '';
 }
 
+describe('ConversationList.vue desktop chat height', () => {
+    it('sizes the chat column from measured header offset so top banners do not clip the composer', () => {
+        expect(viewSource).toMatch(
+            /\.without-footer\.conversation-component\.container\s*\{[^}]*height:\s*calc\(100vh - var\(--app-header-offset,\s*5\.6rem\)\)/s
+        );
+        expect(viewSource).toMatch(
+            /\.conversation-component\.container\s*\{[^}]*height:\s*calc\(100vh - var\(--app-header-offset,\s*5\.6rem\)\s*-\s*3\.75rem\)/s
+        );
+        expect(viewSource).not.toMatch(
+            /\.without-footer\.conversation-component\.container\s*\{[^}]*height:\s*calc\(100vh - 5\.6rem\)/s
+        );
+    });
+});
+
 describe('ConversationList.vue mobile chat ratings header', () => {
     it('uses a taller mobile chat column when the header shows participant ratings', () => {
         expect(viewSource).toContain(
