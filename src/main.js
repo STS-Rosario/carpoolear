@@ -55,10 +55,10 @@ const initializeCapacitorPlugins = async () => {
         return;
     }
 
-    // Configure StatusBar to fix overlay issues
+    // Configure StatusBar so the branded header paints under the notch once.
     await StatusBar.setStyle({ style: Style.Light });
-    await StatusBar.setBackgroundColor({ color: '#ffffff' });
-    await StatusBar.setOverlaysWebView({ overlay: false });
+    await StatusBar.setBackgroundColor({ color: '#1E5F9E' });
+    await StatusBar.setOverlaysWebView({ overlay: true });
 
     // Hide splash screen after app loads
     setTimeout(async () => {
