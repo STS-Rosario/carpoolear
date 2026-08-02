@@ -39,11 +39,26 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
     });
 
-    it('uses icon padding on seat contribution input and spaced rear-comfort label', () => {
+    it('uses AppInput for seat contribution and AppTextarea for description', () => {
         expect(wizardSource).toContain(
-            'form-control form-control-with-icon form-control-price'
+            "import AppInput from '../ui/AppInput.vue'"
+        );
+        expect(wizardSource).toContain(
+            "import AppTextarea from '../ui/AppTextarea.vue'"
+        );
+        expect(wizardSource).toMatch(
+            /<AppInput[\s\S]*?type="number"[\s\S]*?v-model="form\.price"/
+        );
+        expect(wizardSource).toMatch(
+            /<AppTextarea[\s\S]*?v-model="form\.trip\.description"/
         );
         expect(wizardSource).toContain('trip-comfort-preference__label');
+        expect(wizardSource).not.toContain(
+            'form-control form-control-with-icon form-control-price'
+        );
+        expect(wizardSource).not.toMatch(
+            /<textarea[\s\S]*?class="form-control new-trip-wizard__description"/
+        );
     });
 
     it('uses a taller resizable description textarea', () => {
