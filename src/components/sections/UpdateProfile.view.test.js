@@ -155,17 +155,18 @@ describe('UpdateProfile delete account entry point', () => {
     });
 
     it('uses primary mesa de ayuda and danger Eliminar cuenta AppButtons in the delete modal', () => {
-        expect(viewSource).toMatch(
-            /modal-delete-account[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?openMesaAyudaFromDelete[\s\S]*?contactarMesaAyuda/
+        const firstStep = viewSource.match(
+            /eliminacionCuentaRecuperarCuenta[\s\S]*?eliminacionCuentaOtroMotivo[\s\S]*?<\/template>/
         );
-        expect(viewSource).toMatch(
-            /modal-delete-account[\s\S]*?<AppButton[\s\S]*?variant="danger"[\s\S]*?promptDeleteAccountConfirmation[\s\S]*?eliminarCuenta/
+        expect(firstStep).not.toBeNull();
+        const stepHtml = firstStep[0];
+        expect(stepHtml).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?openMesaAyudaFromDelete[\s\S]*?contactarMesaAyuda/
         );
-        expect(viewSource).not.toMatch(
-            /openMesaAyudaFromDelete[\s\S]*?class="btn btn-default"/
+        expect(stepHtml).toMatch(
+            /<AppButton[\s\S]*?variant="danger"[\s\S]*?promptDeleteAccountConfirmation[\s\S]*?eliminarCuenta/
         );
-        expect(viewSource).not.toMatch(
-            /promptDeleteAccountConfirmation[\s\S]*?class="btn btn-danger"/
-        );
+        expect(stepHtml).not.toContain('btn btn-default');
+        expect(stepHtml).not.toContain('btn btn-danger');
     });
 });
