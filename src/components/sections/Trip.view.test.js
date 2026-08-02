@@ -179,6 +179,15 @@ describe('Trip card future owner footer actions', () => {
         );
     });
 
+    it('matches Editar viaje AppButton height to Ver detalle compact padding', () => {
+        expect(footerExtra).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?editarViaje[\s\S]*?<\/AppButton>/
+        );
+        expect(source).toMatch(
+            /\.trip-card-owner-actions\s+:deep\(\.app-button\)\s*\{[^}]*padding:\s*0\.375rem/s
+        );
+    });
+
     it('removes icon-only eye edit trash controls from footer-extra', () => {
         expect(footerExtra).not.toContain('fa-eye');
         expect(footerExtra).not.toContain('fa-pencil');
