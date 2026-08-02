@@ -12,4 +12,12 @@ describe('AdminUserMigrationsList view', () => {
         expect(source).toContain("$t('migracionId')");
         expect(source).toContain("$t('usuarioMantenido')");
     });
+
+    it('uses primary AppButton for new migration link', () => {
+        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-user-migration-new/
+        );
+        expect(source).not.toContain('btn btn-primary');
+    });
 });

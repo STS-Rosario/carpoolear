@@ -32,4 +32,12 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain("<router-link :to=\"{ name: 'admin-users-user', params: { userId: String(u.id) } }\">");
         expect(viewSource).not.toContain('@click="goToUser(u.id)"');
     });
+
+    it('uses AppInput for user search without bootstrap form-control', () => {
+        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?v-model="textSearch"[\s\S]*?admin-users-search/
+        );
+        expect(viewSource).not.toContain('form-control');
+    });
 });

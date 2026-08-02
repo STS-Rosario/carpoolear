@@ -84,4 +84,19 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('!user.is_admin');
         expect(source).toContain('impersonateUser');
     });
+
+    it('uses AppButton for navigation and action controls', () => {
+        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?admin-users/
+        );
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-users-edit/
+        );
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="warning"[\s\S]*?confirmClearIdentityValidation/
+        );
+        expect(source).not.toContain('btn btn-default');
+        expect(source).not.toContain('btn btn-primary');
+    });
 });

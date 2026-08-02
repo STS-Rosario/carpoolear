@@ -131,4 +131,16 @@ describe('AdminUserMigrationNew view', () => {
             'The account of {name} (ID: {id}) is suspended so the migration cannot be performed'
         );
     });
+
+    it('uses AppButton for back navigation and submit action', () => {
+        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?admin-user-migrations/
+        );
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-user-migration-new__submit/
+        );
+        expect(source).not.toContain('btn btn-default');
+        expect(source).not.toContain('btn btn-primary');
+    });
 });

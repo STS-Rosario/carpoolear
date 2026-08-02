@@ -33,4 +33,22 @@ describe('AdminRatingCard', () => {
         expect(cardSource).toContain('rateItemNeutral');
         expect(cardSource).toContain('rate.comment');
     });
+
+    it('uses AppField, AppTextarea and AppButton for edit controls', () => {
+        expect(cardSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(cardSource).toContain("import AppField from '../ui/AppField.vue'");
+        expect(cardSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
+        expect(cardSource).toMatch(
+            /<AppField[\s\S]*?adminUsuariosCalificacion[\s\S]*?admin-rating-card__select/
+        );
+        expect(cardSource).toMatch(
+            /<AppTextarea[\s\S]*?editForm\.comment/
+        );
+        expect(cardSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?\$emit\('save'\)/
+        );
+        expect(cardSource).not.toContain('form-control');
+        expect(cardSource).not.toContain('btn btn-primary');
+        expect(cardSource).not.toContain('btn btn-default');
+    });
 });

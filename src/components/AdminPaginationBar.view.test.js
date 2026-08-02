@@ -21,4 +21,17 @@ describe('AdminPaginationBar component', () => {
         expect(componentSource).toContain("{{ $t('anterior') }}");
         expect(componentSource).toContain("{{ $t('siguiente') }}");
     });
+
+    it('uses AppButton and AppField for pager and per-page selector', () => {
+        expect(componentSource).toContain("import AppButton from './ui/AppButton.vue'");
+        expect(componentSource).toContain("import AppField from './ui/AppField.vue'");
+        expect(componentSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?\$emit\('prev'\)/
+        );
+        expect(componentSource).toMatch(
+            /<AppField[\s\S]*?perPageSelectId[\s\S]*?admin-pagination-bar__per-page-select/
+        );
+        expect(componentSource).not.toContain('form-control');
+        expect(componentSource).not.toContain('btn btn-default');
+    });
 });

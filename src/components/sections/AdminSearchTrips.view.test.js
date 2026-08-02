@@ -24,4 +24,18 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('immediate: true');
         expect(source).toContain('applyParams');
     });
+
+    it('uses AppField for date pickers and AppButton for search without bootstrap classes', () => {
+        expect(source).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(source).toContain("import AppField from '../ui/AppField.vue'");
+        expect(source).toMatch(/<AppField[\s\S]*?<DatePicker[\s\S]*?from_date/);
+        expect(source).toMatch(/<AppField[\s\S]*?<DatePicker[\s\S]*?to_date/);
+        expect(source).toContain('admin-search-trips__autocomplete-input');
+        expect(source).toContain('input-class="admin-search-trips__user-search-input"');
+        expect(source).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?submitSearch/
+        );
+        expect(source).not.toContain('form-control');
+        expect(source).not.toContain('btn btn-primary');
+    });
 });
