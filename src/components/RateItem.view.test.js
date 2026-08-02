@@ -33,3 +33,23 @@ describe('RateItem.vue profile links', () => {
         );
     });
 });
+
+describe('RateItem.vue reply CTAs', () => {
+    it('uses primary Responder and secondary Cancelar AppButtons', () => {
+        expect(viewSource).toContain(
+            "import AppButton from './ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?rateItemResponder[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?rateItemCancelar[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?rateItemResponder/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?rateItemCancelar/
+        );
+    });
+});

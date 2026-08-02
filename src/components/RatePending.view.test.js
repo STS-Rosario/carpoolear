@@ -57,3 +57,20 @@ describe('RatePending.vue neutral ratings', () => {
         expect(baseCss).toContain('background-color: #d8d8d8');
     });
 });
+
+describe('RatePending.vue submit CTA', () => {
+    it('uses primary AppButton for Calificar and keeps vote chips as rating controls', () => {
+        expect(viewSource).toContain(
+            "import AppButton from './ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?ratePendingCalificar[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).toContain('rate-positive');
+        expect(viewSource).toContain('rate-neutral');
+        expect(viewSource).toContain('rate-negative');
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?ratePendingCalificar/
+        );
+    });
+});
