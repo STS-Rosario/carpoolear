@@ -58,6 +58,9 @@ describe('ProfileInfo public panel', () => {
         expect(profilePageCss).toMatch(
             /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon--verified\s*\{[^}]*color:\s*var\(--profile-verified/
         );
+        expect(profilePageCss).toMatch(
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon::before\s*\{[^}]*translateY/
+        );
     });
 
     it('always shows response tile when the conversation delay module is on', () => {
