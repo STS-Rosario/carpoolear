@@ -58,33 +58,28 @@
             <template #body>
                 <p>{{ $t('tripCreationSaveTemplateBody') }}</p>
                 <div class="trip-creation-success__save-template-form text-left color-black">
-                    <div class="form-group">
-                        <label for="trip-creation-template-name">
-                            {{ $t('tripCreationTemplateNameLabel') }}
-                        </label>
-                        <input
-                            id="trip-creation-template-name"
-                            v-model="templateName"
-                            type="text"
-                            class="form-control"
-                            data-testid="trip-creation-template-name"
-                            @input="onTemplateNameInput"
-                        />
-                    </div>
+                    <AppInput
+                        id="trip-creation-template-name"
+                        data-testid="trip-creation-template-name"
+                        v-model="templateName"
+                        :label="$t('tripCreationTemplateNameLabel')"
+                        @update:modelValue="onTemplateNameInput"
+                    />
                     <div
                         v-if="hasExistingTemplates"
                         class="trip-creation-success__template-or"
                     >
                         {{ $t('tripCreationOr') }}
                     </div>
-                    <div v-if="hasExistingTemplates" class="form-group">
-                        <label for="trip-creation-template-replace">
-                            {{ $t('tripCreationReplaceTemplateLabel') }}
-                        </label>
+                    <AppField
+                        v-if="hasExistingTemplates"
+                        :label="$t('tripCreationReplaceTemplateLabel')"
+                        label-for="trip-creation-template-replace"
+                    >
                         <select
                             id="trip-creation-template-replace"
                             v-model="replaceTemplateName"
-                            class="form-control"
+                            class="trip-creation-success__template-select"
                             data-testid="trip-creation-template-replace"
                             @change="onReplaceTemplateChange"
                         >
@@ -99,7 +94,7 @@
                                 {{ template.name }}
                             </option>
                         </select>
-                    </div>
+                    </AppField>
                 </div>
             </template>
             <template #footer>
@@ -127,6 +122,8 @@
 import { mapState } from 'pinia';
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
 import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import { useAuthStore } from '../../stores/auth';
@@ -146,6 +143,8 @@ export default {
     components: {
         TripInviteFriends,
         AppButton,
+        AppField,
+        AppInput,
         modal
     },
 
@@ -339,6 +338,25 @@ export default {
 
 .trip-creation-success__save-template-form label {
     color: #333;
+}
+
+.trip-creation-success__template-select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.trip-creation-success__template-select:focus {
+    outline: none;
 }
 
 .trip-creation-success__template-or {

@@ -9,20 +9,14 @@
             >
             <tab :header="$t('amigos')">
                 <div class="friends-toolbar form-inline-with-margin">
-                    <div class="friend-form form-inline">
-                        <div class="form-group">
-                            <label for="input-name">{{
-                                $t('filtrarPorNombre')
-                            }}</label>
-                            <input
-                                v-on:input="onTextChange"
-                                v-model="text"
-                                type="text"
-                                class="form-control"
-                                id="input-name"
-                                :placeholder="$t('ingresarNombre')"
-                            />
-                        </div>
+                    <div class="friend-form">
+                        <AppInput
+                            id="input-name"
+                            :label="$t('filtrarPorNombre')"
+                            :model-value="text"
+                            :placeholder="$t('ingresarNombre')"
+                            @update:modelValue="onFilterInput"
+                        />
                     </div>
                     <AppButton
                         class="search-more"
@@ -165,6 +159,7 @@ import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 import FilterChips from '../elements/FilterChips.vue';
 import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { applyFriendsSettingDeepLink } from '../../utils/friendsDeepLinks';
 
 export default {
@@ -234,6 +229,11 @@ export default {
                     });
                 }
             });
+        },
+
+        onFilterInput(value) {
+            this.text = value;
+            this.onTextChange();
         },
 
         onTextChange() {
@@ -319,7 +319,8 @@ export default {
         Tab,
         Tabset,
         FilterChips,
-        AppButton
+        AppButton,
+        AppInput
     }
 };
 </script>

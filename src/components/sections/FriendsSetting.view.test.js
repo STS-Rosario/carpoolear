@@ -35,7 +35,7 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
     it('uses AppInput for the friends name filter', () => {
         expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
         expect(viewSource).toMatch(
-            /<AppInput[\s\S]*?:label="\$t\('filtrarPorNombre'\)"[\s\S]*?v-model="text"/
+            /<AppInput[\s\S]*?:label="\$t\('filtrarPorNombre'\)"[\s\S]*?(?:v-model="text"|:model-value="text"|:modelValue="text")/
         );
         expect(viewSource).not.toContain('form-control');
     });
