@@ -1256,6 +1256,7 @@ const messages = {
         solicitadoRetirar: 'Solicitado (RETIRAR)',
         bajarmeViaje: 'Bajarme del viaje',
         finalizado: 'Finalizado',
+        viajeFinalizado: 'Viaje finalizado',
         viajeCarpooleado: 'Viaje Carpooleado',
         tripSeatRequestsDriverWarning:
             'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
@@ -2724,6 +2725,7 @@ const messages = {
         solicitadoRetirar: 'Solicitado (RETIRAR)',
         bajarmeViaje: 'Bajarme del viaje',
         finalizado: 'Finalizado',
+        viajeFinalizado: 'Viaje finalizado',
         viajeCarpooleado: 'Viaje Carpooleado',
         tripSeatRequestsDriverWarning:
             'Tenés pedidos de asiento de pasajeros para este viaje, revisalos en Tus Viajes',
@@ -4460,6 +4462,7 @@ const messages = {
         solicitadoRetirar: 'Requested (WITHDRAW)',
         bajarmeViaje: 'Leave the trip',
         finalizado: 'Completed',
+        viajeFinalizado: 'Trip finished',
         viajeCarpooleado: 'Carpooled Trip',
         tripSeatRequestsDriverWarning:
             'You have passenger seat requests for this trip, review them in My Trips',

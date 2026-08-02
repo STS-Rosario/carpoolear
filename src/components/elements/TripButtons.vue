@@ -109,9 +109,6 @@
                     </button>
                 </template>
             </template>
-            <template v-if="expired">
-                <button class="btn btn-primary" disabled>{{ $t('finalizado') }}</button>
-            </template>
             <router-link
                 v-if="showLiveLocationShare"
                 class="btn btn-primary live-location-share-btn"
@@ -120,27 +117,26 @@
                 <i class="fa fa-wifi live-location-share-btn__icon" aria-hidden="true"></i>
                 {{ $t('compartirUbicacionTiempoReal') }}
             </router-link>
-            <button
+            <AppButton
                 v-if="showGroupChatButton"
-                class="btn btn-primary group-chat-btn"
-                @click="$emit('toGroupChat')"
+                variant="primary"
+                block
+                icon-left="fa fa-comments"
                 :disabled="sendingStatus"
+                :loading="Boolean(sending && sending.groupChatAction)"
+                @click="$emit('toGroupChat')"
             >
-                <spinner
-                    class="blue"
-                    v-if="sending && sending.groupChatAction"
-                ></spinner>
-                <template v-else>
-                    <i class="fa fa-comments" aria-hidden="true"></i>
-                    {{ $t('groupChatButton') }}
-                    <span
-                        v-if="groupChatUnreadCount > 0"
-                        class="group-chat-btn__badge"
-                    >
-                        {{ groupChatUnreadCount }}
-                    </span>
+                {{ $t('groupChatButton') }}
+                <span
+                    v-if="groupChatUnreadCount > 0"
+                    class="group-chat-btn__badge"
+                >
+                    {{ groupChatUnreadCount }}
+                </span>
+                <template #loading>
+                    <spinner class="blue"></spinner>
                 </template>
-            </button>
+            </AppButton>
             <div
                 class="alert alert-warning"
                 role="alert"

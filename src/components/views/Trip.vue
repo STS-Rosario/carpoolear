@@ -294,6 +294,12 @@
                                         ></i>
                                         {{ seatsLabel }}
                                     </div>
+                                    <div
+                                        v-if="isTripExpired"
+                                        class="trip-detail__finished-pill"
+                                    >
+                                        {{ $t('viajeFinalizado') }}
+                                    </div>
                                 </div>
                                 <div class="trip-detail__joined">
                                     <TripPassengers
@@ -980,6 +986,12 @@ export default {
         },
         seatsLabel() {
             return getSeatsPillLabel(this.trip?.seats_available, this.$t);
+        },
+        isTripExpired() {
+            if (!this.trip || !this.trip.trip_date) {
+                return false;
+            }
+            return dayjs(this.trip.trip_date).format() < dayjs().format();
         }
     },
 

@@ -538,6 +538,19 @@
     color: var(--ds-text-muted);
 }
 
+.trip-detail--desktop .trip-detail__finished-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.825rem;
+    border-radius: 999px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    background: var(--ds-input-disabled-bg, #e8e8e8);
+    color: var(--ds-text-muted, #737373);
+}
+
 .trip-detail--desktop .trip-driver {
     background: var(--trip-detail-driver-bg);
     border-top: 1px solid #d6d4cf;
