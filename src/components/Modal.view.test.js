@@ -72,4 +72,28 @@ describe('Modal close behavior', () => {
             /\.modal-footer\s*\{[^}]*border-top:\s*none/
         );
     });
+
+    it('uses design-system card surface tokens on the modal container', () => {
+        expect(source).toMatch(
+            /\.modal-container\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/s
+        );
+        expect(source).toMatch(
+            /\.modal-container\s*\{[^}]*background(?:-color)?:\s*var\(--ds-card-bg/s
+        );
+        expect(source).toMatch(
+            /\.modal-container\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow/s
+        );
+    });
+
+    it('sizes the modal to fit content instead of stretching full width', () => {
+        expect(source).toMatch(
+            /\.modal-wrapper\s*\{[^}]*width:\s*fit-content/s
+        );
+        expect(source).toMatch(
+            /\.modal-container\s*\{[^}]*width:\s*fit-content/s
+        );
+        expect(source).toMatch(
+            /\.modal-container\s*\{[^}]*max-width:\s*min\(/s
+        );
+    });
 });
