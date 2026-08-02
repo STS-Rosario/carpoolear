@@ -38,6 +38,14 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toMatch(/changelog-modal-ok[\s\S]*@click="close"/);
     });
 
+    it('uses primary AppButton for the OK dismiss CTA', () => {
+        expect(viewSource).toContain("import AppButton from './ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?changelog-modal-ok[\s\S]*?close[\s\S]*?changelogModalOk/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
+    });
+
     it('marks the version as seen when closed', () => {
         expect(viewSource).toContain('markChangelogSeenForVersion');
     });
