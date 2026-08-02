@@ -93,6 +93,21 @@ describe('TripButtons.vue owner actions', () => {
         );
     });
 
+    it('uses primary multiline AppButton for live location share', () => {
+        const labelIdx = viewSource.indexOf(
+            "$t('compartirUbicacionTiempoReal')"
+        );
+        expect(labelIdx).toBeGreaterThan(-1);
+        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
+        expect(before).toContain('<AppButton');
+        expect(before).toContain('variant="primary"');
+        expect(before).toContain('live-location-share-btn');
+        expect(before).not.toContain('btn btn-primary');
+        expect(viewSource).toMatch(
+            /\.live-location-share-btn[\s\S]*?white-space:\s*normal/s
+        );
+    });
+
     it('stacks owner Edit above Cancel in a column at all breakpoints', () => {
         expect(viewSource).toMatch(
             /\.buttons-container\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column/
