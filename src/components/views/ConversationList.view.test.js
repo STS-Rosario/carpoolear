@@ -53,7 +53,7 @@ describe('ConversationList.vue mobile chat layout', () => {
     it('sizes mobile chat from measured header offset so the verification banner does not force page scroll', () => {
         const mobileStyles = getMobileStylesBlock();
         expect(mobileStyles).toMatch(
-            /\.conversation-list-page--mobile-chat\s*\{[^}]*height:\s*calc\(100dvh\s*-\s*var\(--app-header-offset/s
+            /\.conversation-list-page--mobile-chat\s*\{[^}]*height:\s*calc\(\s*100dvh\s*-\s*var\(--app-header-offset/s
         );
         expect(mobileStyles).not.toMatch(
             /\.conversation-list-page--mobile-chat\s*\{[^}]*height:\s*calc\(100dvh\s*-\s*52px/s
