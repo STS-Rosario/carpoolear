@@ -54,6 +54,7 @@ export default {
     border-radius: var(--ds-card-radius);
     box-shadow: var(--ds-card-shadow);
     padding: 1.25rem 1.5rem;
+    width: 100%;
     min-width: 0;
     box-sizing: border-box;
 }

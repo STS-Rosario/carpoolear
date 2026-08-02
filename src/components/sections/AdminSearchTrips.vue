@@ -106,6 +106,15 @@
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (from_date = date)"
                 ></DatePicker>
+                <template #actionRight>
+                    <button
+                        type="button"
+                        class="admin-search-trips__clear"
+                        @click="clearDate('from')"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </template>
             </AppField>
 
             <AppField
@@ -120,6 +129,15 @@
                     :class="{ 'has-error': dateError.state }"
                     v-on:date_changed="(date) => (to_date = date)"
                 ></DatePicker>
+                <template #actionRight>
+                    <button
+                        type="button"
+                        class="admin-search-trips__clear"
+                        @click="clearDate('to')"
+                    >
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </template>
             </AppField>
 
             <AppField
@@ -356,6 +374,19 @@ export default {
         resetUser() {
             this.user = null;
         },
+        clearDate(which) {
+            if (which === 'from') {
+                this.from_date = '';
+                if (this.$refs.datepickerFrom) {
+                    this.$refs.datepickerFrom.clear();
+                }
+                return;
+            }
+            this.to_date = '';
+            if (this.$refs.datepickerTo) {
+                this.$refs.datepickerTo.clear();
+            }
+        },
         swapCities() {
             let temp;
             temp = this['to_town'];
@@ -471,7 +502,8 @@ export default {
 }
 
 .admin-search-trips__field--user {
-    flex: 1 1 12rem;
+    flex: 1 1 14rem;
+    max-width: 20rem;
 }
 
 .admin-search-trips__swap {
@@ -511,11 +543,6 @@ export default {
     cursor: pointer;
 }
 
-.admin-search-trips__submit {
-    flex-shrink: 0;
-    padding-bottom: 0.15rem;
-}
-
 .admin-search-trips__field--origin :deep(.admin-search-trips__autocomplete-input) {
     border-color: transparent;
     color: var(--ds-input-text);
@@ -552,39 +579,33 @@ export default {
 }
 
 .admin-search-trips :deep(.app-field .carpoolear-vue-dp .dp__input) {
-    min-height: 0;
-    line-height: 1.3;
-    padding-top: var(--ds-input-padding-y);
-    padding-right: 2rem;
-    padding-bottom: var(--ds-input-padding-y);
+    min-height: 0 !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+    padding-top: var(--ds-input-padding-y) !important;
+    padding-right: 2rem !important;
+    padding-bottom: var(--ds-input-padding-y) !important;
     padding-left: 0 !important;
-    border: 0;
-    background: transparent;
+    border: 0 !important;
+    background: transparent !important;
     background-image: none !important;
-    box-shadow: none;
-    font-family: var(--ds-font-family);
-    font-size: var(--ds-input-font-size);
-    font-weight: var(--ds-font-weight-normal);
-    color: var(--ds-input-text);
+    box-shadow: none !important;
+    font-family: var(--ds-font-family) !important;
+    font-size: var(--ds-input-font-size) !important;
+    font-weight: var(--ds-font-weight-normal) !important;
+    color: var(--ds-input-text) !important;
 }
 
 .admin-search-trips :deep(.app-field .carpoolear-vue-dp .dp__input::placeholder) {
-    color: var(--ds-input-placeholder);
-    opacity: 1;
-    font-family: var(--ds-font-family);
-    font-size: var(--ds-input-font-size);
-    font-weight: var(--ds-font-weight-normal);
+    color: var(--ds-input-placeholder) !important;
+    opacity: 1 !important;
+    font-family: var(--ds-font-family) !important;
+    font-size: var(--ds-input-font-size) !important;
+    font-weight: var(--ds-font-weight-normal) !important;
 }
 
 .admin-search-trips :deep(.date-picker .date-picker--cross) {
-    top: 50%;
-    right: 0.5rem;
-    transform: translateY(-50%);
-    color: var(--ds-action);
-}
-
-.admin-search-trips :deep(.date-picker .date-picker--cross i) {
-    color: var(--ds-action);
+    display: none;
 }
 
 .admin-search-trips :deep(.date-picker__surface.picker) {
