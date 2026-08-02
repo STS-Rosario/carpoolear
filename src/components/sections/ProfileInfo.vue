@@ -15,8 +15,10 @@
                     }"
                 >
                     <i
-                        class="fa fa-shield profile-info-panel__tile-icon"
+                        class="fa profile-info-panel__tile-icon"
                         :class="{
+                            'fa-shield': isIdentityVerified,
+                            'fa-user': !isIdentityVerified,
                             'profile-info-panel__tile-icon--verified':
                                 isIdentityVerified
                         }"
