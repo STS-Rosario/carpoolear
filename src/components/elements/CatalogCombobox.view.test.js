@@ -26,4 +26,12 @@ describe('CatalogCombobox dropdown contrast', () => {
         expect(source).toContain('@blur="onInputBlur"');
         expect(source).not.toContain('v-clickoutside');
     });
+
+    it('drops Bootstrap form-control so AppField can own the chrome', () => {
+        expect(source).not.toContain('form-control');
+        expect(source).toContain('catalog-combobox__input');
+        expect(source).toMatch(
+            /\.catalog-combobox__input\s*\{[^}]*border:\s*0/s
+        );
+    });
 });
