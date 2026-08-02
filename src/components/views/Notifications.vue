@@ -11,21 +11,19 @@
                 <p>
                     {{ $t('notificacionesNoAceptastePermisos') }}
                 </p>
-                <br/>
                 <div class="notification-warning-buttons">
-                    <button
-                        class="btn btn-success"
+                    <AppButton
+                        variant="success"
                         @click="requestNotificationPermission"
                     >
                         {{ $t('otorgarPermisos') }}
-                    </button>
-                    <button
-                        class="btn btn-default"
+                    </AppButton>
+                    <AppButton
+                        variant="secondary"
                         @click="dismissNotificationWarning"
-                        style="margin-left: 10px"
                     >
                         {{ $t('noMostrarDeNuevo') }}
-                    </button>
+                    </AppButton>
                 </div>
             </div>
             <div class="notifications-list list-group">
@@ -42,7 +40,8 @@
                                 aria-hidden="true"
                                 v-show="!n.readed"
                             ></i>
-                            <strong>{{ n.text }}</strong>
+                            <strong v-if="!n.readed">{{ n.text }}</strong>
+                            <span v-else>{{ n.text }}</span>
                             <em>{{ dayjs(n.created_at).calendar() }}</em>
                         </div>
                         <span class="col-xs-2 text-right">
@@ -90,10 +89,16 @@ import {
     getNotificationPermissionStatus,
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
+import AppButton from '../ui/AppButton.vue';
 
 
 export default {
     name: 'notifications',
+
+    components: {
+        Loading,
+        AppButton
+    },
 
     data() {
         return {
@@ -248,10 +253,6 @@ export default {
         if (this.user && this.notificationsEnabledForPlatform) {
             this.checkNotificationPermission();
         }
-    },
-
-    components: {
-        Loading
     }
 };
 </script>
@@ -259,6 +260,24 @@ export default {
 <style scoped>
 .container {
     padding: 3em 2em;
+}
+.ios-notification-warning {
+    margin-top: 1em;
+    padding: 1em;
+    text-align: center;
+    border-radius: var(--ds-card-radius, 20px);
+}
+.ios-notification-warning h4 {
+    margin-bottom: 0.5em;
+}
+.ios-notification-warning p {
+    margin-bottom: 1em;
+}
+.notification-warning-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 .notifications-list .list-group-item {
     cursor: pointer;
