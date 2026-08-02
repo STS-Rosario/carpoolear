@@ -24,31 +24,49 @@
                         />
                     </router-link>
                 </div>
-                <AppButton
-                    v-if="!logged"
-                    class="mobile-header-bar__donate"
-                    variant="header-create"
-                    size="sm"
-                    :to="{ name: 'login' }"
-                >
-                    {{ $t('iniciarSesion') }}
-                </AppButton>
-                <AppButton
-                    v-else-if="!shouldHideDonationOnIOSCapacitor(user)"
-                    class="mobile-header-bar__donate"
-                    variant="header-donate"
-                    size="sm"
-                    href="/donar"
-                >
-                    {{ $t('donar') }}
-                    <template #iconRight>
-                        <img
-                            :src="gift_icon"
-                            alt=""
-                            class="app-button__gift-icon"
-                        />
-                    </template>
-                </AppButton>
+                <div class="mobile-header-bar__trailing">
+                    <div
+                        class="mobile-header-bar__actions"
+                        v-if="logged"
+                    >
+                        <span
+                            class="mobile-header-bar__action"
+                            @click="toNotifications"
+                            aria-label="Notificaciones"
+                        >
+                            <svgItem size="22" icon="bell"></svgItem>
+                            <span
+                                class="mobile-header-bar__badge"
+                                v-if="notificationsCount > 0"
+                            ></span>
+                        </span>
+                    </div>
+                    <AppButton
+                        v-if="!logged"
+                        class="mobile-header-bar__donate"
+                        variant="header-create"
+                        size="sm"
+                        :to="{ name: 'login' }"
+                    >
+                        {{ $t('iniciarSesion') }}
+                    </AppButton>
+                    <AppButton
+                        v-else-if="!shouldHideDonationOnIOSCapacitor(user)"
+                        class="mobile-header-bar__donate"
+                        variant="header-donate"
+                        size="sm"
+                        href="/donar"
+                    >
+                        {{ $t('donar') }}
+                        <template #iconRight>
+                            <img
+                                :src="gift_icon"
+                                alt=""
+                                class="app-button__gift-icon"
+                            />
+                        </template>
+                    </AppButton>
+                </div>
             </template>
             <template v-else>
             <div class="mobile-header-bar__section mobile-header-bar__icon">

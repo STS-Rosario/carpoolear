@@ -47,9 +47,16 @@
         max-width: 100%;
     }
 
+    .mobile-header-bar--branded .mobile-header-bar__trailing {
+        display: flex;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: 0.5rem;
+    }
+
     .mobile-header-bar--branded .mobile-header-bar__donate {
         flex: 0 0 auto;
-        margin-left: 0.75rem;
+        margin-left: 0;
         white-space: nowrap;
     }
 }
