@@ -286,9 +286,16 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(viewSource).toMatch(
             /resetTripCreationForm\([\s\S]*clearTripCreationDraft/
         );
-        expect(viewSource).toMatch(
-            /beforeRouteLeave\([\s\S]*showWizardSuccess[\s\S]*resetTripCreationForm\(\)/
-        );
+
+        const leaveGuard = viewSource.match(
+            /beforeRouteLeave\s*\([\s\S]*?\n\s*\},/
+        )?.[0];
+        expect(leaveGuard).toBeTruthy();
+        expect(leaveGuard).toContain('showWizardSuccess');
+        expect(leaveGuard).toContain('clearTripCreationDraft');
+        // Remounting the wizard here syncs ?step=1 and races Ver viaje → detail.
+        expect(leaveGuard).not.toContain('resetTripCreationForm');
+
         expect(viewSource).toMatch(
             /beforeRouteUpdate\([\s\S]*showWizardSuccess[\s\S]*resetTripCreationForm\(\)/
         );
