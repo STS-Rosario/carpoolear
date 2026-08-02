@@ -2,7 +2,13 @@
     <div class="manual-identity-validation-component">
         <div v-if="config && !identityValidationManualEnabled" class="alert alert-info">
             {{ $t('validacionManualNoDisponible') }}
-            <router-link :to="{ name: 'identity_validation' }" class="btn btn-default btn-sm">{{ $t('volver') }}</router-link>
+            <AppButton
+                variant="secondary"
+                size="sm"
+                :to="{ name: 'identity_validation' }"
+            >
+                {{ $t('volver') }}
+            </AppButton>
         </div>
         <template v-else>
             <div
@@ -18,7 +24,12 @@
             <div v-if="alreadySubmitted" class="panel panel-info">
                 <div class="panel-body">
                     <p>{{ $t('documentacionEnviada') }}</p>
-                    <router-link :to="{ name: 'identity_validation' }" class="btn btn-default">{{ $t('verEstadoValidacion') }}</router-link>
+                    <AppButton
+                        variant="secondary"
+                        :to="{ name: 'identity_validation' }"
+                    >
+                        {{ $t('verEstadoValidacion') }}
+                    </AppButton>
                 </div>
             </div>
 
@@ -50,25 +61,29 @@
                     </p>
 
                     <div class="manual-validation-pay-buttons">
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-lg btn-block manual-validation-btn-mp"
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="manual-validation-pay-cta"
                             :disabled="loadingPreference || loadingQr || costCents <= 0"
+                            :loading="loadingPreference"
                             @click="createPreferenceAndRedirect"
                         >
-                            <span v-if="loadingPreference">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('manualValidationPagarMercadoPago') }}</span>
-                        </button>
-                        <button
+                            {{ $t('manualValidationPagarMercadoPago') }}
+                        </AppButton>
+                        <AppButton
                             v-if="identityValidationManualQrEnabled"
-                            type="button"
-                            class="btn btn-lg btn-block manual-validation-btn-outline"
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="manual-validation-pay-cta"
                             :disabled="loadingPreference || loadingQr || costCents <= 0"
+                            :loading="loadingQr"
                             @click="createQrOrderAndShow"
                         >
-                            <span v-if="loadingQr">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('pagarConQR') }}</span>
-                        </button>
+                            {{ $t('pagarConQR') }}
+                        </AppButton>
                     </div>
 
                     <template v-if="showSwitchToMercadoPagoLink">
@@ -92,9 +107,14 @@
                             </div>
                             <p v-else class="manual-validation-text">{{ $t('cargando') }}...</p>
                             <p class="qr-expiry small">{{ $t('qrExpiraEn') }}</p>
-                            <button type="button" class="btn btn-default btn-sm manual-validation-qr-close" @click="closeQrPanel">
+                            <AppButton
+                                variant="tertiary"
+                                size="sm"
+                                class="manual-validation-qr-close"
+                                @click="closeQrPanel"
+                            >
                                 {{ $t('cerrar') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div>
                 </div>
@@ -196,14 +216,16 @@
                                 class="form-control"
                             />
                         </div>
-                        <button
+                        <AppButton
                             type="submit"
-                            class="btn btn-danger btn-lg manual-validation-upload-submit"
+                            variant="primary"
+                            size="lg"
+                            class="manual-validation-upload-submit"
                             :disabled="submitting || !requestId"
+                            :loading="submitting"
                         >
-                            <span v-if="submitting">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('enviarDocumentacion') }}</span>
-                        </button>
+                            {{ $t('enviarDocumentacion') }}
+                        </AppButton>
                         <p v-if="submitError" class="manual-validation-submit-error">{{ submitError }}</p>
                     </form>
                 </div>
@@ -235,9 +257,13 @@ import {
     shouldShowManualValidationAlreadySubmitted,
     shouldShowManualValidationPayAgain
 } from '../../utils/manualIdentityValidationStatus';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
     name: 'ManualIdentityValidation',
+    components: {
+        AppButton
+    },
     data() {
         return {
             costCents: 0,
@@ -539,26 +565,6 @@ export default {
     }
 }
 
-.manual-identity-validation-component .btn-primary,
-.manual-identity-validation-component .btn-danger {
-    color: #fff;
-}
-
-.manual-identity-validation-component .btn-primary[disabled],
-.manual-identity-validation-component .btn-danger[disabled] {
-    color: #fff;
-    opacity: 0.65;
-}
-
-.manual-identity-validation-component .manual-validation-btn-outline {
-    color: #337ab7;
-}
-
-.manual-identity-validation-component .manual-validation-btn-outline:hover,
-.manual-identity-validation-component .manual-validation-btn-outline:focus {
-    color: #286090;
-}
-
 .manual-identity-validation-component .alert {
     color: #333;
 }
@@ -745,30 +751,9 @@ export default {
     margin-top: 0.25rem;
 }
 
-.manual-validation-btn-mp {
+.manual-validation-pay-cta {
     text-transform: uppercase;
-    font-weight: 600;
     letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.manual-validation-btn-outline {
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1rem;
-    background: #fff;
-    border: 2px solid #337ab7;
-    color: #337ab7;
-}
-
-.manual-validation-btn-outline:hover,
-.manual-validation-btn-outline:focus {
-    background: #f5f9fc;
-    border-color: #286090;
-    color: #286090;
 }
 
 .manual-validation-cost-unavailable {
