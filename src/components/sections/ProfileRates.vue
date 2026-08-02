@@ -101,18 +101,18 @@
                             </p>
                         </template>
                         <template #footer>
-                            <button
-                                class="btn btn-secondary"
-                                @click="hideReferenceConfirmation"
-                            >
-                                {{ $t('cancelar') }}
-                            </button>
-                            <button
-                                class="btn btn-primary"
+                            <AppButton
+                                variant="primary"
                                 @click="confirmReferenceWriting"
                             >
                                 {{ $t('continuar') }}
-                            </button>
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
+                                @click="hideReferenceConfirmation"
+                            >
+                                {{ $t('cancelar') }}
+                            </AppButton>
                         </template>
                     </modal>
                     <div v-else-if="sendReferenceFormVisibility" class="reply-box">
@@ -124,24 +124,23 @@
                             maxlength="260"
                             v-model="referenceComment"
                             id="reference"
+                            class="ds-textarea"
                         ></textarea>
                         <div class="reply-btns">
-                            <button
-                                class="btn btn-primary"
+                            <AppButton
+                                variant="primary"
                                 @click="sendReference"
                                 :disabled="sending"
+                                :loading="sending"
                             >
-                                <template v-if="sending">
-                                    <spinner class="blue"></spinner>
-                                </template>
-                                <template v-else>{{ $t('comentar') }}</template>
-                            </button>
-                            <button
-                                class="btn btn-primary"
+                                {{ $t('guardarReferencia') }}
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
                                 @click="sendReferenceFormVisibility = false"
                             >
                                 {{ $t('cancelar') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div>
                 </div>
@@ -213,7 +212,6 @@ import { useProfileStore } from '../../stores/profile';
 import { useDeviceStore } from '../../stores/device';
 import Loading from '../Loading.vue';
 import RateItem from '../RateItem';
-import Spinner from '../Spinner.vue';
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
 import FilterChips from '../elements/FilterChips.vue';
@@ -453,7 +451,6 @@ export default {
     components: {
         Loading,
         RateItem,
-        Spinner,
         modal,
         AppButton,
         FilterChips
@@ -475,8 +472,35 @@ export default {
     text-align: left;
     border-radius: 0;
 }
-.reply-btns button {
-    min-width: 7rem;
+.ds-textarea {
+    display: block;
+    width: 100%;
+    min-height: 7rem;
+    box-sizing: border-box;
+    margin: 0.5rem 0 1rem;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    border: 1px solid var(--ds-input-border, #d1d5db);
+    border-radius: var(--ds-radius-input, 8px);
+    background: var(--ds-input-bg, #fff);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.4;
+    resize: vertical;
+}
+.ds-textarea:focus {
+    outline: none;
+    border-color: var(--ds-input-focus-border, #1e5f9e);
+    box-shadow: var(--ds-input-focus-ring);
+}
+.ds-textarea::placeholder {
+    color: var(--ds-input-placeholder, #737373);
+}
+.reply-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
 }
 .profile-rates-component :deep(.rate-neutral-icon) {
     margin-left: 0.6em;

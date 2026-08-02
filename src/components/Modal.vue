@@ -124,22 +124,22 @@ export default {
 
 .modal-wrapper {
     display: flex;
-    width: 100%;
-    max-width: 600px;
+    width: fit-content;
+    max-width: 100%;
     justify-content: center;
     flex: 0 1 auto;
     min-height: 0;
 }
 
 .modal-container {
-    max-width: 600px;
-    width: 100%;
+    width: fit-content;
+    max-width: min(32rem, calc(100vw - 2rem));
     max-height: calc(100vh - 2rem);
     margin: 0;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    padding: 1.25rem 1.5rem;
+    background: var(--ds-card-bg, #fff);
+    border-radius: var(--ds-card-radius, 20px);
+    box-shadow: var(--ds-card-shadow, 3px 3px 7.3px 0 rgba(0, 0, 0, 0.05));
     transition: all 0.3s ease;
     color: #333333;
     display: flex;

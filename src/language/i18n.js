@@ -1155,6 +1155,7 @@ const messages = {
         escribeUnaReferenciaSobreElUsuario:
             'Escribe una referencia sobre el usuario',
         comentar: 'Comentar',
+        guardarReferencia: 'Guardar referencia',
         cancelar: 'Cancelar',
         cargando: 'Cargando ...',
         misAmigos: 'Mis amigos',
@@ -2293,6 +2294,7 @@ const messages = {
         escribeUnaReferenciaSobreElUsuario:
             'Escribe una referencia sobre el usuario',
         comentar: 'Comment',
+        guardarReferencia: 'Guardar referencia',
         miPerfil: 'Mi perfil',
         validarIdentidad: 'Verificación de cuenta',
         debug: 'Debug',
@@ -4369,6 +4371,7 @@ const messages = {
             'kilograms of carbon dioxide equivalent',
         escribeUnaReferenciaSobreElUsuario: 'Write a review for the user',
         comentar: 'Comment',
+        guardarReferencia: 'Save reference',
         cancelar: 'Cancel',
         misAmigos: 'My friends',
         deseaSerTuAmigo: 'wants to be your friend.',
