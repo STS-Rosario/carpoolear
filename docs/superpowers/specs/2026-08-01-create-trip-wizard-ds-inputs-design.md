@@ -1,7 +1,7 @@
 # Create-trip wizard DS inputs
 
 **Date:** 2026-08-01  
-**Status:** Draft — pending review
+**Status:** Approved
 
 ## Goal
 
