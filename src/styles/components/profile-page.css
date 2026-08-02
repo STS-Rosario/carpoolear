@@ -649,6 +649,14 @@
         margin: 0 auto;
     }
 
+    .profile-page .profile-info-component {
+        padding-bottom: 0;
+    }
+
+    .profile-page .list-container {
+        margin: 0;
+    }
+
     .profile-info-panel__tiles {
         flex-direction: row;
         gap: 1rem;
