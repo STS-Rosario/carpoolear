@@ -31,4 +31,30 @@ describe('Profile view', () => {
         expect(viewSource).toContain('applyProfileDeepLink');
         expect(viewSource).not.toContain('getRememberedTab');
     });
+
+    it('shows pending friend-request banner above tabs for incoming requests', () => {
+        const headerIndex = viewSource.indexOf('ProfileIdentityHeader');
+        const bannerIndex = viewSource.indexOf(
+            'profile-pending-friend-request'
+        );
+        const tabsetIndex = viewSource.indexOf('<tabset');
+        expect(bannerIndex).toBeGreaterThan(headerIndex);
+        expect(tabsetIndex).toBeGreaterThan(bannerIndex);
+        expect(viewSource).toContain('home-prompt-banner');
+        expect(viewSource).toContain('fa-user-plus');
+        expect(viewSource).toContain("$t('solicitudAmistadPendiente')");
+        expect(viewSource).toContain("friendship_state === 'pending_received'");
+        expect(viewSource).toMatch(
+            /variant="tertiary"[\s\S]*?tone="destructive"[\s\S]*?icon-right="fa fa-times"[\s\S]*?\$t\('rechazar'\)/
+        );
+        expect(viewSource).toMatch(
+            /variant="primary"[\s\S]*?icon-right="fa fa-check"[\s\S]*?\$t\('aceptar'\)/
+        );
+        expect(viewSource).toContain('onAcceptFriend');
+        expect(viewSource).toContain('onRejectFriend');
+        expect(viewSource).toContain('useFriendsStore');
+        expect(viewSource).toContain("acceptFriend: 'accept'");
+        expect(viewSource).toContain("rejectFriend: 'reject'");
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+    });
 });
