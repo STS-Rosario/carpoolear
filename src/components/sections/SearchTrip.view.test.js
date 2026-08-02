@@ -3,7 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'SearchTrip.vue');
+const cssPath = path.resolve(
+    __dirname,
+    '../../styles/components/trips-search.css'
+);
 const source = fs.readFileSync(viewPath, 'utf8');
+const cssSource = fs.readFileSync(cssPath, 'utf8');
 
 describe('SearchTrip advanced filters', () => {
     it('renders filtros avanzados as cog link beside foreign country filter on desktop', () => {
@@ -22,7 +27,7 @@ describe('SearchTrip advanced filters', () => {
     it('renders filtros avanzados toggle above search button on mobile', () => {
         const mobileBlock = source.slice(
             source.indexOf('advanced-filters-toggle-mobile'),
-            source.indexOf('btn-search')
+            source.indexOf('trips-search__submit--mobile')
         );
         expect(mobileBlock).toContain('advanced-filters-toggle-mobile');
         expect(mobileBlock).toContain('advanced-filters-toggle_link');
@@ -56,5 +61,23 @@ describe('SearchTrip advanced filters', () => {
 
     it('resets advanced filters when clearing the search form', () => {
         expect(source).toContain('resetAdvancedFilters');
+    });
+});
+
+describe('SearchTrip mobile submit', () => {
+    it('shows a primary Buscar button on mobile with a stable test id', () => {
+        expect(source).toContain('data-testid="trips-search-submit"');
+        expect(source).toMatch(
+            /isMobile && !autoSearch[\s\S]*?data-testid="trips-search-submit"[\s\S]*?variant="primary"[\s\S]*?\$t\('buscar'\)/
+        );
+    });
+
+    it('pins the mobile submit above the footer bar with safe-area clearance', () => {
+        expect(cssSource).toMatch(
+            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*bottom:\s*calc\(\s*5\.5rem\s*\+\s*env\(safe-area-inset-bottom/
+        );
+        expect(cssSource).toMatch(
+            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*z-index:\s*9/
+        );
     });
 });
