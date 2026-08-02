@@ -14,7 +14,7 @@ export function buildMessagesWithDaySeparators(messages, t, now = dayjs()) {
     const todayKey = now.format('YYYY-MM-DD');
     const yesterdayKey = now.subtract(1, 'day').format('YYYY-MM-DD');
 
-    for (const message of list) {
+    list.forEach((message) => {
         const d = dayjs(message.created_at);
         const dayKey = d.isValid() ? d.format('YYYY-MM-DD') : 'unknown';
         if (dayKey !== lastDayKey) {
@@ -41,6 +41,6 @@ export function buildMessagesWithDaySeparators(messages, t, now = dayjs()) {
             type: 'message',
             message
         });
-    }
+    });
     return items;
 }

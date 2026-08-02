@@ -20,13 +20,13 @@ export function countConversationsByKind(conversations) {
     const list = Array.isArray(conversations) ? conversations : [];
     let group = 0;
     let individual = 0;
-    for (const c of list) {
+    list.forEach((c) => {
         if (isTripGroupConversation(c)) {
             group += 1;
         } else {
             individual += 1;
         }
-    }
+    });
     return {
         all: list.length,
         group,
