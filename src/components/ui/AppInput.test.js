@@ -24,6 +24,12 @@ describe('AppInput', () => {
         expect(source).toContain('focus()');
         expect(source).toContain('ref="inputEl"');
     });
+
+    it('supports an actionRight slot like AppField', () => {
+        expect(source).toContain('actionRight');
+        expect(source).toContain('app-input__control-wrap--action-right');
+        expect(source).toContain('app-input__action-right');
+    });
 });
 
 describe('auth forms AppInput integration', () => {

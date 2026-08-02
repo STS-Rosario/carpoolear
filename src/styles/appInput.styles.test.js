@@ -34,6 +34,11 @@ describe('app input styles', () => {
             /\.app-input__control:disabled\s*\{[^}]*background:\s*var\(--ds-input-disabled-bg\)/
         );
         expect(inputCss).toContain('.app-input__hint--error');
+        expect(inputCss).toContain('.app-input__control-wrap--action-right');
+        expect(inputCss).toContain('.app-input__action-right');
+        expect(inputCss).toMatch(
+            /\.app-input__control-wrap--action-right\s+\.app-input__control\s*\{[^}]*padding-right:\s*2\.75rem/
+        );
     });
 
     it('styles labels with design token size and line height', () => {
