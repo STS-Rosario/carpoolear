@@ -38,6 +38,7 @@ describe('ConversationChat.vue user ratings', () => {
     it('keeps Toast UI markdown composer for sending messages', () => {
         expect(viewSource).toContain('ToastUiEditor');
         expect(viewSource).toContain('messageEditor');
+        expect(viewSource).toContain(":aria-label=\"$t('enviarMensaje')\"");
         expect(viewSource).toContain("invoke('getMarkdown')");
         expect(viewSource).toContain("['bold', 'italic', 'strike']");
         expect(viewSource).toContain('message-composer-editor');

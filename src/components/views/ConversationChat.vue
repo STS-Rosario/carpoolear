@@ -119,6 +119,7 @@
                         @click="sendMessage"
                         :disabled="sending.message"
                         :title="$t('enviarMensaje')"
+                        :aria-label="$t('enviarMensaje')"
                     >
                         <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>
