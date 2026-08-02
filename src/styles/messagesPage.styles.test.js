@@ -135,4 +135,11 @@ describe('messages-page.css', () => {
             /\.message-composer-send[\s\S]*z-index:\s*50/
         );
     });
+
+    it('uses larger body text in the message composer markdown editor', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.message-composer-editor \.toastui-editor-contents\s*\{[^}]*font-size:\s*16px/s
+        );
+    });
 });
