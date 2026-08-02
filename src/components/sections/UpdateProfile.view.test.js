@@ -153,4 +153,19 @@ describe('UpdateProfile delete account entry point', () => {
             /promptDeleteAccountConfirmation[\s\S]*confirmarEliminarCuentaMensaje[\s\S]*@click="deleteAccount"/
         );
     });
+
+    it('uses primary mesa de ayuda and danger Eliminar cuenta AppButtons in the delete modal', () => {
+        expect(viewSource).toMatch(
+            /modal-delete-account[\s\S]*?<AppButton[\s\S]*?variant="primary"[\s\S]*?openMesaAyudaFromDelete[\s\S]*?contactarMesaAyuda/
+        );
+        expect(viewSource).toMatch(
+            /modal-delete-account[\s\S]*?<AppButton[\s\S]*?variant="danger"[\s\S]*?promptDeleteAccountConfirmation[\s\S]*?eliminarCuenta/
+        );
+        expect(viewSource).not.toMatch(
+            /openMesaAyudaFromDelete[\s\S]*?class="btn btn-default"/
+        );
+        expect(viewSource).not.toMatch(
+            /promptDeleteAccountConfirmation[\s\S]*?class="btn btn-danger"/
+        );
+    });
 });
