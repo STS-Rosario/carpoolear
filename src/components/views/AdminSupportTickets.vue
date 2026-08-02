@@ -49,13 +49,13 @@
                     <option value="low">{{ $t('prioridadBaja') }}</option>
                 </select>
             </AppField>
-            <div class="checkbox form-group">
+            <div class="checkbox form-group support-tickets-admin-filters__needs-reply">
                 <label>
                     <input v-model="filterNeedsReply" type="checkbox" />
                     {{ $t('filtroTicketsRequiereRespuesta') }}
                 </label>
             </div>
-            <AppButton variant="secondary" type="submit">{{ $t('buscar') }}</AppButton>
+            <AppButton variant="secondary" size="sm" type="submit">{{ $t('buscar') }}</AppButton>
         </form>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
@@ -411,6 +411,10 @@ export default {
     margin-left: 6px;
 }
 
+.support-tickets-admin-filters {
+    margin-bottom: 1rem;
+}
+
 .support-tickets-admin-filters .form-group {
     margin-right: 12px;
     margin-bottom: 8px;
@@ -424,6 +428,7 @@ export default {
 .support-tickets-admin-filters .checkbox {
     margin-top: 0;
     margin-bottom: 8px;
+    margin-left: 3px;
 }
 
 .admin-support-tickets__filter-select {
