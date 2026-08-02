@@ -93,16 +93,27 @@ describe('TripButtons.vue owner actions', () => {
         );
     });
 
-    it('uses primary multiline AppButton for live location share', () => {
+    it('uses danger AppButton for Bajarme del viaje without uppercase styling', () => {
+        const labelIdx = viewSource.indexOf("$t('bajarmeViaje')");
+        expect(labelIdx).toBeGreaterThan(-1);
+        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
+        expect(before).toContain('<AppButton');
+        expect(before).toContain('variant="danger"');
+        expect(before).not.toContain('btn btn-primary');
+        expect(before).not.toContain('text-transform');
+    });
+
+    it('uses secondary multiline AppButton for live location share', () => {
         const labelIdx = viewSource.indexOf(
             "$t('compartirUbicacionTiempoReal')"
         );
         expect(labelIdx).toBeGreaterThan(-1);
         const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
         expect(before).toContain('<AppButton');
-        expect(before).toContain('variant="primary"');
+        expect(before).toContain('variant="secondary"');
         expect(before).toContain('live-location-share-btn');
         expect(before).not.toContain('btn btn-primary');
+        expect(before).not.toContain('variant="primary"');
         expect(viewSource).toMatch(
             /\.live-location-share-btn[\s\S]*?white-space:\s*normal/s
         );
