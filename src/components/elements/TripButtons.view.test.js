@@ -100,12 +100,17 @@ describe('TripButtons.vue owner actions', () => {
         );
     });
 
-    it('uses primary AppButton for Chat grupal without forcing uppercase', () => {
+    it('uses secondary AppButton with chat icon for Chat grupal without uppercase', () => {
+        const labelIdx = viewSource.indexOf("$t('groupChatButton')");
+        expect(labelIdx).toBeGreaterThan(-1);
+        const before = viewSource.slice(Math.max(0, labelIdx - 500), labelIdx);
+        expect(before).toContain('<AppButton');
+        expect(before).toContain('variant="secondary"');
+        expect(before).toContain('icon-left="fa fa-comments"');
+        expect(before).not.toContain('variant="primary"');
+        expect(before).not.toContain('btn btn-primary');
         expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?variant="primary"[\s\S]*?groupChatButton[\s\S]*?<\/AppButton>/
-        );
-        expect(viewSource).not.toMatch(
-            /class="btn btn-primary group-chat-btn"/
+            /\.group-chat-btn[\s\S]*?text-transform:\s*none/s
         );
     });
 
