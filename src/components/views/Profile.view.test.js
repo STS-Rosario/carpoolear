@@ -62,5 +62,8 @@ describe('Profile view', () => {
         expect(viewSource).toMatch(
             /\.profile-pending-friend-request\s*\{[^}]*max-width:\s*100%/s
         );
+        expect(viewSource).toMatch(
+            /\.profile-pending-friend-request\s*\{[^}]*margin:\s*0\s+auto\s+1rem/s
+        );
     });
 });
