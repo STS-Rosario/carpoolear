@@ -72,12 +72,14 @@ describe('CoordinateTrip.vue', () => {
     });
 
     it('keeps a space before the trip date on seat action buttons', () => {
-        expect(viewSource).toMatch(
-            /\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{[\s\S]*?conversation\.trip\.trip_date/
-        );
-        expect(viewSource).toMatch(
-            /\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{[\s\S]*?conversation\.return_trip\.trip_date/
-        );
+        const outboundDate = viewSource.match(
+            /v-if="!sending\.trip"[\s\S]*?<\/template>/
+        )?.[0];
+        const returnDate = viewSource.match(
+            /v-if="!sending\.returnTrip"[\s\S]*?<\/template>/
+        )?.[0];
+        expect(outboundDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
+        expect(returnDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
     });
 
     it('styles seat request buttons with design-system primary action blue', () => {
