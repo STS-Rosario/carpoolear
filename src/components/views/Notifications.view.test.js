@@ -55,3 +55,34 @@ describe('Notifications view', () => {
         expect(viewSource).toContain('router.push(tripRoute)');
     });
 });
+
+describe('Notifications.vue list and permission warning UI', () => {
+    it('bolds unread notification text only, not already seen items', () => {
+        expect(viewSource).toMatch(
+            /<strong[\s\S]*?!n\.readed[\s\S]*?>\{\{\s*n\.text\s*\}\}<\/strong>/
+        );
+        expect(viewSource).not.toMatch(
+            /<strong>\{\{\s*n\.text\s*\}\}<\/strong>/
+        );
+    });
+
+    it('uses success and secondary AppButtons on the permission warning', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="success"[\s\S]*?otorgarPermisos[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?noMostrarDeNuevo[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toContain('btn-success');
+        expect(viewSource).not.toContain('btn-default');
+    });
+
+    it('rounds the permission warning card like newer cards', () => {
+        expect(viewSource).toMatch(
+            /\.ios-notification-warning\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/s
+        );
+    });
+});
