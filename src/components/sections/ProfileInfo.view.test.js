@@ -29,14 +29,8 @@ describe('ProfileInfo public panel', () => {
     });
 
     it('marks verified identity with an accessible verified hook', () => {
-        expect(viewSource).toContain(
-            'data-testid="profile-identity-verified"'
-        );
-        expect(viewSource).toContain(
-            'data-testid="profile-identity-unverified"'
-        );
         expect(viewSource).toMatch(
-            /isIdentityVerified\s*\?\s*['"]profile-identity-verified['"]\s*:\s*['"]profile-identity-unverified['"]/
+            /:data-testid="[\s\S]*?isIdentityVerified[\s\S]*?profile-identity-verified[\s\S]*?profile-identity-unverified/
         );
         expect(viewSource).toContain("$t('usuarioVerificado')");
         expect(viewSource).toMatch(/['"]fa-shield['"]:\s*isIdentityVerified/);
