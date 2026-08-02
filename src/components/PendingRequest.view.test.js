@@ -22,6 +22,9 @@ describe('PendingRequest.vue design system migration', () => {
         expect(viewSource).toMatch(
             /\.pending-request-card\s*\{[^}]*margin(?:-top)?:\s*0/s
         );
+        expect(viewSource).toMatch(
+            /\.pending-request-card\s*\{[^}]*width:\s*fit-content/s
+        );
     });
 
     it('uses success Aceptar, danger Rechazar, and secondary Enviar mensaje AppButtons', () => {
