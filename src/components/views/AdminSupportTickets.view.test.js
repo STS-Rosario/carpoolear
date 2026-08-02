@@ -150,4 +150,16 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).not.toContain('btn btn-primary');
         expect(viewSource).not.toContain('btn btn-default');
     });
+
+    it('compacts the search row: sm Buscar, checkbox inset, space before table', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?size="sm"[\s\S]*?type="submit"[\s\S]*?buscar/
+        );
+        expect(viewSource).toMatch(
+            /\.support-tickets-admin-filters\s+\.checkbox\s*\{[^}]*margin-left:\s*3px/
+        );
+        expect(viewSource).toMatch(
+            /\.support-tickets-admin-filters\s*\{[^}]*margin-bottom:\s*(1rem|16px)/
+        );
+    });
 });
