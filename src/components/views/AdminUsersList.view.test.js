@@ -36,7 +36,7 @@ describe('AdminUsersList view', () => {
     it('uses AppInput for user search without bootstrap form-control', () => {
         expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
         expect(viewSource).toMatch(
-            /<AppInput[\s\S]*?v-model="textSearch"[\s\S]*?admin-users-search/
+            /<AppInput[\s\S]*?admin-users-search[\s\S]*?v-model="textSearch"/
         );
         expect(viewSource).not.toContain('form-control');
     });

@@ -7,14 +7,14 @@
             v-if="pagination.total_pages > 1"
             class="admin-pagination-bar__pager"
         >
-            <button
-                type="button"
-                class="btn btn-default btn-sm"
+            <AppButton
+                variant="secondary"
+                size="sm"
                 :disabled="loading || pagination.current_page <= 1"
                 @click="$emit('prev')"
             >
                 {{ $t('anterior') }}
-            </button>
+            </AppButton>
             <span class="admin-pagination-bar__pager-label text-muted">
                 {{
                     $t('adminUsuariosPagina', {
@@ -23,22 +23,23 @@
                     })
                 }}
             </span>
-            <button
-                type="button"
-                class="btn btn-default btn-sm"
+            <AppButton
+                variant="secondary"
+                size="sm"
                 :disabled="loading || pagination.current_page >= pagination.total_pages"
                 @click="$emit('next')"
             >
                 {{ $t('siguiente') }}
-            </button>
+            </AppButton>
         </div>
-        <div class="admin-pagination-bar__per-page">
-            <label :for="perPageSelectId" class="admin-pagination-bar__per-page-label">
-                {{ $t('adminItemsPerPage') }}
-            </label>
+        <AppField
+            :label="$t('adminItemsPerPage')"
+            :label-for="perPageSelectId"
+            class="admin-pagination-bar__per-page"
+        >
             <select
                 :id="perPageSelectId"
-                class="form-control input-sm admin-pagination-bar__per-page-select"
+                class="admin-pagination-bar__per-page-select"
                 :value="perPage"
                 :disabled="loading"
                 @change="onPerPageChange"
@@ -51,17 +52,23 @@
                     {{ option }}
                 </option>
             </select>
-        </div>
+        </AppField>
     </div>
 </template>
 
 <script>
+import AppButton from './ui/AppButton.vue';
+import AppField from './ui/AppField.vue';
 import { ADMIN_PER_PAGE_OPTIONS } from '../utils/adminPagination';
 
 let nextPerPageSelectId = 0;
 
 export default {
     name: 'AdminPaginationBar',
+    components: {
+        AppButton,
+        AppField
+    },
     props: {
         pagination: {
             type: Object,
@@ -107,21 +114,27 @@ export default {
 }
 
 .admin-pagination-bar__per-page {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     margin-left: auto;
-}
-
-.admin-pagination-bar__per-page-label {
-    margin: 0;
-    font-size: 12px;
-    font-weight: normal;
 }
 
 .admin-pagination-bar__per-page-select {
     width: auto;
     min-width: 72px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-pagination-bar__per-page-select:focus {
+    outline: none;
 }
 
 .admin-pagination-bar__pager {

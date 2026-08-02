@@ -5,12 +5,10 @@
                 <div class="col-md-22 col-md-offset-1">
                     <h3 class="admin-users-list__title">{{ $t('adminUsers') }}</h3>
                     <div class="form-group">
-                        <label for="admin-users-search">{{ $t('buscar') }}</label>
-                        <input
+                        <AppInput
                             id="admin-users-search"
                             v-model="textSearch"
-                            type="text"
-                            class="form-control"
+                            :label="$t('buscar')"
                             :placeholder="$t('escribeUnNombreYPresionaBuscar')"
                             @keyup="onSearchKeyup"
                         />
@@ -126,6 +124,7 @@
 import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -271,7 +270,8 @@ export default {
     },
     components: {
         AdminLayout,
-        AdminPaginationBar
+        AdminPaginationBar,
+        AppInput
     }
 };
 </script>

@@ -36,22 +36,22 @@
                     <td>{{ occupiedSeats(trip) }}</td>
                     <td>{{ tripStatus(trip) }}</td>
                     <td class="admin-user-trips-table__actions">
-                        <button
-                            type="button"
-                            class="btn btn-default btn-sm"
-                            v-on:click="openDetail(trip)"
+                        <AppButton
+                            variant="secondary"
+                            size="sm"
+                            @click="openDetail(trip)"
                         >
                             {{ $t('verDetalleViaje') }}
-                        </button>
-                        <button
+                        </AppButton>
+                        <AppButton
                             v-if="!trip.deleted"
-                            type="button"
-                            class="btn btn-danger btn-sm"
+                            variant="danger"
+                            size="sm"
                             :disabled="cancelingId === trip.id"
-                            v-on:click="cancelTrip(trip)"
+                            @click="cancelTrip(trip)"
                         >
                             {{ $t('cancelarViaje') }}
-                        </button>
+                        </AppButton>
                     </td>
                 </tr>
             </tbody>
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import AppButton from '../ui/AppButton.vue';
 import {
     formatTripDate,
     formatTripTime,
@@ -69,6 +70,9 @@ import {
 
 export default {
     name: 'admin-user-trips-table',
+    components: {
+        AppButton
+    },
     props: {
         trips: {
             type: Array,
@@ -112,7 +116,7 @@ export default {
     white-space: nowrap;
 }
 
-.admin-user-trips-table__actions .btn + .btn {
+.admin-user-trips-table__actions .app-button + .app-button {
     margin-left: 6px;
 }
 </style>

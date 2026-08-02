@@ -17,43 +17,39 @@
                 </div>
                 <div v-if="manualForm.active" class="row">
                     <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>Modo</label>
-                            <select v-model="manualForm.mode" class="form-control">
+                        <AppField label="Modo">
+                            <select
+                                v-model="manualForm.mode"
+                                class="admin-maintenance__select"
+                            >
                                 <option value="strict">Estricto</option>
                                 <option value="flexible">Flexible (solo admins)</option>
                             </select>
-                        </div>
+                        </AppField>
                     </div>
                     <div class="col-sm-8">
-                        <div class="form-group">
-                            <label>Mensaje</label>
-                            <textarea
-                                v-model="manualForm.message"
-                                class="form-control"
-                                rows="2"
-                            ></textarea>
-                        </div>
+                        <AppTextarea
+                            v-model="manualForm.message"
+                            label="Mensaje"
+                            :rows="2"
+                        />
                     </div>
                     <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>Fin opcional (hora local)</label>
-                            <input
-                                v-model="manualForm.endsAtLocal"
-                                class="form-control"
-                                type="datetime-local"
-                            />
-                        </div>
+                        <AppInput
+                            v-model="manualForm.endsAtLocal"
+                            label="Fin opcional (hora local)"
+                            type="datetime-local"
+                        />
                     </div>
                 </div>
-                <button
+                <AppButton
                     type="button"
-                    class="btn btn-primary"
+                    variant="primary"
                     :disabled="loading"
                     @click="saveManual"
                 >
                     Guardar estado
-                </button>
+                </AppButton>
                 <div
                     v-if="serverState"
                     class="admin-maint-live-status well well-sm"
@@ -85,56 +81,47 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>Inicio (local)</label>
-                            <input
-                                v-model="newSchedule.startsAtLocal"
-                                class="form-control"
-                                type="datetime-local"
-                            />
-                        </div>
+                        <AppInput
+                            v-model="newSchedule.startsAtLocal"
+                            label="Inicio (local)"
+                            type="datetime-local"
+                        />
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>Fin (opcional)</label>
-                            <input
-                                v-model="newSchedule.endsAtLocal"
-                                class="form-control"
-                                type="datetime-local"
-                            />
-                        </div>
+                        <AppInput
+                            v-model="newSchedule.endsAtLocal"
+                            label="Fin (opcional)"
+                            type="datetime-local"
+                        />
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>Modo</label>
-                            <select v-model="newSchedule.mode" class="form-control">
+                        <AppField label="Modo">
+                            <select
+                                v-model="newSchedule.mode"
+                                class="admin-maintenance__select"
+                            >
                                 <option value="strict">Estricto</option>
                                 <option value="flexible">Flexible</option>
                             </select>
-                        </div>
+                        </AppField>
                     </div>
                     <div class="col-sm-9">
-                        <div class="form-group">
-                            <label>Mensaje</label>
-                            <input
-                                v-model="newSchedule.message"
-                                class="form-control"
-                                type="text"
-                            />
-                        </div>
+                        <AppInput
+                            v-model="newSchedule.message"
+                            label="Mensaje"
+                            type="text"
+                        />
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button
-                                type="button"
-                                class="btn btn-default btn-block"
-                                :disabled="loading"
-                                @click="createSchedule"
-                            >
-                                Agregar
-                            </button>
-                        </div>
+                        <AppButton
+                            type="button"
+                            variant="secondary"
+                            block
+                            :disabled="loading"
+                            @click="createSchedule"
+                        >
+                            Agregar
+                        </AppButton>
                     </div>
                 </div>
 
@@ -159,14 +146,15 @@
                                 <td>{{ row.mode }}</td>
                                 <td>{{ row.message }}</td>
                                 <td class="text-right">
-                                    <button
+                                    <AppButton
                                         type="button"
-                                        class="btn btn-xs btn-danger"
+                                        variant="danger"
+                                        size="sm"
                                         :disabled="loading"
                                         @click="cancelSchedule(row)"
                                     >
                                         Cancelar
-                                    </button>
+                                    </AppButton>
                                 </td>
                             </tr>
                         </tbody>
@@ -212,12 +200,16 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import AdminApi from '../../services/api/Admin';
 import dayjs from '../../dayjs';
 
 export default {
     name: 'admin-maintenance',
-    components: { AdminLayout },
+    components: { AdminLayout, AppButton, AppField, AppInput, AppTextarea },
     data() {
         return {
             adminApi: null,
@@ -478,5 +470,24 @@ export default {
 .admin-maint-live-status__dl dd {
     margin-left: 0;
     margin-bottom: 4px;
+}
+
+.admin-maintenance__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-maintenance__select:focus {
+    outline: none;
 }
 </style>

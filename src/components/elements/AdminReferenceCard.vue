@@ -28,50 +28,52 @@
                         {{ reference.comment }}
                     </span>
                 </template>
-                <button
-                    type="button"
-                    class="btn btn-default btn-sm admin-reference-card__edit"
+                <AppButton
+                    variant="secondary"
+                    size="sm"
+                    class="admin-reference-card__edit"
                     @click="$emit('edit')"
                 >
                     {{ $t('adminUsuariosEditarFila') }}
-                </button>
+                </AppButton>
             </div>
             <template v-else>
-                <div class="form-group">
-                    <label>{{ $t('adminUsuariosComentario') }}</label>
-                    <textarea
-                        :value="editComment"
-                        class="form-control"
-                        rows="4"
-                        @input="$emit('update:editComment', $event.target.value)"
-                    ></textarea>
-                </div>
-                <button
-                    type="button"
-                    class="btn btn-primary"
+                <AppTextarea
+                    :label="$t('adminUsuariosComentario')"
+                    :model-value="editComment"
+                    :rows="4"
+                    @update:model-value="$emit('update:editComment', $event)"
+                />
+                <AppButton
+                    variant="primary"
                     :disabled="saving"
                     @click="$emit('save')"
                 >
                     {{ $t('adminUsuariosGuardar') }}
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-default"
+                </AppButton>
+                <AppButton
+                    variant="secondary"
                     :disabled="saving"
                     @click="$emit('cancel')"
                 >
                     {{ $t('adminUsuariosCancelar') }}
-                </button>
+                </AppButton>
             </template>
         </div>
     </div>
 </template>
 
 <script>
+import AppButton from '../ui/AppButton.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'admin-reference-card',
+    components: {
+        AppButton,
+        AppTextarea
+    },
     props: {
         reference: {
             type: Object,

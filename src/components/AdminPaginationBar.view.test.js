@@ -7,7 +7,7 @@ const componentSource = fs.readFileSync(componentPath, 'utf8');
 
 describe('AdminPaginationBar component', () => {
     it('renders per-page selector with allowed options', () => {
-        expect(componentSource).toContain("{{ $t('adminItemsPerPage') }}");
+        expect(componentSource).toContain(':label="$t(\'adminItemsPerPage\')"');
         expect(componentSource).toContain('ADMIN_PER_PAGE_OPTIONS');
         expect(componentSource).toContain('@change="onPerPageChange"');
         expect(componentSource).toContain("emit('update:perPage'");
