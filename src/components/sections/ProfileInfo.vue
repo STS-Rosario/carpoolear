@@ -6,37 +6,49 @@
         </template>
 
         <div class="profile-info-panel__tiles">
-            <div
-                v-if="isIdentityVerified"
-                class="profile-info-panel__tile"
-            >
-                <i
-                    class="fa fa-shield profile-info-panel__tile-icon"
-                    aria-hidden="true"
-                ></i>
+            <div class="profile-info-panel__tile">
+                <span class="profile-info-panel__tile-icon-wrap">
+                    <i
+                        class="fa fa-shield profile-info-panel__tile-icon"
+                        :class="{
+                            'profile-info-panel__tile-icon--verified':
+                                isIdentityVerified
+                        }"
+                        aria-hidden="true"
+                    ></i>
+                </span>
                 <div>
                     <p class="profile-info-panel__tile-title">
-                        {{ $t('identidadVerificadaTitulo') }}
+                        {{
+                            isIdentityVerified
+                                ? $t('identidadVerificadaTitulo')
+                                : $t('identidadNoVerificadaTitulo')
+                        }}
                     </p>
                     <p class="profile-info-panel__tile-sub">
-                        {{ $t('identidadVerificadaSub') }}
+                        {{
+                            isIdentityVerified
+                                ? $t('identidadVerificadaSub')
+                                : $t('identidadNoVerificadaSub')
+                        }}
                     </p>
                 </div>
             </div>
-            <div
-                v-if="responseRateLabel"
-                class="profile-info-panel__tile"
-            >
-                <i
-                    class="fa fa-comment profile-info-panel__tile-icon"
-                    aria-hidden="true"
-                ></i>
+            <div v-if="showResponseTile" class="profile-info-panel__tile">
+                <span class="profile-info-panel__tile-icon-wrap">
+                    <i
+                        class="fa fa-comment profile-info-panel__tile-icon"
+                        aria-hidden="true"
+                    ></i>
+                </span>
                 <div>
                     <p class="profile-info-panel__tile-title">
-                        {{ responseRateLabel }}
+                        {{ responseRateLabel || $t('sinDatosRespuestaTitulo') }}
                     </p>
-                    <p v-if="responseDelayLabel" class="profile-info-panel__tile-sub">
-                        {{ responseDelayLabel }}
+                    <p class="profile-info-panel__tile-sub">
+                        {{
+                            responseDelayLabel || $t('sinDatosRespuestaSub')
+                        }}
                     </p>
                 </div>
             </div>
@@ -296,6 +308,9 @@ export default {
                 delay = this.$t('enElMomento');
             }
             return this.$t('tiempoPromedioRespuesta', { delay });
+        },
+        showResponseTile() {
+            return Boolean(this.config?.module_conversation_average_delay);
         },
         showFriendActions() {
             if (!this.profile || !this.user) {

@@ -33,7 +33,7 @@ describe('ProfileInfo public panel', () => {
 
     it('always shows response tile when the conversation delay module is on', () => {
         expect(viewSource).toContain('showResponseTile');
-        expect(viewSource).toContain("$t('respondeMensajesPorcentaje')");
+        expect(viewSource).toContain("respondeMensajesPorcentaje");
         expect(viewSource).toContain("$t('sinDatosRespuestaTitulo')");
         expect(viewSource).toContain("$t('sinDatosRespuestaSub')");
         expect(viewSource).toContain('module_conversation_average_delay');

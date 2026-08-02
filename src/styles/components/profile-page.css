@@ -292,25 +292,42 @@
 .profile-info-panel__tiles {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.75rem;
+    margin: 0.75rem 0 1rem;
 }
 
 .profile-info-panel__tile {
     display: flex;
     gap: 0.85rem;
     align-items: flex-start;
-    padding: 0.9rem 0;
-    border-top: 1px solid var(--profile-divider);
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
+.profile-info-panel__tile-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #f0f0f0;
+    flex-shrink: 0;
 }
 
 .profile-info-panel__tile-icon {
-    color: var(--profile-tab-active);
-    font-size: 1.25rem;
-    width: 1.5rem;
+    color: #666;
+    font-size: 1.15rem;
+    width: auto;
     text-align: center;
-    flex-shrink: 0;
-    margin-top: 0.1rem;
+    margin: 0;
     float: none;
+}
+
+.profile-info-panel__tile-icon--verified {
+    color: #3d9a3d;
 }
 
 .profile-info-panel__tile-title {
