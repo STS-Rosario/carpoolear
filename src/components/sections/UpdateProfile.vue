@@ -452,21 +452,21 @@
                     <template v-if="!showDeleteAccountConfirmation">
                         <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
                         <div class="text-center" style="margin-top: 1em;">
-                            <button
-                                class="btn btn-default"
+                            <AppButton
+                                variant="primary"
                                 @click="openMesaAyudaFromDelete"
                             >
                                 {{ $t('contactarMesaAyuda') }}
-                            </button>
+                            </AppButton>
                         </div>
                         <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
                         <div class="text-center" style="margin-top: 1.5em;">
-                            <button
-                                class="btn btn-danger"
+                            <AppButton
+                                variant="danger"
                                 @click="promptDeleteAccountConfirmation"
                             >
                                 {{ $t('eliminarCuenta') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </template>
                     <template v-else>
