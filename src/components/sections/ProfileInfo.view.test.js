@@ -20,12 +20,42 @@ describe('ProfileInfo public panel', () => {
         expect(viewSource).not.toContain('fa-smile');
     });
 
+    it('always shows identity tile with verified or unverified copy', () => {
+        expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
+        expect(viewSource).toContain("$t('identidadVerificadaSub')");
+        expect(viewSource).toContain("$t('identidadNoVerificadaTitulo')");
+        expect(viewSource).toContain("$t('identidadNoVerificadaSub')");
+        expect(viewSource).not.toMatch(
+            /v-if="isIdentityVerified"[\s\S]*?identidadVerificadaTitulo/
+        );
+        expect(viewSource).toContain('profile-info-panel__tile-icon--verified');
+    });
+
+    it('always shows response tile when the conversation delay module is on', () => {
+        expect(viewSource).toContain('showResponseTile');
+        expect(viewSource).toContain("$t('respondeMensajesPorcentaje')");
+        expect(viewSource).toContain("$t('sinDatosRespuestaTitulo')");
+        expect(viewSource).toContain("$t('sinDatosRespuestaSub')");
+        expect(viewSource).toContain('module_conversation_average_delay');
+    });
+
     it('keeps profile panel copy in i18n', () => {
         expect(i18nSource).toContain('sobreMi');
         expect(i18nSource).toContain('identidadVerificadaTitulo');
         expect(i18nSource).toContain('identidadVerificadaSub');
+        expect(i18nSource).toContain('identidadNoVerificadaTitulo');
+        expect(i18nSource).toContain('identidadNoVerificadaSub');
+        expect(i18nSource).toContain('sinDatosRespuestaTitulo');
+        expect(i18nSource).toContain('sinDatosRespuestaSub');
         expect(i18nSource).toContain('contactoPrivacidadPerfil');
         expect(i18nSource).toContain('usuarioVerificado');
+        expect(i18nSource).toContain(
+            "Identidad no verificada"
+        );
+        expect(i18nSource).toContain(
+            'Este usuario aún debe verificar su identidad'
+        );
+        expect(i18nSource).toContain('Sin datos de respuesta aún');
     });
 });
 
