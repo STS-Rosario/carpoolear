@@ -157,6 +157,18 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(stack).not.toMatch(/<TripDate\s*\/>/);
     });
 
+    it('shows Viaje finalizado as a grey pill under seats when the trip is expired', () => {
+        const stack = viewSource.match(
+            /trip-detail__stack[\s\S]*?trip-route-map/
+        )[0];
+        expect(stack).toContain('isTripExpired');
+        expect(stack).toContain('trip-detail__finished-pill');
+        expect(stack).toContain("$t('viajeFinalizado')");
+        expect(stack).toMatch(
+            /trip-detail__seats-pill[\s\S]*trip-detail__finished-pill[\s\S]*viajeFinalizado/
+        );
+    });
+
     it('does not include TripShare in the trip-detail stack', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/

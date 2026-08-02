@@ -77,6 +77,22 @@ describe('TripButtons.vue owner actions', () => {
         expect(viewSource).not.toContain("$t('viajeCarpooleado')");
     });
 
+    it('does not render a Finalizado button CTA', () => {
+        expect(viewSource).not.toContain("$t('finalizado')");
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[^>]*>\{\{\s*\$t\('finalizado'\)/
+        );
+    });
+
+    it('uses primary AppButton for Chat grupal without forcing uppercase', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?groupChatButton[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary group-chat-btn"/
+        );
+    });
+
     it('stacks owner Edit above Cancel in a column at all breakpoints', () => {
         expect(viewSource).toMatch(
             /\.buttons-container\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column/

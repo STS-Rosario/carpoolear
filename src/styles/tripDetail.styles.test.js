@@ -236,6 +236,18 @@ describe('trip detail desktop card layout', () => {
             )
         );
     });
+
+    it('styles Viaje finalizado as a grey pill under seats', () => {
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__finished-pill\s*\{[^}]*border-radius:\s*999px/s
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__finished-pill\s*\{[^}]*background:\s*var\(--ds-input-disabled-bg/s
+        );
+        expect(css).toMatch(
+            /\.trip-detail--desktop\s+\.trip-detail__finished-pill\s*\{[^}]*color:\s*var\(--ds-text-muted/s
+        );
+    });
 });
 
 describe('trip detail card/stack nesting', () => {
