@@ -230,7 +230,7 @@ export default {
 .profile-pending-friend-request {
     width: fit-content;
     max-width: 100%;
-    margin: 0 0 1rem;
+    margin: 0 auto 1rem;
     cursor: default;
 }
 
