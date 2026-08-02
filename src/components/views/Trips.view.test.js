@@ -287,3 +287,36 @@ describe('Trips.vue donation modal', () => {
         );
     });
 });
+
+describe('Trips.vue search alert and install modal CTAs', () => {
+    it('uses secondary AppButton for Crear alerta in results and empty states', () => {
+        const alertMatches = [
+            ...viewSource.matchAll(
+                /<AppButton[\s\S]*?variant="secondary"[\s\S]*?\$t\('crearAlerta'\)[\s\S]*?<\/AppButton>/g
+            )
+        ];
+        expect(alertMatches.length).toBeGreaterThanOrEqual(2);
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?\$t\('crearAlerta'\)/
+        );
+    });
+
+    it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
+        const installModal = viewSource.match(
+            /showModalInstallApp[\s\S]*?<\/modal>/
+        )?.[0];
+        expect(installModal).toBeTruthy();
+        expect(installModal).toMatch(
+            /variant="primary"[\s\S]*?\$t\('instalar'\)/
+        );
+        expect(installModal).toMatch(
+            /variant="secondary"[\s\S]*?\$t\('entendido'\)/
+        );
+        expect(installModal).toMatch(
+            /variant="tertiary"[\s\S]*?\$t\('noMostrarDeNuevo'\)/
+        );
+        expect(installModal).not.toContain('btn-danger');
+        expect(installModal).not.toContain('btn-primary');
+        expect(installModal).not.toContain('btn-default');
+    });
+});
