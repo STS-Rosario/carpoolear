@@ -622,14 +622,14 @@
             </template>
             <template #body>
                 <div class="new-trip-wizard__template-modal text-left color-black">
-                    <div class="form-group">
-                        <label for="trip-creation-template-select">
-                            {{ $t('tripCreationTemplateNameLabel') }}
-                        </label>
+                    <AppField
+                        :label="$t('tripCreationTemplateNameLabel')"
+                        label-for="trip-creation-template-select"
+                    >
                         <select
                             id="trip-creation-template-select"
                             v-model="selectedTemplateName"
-                            class="form-control"
+                            class="new-trip-wizard__template-select"
                             data-testid="trip-creation-template-select"
                             @change="onTemplateSelectChange"
                         >
@@ -644,7 +644,7 @@
                                 {{ template.name }}
                             </option>
                         </select>
-                    </div>
+                    </AppField>
                 </div>
             </template>
         </modal>
@@ -699,6 +699,7 @@ import WeeklySchedule from '../elements/WeeklySchedule';
 import SvgItem from '../SvgItem';
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
 import {
@@ -742,6 +743,7 @@ export default {
         SvgItem,
         modal,
         AppButton,
+        AppField,
         AppInput,
         AppTextarea
     },
@@ -1674,6 +1676,25 @@ export default {
     min-height: 10rem;
     height: auto;
     resize: vertical;
+}
+
+.new-trip-wizard__template-select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.new-trip-wizard__template-select:focus {
+    outline: none;
 }
 
 .new-trip-wizard__last-section--preferences {

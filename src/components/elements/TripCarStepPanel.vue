@@ -1,35 +1,36 @@
 <template>
     <div class="trip-car-step-panel">
-        <label for="trip-car-select" class="trip-car-step-panel__label">
-            {{ $t('seleccionarAuto') }}
-            <button
-                type="button"
-                class="trip-car-step-panel__edit-link btn btn-link"
-                @click="$emit('edit-cars')"
-            >
-                {{ $t('editarAutosEnViaje') }}
-            </button>
-        </label>
-        <select
-            id="trip-car-select"
-            class="form-control trip-car-step-panel__select"
-            v-model="selectedCarIdModel"
-            :class="{ 'has-error': carSelectionError.state }"
+        <AppField
+            label-for="trip-car-select"
+            :error="carSelectionError.state ? carSelectionError.message : ''"
         >
-            <option disabled value="">
-                {{ $t('elegiPatente') }}
-            </option>
-            <option
-                v-for="car in driverCarsWithPlate"
-                :key="car.id"
-                :value="car.id"
+            <template #label>
+                {{ $t('seleccionarAuto') }}
+                <button
+                    type="button"
+                    class="trip-car-step-panel__edit-link btn btn-link"
+                    @click="$emit('edit-cars')"
+                >
+                    {{ $t('editarAutosEnViaje') }}
+                </button>
+            </template>
+            <select
+                id="trip-car-select"
+                class="trip-car-step-panel__select"
+                v-model="selectedCarIdModel"
             >
-                {{ formatCarSelectLabel(car) }}
-            </option>
-        </select>
-        <span class="error" v-if="carSelectionError.state">
-            {{ carSelectionError.message }}
-        </span>
+                <option disabled value="">
+                    {{ $t('elegiPatente') }}
+                </option>
+                <option
+                    v-for="car in driverCarsWithPlate"
+                    :key="car.id"
+                    :value="car.id"
+                >
+                    {{ formatCarSelectLabel(car) }}
+                </option>
+            </select>
+        </AppField>
     </div>
 </template>
 
@@ -38,9 +39,14 @@ import { mapState } from 'pinia';
 import { useCarsStore } from '../../stores/car';
 import { formatCarSelectLabel } from '../../utils/carFields.js';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
+import AppField from '../ui/AppField.vue';
 
 export default {
     name: 'trip-car-step-panel',
+
+    components: {
+        AppField
+    },
 
     props: {
         selectedCarId: {
@@ -106,11 +112,11 @@ export default {
     display: block;
     width: 100%;
     height: auto;
-    margin: 0 0 0.75rem;
+    margin: 0;
     box-sizing: border-box;
-    border: 1px solid var(--ds-input-border);
-    border-radius: var(--ds-radius-input, 8px) !important;
-    background-color: var(--ds-input-bg);
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
     color: var(--ds-input-text);
     font-family: inherit;
     font-size: var(--ds-input-font-size);
@@ -124,18 +130,9 @@ export default {
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 0.75rem 0.5rem;
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
 }
 
 .trip-car-step-panel__select:focus {
     outline: none;
-    border-color: var(--ds-input-focus-border);
-    box-shadow: var(--ds-input-focus-ring);
-}
-
-.trip-car-step-panel__select.has-error {
-    border-color: var(--ds-input-error-border, #991b1b);
 }
 </style>
