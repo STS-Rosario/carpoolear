@@ -150,29 +150,28 @@
                     <template #body><div class="">
                         <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || $t('instalarWebAppPWA')">
                         </p>
-                        <div style="margin-bottom: 10px">
-                            <button
+                        <div class="install-modal-actions">
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showInstallButton"
-                                class="btn btn-danger"
+                                variant="primary"
                                 @click="installApp()"
                             >
                                 {{ $t('instalar') }}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showCloseButton"
-                                class="btn btn-primary"
+                                variant="secondary"
                                 @click="closeInstallModal()"
                             >
                                 {{ $t('entendido') }}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showDontShowAgainButton"
-                                class="btn btn-default"
+                                variant="tertiary"
                                 @click="dontShowAgainInstallModal()"
-                                style="margin-left: 10px;"
                             >
                                 {{ $t('noMostrarDeNuevo') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div></template>
                 </modal>
@@ -442,13 +441,13 @@
                         <strong :class="isMobile ? 'sentence' : ''">
                             {{ $t('podesSubscribirte') }}
                         </strong>
-                        <button
-                            class="btn btn-primary"
+                        <AppButton
+                            variant="secondary"
                             v-if="user"
                             @click="subscribeSearch"
                         >
                             {{ $t('crearAlerta') }}
-                        </button>
+                        </AppButton>
                     </span>
                 </p>
             </div>
@@ -471,13 +470,13 @@
                         <strong :class="isMobile ? 'sentence' : ''">
                             {{ $t('subscribirteAViajes') }}
                         </strong>
-                        <button
-                            class="btn btn-primary"
+                        <AppButton
+                            variant="secondary"
                             v-if="user"
                             @click="subscribeSearch"
                         >
                             {{ $t('crearAlerta') }}
-                        </button>
+                        </AppButton>
                     </span>
                 </template>
                 <template v-else>
@@ -507,7 +506,8 @@
     margin-bottom: 1em;
 }
 
-.mobile-alert .btn {
+.mobile-alert .btn,
+.mobile-alert .app-button {
     margin: 0 auto;
     display: block;
 }
@@ -1428,6 +1428,14 @@ export default {
 
 .notification-warning-buttons .btn {
     margin: 0;
+}
+
+.install-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
 @media (max-width: 768px) {
