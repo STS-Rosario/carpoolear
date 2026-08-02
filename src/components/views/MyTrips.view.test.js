@@ -18,6 +18,15 @@ describe('MyTrips seat requests section', () => {
     });
 });
 
+describe('MyTrips subscription alerts list', () => {
+    it('renders subscriptions sorted by passengers then drivers then date then name', () => {
+        expect(source).toContain('sortSubscriptions');
+        expect(source).toContain('sortedSubscriptions');
+        expect(source).toContain('v-for="subs in sortedSubscriptions"');
+        expect(source).not.toContain('v-for="subs in subscriptions"');
+    });
+});
+
 describe('MyTrips trip card navigation', () => {
     it('disables trip info modal on every trip card so clicks go to detail page', () => {
         const tripTags = getTripComponentTags();

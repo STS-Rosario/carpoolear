@@ -23,6 +23,27 @@ describe('SubscriptionItem alert card', () => {
         );
     });
 
+    it('always shows the role label even when coincidencias are present', () => {
+        expect(viewSource).toContain('roleLabel');
+        expect(viewSource).toContain('subscription-alert-card__role');
+        expect(viewSource).toMatch(
+            /subscription-alert-card__role[\s\S]*\{\{\s*roleLabel\s*\}\}/
+        );
+        expect(viewSource).not.toMatch(
+            /v-if="subscription\.is_passenger == 1"[\s\S]*?v-else[\s\S]*?buscoConductor/
+        );
+        expect(viewSource).toContain("$t('coincidencias')");
+    });
+
+    it('keeps origin destination and date rows aligned even when empty', () => {
+        expect(viewSource).toContain('subscription.from_address || emptyPlace');
+        expect(viewSource).toContain('subscription.to_address || emptyPlace');
+        expect(viewSource).toContain('formattedTripDate || emptyPlace');
+        expect(viewSource).not.toMatch(
+            /\{\{\s*\$t\('fechaAproximada'\)\s*\}\}:/
+        );
+    });
+
     it('shows a delete AppButton labeled Borrar that stops card click', () => {
         expect(viewSource).toContain('data-testid="subscription-alert-delete"');
         expect(viewSource).toContain('AppButton');
