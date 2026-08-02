@@ -38,6 +38,13 @@ describe('MyAccount view', () => {
         expect(viewSource).toContain('$t(section.labelKey)');
     });
 
+    it('passes isAdmin into mobile sections so Administración can appear', () => {
+        expect(viewSource).toMatch(
+            /getMyAccountMobileSections\(\s*this\.config\s*,\s*\{\s*isAdmin:/
+        );
+        expect(viewSource).toContain('user.is_admin');
+    });
+
     it('keeps the logout button and a separate delete account action', () => {
         expect(viewSource).toContain('AppButton');
         expect(viewSource).toContain('variant="secondary"');

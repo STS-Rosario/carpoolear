@@ -90,4 +90,30 @@ describe('getMyAccountMobileSections', () => {
             query: { action: 'delete-account' }
         });
     });
+
+    it('adds an Administración section after ayuda only for admins', () => {
+        const without = getMyAccountMobileSections({});
+        expect(without.map((s) => s.id)).toEqual([
+            'perfil',
+            'configuracion',
+            'ayuda'
+        ]);
+
+        const withAdmin = getMyAccountMobileSections({}, { isAdmin: true });
+        expect(withAdmin.map((s) => s.id)).toEqual([
+            'perfil',
+            'configuracion',
+            'ayuda',
+            'administracion'
+        ]);
+        const adminSection = withAdmin[3];
+        expect(adminSection.items).toEqual([
+            {
+                id: 'admin-dashboard',
+                labelKey: 'administracion',
+                icon: 'fa-cogs',
+                route: { name: 'admin-dashboard' }
+            }
+        ]);
+    });
 });

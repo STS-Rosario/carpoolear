@@ -70,6 +70,25 @@ describe('HeaderMenuDropdown profile menu', () => {
         expect(menuDropdownSource).toContain('header-menu-dropdown__item--logout');
     });
 
+    it('shows Administración after Ayuda for admins only', () => {
+        const ayudaIndex = menuDropdownSource.indexOf("$t('ayuda')");
+        const adminIndex = menuDropdownSource.indexOf("$t('administracion')");
+        const logoutDividerIndex = menuDropdownSource.indexOf(
+            'role="separator"',
+            ayudaIndex
+        );
+        const logoutIndex = menuDropdownSource.indexOf("$t('cerrarSesion')");
+        expect(ayudaIndex).toBeGreaterThan(-1);
+        expect(adminIndex).toBeGreaterThan(ayudaIndex);
+        expect(logoutDividerIndex).toBeGreaterThan(adminIndex);
+        expect(logoutIndex).toBeGreaterThan(logoutDividerIndex);
+        expect(menuDropdownSource).toMatch(
+            /v-if="user\.is_admin"[\s\S]*\$t\('administracion'\)/
+        );
+        expect(menuDropdownSource).toContain("name: 'admin-dashboard'");
+        expect(menuDropdownSource).toContain('fa-cogs');
+    });
+
     it('removes the previous full Menu mirror items from the dropdown', () => {
         expect(menuDropdownSource).not.toContain("$t('notificaciones')");
         expect(menuDropdownSource).not.toContain("$t('mensajes')");
