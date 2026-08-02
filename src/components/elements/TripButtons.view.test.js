@@ -52,6 +52,15 @@ describe('TripButtons.vue seat request limit', () => {
             /:disabled="[^"]*seatRequestLimitReached/
         );
     });
+
+    it('keeps Enviar mensaje enabled when the passenger already requested a seat', () => {
+        expect(viewSource).toContain(
+            ':disabled="sendingStatus || (seatRequestLimitReached && canRequest)"'
+        );
+        expect(viewSource).not.toMatch(
+            /showMessageButton[\s\S]*?:disabled="sendingStatus \|\| seatRequestLimitReached"/
+        );
+    });
 });
 
 describe('TripButtons.vue owner actions', () => {

@@ -62,12 +62,27 @@ describe('shouldShowDriverSeatRequestLimitWarning', () => {
 });
 
 describe('shouldShowPassengerSeatRequestLimitMessage', () => {
-    it('returns true for non-owner when limit reached', () => {
+    it('returns true for non-owner when limit reached and they have not requested', () => {
         expect(
             shouldShowPassengerSeatRequestLimitMessage(false, {
                 seat_request_limit_reached: true,
             })
         ).toBe(true);
+        expect(
+            shouldShowPassengerSeatRequestLimitMessage(false, {
+                seat_request_limit_reached: true,
+                request: '',
+            })
+        ).toBe(true);
+    });
+
+    it('returns false when the passenger already requested a seat', () => {
+        expect(
+            shouldShowPassengerSeatRequestLimitMessage(false, {
+                seat_request_limit_reached: true,
+                request: 'send',
+            })
+        ).toBe(false);
     });
 
     it('returns false for owner or when not reached', () => {
