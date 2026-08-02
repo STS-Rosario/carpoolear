@@ -346,6 +346,7 @@
                         <button
                             type="button"
                             class="btn btn-link"
+                            :aria-label="$t('disminuirCantidadAsientos')"
                             :disabled="form.trip.total_seats <= 1"
                             @click="adjustSeats(-1)"
                         >
@@ -355,6 +356,7 @@
                         <button
                             type="button"
                             class="btn btn-link"
+                            :aria-label="$t('aumentarCantidadAsientos')"
                             :disabled="form.trip.total_seats >= 4"
                             @click="adjustSeats(1)"
                         >
@@ -367,6 +369,7 @@
                             <button
                                 type="button"
                                 class="btn btn-link"
+                                :aria-label="$t('disminuirCantidadAsientos')"
                                 :disabled="totalPeople <= 2"
                                 @click="adjustTotalPeople(-1)"
                             >
@@ -376,6 +379,7 @@
                             <button
                                 type="button"
                                 class="btn btn-link"
+                                :aria-label="$t('aumentarCantidadAsientos')"
                                 :disabled="totalPeople >= 5"
                                 @click="adjustTotalPeople(1)"
                             >
