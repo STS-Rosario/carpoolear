@@ -172,21 +172,7 @@
                         </li>
                     </dropdown>
                 </div>
-            </div>
-
-            <div
-                class="mobile-header-bar__section mobile-header-bar__icon mobile-header-bar__icon--right"
-                v-if="isMobile && !user"
-            >
-                <router-link
-                    v-if="isTripsPage"
-                    tag="a"
-                    :to="{ name: 'login' }"
-                    class="btn btn-primary btn-login-header btn-header-small btn-lg"
-                >
-                    Ingresar
-                </router-link>
-            </div>
+                </div>
             </template>
         </div>
         <div class="header_content hidden-xs">
@@ -424,9 +410,6 @@ export default {
                 return true;
             }
             return this.isMobile && this.showLogo;
-        },
-        isTripsPage() {
-            return this.$route.name === 'trips';
         },
         currentLocaleShortLabel() {
             const short = { arg: 'ES', en: 'EN' };
