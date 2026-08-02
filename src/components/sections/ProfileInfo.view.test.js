@@ -51,7 +51,7 @@ describe('ProfileInfo public panel', () => {
             /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap--verified\s*\{[^}]*background:/
         );
         expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon--verified\s*\{[^}]*color:/
+            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon--verified\s*\{[^}]*color:\s*var\(--profile-verified/
         );
     });
 
