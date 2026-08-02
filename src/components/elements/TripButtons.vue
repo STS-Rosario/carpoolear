@@ -123,7 +123,8 @@
             </AppButton>
             <AppButton
                 v-if="showGroupChatButton"
-                variant="primary"
+                class="group-chat-btn"
+                variant="secondary"
                 block
                 icon-left="fa fa-comments"
                 :disabled="sendingStatus"
@@ -352,6 +353,9 @@ export default {
     white-space: normal;
     text-align: center;
     line-height: 1.25;
+}
+.group-chat-btn {
+    text-transform: none;
 }
 .group-chat-btn__badge {
     display: inline-block;
