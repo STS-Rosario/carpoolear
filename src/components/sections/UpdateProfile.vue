@@ -1291,6 +1291,7 @@ export default {
 @media only screen and (max-width: 768px) {
     .update-profile-component {
         padding: 1em;
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
     }
 }
 
