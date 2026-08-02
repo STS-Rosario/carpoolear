@@ -43,18 +43,19 @@ describe('Modal close behavior', () => {
         );
     });
 
-    it('styles the footer Cerrar action larger and blue', () => {
+    it('styles the footer Cerrar action as secondary AppButton', () => {
+        expect(source).toContain("import AppButton from './ui/AppButton.vue'");
         expect(source).toMatch(
-            /\.modal-default-button\s*\{[^}]*font-size:\s*1\.25rem/
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?\$t\('cerrar'\)[\s\S]*?<\/AppButton>/
         );
-        expect(source).toMatch(
-            /\.modal-default-button\s*\{[^}]*color:\s*var\(--ds-action/
+        expect(source).not.toMatch(
+            /class="modal-default-button btn btn-link"/
         );
+    });
+
+    it('forces readable dark text inside the modal even under .blue pages', () => {
         expect(source).toMatch(
-            /\.modal-footer\s*\{[^}]*text-align:\s*center/
-        );
-        expect(source).toMatch(
-            /\.modal-default-button\s*\{[^}]*float:\s*none/
+            /\.modal-container\s+:deep\((?:p|label|h3|li)\)[\s\S]*color:\s*#333/s
         );
     });
 

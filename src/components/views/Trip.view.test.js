@@ -28,6 +28,16 @@ describe('Trip.vue passenger message carpoodatos flow', () => {
             /toMessageForce\(\)[\s\S]*?resolvePricingModalConfirm\(\)[\s\S]*?this\.toMessages\(true\);/
         );
     });
+
+    it('relies on Modal header close only and uses primary Enviar mensaje AppButtons', () => {
+        expect(viewSource).not.toContain('float-right-close');
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?enviarMensaje[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toMatch(
+            /showModalRequestSeat[\s\S]*?class="btn btn-primary"[\s\S]*?enviarMensaje/
+        );
+    });
 });
 
 describe('Trip.vue carpoodatos mesa de ayuda contact', () => {

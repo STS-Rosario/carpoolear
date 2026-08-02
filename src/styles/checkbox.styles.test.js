@@ -19,4 +19,15 @@ describe('native checkbox color', () => {
             );
         }
     });
+
+    it('spaces checkbox and label when the input is nested in the label', () => {
+        for (const css of [baseCss, carpoolearCss]) {
+            expect(css).toMatch(
+                /label:has\(\s*>\s*input\[type=["']checkbox["']\]\s*\)\s*\{[^}]*gap:\s*0\.5(?:rem|em)/s
+            );
+            expect(css).toMatch(
+                /label:has\(\s*>\s*input\[type=["']checkbox["']\]\s*\)\s*\{[^}]*display:\s*inline-flex/s
+            );
+        }
+    });
 });
