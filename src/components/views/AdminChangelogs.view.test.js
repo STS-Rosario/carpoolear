@@ -11,4 +11,16 @@ describe('AdminChangelogs view', () => {
         expect(viewSource).toContain("name: 'admin-changelog-edit'");
         expect(viewSource).toContain('changelogVersion');
     });
+
+    it('uses AppButton for new changelog and row actions', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-changelog-new/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="danger"[\s\S]*?remove\(row\.id\)/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
+        expect(viewSource).not.toContain('btn btn-danger');
+    });
 });

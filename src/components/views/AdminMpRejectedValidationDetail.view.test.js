@@ -23,6 +23,22 @@ describe('AdminMpRejectedValidationDetail view', () => {
         expect(viewSource).toContain("{{ $t('estado') }}:</strong>&nbsp;");
         expect(viewSource).toContain("{{ $t('revisionAdmin') }}:</strong>&nbsp;");
     });
+
+    it('uses AppTextarea and AppButton variants for notes and review actions', () => {
+        expect(viewSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppTextarea[\s\S]*?v-model="privateAdminNote"/
+        );
+        expect(viewSource).toMatch(
+            /<AppTextarea[\s\S]*?v-model="reviewNote"/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="success"[\s\S]*?review\('approve'\)/
+        );
+        expect(viewSource).not.toContain('class="form-control"');
+        expect(viewSource).not.toContain('btn btn-success');
+    });
 });
 
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');

@@ -41,4 +41,12 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('toggleSort(column.key)');
         expect(viewSource).not.toContain("@click=\"toggleSort('acciones')\"");
     });
+
+    it('uses primary AppButton for revisar solicitud action', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?admin-manual-identity-validation-review[\s\S]*?revisarSolicitud/
+        );
+        expect(viewSource).not.toContain('btn-primary-blue');
+    });
 });
