@@ -54,4 +54,21 @@ describe('ManualIdentityValidation CTA AppButtons', () => {
             /\.manual-identity-validation-component\s+\.btn-danger[\s\S]*color:\s*#fff/
         );
     });
+
+    it('uses AppField for identity document file inputs', () => {
+        expect(viewSource).toContain(
+            "import AppField from '../ui/AppField.vue'"
+        );
+        expect(viewSource).toContain('manual-validation__file');
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?manualValidationUploadLabelFront[\s\S]*?type="file"/
+        );
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?manualValidationUploadLabelBack[\s\S]*?type="file"/
+        );
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?manualValidationUploadLabelSelfie[\s\S]*?type="file"/
+        );
+        expect(viewSource).not.toContain('class="form-control"');
+    });
 });

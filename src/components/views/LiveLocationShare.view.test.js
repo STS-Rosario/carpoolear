@@ -61,4 +61,15 @@ describe('LiveLocationShare CTA AppButtons', () => {
         );
         expect(viewSource).not.toContain('btn btn-danger');
     });
+
+    it('uses readonly AppInput for the share URL', () => {
+        expect(viewSource).toContain(
+            "import AppInput from '../ui/AppInput.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?id="live-share-url"[\s\S]*?:model-value="shareUrl"[\s\S]*?readonly/
+        );
+        expect(viewSource).not.toContain('form-control live-location-share__url');
+        expect(viewSource).not.toContain('class="form-control');
+    });
 });

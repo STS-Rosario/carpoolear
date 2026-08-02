@@ -110,4 +110,20 @@ describe('ConversationList.vue messages redesign', () => {
         );
         expect(viewSource).not.toContain('btn btn-primary btn-block');
     });
+
+    it('uses AppInput for conversation search', () => {
+        expect(viewSource).toContain(
+            "import AppInput from '../ui/AppInput.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?v-model="textSearch"[\s\S]*?escribeUnNombreYPresionaBuscar/
+        );
+        expect(viewSource).toContain('debouncedSearch');
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?@click="onSearchUser"/
+        );
+        expect(viewSource).not.toMatch(
+            /messages-page__search[\s\S]*?class="form-control"/
+        );
+    });
 });
