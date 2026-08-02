@@ -95,24 +95,25 @@
                 </template>
 
                 <template v-if="isPassenger">
-                    <button
-                        class="btn btn-primary"
-                        @click="$emit('cancelRequest')"
+                    <AppButton
                         v-if="canRequest"
+                        variant="danger"
+                        block
                         :disabled="sendingStatus"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        @click="$emit('cancelRequest')"
                     >
-                        <spinner
-                            class="blue"
-                            v-if="sending && sending.requestAction"
-                        ></spinner>
-                        <span v-else>{{ $t('bajarmeViaje') }}</span>
-                    </button>
+                        {{ $t('bajarmeViaje') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
                 </template>
             </template>
             <AppButton
                 v-if="showLiveLocationShare"
                 class="live-location-share-btn"
-                variant="primary"
+                variant="secondary"
                 block
                 icon-left="fa fa-wifi"
                 :to="{ name: 'trip_live_share', params: { id: trip.id } }"
