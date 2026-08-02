@@ -155,7 +155,9 @@ export default {
             isFacebokApp: 'isFacebokApp'
         }),
         mobileSections() {
-            return getMyAccountMobileSections(this.config);
+            return getMyAccountMobileSections(this.config, {
+                isAdmin: Boolean(this.user && this.user.is_admin)
+            });
         },
         ratings() {
             return userRatingsFromProfile(this.user);

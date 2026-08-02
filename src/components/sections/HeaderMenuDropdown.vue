@@ -71,6 +71,18 @@
                 }}</span>
             </router-link>
         </li>
+        <li v-if="user.is_admin">
+            <router-link
+                tag="a"
+                class="header-menu-dropdown__item"
+                :to="{ name: 'admin-dashboard' }"
+            >
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+                <span class="header-menu-dropdown__item-label">{{
+                    $t('administracion')
+                }}</span>
+            </router-link>
+        </li>
         <li role="separator" class="divider"></li>
         <li v-if="!isFacebokApp">
             <a

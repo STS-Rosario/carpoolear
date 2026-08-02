@@ -16,7 +16,8 @@ import {
  * `delete-account` is intentionally excluded from the sections; it is rendered
  * as a separate action below the list on the mobile screen.
  */
-export function getMyAccountMobileSections(config) {
+export function getMyAccountMobileSections(config, options = {}) {
+    const isAdmin = Boolean(options && options.isAdmin);
     const profile = [
         {
             id: 'edit-profile',
@@ -121,7 +122,23 @@ export function getMyAccountMobileSections(config) {
             labelKey: 'configuracion',
             items: configuracion.filter((item) => !item.hidden)
         },
-        { id: 'ayuda', labelKey: 'ayuda', items: ayuda }
+        { id: 'ayuda', labelKey: 'ayuda', items: ayuda },
+        ...(isAdmin
+            ? [
+                  {
+                      id: 'administracion',
+                      labelKey: 'administracion',
+                      items: [
+                          {
+                              id: 'admin-dashboard',
+                              labelKey: 'administracion',
+                              icon: 'fa-cogs',
+                              route: { name: 'admin-dashboard' }
+                          }
+                      ]
+                  }
+              ]
+            : [])
     ];
 }
 
