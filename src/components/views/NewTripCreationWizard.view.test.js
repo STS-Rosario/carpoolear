@@ -162,6 +162,13 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('onTemplateSelectChange');
         expect(wizardSource).toContain('new-trip-wizard__template-modal');
         expect(wizardSource).toContain('color-black');
+        expect(wizardSource).toContain("import AppField from '../ui/AppField.vue'");
+        expect(wizardSource).toMatch(
+            /<AppField[\s\S]*?tripCreationTemplateNameLabel[\s\S]*?<select[\s\S]*?data-testid="trip-creation-template-select"/
+        );
+        expect(wizardSource).not.toMatch(
+            /<select[\s\S]*?class="form-control"[\s\S]*?data-testid="trip-creation-template-select"/
+        );
         expect(wizardSource).not.toContain('new-trip-wizard__template-list');
         expect(wizardSource).toMatch(
             /\.new-trip-wizard__template-action\s*\{[^}]*justify-content:\s*center/

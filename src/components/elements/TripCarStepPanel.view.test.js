@@ -29,18 +29,24 @@ describe('TripCarStepPanel.vue', () => {
         );
     });
 
-    it('styles the car select like the trip-search dropdown', () => {
+    it('uses AppField with a borderless select for car choice', () => {
+        expect(componentSource).toContain(
+            "import AppField from '../ui/AppField.vue'"
+        );
+        expect(componentSource).toMatch(
+            /<AppField[\s\S]*?label-for="trip-car-select"[\s\S]*?<select/
+        );
+        expect(componentSource).toContain('trip-car-step-panel__select');
+        expect(componentSource).not.toContain('form-control');
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__select\s*\{[^}]*border:\s*0/
+        );
         expect(componentSource).toMatch(
             /\.trip-car-step-panel__select\s*\{[^}]*appearance:\s*none/
         );
         expect(componentSource).toMatch(
-            /\.trip-car-step-panel__select\s*\{[^}]*border:\s*1px\s+solid\s+var\(--ds-input-border/
-        );
-        expect(componentSource).toMatch(
             /\.trip-car-step-panel__select\s*\{[^}]*background-image:\s*url\(/
-        );
-        expect(componentSource).toMatch(
-            /\.trip-car-step-panel__select\s*\{[^}]*padding:[^}]*2\.5rem/
         );
     });
 });
+
