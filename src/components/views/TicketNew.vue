@@ -1,49 +1,78 @@
 <template>
-    <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ $t('soporte') }}</div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="control-label">{{ $t('categoriaTicket') }}</label>
-                        <select v-model="form.type" class="form-control">
-                            <option
-                                v-for="option in ticketTypeOptions"
-                                :key="option.value"
-                                :value="option.value"
-                            >
-                                {{ $t(option.labelKey) }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <label class="control-label mtop-10">{{ $t('asuntoTicket') }}</label>
-                <input v-model="form.subject" class="form-control" :placeholder="$t('asuntoTicketPlaceholder')" />
-                <label class="control-label mtop-10">{{ $t('mensajeTicket') }}</label>
-                <editor
-                    v-if="showCreateEditor"
-                    :key="createEditorKey"
-                    ref="createEditor"
-                    :initial-value="editorInitialValue"
-                    :options="editorOptionsWithPlaceholder"
-                    initial-edit-type="wysiwyg"
-                    height="180px"
-                    class="mtop-10"
-                    @load="onCreateEditorLoad"
+    <AccountSettingsLayout>
+        <div class="ticket-new-page">
+            <div class="ticket-new-page__card">
+                <h1 class="ticket-new-page__heading">{{ $t('soporte') }}</h1>
+
+                <AppField :label="$t('categoriaTicket')" label-for="ticket-new-type">
+                    <select
+                        id="ticket-new-type"
+                        v-model="form.type"
+                        class="ticket-new-page__select"
+                    >
+                        <option
+                            v-for="option in ticketTypeOptions"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ $t(option.labelKey) }}
+                        </option>
+                    </select>
+                </AppField>
+
+                <AppInput
+                    v-model="form.subject"
+                    :label="$t('asuntoTicket')"
+                    :placeholder="$t('asuntoTicketPlaceholder')"
                 />
-                <label class="control-label mtop-10">{{ $t('adjuntosTicket') }}</label>
-                <input class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onCreateAttachments" />
-                <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
-                <button class="btn btn-primary" @click="createTicket">{{ $t('crearTicket') }}</button>
+
+                <AppField
+                    class="ticket-new-page__editor-field"
+                    :label="$t('mensajeTicket')"
+                >
+                    <editor
+                        v-if="showCreateEditor"
+                        :key="createEditorKey"
+                        ref="createEditor"
+                        :initial-value="editorInitialValue"
+                        :options="editorOptionsWithPlaceholder"
+                        initial-edit-type="wysiwyg"
+                        height="180px"
+                        class="ticket-new-page__editor"
+                        @load="onCreateEditorLoad"
+                    />
+                </AppField>
+
+                <AppField
+                    class="ticket-new-page__attachments-field"
+                    :label="$t('adjuntosTicket')"
+                    :hint="$t('maximo3Imagenes')"
+                >
+                    <input
+                        type="file"
+                        class="ticket-new-page__file"
+                        :accept="imageUploadAccept"
+                        multiple
+                        @change="onCreateAttachments"
+                    />
+                </AppField>
+
+                <AppButton variant="primary" @click="createTicket">
+                    {{ $t('crearTicket') }}
+                </AppButton>
             </div>
         </div>
-    </div>
+    </AccountSettingsLayout>
 </template>
 
 <script>
 import { mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
+import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs';
 import {
@@ -178,7 +207,77 @@ export default {
         }
     },
     components: {
+        AccountSettingsLayout,
+        AppButton,
+        AppField,
+        AppInput,
         editor: ToastUiEditor
     }
 };
 </script>
+
+<style scoped>
+.ticket-new-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.ticket-new-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.ticket-new-page__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.ticket-new-page__select:focus {
+    outline: none;
+}
+
+.ticket-new-page__editor-field :deep(.app-field__control-wrap) {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.ticket-new-page__attachments-field :deep(.app-field__control-wrap) {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.ticket-new-page__file {
+    width: 100%;
+    font-size: var(--ds-input-font-size, 1rem);
+    color: var(--ds-input-text, #22211f);
+}
+
+.ticket-new-page__editor {
+    width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    .ticket-new-page {
+        padding: 1em;
+    }
+}
+</style>
