@@ -72,6 +72,11 @@ describe('TripButtons.vue owner actions', () => {
         );
     });
 
+    it('does not render the red Viaje carpooleado status CTA', () => {
+        expect(viewSource).not.toContain('carpooled-trip');
+        expect(viewSource).not.toContain("$t('viajeCarpooleado')");
+    });
+
     it('stacks owner Edit above Cancel in a column at all breakpoints', () => {
         expect(viewSource).toMatch(
             /\.buttons-container\s*\{[^}]*display:\s*flex[^}]*flex-direction:\s*column/

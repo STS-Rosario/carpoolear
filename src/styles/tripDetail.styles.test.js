@@ -214,6 +214,28 @@ describe('trip detail desktop card layout', () => {
             /\.trip-detail--desktop\s+\.trip-stats\.row\s*\{[^}]*margin-right:\s*0/
         );
     });
+
+    it('sizes joined passenger person-icon avatars just above name text size', () => {
+        expect(css).toMatch(
+            dualRule(
+                '.trip-detail--mobile .trip-detail__passengers .trip_passenger_avatar',
+                'width:\\s*1\\.25rem'
+            )
+        );
+        expect(css).toMatch(
+            dualRule(
+                '.trip-detail--mobile .trip-detail__passengers .trip_passenger_avatar',
+                'height:\\s*1\\.25rem'
+            )
+        );
+        expect(css).toContain('trip_passenger_avatar');
+        expect(css).not.toMatch(
+            dualRule(
+                '.trip-detail--mobile .trip-detail__passengers .trip_passenger_image',
+                'width:\\s*2\\.25rem'
+            )
+        );
+    });
 });
 
 describe('trip detail card/stack nesting', () => {
