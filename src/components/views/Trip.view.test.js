@@ -5,6 +5,22 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'Trip.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
+describe('Trip.vue mobile page background class', () => {
+    it('syncs a body class for mobile trip detail without relying on :has()', () => {
+        expect(viewSource).toContain('syncTripDetailMobilePageClass');
+        expect(viewSource).toContain('trip-detail-mobile-page');
+        expect(viewSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*?syncTripDetailMobilePageClass/
+        );
+        expect(viewSource).toMatch(
+            /beforeUnmount\(\)\s*\{[\s\S]*?syncTripDetailMobilePageClass\(false\)/
+        );
+        expect(viewSource).toMatch(
+            /isMobile:\s*function[\s\S]*?syncTripDetailMobilePageClass/
+        );
+    });
+});
+
 describe('Trip.vue passenger message carpoodatos flow', () => {
     it('closes the request-seat modal before showing the pricing hint', () => {
         expect(viewSource).toContain('resolveRequestSeatModalConfirm');
