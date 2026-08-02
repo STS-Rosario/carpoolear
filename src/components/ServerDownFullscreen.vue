@@ -15,14 +15,15 @@
             >
                 {{ $t('serverDownRetrying') }}
             </p>
-            <button
-                type="button"
-                class="btn btn-primary server-down-fullscreen__retry"
+            <AppButton
+                class="server-down-fullscreen__retry"
+                variant="primary"
+                :loading="checking"
                 :disabled="checking"
                 @click="onRetry"
             >
                 {{ $t('serverDownRetryButton') }}
-            </button>
+            </AppButton>
         </div>
     </div>
 </template>
@@ -30,9 +31,13 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useServerStatusStore } from '../stores/serverStatus';
+import AppButton from './ui/AppButton.vue';
 
 export default {
     name: 'server-down-fullscreen',
+    components: {
+        AppButton
+    },
     computed: {
         ...mapState(useServerStatusStore, {
             checking: 'checking'
