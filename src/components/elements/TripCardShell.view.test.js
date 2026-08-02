@@ -6,9 +6,10 @@ const viewPath = path.resolve(__dirname, 'TripCardShell.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('TripCardShell.vue', () => {
-    it('renders ratings thumbs, name badge, city, province and trip point text, seats and detail CTA', () => {
+    it('renders ratings thumbs, plain name, city, province and trip point text, seats and detail CTA', () => {
         expect(viewSource).toContain('UserRatingsCounts');
-        expect(viewSource).toContain('UserNameWithBadge');
+        expect(viewSource).not.toContain('UserNameWithBadge');
+        expect(viewSource).toContain('trip-card-shell__name');
         expect(viewSource).not.toContain("$t('puntoDePartida')");
         expect(viewSource).not.toContain("$t('puntoDeLlegada')");
         expect(viewSource).toContain("$t('verDetalle')");
@@ -20,6 +21,20 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toContain('toPoint');
         expect(viewSource).toContain('getSeatsPillTone');
         expect(viewSource).toContain('getSeatsPillLabel');
+    });
+
+    it('shows verified shield after trips count only when driver is verified', () => {
+        expect(viewSource).toMatch(
+            /trip-card-shell__meta[\s\S]*trip-card-shell__trips[\s\S]*trip-card-shell__verified/
+        );
+        expect(viewSource).toMatch(
+            /v-if="isDriverVerified"[\s\S]*trip-card-shell__verified|trip-card-shell__verified[\s\S]*v-if="isDriverVerified"/
+        );
+        expect(viewSource).toContain('fa-shield');
+        expect(viewSource).toContain("$t('usuarioVerificado')");
+        expect(viewSource).toMatch(
+            /isDriverVerified\(\)\s*\{[\s\S]*identity_validated[\s\S]*identity_validated_at/
+        );
     });
 
     it('centers avatar beside name/seats and ratings/viajes rows', () => {
