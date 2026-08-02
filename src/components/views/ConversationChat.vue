@@ -286,10 +286,6 @@ export default {
             setImgTitle: 'setImgTitle'
         }),
 
-        userProfile() {
-            return this.otherUserProfileRoute?.params || { id: 0 };
-        },
-
         onEditorChange() {
             const editor = this.$refs.messageEditor;
             if (!editor) return;
