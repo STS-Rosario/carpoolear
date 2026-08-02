@@ -131,5 +131,8 @@ describe('messages-page.css', () => {
         expect(css).toMatch(
             /\.message-composer-send[\s\S]*right:/
         );
+        expect(css).toMatch(
+            /\.message-composer-send[\s\S]*z-index:\s*50/
+        );
     });
 });
