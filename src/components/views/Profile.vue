@@ -5,6 +5,39 @@
             :class="{ 'profile-page--public': !isMyOwnProfile }"
         >
             <ProfileIdentityHeader :profile="profile" />
+            <div
+                v-if="showPendingFriendRequestBanner"
+                class="profile-pending-friend-request home-prompt-banner"
+            >
+                <div class="home-prompt-banner__icon" aria-hidden="true">
+                    <i class="fa fa-user-plus"></i>
+                </div>
+                <div class="home-prompt-banner__body">
+                    <div class="home-prompt-banner__title">
+                        {{ $t('solicitudAmistadPendiente') }}
+                    </div>
+                </div>
+                <div class="profile-pending-friend-request__actions">
+                    <AppButton
+                        variant="tertiary"
+                        tone="destructive"
+                        icon-right="fa fa-times"
+                        :disabled="friendActionLoading"
+                        @click="onRejectFriend"
+                    >
+                        {{ $t('rechazar') }}
+                    </AppButton>
+                    <AppButton
+                        variant="primary"
+                        icon-right="fa fa-check"
+                        :disabled="friendActionLoading"
+                        :loading="friendActionLoading"
+                        @click="onAcceptFriend"
+                    >
+                        {{ $t('aceptar') }}
+                    </AppButton>
+                </div>
+            </div>
             <div class="profile-page__content-card">
                 <tabset
                     ref="tabs"
@@ -30,9 +63,11 @@ import Tab from '../elements/Tab';
 import Tabset from '../elements/Tabset';
 import ProfileIdentityHeader from '../elements/ProfileIdentityHeader.vue';
 import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
+import { useFriendsStore } from '../../stores/friends';
 import { useActionbarsStore } from '../../stores/actionbars';
 import ProfileInfo from '../sections/ProfileInfo';
 import ProfileRates from '../sections/ProfileRates';
@@ -48,6 +83,7 @@ export default {
         Tabset,
         ProfileIdentityHeader,
         AccountSettingsLayout,
+        AppButton,
         ProfileInfo,
         ProfileRates,
         MyTrips,
@@ -69,7 +105,8 @@ export default {
 
     data() {
         return {
-            currentView: null
+            currentView: null,
+            friendActionLoading: false
         };
     },
 
@@ -87,6 +124,14 @@ export default {
         },
         isMyOwnProfile() {
             return this.id === 'me' || this.id === this.user.id;
+        },
+        showPendingFriendRequestBanner() {
+            return (
+                this.user &&
+                this.profile &&
+                this.profile.id !== this.user.id &&
+                this.profile.friendship_state === 'pending_received'
+            );
         }
     },
 
@@ -99,6 +144,30 @@ export default {
             setProfileByID: 'setUserByID',
             fetchBadges: 'fetchBadges'
         }),
+        ...mapActions(useFriendsStore, {
+            acceptFriend: 'accept',
+            rejectFriend: 'reject'
+        }),
+        updateFriendshipState(friendshipState) {
+            this.setProfile({
+                ...this.profile,
+                friendship_state: friendshipState
+            });
+        },
+        runFriendAction(action, friendshipState) {
+            this.friendActionLoading = true;
+            return action(this.profile.id)
+                .then(() => this.updateFriendshipState(friendshipState))
+                .finally(() => {
+                    this.friendActionLoading = false;
+                });
+        },
+        onAcceptFriend() {
+            this.runFriendAction(this.acceptFriend, 'friend');
+        },
+        onRejectFriend() {
+            this.runFriendAction(this.rejectFriend, 'none');
+        },
         applyProfileDeepLink() {
             const index = resolveProfileTabIndex({
                 query: (this.$route && this.$route.query) || {},
@@ -156,3 +225,39 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.profile-pending-friend-request {
+    margin: 0 0 1rem;
+    cursor: default;
+}
+
+.profile-pending-friend-request:hover,
+.profile-pending-friend-request:focus {
+    background: #fff5e6;
+    color: #5d4037;
+    text-decoration: none;
+}
+
+.profile-pending-friend-request__actions {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    margin-left: auto;
+}
+
+@media only screen and (max-width: 640px) {
+    .profile-pending-friend-request {
+        flex-wrap: wrap;
+    }
+
+    .profile-pending-friend-request__actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+}
+</style>
