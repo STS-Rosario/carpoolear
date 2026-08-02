@@ -252,7 +252,6 @@
     width: 100%;
     box-sizing: border-box;
     background: var(--trip-detail-canvas);
-    border-bottom: 1px solid var(--trip-detail-divider);
 }
 .trip-detail--mobile .trip-detail__passengers .list-item, .trip-detail--desktop .trip-detail__passengers .list-item {
     display: flex;
