@@ -467,7 +467,7 @@ export default {
     position: absolute;
     right: 0.5rem;
     bottom: 0.5rem;
-    z-index: 3;
+    z-index: 50;
     width: 2.5rem;
     height: 2.5rem;
     min-width: 2.5rem;
