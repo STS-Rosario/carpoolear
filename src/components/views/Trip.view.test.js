@@ -76,6 +76,19 @@ describe('Trip.vue carpoodatos mesa de ayuda contact', () => {
         expect(pricingModal).toContain("$t('carpoodatosContribucionComprobantes')");
         expect(pricingModal).toMatch(/<ul>[\s\S]*?<\/ul>/);
     });
+
+    it('styles carpoodatos bullets as visible list items matching modal body text size', () => {
+        const cssPath = path.resolve(__dirname, '../../styles/base.css');
+        const css = fs.readFileSync(cssPath, 'utf8');
+        const carpoodatosBlock = css.match(/\.carpoodatos\s+ul\s*\{[\s\S]*?\}/);
+
+        expect(carpoodatosBlock).not.toBeNull();
+        expect(carpoodatosBlock[0]).toMatch(/list-style(?:-type)?:\s*disc/);
+        expect(carpoodatosBlock[0]).toMatch(/padding-left:\s*1\.25rem/);
+        expect(css).not.toMatch(
+            /\.carpoodatos\s+p\s*,\s*\.carpoodatos\s+ul\s*\{[\s\S]*?font-size:\s*11px/
+        );
+    });
 });
 
 describe('Trip.vue driver seat requests warning', () => {
