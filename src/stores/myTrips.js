@@ -49,6 +49,7 @@ export const useMyTripsStore = defineStore('myTrips', {
         },
 
         tripAsDriver() {
+            this.driver_trip = null;
             return tripsApi
                 .myTrips(true)
                 .then((response) => {
@@ -62,6 +63,7 @@ export const useMyTripsStore = defineStore('myTrips', {
         },
 
         tripAsPassenger() {
+            this.passenger_trip = null;
             return tripsApi
                 .myTrips(false)
                 .then((response) => {
@@ -75,18 +77,21 @@ export const useMyTripsStore = defineStore('myTrips', {
         },
 
         pendingRatesAction() {
+            this.pending_rates = null;
             return rateApi.pending(null).then((response) => {
                 this.pending_rates = response.data;
             });
         },
 
         oldTripsAsDriver() {
+            this.driver_old_trips = null;
             return tripsApi.myOldTrips(true).then((response) => {
                 this.driver_old_trips = tripsListFromResponse(response);
             });
         },
 
         oldTripsAsPassenger() {
+            this.passenger_old_trips = null;
             return tripsApi.myOldTrips(false).then((response) => {
                 this.passenger_old_trips = tripsListFromResponse(response);
             });

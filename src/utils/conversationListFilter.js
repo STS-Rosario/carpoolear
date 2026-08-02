@@ -2,11 +2,15 @@ import { isTripGroupConversation } from './tripGroupChatTitle';
 
 /**
  * Filter conversations by list chip kind.
- * @param {Array} conversations
+ * @param {Array|null|undefined} conversations
  * @param {'all'|'group'|'individual'} kind
+ * @returns {Array|null} null while loading so Loading can show spinner
  */
 export function filterConversationsByKind(conversations, kind) {
-    const list = Array.isArray(conversations) ? conversations : [];
+    if (!Array.isArray(conversations)) {
+        return null;
+    }
+    const list = conversations;
     if (kind === 'group') {
         return list.filter((c) => isTripGroupConversation(c));
     }
