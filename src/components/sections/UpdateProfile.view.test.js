@@ -102,6 +102,12 @@ describe('UpdateProfile page card', () => {
             /\.update-profile-component\s+\.form\s*\{[^}]*padding:\s*0/s
         );
     });
+
+    it('clears the fixed mobile footer so Guardar cambios stays reachable', () => {
+        expect(viewSource).toMatch(
+            /@media[^{]*max-width:\s*768px[^{]*\{[\s\S]*\.update-profile-component\s*\{[^}]*padding-bottom:\s*calc\(5\.5rem\s*\+\s*env\(safe-area-inset-bottom/s
+        );
+    });
 });
 
 describe('UpdateProfile AppInput fields', () => {
