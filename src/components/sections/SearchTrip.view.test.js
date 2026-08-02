@@ -74,7 +74,7 @@ describe('SearchTrip mobile submit', () => {
 
     it('pins the mobile submit above the footer bar with safe-area clearance', () => {
         expect(cssSource).toMatch(
-            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*bottom:\s*calc\(\s*5\.5rem\s*\+\s*env\(safe-area-inset-bottom/
+            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*bottom:\s*calc\(\s*6rem\s*\+\s*env\(safe-area-inset-bottom/
         );
         expect(cssSource).toMatch(
             /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*z-index:\s*9/

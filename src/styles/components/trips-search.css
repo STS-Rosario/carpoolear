@@ -246,8 +246,8 @@
 .trips-search--mobile .trips-search__submit {
     position: fixed;
     right: 1rem;
-    bottom: calc(5.5rem + constant(safe-area-inset-bottom, 0px));
-    bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(6rem + constant(safe-area-inset-bottom, 0px));
+    bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
     left: 1rem;
     z-index: 9;
     margin: 0;
