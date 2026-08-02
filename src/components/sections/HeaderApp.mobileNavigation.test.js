@@ -11,8 +11,23 @@ describe('HeaderApp mobile navigation', () => {
         expect(headerSource).toContain('toNotifications');
         expect(headerSource).toContain('notificationsCount');
         expect(headerSource).not.toContain('unreadMessagesCount');
-        expect(headerSource).toContain('v-if="isMobile && logged"');
         expect(headerSource).toContain('icon="bell"');
+    });
+
+    it('shows the notification icon left of Donar on the branded mobile header', () => {
+        const branded = headerSource.match(
+            /<template v-if="showBrandedMobileHeader">([\s\S]*?)<\/template>/
+        );
+        expect(branded).not.toBeNull();
+        const chunk = branded[1];
+        expect(chunk).toContain('toNotifications');
+        expect(chunk).toContain('icon="bell"');
+        expect(chunk).toContain('mobile-header-bar__actions');
+        const bellAt = chunk.indexOf('toNotifications');
+        const donateAt = chunk.indexOf('variant="header-donate"');
+        expect(bellAt).toBeGreaterThan(-1);
+        expect(donateAt).toBeGreaterThan(-1);
+        expect(bellAt).toBeLessThan(donateAt);
     });
 
     it('does not render a messages icon in the mobile header', () => {
