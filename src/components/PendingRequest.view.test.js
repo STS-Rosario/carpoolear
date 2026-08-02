@@ -44,4 +44,26 @@ describe('PendingRequest.vue design system migration', () => {
         expect(viewSource).not.toContain('btn btn-primary');
         expect(viewSource).not.toContain('btn btn-secondary');
     });
+
+    it('keeps mobile pending-request actions in one compact equal-width row', () => {
+        expect(viewSource).toMatch(
+            /pending-request-card__actions[\s\S]*?variant="success"[\s\S]*?variant="danger"[\s\S]*?variant="secondary"[\s\S]*?pendingRequestEnviarMensaje/
+        );
+        expect(viewSource).not.toContain('pending-request-card__message-action');
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?size="sm"[\s\S]*?pendingRequestAceptar/
+        );
+        expect(viewSource).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.pending-request-card__actions\s*\{[^}]*flex-direction:\s*row/s
+        );
+        expect(viewSource).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.pending-request-card__actions\s+:deep\(\.app-button\)\s*\{[^}]*flex:\s*1\s+1\s+0/s
+        );
+        expect(viewSource).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.pending-request-card__content\s*\{[^}]*font-size:\s*1rem/s
+        );
+        expect(viewSource).not.toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*\.pending-request-card__actions\s*\{[^}]*flex-direction:\s*column/s
+        );
+    });
 });
