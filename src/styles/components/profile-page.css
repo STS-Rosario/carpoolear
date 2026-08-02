@@ -306,7 +306,7 @@
     background: #fff;
 }
 
-.profile-info-panel__tile-icon-wrap {
+.profile-page .profile-info-component .profile-info-panel__tile-icon-wrap {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -315,22 +315,26 @@
     border-radius: 50%;
     background: #f0f0f0;
     flex-shrink: 0;
+    line-height: 0;
 }
 
-.profile-info-panel__tile-icon-wrap--verified {
+.profile-page .profile-info-component .profile-info-panel__tile-icon-wrap--verified {
     background: #c8e6c9;
 }
 
-.profile-info-panel__tile-icon {
+.profile-page .profile-info-component .profile-info-panel__tile-icon {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
     color: #666;
     font-size: 1.15rem;
-    width: auto;
+    line-height: 1;
     text-align: center;
-    margin: 0;
-    float: none;
+    display: block;
 }
 
-.profile-info-panel__tile-icon--verified {
+.profile-page .profile-info-component .profile-info-panel__tile-icon--verified {
     color: #1b5e20;
 }
 
