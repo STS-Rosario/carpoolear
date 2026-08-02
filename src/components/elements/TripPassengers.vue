@@ -18,8 +18,6 @@
                 <span
                     @click="toUserProfile(p)"
                     class="trip_passenger_avatar"
-                    role="img"
-                    :aria-hidden="false"
                 >
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </span>
@@ -64,8 +62,6 @@
                 <span
                     @click="toUserProfile(p)"
                     class="trip_passenger_avatar"
-                    role="img"
-                    :aria-hidden="false"
                 >
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </span>
