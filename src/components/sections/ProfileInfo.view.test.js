@@ -53,43 +53,58 @@ describe('ProfileInfo friend actions', () => {
             "import AppButton from '../ui/AppButton.vue'"
         );
         expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?friendship_state === 'none'[\s\S]*?variant="primary"[\s\S]*?onInviteFriend[\s\S]*?invitarAmigos[\s\S]*?<\/AppButton>/
+            /<AppButton[\s\S]*?friendship_state === 'none'[\s\S]*?variant="primary"[\s\S]*?onInviteFriend/
         );
         expect(viewSource).not.toMatch(
             /friendship_state === 'none'[\s\S]*?class="btn btn-primary"[\s\S]*?invitarAmigos/
         );
     });
 
-    it('shows sent-request state when friendship is pending_sent', () => {
-        expect(viewSource).toContain("friendship_state === 'pending_sent'");
-        expect(viewSource).toContain("$t('suSolicitudAmistadEnviada')");
+    it('shows Enviando solicitud while invite is in flight', () => {
+        expect(viewSource).toContain("$t('enviandoSolicitudAmistad')");
         expect(viewSource).toMatch(
-            /<AppButton[\s\S]*?friendship_state === 'pending_sent'[\s\S]*?variant="primary"[\s\S]*?suSolicitudAmistadEnviada[\s\S]*?<\/AppButton>/
+            /friendship_state === 'none'[\s\S]*?friendActionLoading[\s\S]*?enviandoSolicitudAmistad[\s\S]*?invitarAmigos/
         );
         expect(i18nSource).toMatch(
-            /suSolicitudAmistadEnviada:\s*'Su solicitud ya fue enviada, aguarde a la respuesta del usuario\.'/
+            /enviandoSolicitudAmistad:\s*'Enviando solicitud'/
         );
         expect(i18nSource).toMatch(
-            /suSolicitudAmistadEnviada:\s*["']Your request has already been sent, please wait for the user'?s response\.["']/
-        );
-        expect(i18nSource).not.toMatch(
-            /suSolicitudAmistadEnviada:[\s\S]*?aguarde un momento por favor/
+            /enviandoSolicitudAmistad:\s*'Sending request'/
         );
     });
 
-    it('shows accept and reject for incoming friend requests', () => {
-        expect(viewSource).toContain("friendship_state === 'pending_received'");
-        expect(viewSource).toContain('onAcceptFriend');
-        expect(viewSource).toContain('onRejectFriend');
-        expect(viewSource).toContain("$t('aceptar')");
-        expect(viewSource).toContain("$t('rechazar')");
+    it('shows danger cancel button when friendship is pending_sent', () => {
+        expect(viewSource).toContain("friendship_state === 'pending_sent'");
+        expect(viewSource).toContain("$t('cancelarSolicitudAmistad')");
+        expect(viewSource).toContain('onCancelFriendRequest');
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?friendship_state === 'pending_sent'[\s\S]*?variant="danger"[\s\S]*?cancelarSolicitudAmistad[\s\S]*?<\/AppButton>/
+        );
+        expect(viewSource).not.toContain("$t('suSolicitudAmistadEnviada')");
+        expect(i18nSource).toMatch(
+            /cancelarSolicitudAmistad:\s*'Cancelar solicitud de amistad'/
+        );
+        expect(i18nSource).toMatch(
+            /cancelarSolicitudAmistad:\s*'Cancel friend request'/
+        );
+    });
+
+    it('does not render accept or reject buttons for incoming requests', () => {
+        expect(viewSource).not.toMatch(
+            /friendship_state === 'pending_received'[\s\S]*?onAcceptFriend/
+        );
+        expect(viewSource).not.toMatch(
+            /friendship_state === 'pending_received'[\s\S]*?\$t\('aceptar'\)/
+        );
+        expect(viewSource).not.toContain('onAcceptFriend');
+        expect(viewSource).not.toContain('onRejectFriend');
     });
 
     it('wires friend actions through friends store', () => {
         expect(viewSource).toContain('useFriendsStore');
         expect(viewSource).toContain('requestFriend');
-        expect(viewSource).toContain('acceptFriend');
-        expect(viewSource).toContain('rejectFriend');
+        expect(viewSource).toContain('cancelFriendRequest');
+        expect(viewSource).toContain("cancelRequest: 'cancelRequest'");
     });
 });
 
