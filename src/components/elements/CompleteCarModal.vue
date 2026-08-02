@@ -82,14 +82,14 @@
             </div>
         </template>
         <template #footer>
-            <button
-                type="button"
-                class="btn btn-primary"
+            <AppButton
+                variant="primary"
+                :loading="saving"
                 :disabled="saving"
                 @click="save"
             >
                 {{ $t('guardar') }}
-            </button>
+            </AppButton>
         </template>
     </modal>
 </template>
@@ -97,6 +97,7 @@
 <script>
 import modal from '../Modal';
 import CatalogCombobox from './CatalogCombobox.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useCarCatalogStore } from '../../stores/carCatalog';
 import { useCarsStore } from '../../stores/car';
 import {
@@ -111,7 +112,8 @@ export default {
     name: 'complete-car-modal',
     components: {
         modal,
-        CatalogCombobox
+        CatalogCombobox,
+        AppButton
     },
     props: {
         visible: {
