@@ -3261,6 +3261,17 @@
     margin: 0 0 15px 0;
   }
 
+  .carpoodatos ul {
+    color: #333;
+    list-style-type: disc;
+    padding-left: 1.25rem;
+    margin: 0 0 15px 0;
+  }
+
+  .carpoodatos li {
+    color: #333;
+  }
+
   .trips .modal-header,
   .trip-detail-component .modal-header,
   .request-list .modal-header {
@@ -3294,10 +3305,6 @@
  }
 
   @media (max-width: 800px) {
-      .carpoodatos p,
-      .carpoodatos ul {
-          font-size: 11px;
-      }
       .carpoodatos {
           max-height: 50vh;
           overflow-y: auto;
