@@ -103,18 +103,24 @@ export default {
 
 <style scoped>
 .admin-pagination-bar {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 12px;
     margin-top: 12px;
-    width: 100%;
-    min-width: min(100%, 20rem);
+    width: fit-content;
+    max-width: 100%;
 }
 
 .admin-pagination-bar__per-page {
-    margin-left: auto;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0;
+}
+
+.admin-pagination-bar__per-page :deep(.app-field__control-wrap) {
+    width: auto;
 }
 
 .admin-pagination-bar__per-page-select {

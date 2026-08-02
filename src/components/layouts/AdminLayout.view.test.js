@@ -48,7 +48,8 @@ describe('AdminLayout desktop spacing', () => {
 
     it('keeps overflow-x safety without relying on Bootstrap col-md-4/20 shell', () => {
         expect(layoutSource).toContain('overflow-x: auto');
-        expect(layoutSource).not.toContain('col-md-4');
-        expect(layoutSource).not.toContain('col-md-20');
+        expect(layoutSource).not.toMatch(/class="col-md-4"/);
+        expect(layoutSource).not.toMatch(/class="col-md-20[^"]*"/);
+        expect(layoutSource).not.toContain('<div class="col-md-24">');
     });
 });

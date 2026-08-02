@@ -37,13 +37,13 @@ describe('AdminPaginationBar component', () => {
 
     it('sizes the bar and per-page field to content width', () => {
         expect(componentSource).toMatch(
-            /\.admin-pagination-bar\s*\{[^}]*width:\s*(fit-content|auto)/
+            /\.admin-pagination-bar\s*\{[^}]*width:\s*fit-content/
         );
         expect(componentSource).toMatch(
-            /\.admin-pagination-bar__per-page\s*\{[^}]*width:\s*(fit-content|auto)/
+            /\.admin-pagination-bar__per-page\s*\{[^}]*width:\s*fit-content/
         );
         expect(componentSource).not.toMatch(
-            /\.admin-pagination-bar\s*\{[^}]*width:\s*100%/
+            /\.admin-pagination-bar\s*\{[^}]*[^-\w]width:\s*100%/
         );
     });
 });

@@ -379,10 +379,20 @@ export default {
     margin-top: 0;
 }
 
-.user-admin-view-nav .btn,
-.user-admin-view-actions .btn {
-    margin-right: 8px;
-    margin-bottom: 8px;
+.user-admin-view-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.user-admin-view-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
 }
 
 .medium-icon {
