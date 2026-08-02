@@ -2,14 +2,14 @@
     <AdminLayout>
         <h3>{{ $t('adminCarBrands') }}</h3>
         <div class="admin-car-sync-panel">
-            <button
-                type="button"
-                class="btn btn-primary"
+            <AppButton
+                variant="primary"
                 :disabled="syncRunning"
+                :loading="syncRunning"
                 @click="syncNow"
             >
                 {{ $t('adminCarCatalogSyncNow') }}
-            </button>
+            </AppButton>
             <p v-if="syncRunning">{{ $t('adminCarCatalogSyncRunning') }}</p>
             <p v-else-if="lastSyncSummary">
                 {{ $t('adminCarCatalogSyncLastRun') }}:
@@ -19,17 +19,16 @@
         <form class="admin-car-brand-form" @submit.prevent="createBrand">
             <div class="row">
                 <div class="col-sm-8">
-                    <input
+                    <AppInput
                         v-model="form.name"
-                        class="form-control"
                         :placeholder="$t('marca')"
                         required
                     />
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="btn btn-primary">
+                    <AppButton type="submit" variant="primary">
                         {{ $t('agregar') }}
-                    </button>
+                    </AppButton>
                 </div>
             </div>
         </form>
@@ -44,15 +43,16 @@
                 <tr v-for="row in brands" :key="row.id">
                     <td>{{ row.name }}</td>
                     <td>
-                        <router-link
-                            class="btn btn-xs btn-default"
+                        <AppButton
+                            variant="secondary"
+                            size="sm"
                             :to="{
                                 name: 'admin-car-models',
                                 params: { brandId: row.id }
                             }"
                         >
                             {{ $t('adminCarModels') }}
-                        </router-link>
+                        </AppButton>
                     </td>
                 </tr>
             </tbody>
@@ -63,11 +63,13 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAdminCarCatalogStore } from '../../stores/adminCarCatalog';
 
 export default {
     name: 'admin-car-brands',
-    components: { AdminLayout },
+    components: { AdminLayout, AppButton, AppInput },
     data() {
         return {
             form: { name: '' },

@@ -2,9 +2,9 @@
     <AdminLayout>
         <h3>{{ $t('adminNavChangelog') }}</h3>
         <p class="mb-2">
-            <router-link class="btn btn-primary" :to="{ name: 'admin-changelog-new' }">
+            <AppButton variant="primary" :to="{ name: 'admin-changelog-new' }">
                 {{ $t('nuevoChangelog') }}
-            </router-link>
+            </AppButton>
         </p>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
@@ -27,21 +27,27 @@
                         <td :title="fullDate(row.created_at)">{{ relativeDate(row.created_at) }}</td>
                         <td :title="fullDate(row.updated_at)">{{ relativeDate(row.updated_at) }}</td>
                         <td class="changelog-actions">
-                            <router-link
-                                class="btn btn-xs btn-default"
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
                                 :to="{ name: 'admin-changelog-view', params: { changelogId: row.id } }"
                             >
                                 {{ $t('accionVer') }}
-                            </router-link>
-                            <router-link
-                                class="btn btn-xs btn-default"
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
                                 :to="{ name: 'admin-changelog-edit', params: { changelogId: row.id } }"
                             >
                                 {{ $t('accionEditar') }}
-                            </router-link>
-                            <button type="button" class="btn btn-xs btn-danger" @click="remove(row.id)">
+                            </AppButton>
+                            <AppButton
+                                variant="danger"
+                                size="sm"
+                                @click="remove(row.id)"
+                            >
                                 {{ $t('accionEliminar') }}
-                            </button>
+                            </AppButton>
                         </td>
                     </tr>
                 </tbody>
@@ -53,6 +59,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useChangelogStore } from '../../stores/changelog';
 import dayjs from '../../dayjs';
 
@@ -109,7 +116,8 @@ export default {
         this.reload();
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AppButton
     }
 };
 </script>
@@ -128,7 +136,7 @@ export default {
     border: 1px solid #e5e5e5;
 }
 
-.changelog-actions .btn {
+.changelog-actions .app-button {
     margin-right: 4px;
     margin-bottom: 4px;
 }

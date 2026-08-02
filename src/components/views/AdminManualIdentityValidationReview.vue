@@ -2,9 +2,14 @@
     <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
-                <router-link :to="{ name: 'admin-manual-identity-validations' }" class="btn btn-default btn-sm mb-2">
+                <AppButton
+                    variant="secondary"
+                    size="sm"
+                    class="mb-2"
+                    :to="{ name: 'admin-manual-identity-validations' }"
+                >
                     {{ $t('volver') }}
-                </router-link>
+                </AppButton>
                 <div v-if="loading" class="text-center">
                     <img :src="$publicImg('loader.gif')" alt="" class="ajax-loader" />
                     <p>{{ $t('cargando') }}</p>
@@ -27,34 +32,40 @@
                             <p class="text-muted admin-manual-identity-state-edit-hint">
                                 {{ $t('adminManualIdentityEditStateHint') }}
                             </p>
-                            <div class="form-group">
-                                <label for="manual-identity-edit-paid">{{ $t('pagado') }}</label>
+                            <AppField
+                                :label="$t('pagado')"
+                                label-for="manual-identity-edit-paid"
+                            >
                                 <select
                                     id="manual-identity-edit-paid"
                                     v-model="editablePaid"
-                                    class="form-control admin-manual-identity-state-edit-paid"
+                                    class="admin-page__select admin-manual-identity-state-edit-paid"
                                 >
                                     <option :value="true">{{ $t('si') }}</option>
                                     <option :value="false">{{ $t('no') }}</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="manual-identity-edit-photos-submitted">{{ $t('fotosEnviadas') }}</label>
+                            </AppField>
+                            <AppField
+                                :label="$t('fotosEnviadas')"
+                                label-for="manual-identity-edit-photos-submitted"
+                            >
                                 <select
                                     id="manual-identity-edit-photos-submitted"
                                     v-model="editablePhotosSubmitted"
-                                    class="form-control admin-manual-identity-state-edit-photos-submitted"
+                                    class="admin-page__select admin-manual-identity-state-edit-photos-submitted"
                                 >
                                     <option :value="true">{{ $t('si') }}</option>
                                     <option :value="false">{{ $t('no') }}</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="manual-identity-edit-status">{{ $t('estado') }}</label>
+                            </AppField>
+                            <AppField
+                                :label="$t('estado')"
+                                label-for="manual-identity-edit-status"
+                            >
                                 <select
                                     id="manual-identity-edit-status"
                                     v-model="editableReviewStatus"
-                                    class="form-control admin-manual-identity-state-edit-status"
+                                    class="admin-page__select admin-manual-identity-state-edit-status"
                                 >
                                     <option
                                         v-for="option in reviewStatusOptions"
@@ -64,15 +75,18 @@
                                         {{ $t(option.labelKey) }}
                                     </option>
                                 </select>
-                            </div>
-                            <button
-                                class="btn btn-default btn-sm admin-manual-identity-state-edit-save"
+                            </AppField>
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
+                                class="admin-manual-identity-state-edit-save"
                                 :disabled="!hasStateChanges || savingState"
+                                :loading="savingState"
                                 @click="saveManualIdentityValidationState"
                             >
-                                <span v-if="savingState">{{ $t('guardando') }}</span>
-                                <span v-else>{{ $t('guardar') }}</span>
-                            </button>
+                                <template v-if="savingState">{{ $t('guardando') }}</template>
+                                <template v-else>{{ $t('guardar') }}</template>
+                            </AppButton>
                             <p v-if="stateSaveError" class="text-danger admin-manual-identity-state-edit-error">
                                 {{ stateSaveError }}
                             </p>
@@ -82,9 +96,10 @@
                             :user-id="item.user_id"
                             :support-tickets-count="item.support_tickets_count || 0"
                         />
-                        <router-link
+                        <AppButton
                             v-if="item.user_id"
-                            class="btn btn-default btn-sm"
+                            variant="secondary"
+                            size="sm"
                             :to="{
                                 name: 'admin-support-ticket-new',
                                 query: {
@@ -96,7 +111,7 @@
                             }"
                         >
                             {{ $t('crearTicketSoporte') }}
-                        </router-link>
+                        </AppButton>
                         <p v-if="item.reviewed_at">
                             <strong>{{ getActionDateLabel(item.review_status) }}:</strong> {{ formatDate(item.reviewed_at) }}
                         </p>
@@ -108,21 +123,23 @@
                         </p>
 
                         <div class="form-group private-admin-note-group">
-                            <label>{{ $t('notaPrivadaSoloAdmins') }}</label>
-                            <textarea
+                            <AppTextarea
                                 v-model="privateAdminNote"
-                                class="form-control"
-                                rows="3"
+                                :label="$t('notaPrivadaSoloAdmins')"
                                 :placeholder="$t('notaPrivadaSoloAdmins')"
-                            ></textarea>
-                            <button
-                                class="btn btn-default btn-sm private-admin-note-save-btn"
+                                :rows="3"
+                            />
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
+                                class="private-admin-note-save-btn"
                                 :disabled="savingPrivateNote"
+                                :loading="savingPrivateNote"
                                 @click="savePrivateAdminNote"
                             >
-                                <span v-if="savingPrivateNote">{{ $t('guardando') }}</span>
-                                <span v-else>{{ $t('guardar') }}</span>
-                            </button>
+                                <template v-if="savingPrivateNote">{{ $t('guardando') }}</template>
+                                <template v-else>{{ $t('guardar') }}</template>
+                            </AppButton>
                         </div>
 
                         <div v-if="item.has_images" class="images-section">
@@ -176,32 +193,37 @@
                                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     {{ $t('comentarioVisibleParaUsuario') }}
                                 </div>
-                                <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
+                                <AppTextarea
+                                    v-model="reviewNote"
+                                    :placeholder="$t('comentarioRevisar')"
+                                    :rows="3"
+                                />
                             </div>
                             <div class="review-actions-buttons">
-                                <button
-                                    class="btn btn-success"
+                                <AppButton
+                                    variant="success"
                                     :disabled="submitting"
+                                    :loading="submitting"
                                     @click="review('approve')"
                                 >
                                     {{ $t('aprobar') }}
-                                </button>
-                                <button
-                                    class="btn btn-warning"
+                                </AppButton>
+                                <AppButton
+                                    variant="warning"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                     @click="confirmReview('pending')"
                                 >
                                     {{ $t('marcarPendiente') }}
-                                </button>
-                                <button
-                                    class="btn btn-danger"
+                                </AppButton>
+                                <AppButton
+                                    variant="danger"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                     @click="review('reject')"
                                 >
                                     {{ $t('rechazar') }}
-                                </button>
+                                </AppButton>
                             </div>
                             <p v-if="reviewError" class="text-danger review-actions-error">{{ reviewError }}</p>
                         </div>
@@ -209,13 +231,14 @@
 
                         <div class="purge-section mt-3">
                             <p class="text-muted purge-warning">{{ $t('purgarFotosAdvertencia') }}</p>
-                            <button
-                                class="btn btn-default"
+                            <AppButton
+                                variant="secondary"
                                 :disabled="!item.has_images || purging"
+                                :loading="purging"
                                 @click="confirmPurge"
                             >
                                 {{ $t('purgarFotos') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div>
                 </div>
@@ -234,6 +257,9 @@ import axios from 'axios';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { AdminApi } from '../../services/api';
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
@@ -493,7 +519,10 @@ export default {
     components: {
         AdminLayout,
         AdminReviewSubjectUserLine,
-        AdminUserSupportTicketsWarning
+        AdminUserSupportTicketsWarning,
+        AppButton,
+        AppField,
+        AppTextarea
     }
 };
 </script>
@@ -564,5 +593,22 @@ export default {
 }
 .identity-validation-review-comment-user-visible .fa {
     margin-right: 0.5rem;
+}
+.admin-page__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+.admin-page__select:focus {
+    outline: none;
 }
 </style>

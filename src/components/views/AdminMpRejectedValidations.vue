@@ -39,12 +39,13 @@
                                     >
                                         {{ $t('verPerfil') }}
                                     </router-link>
-                                    <router-link
+                                    <AppButton
+                                        variant="primary"
+                                        size="sm"
                                         :to="{ name: 'admin-mp-rejected-validation-detail', params: { id: item.id } }"
-                                        class="btn btn-primary-blue btn-sm"
                                     >
                                         {{ $t('verDetalle') }}
-                                    </router-link>
+                                    </AppButton>
                                 </td>
                             </tr>
                         </tbody>
@@ -77,6 +78,7 @@ import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
@@ -158,7 +160,8 @@ export default {
     components: {
         AdminLayout,
         AdminPaginationBar,
-        Loading
+        Loading,
+        AppButton
     }
 };
 </script>
