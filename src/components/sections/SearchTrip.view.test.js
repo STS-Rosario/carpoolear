@@ -72,12 +72,15 @@ describe('SearchTrip mobile submit', () => {
         );
     });
 
-    it('pins the mobile submit above the footer bar with safe-area clearance', () => {
+    it('keeps the mobile Buscar button in document flow at the end of the form', () => {
         expect(cssSource).toMatch(
-            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*bottom:\s*calc\(\s*6rem\s*\+\s*env\(safe-area-inset-bottom/
+            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*position:\s*static/
         );
-        expect(cssSource).toMatch(
-            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*z-index:\s*9/
+        expect(cssSource).not.toMatch(
+            /\.trips-search--mobile\s+\.trips-search__submit\s*\{[^}]*position:\s*fixed/
+        );
+        expect(source).toMatch(
+            /trips-search__submit--mobile[\s\S]*\$t\('buscar'\)[\s\S]*<\/div>\s*<\/div>\s*<\/div>\s*<\/template>/
         );
     });
 });
