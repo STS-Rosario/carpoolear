@@ -91,6 +91,7 @@
                 <div class="pending-request-card__actions">
                     <AppButton
                         variant="success"
+                        size="sm"
                         :disabled="acceptInProcess || rejectInProcess"
                         :loading="acceptInProcess"
                         @click="onAcceptRequest"
@@ -102,6 +103,7 @@
                     </AppButton>
                     <AppButton
                         variant="danger"
+                        size="sm"
                         :disabled="rejectInProcess || acceptInProcess"
                         :loading="rejectInProcess"
                         @click="reject"
@@ -111,10 +113,9 @@
                             <spinner class="blue"></spinner>
                         </template>
                     </AppButton>
-                </div>
-                <div class="pending-request-card__message-action">
                     <AppButton
                         variant="secondary"
+                        size="sm"
                         @click="chat"
                     >
                         {{ $t('pendingRequestEnviarMensaje') }}
@@ -339,12 +340,10 @@ export default {
 .pending-request-card__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6em;
+    gap: 0.5rem;
     margin-top: 0.8em;
-}
-
-.pending-request-card__message-action {
-    margin-top: 0.8em;
+    width: fit-content;
+    max-width: 100%;
 }
 
 .pending-request-card__modal-actions {
@@ -360,12 +359,24 @@ export default {
         height: 3.5em;
     }
 
+    .pending-request-card__content {
+        font-size: 1rem;
+        line-height: 1.45;
+    }
+
     .pending-request-card__actions {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 100%;
     }
 
     .pending-request-card__actions :deep(.app-button) {
-        width: 100%;
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 }
 </style>
