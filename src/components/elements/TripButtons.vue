@@ -109,14 +109,16 @@
                     </button>
                 </template>
             </template>
-            <router-link
+            <AppButton
                 v-if="showLiveLocationShare"
-                class="btn btn-primary live-location-share-btn"
+                class="live-location-share-btn"
+                variant="primary"
+                block
+                icon-left="fa fa-wifi"
                 :to="{ name: 'trip_live_share', params: { id: trip.id } }"
             >
-                <i class="fa fa-wifi live-location-share-btn__icon" aria-hidden="true"></i>
                 {{ $t('compartirUbicacionTiempoReal') }}
-            </router-link>
+            </AppButton>
             <AppButton
                 v-if="showGroupChatButton"
                 variant="primary"
@@ -341,9 +343,13 @@ export default {
     width: 100%;
     box-sizing: border-box;
 }
-.live-location-share-btn__icon {
+.live-location-share-btn :deep(.app-button__icon--left) {
     transform: rotate(90deg);
-    margin-right: 0.35rem;
+}
+.live-location-share-btn :deep(.app-button__label) {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
 }
 .group-chat-btn__badge {
     display: inline-block;
