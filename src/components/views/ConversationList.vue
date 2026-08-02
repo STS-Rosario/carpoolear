@@ -25,30 +25,21 @@
                                 <h1 class="messages-page__title hidden-xs">
                                     {{ $t('mensajes') }}
                                 </h1>
-                                <div class="input-group messages-page__search">
-                                    <input
-                                        v-jump:click="'btn-search'"
+                                <div class="messages-page__search">
+                                    <AppInput
+                                        id="btn-search-input"
                                         v-model="textSearch"
-                                        v-debounceInput="onSearchUser"
-                                        type="text"
-                                        class="form-control"
                                         :placeholder="$t('escribeUnNombreYPresionaBuscar')"
+                                        @update:modelValue="onSearchInput"
                                     />
-                                    <span class="input-group-btn">
-                                        <!--  -->
-                                        <button
-                                            v-jump
-                                            id="btn-search"
-                                            class="btn btn-default"
-                                            type="button"
-                                            @click="onSearchUser"
-                                        >
-                                            <i
-                                                class="fa fa-search"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
+                                    <AppButton
+                                        variant="secondary"
+                                        icon-left="fa fa-search"
+                                        icon-only
+                                        id="btn-search"
+                                        :aria-label="$t('escribeUnNombreYPresionaBuscar')"
+                                        @click="onSearchUser"
+                                    />
                                 </div>
                                 <FilterChips
                                     v-if="textSearch.length === 0"
@@ -276,13 +267,16 @@ import {
     filterConversationsByKind
 } from '../../utils/conversationListFilter';
 import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
+import { debounce } from '../../services/utility';
 
 export default {
     name: 'conversation-list',
     data() {
         return {
             textSearch: '',
-            messagesFilter: 'all'
+            messagesFilter: 'all',
+            debouncedSearch: null
         };
     },
 
@@ -371,6 +365,12 @@ export default {
             this.searchUser(this.textSearch);
         },
 
+        onSearchInput() {
+            if (this.debouncedSearch) {
+                this.debouncedSearch();
+            }
+        },
+
         createConversation(user) {
             this.create(user)
                 .then((c) => {
@@ -428,13 +428,19 @@ export default {
             router.push({ name: 'conversation-chat' });
         }
     },
+    created() {
+        this.debouncedSearch = debounce(() => {
+            this.onSearchUser();
+        }, 800);
+    },
     updated() {},
     components: {
         Loading,
         CoordinateTrip,
         UserNameWithBadge,
         FilterChips,
-        AppButton
+        AppButton,
+        AppInput
     }
 };
 </script>

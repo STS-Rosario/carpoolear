@@ -174,48 +174,48 @@
                     </p>
 
                     <form class="manual-validation-upload-form" @submit.prevent="submitImages">
-                        <div class="form-group">
-                            <label class="manual-validation-field-label">
+                        <AppField class="manual-validation-upload-field">
+                            <template #label>
                                 {{ $t('manualValidationUploadLabelFront') }}
                                 <span class="required">*</span>
-                            </label>
+                            </template>
                             <input
                                 type="file"
+                                class="manual-validation__file"
                                 :accept="imageUploadAccept"
                                 ref="frontInput"
-                                @change="onFileChange($event, 'front')"
                                 required
-                                class="form-control"
+                                @change="onFileChange($event, 'front')"
                             />
-                        </div>
-                        <div class="form-group">
-                            <label class="manual-validation-field-label">
+                        </AppField>
+                        <AppField class="manual-validation-upload-field">
+                            <template #label>
                                 {{ $t('manualValidationUploadLabelBack') }}
                                 <span class="required">*</span>
-                            </label>
+                            </template>
                             <input
                                 type="file"
+                                class="manual-validation__file"
                                 :accept="imageUploadAccept"
                                 ref="backInput"
-                                @change="onFileChange($event, 'back')"
                                 required
-                                class="form-control"
+                                @change="onFileChange($event, 'back')"
                             />
-                        </div>
-                        <div class="form-group">
-                            <label class="manual-validation-field-label">
+                        </AppField>
+                        <AppField class="manual-validation-upload-field">
+                            <template #label>
                                 {{ $t('manualValidationUploadLabelSelfie') }}
                                 <span class="required">*</span>
-                            </label>
+                            </template>
                             <input
                                 type="file"
+                                class="manual-validation__file"
                                 :accept="imageUploadAccept"
                                 ref="selfieInput"
-                                @change="onFileChange($event, 'selfie')"
                                 required
-                                class="form-control"
+                                @change="onFileChange($event, 'selfie')"
                             />
-                        </div>
+                        </AppField>
                         <AppButton
                             type="submit"
                             variant="primary"
@@ -258,11 +258,13 @@ import {
     shouldShowManualValidationPayAgain
 } from '../../utils/manualIdentityValidationStatus';
 import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 
 export default {
     name: 'ManualIdentityValidation',
     components: {
-        AppButton
+        AppButton,
+        AppField
     },
     data() {
         return {
@@ -676,8 +678,16 @@ export default {
     font-weight: 600;
 }
 
-.manual-validation-upload-form .form-group {
-    margin-bottom: 1.1rem;
+.manual-validation-upload-field :deep(.app-field__control-wrap) {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.manual-validation__file {
+    width: 100%;
+    font-size: var(--ds-input-font-size, 1rem);
+    color: var(--ds-input-text, #22211f);
 }
 
 .manual-validation-upload-submit {

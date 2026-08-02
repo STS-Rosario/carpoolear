@@ -8,27 +8,27 @@
                 <p v-if="!hasCoordinates" class="alert alert-info">
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
-                <label class="live-location-share__label" for="live-share-url">{{
-                    $t('liveLocationShareUrlLabel')
-                }}</label>
-                <div class="live-location-share__url-row">
-                    <input
+                <div class="live-location-share__url-block">
+                    <AppInput
                         id="live-share-url"
-                        class="form-control live-location-share__url"
-                        :value="shareUrl"
+                        class="live-location-share__url"
+                        :model-value="shareUrl"
+                        :label="$t('liveLocationShareUrlLabel')"
                         readonly
                     />
-                    <AppButton variant="secondary" @click="copyShareUrl">
-                        {{ $t('liveLocationCopyUrl') }}
-                    </AppButton>
-                    <AppButton
-                        class="live-location-share__share-btn"
-                        variant="primary"
-                        icon-left="fa fa-share-alt"
-                        @click="shareLiveUrl"
-                    >
-                        {{ $t('compartirUbicacionTiempoReal') }}
-                    </AppButton>
+                    <div class="live-location-share__url-row">
+                        <AppButton variant="secondary" @click="copyShareUrl">
+                            {{ $t('liveLocationCopyUrl') }}
+                        </AppButton>
+                        <AppButton
+                            class="live-location-share__share-btn"
+                            variant="primary"
+                            icon-left="fa fa-share-alt"
+                            @click="shareLiveUrl"
+                        >
+                            {{ $t('compartirUbicacionTiempoReal') }}
+                        </AppButton>
+                    </div>
                 </div>
                 <AppButton
                     variant="danger"
@@ -65,6 +65,7 @@ import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
 import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
 import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAuthStore } from '../../stores/auth.js';
 import { useRootStore } from '../../stores/root.js';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
@@ -222,6 +223,7 @@ export default {
     },
     components: {
         AppButton,
+        AppInput,
         Loading,
         LiveLocationLastUpdated
     }
@@ -260,7 +262,8 @@ export default {
 }
 
 .live-location-share__url {
-    flex: 1 1 220px;
+    width: 100%;
+    margin-bottom: 0;
 }
 
 .live-location-share__share-icon {
