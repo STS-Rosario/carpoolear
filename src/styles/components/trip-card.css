@@ -99,12 +99,12 @@
     white-space: nowrap;
 }
 
-.trip-card-shell__meta :deep(.user-ratings-counts) {
+.trip-card-shell__meta .user-ratings-counts {
     font-size: 0.75rem;
     gap: 0.4em;
 }
 
-.trip-card-shell__meta :deep(.user-ratings-counts__pair) {
+.trip-card-shell__meta .user-ratings-counts__pair {
     gap: 0.25em;
 }
 
