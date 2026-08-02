@@ -354,7 +354,8 @@ export default {
             if (this.user?.id != null) {
                 clearTripCreationDraft(this.user.id);
             }
-            this.resetTripCreationForm();
+            // Avoid remounting the wizard on leave: that syncs ?step=1 and
+            // races navigation from Ver viaje to trip detail.
         }
         next();
     },
