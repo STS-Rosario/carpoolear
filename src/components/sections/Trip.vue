@@ -443,6 +443,11 @@ export default {
     width: 100%;
 }
 
+.trip-card-owner-actions :deep(.app-button) {
+    padding: 0.375rem var(--ds-button-padding-x-md);
+    line-height: 1.25;
+}
+
 .trip-seats-control {
     display: flex;
     flex-direction: row;
