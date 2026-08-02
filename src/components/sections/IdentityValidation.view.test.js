@@ -36,6 +36,46 @@ describe('IdentityValidation page card', () => {
     });
 });
 
+describe('IdentityValidation CTA AppButtons', () => {
+    it('uses primary AppButtons for pay, upload docs, and Mercado Pago paths', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?payManualValidation[\s\S]*?pagarAhora/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?subirDocumentacion/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?startMercadoPagoOAuth[\s\S]*?validarConMercadoPago/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-primary"[\s\S]*?pagarAhora/
+        );
+        expect(viewSource).not.toMatch(
+            /class="btn btn-danger[\s\S]*?validarConMercadoPago/
+        );
+    });
+
+    it('uses secondary AppButton for manual verification request', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?goToManualValidation[\s\S]*?solicitarVerificacionManual/
+        );
+        expect(viewSource).not.toContain('identity-validation-btn-outline');
+    });
+
+    it('drops legacy white-text overrides for bootstrap primary and danger buttons', () => {
+        expect(viewSource).not.toMatch(
+            /\.identity-validation-component\s+\.btn-primary[\s\S]*color:\s*#fff/
+        );
+        expect(viewSource).not.toMatch(
+            /\.identity-validation-component\s+\.btn-danger[\s\S]*color:\s*#fff/
+        );
+        expect(viewSource).not.toContain('identity-validation-btn-cta');
+    });
+});
+
 describe('IdentityValidation admin review note contexts', () => {
     it('uses approval note helper in success banner', () => {
         expect(viewSource).toContain('displayableManualApprovalReviewNote');
