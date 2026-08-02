@@ -52,4 +52,25 @@ describe('Register page redesign integration', () => {
         expect(registerSource).toContain(":label=\"$t('registrarme')\"");
         expect(registerSource).toContain('class="register-form__submit g-recaptcha"');
     });
+
+    it('uses primary AppButton for email entry and keeps Facebook brand styling', () => {
+        expect(registerSource).toMatch(
+            /<AppButton[\s\S]*?id="btn_show_register"[\s\S]*?variant="primary"[\s\S]*?onShowRegister[\s\S]*?ingresaEmail/
+        );
+        expect(registerSource).toMatch(
+            /btn_show_register[\s\S]*?iconLeft|btn_show_register[\s\S]*?fa-envelope/
+        );
+        expect(registerSource).not.toMatch(
+            /class="btn btn-primary btn-shadowed-black btn-with-icon btn-email"/
+        );
+        expect(registerSource).toMatch(
+            /class="[^"]*btn-facebook[^"]*btn-with-icon[^"]*"/
+        );
+        expect(registerSource).toMatch(
+            /facebookLogin[\s\S]*?Facebook|btn-facebook[\s\S]*?facebookLogin/
+        );
+        expect(registerSource).not.toMatch(
+            /class="btn btn-primary btn-search btn-facebook btn-with-icon"/
+        );
+    });
 });
