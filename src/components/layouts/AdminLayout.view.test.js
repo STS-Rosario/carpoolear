@@ -52,4 +52,23 @@ describe('AdminLayout desktop spacing', () => {
         expect(layoutSource).not.toMatch(/class="col-md-20[^"]*"/);
         expect(layoutSource).not.toContain('<div class="col-md-24">');
     });
+
+    it('wraps main content in a DS card with dark page-title styling', () => {
+        expect(layoutSource).toContain('admin-layout-card');
+        expect(layoutSource).toMatch(
+            /\.admin-layout-card\s*\{[^}]*background:\s*var\(--ds-card-bg\)/
+        );
+        expect(layoutSource).toMatch(
+            /\.admin-layout-card\s*\{[^}]*border-radius:\s*var\(--ds-card-radius\)/
+        );
+        expect(layoutSource).toMatch(
+            /\.admin-layout-card\s*\{[^}]*box-shadow:\s*var\(--ds-card-shadow\)/
+        );
+        expect(layoutSource).toMatch(
+            /admin-layout-card[\s\S]*?h2[\s\S]*?color:\s*var\(--ds-text-primary\)/
+        );
+        expect(layoutSource).toMatch(
+            /admin-layout-card[\s\S]*?\.app-page-title[\s\S]*?color:\s*var\(--ds-text-primary\)/
+        );
+    });
 });
