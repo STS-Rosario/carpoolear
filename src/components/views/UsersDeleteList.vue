@@ -98,27 +98,29 @@
                                     {{ formatDate(currentRequest.date_requested) }}</label
                                 >
                             </div>
-                            <div class="form-group">
-                                <label for="action-taken">{{ $t('accionTomada') }}</label>
+                            <AppField
+                                :label="$t('accionTomada')"
+                                label-for="action-taken"
+                            >
                                 <select
                                     v-model="editForm.action_taken"
                                     id="action-taken"
-                                    class="form-control"
+                                    class="users-delete-list__select"
                                 >
                                     <option :value="0">{{ $t('solicitado') }}</option>
                                     <option :value="1">{{ $t('eliminado') }}</option>
                                     <option :value="2">{{ $t('rechazado') }}</option>
                                 </select>
-                            </div>
+                            </AppField>
                             <div class="text-center" style="margin-top: 1.5em;">
-                                <button
-                                    class="btn btn-primary"
-                                    @click="submitUpdate"
+                                <AppButton
+                                    variant="primary"
                                     :disabled="loading"
+                                    :loading="loading"
+                                    @click="submitUpdate"
                                 >
-                                    <span v-if="!loading">{{ $t('guardar') }}</span>
-                                    <spinner class="blue" v-if="loading"></spinner>
-                                </button>
+                                    {{ $t('guardar') }}
+                                </AppButton>
                             </div>
                         </div>
                     </div></template>
@@ -131,7 +133,8 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import Loading from '../Loading.vue';
 import modal from '../Modal';
-import Spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
@@ -139,6 +142,13 @@ import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 
 export default {
     name: 'admin-users-delete-list',
+    components: {
+        AdminLayout,
+        Loading,
+        modal,
+        AppButton,
+        AppField
+    },
     data() {
         return {
             deleteRequests: null,
@@ -227,12 +237,6 @@ export default {
                 });
         }
     },
-    components: {
-        AdminLayout,
-        Loading,
-        modal,
-        Spinner
-    },
     mounted() {
         this.adminApi = new AdminApi();
         this.loadDeleteRequests();
@@ -296,6 +300,21 @@ export default {
 .ajax-loader {
     margin: 20px auto;
     display: block;
+}
+
+.users-delete-list__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+}
+
+.users-delete-list__select:focus {
+    outline: none;
 }
 </style>
 
