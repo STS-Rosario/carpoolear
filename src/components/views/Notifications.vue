@@ -286,9 +286,9 @@ export default {
     background: #eee;
 }
 .notifications-list .list-group-item.unread {
-    background: rgba(254, 153, 0, 0.25);
+    background: #e8f4fa;
 }
 .notifications-list .list-group-item.unread:hover {
-    background: rgba(254, 222, 0, 0.1);
+    background: #dceef7;
 }
 </style>
