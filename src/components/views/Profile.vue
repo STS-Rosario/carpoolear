@@ -228,6 +228,8 @@ export default {
 
 <style scoped>
 .profile-pending-friend-request {
+    width: fit-content;
+    max-width: 100%;
     margin: 0 0 1rem;
     cursor: default;
 }
@@ -239,25 +241,21 @@ export default {
     text-decoration: none;
 }
 
+.profile-pending-friend-request :deep(.home-prompt-banner__body) {
+    flex: 0 1 auto;
+}
+
 .profile-pending-friend-request__actions {
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-end;
     gap: 0.35rem;
-    margin-left: auto;
 }
 
 @media only screen and (max-width: 640px) {
     .profile-pending-friend-request {
         flex-wrap: wrap;
-    }
-
-    .profile-pending-friend-request__actions {
-        width: 100%;
-        margin-left: 0;
-        justify-content: flex-end;
     }
 }
 </style>
