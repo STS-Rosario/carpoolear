@@ -184,12 +184,13 @@
                                         v-if="moreConversations"
                                         class="list-group-item"
                                     >
-                                        <button
-                                            class="btn btn-primary btn-block"
+                                        <AppButton
+                                            variant="primary"
+                                            block
                                             @click="nextPage"
                                         >
                                             {{ $t('masResultados') }}
-                                        </button>
+                                        </AppButton>
                                     </li>
                                     <template #no-data><li
                                         class="list-group-item alert alert-warning"
@@ -274,6 +275,7 @@ import {
     countConversationsByKind,
     filterConversationsByKind
 } from '../../utils/conversationListFilter';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
     name: 'conversation-list',
@@ -431,7 +433,8 @@ export default {
         Loading,
         CoordinateTrip,
         UserNameWithBadge,
-        FilterChips
+        FilterChips,
+        AppButton
     }
 };
 </script>

@@ -54,9 +54,9 @@
                 </div>
             </div>
             <div class="text-right">
-                <button class="btn btn-primary" v-on:click="nextPage()">
+                <AppButton variant="primary" @click="nextPage()">
                     {{ $t('siguiente') }}
-                </button>
+                </AppButton>
             </div>
             <template #no-data><p class="alert alert-warning" role="alert">
                 {{ $t('noHayNotificaciones') }}

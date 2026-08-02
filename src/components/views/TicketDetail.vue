@@ -50,16 +50,22 @@
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
                 <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
                 <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
-                <button type="button" class="btn btn-primary" :disabled="replySubmitting" @click="sendReply">
+                <AppButton
+                    variant="primary"
+                    :loading="replySubmitting"
+                    :disabled="replySubmitting"
+                    @click="sendReply"
+                >
                     {{ replySubmitting ? $t('enviando') : $t('responder') }}
-                </button>
-                <button
+                </AppButton>
+                <AppButton
                     v-if="showUserCloseButton"
-                    class="btn btn-default mleft-10"
+                    variant="secondary"
+                    class="mleft-10"
                     @click="closeTicket"
                 >
                     {{ $t('cerrarTicket') }}
-                </button>
+                </AppButton>
             </div>
         </div>
     </div>
@@ -68,6 +74,7 @@
 <script>
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import { markdownToHtml } from '../../services/markdown';
@@ -262,7 +269,8 @@ export default {
         }
     },
     components: {
-        editor: ToastUiEditor
+        editor: ToastUiEditor,
+        AppButton
     },
     mounted() {
         this.refresh();
