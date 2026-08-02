@@ -133,6 +133,28 @@ describe('UpdateProfile AppInput fields', () => {
         expect(viewSource).not.toMatch(/<textarea[\s\S]*?v-model="user\.description"/);
     });
 
+    it('uses AppField for account type and bank selects', () => {
+        expect(viewSource).toContain(
+            "import AppField from '../ui/AppField.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?tipoDeCuenta[\s\S]*?id="tipoDeCuenta"[\s\S]*?v-model="user\.account_type"/
+        );
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?bancoDeCuenta[\s\S]*?id="bancoDeCuenta"[\s\S]*?v-model="user\.account_bank"/
+        );
+        expect(viewSource).toContain('update-profile__select');
+        expect(viewSource).not.toMatch(
+            /id="tipoDeCuenta"[\s\S]*?class="form-control"/
+        );
+        expect(viewSource).not.toMatch(
+            /id="bancoDeCuenta"[\s\S]*?class="form-control"/
+        );
+        expect(viewSource).toMatch(
+            /\.update-profile__select\s*\{[^}]*border:\s*0/
+        );
+    });
+
     it('offsets the datos públicos checkbox 5px to the right', () => {
         expect(viewSource).toContain('update-profile-datos-publicos');
         expect(viewSource).toContain("$t('datosVisiblesCheck')");
