@@ -184,46 +184,54 @@
                     />
                     <p class="help-block">{{ $t('requisitosRegister') }}</p>
                     <div class="form-group">
-                        <label for="tipoDeCuenta">
-                            {{ $t('tipoDeCuenta') }}
-                        </label>
-                        <select
-                            v-model="account_type"
-                            id="tipoDeCuenta"
-                            class="form-control"
-                            :class="{ 'has-error': accountTypeError.state }"
+                        <AppField
+                            :label="$t('tipoDeCuenta')"
+                            label-for="tipoDeCuenta"
+                            :error="
+                                accountTypeError.state
+                                    ? accountTypeError.message
+                                    : ''
+                            "
                         >
-                            <option
-                                v-for="option in accountTypes"
-                                v-bind:value="option.id"
+                            <select
+                                id="tipoDeCuenta"
+                                v-model="account_type"
+                                class="register-page__select"
                             >
-                                {{ option.name }}
-                            </option>
-                        </select>
-                        <span class="error" v-if="accountTypeError.state">
-                            {{ accountTypeError.message }}
-                        </span>
+                                <option
+                                    v-for="option in accountTypes"
+                                    :key="option.id"
+                                    v-bind:value="option.id"
+                                >
+                                    {{ option.name }}
+                                </option>
+                            </select>
+                        </AppField>
                     </div>
                     <div class="form-group">
-                        <label for="bancoDeCuenta">
-                            {{ $t('bancoDeCuenta') }}
-                        </label>
-                        <select
-                            v-model="account_bank"
-                            id=""
-                            class="form-control"
-                            :class="{ 'has-error': accountBankError.state }"
+                        <AppField
+                            :label="$t('bancoDeCuenta')"
+                            label-for="bancoDeCuenta"
+                            :error="
+                                accountBankError.state
+                                    ? accountBankError.message
+                                    : ''
+                            "
                         >
-                            <option
-                                v-for="option in banks"
-                                v-bind:value="option.id"
+                            <select
+                                id="bancoDeCuenta"
+                                v-model="account_bank"
+                                class="register-page__select"
                             >
-                                {{ option.name }}
-                            </option>
-                        </select>
-                        <span class="error" v-if="accountBankError.state">
-                            {{ accountBankError.message }}
-                        </span>
+                                <option
+                                    v-for="option in banks"
+                                    :key="option.id"
+                                    v-bind:value="option.id"
+                                >
+                                    {{ option.name }}
+                                </option>
+                            </select>
+                        </AppField>
                     </div>
                     <div class="form-group">
                         <label for="accountNumber">
@@ -324,6 +332,7 @@ import modal from '../Modal';
 import dayjs from '../../dayjs';
 import Spinner from '../Spinner.vue';
 import AppInput from '../ui/AppInput.vue';
+import AppField from '../ui/AppField.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppPageTitle from '../ui/AppPageTitle.vue';
 import AppAuthPage from '../ui/AppAuthPage.vue';
@@ -420,6 +429,7 @@ export default {
         modal,
         Spinner,
         AppInput,
+        AppField,
         AppButton,
         AppPageTitle,
         AppAuthPage
@@ -813,6 +823,23 @@ input[type='file'] {
 }
 .text-creating-with-fb {
     margin: 1em 0;
+}
+.register-page__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+.register-page__select:focus {
+    outline: none;
 }
 @media (min-width: 768px) {
     .text-with,

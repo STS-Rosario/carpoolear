@@ -319,54 +319,68 @@
                         "
                     >
                         <div class="form-group">
-                            <label for="tipoDeCuenta">
-                                {{ $t('tipoDeCuenta') }}
-                                <span
-                                    class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
-                                    >(*)</span
-                                >
-                            </label>
-                            <select
-                                v-model="user.account_type"
-                                id="tipoDeCuenta"
-                                class="form-control"
+                            <AppField
+                                label-for="tipoDeCuenta"
+                                :error="
+                                    accountTypeError.state
+                                        ? accountTypeError.message
+                                        : ''
+                                "
                             >
-                                <option
-                                    v-for="option in accountTypes"
-                                    v-bind:value="option.id"
+                                <template #label>
+                                    {{ $t('tipoDeCuenta') }}
+                                    <span
+                                        class="required-field-flag"
+                                        :title="$t('tituloCampoRequerido')"
+                                        >(*)</span
+                                    >
+                                </template>
+                                <select
+                                    id="tipoDeCuenta"
+                                    v-model="user.account_type"
+                                    class="update-profile__select"
                                 >
-                                    {{ option.name }}
-                                </option>
-                            </select>
-                            <span class="error" v-if="accountTypeError.state">
-                                {{ accountTypeError.message }}
-                            </span>
+                                    <option
+                                        v-for="option in accountTypes"
+                                        :key="option.id"
+                                        v-bind:value="option.id"
+                                    >
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                            </AppField>
                         </div>
                         <div class="form-group">
-                            <label for="bancoDeCuenta">
-                                {{ $t('bancoDeCuenta') }}
-                                <span
-                                    class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
-                                    >(*)</span
-                                >
-                            </label>
-                            <select
-                                v-model="user.account_bank"
-                                id=""
-                                class="form-control"
+                            <AppField
+                                label-for="bancoDeCuenta"
+                                :error="
+                                    accountBankError.state
+                                        ? accountBankError.message
+                                        : ''
+                                "
                             >
-                                <option
-                                    v-for="option in banks"
-                                    v-bind:value="option.id"
+                                <template #label>
+                                    {{ $t('bancoDeCuenta') }}
+                                    <span
+                                        class="required-field-flag"
+                                        :title="$t('tituloCampoRequerido')"
+                                        >(*)</span
+                                    >
+                                </template>
+                                <select
+                                    id="bancoDeCuenta"
+                                    v-model="user.account_bank"
+                                    class="update-profile__select"
                                 >
-                                    {{ option.name }}
-                                </option>
-                            </select>
-                            <span class="error" v-if="accountBankError.state">
-                                {{ accountBankError.message }}
-                            </span>
+                                    <option
+                                        v-for="option in banks"
+                                        :key="option.id"
+                                        v-bind:value="option.id"
+                                    >
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                            </AppField>
                         </div>
                         <AppInput
                             id="accountNumber"
@@ -586,6 +600,7 @@ import dayjs from '../../dayjs';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
 import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
@@ -1235,6 +1250,7 @@ export default {
         SvgItem,
         Spinner,
         AppButton,
+        AppField,
         AppInput,
         AppTextarea,
         modal
@@ -1275,6 +1291,25 @@ export default {
 
 .update-profile-datos-publicos {
     margin-left: 5px;
+}
+
+.update-profile__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.update-profile__select:focus {
+    outline: none;
 }
 
 .update-profile-component :deep(.app-input__label .description) {
