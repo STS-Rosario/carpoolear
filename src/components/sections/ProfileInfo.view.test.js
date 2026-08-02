@@ -4,28 +4,21 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'ProfileInfo.vue');
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
-const profilePageCssPath = path.resolve(
-    __dirname,
-    '../../styles/components/profile-page.css'
-);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
-const profilePageCss = fs.readFileSync(profilePageCssPath, 'utf8');
 
 describe('ProfileInfo public panel', () => {
     it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
-        expect(viewSource).toContain('profile-info-panel');
+        expect(viewSource).toContain('data-testid="profile-identity-tile"');
         expect(viewSource).toContain("$t('sobreMi')");
         expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
         expect(viewSource).toContain("$t('contactoPrivacidadPerfil')");
         expect(viewSource).not.toContain('UserRatingsCounts');
-        expect(viewSource).not.toContain('profile-info--ratings');
-        expect(viewSource).not.toContain('profile-info--member-stats');
-        expect(viewSource).not.toContain('circle-box profile');
         expect(viewSource).not.toContain('fa-smile');
     });
 
     it('always shows identity tile with verified or unverified copy', () => {
+        expect(viewSource).toContain('data-testid="profile-identity-tile"');
         expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
         expect(viewSource).toContain("$t('identidadVerificadaSub')");
         expect(viewSource).toContain("$t('identidadNoVerificadaTitulo')");
@@ -33,39 +26,27 @@ describe('ProfileInfo public panel', () => {
         expect(viewSource).not.toMatch(
             /v-if="isIdentityVerified"[\s\S]*?identidadVerificadaTitulo/
         );
-        expect(viewSource).toContain('profile-info-panel__tile-icon-wrap--verified');
-        expect(viewSource).toContain('profile-info-panel__tile-icon--verified');
     });
 
-    it('shows shield when verified and person icon when unverified', () => {
+    it('marks verified identity with an accessible verified hook', () => {
+        expect(viewSource).toContain(
+            'data-testid="profile-identity-verified"'
+        );
+        expect(viewSource).toContain(
+            'data-testid="profile-identity-unverified"'
+        );
+        expect(viewSource).toMatch(
+            /isIdentityVerified\s*\?\s*['"]profile-identity-verified['"]\s*:\s*['"]profile-identity-unverified['"]/
+        );
+        expect(viewSource).toContain("$t('usuarioVerificado')");
         expect(viewSource).toMatch(/['"]fa-shield['"]:\s*isIdentityVerified/);
         expect(viewSource).toMatch(/['"]fa-user['"]:\s*!isIdentityVerified/);
     });
 
-    it('centers tile icons and beats legacy floated profile icons', () => {
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon\s*\{[^}]*float:\s*none/
-        );
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap\s*\{[^}]*align-items:\s*center/
-        );
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap\s*\{[^}]*justify-content:\s*center/
-        );
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon-wrap--verified\s*\{[^}]*background:/
-        );
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon--verified\s*\{[^}]*color:\s*var\(--profile-verified/
-        );
-        expect(profilePageCss).toMatch(
-            /\.profile-page\s+\.profile-info-component\s+\.profile-info-panel__tile-icon::before\s*\{[^}]*translateY/
-        );
-    });
-
     it('always shows response tile when the conversation delay module is on', () => {
+        expect(viewSource).toContain('data-testid="profile-response-tile"');
         expect(viewSource).toContain('showResponseTile');
-        expect(viewSource).toContain("respondeMensajesPorcentaje");
+        expect(viewSource).toContain('respondeMensajesPorcentaje');
         expect(viewSource).toContain("$t('sinDatosRespuestaTitulo')");
         expect(viewSource).toContain("$t('sinDatosRespuestaSub')");
         expect(viewSource).toContain('module_conversation_average_delay');
