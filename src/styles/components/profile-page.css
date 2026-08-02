@@ -116,6 +116,10 @@
     box-sizing: border-box;
 }
 
+.profile-page .profile-info-component {
+    padding-bottom: 1rem;
+}
+
 .profile-page__content-card {
     width: 100%;
     max-width: 100%;
