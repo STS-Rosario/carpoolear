@@ -17,26 +17,28 @@
             @profile-click="onProfileClick"
             @detail-click="onDetailClick"
         >
-            <template #actions-extra>
-                <router-link
+            <template #footer-extra>
+                <AppButton
                     v-if="showShareLocationLink"
+                    class="ongoing-trip__share-btn"
+                    :class="{
+                        'ongoing-trip__share-btn--active': isSharingLiveLocation
+                    }"
+                    variant="secondary"
+                    block
+                    icon-left="fa fa-wifi"
                     :to="{
                         name: 'trip_live_share',
                         params: { id: trip.id }
                     }"
-                    :class="[
-                        'ongoing-trip__share',
-                        { 'ongoing-trip__share--active': isSharingLiveLocation }
-                    ]"
                     @click.stop
                 >
-                    <i class="fa fa-wifi ongoing-trip__share-icon" aria-hidden="true"></i>
-                    <span>{{
+                    {{
                         isSharingLiveLocation
                             ? $t('compartiendoUbicacionTiempoReal')
                             : $t('compartirUbicacionTiempoReal')
-                    }}</span>
-                </router-link>
+                    }}
+                </AppButton>
             </template>
         </TripCardShell>
     </div>
@@ -53,6 +55,7 @@ import { formatTripCardDate, formatTripCardTime } from '../../utils/tripCardDisp
 import { useAuthStore } from '../../stores/auth.js';
 import TripLiveShareApi from '../../services/api/TripLiveShare.js';
 import TripCardShell from './TripCardShell.vue';
+import AppButton from '../ui/AppButton.vue';
 
 const tripLiveShareApi = new TripLiveShareApi();
 
@@ -154,7 +157,8 @@ export default {
         }
     },
     components: {
-        TripCardShell
+        TripCardShell,
+        AppButton
     }
 };
 </script>
@@ -171,20 +175,18 @@ export default {
     font-weight: 700;
 }
 
-.ongoing-trip__share {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: inherit;
-    text-decoration: none;
-    font-weight: 700;
-}
-
-.ongoing-trip__share--active {
-    color: #e53935;
-}
-
-.ongoing-trip__share-icon {
+.ongoing-trip__share-btn :deep(.app-button__icon--left) {
     transform: rotate(90deg);
+}
+
+.ongoing-trip__share-btn :deep(.app-button__label) {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+}
+
+.ongoing-trip__share-btn--active {
+    color: #e53935;
+    border-color: #e53935;
 }
 </style>
