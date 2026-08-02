@@ -140,26 +140,43 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('showAssignedToOtherAdmin');
     });
 
-    it('places assign and unassign actions at the top with distinct button styles', () => {
+    it('places assign and unassign actions at the top with distinct AppButton variants', () => {
         const assignmentTop = viewSource.indexOf('ticket-assignment-actions');
         const replyBox = viewSource.indexOf('admin-reply-box');
-        const categoryLabel = viewSource.indexOf("{{ $t('categoriaTicket') }}");
+        const categoryField = viewSource.indexOf('admin-support-ticket-detail__category-select');
         expect(assignmentTop).toBeGreaterThan(-1);
-        expect(assignmentTop).toBeLessThan(categoryLabel);
+        expect(assignmentTop).toBeLessThan(categoryField);
         expect(assignmentTop).toBeLessThan(replyBox);
-        expect(viewSource).toContain('btn-info');
-        expect(viewSource).toContain('btn-warning');
-        expect(viewSource).toMatch(/showAssignTicketButton[\s\S]*btn-info/);
-        expect(viewSource).toMatch(/showUnassignTicketButton[\s\S]*btn-warning/);
+        expect(viewSource).toMatch(/showAssignTicketButton[\s\S]*variant="secondary"/);
+        expect(viewSource).toMatch(/showUnassignTicketButton[\s\S]*variant="warning"/);
     });
 
-    it('uses green resolve and red close action buttons', () => {
-        expect(viewSource).toMatch(/showResolveTicketButton[\s\S]*btn-success/);
-        expect(viewSource).toMatch(/showCloseTicketButton[\s\S]*btn-danger/);
+    it('uses success and danger AppButtons for resolve and close actions', () => {
+        expect(viewSource).toMatch(/showResolveTicketButton[\s\S]*variant="success"/);
+        expect(viewSource).toMatch(/showCloseTicketButton[\s\S]*variant="danger"/);
     });
 
-    it('uses blue mark needs review action button', () => {
-        expect(viewSource).toMatch(/showMarkNeedsReviewButton[\s\S]*btn-info/);
+    it('uses secondary AppButton for mark needs review action', () => {
+        expect(viewSource).toMatch(/showMarkNeedsReviewButton[\s\S]*variant="secondary"/);
+    });
+
+    it('uses AppField, AppTextarea, AppInput and AppButton for admin form controls', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toContain("import AppField from '../ui/AppField.vue'");
+        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
+        expect(viewSource).toContain("import AppTextarea from '../ui/AppTextarea.vue'");
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?categoriaTicket[\s\S]*?<select[\s\S]*?v-model="ticketType"[\s\S]*?admin-support-ticket-detail__category-select/
+        );
+        expect(viewSource).toMatch(/<AppTextarea[\s\S]*?v-model="internalNote"[\s\S]*?notaInterna/);
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?v-model="replyTemplateSearch"[\s\S]*?buscarPlantillasPlaceholder/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?sendReply[\s\S]*?responder/
+        );
+        expect(viewSource).not.toContain('form-control');
+        expect(viewSource).not.toContain('btn btn-');
     });
 
     it('toggles resolve and unresolve actions', () => {

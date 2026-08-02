@@ -130,4 +130,24 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('setInterval');
         expect(viewSource).toContain('loadTickets({ silent: true })');
     });
+
+    it('uses AppButton and AppField borderless selects for admin actions and filters', () => {
+        expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toContain("import AppField from '../ui/AppField.vue'");
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?:to="\{ name: 'admin-support-ticket-new' \}"[\s\S]*?crearTicket/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?:to="\{ name: 'admin-support-reply-templates' \}"[\s\S]*?editarPlantillasRespuestas/
+        );
+        expect(viewSource).toMatch(
+            /<AppField[\s\S]*?support-filter-type[\s\S]*?<select[\s\S]*?v-model="filterType"[\s\S]*?admin-support-tickets__filter-select/
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="secondary"[\s\S]*?applyFilters[\s\S]*?buscar/
+        );
+        expect(viewSource).not.toContain('form-control');
+        expect(viewSource).not.toContain('btn btn-primary');
+        expect(viewSource).not.toContain('btn btn-default');
+    });
 });
