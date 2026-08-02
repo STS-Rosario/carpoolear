@@ -15,7 +15,7 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('@click.prevent="toggleAdvancedFilters"');
         expect(source).toContain("$t('filtrosAvanzados')");
         expect(source).toContain('cursor: pointer');
-        expect(source).toContain('margin-left');
+        expect(source).toContain('advanced-filters-toggle-desktop');
         expect(source).not.toContain('id="cbxAdvancedFilters"');
     });
 
@@ -40,6 +40,21 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('v-model="$data[field.modelKey]"');
         expect(source).toContain('ALLOW_PREFERENCE_FILTER_FIELDS');
         expect(source).toContain("$t('filtroCualquiera')");
+    });
+
+    it('uses AppField for allow-preference selects on desktop and mobile', () => {
+        expect(source).toMatch(
+            /allow-preference-filter[\s\S]*?<AppField[\s\S]*?:label="\$t\(field\.labelKey\)"[\s\S]*?<select/
+        );
+        expect(source).toContain('trips-search__preference-select');
+        expect(source).toContain("idPrefix + 'Desktop'");
+        expect(source).toContain("idPrefix + 'Mobile'");
+        expect(source).not.toMatch(
+            /allow-preference-filter[\s\S]*?class="form-control"/
+        );
+        expect(source).toMatch(
+            /\.trips-search__preference-select\s*\{[^}]*border:\s*0/
+        );
     });
 
     it('emits advanced filter params through appendAllowPreferenceParams', () => {
