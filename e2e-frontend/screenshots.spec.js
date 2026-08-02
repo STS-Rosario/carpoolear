@@ -181,10 +181,26 @@ test.describe('Screenshot tests', () => {
 
         for (let step = 1; step <= 9; step += 1) {
             test(`new trip wizard step ${step}`, async ({ page }) => {
-                await page.addInitScript(() => {
-                    localStorage.removeItem('TRIP_CREATION_DRAFT');
-                });
-                await page.goto(`/trips/create?step=${step}`);
+                if (step === 1) {
+                    await page.addInitScript(() => {
+                        localStorage.removeItem('TRIP_CREATION_DRAFT');
+                    });
+                    await page.goto('/trips/create?step=1');
+                } else {
+                    await page.addInitScript((stepNum) => {
+                        localStorage.setItem(
+                            'TRIP_CREATION_DRAFT',
+                            JSON.stringify({
+                                1: {
+                                    currentStep: stepNum,
+                                    maxVisitedStep: stepNum,
+                                    trip: { is_passenger: 0 }
+                                }
+                            })
+                        );
+                    }, step);
+                    await page.goto('/trips/create?resumeDraft=1');
+                }
                 await waitForPageReady(page);
                 await expect(
                     page.getByTestId(`trip-creation-wizard-step-${step}`)
@@ -201,7 +217,18 @@ test.describe('Screenshot tests', () => {
                 route.fulfill({
                     status: 200,
                     contentType: 'application/json',
-                    body: JSON.stringify({ data: MOCK_TRIP_DETAIL })
+                    body: JSON.stringify({
+                        data: {
+                            ...MOCK_TRIP_DETAIL,
+                            user: {
+                                id: MOCK_USER.id,
+                                name: MOCK_USER.name,
+                                image: MOCK_USER.image,
+                                positive_ratings: MOCK_USER.positive_ratings,
+                                negative_ratings: MOCK_USER.negative_ratings
+                            }
+                        }
+                    })
                 });
             });
             await page.goto('/trips/update/1');

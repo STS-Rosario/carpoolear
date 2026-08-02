@@ -25,11 +25,32 @@ test.describe('trip creation wizard', () => {
         await expect(page.getByTestId('trip-creation-role-driver')).toBeVisible();
     });
 
-    test('deep link opens requested wizard step', async ({ page }) => {
+    test('fresh create ignores step query and starts at role step', async ({
+        page
+    }) => {
         await page.addInitScript(() => {
             localStorage.removeItem('TRIP_CREATION_DRAFT');
         });
         await page.goto('/trips/create?step=5');
+        await waitForPageReady(page);
+        await expect(page).toHaveURL(/step=1/);
+        await expect(page.getByTestId('trip-creation-wizard-step-1')).toBeVisible();
+    });
+
+    test('resumeDraft opens wizard at the saved draft step', async ({ page }) => {
+        await page.addInitScript(() => {
+            localStorage.setItem(
+                'TRIP_CREATION_DRAFT',
+                JSON.stringify({
+                    1: {
+                        currentStep: 5,
+                        maxVisitedStep: 5,
+                        trip: { is_passenger: 0 }
+                    }
+                })
+            );
+        });
+        await page.goto('/trips/create?resumeDraft=1');
         await waitForPageReady(page);
         await expect(page).toHaveURL(/step=5/);
         await expect(page.getByTestId('trip-creation-wizard-step-5')).toBeVisible();

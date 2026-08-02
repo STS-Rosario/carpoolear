@@ -117,7 +117,7 @@ test.describe('Friends overhaul', () => {
         await waitForPageReady(page);
 
         await page.locator('#input-name').fill('Lil');
-        await page.locator('.input-group-btn button').click();
+        await page.getByRole('button', { name: /buscar personas/i }).click();
 
         await expect(page.getByText('Lilliana Treutel')).toBeVisible({
             timeout: 15000
@@ -164,7 +164,7 @@ test.describe('Friends overhaul', () => {
         await waitForPageReady(page);
 
         await page.locator('#input-name').fill('Lil');
-        await page.locator('.input-group-btn button').click();
+        await page.getByRole('button', { name: /buscar personas/i }).click();
         await page.getByRole('button', { name: /agregar/i }).click();
 
         const sentButton = page.getByRole('button', { name: /^enviada$/i });
@@ -208,11 +208,11 @@ test.describe('Friends overhaul', () => {
             });
         });
 
-        await page.goto('/setting/friends');
+        await page.goto('/setting/friends?tab=solicitudes&filter=enviadas');
         await waitForPageReady(page);
 
         await expect(
-            page.getByRole('heading', { name: /solicitudes de amigo pendientes/i })
+            page.getByText(/enviadas/i).first()
         ).toBeVisible({ timeout: 15000 });
         await expect(page.getByText('Lilliana Treutel')).toBeVisible();
 
@@ -273,6 +273,6 @@ test.describe('Friends overhaul', () => {
         await expect(page.getByText('Viajes de mis amigos')).toBeVisible({
             timeout: 15000
         });
-        await expect(page.getByText('Otros viajes')).toBeVisible();
+        await expect(page.getByText('Viajes publicados').first()).toBeVisible();
     });
 });

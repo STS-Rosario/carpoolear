@@ -86,8 +86,12 @@ test.describe('My Trips page', () => {
     await expect(page.getByText('Laura Martínez')).toBeVisible();
 
     // Accept and reject buttons should be present
-    await expect(page.locator('.btn-accept-request').first()).toBeVisible();
-    await expect(page.getByText('Rechazar').first()).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /^aceptar$/i }).first()
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /^rechazar$/i }).first()
+    ).toBeVisible();
   });
 
   test('shows multiple pending requests with correct user info', async ({ page }) => {

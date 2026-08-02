@@ -51,7 +51,7 @@ test.describe('Trip detail page', () => {
     await expect(page.getByText('Cancelar Viaje')).toBeVisible();
   });
 
-  test('shows "Solicitado" state for passenger who already requested', async ({ page }) => {
+  test('shows withdraw seat request action for passenger who already requested', async ({ page }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
@@ -67,7 +67,9 @@ test.describe('Trip detail page', () => {
     await page.goto(`/trips/${TRIP_ID}`);
     await waitForPageReady(page);
 
-    await expect(page.getByText('Solicitado').first()).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByRole('button', { name: /retirar solicitud de asiento/i }).first()
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('shows "Enviar mensaje" for unrelated logged-in user', async ({ page }) => {
@@ -167,10 +169,10 @@ test.describe('Trip detail page', () => {
     await setupAuthState(page);
 
     const passengers = [
-      { id: 201, name: 'Pasajero Uno', image: null, request_state: 1 },
-      { id: 202, name: 'Pasajero Dos', image: null, request_state: 1 },
-      { id: 203, name: 'Pasajero Tres', image: null, request_state: 1 },
-      { id: 204, name: 'Pasajero Cuatro', image: null, request_state: 1 },
+      { id: 201, name: 'Pasajero Uno', first_name: 'Pasajero Uno', image: null, request_state: 1 },
+      { id: 202, name: 'Pasajero Dos', first_name: 'Pasajero Dos', image: null, request_state: 1 },
+      { id: 203, name: 'Pasajero Tres', first_name: 'Pasajero Tres', image: null, request_state: 1 },
+      { id: 204, name: 'Pasajero Cuatro', first_name: 'Pasajero Cuatro', image: null, request_state: 1 },
     ];
 
     const trip = makeMockTrip(TRIP_ID, {

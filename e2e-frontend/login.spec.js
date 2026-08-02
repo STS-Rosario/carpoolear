@@ -18,7 +18,7 @@ test.describe('Login', () => {
     await expect(page.locator('#txt_user')).toBeVisible();
     await expect(page.locator('#txt_password')).toBeVisible();
     await expect(page.locator('#btn_login')).toBeVisible();
-    await expect(page.locator('#btn_login')).toContainText('Ingresar');
+    await expect(page.locator('#btn_login')).toContainText('Iniciar sesión');
   });
 
   test('toggles password visibility when clicking the show/hide button', async ({ page }) => {
@@ -28,10 +28,10 @@ test.describe('Login', () => {
     const passwordInput = page.locator('#txt_password');
     await expect(passwordInput).toHaveAttribute('type', 'password');
 
-    await page.locator('#btn_toggle_password').click();
+    await page.locator('.app-input__toggle').click();
     await expect(passwordInput).toHaveAttribute('type', 'text');
 
-    await page.locator('#btn_toggle_password').click();
+    await page.locator('.app-input__toggle').click();
     await expect(passwordInput).toHaveAttribute('type', 'password');
   });
 

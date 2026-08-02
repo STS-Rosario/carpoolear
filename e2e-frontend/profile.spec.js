@@ -54,7 +54,9 @@ test.describe('Profile page', () => {
     await page.goto(`/profile/${MOCK_PROFILE_USER.id}`);
     await waitForPageReady(page);
 
-    await expect(page.locator('.profile-info--name.desktop').getByText('Perfil de Prueba')).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.locator('.profile-identity-header__name').getByText('Perfil de Prueba')
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('ratings tab — shows empty state with 0 ratings', async ({ page }) => {
@@ -161,7 +163,9 @@ test.describe('Profile page', () => {
     await page.goto(`/profile/${MOCK_PROFILE_USER.id}`);
     await waitForPageReady(page);
 
-    await expect(page.locator('.profile-info--name.desktop').getByText('Perfil de Prueba')).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.locator('.profile-identity-header__name').getByText('Perfil de Prueba')
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('admin viewing another user past passenger trip navigates to detail, not modal', async ({
