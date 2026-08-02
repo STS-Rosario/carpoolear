@@ -6,13 +6,26 @@
         </template>
 
         <div class="profile-info-panel__tiles">
-            <div class="profile-info-panel__tile">
+            <div
+                class="profile-info-panel__tile"
+                data-testid="profile-identity-tile"
+            >
                 <span
                     class="profile-info-panel__tile-icon-wrap"
                     :class="{
                         'profile-info-panel__tile-icon-wrap--verified':
                             isIdentityVerified
                     }"
+                    :data-testid="
+                        isIdentityVerified
+                            ? 'profile-identity-verified'
+                            : 'profile-identity-unverified'
+                    "
+                    :aria-label="
+                        isIdentityVerified
+                            ? $t('usuarioVerificado')
+                            : $t('identidadNoVerificadaTitulo')
+                    "
                 >
                     <i
                         class="fa profile-info-panel__tile-icon"
@@ -42,7 +55,11 @@
                     </p>
                 </div>
             </div>
-            <div v-if="showResponseTile" class="profile-info-panel__tile">
+            <div
+                v-if="showResponseTile"
+                class="profile-info-panel__tile"
+                data-testid="profile-response-tile"
+            >
                 <span class="profile-info-panel__tile-icon-wrap">
                     <i
                         class="fa fa-comment profile-info-panel__tile-icon"

@@ -15,7 +15,10 @@
                 ></div>
                 <div class="trip-card-shell__copy">
                     <div class="trip-card-shell__primary">
-                        <div class="trip-card-shell__name">
+                        <div
+                            class="trip-card-shell__name"
+                            data-testid="trip-card-driver-name"
+                        >
                             {{ user.name }}
                         </div>
                         <div
@@ -29,12 +32,17 @@
                     </div>
                     <div class="trip-card-shell__meta">
                         <UserRatingsCounts :ratings="ratings" />
-                        <span v-if="tripsCountLabel" class="trip-card-shell__trips">
+                        <span
+                            v-if="tripsCountLabel"
+                            class="trip-card-shell__trips"
+                            data-testid="trip-card-trips-count"
+                        >
                             | {{ tripsCountLabel }}
                         </span>
                         <span
                             v-if="isDriverVerified"
                             class="trip-card-shell__verified"
+                            data-testid="trip-card-verified"
                             :title="$t('usuarioVerificado')"
                             :aria-label="$t('usuarioVerificado')"
                         >
@@ -102,6 +110,7 @@
             <button
                 type="button"
                 class="trip-card-shell__detail"
+                data-testid="trip-card-detail"
                 @click.stop="onDetailClick"
             >
                 {{ $t('verDetalle') }}
