@@ -85,4 +85,11 @@ describe('Notifications.vue list and permission warning UI', () => {
             /\.ios-notification-warning\s*\{[^}]*border-radius:\s*var\(--ds-card-radius/s
         );
     });
+
+    it('uses light blue unread row background like conversations', () => {
+        expect(viewSource).toMatch(
+            /\.notifications-list \.list-group-item\.unread\s*\{[^}]*background:\s*#e8f4fa/s
+        );
+        expect(viewSource).not.toContain('rgba(254, 153, 0');
+    });
 });
