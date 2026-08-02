@@ -86,4 +86,20 @@ describe('TripCreationSuccess.vue', () => {
             /\.trip-creation-success__actions\s*\{[^}]*flex-direction:\s*column/
         );
     });
+
+    it('uses AppInput and AppField for the save-template modal fields', () => {
+        expect(componentSource).toContain(
+            "import AppInput from '../ui/AppInput.vue'"
+        );
+        expect(componentSource).toContain(
+            "import AppField from '../ui/AppField.vue'"
+        );
+        expect(componentSource).toMatch(
+            /<AppInput[\s\S]*?data-testid="trip-creation-template-name"[\s\S]*?v-model="templateName"/
+        );
+        expect(componentSource).toMatch(
+            /<AppField[\s\S]*?tripCreationReplaceTemplateLabel[\s\S]*?<select[\s\S]*?data-testid="trip-creation-template-replace"/
+        );
+        expect(componentSource).not.toContain('form-control');
+    });
 });

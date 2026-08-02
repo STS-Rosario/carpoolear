@@ -32,6 +32,14 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
         );
     });
 
+    it('uses AppInput for the friends name filter', () => {
+        expect(viewSource).toContain("import AppInput from '../ui/AppInput.vue'");
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?:label="\$t\('filtrarPorNombre'\)"[\s\S]*?v-model="text"/
+        );
+        expect(viewSource).not.toContain('form-control');
+    });
+
     it('shows Recibidas/Enviadas FilterChips under Solicitudes with counts', () => {
         expect(viewSource).toContain('FilterChips');
         expect(viewSource).toContain('requestsFilter');
