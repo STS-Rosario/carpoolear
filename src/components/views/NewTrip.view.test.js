@@ -22,6 +22,9 @@ describe('NewTrip.vue page card shell', () => {
         );
         expect(viewSource).toContain("$t('editarViaje')");
         expect(viewSource).toMatch(
+            /id \|\| updatingTrip \? \$t\('editarViaje'\) : \$t\('crearViaje'\)/
+        );
+        expect(viewSource).toMatch(
             /\.new-trip-page__card\s*\{[^}]*background:\s*(?:#fff|var\(--profile-card-bg)/s
         );
         expect(viewSource).toMatch(
