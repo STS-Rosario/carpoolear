@@ -56,5 +56,11 @@ describe('Profile view', () => {
         expect(viewSource).toContain("acceptFriend: 'accept'");
         expect(viewSource).toContain("rejectFriend: 'reject'");
         expect(viewSource).toContain("import AppButton from '../ui/AppButton.vue'");
+        expect(viewSource).toMatch(
+            /\.profile-pending-friend-request\s*\{[^}]*width:\s*fit-content/s
+        );
+        expect(viewSource).toMatch(
+            /\.profile-pending-friend-request\s*\{[^}]*max-width:\s*100%/s
+        );
     });
 });
