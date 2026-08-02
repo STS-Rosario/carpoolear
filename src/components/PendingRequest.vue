@@ -122,7 +122,6 @@
                     <div class="pending-request-card__message-action">
                         <AppButton
                             variant="secondary"
-                            block
                             @click="chat"
                         >
                             {{ $t('pendingRequestEnviarMensaje') }}
