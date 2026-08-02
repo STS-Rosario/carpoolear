@@ -16,3 +16,14 @@ describe('CompleteCarModal CTA AppButtons', () => {
         expect(viewSource).not.toContain('btn btn-primary');
     });
 });
+
+describe('CompleteCarModal DS form', () => {
+    it('reuses CarForm with patente disabled instead of duplicating fields', () => {
+        expect(viewSource).toContain("import CarForm from './CarForm.vue'");
+        expect(viewSource).toMatch(
+            /<CarForm[\s\S]*?:entry="form"[\s\S]*?patente-disabled[\s\S]*?@brand-selection-change="onBrandSelectionChange"/
+        );
+        expect(viewSource).not.toContain('form-control');
+        expect(viewSource).not.toContain('CatalogCombobox');
+    });
+});
