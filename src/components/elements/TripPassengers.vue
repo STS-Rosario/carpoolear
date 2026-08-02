@@ -17,9 +17,12 @@
             >
                 <span
                     @click="toUserProfile(p)"
-                    class="trip_driver_img circle-box passenger trip_passenger_image"
-                    v-imgSrc:profile="p.image"
-                ></span>
+                    class="trip_passenger_avatar"
+                    role="img"
+                    :aria-hidden="false"
+                >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
                 <a
                     href="#"
                     @click="toUserProfile(p)"
@@ -60,9 +63,12 @@
             >
                 <span
                     @click="toUserProfile(p)"
-                    class="trip_driver_img circle-box passenger trip_passenger_image"
-                    v-imgSrc:profile="p.image"
-                ></span>
+                    class="trip_passenger_avatar"
+                    role="img"
+                    :aria-hidden="false"
+                >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
                 <a
                     href="#"
                     @click="toUserProfile(p)"
@@ -233,18 +239,12 @@ export default {
 };
 </script>
 <style scoped>
-.trip_driver_img.circle-box.passenger {
-    width: 3.5em;
-    height: 3.5em;
-    position: relative;
-    margin-right: 0.5em;
-}
 .passengers {
     margin-bottom: 0.8em;
 }
 .trip_passenger-chat,
 .trip_passenger-remove,
-.trip_passenger_image,
+.trip_passenger_avatar,
 .trip_passenger_name {
     vertical-align: middle;
     cursor: pointer;
@@ -261,11 +261,5 @@ export default {
 }
 .trip_passenger-chat {
     margin-left: 0.5em;
-}
-@media only screen and (min-width: 400px) and (max-width: 767px) {
-    .trip_driver_img {
-        width: 6.7rem;
-        height: 6.7rem;
-    }
 }
 </style>

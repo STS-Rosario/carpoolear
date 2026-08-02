@@ -141,9 +141,6 @@
                     </span>
                 </template>
             </button>
-            <template v-if="trip.seats_available === 0 && !trip.is_passenger">
-                <div class="carpooled-trip">{{ $t('viajeCarpooleado') }}</div>
-            </template>
             <div
                 class="alert alert-warning"
                 role="alert"

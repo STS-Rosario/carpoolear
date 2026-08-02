@@ -265,17 +265,20 @@
     border-top: none;
     padding-top: 0;
 }
-.trip-detail--mobile .trip-detail__passengers .trip_passenger_image, .trip-detail--desktop .trip-detail__passengers .trip_passenger_image {
+.trip-detail--mobile .trip-detail__passengers .trip_passenger_avatar, .trip-detail--desktop .trip-detail__passengers .trip_passenger_avatar {
+    display: inline-flex;
     flex: 0 0 auto;
-    width: 2.25rem;
-    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
     margin: 0;
     border-radius: 50%;
-    overflow: hidden;
-    background-color: var(--ds-input-disabled-bg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
+    background-color: var(--ds-input-disabled-bg, #e8e8e8);
+    color: var(--ds-text-muted, #888);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
 }
 .trip-detail--mobile .trip-detail__passengers .trip_passenger_name, .trip-detail--desktop .trip-detail__passengers .trip_passenger_name {
     flex: 1 1 auto;
@@ -754,17 +757,20 @@
     padding-top: 0;
 }
 
-.trip-detail--desktop .trip-detail__passengers .trip_passenger_image {
+.trip-detail--desktop .trip-detail__passengers .trip_passenger_avatar {
+    display: inline-flex;
     flex: 0 0 auto;
-    width: 2.25rem;
-    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
     margin: 0;
     border-radius: 50%;
-    overflow: hidden;
-    background-color: var(--ds-input-disabled-bg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
+    background-color: var(--ds-input-disabled-bg, #e8e8e8);
+    color: var(--ds-text-muted, #888);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
 }
 
 .trip-detail--desktop .trip-detail__passengers .trip_passenger_name {
