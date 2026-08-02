@@ -553,11 +553,14 @@ export default {
     .conversation-component.container {
         padding-left: 10px;
         padding-right: 10px;
+        padding-bottom: 0;
+        margin-bottom: 0;
         overflow-y: hidden;
-        height: calc(100vh - 150px);
+        /* Header measured via --app-header-offset (includes identity banner); + footer approx */
+        height: calc(100vh - var(--app-header-offset, 5.6rem) - 3.75rem);
     }
     .without-footer.conversation-component.container {
-        height: calc(100vh - 5.6rem);
+        height: calc(100vh - var(--app-header-offset, 5.6rem));
     }
     .conversation-component > .row {
         padding-left: 20px;
