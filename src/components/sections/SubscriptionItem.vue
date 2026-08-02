@@ -5,37 +5,22 @@
         @click="search(true)"
     >
         <div class="subscription-alert-card__body">
-            <div
-                class="subscription-alert-card__detail"
-                v-if="subscription.from_address"
-            >
+            <div class="subscription-alert-card__detail">
                 <span>{{ $t('origen') }}:</span>
-                <strong>{{ subscription.from_address }}</strong>
+                <strong>{{ subscription.from_address || emptyPlace }}</strong>
             </div>
-            <div
-                class="subscription-alert-card__detail"
-                v-if="subscription.to_address"
-            >
+            <div class="subscription-alert-card__detail">
                 <span>{{ $t('destino') }}:</span>
-                <strong>{{ subscription.to_address }}</strong>
+                <strong>{{ subscription.to_address || emptyPlace }}</strong>
+            </div>
+            <div class="subscription-alert-card__detail">
+                <span>{{ $t('fechaAproximada') }}</span>
+                <strong>{{ formattedTripDate || emptyPlace }}</strong>
             </div>
             <div
-                class="subscription-alert-card__detail"
-                v-if="subscription.trip_date"
+                class="subscription-alert-card__detail subscription-alert-card__role"
             >
-                <span>{{ $t('fechaAproximada') }}:</span>
-                <strong>{{
-                    dayjs(subscription.trip_date).format('DD/MM/YYYY')
-                }}</strong>
-            </div>
-            <div
-                class="subscription-alert-card__detail"
-                v-if="subscription.is_passenger == 1"
-            >
-                <span>{{ $t('buscoPasajeros') }}</span>
-            </div>
-            <div class="subscription-alert-card__detail" v-else>
-                <span v-html="$t('buscoConductor')"></span>
+                <span>{{ roleLabel }}</span>
             </div>
             <div
                 class="subscription-alert-card__detail"
@@ -91,8 +76,23 @@ export default {
     data() {
         return {
             inProgress: false,
-            resultCount: 0
+            resultCount: 0,
+            emptyPlace: '—'
         };
+    },
+    computed: {
+        formattedTripDate() {
+            if (!this.subscription || !this.subscription.trip_date) {
+                return '';
+            }
+            return dayjs(this.subscription.trip_date).format('DD/MM/YYYY');
+        },
+        roleLabel() {
+            if (this.subscription && this.subscription.is_passenger == 1) {
+                return this.$t('buscoPasajeros');
+            }
+            return String(this.$t('buscoConductor')).replace(/<[^>]+>/g, '');
+        }
     },
     mounted() {
         this.search(false);
