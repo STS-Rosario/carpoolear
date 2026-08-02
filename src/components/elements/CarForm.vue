@@ -1,16 +1,12 @@
 <template>
     <div class="car-form">
-        <div class="form-group">
-            <label>{{ $t('patente') }}</label>
-            <input
-                v-model="entry.patente"
-                type="text"
-                class="form-control"
-                maxlength="20"
-            />
-        </div>
-        <div class="form-group">
-            <label>{{ $t('marca') }}</label>
+        <AppInput
+            :label="$t('patente')"
+            v-model="entry.patente"
+            maxlength="20"
+            :disabled="patenteDisabled"
+        />
+        <AppField :label="$t('marca')">
             <CatalogCombobox
                 v-model="entry.brandSelection"
                 :options="catalogBrands"
@@ -19,20 +15,13 @@
                 @update:model-value="onBrandSelectionChange"
                 @other-selected="onBrandSelectionChange('other')"
             />
-        </div>
-        <div
+        </AppField>
+        <AppInput
             v-if="entry.brandSelection === catalogOtherValue"
-            class="form-group"
-        >
-            <input
-                v-model="entry.brand_other"
-                type="text"
-                class="form-control"
-                :placeholder="$t('marcaOtroPlaceholder')"
-            />
-        </div>
-        <div class="form-group">
-            <label>{{ $t('modelo') }}</label>
+            v-model="entry.brand_other"
+            :placeholder="$t('marcaOtroPlaceholder')"
+        />
+        <AppField :label="$t('modelo')">
             <CatalogCombobox
                 v-model="entry.modelSelection"
                 :options="catalogModels"
@@ -42,32 +31,26 @@
                 @update:model-value="onModelSelectionChange"
                 @other-selected="onModelSelectionChange('other')"
             />
-        </div>
-        <div
+        </AppField>
+        <AppInput
             v-if="entry.modelSelection === catalogOtherValue"
-            class="form-group"
-        >
-            <input
-                v-model="entry.model_other"
-                type="text"
-                class="form-control"
-                :placeholder="$t('modeloOtroPlaceholder')"
-            />
-        </div>
-        <div class="form-group">
-            <label>{{ $t('anio') }}</label>
-            <input
-                v-model.number="entry.year"
-                type="number"
-                class="form-control"
-                :min="carYearMin"
-                :max="carYearMax"
-                :placeholder="$t('anioPlaceholder')"
-            />
-        </div>
-        <div class="form-group">
-            <label>{{ $t('color') }}</label>
-            <select v-model="entry.car_color_id" class="form-control">
+            v-model="entry.model_other"
+            :placeholder="$t('modeloOtroPlaceholder')"
+        />
+        <AppInput
+            :label="$t('anio')"
+            v-model="entry.year"
+            type="number"
+            :min="carYearMin"
+            :max="carYearMax"
+            :placeholder="$t('anioPlaceholder')"
+        />
+        <AppField :label="$t('color')" label-for="car-form-color">
+            <select
+                id="car-form-color"
+                v-model="entry.car_color_id"
+                class="car-form__select"
+            >
                 <option :value="null">{{ $t('seleccionarColor') }}</option>
                 <option
                     v-for="color in catalogColors"
@@ -77,12 +60,14 @@
                     {{ color.name }}
                 </option>
             </select>
-        </div>
+        </AppField>
     </div>
 </template>
 
 <script>
 import CatalogCombobox from './CatalogCombobox.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
 import {
     CAR_YEAR_MIN,
     CATALOG_OTHER_VALUE,
@@ -92,7 +77,9 @@ import {
 export default {
     name: 'car-form',
     components: {
-        CatalogCombobox
+        CatalogCombobox,
+        AppField,
+        AppInput
     },
     props: {
         entry: {
@@ -110,6 +97,10 @@ export default {
         catalogModels: {
             type: Array,
             default: () => []
+        },
+        patenteDisabled: {
+            type: Boolean,
+            default: false
         }
     },
     emits: ['brand-selection-change'],
@@ -143,11 +134,26 @@ export default {
 </script>
 
 <style scoped>
-.car-form :deep(.form-control) {
-    color: #333;
+.car-form__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
 }
 
-.car-form :deep(select.form-control option) {
+.car-form__select:focus {
+    outline: none;
+}
+
+.car-form__select option {
     color: #333;
     background: #fff;
 }
