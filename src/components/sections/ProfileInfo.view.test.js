@@ -104,7 +104,7 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain('useFriendsStore');
         expect(viewSource).toContain('requestFriend');
         expect(viewSource).toContain('cancelFriendRequest');
-        expect(viewSource).toContain("cancelRequest: 'cancelRequest'");
+        expect(viewSource).toContain("cancelFriendRequest: 'cancelRequest'");
     });
 });
 

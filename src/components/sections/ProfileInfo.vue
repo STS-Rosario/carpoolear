@@ -152,33 +152,24 @@
                 variant="primary"
                 icon-left="fa fa-user"
                 :disabled="friendActionLoading"
+                :loading="friendActionLoading"
                 @click="onInviteFriend()"
             >
-                {{ $t('invitarAmigos') }}
+                {{
+                    friendActionLoading
+                        ? $t('enviandoSolicitudAmistad')
+                        : $t('invitarAmigos')
+                }}
             </AppButton>
             <AppButton
                 v-else-if="profile.friendship_state === 'pending_sent'"
-                variant="primary"
-                disabled
+                variant="danger"
+                :disabled="friendActionLoading"
+                :loading="friendActionLoading"
+                @click="onCancelFriendRequest()"
             >
-                {{ $t('suSolicitudAmistadEnviada') }}
+                {{ $t('cancelarSolicitudAmistad') }}
             </AppButton>
-            <template v-else-if="profile.friendship_state === 'pending_received'">
-                <button
-                    class="btn btn-primary"
-                    :disabled="friendActionLoading"
-                    v-on:click="onAcceptFriend()"
-                >
-                    {{ $t('aceptar') }}
-                </button>
-                <button
-                    class="btn btn-default"
-                    :disabled="friendActionLoading"
-                    v-on:click="onRejectFriend()"
-                >
-                    {{ $t('rechazar') }}
-                </button>
-            </template>
             <template v-else-if="profile.friendship_state === 'friend'">
                 <AppButton
                     variant="primary"
@@ -311,9 +302,7 @@ export default {
                 return false;
             }
             const state = this.profile.friendship_state || 'none';
-            return ['none', 'pending_sent', 'pending_received', 'friend'].includes(
-                state
-            );
+            return ['none', 'pending_sent', 'friend'].includes(state);
         },
         tripAlertsButtonLabel() {
             if (!this.profile || !this.profile.name) {
@@ -331,8 +320,7 @@ export default {
         }),
         ...mapActions(useFriendsStore, {
             requestFriend: 'request',
-            acceptFriend: 'accept',
-            rejectFriend: 'reject',
+            cancelFriendRequest: 'cancelRequest',
             toggleTripAlerts: 'toggleTripAlerts'
         }),
         ...mapActions(useProfileStore, {
@@ -356,11 +344,8 @@ export default {
         onInviteFriend() {
             this.runFriendAction(this.requestFriend, 'pending_sent');
         },
-        onAcceptFriend() {
-            this.runFriendAction(this.acceptFriend, 'friend');
-        },
-        onRejectFriend() {
-            this.runFriendAction(this.rejectFriend, 'none');
+        onCancelFriendRequest() {
+            this.runFriendAction(this.cancelFriendRequest, 'none');
         },
         onToggleTripAlerts() {
             this.friendActionLoading = true;
