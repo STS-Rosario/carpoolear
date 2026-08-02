@@ -16,7 +16,7 @@
                 <div class="trip-card-shell__copy">
                     <div class="trip-card-shell__primary">
                         <div class="trip-card-shell__name">
-                            <UserNameWithBadge :user="user" />
+                            {{ user.name }}
                         </div>
                         <div
                             v-if="showSeatsPill"
@@ -31,6 +31,14 @@
                         <UserRatingsCounts :ratings="ratings" />
                         <span v-if="tripsCountLabel" class="trip-card-shell__trips">
                             | {{ tripsCountLabel }}
+                        </span>
+                        <span
+                            v-if="isDriverVerified"
+                            class="trip-card-shell__verified"
+                            :title="$t('usuarioVerificado')"
+                            :aria-label="$t('usuarioVerificado')"
+                        >
+                            <i class="fa fa-shield" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
@@ -105,7 +113,6 @@
 
 <script>
 import { getSeatsPillTone, getSeatsPillLabel } from '../../utils/tripCardDisplay.js';
-import UserNameWithBadge from './UserNameWithBadge.vue';
 import UserRatingsCounts from './UserRatingsCounts.vue';
 
 export default {
@@ -174,6 +181,12 @@ export default {
         },
         seatsLabel() {
             return getSeatsPillLabel(this.seatsAvailable, this.$t);
+        },
+        isDriverVerified() {
+            return !!(
+                this.user &&
+                (this.user.identity_validated || this.user.identity_validated_at)
+            );
         }
     },
     methods: {
@@ -188,7 +201,6 @@ export default {
         }
     },
     components: {
-        UserNameWithBadge,
         UserRatingsCounts
     }
 };

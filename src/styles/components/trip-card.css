@@ -112,6 +112,23 @@
     color: var(--ds-text-muted);
 }
 
+.trip-card-shell__verified {
+    display: inline-flex;
+    align-items: center;
+    color: var(--profile-verified, #2e7d32);
+    font-size: 0.85rem;
+    line-height: 1;
+    margin-left: 0.15rem;
+}
+
+.trip-card-shell__verified .fa {
+    color: inherit;
+    float: none;
+    width: auto;
+    margin: 0;
+    line-height: 1;
+}
+
 .trip-card-shell__seats {
     position: static;
     display: inline-flex;
