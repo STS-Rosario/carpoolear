@@ -237,6 +237,15 @@ describe('trip detail desktop card layout', () => {
         );
     });
 
+    it('does not draw a bottom border under the joined passengers block', () => {
+        expect(css).not.toMatch(
+            dualRule(
+                '.trip-detail--mobile .trip-detail__passengers',
+                'border-bottom:\\s*1px'
+            )
+        );
+    });
+
     it('styles Viaje finalizado as a grey pill under seats', () => {
         expect(css).toMatch(
             /\.trip-detail--desktop\s+\.trip-detail__finished-pill\s*\{[^}]*border-radius:\s*999px/s
