@@ -90,4 +90,14 @@ describe('TripSeats.vue invite friends placement', () => {
             /maybeOpenInviteFriendsFromQuery[\s\S]*inviteFriendsBlockedByUnpaidSellado/
         );
     });
+
+    it('uses primary AppButton for invite friends', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?invitarAmigosAlViaje/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
+    });
 });

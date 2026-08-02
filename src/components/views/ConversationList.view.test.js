@@ -100,4 +100,14 @@ describe('ConversationList.vue messages redesign', () => {
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
+
+    it('uses primary AppButton for load more conversations', () => {
+        expect(viewSource).toContain(
+            "import AppButton from '../ui/AppButton.vue'"
+        );
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?block[\s\S]*?nextPage[\s\S]*?masResultados/
+        );
+        expect(viewSource).not.toContain('btn btn-primary btn-block');
+    });
 });

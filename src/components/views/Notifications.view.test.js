@@ -92,4 +92,11 @@ describe('Notifications.vue list and permission warning UI', () => {
         );
         expect(viewSource).not.toContain('rgba(254, 153, 0');
     });
+
+    it('uses primary AppButton for next page', () => {
+        expect(viewSource).toMatch(
+            /<AppButton[\s\S]*?variant="primary"[\s\S]*?nextPage[\s\S]*?siguiente/
+        );
+        expect(viewSource).not.toContain('btn btn-primary');
+    });
 });
