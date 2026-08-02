@@ -230,7 +230,7 @@ describe('AdminSupportTicketDetail view', () => {
     });
 
     it('lets admins change ticket category and save it', () => {
-        expect(viewSource).toContain("{{ $t('categoriaTicket') }}");
+        expect(viewSource).toContain(':label="$t(\'categoriaTicket\')"');
         expect(viewSource).toContain('ticketTypeOptions');
         expect(viewSource).toContain('v-model="ticketType"');
         expect(viewSource).toContain('saveTicketCategory');

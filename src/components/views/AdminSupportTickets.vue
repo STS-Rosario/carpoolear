@@ -2,17 +2,30 @@
     <AdminLayout>
         <h3>{{ $t('soporte') }}</h3>
         <p class="mb-2 support-tickets-admin-actions">
-            <router-link class="btn btn-primary" :to="{ name: 'admin-support-ticket-new' }">
+            <AppButton
+                variant="primary"
+                :to="{ name: 'admin-support-ticket-new' }"
+            >
                 {{ $t('crearTicket') }}
-            </router-link>
-            <router-link class="btn btn-default mleft-6" :to="{ name: 'admin-support-reply-templates' }">
+            </AppButton>
+            <AppButton
+                variant="secondary"
+                class="mleft-6"
+                :to="{ name: 'admin-support-reply-templates' }"
+            >
                 {{ $t('editarPlantillasRespuestas') }}
-            </router-link>
+            </AppButton>
         </p>
         <form class="form-inline support-tickets-admin-filters mb-3" @submit.prevent="applyFilters">
-            <div class="form-group">
-                <label class="sr-only" for="support-filter-type">{{ capitalizeFirst($t('categoriaTicket')) }}</label>
-                <select id="support-filter-type" v-model="filterType" class="form-control">
+            <AppField label-for="support-filter-type" class="support-tickets-admin-filters__field">
+                <template #label>
+                    <span class="sr-only">{{ capitalizeFirst($t('categoriaTicket')) }}</span>
+                </template>
+                <select
+                    id="support-filter-type"
+                    v-model="filterType"
+                    class="admin-support-tickets__filter-select"
+                >
                     <option value="">{{ $t('filtroTicketsTodasCategorias') }}</option>
                     <option
                         v-for="option in ticketTypeOptions"
@@ -20,23 +33,29 @@
                         :value="option.value"
                     >{{ $t(option.labelKey) }}</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label class="sr-only" for="support-filter-priority">{{ capitalizeFirst($t('prioridad')) }}</label>
-                <select id="support-filter-priority" v-model="filterPriority" class="form-control">
+            </AppField>
+            <AppField label-for="support-filter-priority" class="support-tickets-admin-filters__field">
+                <template #label>
+                    <span class="sr-only">{{ capitalizeFirst($t('prioridad')) }}</span>
+                </template>
+                <select
+                    id="support-filter-priority"
+                    v-model="filterPriority"
+                    class="admin-support-tickets__filter-select"
+                >
                     <option value="">{{ $t('filtroTicketsTodasPrioridades') }}</option>
                     <option value="high">{{ $t('prioridadAlta') }}</option>
                     <option value="normal">{{ $t('prioridadNormal') }}</option>
                     <option value="low">{{ $t('prioridadBaja') }}</option>
                 </select>
-            </div>
+            </AppField>
             <div class="checkbox form-group">
                 <label>
                     <input v-model="filterNeedsReply" type="checkbox" />
                     {{ $t('filtroTicketsRequiereRespuesta') }}
                 </label>
             </div>
-            <button type="submit" class="btn btn-default">{{ $t('buscar') }}</button>
+            <AppButton variant="secondary" type="submit">{{ $t('buscar') }}</AppButton>
         </form>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
@@ -109,6 +128,8 @@
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dayjs from '../../dayjs';
 import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
@@ -356,7 +377,9 @@ export default {
     },
     components: {
         AdminLayout,
-        AdminPaginationBar
+        AdminPaginationBar,
+        AppButton,
+        AppField
     }
 };
 </script>
@@ -393,8 +416,33 @@ export default {
     margin-bottom: 8px;
 }
 
+.support-tickets-admin-filters__field {
+    margin-right: 12px;
+    margin-bottom: 8px;
+}
+
 .support-tickets-admin-filters .checkbox {
     margin-top: 0;
     margin-bottom: 8px;
+}
+
+.admin-support-tickets__filter-select {
+    width: 100%;
+    min-width: 10rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-support-tickets__filter-select:focus {
+    outline: none;
 }
 </style>

@@ -20,49 +20,51 @@
         </div>
 
         <div v-if="showAssignTicketButton || showUnassignTicketButton" class="ticket-assignment-actions">
-            <button
+            <AppButton
                 v-if="showAssignTicketButton"
-                type="button"
-                class="btn btn-info"
+                variant="secondary"
                 :disabled="isAssignTicketDisabled(ticket, currentAdminId)"
                 @click="assignTicketToMe"
             >
                 {{ $t('asignarmeTicket') }}
-            </button>
-            <button
+            </AppButton>
+            <AppButton
                 v-if="showUnassignTicketButton"
-                type="button"
-                class="btn btn-warning"
+                variant="warning"
                 @click="unassignTicketFromMe"
             >
                 {{ $t('desasignarmeTicket') }}
-            </button>
+            </AppButton>
         </div>
 
-        <label>{{ $t('categoriaTicket') }}</label>
-        <select v-model="ticketType" class="form-control ticket-category-select">
-            <option
-                v-for="option in ticketTypeOptions"
-                :key="option.value"
-                :value="option.value"
+        <AppField :label="$t('categoriaTicket')" label-for="admin-ticket-category">
+            <select
+                id="admin-ticket-category"
+                v-model="ticketType"
+                class="admin-support-ticket-detail__category-select"
             >
-                {{ $t(option.labelKey) }}
-            </option>
-        </select>
-        <button class="btn btn-default mtop-10" @click="saveTicketCategory">{{ $t('guardarCambio') }}</button>
+                <option
+                    v-for="option in ticketTypeOptions"
+                    :key="option.value"
+                    :value="option.value"
+                >
+                    {{ $t(option.labelKey) }}
+                </option>
+            </select>
+        </AppField>
+        <AppButton variant="secondary" class="mtop-10" @click="saveTicketCategory">{{ $t('guardarCambio') }}</AppButton>
 
         <hr />
-        <label>{{ $t('notaInterna') }}</label>
-        <textarea class="form-control" v-model="internalNote"></textarea>
-        <button class="btn btn-default mtop-10" @click="saveInternalNote">{{ $t('guardarCambio') }}</button>
-        <button
+        <AppTextarea v-model="internalNote" :label="$t('notaInterna')" />
+        <AppButton variant="secondary" class="mtop-10" @click="saveInternalNote">{{ $t('guardarCambio') }}</AppButton>
+        <AppButton
             v-if="ticketHasAttachments"
-            type="button"
-            class="btn btn-danger mtop-10 mleft-10"
+            variant="danger"
+            class="mtop-10 mleft-10"
             @click="purgeAllAttachments"
         >
             {{ $t('eliminarTodasLasImagenes') }}
-        </button>
+        </AppButton>
 
         <hr />
         <div class="list-group">
@@ -97,9 +99,9 @@
         <div v-if="showReplyForm" class="admin-reply-box">
             <div class="admin-reply-header">
                 <label class="control-label">{{ $t('respuestaCarpoolear') }}</label>
-                <button type="button" class="btn btn-default btn-sm" @click="openReplyTemplateModal">
+                <AppButton variant="secondary" size="sm" @click="openReplyTemplateModal">
                     {{ $t('responderConPlantilla') }}
-                </button>
+                </AppButton>
             </div>
             <editor
                 :key="replyEditorKey"
@@ -114,43 +116,60 @@
             <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
             <div class="reply-actions">
                 <div class="reply-actions-left">
-                    <button
-                        type="button"
-                        class="btn btn-primary reply-action-btn"
+                    <AppButton
+                        variant="primary"
+                        class="reply-action-btn"
                         :disabled="replySubmitting"
                         @click="sendReply"
                     >
                         {{ replySubmitting ? $t('enviando') : $t('responder') }}
-                    </button>
+                    </AppButton>
                 </div>
             </div>
         </div>
 
         <div class="admin-ticket-actions reply-actions mtop-10">
             <div class="reply-actions-right">
-                <button
+                <AppButton
                     v-if="showMarkNeedsReviewButton"
-                    class="btn btn-info reply-action-btn"
+                    variant="secondary"
+                    class="reply-action-btn"
                     @click="markNeedsReviewTicket"
                 >
                     {{ $t(markNeedsReviewButtonLabelKey) }}
-                </button>
-                <button
+                </AppButton>
+                <AppButton
                     v-if="showResolveTicketButton"
-                    class="btn btn-success reply-action-btn"
+                    variant="success"
+                    class="reply-action-btn"
                     @click="resolveTicket"
                 >
                     {{ $t('marcarResuelto') }}
-                </button>
-                <button
+                </AppButton>
+                <AppButton
                     v-if="showUnresolveTicketButton"
-                    class="btn btn-default reply-action-btn"
+                    variant="secondary"
+                    class="reply-action-btn"
                     @click="unresolveTicket"
                 >
                     {{ $t('marcarComoNoResuelto') }}
-                </button>
-                <button v-if="showCloseTicketButton" class="btn btn-danger reply-action-btn" @click="closeTicket">{{ $t('cerrarTicket') }}</button>
-                <button v-if="showReopenTicketButton" class="btn btn-default reply-action-btn" @click="reopenTicket">{{ $t('reabrirTicket') }}</button>
+                </AppButton>
+                <AppButton
+                    v-if="showCloseTicketButton"
+                    variant="danger"
+                    class="reply-action-btn"
+                    @click="closeTicket"
+                >
+                    {{ $t('cerrarTicket') }}
+                </AppButton>
+                <AppButton
+                    v-if="showReopenTicketButton"
+                    variant="secondary"
+                    class="reply-action-btn"
+                    @click="reopenTicket"
+                >
+                    {{ $t('reabrirTicket') }}
+                </AppButton>
             </div>
         </div>
 
@@ -166,9 +185,9 @@
                         &times;
                     </button>
                 </div>
-                <input
+                <AppInput
                     v-model="replyTemplateSearch"
-                    class="form-control mtop-10"
+                    class="mtop-10"
                     type="search"
                     :placeholder="$t('buscarPlantillasPlaceholder')"
                 />
@@ -195,9 +214,9 @@
                         </li>
                     </template>
                 </ul>
-                <button type="button" class="btn btn-default mtop-10" @click="closeReplyTemplateModal">
+                <AppButton variant="secondary" class="mtop-10" @click="closeReplyTemplateModal">
                     {{ $t('cerrarModal') }}
-                </button>
+                </AppButton>
             </div>
         </div>
     </AdminLayout>
@@ -207,6 +226,10 @@
 import { mapActions, mapState } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
@@ -700,7 +723,11 @@ export default {
     },
     components: {
         editor: ToastUiEditor,
-        AdminLayout
+        AdminLayout,
+        AppButton,
+        AppField,
+        AppInput,
+        AppTextarea
     }
 };
 </script>
@@ -852,5 +879,24 @@ export default {
     gap: 8px;
     margin-top: 12px;
     margin-bottom: 12px;
+}
+
+.admin-support-ticket-detail__category-select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-support-ticket-detail__category-select:focus {
+    outline: none;
 }
 </style>
