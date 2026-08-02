@@ -171,7 +171,6 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-
     it('renders TripDetailRoute in DETALLE and a seats pill in the desktop lugares band', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/

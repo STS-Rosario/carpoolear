@@ -49,4 +49,3 @@ describe('TripCarStepPanel.vue', () => {
         );
     });
 });
-

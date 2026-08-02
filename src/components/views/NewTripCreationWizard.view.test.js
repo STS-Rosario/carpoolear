@@ -314,7 +314,7 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toMatch(
             /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/
         );
-        expect(wizardSource).toContain(":loading=\"form.saving\"");
+        expect(wizardSource).toContain(':loading="form.saving"');
         expect(wizardSource).toMatch(
             /#loading[\s\S]*?savingLabel|savingLabel[\s\S]*?#loading/
         );

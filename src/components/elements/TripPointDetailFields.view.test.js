@@ -23,7 +23,7 @@ describe('TripPointDetailFields', () => {
     });
 
     it('can render only partida or only llegada via fields prop', () => {
-        expect(viewSource).toContain("fields: {");
+        expect(viewSource).toContain('fields: {');
         expect(viewSource).toContain("default: 'both'");
         expect(viewSource).toContain('showPuntoPartida');
         expect(viewSource).toContain('showPuntoLlegada');

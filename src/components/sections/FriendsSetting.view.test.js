@@ -18,7 +18,7 @@ describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
         );
         expect(viewSource).toContain("$t('amigos')");
         expect(viewSource).toContain("$t('solicitudes')");
-        expect(viewSource).toContain("keytabset=\"friends\"");
+        expect(viewSource).toContain('keytabset="friends"');
     });
 
     it('wraps Amigos content in a white content card', () => {

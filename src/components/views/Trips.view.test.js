@@ -183,7 +183,7 @@ describe('Trips.vue friend-first trip sections', () => {
 
     it('styles the donation banner with blue ayuda text and green header-donate button', () => {
         expect(viewSource).toContain('variant="header-donate"');
-        expect(viewSource).toContain("gift.svg");
+        expect(viewSource).toContain('gift.svg');
         expect(viewSource).not.toContain('btn btn-success pull-right btn-donar');
         expect(viewSource).toContain('panel-donar__body');
         expect(viewSource).toContain('keypath="ayudanos"');

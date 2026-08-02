@@ -125,19 +125,19 @@ export function getMyAccountMobileSections(config, options = {}) {
         { id: 'ayuda', labelKey: 'ayuda', items: ayuda },
         ...(isAdmin
             ? [
-                  {
-                      id: 'administracion',
-                      labelKey: 'administracion',
-                      items: [
-                          {
-                              id: 'admin-dashboard',
-                              labelKey: 'administracion',
-                              icon: 'fa-cogs',
-                              route: { name: 'admin-dashboard' }
-                          }
-                      ]
-                  }
-              ]
+                {
+                    id: 'administracion',
+                    labelKey: 'administracion',
+                    items: [
+                        {
+                            id: 'admin-dashboard',
+                            labelKey: 'administracion',
+                            icon: 'fa-cogs',
+                            route: { name: 'admin-dashboard' }
+                        }
+                    ]
+                }
+            ]
             : [])
     ];
 }
