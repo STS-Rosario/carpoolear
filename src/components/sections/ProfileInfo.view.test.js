@@ -28,6 +28,7 @@ describe('ProfileInfo public panel', () => {
         expect(viewSource).not.toMatch(
             /v-if="isIdentityVerified"[\s\S]*?identidadVerificadaTitulo/
         );
+        expect(viewSource).toContain('profile-info-panel__tile-icon-wrap--verified');
         expect(viewSource).toContain('profile-info-panel__tile-icon--verified');
     });
 

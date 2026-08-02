@@ -317,6 +317,10 @@
     flex-shrink: 0;
 }
 
+.profile-info-panel__tile-icon-wrap--verified {
+    background: #c8e6c9;
+}
+
 .profile-info-panel__tile-icon {
     color: #666;
     font-size: 1.15rem;
@@ -327,7 +331,7 @@
 }
 
 .profile-info-panel__tile-icon--verified {
-    color: #3d9a3d;
+    color: #1b5e20;
 }
 
 .profile-info-panel__tile-title {

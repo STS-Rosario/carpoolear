@@ -7,7 +7,13 @@
 
         <div class="profile-info-panel__tiles">
             <div class="profile-info-panel__tile">
-                <span class="profile-info-panel__tile-icon-wrap">
+                <span
+                    class="profile-info-panel__tile-icon-wrap"
+                    :class="{
+                        'profile-info-panel__tile-icon-wrap--verified':
+                            isIdentityVerified
+                    }"
+                >
                     <i
                         class="fa fa-shield profile-info-panel__tile-icon"
                         :class="{
