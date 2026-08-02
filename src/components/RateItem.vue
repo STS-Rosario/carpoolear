@@ -135,12 +135,12 @@
                 >{{ $t('rateItemResponderALaCalificacion') }}</label>
             <textarea maxlength="260" v-model="comment" id="reply"></textarea>
             <div class="reply-btns">
-                <button class="btn btn-primary" @click="onReply">
+                <AppButton variant="primary" @click="onReply">
                     {{ $t('rateItemResponder') }}
-                </button>
-                <button class="btn btn-primary" @click="onCancelReply">
+                </AppButton>
+                <AppButton variant="secondary" @click="onCancelReply">
                     {{ $t('rateItemCancelar') }}
-                </button>
+                </AppButton>
             </div>
         </div>
         <div
@@ -169,7 +169,11 @@ import {
     isNeutralRating,
     isPositiveRating
 } from '../utils/tripRating';
+import AppButton from './ui/AppButton.vue';
 export default {
+    components: {
+        AppButton
+    },
     data() {
         return {
             showReply: false,
@@ -317,6 +321,9 @@ export default {
     color: #999;
 }
 .reply-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
     margin-top: 1em;
 }
 .label-reply {
