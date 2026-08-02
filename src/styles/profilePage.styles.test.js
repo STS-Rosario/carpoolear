@@ -163,6 +163,16 @@ describe('profile page styles', () => {
         expect(css).toMatch(
             /\.profile-page\s+\.profile-info-component\s*\{[^}]*padding-bottom:\s*1rem/
         );
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-page\s+\.profile-info-component\s*\{[^}]*padding-bottom:\s*0/
+        );
+    });
+
+    it('removes desktop list-container vertical margin on profile', () => {
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*\.profile-page\s+\.list-container\s*\{[^}]*margin:\s*0/
+        );
     });
 
     it('aligns profile trip role label with avatar and route', () => {
