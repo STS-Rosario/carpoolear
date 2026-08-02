@@ -348,7 +348,7 @@
                             "
                         >
                             <div
-                                class="panel panel-default panel-donar"
+                                class="col-xs-24"
                                 v-if="
                                     (index +
                                         parseFloat(
@@ -359,6 +359,9 @@
                                         ) ===
                                     0
                                 "
+                            >
+                            <div
+                                class="panel panel-default panel-donar"
                             >
                                 <div class="panel-body panel-donar__body">
                                     <AppButton
@@ -406,14 +409,14 @@
                                         target="_blank"
                                         v-on:click.prevent="
                                             onOpenLink(
-                                                'https://carpoolear.com.ar/donar?u=' +
-                                                    user.id
+                                                'https://carpoolear.com.ar/donar'
                                             )
                                         "
                                     >
                                         {{ $t('porQueDonar') }}
                                     </a>
                                 </div>
+                            </div>
                             </div>
                         </template>
                         <template
