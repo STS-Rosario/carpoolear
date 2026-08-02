@@ -53,9 +53,13 @@
                 >
                     {{ $t('changelogModalViewPrevious') }}
                 </a>
-                <button type="button" class="btn btn-primary changelog-modal-ok" @click="close">
+                <AppButton
+                    variant="primary"
+                    class="changelog-modal-ok"
+                    @click="close"
+                >
                     {{ $t('changelogModalOk') }}
-                </button>
+                </AppButton>
             </div>
         </div>
     </div>
@@ -67,6 +71,7 @@ import { useAuthStore } from '../stores/auth';
 import { useRootStore } from '../stores/root';
 import { useChangelogStore } from '../stores/changelog';
 import MarkdownPreview from './elements/MarkdownPreview.vue';
+import AppButton from './ui/AppButton.vue';
 import bus from '../services/bus-event';
 import {
     shouldShowChangelogModal,
@@ -79,6 +84,10 @@ const CHANGELOG_OPEN_EVENT = 'changelog:open';
 
 export default {
     name: 'ChangelogModal',
+    components: {
+        MarkdownPreview,
+        AppButton
+    },
     props: {
         suppress: {
             type: Boolean,
@@ -217,9 +226,6 @@ export default {
             this.navigationEntries = [];
             this.dismissed = true;
         }
-    },
-    components: {
-        MarkdownPreview
     }
 };
 </script>
