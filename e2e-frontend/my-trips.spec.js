@@ -284,7 +284,7 @@ test.describe('My Trips page', () => {
 
     await expect(page.getByText('Buenos Aires').first()).toBeVisible({ timeout: 10000 });
 
-    await page.locator('.trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
@@ -336,7 +336,7 @@ test.describe('My Trips page', () => {
     await page.goto('/my-trips');
     await waitForPageReady(page);
 
-    await page.locator('.trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();

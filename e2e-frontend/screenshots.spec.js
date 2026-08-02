@@ -105,7 +105,8 @@ test.describe('Screenshot tests', () => {
             await page.goto('/trips');
             await waitForPageReady(page);
             await page
-                .locator('.trips-list')
+                .getByText(/rosario|viajes publicados|no hay viajes/i)
+                .first()
                 .waitFor({ state: 'visible', timeout: 10000 })
                 .catch(() => {});
             await expect(page).toHaveScreenshot(

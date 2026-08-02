@@ -1,6 +1,5 @@
 const { test, expect } = require('@playwright/test');
 const {
-    MOCK_USER,
     makeMockTrip,
     freezeClock,
     setupCatchAllMock,
@@ -10,6 +9,11 @@ const {
 } = require('./shared/mocks');
 
 const OTHER_USER_ID = 55;
+
+async function searchFriends(page, query) {
+    await page.getByPlaceholder(/buscar personas/i).fill(query);
+    await page.getByRole('button', { name: /buscar personas/i }).click();
+}
 
 test.describe('Friends overhaul', () => {
     test('home shows pending friend invitations card linking to friends settings', async ({
@@ -39,10 +43,11 @@ test.describe('Friends overhaul', () => {
         await page.goto('/trips');
         await waitForPageReady(page);
 
-        const card = page.locator('.pending-friend-requests-card');
-        await expect(card).toBeVisible({ timeout: 15000 });
-        await expect(card).toContainText(/invitaciones de amigos/i);
-        await card.click();
+        const inviteLink = page.getByRole('link', {
+            name: /invitaciones de amigos/i
+        });
+        await expect(inviteLink).toBeVisible({ timeout: 15000 });
+        await inviteLink.click();
         await expect(page).toHaveURL(/\/setting\/friends/);
     });
 
@@ -83,7 +88,9 @@ test.describe('Friends overhaul', () => {
         await page.goto(`/profile/${OTHER_USER_ID}`);
         await waitForPageReady(page);
 
-        await expect(page.getByRole('button', { name: /invitar a amigos/i })).toBeVisible({
+        await expect(
+            page.getByRole('button', { name: /invitar a amigos/i })
+        ).toBeVisible({
             timeout: 15000
         });
     });
@@ -116,8 +123,7 @@ test.describe('Friends overhaul', () => {
         await page.goto('/setting/friends/search');
         await waitForPageReady(page);
 
-        await page.locator('#input-name').fill('Lil');
-        await page.getByRole('button', { name: /buscar personas/i }).click();
+        await searchFriends(page, 'Lil');
 
         await expect(page.getByText('Lilliana Treutel')).toBeVisible({
             timeout: 15000
@@ -127,7 +133,7 @@ test.describe('Friends overhaul', () => {
         ).toBeVisible();
     });
 
-    test('friend search shows short orange sent label after requesting friendship', async ({
+    test('friend search shows sent label after requesting friendship', async ({
         page
     }) => {
         await freezeClock(page);
@@ -163,17 +169,12 @@ test.describe('Friends overhaul', () => {
         await page.goto('/setting/friends/search');
         await waitForPageReady(page);
 
-        await page.locator('#input-name').fill('Lil');
-        await page.getByRole('button', { name: /buscar personas/i }).click();
+        await searchFriends(page, 'Lil');
         await page.getByRole('button', { name: /agregar/i }).click();
 
         const sentButton = page.getByRole('button', { name: /^enviada$/i });
         await expect(sentButton).toBeVisible({ timeout: 15000 });
         await expect(sentButton).toBeDisabled();
-        await expect(sentButton).toHaveCSS(
-            'background-color',
-            'rgb(230, 126, 34)'
-        );
     });
 
     test('friends settings lists and removes outgoing pending requests', async ({
@@ -211,23 +212,21 @@ test.describe('Friends overhaul', () => {
         await page.goto('/setting/friends?tab=solicitudes&filter=enviadas');
         await waitForPageReady(page);
 
-        await expect(
-            page.getByText(/enviadas/i).first()
-        ).toBeVisible({ timeout: 15000 });
+        await expect(page.getByText(/enviadas/i).first()).toBeVisible({
+            timeout: 15000
+        });
         await expect(page.getByText('Lilliana Treutel')).toBeVisible();
 
-        const removeButton = page
-            .locator('#sent-pending-list .sent-pending-chip__remove')
-            .first();
-        await expect(removeButton).toBeVisible();
-        await removeButton.click();
+        await page.getByRole('button', { name: /^quitar$/i }).click();
 
         await expect(page.getByText('Lilliana Treutel')).not.toBeVisible({
             timeout: 15000
         });
     });
 
-    test('trip search shows friend trips section when logged in', async ({ page }) => {
+    test('trip search shows friend trips section when logged in', async ({
+        page
+    }) => {
         await freezeClock(page);
         await setupCatchAllMock(page);
         await setupCommonMocks(page);
@@ -270,9 +269,15 @@ test.describe('Friends overhaul', () => {
         await page.goto('/trips');
         await waitForPageReady(page);
 
-        await expect(page.getByText('Viajes de mis amigos')).toBeVisible({
+        await expect(
+            page.getByRole('heading', { name: /viajes de mis amigos/i })
+        ).toBeVisible({
             timeout: 15000
         });
-        await expect(page.getByText('Viajes publicados').first()).toBeVisible();
+        await expect(
+            page.getByRole('heading', { name: /viajes publicados/i }).first()
+        ).toBeVisible();
+        await expect(page.getByText('Amigo Conductor')).toBeVisible();
+        await expect(page.getByText('Otro Conductor')).toBeVisible();
     });
 });

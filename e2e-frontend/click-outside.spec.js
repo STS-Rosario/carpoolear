@@ -37,17 +37,16 @@ test.describe('clickOutside directive', () => {
       if (iframe) iframe.remove();
     });
 
-    // Click on the autocomplete input to focus it
-    const autocompleteInput = page.locator('.osm-autocomplete input').first();
+    // Focus an origin autocomplete field, then click outside it
+    const autocompleteInput = page.getByPlaceholder(/^origen$/i).first();
     await autocompleteInput.waitFor({ state: 'visible', timeout: 10000 });
     await autocompleteInput.click();
 
-    // Click outside the autocomplete (e.g. on the page header) to trigger v-clickoutside
-    await page.locator('.header').first().click();
+    await page.getByRole('banner').click({ position: { x: 10, y: 10 } });
 
     // Check for the clickOutside TypeError
-    const clickOutsideErrors = errors.filter(msg =>
-      msg.includes('is not a function') && msg.includes('context')
+    const clickOutsideErrors = errors.filter(
+      (msg) => msg.includes('is not a function') && msg.includes('context')
     );
 
     expect(clickOutsideErrors).toEqual([]);

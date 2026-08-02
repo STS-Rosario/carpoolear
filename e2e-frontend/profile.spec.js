@@ -55,7 +55,7 @@ test.describe('Profile page', () => {
     await waitForPageReady(page);
 
     await expect(
-      page.locator('.profile-identity-header__name').getByText('Perfil de Prueba')
+      page.getByRole('heading', { name: 'Perfil de Prueba' })
     ).toBeVisible({ timeout: 15000 });
   });
 
@@ -164,7 +164,7 @@ test.describe('Profile page', () => {
     await waitForPageReady(page);
 
     await expect(
-      page.locator('.profile-identity-header__name').getByText('Perfil de Prueba')
+      page.getByRole('heading', { name: 'Perfil de Prueba' })
     ).toBeVisible({ timeout: 15000 });
   });
 
@@ -223,7 +223,7 @@ test.describe('Profile page', () => {
     });
     await expect(page.getByText('Buenos Aires').first()).toBeVisible();
 
-    await page.locator('.profile-trip-component .trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
