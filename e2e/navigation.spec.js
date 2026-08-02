@@ -1,12 +1,9 @@
 const { test, expect } = require('@playwright/test');
+const { uiLogin } = require('./helpers');
 
 test.describe('Authenticated navigation', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/login');
-    await page.fill('#txt_user', 'user0@g.com');
-    await page.fill('#txt_password', '123456');
-    await page.click('#btn_login');
-    await expect(page).not.toHaveURL(/\/login/, { timeout: 15000 });
+    await uiLogin(page, 'user0@g.com', '123456');
   });
 
   test('redirects to trips after login', async ({ page }) => {

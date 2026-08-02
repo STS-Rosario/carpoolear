@@ -1,44 +1,14 @@
 const { test, expect } = require('@playwright/test');
-const { uiLogin } = require('./helpers');
+const {
+  uiLogin,
+  selectAutocompleteSuggestion,
+  clickWizardNext,
+  pickFutureDate,
+} = require('./helpers');
 
 function expectedSeatPriceCents(totalTripPriceCents, rearMaxTwoPassengers) {
   const occupants = rearMaxTwoPassengers ? 4 : 5;
   return Math.round(totalTripPriceCents / occupants);
-}
-
-function parseCurrencyTextToUnits(text) {
-  const numberPart = (text.match(/([0-9][0-9.,\s]*)/) || [])[1];
-  if (!numberPart) {
-    return null;
-  }
-
-  const compact = numberPart.replace(/\s/g, '');
-  const lastComma = compact.lastIndexOf(',');
-  const lastDot = compact.lastIndexOf('.');
-  const hasComma = lastComma >= 0;
-  const hasDot = lastDot >= 0;
-
-  let normalized = compact;
-  if (hasComma && hasDot) {
-    const decimalIndex = Math.max(lastComma, lastDot);
-    const integer = compact.slice(0, decimalIndex).replace(/[.,]/g, '');
-    const decimals = compact.slice(decimalIndex + 1).replace(/[.,]/g, '');
-    normalized = `${integer}.${decimals}`;
-  } else if (hasComma) {
-    const parts = compact.split(',');
-    normalized = parts.length > 1 && parts[parts.length - 1].length === 3
-      ? parts.join('')
-      : `${parts.slice(0, -1).join('')}.${parts[parts.length - 1]}`;
-  } else if (hasDot) {
-    const parts = compact.split('.');
-    normalized = parts.length > 1 && parts[parts.length - 1].length === 3
-      ? parts.join('')
-      : `${parts.slice(0, -1).join('')}.${parts[parts.length - 1]}`;
-  } else {
-    normalized = compact;
-  }
-
-  return Math.round(Number(normalized));
 }
 
 async function setupRouteMocks(page, mockedTripInfo) {
@@ -68,7 +38,7 @@ async function setupRouteMocks(page, mockedTripInfo) {
     });
   });
 
-  // Ensure pricing cards are enabled in UI regardless of backend defaults.
+  // Ensure pricing validation is enabled in UI regardless of backend defaults.
   await page.route('**/api/login', async (route) => {
     const response = await route.fetch();
     const json = await response.json();
@@ -113,10 +83,49 @@ async function setupRouteMocks(page, mockedTripInfo) {
   });
 }
 
+async function goToSeatsStep(page) {
+  await page.getByRole('link', { name: /crear viaje/i }).click();
+  await expect(page).toHaveURL(/\/trips\/create/);
+
+  await page.getByRole('button', { name: /soy conductor/i }).click();
+  await clickWizardNext(page);
+
+  await selectAutocompleteSuggestion(page, 'origen', 'Rosario');
+  await page.getByLabel(/punto de partida/i).fill('Plaza 25 de Mayo');
+  await clickWizardNext(page);
+
+  await selectAutocompleteSuggestion(page, 'destino', 'Buenos');
+  await page.getByLabel(/punto de llegada/i).fill('Obelisco');
+  await clickWizardNext(page);
+
+  await expect(page.getByTestId('trip-creation-wizard-step-5')).toBeVisible({
+    timeout: 15000,
+  });
+  await pickFutureDate(page);
+  await page.locator('input[type="time"]').fill('14:00');
+  await clickWizardNext(page);
+
+  if (await page.getByTestId('trip-creation-wizard-step-6').isVisible().catch(() => false)) {
+    const carSelect = page.getByLabel(/seleccionar auto/i);
+    if (await carSelect.isVisible().catch(() => false)) {
+      const options = await carSelect.locator('option').allTextContents();
+      const selectable = options.findIndex((text, index) => index > 0 && text.trim());
+      if (selectable > 0) {
+        await carSelect.selectOption({ index: selectable });
+      }
+    }
+    await clickWizardNext(page);
+  }
+
+  await expect(page.getByTestId('trip-creation-wizard-step-7')).toBeVisible({
+    timeout: 10000,
+  });
+}
+
 test.describe('Trip creation recommended contribution', () => {
   test.setTimeout(120000);
 
-  test('recalculates Contribución promedio with comfort preference divisor', async ({ page }) => {
+  test('recalculates max contribution with comfort preference divisor', async ({ page }) => {
     const mockedTripInfo = {
       distance: 291088.8,
       duration: 11805.6,
@@ -128,48 +137,43 @@ test.describe('Trip creation recommended contribution', () => {
 
     await setupRouteMocks(page, mockedTripInfo);
     await uiLogin(page, 'user0@g.com', '123456');
-    const identityModalLaterButton = page.locator('.identity-validation-prompt-btn-later').first();
-    if (await identityModalLaterButton.isVisible().catch(() => false)) {
-      await identityModalLaterButton.click();
-    }
+    await goToSeatsStep(page);
 
-    await page.getByRole('link', { name: /crear viaje/i }).click();
-    await expect(page).toHaveURL(/\/trips\/create/);
+    const priceField = page.getByLabel(/contribución por persona/i);
+    await expect(priceField).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByLabel(/atrás viajan|atras viajan|only 2 people in the back/i)
+    ).toBeVisible();
 
-    await page.click('label[for="type-driver"]');
+    const defaultMaxUnits = Math.round(
+      expectedSeatPriceCents(mockedTripInfo.maximum_trip_price_cents, false) / 100
+    );
+    const comfortMaxUnits = Math.round(
+      expectedSeatPriceCents(mockedTripInfo.maximum_trip_price_cents, true) / 100
+    );
+    // Price between the two caps: over default (÷5), under comfort (÷4).
+    const midPrice = Math.round((defaultMaxUnits + comfortMaxUnits) / 2);
 
-    const originInput = page.locator('.trip_point').first().locator('.osm-autocomplete input');
-    await originInput.click();
-    await originInput.pressSequentially('Rosario', { delay: 30 });
-    await page.locator('.trip_point').first().locator('.osm-autocomplete-results button').first().click();
+    await priceField.fill(String(midPrice));
+    await expect(
+      page.getByText(/excede|máximo|maximum/i).first()
+    ).toBeVisible({ timeout: 10000 });
 
-    const destinationInput = page.locator('.trip_point').last().locator('.osm-autocomplete input');
-    await destinationInput.click();
-    await destinationInput.pressSequentially('Buenos', { delay: 30 });
-    await page.locator('.trip_point').last().locator('.osm-autocomplete-results button').first().click();
+    await page
+      .getByLabel(/atrás viajan|atras viajan|only 2 people in the back/i)
+      .check();
 
-    await expect(page.locator('.trip-contribucion-recomendada-card__main strong').first()).toBeVisible({ timeout: 15000 });
-
-    const comfortCheckbox = page.locator('#newtrip-comfort-rear-max-two');
-
-    // Default unchecked => divide by 5 occupants
-    const defaultExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, false) / 100);
-    const defaultText = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
-    expect(parseCurrencyTextToUnits(defaultText)).toBe(defaultExpectedUnits);
-
-    // Checked => divide by 4 occupants
-    await comfortCheckbox.check();
-    const comfortExpectedUnits = Math.round(expectedSeatPriceCents(mockedTripInfo.recommended_trip_price_cents, true) / 100);
     await expect.poll(async () => {
-      const text = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
-      return parseCurrencyTextToUnits(text);
-    }).toBe(comfortExpectedUnits);
+      return page
+        .getByText(/excede|máximo|maximum/i)
+        .first()
+        .isVisible()
+        .catch(() => false);
+    }).toBe(false);
 
-    // Changing seat count must not alter recommended contribution
-    await page.click('label[for="seats-four"]');
-    await expect.poll(async () => {
-      const text = await page.locator('.trip-contribucion-recomendada-card__main strong').first().innerText();
-      return parseCurrencyTextToUnits(text);
-    }).toBe(comfortExpectedUnits);
+    // Changing available seats must not change the comfort-based max divisor.
+    await page.getByRole('button', { name: /aumentar|increase/i }).first().click();
+    await priceField.fill(String(midPrice));
+    await expect(page.getByText(/excede|máximo|maximum/i)).toHaveCount(0);
   });
 });
