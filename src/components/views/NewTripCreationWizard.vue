@@ -269,22 +269,28 @@
                         v-on:date_changed="form.changeDate"
                     ></DatePicker>
                     <div class="new-trip-wizard__time-field">
-                        <input
+                        <AppInput
                             ref="wizardTimeInput"
                             type="time"
-                            v-maska="'##:##'"
                             v-model="form.time"
-                            class="form-control form-control-with-icon form-control-time"
-                            :class="{ 'has-error': form.timeError.state }"
-                        />
-                        <button
-                            type="button"
-                            class="new-trip-wizard__time-caret"
-                            :aria-label="$t('hora')"
-                            @click="openWizardTimePicker"
+                            mask="##:##"
+                            icon-left="fa fa-clock-o"
+                            class="new-trip-wizard__time-input"
                         >
-                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
-                        </button>
+                            <template #actionRight>
+                                <button
+                                    type="button"
+                                    class="new-trip-wizard__time-caret"
+                                    :aria-label="$t('hora')"
+                                    @click="openWizardTimePicker"
+                                >
+                                    <i
+                                        class="fa fa-chevron-down"
+                                        aria-hidden="true"
+                                    ></i>
+                                </button>
+                            </template>
+                        </AppInput>
                     </div>
                 </div>
                 <WeeklySchedule
@@ -916,7 +922,8 @@ export default {
             }
         },
         openWizardTimePicker() {
-            const input = this.$refs.wizardTimeInput;
+            const component = this.$refs.wizardTimeInput;
+            const input = component?.$refs?.inputEl ?? component;
             if (!input) {
                 return;
             }
@@ -1477,31 +1484,19 @@ export default {
     position: relative;
 }
 
-.new-trip-wizard .trip_datetime .form-control-time {
-    padding-left: 2.75rem;
-    padding-right: 2.5rem;
-    background-position: 0.75rem center;
-    background-size: 1.25rem 1.25rem;
-    background-repeat: no-repeat;
-    background-color: var(--ds-input-bg);
-    appearance: none;
-    -webkit-appearance: none;
-}
-
-.new-trip-wizard .trip_datetime .form-control-time::-webkit-calendar-picker-indicator {
+.new-trip-wizard .trip_datetime .new-trip-wizard__time-input :deep(
+    input[type='time']::-webkit-calendar-picker-indicator
+) {
     opacity: 0;
     display: none;
 }
 
 .new-trip-wizard .trip_datetime .new-trip-wizard__time-caret {
-    position: absolute;
-    top: 50%;
-    right: 0.75rem;
-    transform: translateY(-50%);
-    z-index: 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     padding: 0;
     border: 0;
     background: transparent;

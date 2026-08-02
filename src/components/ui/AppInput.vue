@@ -20,6 +20,7 @@
             <input
                 ref="inputEl"
                 v-jump
+                v-maska="mask || undefined"
                 :id="controlId"
                 class="app-input__control"
                 :class="controlClass"
@@ -104,6 +105,10 @@ export default {
             default: ''
         },
         iconImage: {
+            type: String,
+            default: ''
+        },
+        mask: {
             type: String,
             default: ''
         }
