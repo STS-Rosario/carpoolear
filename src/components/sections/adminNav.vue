@@ -84,7 +84,6 @@ export default {
 <style scoped>
 .admin-nav-wrapper {
     margin-bottom: 16px;
-    margin-top: 72px;
 }
 
 .admin-nav-sidebar {
@@ -134,10 +133,6 @@ export default {
 }
 
 @media (max-width: 767px) {
-    .admin-nav-wrapper {
-        margin-top: 92px;
-    }
-
     .admin-nav-sidebar {
         display: none;
     }
