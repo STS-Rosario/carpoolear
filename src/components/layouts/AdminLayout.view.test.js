@@ -26,6 +26,7 @@ describe('AdminLayout', () => {
         expect(layoutSource).toContain('admin-layout-row');
         expect(layoutSource).toMatch(/\.admin-layout-row\s*\{[^}]*display:\s*flex/);
         expect(layoutSource).toMatch(/\.admin-layout-row\s*\{[^}]*align-items:\s*stretch/);
-        expect(layoutSource).toMatch(/min-height:\s*calc\(100vh/);
+        // Subtract footer margin-top (1em) so 100vh fill does not recreate page scroll.
+        expect(layoutSource).toMatch(/min-height:\s*calc\(100vh[^)]*1em\)/);
     });
 });
