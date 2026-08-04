@@ -230,4 +230,18 @@ describe('Trips.vue nearby results header', () => {
             /isComplementary\(\s*trip,\s*searchParams,\s*trips,\s*index\s*\)/
         );
     });
+
+    it('shows a description under the nearby results heading', () => {
+        const complementaryBlocks = [
+            ...viewSource.matchAll(
+                /class="trip-complementary"[\s\S]*?<\/div>/g
+            )
+        ].map((match) => match[0]);
+
+        expect(complementaryBlocks.length).toBeGreaterThan(0);
+        complementaryBlocks.forEach((block) => {
+            expect(block).toContain("$t('resultadosCercanos')");
+            expect(block).toContain("$t('resultadosCercanosDescripcion')");
+        });
+    });
 });
