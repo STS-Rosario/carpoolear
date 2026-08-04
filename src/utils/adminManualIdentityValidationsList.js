@@ -1,3 +1,5 @@
+import { parseAdminPaginationFromRoute } from './adminPagination';
+
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
     'adminManualIdentityValidationsShowResolved';
 
@@ -187,5 +189,48 @@ export function getNextManualIdentityValidationSortState(currentKey, currentDir,
     return {
         sortKey: column,
         sortDir: column === 'id' ? 'desc' : 'asc'
+    };
+}
+
+export function buildManualIdentityValidationListParams({
+    page,
+    perPage,
+    showResolved = false,
+    sortKey = null,
+    sortDir = 'asc'
+} = {}) {
+    const params = {};
+
+    if (page) {
+        params.page = page;
+    }
+    if (perPage) {
+        params.per_page = perPage;
+    }
+    if (showResolved) {
+        params.show_resolved = '1';
+    }
+    if (sortKey) {
+        params.sort = sortKey;
+        params.direction = sortDir === 'desc' ? 'desc' : 'asc';
+    }
+
+    return params;
+}
+
+export function parseManualIdentityValidationListFromRoute(query = {}) {
+    const pagination = parseAdminPaginationFromRoute(query);
+    const showResolved = query.show_resolved != null
+        && ['1', 'true', 'yes'].includes(String(query.show_resolved).toLowerCase());
+
+    const sortKey = query.sort ? String(query.sort) : null;
+    const sortDir = String(query.direction || '').toLowerCase() === 'desc' ? 'desc' : 'asc';
+
+    return {
+        page: pagination.page,
+        perPage: pagination.perPage,
+        showResolved,
+        sortKey,
+        sortDir
     };
 }
