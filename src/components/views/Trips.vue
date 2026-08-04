@@ -1205,7 +1205,7 @@ export default {
 
 .trip-complementary p {
     margin: 0.35rem 0 0.75rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.4;
     color: #555;
 }
