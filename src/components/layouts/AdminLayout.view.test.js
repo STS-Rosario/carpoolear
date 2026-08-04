@@ -18,4 +18,14 @@ describe('AdminLayout', () => {
         expect(layoutSource).not.toMatch(/margin-top:\s*72px/);
         expect(layoutSource).not.toMatch(/margin-top:\s*24px/);
     });
+
+    it('stretches the content column to fill available vertical space in the admin row', () => {
+        // Bootstrap float columns shrink to content height; the content pane must
+        // stretch with the sidebar (and to the remaining viewport) so short pages
+        // do not leave a short overflow:auto box with a spurious vertical scrollbar.
+        expect(layoutSource).toContain('admin-layout-row');
+        expect(layoutSource).toMatch(/\.admin-layout-row\s*\{[^}]*display:\s*flex/);
+        expect(layoutSource).toMatch(/\.admin-layout-row\s*\{[^}]*align-items:\s*stretch/);
+        expect(layoutSource).toMatch(/min-height:\s*calc\(100vh/);
+    });
 });
