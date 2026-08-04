@@ -258,6 +258,8 @@ const messages = {
         porQueDonar: 'Por qué donar a Carpoolear',
         oCreandoUnaCuentaCon: 'o creando una cuenta con',
         resultadosCercanos: 'Resultados cercanos',
+        resultadosCercanosDescripcion:
+            'Viajes cercanos a la fecha que elegiste (+- 3 días), revisá bien la fecha del viaje',
         podesSubscribirte:
             'Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.',
         crearAlerta: 'Crear Alerta',
@@ -1929,6 +1931,8 @@ const messages = {
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
         porQueDonar: 'Por qué donar a Apalan-car',
         resultadosCercanos: 'Resultados cercanos',
+        resultadosCercanosDescripcion:
+            'Viajes cercanos a la fecha que elegiste (+- 3 días), revisá bien la fecha del viaje',
         podesSubscribirte:
             'Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.',
         crearAlerta: 'Crear Alerta',
@@ -3254,6 +3258,8 @@ const messages = {
         porQueDonar: 'Why donate to Carpoolear',
         oCreandoUnaCuentaCon: 'or by creating an account with',
         resultadosCercanos: 'Nearby results',
+        resultadosCercanosDescripcion:
+            'Nearby trips around the date you chose (± 3 days), double-check the trip date',
         podesSubscribirte:
             'If you subscribe we can let you know when a new trip matches your query.',
         crearAlerta: 'Create Alert',

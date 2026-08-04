@@ -204,3 +204,56 @@ describe('Trips.vue donation modal', () => {
         expect(viewSource).not.toContain('value="10000"');
     });
 });
+
+describe('Trips.vue nearby results header', () => {
+    it('delegates complementary header visibility to shouldShowNearbyResultsHeader', () => {
+        expect(viewSource).toContain(
+            "from '../../utils/nearbyTripResults.js'"
+        );
+        expect(viewSource).toContain('shouldShowNearbyResultsHeader');
+        const methodBlock = viewSource.match(
+            /isComplementary\([^)]*\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(methodBlock).not.toBeNull();
+        expect(methodBlock[0]).toContain('shouldShowNearbyResultsHeader');
+        expect(methodBlock[0]).toContain('previousTrips');
+    });
+
+    it('passes each section trip list so only the first nearby trip shows the header', () => {
+        expect(viewSource).toContain(
+            'isComplementary(trip, searchParams, friendTripsList, index)'
+        );
+        expect(viewSource).toContain(
+            'isComplementary(trip, searchParams, otherTripsList, index)'
+        );
+        expect(viewSource).toMatch(
+            /isComplementary\(\s*trip,\s*searchParams,\s*trips,\s*index\s*\)/
+        );
+    });
+
+    it('shows a description under the nearby results heading', () => {
+        const complementaryBlocks = [
+            ...viewSource.matchAll(
+                /class="trip-complementary"[\s\S]*?<\/div>/g
+            )
+        ].map((match) => match[0]);
+
+        expect(complementaryBlocks.length).toBeGreaterThan(0);
+        complementaryBlocks.forEach((block) => {
+            expect(block).toContain("$t('resultadosCercanos')");
+            expect(block).toContain("$t('resultadosCercanosDescripcion')");
+        });
+    });
+
+    it('styles the nearby heading without bottom margin and a smaller spaced description', () => {
+        expect(viewSource).toMatch(
+            /\.trip-complementary h2\s*\{[^}]*margin-bottom:\s*0;/
+        );
+        expect(viewSource).toMatch(
+            /\.trip-complementary p\s*\{[^}]*font-size:\s*1\.2rem;/
+        );
+        expect(viewSource).toMatch(
+            /\.trip-complementary p\s*\{[^}]*margin:[^}]*0\.75rem;/
+        );
+    });
+});

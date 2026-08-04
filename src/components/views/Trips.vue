@@ -185,16 +185,13 @@
                                 >
                                     <div
                                         v-if="
-                                            isComplementary(
-                                                trip,
-                                                searchParams,
-                                                index
-                                            )
+                                            isComplementary(trip, searchParams, friendTripsList, index)
                                         "
                                         class="col-xs-24"
                                     >
                                         <div class="trip-complementary">
                                             <h2>{{ $t('resultadosCercanos') }}</h2>
+                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                         </div>
                                     </div>
                                     <Trip :trip="trip" :user="user"></Trip>
@@ -215,16 +212,13 @@
                                 >
                                     <div
                                         v-if="
-                                            isComplementary(
-                                                trip,
-                                                searchParams,
-                                                friendTripsList.length + index
-                                            )
+                                            isComplementary(trip, searchParams, otherTripsList, index)
                                         "
                                         class="col-xs-24"
                                     >
                                         <div class="trip-complementary">
                                             <h2>{{ $t('resultadosCercanos') }}</h2>
+                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                         </div>
                                     </div>
                                     <Trip :trip="trip" :user="user"></Trip>
@@ -242,12 +236,13 @@
                         >
                             <div
                                 v-if="
-                                    isComplementary(trip, searchParams, index)
+                                    isComplementary(trip, searchParams, otherTripsList, index)
                                 "
                                 class="col-xs-24"
                             >
                                 <div class="trip-complementary">
                                     <h2>{{ $t('resultadosCercanos') }}</h2>
+                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                 </div>
                             </div>
                             <Trip :trip="trip" :user="user"></Trip>
@@ -305,11 +300,12 @@
                             </div>
                         </template>
                         <template
-                            v-if="isComplementary(trip, searchParams, index)"
+                            v-if="isComplementary(trip, searchParams, trips, index)"
                         >
                             <div class="col-xs-24">
                                 <div class="trip-complementary">
                                     <h2>{{ $t('resultadosCercanos') }}</h2>
+                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                 </div>
                             </div>
                         </template>
@@ -445,6 +441,7 @@ import {
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
+import { shouldShowNearbyResultsHeader } from '../../utils/nearbyTripResults.js';
 
 export default {
     name: 'trips',
@@ -716,21 +713,17 @@ export default {
                 });
             });
         },
-        isComplementary(trip, searchParams, index) {
-            let isComplementary = false;
-            if (searchParams.data && searchParams.data.date) {
-                var searchDate = dayjs(searchParams.data.date).toDate();
-                var tripDate = dayjs(trip.trip_date).toDate();
-                tripDate.setHours(0);
-                tripDate.setMinutes(0);
-                tripDate.setSeconds(0);
-                if (searchDate.getTime() === tripDate.getTime()) {
-                    isComplementary = false;
-                } else {
-                    isComplementary = true;
-                }
-            }
-            return isComplementary;
+        isComplementary(trip, searchParams, sectionTrips, index) {
+            const searchDate =
+                searchParams.data && searchParams.data.date
+                    ? searchParams.data.date
+                    : null;
+            const previousTrips = (sectionTrips || []).slice(0, index);
+            return shouldShowNearbyResultsHeader(
+                trip,
+                searchDate,
+                previousTrips
+            );
         },
         // TODO filter trips that not are main route
         // REVIEW wich is the best way to do it?
@@ -1204,5 +1197,16 @@ export default {
 .trips-donation-banner {
     width: 100%;
     margin-bottom: 1.5rem;
+}
+
+.trip-complementary h2 {
+    margin-bottom: 0;
+}
+
+.trip-complementary p {
+    margin: 0.35rem 0 0.75rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #555;
 }
 </style>
