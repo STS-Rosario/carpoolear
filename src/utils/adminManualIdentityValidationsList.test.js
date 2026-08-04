@@ -1,11 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
     ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
+    buildManualIdentityValidationListParams,
     filterManualIdentityValidationsList,
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
     isManualIdentityValidationResolved,
     MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
+    parseManualIdentityValidationListFromRoute,
     saveShowResolvedManualIdentityValidations,
     sortManualIdentityValidationsList
 } from './adminManualIdentityValidationsList.js';
@@ -162,6 +164,53 @@ describe('adminManualIdentityValidationsList', () => {
                 'paid',
                 'review_status'
             ]);
+        });
+    });
+
+    describe('buildManualIdentityValidationListParams', () => {
+        it('includes pagination, show_resolved and sort params for the API', () => {
+            expect(
+                buildManualIdentityValidationListParams({
+                    page: 2,
+                    perPage: 30,
+                    showResolved: true,
+                    sortKey: 'id',
+                    sortDir: 'desc'
+                })
+            ).toEqual({
+                page: 2,
+                per_page: 30,
+                show_resolved: '1',
+                sort: 'id',
+                direction: 'desc'
+            });
+        });
+
+        it('omits sort params when no column is selected', () => {
+            expect(buildManualIdentityValidationListParams({ page: 1, perPage: 20 })).toEqual({
+                page: 1,
+                per_page: 20
+            });
+        });
+    });
+
+    describe('parseManualIdentityValidationListFromRoute', () => {
+        it('reads pagination, show_resolved and sort from route query', () => {
+            expect(
+                parseManualIdentityValidationListFromRoute({
+                    page: '3',
+                    per_page: '50',
+                    show_resolved: '1',
+                    sort: 'user_name',
+                    direction: 'asc'
+                })
+            ).toEqual({
+                page: 3,
+                perPage: 50,
+                showResolved: true,
+                sortKey: 'user_name',
+                sortDir: 'asc'
+            });
         });
     });
 
