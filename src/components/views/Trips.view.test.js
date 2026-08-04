@@ -244,4 +244,16 @@ describe('Trips.vue nearby results header', () => {
             expect(block).toContain("$t('resultadosCercanosDescripcion')");
         });
     });
+
+    it('styles the nearby heading without bottom margin and a smaller spaced description', () => {
+        expect(viewSource).toMatch(
+            /\.trip-complementary h2\s*\{[^}]*margin-bottom:\s*0;/
+        );
+        expect(viewSource).toMatch(
+            /\.trip-complementary p\s*\{[^}]*font-size:\s*1\.2rem;/
+        );
+        expect(viewSource).toMatch(
+            /\.trip-complementary p\s*\{[^}]*margin:[^}]*0\.75rem;/
+        );
+    });
 });
