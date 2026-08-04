@@ -27,8 +27,8 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('getShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('saveShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('show_resolved');
-        expect(viewSource).toContain(':data="displayedList"');
-        expect(viewSource).toContain('v-for="item in displayedList"');
+        expect(viewSource).toContain(':data="list"');
+        expect(viewSource).toContain('v-for="item in list"');
     });
 
     it('renders sortable column headers for manual validation rows', () => {
@@ -46,7 +46,8 @@ describe('AdminManualIdentityValidations view', () => {
     it('sends sort and pagination params to the API instead of sorting locally', () => {
         expect(viewSource).not.toContain('sortManualIdentityValidationsList');
         expect(viewSource).toContain('syncRouteQuery');
-        expect(viewSource).toContain('params.sort = this.sortKey');
-        expect(viewSource).toContain('params.direction = this.sortDir');
+        expect(viewSource).toContain('buildManualIdentityValidationListParams');
+        expect(viewSource).toContain('sortKey: this.sortKey');
+        expect(viewSource).toContain('sortDir: this.sortDir');
     });
 });
