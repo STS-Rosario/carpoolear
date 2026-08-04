@@ -191,6 +191,7 @@
                                     >
                                         <div class="trip-complementary">
                                             <h2>{{ $t('resultadosCercanos') }}</h2>
+                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                         </div>
                                     </div>
                                     <Trip :trip="trip" :user="user"></Trip>
@@ -217,6 +218,7 @@
                                     >
                                         <div class="trip-complementary">
                                             <h2>{{ $t('resultadosCercanos') }}</h2>
+                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                         </div>
                                     </div>
                                     <Trip :trip="trip" :user="user"></Trip>
@@ -240,6 +242,7 @@
                             >
                                 <div class="trip-complementary">
                                     <h2>{{ $t('resultadosCercanos') }}</h2>
+                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                 </div>
                             </div>
                             <Trip :trip="trip" :user="user"></Trip>
@@ -302,6 +305,7 @@
                             <div class="col-xs-24">
                                 <div class="trip-complementary">
                                     <h2>{{ $t('resultadosCercanos') }}</h2>
+                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
                                 </div>
                             </div>
                         </template>
