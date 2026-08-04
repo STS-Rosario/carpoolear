@@ -1,7 +1,7 @@
 import dayjs from '../dayjs';
 
 export function isNearbyTrip(trip, searchDate) {
-    if (!searchDate || !trip?.trip_date) {
+    if (!searchDate || !trip || !trip.trip_date) {
         return false;
     }
 
