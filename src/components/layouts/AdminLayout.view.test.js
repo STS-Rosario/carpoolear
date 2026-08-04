@@ -15,7 +15,6 @@ describe('AdminLayout', () => {
     it('does not add a redundant top margin on top of view-container header offset', () => {
         // .view-container already clears the fixed header; extra margin causes
         // avoidable vertical scroll on short admin pages (e.g. user-migrations/new).
-        expect(layoutSource).not.toMatch(/\.admin-layout-content\s*\{[^}]*margin-top:\s*72px/);
         expect(layoutSource).not.toMatch(/margin-top:\s*72px/);
         expect(layoutSource).not.toMatch(/margin-top:\s*24px/);
     });

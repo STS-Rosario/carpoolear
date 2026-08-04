@@ -9,7 +9,6 @@ describe('adminNav layout spacing', () => {
     it('does not add a redundant top margin on top of view-container header offset', () => {
         // Same double-offset bug as AdminLayout: tall sidebar + extra margin
         // forces vertical scroll when page content would otherwise fit.
-        expect(navSource).not.toMatch(/\.admin-nav-wrapper\s*\{[^}]*margin-top:\s*72px/);
         expect(navSource).not.toMatch(/margin-top:\s*72px/);
         expect(navSource).not.toMatch(/margin-top:\s*92px/);
     });
