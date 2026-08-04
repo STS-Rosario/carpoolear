@@ -1199,9 +1199,13 @@ export default {
     margin-bottom: 1.5rem;
 }
 
+.trip-complementary h2 {
+    margin-bottom: 0;
+}
+
 .trip-complementary p {
-    margin: 0.5rem 0 0;
-    font-size: 1.4rem;
+    margin: 0.35rem 0 0.75rem;
+    font-size: 1.2rem;
     line-height: 1.4;
     color: #555;
 }
