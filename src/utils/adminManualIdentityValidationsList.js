@@ -220,8 +220,8 @@ export function buildManualIdentityValidationListParams({
 
 export function parseManualIdentityValidationListFromRoute(query = {}) {
     const pagination = parseAdminPaginationFromRoute(query);
-    const showResolved = query.show_resolved != null
-        && ['1', 'true', 'yes'].includes(String(query.show_resolved).toLowerCase());
+    const showResolved = query.show_resolved != null &&
+        ['1', 'true', 'yes'].includes(String(query.show_resolved).toLowerCase());
 
     const sortKey = query.sort ? String(query.sort) : null;
     const sortDir = String(query.direction || '').toLowerCase() === 'desc' ? 'desc' : 'asc';
