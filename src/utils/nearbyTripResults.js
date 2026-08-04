@@ -1,6 +1,6 @@
 import dayjs from '../dayjs';
 
-function isNearbyTrip(trip, searchDate) {
+export function isNearbyTrip(trip, searchDate) {
     if (!searchDate || !trip?.trip_date) {
         return false;
     }
