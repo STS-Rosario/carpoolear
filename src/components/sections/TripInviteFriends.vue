@@ -1,6 +1,8 @@
 <template>
     <div class="trip-invite-friends">
-        <p>{{ $t('queresInvitarTusAmigos') }}</p>
+        <p v-if="showPrompt" class="trip-invite-friends__prompt">
+            {{ $t('queresInvitarTusAmigos') }}
+        </p>
         <div v-if="friends && friends.length" class="trip-invite-friends__list">
             <div class="checkbox">
                 <label>
@@ -48,6 +50,10 @@ import { mapState, mapActions } from 'pinia';
 import { useFriendsStore } from '../../stores/friends';
 import TripApi from '../../services/api/Trips';
 import dialogs from '../../services/dialogs.js';
+import {
+    TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR,
+    resolveTripInviteFriendsClose
+} from '../../utils/tripInviteFriendsClose.js';
 
 const tripApi = new TripApi();
 
@@ -58,6 +64,19 @@ export default {
         tripId: {
             type: [Number, String],
             required: true
+        },
+        closeBehavior: {
+            type: String,
+            default: TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR.EMIT,
+            validator(value) {
+                return Object.values(TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR).includes(
+                    value
+                );
+            }
+        },
+        showPrompt: {
+            type: Boolean,
+            default: true
         }
     },
 
@@ -101,7 +120,7 @@ export default {
                     dialogs.message(this.$t('invitarAmigos'), {
                         estado: 'success'
                     });
-                    this.$emit('close');
+                    this.dismiss();
                 })
                 .catch(() => {
                     dialogs.message(this.$t('problemaAlCargarElViaje'), {
@@ -113,7 +132,15 @@ export default {
                 });
         },
         onClose() {
-            this.$emit('close');
+            this.dismiss();
+        },
+        dismiss() {
+            resolveTripInviteFriendsClose({
+                closeBehavior: this.closeBehavior,
+                tripId: this.tripId,
+                router: this.$router,
+                emit: (event) => this.$emit(event)
+            });
         }
     },
 

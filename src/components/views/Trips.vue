@@ -18,6 +18,7 @@
             </router-link>
         </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
+        <TripCreationDraftCard v-if="user" ref="tripCreationDraftCard" />
         <PendingFriendRequestsCard v-if="user" />
         <div
             v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"
@@ -398,6 +399,7 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import OngoingTripCard from '../elements/OngoingTripCard.vue';
+import TripCreationDraftCard from '../elements/TripCreationDraftCard.vue';
 import PendingFriendRequestsCard from '../elements/PendingFriendRequestsCard.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
@@ -490,6 +492,9 @@ export default {
         ...mapActions(useFriendsStore, {
             fetchPendingFriends: 'pending'
         }),
+        refreshTripCreationDraftCard() {
+            this.$refs.tripCreationDraftCard?.refresh?.();
+        },
         // setActionButton: 'actionbars/setHeaderButtons'
         isInternalBannerUrl(url) {
             return typeof url === 'string' && url.trim().startsWith('/');
@@ -982,6 +987,11 @@ export default {
             this.fetchOngoingTrip();
             this.fetchPendingFriends();
         }
+
+        this.refreshTripCreationDraftCard();
+    },
+    activated() {
+        this.refreshTripCreationDraftCard();
     },
     updated(a) {
         // {{ $t('pendienteNoSeLimpiaBuscador') }}
@@ -993,6 +1003,11 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
+        '$route.name'(name) {
+            if (name === 'trips') {
+                this.refreshTripCreationDraftCard();
+            }
+        },
         user(value) {
             if (value) {
                 this.fetchOngoingTrip();
@@ -1101,6 +1116,7 @@ export default {
     components: {
         Trip,
         OngoingTripCard,
+        TripCreationDraftCard,
         PendingFriendRequestsCard,
         Loading,
         SearchBox,
