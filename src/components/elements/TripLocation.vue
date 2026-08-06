@@ -3,7 +3,9 @@
         <template v-if="trip.points.length >= 2">
             <div
                 class="row trip_location_from"
-                :class="{ 'trip_location_from--has-point-detail': trip.punto_partida }"
+                :class="{
+                    'trip_location_from--has-point-detail': showPuntoPartida
+                }"
             >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
                     <span class="trip_from_time">{{
@@ -29,7 +31,7 @@
                         {{ googleInfoClean(getStateName(trip.points[0])) }}
                     </span>
                     <span
-                        v-if="trip.punto_partida"
+                        v-if="showPuntoPartida"
                         class="trip-location-point-detail trip-location-point-detail--partida"
                     >
                         <span class="trip-location-point-detail__label">{{
@@ -80,7 +82,7 @@
                     trip.points.length > 2
                         ? 'has_points'
                         : '',
-                    { 'trip_location_to--has-point-detail': trip.punto_llegada }
+                    { 'trip_location_to--has-point-detail': showPuntoLlegada }
                 ]"
             >
                 <div class="col-xs-4" v-if="tripCardTheme === 'light'">
@@ -106,7 +108,7 @@
                         }}
                     </span>
                     <span
-                        v-if="trip.punto_llegada"
+                        v-if="showPuntoLlegada"
                         class="trip-location-point-detail trip-location-point-detail--llegada"
                     >
                         <span class="trip-location-point-detail__label">{{
@@ -133,7 +135,9 @@
         <template v-else>
             <div
                 class="row trip_location_from"
-                :class="{ 'trip_location_from--has-point-detail': trip.punto_partida }"
+                :class="{
+                    'trip_location_from--has-point-detail': showPuntoPartida
+                }"
             >
                 <div class="col-xs-4 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
@@ -141,7 +145,7 @@
                 <div class="col-xs-20">
                     {{ trip.from_town }}
                     <div
-                        v-if="trip.punto_partida"
+                        v-if="showPuntoPartida"
                         class="trip-location-point-detail trip-location-point-detail--partida"
                     >
                         <span class="trip-location-point-detail__label">{{
@@ -151,14 +155,17 @@
                     </div>
                 </div>
             </div>
-            <div class="row trip_location_to" :class="{ 'trip_location_to--has-point-detail': trip.punto_llegada }">
+            <div
+                class="row trip_location_to"
+                :class="{ 'trip_location_to--has-point-detail': showPuntoLlegada }"
+            >
                 <div class="col-xs-4 text-right">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                 </div>
                 <div class="col-xs-20">
                     {{ trip.to_town }}
                     <div
-                        v-if="trip.punto_llegada"
+                        v-if="showPuntoLlegada"
                         class="trip-location-point-detail trip-location-point-detail--llegada"
                     >
                         <span class="trip-location-point-detail__label">{{
@@ -178,6 +185,7 @@ import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
 import dayjs from '../../dayjs';
 import { googleInfoClean } from '../../filters';
+import { shouldShowTripCardPointDetail } from '../../utils/tripCardDisplay';
 
 export default {
     name: 'tripLocation',
@@ -189,8 +197,15 @@ export default {
             trip: 'currentTrip'
         }),
         ...mapState(useAuthStore, {
-            tripCardTheme: 'tripCardTheme'
+            tripCardTheme: 'tripCardTheme',
+            user: 'user'
         }),
+        showPuntoPartida() {
+            return shouldShowTripCardPointDetail(this.user, this.trip.punto_partida);
+        },
+        showPuntoLlegada() {
+            return shouldShowTripCardPointDetail(this.user, this.trip.punto_llegada);
+        },
         widthLocationClass() {
             return this.tripCardTheme === 'light' ? 'col-xs-14' : 'col-xs-18';
         },

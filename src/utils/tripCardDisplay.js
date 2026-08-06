@@ -23,3 +23,7 @@ export function formatTripCardTime(tripDate, dayjsFn) {
     if (!tripDate) return '';
     return `${dayjsFn(tripDate).format('HH:mm')} hs`;
 }
+
+export function shouldShowTripCardPointDetail(user, pointDetail) {
+    return Boolean(user) && Boolean(pointDetail);
+}
