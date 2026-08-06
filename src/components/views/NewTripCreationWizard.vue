@@ -1585,12 +1585,6 @@ export default {
     font-size: 1rem;
 }
 
-.new-trip-wizard__role-card-text {
-    font-size: 0.8125rem;
-    color: #666;
-    line-height: 1.35;
-}
-
 .new-trip-wizard__wants-stops {
     margin: 1rem 0;
 }
