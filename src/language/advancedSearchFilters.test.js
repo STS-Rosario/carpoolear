@@ -14,5 +14,15 @@ describe('advanced search filters i18n', () => {
         expect(source).toContain("filtrosAvanzados: 'Advanced filters'");
         expect(source).toContain("filtroCualquiera: 'Any'");
         expect(source).toContain("filtrosAvanzados: 'Filtros avanzados'");
+        expect(source).toContain(
+            "buscarEnRangoDeFechas: 'Buscar en rango de fechas'"
+        );
+        expect(source).toContain("desde: 'Desde'");
+        expect(source).toContain("hasta: 'Hasta'");
+        expect(source).toContain(
+            "buscarEnRangoDeFechas: 'Search in date range'"
+        );
+        expect(source).toContain("desde: 'From'");
+        expect(source).toContain("hasta: 'To'");
     });
 });
