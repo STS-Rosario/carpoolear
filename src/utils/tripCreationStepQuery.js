@@ -21,7 +21,11 @@ export function parseStepFromQuery(value) {
 
 export function resolveStepFromQuery(
     value,
-    { isPassenger = false, isEdit = false } = {}
+    {
+        isPassenger = false,
+        isEdit = false,
+        seatPriceEnabled = true
+    } = {}
 ) {
     const step = parseStepFromQuery(value);
     if (step == null) {
@@ -32,8 +36,12 @@ export function resolveStepFromQuery(
         return STEP.ORIGIN;
     }
 
+    if (step === STEP.CONTRIBUTION && !seatPriceEnabled) {
+        return STEP.DESCRIPTION;
+    }
+
     if (isStepDisabledForPassenger(step, isPassenger)) {
-        return STEP.SEATS;
+        return step === STEP.CONTRIBUTION ? STEP.DESCRIPTION : STEP.SEATS;
     }
 
     return step;

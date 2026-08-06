@@ -35,7 +35,7 @@
             :class="{
                 'trip-contribution-step__suggested--expanded': suggestedExpanded
             }"
-            @click="onSuggestedClick"
+            @click="applySuggested"
         >
             <span class="trip-contribution-step__suggested-main">
                 {{
@@ -118,7 +118,7 @@ export default {
     },
 
     methods: {
-        onSuggestedClick() {
+        applySuggested() {
             const units = contributionUnitsFromCents(
                 this.recommendedSeatPriceCents
             );

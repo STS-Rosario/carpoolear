@@ -4,6 +4,7 @@
             :current-step="currentStep"
             :max-visited-step="maxVisitedStep"
             :is-passenger="isPassenger"
+            :seat-price-enabled="navigationOptions.seatPriceEnabled"
             :incomplete-steps="incompleteSteps"
             @select="onStepSelect"
         />
@@ -372,27 +373,32 @@
                     </div>
                     <span class="error" v-if="form.seatsError.state">{{ form.seatsError.message }}</span>
                 </div>
-                <div
-                    class="trip_price"
-                    v-if="!isPassenger && form.config.module_seat_price_enabled"
-                >
-                    <AppInput
-                        type="number"
-                        v-model="form.price"
-                        :label="$t('precioAsiento')"
-                        min="0"
-                        icon-left="fa fa-usd"
-                        :error="
-                            form.priceError.state
-                                ? form.priceError.message
-                                : ''
-                        "
-                        @update:modelValue="form.onOutboundPriceFieldInput"
-                    />
-                </div>
             </template>
 
-            <!-- Step 6: Description -->
+            <!-- Step: Contribution -->
+            <template
+                v-if="
+                    currentStep === STEP.CONTRIBUTION &&
+                    !isPassenger &&
+                    form.config.module_seat_price_enabled
+                "
+            >
+                <TripContributionStepPanel
+                    :price="form.price"
+                    :recommended-seat-price-cents="
+                        form.recommended_seat_price_cents
+                    "
+                    :suggested-description="
+                        form.contribucionRecomendadaCardDescripcionText
+                    "
+                    :price-error="
+                        form.priceError.state ? form.priceError.message : ''
+                    "
+                    @update:price="onContributionPriceUpdate"
+                />
+            </template>
+
+            <!-- Step: Description -->
             <template v-if="currentStep === STEP.DESCRIPTION">
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepDescriptionQuestion') }}
@@ -680,6 +686,7 @@ import TripCreationStepper from '../elements/TripCreationStepper.vue';
 import TripCreationRoutePanel from '../elements/TripCreationRoutePanel.vue';
 import TripCarStepPanel from '../elements/TripCarStepPanel.vue';
 import TripSeatMapPanel from '../elements/TripSeatMapPanel.vue';
+import TripContributionStepPanel from '../elements/TripContributionStepPanel.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
@@ -716,6 +723,7 @@ import {
 } from '../../utils/tripCreationStepQuery.js';
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
+import { contributionUnitsFromCents } from '../../utils/tripContributionDisplay.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -725,6 +733,7 @@ export default {
         TripCreationRoutePanel,
         TripCarStepPanel,
         TripSeatMapPanel,
+        TripContributionStepPanel,
         TripPointDetailFields,
         DatePicker,
         autocomplete,
@@ -789,7 +798,10 @@ export default {
         },
         navigationOptions() {
             return {
-                wantsIntermediateStops: this.form.wantsIntermediateStops
+                wantsIntermediateStops: this.form.wantsIntermediateStops,
+                seatPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_seat_price_enabled
+                )
             };
         },
         intermediatePoints() {
@@ -1117,7 +1129,7 @@ export default {
             }
         },
         syncSeatPriceErrors(errors = {}) {
-            if (this.currentStep !== STEP.SEATS) {
+            if (this.currentStep !== STEP.CONTRIBUTION) {
                 return;
             }
 
@@ -1158,7 +1170,13 @@ export default {
         revalidateVisitedSteps() {
             const steps = [];
             for (let s = STEP.ROLE; s <= this.maxVisitedStep; s++) {
-                if (this.isPassenger && s === STEP.CAR) {
+                if (this.isPassenger && (s === STEP.CAR || s === STEP.CONTRIBUTION)) {
+                    continue;
+                }
+                if (
+                    s === STEP.CONTRIBUTION &&
+                    !this.navigationOptions.seatPriceEnabled
+                ) {
                     continue;
                 }
                 const result = validateStep(s, this.buildValidationContext());
@@ -1183,7 +1201,8 @@ export default {
         stepQueryContext() {
             return {
                 isPassenger: this.isPassenger,
-                isEdit: this.isEditTripFlow
+                isEdit: this.isEditTripFlow,
+                seatPriceEnabled: this.navigationOptions.seatPriceEnabled
             };
         },
         applyStepFromRouteQuery() {
@@ -1202,8 +1221,32 @@ export default {
         setCurrentStep(step, { syncUrl = true } = {}) {
             this.currentStep = step;
             this.maxVisitedStep = Math.max(this.maxVisitedStep, step);
+            if (step === STEP.CONTRIBUTION) {
+                this.ensureContributionPrefill();
+            }
             if (syncUrl && !this.syncingStepFromRoute) {
                 this.syncStepToRoute(step);
+            }
+        },
+        ensureContributionPrefill() {
+            if (this.form.price !== '' && this.form.price != null) {
+                return;
+            }
+            const units = contributionUnitsFromCents(
+                this.form.recommended_seat_price_cents
+            );
+            if (units === '') {
+                return;
+            }
+            this.form.price = units;
+            if (typeof this.form.onOutboundPriceFieldInput === 'function') {
+                this.form.onOutboundPriceFieldInput();
+            }
+        },
+        onContributionPriceUpdate(value) {
+            this.form.price = value;
+            if (typeof this.form.onOutboundPriceFieldInput === 'function') {
+                this.form.onOutboundPriceFieldInput();
             }
         },
         syncStepToRoute(step) {

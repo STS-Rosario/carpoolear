@@ -32,7 +32,8 @@ import {
     ALL_WIZARD_STEPS,
     canNavigateToStep,
     getTripCreationStepLabelKey,
-    isStepDisabledForPassenger
+    isStepDisabledForPassenger,
+    STEP
 } from '../../utils/tripCreationSteps.js';
 import { isTripCreationStepCompleted } from '../../utils/tripCreationWizardMount.js';
 
@@ -52,6 +53,10 @@ export default {
             type: Boolean,
             default: false
         },
+        seatPriceEnabled: {
+            type: Boolean,
+            default: true
+        },
         incompleteSteps: {
             type: Array,
             default: () => []
@@ -62,7 +67,12 @@ export default {
 
     computed: {
         steps() {
-            return ALL_WIZARD_STEPS;
+            if (this.seatPriceEnabled) {
+                return ALL_WIZARD_STEPS;
+            }
+            return ALL_WIZARD_STEPS.filter(
+                (step) => step !== STEP.CONTRIBUTION
+            );
         }
     },
 
