@@ -36,6 +36,9 @@ describe('tripCreationSteps step labels', () => {
         expect(getTripCreationStepLabelKey(STEP.SEATS)).toBe(
             'tripCreationStepLabelSeats'
         );
+        expect(getTripCreationStepLabelKey(STEP.CONTRIBUTION)).toBe(
+            'tripCreationStepLabelContribution'
+        );
         expect(getTripCreationStepLabelKey(STEP.DESCRIPTION)).toBe(
             'tripCreationStepLabelDescription'
         );
@@ -46,16 +49,37 @@ describe('tripCreationSteps step labels', () => {
 });
 
 describe('tripCreationSteps navigation', () => {
-    it('lists nine steps for drivers and skips car step for passengers', () => {
-        expect(ALL_WIZARD_STEPS).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-        expect(getVisibleSteps(false)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
+    it('lists ten steps for drivers and skips car/contribution for passengers', () => {
+        expect(ALL_WIZARD_STEPS).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(getVisibleSteps(false)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 7, 9, 10]);
     });
 
     it('marks step 6 as disabled for passengers', () => {
         expect(isStepDisabledForPassenger(6, true)).toBe(true);
         expect(isStepDisabledForPassenger(6, false)).toBe(false);
         expect(isCarStep(6)).toBe(true);
+    });
+
+    it('skips contribution when seat price module is disabled', () => {
+        expect(
+            getNextStep(STEP.SEATS, false, {
+                wantsIntermediateStops: false,
+                seatPriceEnabled: false
+            })
+        ).toBe(STEP.DESCRIPTION);
+        expect(
+            getNextStep(STEP.SEATS, false, {
+                wantsIntermediateStops: false,
+                seatPriceEnabled: true
+            })
+        ).toBe(STEP.CONTRIBUTION);
+        expect(
+            getPreviousStep(STEP.DESCRIPTION, false, {
+                wantsIntermediateStops: false,
+                seatPriceEnabled: true
+            })
+        ).toBe(STEP.CONTRIBUTION);
     });
 
     it('skips stops when destination checkbox is unchecked', () => {
@@ -236,11 +260,19 @@ describe('tripCreationSteps validateStep', () => {
         expect(validateStep(STEP.DESCRIPTION, { description: '' }).valid).toBe(false);
     });
 
-    it('requires contribution per person on seats step for drivers when enabled', () => {
+    it('requires contribution per person on contribution step for drivers when enabled', () => {
         expect(
             validateStep(STEP.SEATS, {
                 totalSeats: 3,
                 passengers: 0,
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: ''
+            }).valid
+        ).toBe(true);
+
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
                 isPassenger: false,
                 seatPriceEnabled: true,
                 price: ''
@@ -251,9 +283,7 @@ describe('tripCreationSteps validateStep', () => {
         });
 
         expect(
-            validateStep(STEP.SEATS, {
-                totalSeats: 3,
-                passengers: 0,
+            validateStep(STEP.CONTRIBUTION, {
                 isPassenger: false,
                 seatPriceEnabled: true,
                 price: '1500'
@@ -261,21 +291,9 @@ describe('tripCreationSteps validateStep', () => {
         ).toBe(true);
 
         expect(
-            validateStep(STEP.SEATS, {
-                totalSeats: 3,
-                passengers: 0,
+            validateStep(STEP.CONTRIBUTION, {
                 isPassenger: true,
                 seatPriceEnabled: true,
-                price: ''
-            }).valid
-        ).toBe(true);
-
-        expect(
-            validateStep(STEP.SEATS, {
-                totalSeats: 3,
-                passengers: 0,
-                isPassenger: false,
-                seatPriceEnabled: false,
                 price: ''
             }).valid
         ).toBe(true);
