@@ -39,17 +39,11 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
     });
 
-    it('uses a taller resizable description textarea', () => {
-        expect(wizardSource).toContain('new-trip-wizard__description');
-        expect(wizardSource).toContain('resize: vertical');
-    });
-
-    it('restores last-details lucrar card and preference card styling', () => {
-        expect(wizardSource).toContain('trip_terms--lucrar-card__copy');
-        expect(wizardSource).toContain('viajeColaborativoLead');
-        expect(wizardSource).toContain('trip-pref-card__badge');
-        expect(wizardSource).toContain('col-xs-8 trip-pref-cards__cell');
-        expect(wizardSource).toContain('new-trip-wizard__last-section--preferences');
+    it('uses preferences and review step panels', () => {
+        expect(wizardSource).toContain('TripPreferencesStepPanel');
+        expect(wizardSource).toContain('TripReviewStepPanel');
+        expect(wizardSource).toContain('isSubmitDisabled');
+        expect(wizardSource).toContain('tripCreationPublish');
         expect(wizardSource).not.toContain('new-trip-wizard__last-section--return');
         expect(wizardSource).not.toContain('cargarViajeRegreso');
     });

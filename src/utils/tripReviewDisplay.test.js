@@ -39,9 +39,9 @@ describe('tripReviewDisplay', () => {
     it('builds preference SI/NO tag states', () => {
         expect(
             buildTripReviewPreferenceTags({
-                allow_kids: false,
-                allow_smoking: false,
-                allow_animals: true
+                allowKids: false,
+                allowSmoking: false,
+                allowAnimals: true
             })
         ).toEqual([
             { key: 'kids', allowed: false },
