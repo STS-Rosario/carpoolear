@@ -1314,7 +1314,7 @@ const messages = {
         detallesDelViaje: 'Detalles del viaje',
         tripDetailPageTitle: 'Detalle de viaje',
         tripDetailSection: 'Detalle',
-        tripDetailDriverMessage: 'Mensaje del conductor',
+        tripDetailDriverMessage: 'Mensaje de quien conduce',
         tripDetailConditions: 'Características',
         tripDetailJoined: 'Ya se sumaron',
         tripDetailStatDuration: 'Tiempo estimado',
