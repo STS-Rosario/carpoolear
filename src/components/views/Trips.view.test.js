@@ -236,6 +236,12 @@ describe('Trips.vue persisted search state', () => {
         expect(viewSource).toContain('readAllowPreferenceParamsFromQuery');
         expect(viewSource).toContain("from '../../utils/searchAdvancedFilters.js'");
     });
+
+    it('restores from_date and to_date from the route query', () => {
+        expect(viewSource).toContain(
+            "const textFields = ['origin_name', 'destination_name', 'date', 'from_date', 'to_date']"
+        );
+    });
 });
 
 describe('Trips.vue donation modal', () => {
