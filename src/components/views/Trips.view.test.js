@@ -274,3 +274,17 @@ describe('Trips.vue search alert and install modal CTAs', () => {
         );
     });
 });
+
+describe('Trips.vue empty search and nearby section', () => {
+    it('shows loupe empty state and reuses nearby trips without refetch', () => {
+        expect(viewSource).toContain('loupe-car.svg');
+        expect(viewSource).toContain("$t('searchNoResultsTitle')");
+        expect(viewSource).toContain("$t('searchSeeNearbyTrips')");
+        expect(viewSource).toContain("$t('viajesCercanos')");
+        expect(viewSource).toContain('splitTripsBySearchDate');
+        expect(viewSource).toContain('showNearbyTrips');
+        expect(viewSource).toContain('nearbyTrips');
+        expect(viewSource).toContain('exactTrips');
+        expect(viewSource).not.toContain('isComplementary(');
+    });
+});
