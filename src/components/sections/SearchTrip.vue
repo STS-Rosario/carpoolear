@@ -678,11 +678,11 @@ export default {
                     this.isPassenger = false;
                 }
                 const dateRange = hydrateDateRangeSearch(parameters);
-                this.dateRangeEnabled = dateRange.dateRangeEnabled;
                 this.date = dateRange.fromDate;
                 this.dateAnswer = dateRange.fromDate;
                 this.toDate = dateRange.toDate;
                 this.toDateAnswer = dateRange.toDate;
+                this.dateRangeEnabled = dateRange.dateRangeEnabled;
                 const allowFilters = hydrateAllowPreferenceFilters(parameters);
                 this.allowAnimalsFilter = allowFilters.allowAnimals;
                 this.allowSmokingFilter = allowFilters.allowSmoking;
