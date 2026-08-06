@@ -55,6 +55,12 @@
                     {{ $t('filtroTicketsRequiereRespuesta') }}
                 </label>
             </div>
+            <div class="checkbox form-group support-tickets-admin-filters__needs-reply">
+                <label>
+                    <input v-model="filterOpen" type="checkbox" />
+                    {{ $t('filtroTicketsAbiertos') }}
+                </label>
+            </div>
             <AppButton variant="secondary" size="sm" type="submit">{{ $t('buscar') }}</AppButton>
         </form>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
@@ -157,6 +163,7 @@ export default {
             filterType: '',
             filterPriority: '',
             filterNeedsReply: false,
+            filterOpen: false,
             filterUserId: null,
             listPage: 1,
             listPerPage: DEFAULT_ADMIN_PER_PAGE,
@@ -180,6 +187,7 @@ export default {
                 type: this.filterType,
                 priority: this.filterPriority,
                 needsReply: this.filterNeedsReply,
+                open: this.filterOpen,
                 userId: this.filterUserId,
                 page: this.listPage,
                 perPage: this.listPerPage
@@ -205,6 +213,7 @@ export default {
             this.filterType = parsed.type;
             this.filterPriority = parsed.priority;
             this.filterNeedsReply = parsed.needsReply;
+            this.filterOpen = parsed.open;
             this.filterUserId = parsed.userId;
             this.listPage = parsed.page;
             this.listPerPage = parsed.perPage;
@@ -219,6 +228,9 @@ export default {
             }
             if (this.filterNeedsReply) {
                 query.needs_reply = '1';
+            }
+            if (this.filterOpen) {
+                query.open = '1';
             }
             if (this.filterUserId) {
                 query.user_id = String(this.filterUserId);

@@ -52,6 +52,27 @@
                                 </td>
                                 <td>
                                     <router-link
+                                        v-if="
+                                            item.user_id &&
+                                            Number(
+                                                item.open_account_verification_tickets_count
+                                            ) > 0
+                                        "
+                                        :to="
+                                            accountVerificationTicketsRoute(
+                                                item.user_id
+                                            )
+                                        "
+                                        class="btn btn-link btn-sm"
+                                    >
+                                        {{
+                                            item.open_account_verification_tickets_count
+                                        }}
+                                    </router-link>
+                                    <span v-else>-</span>
+                                </td>
+                                <td>
+                                    <router-link
                                         v-if="item.user_id"
                                         :to="getAdminUserProfileRoute(item.user_id)"
                                         class="btn btn-link btn-sm"
@@ -99,6 +120,7 @@ import Loading from '../Loading';
 import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import {
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
@@ -145,6 +167,12 @@ export default {
     },
     methods: {
         getAdminUserProfileRoute,
+        accountVerificationTicketsRoute(userId) {
+            return adminUserSupportTicketsRoute(userId, {
+                type: 'account_verification',
+                open: true
+            });
+        },
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();
