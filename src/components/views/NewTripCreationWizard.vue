@@ -585,7 +585,6 @@ import {
 } from '../../utils/tripCreationStepQuery.js';
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
-import { contributionUnitsFromCents } from '../../utils/tripContributionDisplay.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -1136,26 +1135,8 @@ export default {
         setCurrentStep(step, { syncUrl = true } = {}) {
             this.currentStep = step;
             this.maxVisitedStep = Math.max(this.maxVisitedStep, step);
-            if (step === STEP.CONTRIBUTION) {
-                this.ensureContributionPrefill();
-            }
             if (syncUrl && !this.syncingStepFromRoute) {
                 this.syncStepToRoute(step);
-            }
-        },
-        ensureContributionPrefill() {
-            if (this.form.price !== '' && this.form.price != null) {
-                return;
-            }
-            const units = contributionUnitsFromCents(
-                this.form.recommended_seat_price_cents
-            );
-            if (units === '') {
-                return;
-            }
-            this.form.price = units;
-            if (typeof this.form.onOutboundPriceFieldInput === 'function') {
-                this.form.onOutboundPriceFieldInput();
             }
         },
         onContributionPriceUpdate(value) {
