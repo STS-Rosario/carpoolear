@@ -989,7 +989,7 @@ const messages = {
         debeActivarCuenta:
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
         instalar: 'Instalar',
-        donar: 'Donar',
+        donar: 'Aportar',
         donarEnSafari: 'Conocer más',
         ingresar: 'Ingresar',
         loginEmailOrPhone: 'Email o teléfono',
@@ -2974,7 +2974,7 @@ const messages = {
         solicitudAmistadPendiente: 'Solicitud de amistad pendiente',
         noSeEncontraronContactos: 'No se encontraron contactos.',
         buscandoContactos: 'Buscando contactos..',
-        donar: 'Donar',
+        donar: 'Aportar',
         ingresar: 'Ingresar',
         loginEmailOrPhone: 'Email o teléfono',
         olvideContraMobile: 'Olvidé mi contraseña',
@@ -4222,7 +4222,7 @@ const messages = {
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
         instalar: 'Install',
-        donar: 'Donate',
+        donar: 'Contribute',
         ingresar: 'Log in',
         loginEmailOrPhone: 'Email or phone',
         olvideContraMobile: 'I forgot my password',
