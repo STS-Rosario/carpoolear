@@ -6,7 +6,11 @@
 
         <div class="trip-seat-map-panel__row">
             <div class="trip-seat-map-panel__seat trip-seat-map-panel__seat--driver">
-                <i class="fa fa-circle-o" aria-hidden="true"></i>
+                <img
+                    :src="driverIcon"
+                    alt=""
+                    class="trip-seat-map-panel__icon"
+                />
                 <strong>{{ $t('tripSeatMapDriver') }}</strong>
                 <span>{{ $t('tripSeatMapDriverRole') }}</span>
             </div>
@@ -17,7 +21,11 @@
                 :class="seatClass(0)"
                 @click="toggleSeat(0)"
             >
-                <i class="fa fa-square-o" aria-hidden="true"></i>
+                <img
+                    :src="seatIcon"
+                    alt=""
+                    class="trip-seat-map-panel__icon"
+                />
                 <strong>{{ $t(seatLabelKeys[0]) }}</strong>
                 <span>{{ seatStatusLabel(0) }}</span>
             </button>
@@ -35,7 +43,11 @@
                 :class="seatClass(index)"
                 @click="toggleSeat(index)"
             >
-                <i class="fa fa-square-o" aria-hidden="true"></i>
+                <img
+                    :src="seatIcon"
+                    alt=""
+                    class="trip-seat-map-panel__icon"
+                />
                 <strong>{{ $t(seatLabelKeys[index]) }}</strong>
                 <span>{{ seatStatusLabel(index) }}</span>
             </button>
@@ -79,6 +91,15 @@ export default {
     },
 
     emits: ['update:passengerSeatAvailability'],
+
+    data() {
+        const base = process.env.ROUTE_BASE || '/';
+        const normalized = base.endsWith('/') ? base : `${base}/`;
+        return {
+            driverIcon: `${normalized}img/volante.svg`,
+            seatIcon: `${normalized}img/asiento.svg`
+        };
+    },
 
     computed: {
         seatLabelKeys() {
@@ -154,9 +175,18 @@ export default {
     cursor: pointer;
 }
 
-.trip-seat-map-panel__seat i {
-    font-size: 1.5rem;
+.trip-seat-map-panel__seat i,
+.trip-seat-map-panel__icon {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
     margin-bottom: 0.25rem;
+    object-fit: contain;
+}
+
+.trip-seat-map-panel__seat--off .trip-seat-map-panel__icon {
+    opacity: 0.45;
+    filter: grayscale(1);
 }
 
 .trip-seat-map-panel__seat strong {

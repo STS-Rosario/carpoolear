@@ -233,6 +233,7 @@ export default {
 .trip-car-step-panel__dropdown-option {
     padding: 0.75rem 1rem;
     cursor: pointer;
+    color: #22211f;
 }
 
 .trip-car-step-panel__dropdown-option:hover,
