@@ -128,14 +128,16 @@ export function applyTripCreationTemplateToForm(form, templateData, options = {}
     form.price = templateData.price || form.price;
     form.no_lucrar = templateData.no_lucrar || false;
     form.selectedCarId = templateData.selectedCarId;
-    form.seatLayoutCapacity =
-        templateData.seatLayoutCapacity != null
-            ? templateData.seatLayoutCapacity
-            : Number(templateData.trip?.rear_max_two_passengers)
-              ? 4
-              : templateData.trip
-                ? 5
-                : null;
+    const templateTrip = templateData.trip || null;
+    if (templateData.seatLayoutCapacity != null) {
+        form.seatLayoutCapacity = templateData.seatLayoutCapacity;
+    } else if (templateTrip) {
+        form.seatLayoutCapacity = Number(templateTrip.rear_max_two_passengers)
+            ? 4
+            : 5;
+    } else {
+        form.seatLayoutCapacity = null;
+    }
     form.passengerSeatAvailability = Array.isArray(
         templateData.passengerSeatAvailability
     )
@@ -148,10 +150,8 @@ export function applyTripCreationTemplateToForm(form, templateData, options = {}
                 (Number(form.seatLayoutCapacity) === 4 ? 3 : 4))
     ) {
         const max = Number(form.seatLayoutCapacity) === 4 ? 3 : 4;
-        const offered = Math.min(
-            Math.max(Number(form.trip?.total_seats) || max, 1),
-            max
-        );
+        const totalSeats = templateTrip ? templateTrip.total_seats : max;
+        const offered = Math.min(Math.max(Number(totalSeats) || max, 1), max);
         form.passengerSeatAvailability = Array.from(
             { length: max },
             (_, i) => i < offered
