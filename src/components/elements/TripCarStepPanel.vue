@@ -1,55 +1,117 @@
 <template>
     <div class="trip-car-step-panel">
-        <AppField
-            label-for="trip-car-select"
-            :error="carSelectionError.state ? carSelectionError.message : ''"
+        <p class="trip-car-step-panel__subtitle label-soft">
+            {{ $t('tripCreationStepCarSubtitle') }}
+        </p>
+
+        <div
+            class="trip-car-step-panel__dropdown"
+            :class="{ 'trip-car-step-panel__dropdown--open': dropdownOpen }"
         >
-            <template #label>
-                {{ $t('seleccionarAuto') }}
-                <button
-                    type="button"
-                    class="trip-car-step-panel__edit-link btn btn-link"
-                    @click="$emit('edit-cars')"
-                >
-                    {{ $t('editarAutosEnViaje') }}
-                </button>
-            </template>
-            <select
-                id="trip-car-select"
-                class="trip-car-step-panel__select"
-                v-model="selectedCarIdModel"
+            <button
+                type="button"
+                class="trip-car-step-panel__dropdown-trigger"
+                :aria-expanded="dropdownOpen ? 'true' : 'false'"
+                aria-haspopup="listbox"
+                @click="dropdownOpen = !dropdownOpen"
             >
-                <option disabled value="">
-                    {{ $t('elegiPatente') }}
-                </option>
-                <option
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <span class="trip-car-step-panel__dropdown-label">
+                    {{ selectedCarLabel || $t('elegiPatente') }}
+                </span>
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <ul
+                v-if="dropdownOpen"
+                class="trip-car-step-panel__dropdown-menu"
+                role="listbox"
+            >
+                <li
                     v-for="car in driverCarsWithPlate"
                     :key="car.id"
-                    :value="car.id"
+                    role="option"
+                    :aria-selected="String(car.id) === String(selectedCarId)"
+                    class="trip-car-step-panel__dropdown-option"
+                    @click="selectCar(car.id)"
                 >
-                    {{ formatCarSelectLabel(car) }}
-                </option>
-            </select>
-        </AppField>
+                    {{ formatCarDropdownLabel(car) }}
+                </li>
+            </ul>
+        </div>
+        <span class="error" v-if="carSelectionError.state">
+            {{ carSelectionError.message }}
+        </span>
+
+        <div class="trip-car-step-panel__add-wrap">
+            <button
+                type="button"
+                class="trip-car-step-panel__add-link btn btn-link"
+                @click="$emit('edit-cars')"
+            >
+                {{ $t('tripCreationAddVehicle') }}
+            </button>
+        </div>
+
+        <div class="trip-car-step-panel__layouts">
+            <p class="trip-car-step-panel__layout-prompt">
+                {{ $t('tripSeatLayoutPrompt') }}
+            </p>
+            <p class="trip-car-step-panel__layout-tip label-soft">
+                {{ $t('tripSeatLayoutTip') }}
+            </p>
+            <div class="trip-car-step-panel__layout-cards">
+                <button
+                    type="button"
+                    class="trip-car-step-panel__layout-card"
+                    :class="{
+                        'trip-car-step-panel__layout-card--active':
+                            Number(seatLayoutCapacity) === 4
+                    }"
+                    @click="selectLayout(4)"
+                >
+                    <span
+                        class="trip-car-step-panel__layout-icon"
+                        :style="layoutIconStyle(fourSeatsIcon)"
+                        aria-hidden="true"
+                    ></span>
+                    <span>{{ $t('tripSeatLayoutFour') }}</span>
+                </button>
+                <button
+                    type="button"
+                    class="trip-car-step-panel__layout-card"
+                    :class="{
+                        'trip-car-step-panel__layout-card--active':
+                            Number(seatLayoutCapacity) === 5
+                    }"
+                    @click="selectLayout(5)"
+                >
+                    <span
+                        class="trip-car-step-panel__layout-icon"
+                        :style="layoutIconStyle(fiveSeatsIcon)"
+                        aria-hidden="true"
+                    ></span>
+                    <span>{{ $t('tripSeatLayoutFive') }}</span>
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { mapState } from 'pinia';
 import { useCarsStore } from '../../stores/car';
-import { formatCarSelectLabel } from '../../utils/carFields.js';
+import { formatCarDropdownLabel } from '../../utils/carFields.js';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
-import AppField from '../ui/AppField.vue';
 
 export default {
     name: 'trip-car-step-panel',
 
-    components: {
-        AppField
-    },
-
     props: {
         selectedCarId: {
+            type: [Number, String],
+            default: null
+        },
+        seatLayoutCapacity: {
             type: [Number, String],
             default: null
         },
@@ -59,7 +121,20 @@ export default {
         }
     },
 
-    emits: ['update:selectedCarId', 'cars-updated', 'edit-cars'],
+    emits: [
+        'update:selectedCarId',
+        'update:seatLayoutCapacity',
+        'cars-updated',
+        'edit-cars'
+    ],
+
+    data() {
+        return {
+            dropdownOpen: false,
+            fourSeatsIcon: process.env.ROUTE_BASE + 'img/4-seats.svg',
+            fiveSeatsIcon: process.env.ROUTE_BASE + 'img/5-seats.svg'
+        };
+    },
 
     computed: {
         ...mapState(useCarsStore, {
@@ -68,71 +143,163 @@ export default {
         driverCarsWithPlate() {
             return activeCarsWithPlate(this.cars);
         },
-        selectedCarIdModel: {
-            get() {
-                return this.selectedCarId;
-            },
-            set(value) {
-                this.$emit('update:selectedCarId', value);
-            }
+        selectedCar() {
+            return this.driverCarsWithPlate.find(
+                (car) => String(car.id) === String(this.selectedCarId)
+            );
+        },
+        selectedCarLabel() {
+            return this.selectedCar
+                ? formatCarDropdownLabel(this.selectedCar)
+                : '';
         }
     },
 
     methods: {
-        formatCarSelectLabel
+        formatCarDropdownLabel,
+        selectCar(id) {
+            this.$emit('update:selectedCarId', id);
+            this.dropdownOpen = false;
+        },
+        selectLayout(capacity) {
+            this.$emit('update:seatLayoutCapacity', capacity);
+        },
+        layoutIconStyle(url) {
+            return {
+                '-webkit-mask-image': `url(${url})`,
+                'mask-image': `url(${url})`
+            };
+        }
     }
 };
 </script>
 
 <style scoped>
-.trip-car-step-panel__label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--ds-input-label, #404040);
-    font-size: var(--ds-input-label-size, 1rem);
-    font-weight: var(--ds-input-label-font-weight, 400);
+.trip-car-step-panel__subtitle {
+    margin: 0 0 0.75rem;
 }
 
-.trip-car-step-panel__edit-link {
-    font-size: inherit;
-    padding: 0;
-    vertical-align: baseline;
-    font-weight: 700;
-    text-decoration: underline;
-    color: var(--ds-text-primary, #22211f);
+.trip-car-step-panel__dropdown {
+    position: relative;
 }
 
-.trip-car-step-panel__edit-link:hover,
-.trip-car-step-panel__edit-link:focus {
-    text-decoration: underline;
-    color: var(--ds-text-primary, #22211f);
-}
-
-.trip-car-step-panel__select {
-    display: block;
+.trip-car-step-panel__dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     width: 100%;
-    height: auto;
-    margin: 0;
-    box-sizing: border-box;
-    border: 0;
-    border-radius: 0;
-    background-color: transparent;
-    color: var(--ds-input-text);
-    font-family: inherit;
-    font-size: var(--ds-input-font-size);
-    line-height: 1.3;
-    padding: var(--ds-input-padding-y) 2.5rem var(--ds-input-padding-y)
-        var(--ds-input-padding-x);
-    box-shadow: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23737373' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 0.75rem 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #22211f;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
 }
 
-.trip-car-step-panel__select:focus {
-    outline: none;
+.trip-car-step-panel__dropdown-trigger .fa-car {
+    color: #737373;
+}
+
+.trip-car-step-panel__dropdown-trigger .fa-chevron-down {
+    margin-left: auto;
+    color: var(--ds-action, #1e5f9e);
+}
+
+.trip-car-step-panel__dropdown-label {
+    flex: 1;
+    min-width: 0;
+}
+
+.trip-car-step-panel__dropdown-menu {
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    right: 0;
+    top: calc(100% + 0.25rem);
+    margin: 0;
+    padding: 0.35rem 0;
+    list-style: none;
+    border: 1px solid #d0d0d0;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-height: 14rem;
+    overflow: auto;
+}
+
+.trip-car-step-panel__dropdown-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+.trip-car-step-panel__dropdown-option:hover,
+.trip-car-step-panel__dropdown-option[aria-selected='true'] {
+    background: #f3f7fb;
+    color: var(--ds-action, #1e5f9e);
+}
+
+.trip-car-step-panel__add-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0.5rem 0 1.25rem;
+}
+
+.trip-car-step-panel__add-link {
+    padding: 0;
+    font-weight: 600;
+    color: var(--ds-action, #1e5f9e);
+    text-decoration: none;
+}
+
+.trip-car-step-panel__layout-prompt {
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+}
+
+.trip-car-step-panel__layout-tip {
+    margin: 0 0 1rem;
+}
+
+.trip-car-step-panel__layout-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.trip-car-step-panel__layout-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #434240;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.trip-car-step-panel__layout-card--active {
+    border-color: var(--ds-action, #1e5f9e);
+    background: #eef5fb;
+    color: var(--ds-action, #1e5f9e);
+}
+
+.trip-car-step-panel__layout-icon {
+    display: block;
+    width: 2.5rem;
+    height: 4.25rem;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 </style>
