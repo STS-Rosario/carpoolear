@@ -248,7 +248,12 @@ function validateSchedule({
     return { valid: true, errors: {} };
 }
 
-function validateCar({ isPassenger = false, cars = [], selectedCarId = null }) {
+function validateCar({
+    isPassenger = false,
+    cars = [],
+    selectedCarId = null,
+    seatLayoutCapacity = null
+}) {
     if (isPassenger) {
         return { valid: true, errors: {} };
     }
@@ -259,10 +264,18 @@ function validateCar({ isPassenger = false, cars = [], selectedCarId = null }) {
     }
 
     const resolved = resolveTripCarId(cars, selectedCarId);
-    return {
-        valid: resolved != null && resolved !== undefined,
-        errors: resolved != null && resolved !== undefined ? {} : { car: 'elegiPatente' }
-    };
+    if (resolved == null || resolved === undefined) {
+        return { valid: false, errors: { car: 'elegiPatente' } };
+    }
+
+    if (
+        Number(seatLayoutCapacity) !== 4 &&
+        Number(seatLayoutCapacity) !== 5
+    ) {
+        return { valid: false, errors: { seatLayout: 'tripSeatLayoutRequired' } };
+    }
+
+    return { valid: true, errors: {} };
 }
 
 function validateSeats({
