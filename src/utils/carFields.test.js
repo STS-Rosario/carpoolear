@@ -8,6 +8,7 @@ import {
     carDetailRows,
     carDisplayLabel,
     formatCarSelectLabel,
+    formatCarDropdownLabel,
     carPayloadFromForm,
     CATALOG_OTHER_VALUE,
     CAR_YEAR_MIN,
@@ -199,6 +200,22 @@ describe('carFields', () => {
         ).toBe('ABC123 (Custom Van)');
 
         expect(formatCarSelectLabel({ patente: 'ONLY1' })).toBe('ONLY1');
+    });
+
+    it('formats car dropdown label as make model · patente', () => {
+        expect(
+            formatCarDropdownLabel({
+                patente: 'NSG345',
+                brand_name: 'Peugeot',
+                model_name: '405'
+            })
+        ).toBe('Peugeot 405 · NSG345');
+
+        expect(
+            formatCarDropdownLabel({
+                patente: 'ONLY1'
+            })
+        ).toBe('ONLY1');
     });
 
     it('builds payload for catalog brand with other model', () => {
