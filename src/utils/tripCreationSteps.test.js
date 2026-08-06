@@ -202,9 +202,19 @@ describe('tripCreationSteps validateStep', () => {
             validateStep(STEP.CAR, {
                 isPassenger: false,
                 cars: [{ id: 1, patente: 'ABC123' }],
-                selectedCarId: 1
+                selectedCarId: 1,
+                seatLayoutCapacity: 4
             }).valid
         ).toBe(true);
+
+        expect(
+            validateStep(STEP.CAR, {
+                isPassenger: false,
+                cars: [{ id: 1, patente: 'ABC123' }],
+                selectedCarId: 1,
+                seatLayoutCapacity: null
+            }).valid
+        ).toBe(false);
 
         expect(
             validateStep(STEP.CAR, {
@@ -213,7 +223,8 @@ describe('tripCreationSteps validateStep', () => {
                     { id: 1, patente: 'ABC123' },
                     { id: 2, patente: 'XYZ789' }
                 ],
-                selectedCarId: null
+                selectedCarId: null,
+                seatLayoutCapacity: 5
             }).valid
         ).toBe(false);
     });
