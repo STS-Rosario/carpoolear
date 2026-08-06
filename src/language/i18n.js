@@ -631,7 +631,7 @@ const messages = {
         errorAlertasViajeAmigo:
             'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
         aceptarPedidosAmigosAutomaticamente:
-            'Aceptar pedidos de asiento de amigos automáticamente',
+            'Aceptar pedidos de asiento de amistades automáticamente',
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
         invitarATodosMisAmigos: 'Invitar a todos mis amigos',
         invitarAmigosAlViaje: 'Invitar amigos al viaje',
@@ -2641,7 +2641,7 @@ const messages = {
         errorAlertasViajeAmigo:
             'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
         aceptarPedidosAmigosAutomaticamente:
-            'Aceptar pedidos de asiento de amigos automáticamente',
+            'Aceptar pedidos de asiento de amistades automáticamente',
         queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
         invitarATodosMisAmigos: 'Invitar a todos mis amigos',
         invitarAmigosAlViaje: 'Invitar amigos al viaje',
