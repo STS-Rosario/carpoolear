@@ -285,7 +285,7 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('price: this.form.price');
         expect(wizardSource).toContain('syncSeatPriceErrors');
         expect(wizardSource).toContain('STEP.CONTRIBUTION');
-        expect(wizardSource).toContain('ensureContributionPrefill');
+        expect(wizardSource).not.toContain('ensureContributionPrefill');
         expect(wizardSource).toMatch(
             /validateCurrentStep\(\)[\s\S]*syncSeatPriceErrors/
         );
