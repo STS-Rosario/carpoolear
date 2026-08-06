@@ -600,6 +600,17 @@ const messages = {
         tripSeatMapOffering: 'Ofrecés {n} lugares',
         tripSeatMapOfferAtLeastOne: 'Ofrecé al menos un lugar',
         tripSeatMapHint: 'Tocá un asiento para encenderlo o apagarlo',
+        tripCreationStepContributionQuestion: '¿Cuánto aporta cada persona?',
+        tripCreationStepContributionSubtitle:
+            'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
+        tripCreationStepLabelContribution: 'Contribución',
+        tripContributionPerPerson: 'por persona',
+        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionHowCalculated:
+            '¿Cómo se calcula la contribución sugerida?',
+        tripContributionImportantTitle: 'Importante',
+        tripContributionImportantBody:
+            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
         tripCreationStepDescriptionQuestion: 'Contanos un poco más del viaje',
         tripCreationStepLastDetailsTitle: '¡Últimos detalles!',
         tripCreationStepLabelOrigin: 'Origen',
@@ -2299,6 +2310,17 @@ const messages = {
         tripSeatMapOffering: 'Ofrecés {n} lugares',
         tripSeatMapOfferAtLeastOne: 'Ofrecé al menos un lugar',
         tripSeatMapHint: 'Tocá un asiento para encenderlo o apagarlo',
+        tripCreationStepContributionQuestion: '¿Cuánto aporta cada persona?',
+        tripCreationStepContributionSubtitle:
+            'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
+        tripCreationStepLabelContribution: 'Contribución',
+        tripContributionPerPerson: 'por persona',
+        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionHowCalculated:
+            '¿Cómo se calcula la contribución sugerida?',
+        tripContributionImportantTitle: 'Importante',
+        tripContributionImportantBody:
+            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
         tripCreationStepDescriptionQuestion: 'Contanos un poco más del viaje',
         tripCreationStepLastDetailsTitle: '¡Últimos detalles!',
         tripCreationStepLabelOrigin: 'Origen',
@@ -3887,6 +3909,17 @@ const messages = {
         tripSeatMapOffering: 'You are offering {n} seats',
         tripSeatMapOfferAtLeastOne: 'Offer at least one seat',
         tripSeatMapHint: 'Tap a seat to turn it on or off',
+        tripCreationStepContributionQuestion: 'How much does each person contribute?',
+        tripCreationStepContributionSubtitle:
+            'This is what each passenger contributes to help with trip expenses.',
+        tripCreationStepLabelContribution: 'Contribution',
+        tripContributionPerPerson: 'per person',
+        tripContributionSuggested: 'Suggested contribution: $ {amount}',
+        tripContributionHowCalculated:
+            'How is the suggested contribution calculated?',
+        tripContributionImportantTitle: 'Important',
+        tripContributionImportantBody:
+            'This platform is for shared trips <strong>without profit</strong>. The contribution should only cover trip expenses, <strong>not generate profit</strong>. Requesting more than the suggested amount could make the trip look like a commercial activity or illegal passenger transport, with possible consequences for insurance coverage and liability to third parties.',
         tripCreationStepDescriptionQuestion: 'Tell us a bit more about the trip',
         tripCreationStepLastDetailsTitle: 'Last details!',
         tripCreationStepLabelOrigin: 'Origin',
