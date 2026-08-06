@@ -398,210 +398,65 @@
                 />
             </template>
 
-            <!-- Step: Description -->
+            <!-- Step: Preferences and details -->
             <template v-if="currentStep === STEP.DESCRIPTION">
-                <h3 class="new-trip-wizard__question">
-                    {{ $t('tripCreationStepDescriptionQuestion') }}
-                </h3>
-                <AppTextarea
-                    class="new-trip-wizard__description"
-                    maxlength="2000"
-                    v-model="form.trip.description"
-                    :placeholder="$t('placeholderComentarioPasajeros')"
-                    :error="
-                        form.commentError.state ? form.commentError.message : ''
+                <TripPreferencesStepPanel
+                    :allow-kids="form.trip.allow_kids"
+                    :allow-smoking="form.trip.allow_smoking"
+                    :allow-animals="form.trip.allow_animals"
+                    :autoaccept-friends="form.trip.autoaccept_friends_requests"
+                    :description="form.trip.description"
+                    :description-error="
+                        form.commentError.state
+                            ? form.commentError.message
+                            : stepErrors.description
+                                ? $t(stepErrors.description)
+                                : ''
                     "
+                    :show-friends="!isPassenger"
+                    :kids-icon="form.tripStaticImg('icon-baby.svg')"
+                    :smoking-icon="form.tripStaticImg('icon-smoke.svg')"
+                    :pets-icon="form.tripStaticImg('icon-pet.svg')"
+                    @update:allowKids="form.trip.allow_kids = $event"
+                    @update:allowSmoking="form.trip.allow_smoking = $event"
+                    @update:allowAnimals="form.trip.allow_animals = $event"
+                    @update:autoacceptFriends="
+                        form.trip.autoaccept_friends_requests = $event
+                    "
+                    @update:description="form.trip.description = $event"
                 />
-                <div v-if="!isPassenger" class="checkbox-trip-autoaccept-friends">
-                    <input
-                        type="checkbox"
-                        v-model="form.trip.autoaccept_friends_requests"
-                        id="wizard-autoaccept"
-                    />
-                    <label for="wizard-autoaccept">
-                        {{ $t('aceptarPedidosAmigosAutomaticamente') }}
-                    </label>
-                </div>
-                <span class="error" v-if="stepErrors.description">{{ $t(stepErrors.description) }}</span>
             </template>
 
-            <!-- Step 7: Last details -->
+            <!-- Step: Review -->
             <template v-if="currentStep === STEP.LAST_DETAILS">
-                <h3 class="new-trip-wizard__question">
-                    {{ $t('tripCreationStepLastDetailsTitle') }}
-                </h3>
-                <div
-                    v-if="!isPassenger"
-                    class="new-trip-wizard__last-section new-trip-wizard__last-section--lucrar"
-                >
-                    <div class="trip_terms trip_terms--lucrar-card">
-                        <input
-                            type="checkbox"
-                            id="wizard-no-lucrar"
-                            v-model="form.no_lucrar"
-                            class="checkbox-button trip_terms--lucrar-card__input"
-                        />
-                        <label
-                            for="wizard-no-lucrar"
-                            class="trip_terms_label checkbox-click-target trip_terms--lucrar-card__label"
-                            :class="{ 'has-error': form.lucrarError.state }"
-                        >
-                            <span
-                                class="checkbox-box trip_terms--lucrar-card__box"
-                            ></span>
-                            <div class="trip_terms--lucrar-card__copy">
-                                <div class="trip_terms--lucrar-card__title-row">
-                                    <strong class="trip_terms--lucrar-card__title">{{
-                                        $t('meComprometo')
-                                    }}</strong>
-                                    <span
-                                        class="tooltip-bottom trip_terms--lucrar-card__tooltip"
-                                        role="button"
-                                        tabindex="0"
-                                        :data-tooltip="$t('meComprometoLucroTooltip')"
-                                    >
-                                        <img
-                                            :src="form.tripStaticImg('icon-info.svg')"
-                                            alt=""
-                                            class="trip-form-info-icon"
-                                        />
-                                    </span>
-                                </div>
-                                <p class="trip_terms--lucrar-card__lead">
-                                    {{ $t('viajeColaborativoLead') }}
-                                </p>
-                                <p class="trip_terms--lucrar-card__text">
-                                    {{ $t('contribucionMaxima') }}
-                                </p>
-                            </div>
-                        </label>
-                    </div>
-                    <span
-                        class="error new-trip-wizard__lucrar-error"
-                        v-if="form.lucrarError.state || stepErrors.lastDetails"
-                    >
-                        {{
-                            form.lucrarError.state
-                                ? form.lucrarError.message
-                                : $t(stepErrors.lastDetails)
-                        }}
-                    </span>
-                </div>
-                <div class="new-trip-wizard__last-section new-trip-wizard__last-section--preferences">
-                    <legend class="label-for-group new-trip-wizard__preferences-title">
-                        {{ $t('preferenciasViaje') }}
-                    </legend>
-                    <div class="preferences row trip-pref-cards">
-                        <div class="col-xs-8 trip-pref-cards__cell">
-                            <div class="trip-pref-card">
-                                <input
-                                    type="checkbox"
-                                    id="wizard-pref-smoking"
-                                    v-model="form.trip.allow_smoking"
-                                    class="trip-pref-card__input sr-only"
-                                />
-                                <label
-                                    for="wizard-pref-smoking"
-                                    class="trip-pref-card__label"
-                                >
-                                    <span class="trip-pref-card__surface">
-                                        <span
-                                            class="trip-pref-card__badge"
-                                            aria-hidden="true"
-                                        >
-                                            <i
-                                                class="fa fa-check"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </span>
-                                        <img
-                                            :src="form.tripStaticImg('icon-smoke.svg')"
-                                            alt=""
-                                            class="trip-pref-card__icon"
-                                        />
-                                    </span>
-                                    <span
-                                        class="trip-pref-card__caption label-soft"
-                                    >
-                                        {{ $t('preferenciaPermitidoFumar') }}
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-xs-8 trip-pref-cards__cell">
-                            <div class="trip-pref-card">
-                                <input
-                                    type="checkbox"
-                                    id="wizard-pref-animals"
-                                    v-model="form.trip.allow_animals"
-                                    class="trip-pref-card__input sr-only"
-                                />
-                                <label
-                                    for="wizard-pref-animals"
-                                    class="trip-pref-card__label"
-                                >
-                                    <span class="trip-pref-card__surface">
-                                        <span
-                                            class="trip-pref-card__badge"
-                                            aria-hidden="true"
-                                        >
-                                            <i
-                                                class="fa fa-check"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </span>
-                                        <img
-                                            :src="form.tripStaticImg('icon-pet.svg')"
-                                            alt=""
-                                            class="trip-pref-card__icon"
-                                        />
-                                    </span>
-                                    <span
-                                        class="trip-pref-card__caption label-soft"
-                                    >
-                                        {{ $t('preferenciaPermitidoAnimales') }}
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-xs-8 trip-pref-cards__cell">
-                            <div class="trip-pref-card">
-                                <input
-                                    type="checkbox"
-                                    id="wizard-pref-kids"
-                                    v-model="form.trip.allow_kids"
-                                    class="trip-pref-card__input sr-only"
-                                />
-                                <label
-                                    for="wizard-pref-kids"
-                                    class="trip-pref-card__label"
-                                >
-                                    <span class="trip-pref-card__surface">
-                                        <span
-                                            class="trip-pref-card__badge"
-                                            aria-hidden="true"
-                                        >
-                                            <i
-                                                class="fa fa-check"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </span>
-                                        <img
-                                            :src="form.tripStaticImg('icon-baby.svg')"
-                                            alt=""
-                                            class="trip-pref-card__icon"
-                                        />
-                                    </span>
-                                    <span
-                                        class="trip-pref-card__caption label-soft"
-                                    >
-                                        {{ $t('preferenciaPermitidoNinos') }}
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <TripReviewStepPanel
+                    :points="form.points"
+                    :punto-partida="form.trip.punto_partida"
+                    :punto-llegada="form.trip.punto_llegada"
+                    :date-label="reviewDateLabel"
+                    :time-label="reviewTimeLabel"
+                    :show-vehicle="!isPassenger"
+                    :vehicle-label="reviewVehicleLabel"
+                    :seats-count="form.trip.total_seats"
+                    :show-contribution="
+                        !isPassenger && navigationOptions.seatPriceEnabled
+                    "
+                    :price="form.price"
+                    :allow-kids="form.trip.allow_kids"
+                    :allow-smoking="form.trip.allow_smoking"
+                    :allow-animals="form.trip.allow_animals"
+                    :show-no-lucrar="!isPassenger"
+                    :no-lucrar="form.no_lucrar"
+                    :no-lucrar-error="
+                        form.lucrarError.state
+                            ? form.lucrarError.message
+                            : stepErrors.lastDetails
+                                ? $t(stepErrors.lastDetails)
+                                : ''
+                    "
+                    @edit="setCurrentStep"
+                    @update:noLucrar="form.no_lucrar = $event"
+                />
             </template>
         </div>
 
@@ -669,7 +524,7 @@
                 size="lg"
                 class="new-trip-wizard__submit"
                 data-testid="trip-creation-submit"
-                :disabled="form.saving"
+                :disabled="isSubmitDisabled"
                 :loading="form.saving"
                 @click="onSubmit"
             >
@@ -687,6 +542,8 @@ import TripCreationRoutePanel from '../elements/TripCreationRoutePanel.vue';
 import TripCarStepPanel from '../elements/TripCarStepPanel.vue';
 import TripSeatMapPanel from '../elements/TripSeatMapPanel.vue';
 import TripContributionStepPanel from '../elements/TripContributionStepPanel.vue';
+import TripPreferencesStepPanel from '../elements/TripPreferencesStepPanel.vue';
+import TripReviewStepPanel from '../elements/TripReviewStepPanel.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
@@ -696,7 +553,12 @@ import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
-import AppTextarea from '../ui/AppTextarea.vue';
+import dayjs from '../../dayjs';
+import { formatCarDropdownLabel } from '../../utils/carFields.js';
+import {
+    activeCarsWithPlate,
+    resolveTripCarId
+} from '../../utils/userCars.js';
 import {
     STEP,
     getNextStep,
@@ -734,6 +596,8 @@ export default {
         TripCarStepPanel,
         TripSeatMapPanel,
         TripContributionStepPanel,
+        TripPreferencesStepPanel,
+        TripReviewStepPanel,
         TripPointDetailFields,
         DatePicker,
         autocomplete,
@@ -742,8 +606,7 @@ export default {
         modal,
         AppButton,
         AppField,
-        AppInput,
-        AppTextarea
+        AppInput
     },
 
     inject: ['newTripForm'],
@@ -811,13 +674,53 @@ export default {
             if (this.form.saving) {
                 return this.savingLabel;
             }
-            return this.isEditTripFlow ? this.$t('actualizar') : this.$t('crearViaje');
+            if (this.isEditTripFlow) {
+                return this.$t('actualizar');
+            }
+            return this.$t('tripCreationPublish');
         },
         savingLabel() {
             return this.isEditTripFlow ? this.$t('guardando') : this.$t('creando');
         },
         totalPeople() {
             return Number(this.form.trip.total_seats) + 1;
+        },
+        isSubmitDisabled() {
+            if (this.form.saving) {
+                return true;
+            }
+            if (!this.isPassenger && !this.form.no_lucrar) {
+                return true;
+            }
+            return false;
+        },
+        reviewDateLabel() {
+            if (this.form.useWeeklySchedule) {
+                return '';
+            }
+            if (!this.form.dateAnswer || !dayjs(this.form.dateAnswer).isValid()) {
+                return '';
+            }
+            return dayjs(this.form.dateAnswer).format('ddd, D MMM');
+        },
+        reviewTimeLabel() {
+            const time = this.form.useWeeklySchedule
+                ? this.form.weeklyScheduleTime
+                : this.form.time;
+            if (!time) {
+                return '';
+            }
+            return `${time} hs`;
+        },
+        reviewVehicleLabel() {
+            const carId = resolveTripCarId(
+                this.form.cars,
+                this.form.selectedCarId
+            );
+            const car = activeCarsWithPlate(this.form.cars).find(
+                (item) => String(item.id) === String(carId)
+            );
+            return formatCarDropdownLabel(car);
         },
         isNextDisabled() {
             return shouldDisableTripCreationNext({
@@ -1155,8 +1058,20 @@ export default {
             this.stepErrors = result.errors || {};
             this.syncPuntoDetailErrors(this.stepErrors);
             this.syncSeatPriceErrors(this.stepErrors);
+            this.syncDescriptionErrors(this.stepErrors);
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
+        },
+        syncDescriptionErrors(errors = {}) {
+            if (this.currentStep !== STEP.DESCRIPTION) {
+                return;
+            }
+            if (errors.description) {
+                this.form.commentError.state = true;
+                this.form.commentError.message = this.$t(errors.description);
+                return;
+            }
+            this.form.commentError.state = false;
         },
         updateIncompleteSteps(step, valid) {
             const set = new Set(this.incompleteSteps);
@@ -1687,12 +1602,6 @@ export default {
     flex-shrink: 0;
 }
 
-.new-trip-wizard__description {
-    min-height: 10rem;
-    height: auto;
-    resize: vertical;
-}
-
 .new-trip-wizard__template-select {
     width: 100%;
     border: 0;
@@ -1710,272 +1619,6 @@ export default {
 
 .new-trip-wizard__template-select:focus {
     outline: none;
-}
-
-.new-trip-wizard__last-section--preferences {
-    margin-top: 1.75rem;
-}
-
-.new-trip-wizard__preferences-title {
-    display: block;
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #333;
-}
-
-.new-trip-wizard__lucrar-error {
-    display: block;
-    color: #ff0000;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.4;
-    margin-top: 1.25rem;
-    margin-bottom: 0;
-}
-</style>
-
-<style>
-/* Last-details blocks mirror NewTrip.vue (scoped there); wizard needs global rules. */
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card {
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
-    background: var(--form-background, #fff);
-    border: 1px solid #dcdfe6;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__label.trip_terms_label,
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__label.checkbox-click-target {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 12px;
-    width: 100%;
-    margin: 0;
-    padding: 14px 16px;
-    box-sizing: border-box;
-    color: #111;
-    line-height: 1.4;
-    vertical-align: unset;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__label.trip_terms_label.has-error {
-    color: #111;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__box.checkbox-box {
-    position: relative;
-    top: 2px;
-    left: 0;
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    border-width: 2px;
-    border-radius: 5px;
-    border-color: #aeb6bd;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__box.checkbox-box:after {
-    width: 11px;
-    height: 7px;
-    left: 3px;
-    top: 5px;
-    border: 2px solid #444;
-    border-top: none;
-    border-right: none;
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__copy {
-    flex: 1;
-    min-width: 0;
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__title-row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    gap: 0.35rem;
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__tooltip {
-    flex-shrink: 0;
-    margin-top: 0.15em;
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__title {
-    flex: 0 1 auto;
-    min-width: 0;
-    font-weight: 700;
-    font-size: 1.125rem;
-    line-height: 1.35;
-    color: #111;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__tooltip[data-tooltip].tooltip-bottom:before {
-    font-size: 0.9375rem;
-    line-height: 1.4;
-    text-align: left;
-    min-width: min(28rem, 92vw);
-    max-width: min(36rem, 92vw);
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__lead {
-    margin: 0.65rem 0 0 0;
-    font-weight: 700;
-    font-size: 0.9375rem;
-    color: #111;
-    line-height: 1.35;
-}
-
-.new-trip-wizard__last-section--lucrar .trip_terms--lucrar-card__text {
-    margin: 0.4rem 0 0 0;
-    font-weight: 400;
-    font-size: 0.8125rem;
-    color: #111;
-    line-height: 1.45;
-}
-
-.new-trip-wizard__last-section--lucrar
-    .trip_terms--lucrar-card__label.has-error
-    .trip_terms--lucrar-card__title {
-    color: var(--main-error, #d72521);
-}
-
-.new-trip-wizard__last-section .trip-form-info-icon {
-    width: 1.1em;
-    height: 1.1em;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-cards__cell {
-    text-align: center;
-    margin-bottom: 0.35rem;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card {
-    display: inline-block;
-    max-width: 100%;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card__label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    margin: 0;
-    font-weight: normal;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card__surface {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3.15rem;
-    height: 3.15rem;
-    box-sizing: border-box;
-    border: 1px solid #cfd4d8;
-    border-radius: 4px;
-    background: #fffef8;
-    transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease;
-}
-
-.new-trip-wizard__last-section--preferences
-    .trip-pref-card__input:checked
-    + .trip-pref-card__label
-    .trip-pref-card__surface {
-    border-color: var(--primary-color, #0070b8);
-    background: #fffef8;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card__badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 1.125rem;
-    height: 1.125rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2px;
-    box-sizing: border-box;
-    border: 1px solid #aeb6bd;
-    background: #fff;
-    color: #fff;
-    font-size: 0.65rem;
-    line-height: 1;
-    pointer-events: none;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
-    transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease,
-        box-shadow 0.15s ease;
-}
-
-.new-trip-wizard__last-section--preferences
-    .trip-pref-card__badge
-    .fa-check {
-    opacity: 0;
-    transform: scale(0.75);
-    transition:
-        opacity 0.12s ease,
-        transform 0.12s ease;
-}
-
-.new-trip-wizard__last-section--preferences
-    .trip-pref-card__input:checked
-    + .trip-pref-card__label
-    .trip-pref-card__badge {
-    border-color: var(--primary-color, #0070b8);
-    background: var(--primary-color, #0070b8);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.new-trip-wizard__last-section--preferences
-    .trip-pref-card__input:checked
-    + .trip-pref-card__label
-    .trip-pref-card__badge
-    .fa-check {
-    opacity: 1;
-    transform: scale(1.12);
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card__icon {
-    display: block;
-    object-fit: contain;
-    width: 1.4rem;
-    height: 1.4rem;
-}
-
-.new-trip-wizard__last-section--preferences .trip-pref-card__caption {
-    display: block;
-    margin-top: 0.35rem;
-    font-size: 0.8rem;
-    text-align: center;
-    color: var(--main-font-color, #555);
-    max-width: 7.5rem;
-    line-height: 1.25;
-}
-
-.new-trip-wizard__last-section--preferences
-    .trip-pref-card__input:focus-visible
-    + .trip-pref-card__label
-    .trip-pref-card__surface {
-    outline: 2px solid var(--primary-color, #0070b8);
-    outline-offset: 2px;
 }
 
 </style>
