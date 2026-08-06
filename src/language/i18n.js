@@ -263,6 +263,15 @@ const messages = {
         porQueDonar: 'Por qué donar a Carpoolear',
         oCreandoUnaCuentaCon: 'o creando una cuenta con',
         resultadosCercanos: 'Resultados cercanos',
+        viajesCercanos: 'Viajes cercanos',
+        viajesCercanosSubtitle:
+            'Viajes de hasta 3 días antes o después de la fecha buscada.',
+        searchNoResultsTitle: 'No encontramos resultados para tu búsqueda',
+        searchNoResultsAlertQuestion:
+            '¿Querés que te avisemos cuando se crea un viaje con este origen y destino?',
+        searchCreateAlertNow: 'Creá una alerta ahora.',
+        searchOr: 'o',
+        searchSeeNearbyTrips: 'Ver viajes cercanos (+- 3 días)',
         podesSubscribirte:
             'Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.',
         crearAlerta: 'Crear Alerta',
@@ -2136,6 +2145,15 @@ const messages = {
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
         porQueDonar: 'Por qué donar a Apalan-car',
         resultadosCercanos: 'Resultados cercanos',
+        viajesCercanos: 'Viajes cercanos',
+        viajesCercanosSubtitle:
+            'Viajes de hasta 3 días antes o después de la fecha buscada.',
+        searchNoResultsTitle: 'No encontramos resultados para tu búsqueda',
+        searchNoResultsAlertQuestion:
+            '¿Querés que te avisemos cuando se crea un viaje con este origen y destino?',
+        searchCreateAlertNow: 'Creá una alerta ahora.',
+        searchOr: 'o',
+        searchSeeNearbyTrips: 'Ver viajes cercanos (+- 3 días)',
         podesSubscribirte:
             'Ahora podés suscribirte para que te avisemos cuando haya un nuevo viaje que concuerde con lo que estas buscando.',
         crearAlerta: 'Crear Alerta',
@@ -3637,6 +3655,15 @@ const messages = {
         porQueDonar: 'Why donate to Carpoolear',
         oCreandoUnaCuentaCon: 'or by creating an account with',
         resultadosCercanos: 'Nearby results',
+        viajesCercanos: 'Nearby trips',
+        viajesCercanosSubtitle:
+            'Trips up to 3 days before or after your searched date.',
+        searchNoResultsTitle: 'We couldn’t find results for your search',
+        searchNoResultsAlertQuestion:
+            'Want us to notify you when a trip is created with this origin and destination?',
+        searchCreateAlertNow: 'Create an alert now.',
+        searchOr: 'or',
+        searchSeeNearbyTrips: 'See nearby trips (+- 3 days)',
         podesSubscribirte:
             'If you subscribe we can let you know when a new trip matches your query.',
         crearAlerta: 'Create Alert',
