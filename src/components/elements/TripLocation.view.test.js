@@ -13,6 +13,17 @@ describe('TripLocation punto partida and punto llegada', () => {
         expect(viewSource).toContain("$t('puntoDePartida')");
         expect(viewSource).toContain("$t('puntoDeLlegada')");
     });
+
+    it('gates point details on logged-in user via shouldShowTripCardPointDetail', () => {
+        expect(viewSource).toContain('shouldShowTripCardPointDetail');
+        expect(viewSource).toContain(
+            'shouldShowTripCardPointDetail(this.user, this.trip.punto_partida)'
+        );
+        expect(viewSource).toContain(
+            'shouldShowTripCardPointDetail(this.user, this.trip.punto_llegada)'
+        );
+        expect(viewSource).toContain("user: 'user'");
+    });
 });
 
 describe('TripLocation mobile trip-detail stack', () => {

@@ -3,7 +3,8 @@ import {
     getSeatsPillTone,
     getSeatsPillLabel,
     formatTripCardDate,
-    formatTripCardTime
+    formatTripCardTime,
+    shouldShowTripCardPointDetail
 } from './tripCardDisplay.js';
 import dayjs from '../dayjs';
 
@@ -41,5 +42,18 @@ describe('formatTripCardDate / formatTripCardTime', () => {
     it('returns empty string for missing dates', () => {
         expect(formatTripCardDate(null, dayjs)).toBe('');
         expect(formatTripCardTime(null, dayjs)).toBe('');
+    });
+});
+
+describe('shouldShowTripCardPointDetail', () => {
+    it('hides point details when the user is not logged in', () => {
+        expect(shouldShowTripCardPointDetail(null, 'Terminal')).toBe(false);
+        expect(shouldShowTripCardPointDetail(undefined, 'Terminal')).toBe(false);
+    });
+
+    it('shows point details only when logged in and a value is present', () => {
+        expect(shouldShowTripCardPointDetail({ id: 1 }, 'Terminal')).toBe(true);
+        expect(shouldShowTripCardPointDetail({ id: 1 }, '')).toBe(false);
+        expect(shouldShowTripCardPointDetail({ id: 1 }, null)).toBe(false);
     });
 });
