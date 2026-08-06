@@ -16,8 +16,9 @@ export const STEP = {
     SCHEDULE: 5,
     CAR: 6,
     SEATS: 7,
-    DESCRIPTION: 8,
-    LAST_DETAILS: 9
+    CONTRIBUTION: 8,
+    DESCRIPTION: 9,
+    LAST_DETAILS: 10
 };
 
 export const ALL_WIZARD_STEPS = [
@@ -28,6 +29,7 @@ export const ALL_WIZARD_STEPS = [
     STEP.SCHEDULE,
     STEP.CAR,
     STEP.SEATS,
+    STEP.CONTRIBUTION,
     STEP.DESCRIPTION,
     STEP.LAST_DETAILS
 ];
@@ -53,6 +55,7 @@ const STEP_LABEL_KEYS = {
     [STEP.SCHEDULE]: 'tripCreationStepLabelSchedule',
     [STEP.CAR]: 'tripCreationStepLabelCar',
     [STEP.SEATS]: 'tripCreationStepLabelSeats',
+    [STEP.CONTRIBUTION]: 'tripCreationStepLabelContribution',
     [STEP.DESCRIPTION]: 'tripCreationStepLabelDescription',
     [STEP.LAST_DETAILS]: 'tripCreationStepLabelLastDetails'
 };
@@ -70,21 +73,27 @@ export function isCarStep(step) {
 }
 
 export function isStepDisabledForPassenger(step, isPassenger) {
-    return isPassenger && step === STEP.CAR;
+    return isPassenger && (step === STEP.CAR || step === STEP.CONTRIBUTION);
 }
 
 function getNavigationOptions(options = {}) {
     return {
-        wantsIntermediateStops: Boolean(options.wantsIntermediateStops)
+        wantsIntermediateStops: Boolean(options.wantsIntermediateStops),
+        seatPriceEnabled: Boolean(options.seatPriceEnabled)
     };
 }
 
 function getLinearSteps(isPassenger, options = {}) {
-    const { wantsIntermediateStops } = getNavigationOptions(options);
-    const steps = getVisibleSteps(isPassenger);
+    const { wantsIntermediateStops, seatPriceEnabled } =
+        getNavigationOptions(options);
+    let steps = getVisibleSteps(isPassenger);
 
     if (!wantsIntermediateStops) {
-        return steps.filter((step) => step !== STEP.STOPS);
+        steps = steps.filter((step) => step !== STEP.STOPS);
+    }
+
+    if (!seatPriceEnabled) {
+        steps = steps.filter((step) => step !== STEP.CONTRIBUTION);
     }
 
     return steps;
@@ -146,6 +155,8 @@ export function validateStep(step, context = {}) {
         return validateCar(context);
     case STEP.SEATS:
         return validateSeats(context);
+    case STEP.CONTRIBUTION:
+        return validateContribution(context);
     case STEP.DESCRIPTION:
         return validateDescription(context);
     case STEP.LAST_DETAILS:
@@ -278,16 +289,7 @@ function validateCar({
     return { valid: true, errors: {} };
 }
 
-function validateSeats({
-    totalSeats = 0,
-    passengers = 0,
-    isPassenger = false,
-    seatPriceEnabled = false,
-    maxPriceEnabled = false,
-    price = '',
-    maximumSeatPriceCents = 0,
-    maximumTripPriceCents = 0
-}) {
+function validateSeats({ totalSeats = 0, passengers = 0 }) {
     if (Number(totalSeats) < 1) {
         return { valid: false, errors: { seats: 'lugaresDisponibles' } };
     }
@@ -296,33 +298,46 @@ function validateSeats({
         return { valid: false, errors: { seats: 'pasajerosSubidos' } };
     }
 
-    if (!isPassenger && seatPriceEnabled) {
-        const seatP = parseSeatPriceInput(price);
-        if (seatP === null) {
-            return {
-                valid: false,
-                errors: { price: 'contribucionPorPersonaRequerida' }
-            };
-        }
-        if (isNegativeSeatPriceUnits(seatP)) {
-            return {
-                valid: false,
-                errors: { price: 'contribucionPorPersonaNegativa' }
-            };
-        }
-        if (
-            maxPriceEnabled &&
-            exceedsMaximumSeatPrice({
-                seatPriceUnits: seatP,
-                maximumSeatPriceCents,
-                maximumTripPriceCents
-            })
-        ) {
-            return {
-                valid: false,
-                errors: { price: 'precioMaximoExcedido' }
-            };
-        }
+    return { valid: true, errors: {} };
+}
+
+function validateContribution({
+    isPassenger = false,
+    seatPriceEnabled = false,
+    maxPriceEnabled = false,
+    price = '',
+    maximumSeatPriceCents = 0,
+    maximumTripPriceCents = 0
+}) {
+    if (isPassenger || !seatPriceEnabled) {
+        return { valid: true, errors: {} };
+    }
+
+    const seatP = parseSeatPriceInput(price);
+    if (seatP === null) {
+        return {
+            valid: false,
+            errors: { price: 'contribucionPorPersonaRequerida' }
+        };
+    }
+    if (isNegativeSeatPriceUnits(seatP)) {
+        return {
+            valid: false,
+            errors: { price: 'contribucionPorPersonaNegativa' }
+        };
+    }
+    if (
+        maxPriceEnabled &&
+        exceedsMaximumSeatPrice({
+            seatPriceUnits: seatP,
+            maximumSeatPriceCents,
+            maximumTripPriceCents
+        })
+    ) {
+        return {
+            valid: false,
+            errors: { price: 'precioMaximoExcedido' }
+        };
     }
 
     return { valid: true, errors: {} };
