@@ -62,6 +62,20 @@ describe('SearchTrip advanced filters', () => {
     it('resets advanced filters when clearing the search form', () => {
         expect(source).toContain('resetAdvancedFilters');
     });
+
+    it('adds Buscar en rango de fechas checkbox and Desde/Hasta date pickers', () => {
+        expect(source).toContain("$t('buscarEnRangoDeFechas')");
+        expect(source).toContain('v-model="dateRangeEnabled"');
+        expect(source).toContain('id="cbxDateRangeSearch"');
+        expect(source).toContain('id="cbxDateRangeSearchMobile"');
+        expect(source).toContain("$t('desde')");
+        expect(source).toContain("$t('hasta')");
+        expect(source).toContain('v-if="dateRangeEnabled"');
+        expect(source).toContain('ref="datepickerTo"');
+        expect(source).toContain('appendDateSearchParams');
+        expect(source).toContain('hydrateDateRangeSearch');
+        expect(source).toContain('date_changed');
+    });
 });
 
 describe('SearchTrip mobile submit', () => {
