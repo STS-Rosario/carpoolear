@@ -13,6 +13,8 @@ describe('TripSeatMapPanel.vue', () => {
         expect(componentSource).toContain('toggleSeat');
         expect(componentSource).toContain("$t('tripSeatMapAvailable')");
         expect(componentSource).toContain("$t('tripSeatMapUnavailable')");
+        expect(componentSource).toContain('volante.svg');
+        expect(componentSource).toContain('asiento.svg');
     });
 
     it('shows offering count or at-least-one message', () => {

@@ -17,6 +17,9 @@ describe('TripCarStepPanel.vue', () => {
         expect(componentSource).toContain('formatCarDropdownLabel');
         expect(componentSource).toContain('trip-car-step-panel__dropdown');
         expect(componentSource).toContain('fa-car');
+        expect(componentSource).toMatch(
+            /\.trip-car-step-panel__dropdown-option\s*\{[^}]*color:\s*#22211f/s
+        );
     });
 
     it('requires choosing a 4 or 5 seat layout with icons', () => {
