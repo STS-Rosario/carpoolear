@@ -84,6 +84,7 @@ describe('tripCreationFormReset', () => {
         expect(form.trip.description).toBe('');
         expect(form.trip.total_seats).toBe(2);
         expect(form.trip.allow_smoking).toBe(false);
+        expect(form.trip.autoaccept_friends_requests).toBe(true);
         expect(form.selectedCarId).toBeNull();
         expect(form.allowForeignPoints).toBe(false);
         expect(form.wantsIntermediateStops).toBe(false);
