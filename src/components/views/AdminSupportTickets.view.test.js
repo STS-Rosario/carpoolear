@@ -88,8 +88,10 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('v-model="filterType"');
         expect(viewSource).toContain('v-model="filterPriority"');
         expect(viewSource).toContain('v-model="filterNeedsReply"');
+        expect(viewSource).toContain('v-model="filterOpen"');
         expect(viewSource).toContain("{{ $t('filtroTicketsTodasCategorias') }}");
         expect(viewSource).toContain("{{ $t('filtroTicketsRequiereRespuesta') }}");
+        expect(viewSource).toContain("{{ $t('filtroTicketsAbiertos') }}");
     });
 
     it('renders admin pagination bar with per-page selector', () => {
