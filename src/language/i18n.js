@@ -1350,6 +1350,9 @@ const messages = {
         filtroCualquiera: 'Cualquiera',
         filtroPermitido: 'Permitido',
         filtroNoPermitido: 'No permitido',
+        buscarEnRangoDeFechas: 'Buscar en rango de fechas',
+        desde: 'Desde',
+        hasta: 'Hasta',
         marcandoEstaOpcionPodrasSeleccionar:
             'Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje',
         origenYDestinoNoPuedenSerAmbosDelExterior:
@@ -2824,6 +2827,9 @@ const messages = {
         filtroCualquiera: 'Cualquiera',
         filtroPermitido: 'Permitido',
         filtroNoPermitido: 'No permitido',
+        buscarEnRangoDeFechas: 'Buscar en rango de fechas',
+        desde: 'Desde',
+        hasta: 'Hasta',
         marcandoEstaOpcionPodrasSeleccionar:
             'Marcando esta opción vas a poder seleccionar origen o destino fuera de Argentina. Recordá averiguar con la aseguradora del auto, si tenés cobertura contra terceros fuera de la Argentina. Si no es así, averiguá con ella para obtener la extensión fuera de Argentina, de forma de tener cobertura durante el viaje',
         origenYDestinoNoPuedenSerAmbosDelExterior:
@@ -4574,6 +4580,9 @@ const messages = {
         filtroCualquiera: 'Any',
         filtroPermitido: 'Allowed',
         filtroNoPermitido: 'Not allowed',
+        buscarEnRangoDeFechas: 'Search in date range',
+        desde: 'From',
+        hasta: 'To',
         marcandoEstaOpcionPodrasSeleccionar:
             'By checking this option you will be able to select departure or destination outside of Argentina. Remember to check with the car insurance company if you have third-party coverage outside of Argentina. If not, check with them to get an extension outside of Argentina, in order to have coverage during the trip',
         origenYDestinoNoPuedenSerAmbosDelExterior:
