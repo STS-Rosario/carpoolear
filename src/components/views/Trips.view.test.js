@@ -150,7 +150,7 @@ describe('Trips.vue friend-first trip sections', () => {
             /trips-section__list--start['"]?\s*:\s*otherTripsList\.length\s*<\s*4/
         );
         expect(viewSource).toMatch(
-            /trips-section__list--start['"]?\s*:\s*trips\.length\s*<\s*4/
+            /trips-section__list--start['"]?\s*:\s*exactTrips\.length\s*<\s*4/
         );
     });
 
