@@ -128,6 +128,35 @@ export function applyTripCreationTemplateToForm(form, templateData, options = {}
     form.price = templateData.price || form.price;
     form.no_lucrar = templateData.no_lucrar || false;
     form.selectedCarId = templateData.selectedCarId;
+    form.seatLayoutCapacity =
+        templateData.seatLayoutCapacity != null
+            ? templateData.seatLayoutCapacity
+            : Number(templateData.trip?.rear_max_two_passengers)
+              ? 4
+              : templateData.trip
+                ? 5
+                : null;
+    form.passengerSeatAvailability = Array.isArray(
+        templateData.passengerSeatAvailability
+    )
+        ? templateData.passengerSeatAvailability.slice()
+        : [];
+    if (
+        form.seatLayoutCapacity &&
+        (!form.passengerSeatAvailability.length ||
+            form.passengerSeatAvailability.length !==
+                (Number(form.seatLayoutCapacity) === 4 ? 3 : 4))
+    ) {
+        const max = Number(form.seatLayoutCapacity) === 4 ? 3 : 4;
+        const offered = Math.min(
+            Math.max(Number(form.trip?.total_seats) || max, 1),
+            max
+        );
+        form.passengerSeatAvailability = Array.from(
+            { length: max },
+            (_, i) => i < offered
+        );
+    }
     form.allowForeignPoints = templateData.allowForeignPoints || false;
     form.wantsIntermediateStops = templateData.wantsIntermediateStops || false;
     form.useWeeklySchedule = templateData.useWeeklySchedule || false;
@@ -177,6 +206,12 @@ export function buildTripCreationTemplateFromSnapshot(snapshot) {
         price: snapshot.price || '',
         no_lucrar: snapshot.no_lucrar ?? false,
         selectedCarId: snapshot.selectedCarId,
+        seatLayoutCapacity: snapshot.seatLayoutCapacity ?? null,
+        passengerSeatAvailability: Array.isArray(
+            snapshot.passengerSeatAvailability
+        )
+            ? snapshot.passengerSeatAvailability.slice()
+            : [],
         allowForeignPoints: snapshot.allowForeignPoints || false,
         wantsIntermediateStops: snapshot.wantsIntermediateStops || false,
         useWeeklySchedule: snapshot.useWeeklySchedule || false,

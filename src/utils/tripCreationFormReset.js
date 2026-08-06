@@ -86,6 +86,8 @@ export function applyTripCreationFormReset(form, options = {}) {
     form.sameCity = false;
     Object.assign(form.trip, createInitialTripCreationTrip());
     form.selectedCarId = null;
+    form.seatLayoutCapacity = null;
+    form.passengerSeatAvailability = [];
     form.allowForeignPoints = false;
     form.wantsIntermediateStops = false;
     form.useWeeklySchedule = false;

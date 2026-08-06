@@ -315,12 +315,17 @@
                 </h3>
                 <TripCarStepPanel
                     :selected-car-id="form.selectedCarId"
+                    :seat-layout-capacity="form.seatLayoutCapacity"
                     :car-selection-error="form.carSelectionError"
                     @update:selected-car-id="form.selectedCarId = $event"
+                    @update:seat-layout-capacity="form.applySeatLayoutCapacity"
                     @cars-updated="form.preselectDriverCar"
                     @edit-cars="form.openTripCarsModal"
                 />
                 <span class="error" v-if="stepErrors.car">{{ $t(stepErrors.car) }}</span>
+                <span class="error" v-if="stepErrors.seatLayout">{{
+                    $t(stepErrors.seatLayout)
+                }}</span>
             </template>
 
             <!-- Step 5: Seats -->
@@ -328,7 +333,15 @@
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepSeatsQuestion') }}
                 </h3>
-                <div class="trip_seats-available">
+                <TripSeatMapPanel
+                    v-if="!isPassenger && form.seatLayoutCapacity"
+                    :seat-layout-capacity="form.seatLayoutCapacity"
+                    :passenger-seat-availability="form.passengerSeatAvailability"
+                    @update:passenger-seat-availability="
+                        form.onPassengerSeatAvailabilityUpdate($event)
+                    "
+                />
+                <div class="trip_seats-available" v-else>
                     <label class="label-for-group">
                         {{
                             isPassenger
@@ -357,63 +370,25 @@
                             <svg-item :size="28" :icon="'add'"></svg-item>
                         </button>
                     </div>
-                    <div v-if="!isPassenger" class="trip_seats-total-people">
-                        <label class="label-soft">{{ $t('tripCreationTotalPeopleLabel') }}</label>
-                        <div class="seats-widget">
-                            <button
-                                type="button"
-                                class="btn btn-link"
-                                :aria-label="$t('disminuirCantidadAsientos')"
-                                :disabled="totalPeople <= 2"
-                                @click="adjustTotalPeople(-1)"
-                            >
-                                <svg-item :size="28" :icon="'remove'"></svg-item>
-                            </button>
-                            <span class="total_seats">{{ totalPeople }}</span>
-                            <button
-                                type="button"
-                                class="btn btn-link"
-                                :aria-label="$t('aumentarCantidadAsientos')"
-                                :disabled="totalPeople >= 5"
-                                @click="adjustTotalPeople(1)"
-                            >
-                                <svg-item :size="28" :icon="'add'"></svg-item>
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="!isPassenger" class="trip-comfort-preference">
-                        <label
-                            for="wizard-comfort-rear"
-                            class="label-soft trip-comfort-preference__label"
-                        >
-                            <input
-                                type="checkbox"
-                                id="wizard-comfort-rear"
-                                :checked="form.trip.rear_max_two_passengers"
-                                @change="form.onOutboundRearMaxTwoChange($event)"
-                            />
-                            <span>{{ $t('atrasViajanSolo2Personas') }}</span>
-                        </label>
-                    </div>
-                    <div
-                        class="trip_price"
-                        v-if="!isPassenger && form.config.module_seat_price_enabled"
-                    >
-                        <AppInput
-                            type="number"
-                            v-model="form.price"
-                            :label="$t('precioAsiento')"
-                            min="0"
-                            icon-left="fa fa-usd"
-                            :error="
-                                form.priceError.state
-                                    ? form.priceError.message
-                                    : ''
-                            "
-                            @update:modelValue="form.onOutboundPriceFieldInput"
-                        />
-                    </div>
                     <span class="error" v-if="form.seatsError.state">{{ form.seatsError.message }}</span>
+                </div>
+                <div
+                    class="trip_price"
+                    v-if="!isPassenger && form.config.module_seat_price_enabled"
+                >
+                    <AppInput
+                        type="number"
+                        v-model="form.price"
+                        :label="$t('precioAsiento')"
+                        min="0"
+                        icon-left="fa fa-usd"
+                        :error="
+                            form.priceError.state
+                                ? form.priceError.message
+                                : ''
+                        "
+                        @update:modelValue="form.onOutboundPriceFieldInput"
+                    />
                 </div>
             </template>
 
@@ -704,6 +679,7 @@ import { last } from 'lodash';
 import TripCreationStepper from '../elements/TripCreationStepper.vue';
 import TripCreationRoutePanel from '../elements/TripCreationRoutePanel.vue';
 import TripCarStepPanel from '../elements/TripCarStepPanel.vue';
+import TripSeatMapPanel from '../elements/TripSeatMapPanel.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
@@ -748,6 +724,7 @@ export default {
         TripCreationStepper,
         TripCreationRoutePanel,
         TripCarStepPanel,
+        TripSeatMapPanel,
         TripPointDetailFields,
         DatePicker,
         autocomplete,
@@ -988,6 +965,12 @@ export default {
                 price: this.form.price,
                 no_lucrar: this.form.no_lucrar,
                 selectedCarId: this.form.selectedCarId,
+                seatLayoutCapacity: this.form.seatLayoutCapacity,
+                passengerSeatAvailability: Array.isArray(
+                    this.form.passengerSeatAvailability
+                )
+                    ? this.form.passengerSeatAvailability.slice()
+                    : [],
                 allowForeignPoints: this.form.allowForeignPoints,
                 wantsIntermediateStops: this.form.wantsIntermediateStops,
                 parentTripId: this.form.parentTripId,
@@ -1102,6 +1085,7 @@ export default {
                 isPassenger: this.isPassenger,
                 cars: this.form.cars,
                 selectedCarId: this.form.selectedCarId,
+                seatLayoutCapacity: this.form.seatLayoutCapacity,
                 totalSeats: this.form.trip.total_seats,
                 passengers: this.form.passengers,
                 description: this.form.trip.description,

@@ -51,6 +51,8 @@ describe('tripCreationFormReset', () => {
                 allow_smoking: true
             },
             selectedCarId: 9,
+            seatLayoutCapacity: 5,
+            passengerSeatAvailability: [true, true, true, true],
             allowForeignPoints: true,
             wantsIntermediateStops: true,
             useWeeklySchedule: true,
@@ -86,6 +88,8 @@ describe('tripCreationFormReset', () => {
         expect(form.trip.allow_smoking).toBe(false);
         expect(form.trip.autoaccept_friends_requests).toBe(true);
         expect(form.selectedCarId).toBeNull();
+        expect(form.seatLayoutCapacity).toBeNull();
+        expect(form.passengerSeatAvailability).toEqual([]);
         expect(form.allowForeignPoints).toBe(false);
         expect(form.wantsIntermediateStops).toBe(false);
         expect(form.useWeeklySchedule).toBe(false);

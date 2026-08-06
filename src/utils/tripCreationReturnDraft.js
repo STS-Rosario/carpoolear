@@ -17,6 +17,10 @@ export function buildOutboundTripCreationSnapshot(form) {
         price: form.price,
         no_lucrar: form.no_lucrar,
         selectedCarId: form.selectedCarId,
+        seatLayoutCapacity: form.seatLayoutCapacity,
+        passengerSeatAvailability: Array.isArray(form.passengerSeatAvailability)
+            ? form.passengerSeatAvailability.slice()
+            : [],
         allowForeignPoints: form.allowForeignPoints,
         wantsIntermediateStops: form.wantsIntermediateStops,
         useWeeklySchedule: form.useWeeklySchedule,
@@ -63,6 +67,12 @@ export function buildReturnTripCreationDraftFromSnapshot(snapshot, parentTripId)
         price: snapshot.price || '',
         no_lucrar: snapshot.no_lucrar ?? false,
         selectedCarId: snapshot.selectedCarId,
+        seatLayoutCapacity: snapshot.seatLayoutCapacity ?? null,
+        passengerSeatAvailability: Array.isArray(
+            snapshot.passengerSeatAvailability
+        )
+            ? snapshot.passengerSeatAvailability.slice()
+            : [],
         allowForeignPoints: snapshot.allowForeignPoints || false,
         wantsIntermediateStops: false,
         useWeeklySchedule: false,

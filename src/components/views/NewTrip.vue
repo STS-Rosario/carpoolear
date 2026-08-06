@@ -89,6 +89,13 @@ import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants
 import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
+    countAvailableSeats,
+    createPassengerSeatAvailability,
+    rearMaxTwoFromLayout,
+    SEAT_LAYOUT_FOUR,
+    SEAT_LAYOUT_FIVE
+} from '../../utils/tripSeatLayout.js';
+import {
     shouldShowTripPointDetailInputs,
     applyTripPointDetailValidation
 } from '../../utils/tripPointDetailValidation.js';
@@ -231,6 +238,8 @@ export default {
             },
             updatingTrip: null,
             selectedCarId: null,
+            seatLayoutCapacity: null,
+            passengerSeatAvailability: [],
             carSelectionError: new Error(),
             showCompleteCarModal: false,
             showTripCarsModal: false,
@@ -801,6 +810,7 @@ export default {
         this.trip.rear_max_two_passengers = Number(trip.rear_max_two_passengers) > 0;
         this.trip.autoaccept_friends_requests =
             Number(trip.autoaccept_friends_requests) > 0;
+        this.syncSeatLayoutFromTrip();
 
         const restoredCarId = restoreSelectedCarIdFromTrip(trip, this.cars);
         if (restoredCarId != null) {
@@ -1770,6 +1780,41 @@ export default {
                 return;
             }
             this.trip.rear_max_two_passengers = wantsChecked;
+        },
+        applySeatLayoutCapacity(capacity) {
+            const layout = Number(capacity);
+            if (layout !== SEAT_LAYOUT_FOUR && layout !== SEAT_LAYOUT_FIVE) {
+                return;
+            }
+            this.seatLayoutCapacity = layout;
+            this.trip.rear_max_two_passengers = rearMaxTwoFromLayout(layout);
+            this.passengerSeatAvailability =
+                createPassengerSeatAvailability(layout);
+            this.trip.total_seats = countAvailableSeats(
+                this.passengerSeatAvailability
+            );
+        },
+        onPassengerSeatAvailabilityUpdate(availability) {
+            this.passengerSeatAvailability = availability;
+            this.trip.total_seats = countAvailableSeats(availability);
+        },
+        syncSeatLayoutFromTrip() {
+            const layout = Number(this.trip.rear_max_two_passengers)
+                ? SEAT_LAYOUT_FOUR
+                : SEAT_LAYOUT_FIVE;
+            this.seatLayoutCapacity = layout;
+            const max = Number(layout) === SEAT_LAYOUT_FOUR ? 3 : 4;
+            const offered = Math.min(
+                Math.max(Number(this.trip.total_seats) || max, 1),
+                max
+            );
+            this.passengerSeatAvailability = Array.from(
+                { length: max },
+                (_, i) => i < offered
+            );
+            this.trip.total_seats = countAvailableSeats(
+                this.passengerSeatAvailability
+            );
         },
         onReturnRearMaxTwoChange(event) {
             const wantsChecked = event.target.checked;
