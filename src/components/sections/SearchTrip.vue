@@ -119,7 +119,7 @@
 
                     <AppField
                         class="trips-search__field trips-search__field--date"
-                        :label="$t('fecha')"
+                        :label="dateRangeEnabled ? $t('desde') : $t('fecha')"
                         optional
                         icon-left="fa fa-calendar"
                     >
@@ -128,6 +128,23 @@
                             :model-value="date"
                             :minDate="minDate"
                             :class="{ 'has-error': dateError.state }"
+                            v-on:date_changed="onFromDateChanged"
+                        ></DatePicker>
+                    </AppField>
+
+                    <AppField
+                        v-if="dateRangeEnabled"
+                        class="trips-search__field trips-search__field--date"
+                        :label="$t('hasta')"
+                        optional
+                        icon-left="fa fa-calendar"
+                    >
+                        <DatePicker
+                            ref="datepickerTo"
+                            :model-value="toDate"
+                            :minDate="minDate"
+                            :class="{ 'has-error': dateError.state }"
+                            v-on:date_changed="onToDateChanged"
                         ></DatePicker>
                     </AppField>
 
@@ -202,6 +219,17 @@
                             {{ $t('esconderViajesCarpooleados') }}
                         </label>
                     </div>
+                    <div class="date-range-search-select_wrapper">
+                        <input
+                            type="checkbox"
+                            v-model="dateRangeEnabled"
+                            id="cbxDateRangeSearch"
+                            class="cbx"
+                        />
+                        <label for="cbxDateRangeSearch" class="cbx_label">
+                            {{ $t('buscarEnRangoDeFechas') }}
+                        </label>
+                    </div>
                     <div
                         v-for="field in allowPreferenceFilterFields"
                         :key="'desktop-' + field.idPrefix"
@@ -258,6 +286,17 @@
                             {{ $t('esconderViajesCarpooleados') }}
                         </label>
                     </div>
+                    <div class="date-range-search-select_wrapper">
+                        <input
+                            type="checkbox"
+                            v-model="dateRangeEnabled"
+                            id="cbxDateRangeSearchMobile"
+                            class="cbx"
+                        />
+                        <label for="cbxDateRangeSearchMobile" class="cbx_label">
+                            {{ $t('buscarEnRangoDeFechas') }}
+                        </label>
+                    </div>
                     <div
                         v-for="field in allowPreferenceFilterFields"
                         :key="'mobile-' + field.idPrefix"
@@ -307,14 +346,15 @@ import autocomplete from '../Autocomplete.vue';
 import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
 import AppField from '../ui/AppField.vue';
 import AppButton from '../ui/AppButton.vue';
-import bus from '../../services/bus-event.js';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import {
     ANY_ALLOW_FILTER,
     ALLOW_PREFERENCE_FILTER_FIELDS,
     appendAllowPreferenceParams,
+    appendDateSearchParams,
     hydrateAllowPreferenceFilters,
+    hydrateDateRangeSearch,
     hasAdvancedSearchFilters
 } from '../../utils/searchAdvancedFilters.js';
 
@@ -338,6 +378,9 @@ export default {
             },
             date: '',
             dateAnswer: '',
+            toDate: '',
+            toDateAnswer: '',
+            dateRangeEnabled: false,
             dateError: {
                 message: '',
                 state: ''
@@ -409,6 +452,23 @@ export default {
                 this.emit();
             }
         },
+        toDateAnswer() {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
+        dateRangeEnabled(enabled) {
+            if (!enabled) {
+                this.toDate = '';
+                this.toDateAnswer = '';
+                if (this.$refs.datepickerTo) {
+                    this.$refs.datepickerTo.clear();
+                }
+            }
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
         isPassenger() {
             if (this.autoSearch) {
                 this.emit();
@@ -416,7 +476,6 @@ export default {
         }
     },
     mounted() {
-        bus.on('date-change', this.dateChange);
         this.loadParams(this.params);
         this.from_town.country = this.config.osm_country;
         this.to_town.country = this.config.osm_country;
@@ -430,14 +489,18 @@ export default {
             this.checkInput
         );
         this.$refs['to_town'].$el.removeEventListener('input', this.checkInput);
-        bus.off('date-change', this.dateChange);
     },
     methods: {
         setPassengerMode(isPassenger) {
             this.isPassenger = Boolean(isPassenger);
         },
-        dateChange(value) {
+        onFromDateChanged(value) {
+            this.date = value;
             this.dateAnswer = value;
+        },
+        onToDateChanged(value) {
+            this.toDate = value;
+            this.toDateAnswer = value;
         },
         checkInput(event) {
             let value = event.target.value;
@@ -510,9 +573,12 @@ export default {
             ) {
                 foreignCountry++;
             }
-            if (this.dateAnswer) {
-                params.date = this.dateAnswer;
-            }
+            appendDateSearchParams(params, {
+                dateRangeEnabled: this.dateRangeEnabled,
+                date: this.dateAnswer,
+                fromDate: this.dateAnswer,
+                toDate: this.toDateAnswer
+            });
             params.is_passenger = this.isPassenger;
             if (this.hideCarpooleado) {
                 params.hide_carpooleado = this.hideCarpooleado;
@@ -562,6 +628,12 @@ export default {
             this.resetInput('to_town');
             this.$refs['to_town'].input = '';
             this.$refs.datepicker.clear();
+            if (this.$refs.datepickerTo) {
+                this.$refs.datepickerTo.clear();
+            }
+            this.toDate = '';
+            this.toDateAnswer = '';
+            this.dateAnswer = '';
             this.resetAdvancedFilters();
         },
         toggleAdvancedFilters() {
@@ -570,6 +642,7 @@ export default {
         resetAdvancedFilters() {
             this.showAdvancedFilters = false;
             this.hideCarpooleado = false;
+            this.dateRangeEnabled = false;
             this.allowAnimalsFilter = ANY_ALLOW_FILTER;
             this.allowSmokingFilter = ANY_ALLOW_FILTER;
             this.allowKidsFilter = ANY_ALLOW_FILTER;
@@ -604,11 +677,12 @@ export default {
                 } else {
                     this.isPassenger = false;
                 }
-                if (parameters.date) {
-                    this.date = parameters.date;
-                } else {
-                    this.date = '';
-                }
+                const dateRange = hydrateDateRangeSearch(parameters);
+                this.dateRangeEnabled = dateRange.dateRangeEnabled;
+                this.date = dateRange.fromDate;
+                this.dateAnswer = dateRange.fromDate;
+                this.toDate = dateRange.toDate;
+                this.toDateAnswer = dateRange.toDate;
                 const allowFilters = hydrateAllowPreferenceFilters(parameters);
                 this.allowAnimalsFilter = allowFilters.allowAnimals;
                 this.allowSmokingFilter = allowFilters.allowSmoking;
