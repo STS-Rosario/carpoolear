@@ -204,6 +204,28 @@ export function formatCarSelectLabel(car) {
     return makeModel;
 }
 
+export function formatCarDropdownLabel(car) {
+    if (!car) {
+        return '';
+    }
+
+    const patente = String(car.patente || '').trim();
+    const makeModel = [carMakeName(car), carModelName(car)]
+        .map((part) => String(part || '').trim())
+        .filter(hasValue)
+        .join(' ');
+
+    if (patente && makeModel) {
+        return `${makeModel} · ${patente}`;
+    }
+
+    if (patente) {
+        return patente;
+    }
+
+    return makeModel;
+}
+
 export function carDisplayLabel(car) {
     if (!car) {
         return '';
