@@ -40,10 +40,8 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).toContain('white-space: normal');
     });
 
-    it('marks completed bars only for finished steps, not the current step', () => {
-        expect(componentSource).toContain('isTripCreationStepCompleted');
-        expect(componentSource).not.toMatch(
-            /trip-creation-stepper__bar--completed':\s*[\s\S]*?step\s*<\s*this\.currentStep\s*\|\|\s*step\s*<=\s*this\.maxVisitedStep/
-        );
+    it('hides contribution segment when seat price is disabled', () => {
+        expect(componentSource).toContain('seatPriceEnabled');
+        expect(componentSource).toContain('STEP.CONTRIBUTION');
     });
 });

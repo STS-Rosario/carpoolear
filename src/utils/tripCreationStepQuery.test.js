@@ -14,14 +14,14 @@ describe('tripCreationStepQuery', () => {
 
     it('formats wizard step numbers for the URL', () => {
         expect(formatStepQueryValue(STEP.ROLE)).toBe('1');
-        expect(formatStepQueryValue(STEP.LAST_DETAILS)).toBe('9');
+        expect(formatStepQueryValue(STEP.LAST_DETAILS)).toBe('10');
     });
 
     it('parses valid step numbers from the query', () => {
         expect(parseStepFromQuery('1')).toBe(STEP.ROLE);
-        expect(parseStepFromQuery('9')).toBe(STEP.LAST_DETAILS);
+        expect(parseStepFromQuery('10')).toBe(STEP.LAST_DETAILS);
         expect(parseStepFromQuery('0')).toBeNull();
-        expect(parseStepFromQuery('10')).toBeNull();
+        expect(parseStepFromQuery('11')).toBeNull();
         expect(parseStepFromQuery('origin')).toBeNull();
     });
 
@@ -41,5 +41,21 @@ describe('tripCreationStepQuery', () => {
                 isEdit: false
             })
         ).toBe(STEP.SEATS);
+    });
+
+    it('resolves contribution to description when skipped', () => {
+        expect(
+            resolveStepFromQuery('8', {
+                isPassenger: true,
+                isEdit: false
+            })
+        ).toBe(STEP.DESCRIPTION);
+        expect(
+            resolveStepFromQuery('8', {
+                isPassenger: false,
+                isEdit: false,
+                seatPriceEnabled: false
+            })
+        ).toBe(STEP.DESCRIPTION);
     });
 });

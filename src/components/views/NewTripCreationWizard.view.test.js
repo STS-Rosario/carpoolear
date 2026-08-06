@@ -285,10 +285,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
-    it('blocks seats next when contribution per person is required and empty', () => {
+    it('validates contribution price on the contribution step', () => {
+        expect(wizardSource).toContain('TripContributionStepPanel');
         expect(wizardSource).toContain('seatPriceEnabled:');
         expect(wizardSource).toContain('price: this.form.price');
         expect(wizardSource).toContain('syncSeatPriceErrors');
+        expect(wizardSource).toContain('STEP.CONTRIBUTION');
+        expect(wizardSource).toContain('ensureContributionPrefill');
         expect(wizardSource).toMatch(
             /validateCurrentStep\(\)[\s\S]*syncSeatPriceErrors/
         );
