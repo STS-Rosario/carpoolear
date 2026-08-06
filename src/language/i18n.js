@@ -563,10 +563,10 @@ const messages = {
         tripCreationStepRoleQuestion: '¿Qué tipo de viaje querés crear?',
         tripCreationStepRoleSubtitle:
             'Encontrá con quién viajar en tu próximo viaje.',
-        tripCreationRoleDriverTitle: 'Soy conductor',
+        tripCreationRoleDriverTitle: 'Conduzco',
         tripCreationRoleDriverDescription:
             'Busco pasajeros para compartir los gastos',
-        tripCreationRolePassengerTitle: 'Soy pasajero',
+        tripCreationRolePassengerTitle: 'Voy de acompañante',
         tripCreationRolePassengerDescription: 'Busco alguien que me lleve',
         tripCreationStepOriginQuestion: '¿Dónde empieza tu viaje?',
         tripCreationStepDestinationQuestion: '¿Hasta dónde vas?',
@@ -2237,10 +2237,10 @@ const messages = {
         tripCreationStepRoleQuestion: '¿Qué tipo de viaje querés crear?',
         tripCreationStepRoleSubtitle:
             'Encontrá con quién viajar en tu próximo viaje.',
-        tripCreationRoleDriverTitle: 'Soy conductor',
+        tripCreationRoleDriverTitle: 'Conduzco',
         tripCreationRoleDriverDescription:
             'Busco pasajeros para compartir los gastos',
-        tripCreationRolePassengerTitle: 'Soy pasajero',
+        tripCreationRolePassengerTitle: 'Voy de acompañante',
         tripCreationRolePassengerDescription: 'Busco alguien que me lleve',
         tripCreationStepOriginQuestion: '¿Dónde empieza tu viaje?',
         tripCreationStepDestinationQuestion: '¿Hasta dónde vas?',
@@ -3800,10 +3800,10 @@ const messages = {
         tripCreationStepRoleQuestion: 'What type of trip do you want to create?',
         tripCreationStepRoleSubtitle:
             'Find someone to travel with on your next trip.',
-        tripCreationRoleDriverTitle: 'I am a driver',
+        tripCreationRoleDriverTitle: 'I drive',
         tripCreationRoleDriverDescription:
             'Looking for passengers to share expenses',
-        tripCreationRolePassengerTitle: 'I am a passenger',
+        tripCreationRolePassengerTitle: 'I ride as a passenger',
         tripCreationRolePassengerDescription: 'Looking for someone to take me',
         tripCreationStepOriginQuestion: 'Where does your trip start?',
         tripCreationStepDestinationQuestion: 'Where are you going?',

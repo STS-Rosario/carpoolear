@@ -59,9 +59,6 @@
                         <span class="new-trip-wizard__role-card-title">
                             {{ $t('tripCreationRoleDriverTitle') }}
                         </span>
-                        <span class="new-trip-wizard__role-card-text">
-                            {{ $t('tripCreationRoleDriverDescription') }}
-                        </span>
                     </button>
                     <button
                         type="button"
@@ -77,9 +74,6 @@
                         />
                         <span class="new-trip-wizard__role-card-title">
                             {{ $t('tripCreationRolePassengerTitle') }}
-                        </span>
-                        <span class="new-trip-wizard__role-card-text">
-                            {{ $t('tripCreationRolePassengerDescription') }}
                         </span>
                     </button>
                 </div>
