@@ -74,7 +74,7 @@
             v-show="!isMobile || lookSearch"
             ref="searchBox"
         ></SearchBox>
-        <Loading :data="trips" v-if="showingTrips">
+        <Loading :data="tripsLoadingData" v-if="showingTrips">
             <div class="trips-list">
                 <h2
                     v-if="isMobile && !lookSearch && !showSplitDonationPanel"
@@ -248,20 +248,6 @@
                                     v-for="(trip, index) in friendTripsList"
                                     :key="'friend-' + (trip.id != null ? trip.id : index)"
                                 >
-                                    <div
-                                        v-if="
-                                            isComplementary(
-                                                trip,
-                                                searchParams,
-                                                index
-                                            )
-                                        "
-                                        class="col-xs-24"
-                                    >
-                                        <div class="trip-complementary">
-                                            <h2>{{ $t('resultadosCercanos') }}</h2>
-                                        </div>
-                                    </div>
                                     <Trip :trip="trip" :user="user"></Trip>
                                 </template>
                             </div>
@@ -284,20 +270,6 @@
                                     v-for="(trip, index) in otherTripsList"
                                     :key="'other-' + (trip.id != null ? trip.id : index)"
                                 >
-                                    <div
-                                        v-if="
-                                            isComplementary(
-                                                trip,
-                                                searchParams,
-                                                friendTripsList.length + index
-                                            )
-                                        "
-                                        class="col-xs-24"
-                                    >
-                                        <div class="trip-complementary">
-                                            <h2>{{ $t('resultadosCercanos') }}</h2>
-                                        </div>
-                                    </div>
                                     <Trip :trip="trip" :user="user"></Trip>
                                 </template>
                             </div>
@@ -315,16 +287,6 @@
                             v-for="(trip, index) in otherTripsList"
                             :key="'flat-' + (trip.id != null ? trip.id : index)"
                         >
-                            <div
-                                v-if="
-                                    isComplementary(trip, searchParams, index)
-                                "
-                                class="col-xs-24"
-                            >
-                                <div class="trip-complementary">
-                                    <h2>{{ $t('resultadosCercanos') }}</h2>
-                                </div>
-                            </div>
                             <Trip :trip="trip" :user="user"></Trip>
                         </template>
                     </div>
@@ -333,11 +295,11 @@
                     <div
                         class="trips-section__list row"
                         :class="{
-                            'trips-section__list--start': trips.length < 4
+                            'trips-section__list--start': exactTrips.length < 4
                         }"
                     >
                     <template
-                        v-for="(trip, index) in trips"
+                        v-for="(trip, index) in exactTrips"
                         :key="trip.id != null ? trip.id : index"
                     >
                         <template
@@ -419,41 +381,50 @@
                             </div>
                             </div>
                         </template>
-                        <template
-                            v-if="isComplementary(trip, searchParams, index)"
-                        >
-                            <div class="col-xs-24">
-                                <div class="trip-complementary">
-                                    <h2>{{ $t('resultadosCercanos') }}</h2>
-                                </div>
-                            </div>
-                        </template>
                         <Trip :trip="trip" :user="user"></Trip>
                     </template>
                     </div>
                 </template>
             </div>
-            <div class="row">
-                <p
-                    class="alert alert-warning"
-                    role="alert"
-                    :class="isMobile ? 'mobile-alert' : ''"
-                    v-if="resultaOfSearch && !alreadySubscribe"
-                >
-                    <span class="sentence">
-                        <strong :class="isMobile ? 'sentence' : ''">
-                            {{ $t('podesSubscribirte') }}
-                        </strong>
-                        <AppButton
-                            variant="secondary"
-                            v-if="user"
-                            @click="subscribeSearch"
-                        >
-                            {{ $t('crearAlerta') }}
-                        </AppButton>
-                    </span>
+            <div
+                v-if="resultaOfSearch && !alreadySubscribe && exactTrips.length"
+                class="trips-search-alert"
+            >
+                <p class="trips-search-alert__question">
+                    {{ $t('searchNoResultsAlertQuestion') }}
                 </p>
+                <button
+                    v-if="user"
+                    type="button"
+                    class="trips-search-alert__link"
+                    @click="subscribeSearch"
+                >
+                    {{ $t('searchCreateAlertNow') }}
+                </button>
             </div>
+            <section
+                v-if="nearbyTrips.length && exactTrips.length"
+                class="trips-nearby"
+                data-testid="trips-nearby-section"
+            >
+                <h2 class="trips-nearby__title">{{ $t('viajesCercanos') }}</h2>
+                <p class="trips-nearby__subtitle label-soft">
+                    {{ $t('viajesCercanosSubtitle') }}
+                </p>
+                <div
+                    class="trips-section__list row"
+                    :class="{
+                        'trips-section__list--start': nearbyTrips.length < 4
+                    }"
+                >
+                    <Trip
+                        v-for="(trip, index) in nearbyTrips"
+                        :key="'nearby-' + (trip.id != null ? trip.id : index)"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
+                </div>
+            </section>
             <div v-if="runningSearch" class="more-trips-loading">
                 <img
                     :src="$publicImg('loader.gif')"
@@ -462,32 +433,83 @@
                 />
                 {{ $t('cargandoMasResultados') }}
             </div>
-            <template #no-data><p
-                class="alert alert-warning"
-                role="alert"
-                :class="isMobile ? 'mobile-alert' : ''"
-            >
-                <template v-if="filtered">
-                    <span class="sentence">{{ $t('noHayViajes') }}</span>
-                    <span class="sentence" v-if="!alreadySubscribe">
-                        <strong :class="isMobile ? 'sentence' : ''">
-                            {{ $t('subscribirteAViajes') }}
-                        </strong>
-                        <AppButton
-                            variant="secondary"
-                            v-if="user"
-                            @click="subscribeSearch"
+            <template #no-data>
+                <div v-if="filtered" class="trips-empty">
+                    <img
+                        :src="$publicImg('loupe-car.svg')"
+                        alt=""
+                        class="trips-empty__icon"
+                    />
+                    <h3 class="trips-empty__title">
+                        {{ $t('searchNoResultsTitle') }}
+                    </h3>
+                    <p
+                        v-if="!alreadySubscribe"
+                        class="trips-empty__question"
+                    >
+                        {{ $t('searchNoResultsAlertQuestion') }}
+                    </p>
+                    <button
+                        v-if="user && !alreadySubscribe"
+                        type="button"
+                        class="trips-empty__alert-link"
+                        @click="subscribeSearch"
+                    >
+                        {{ $t('searchCreateAlertNow') }}
+                    </button>
+                    <template
+                        v-if="hasDateSearch && nearbyTrips.length && !showNearbyTrips"
+                    >
+                        <p class="trips-empty__or">{{ $t('searchOr') }}</p>
+                        <button
+                            type="button"
+                            class="trips-empty__nearby-link"
+                            @click="showNearbyTrips = true"
                         >
-                            {{ $t('crearAlerta') }}
-                        </AppButton>
-                    </span>
-                </template>
-                <template v-else>
+                            {{ $t('searchSeeNearbyTrips') }}
+                        </button>
+                    </template>
+                    <section
+                        v-if="showNearbyTrips && nearbyTrips.length"
+                        class="trips-nearby"
+                        data-testid="trips-nearby-section"
+                    >
+                        <h2 class="trips-nearby__title">
+                            {{ $t('viajesCercanos') }}
+                        </h2>
+                        <p class="trips-nearby__subtitle label-soft">
+                            {{ $t('viajesCercanosSubtitle') }}
+                        </p>
+                        <div
+                            class="trips-section__list row"
+                            :class="{
+                                'trips-section__list--start':
+                                    nearbyTrips.length < 4
+                            }"
+                        >
+                            <Trip
+                                v-for="(trip, index) in nearbyTrips"
+                                :key="
+                                    'nearby-empty-' +
+                                    (trip.id != null ? trip.id : index)
+                                "
+                                :trip="trip"
+                                :user="user"
+                            ></Trip>
+                        </div>
+                    </section>
+                </div>
+                <p
+                    v-else
+                    class="alert alert-warning"
+                    role="alert"
+                    :class="isMobile ? 'mobile-alert' : ''"
+                >
                     <span class="sentence">{{
                         $t('noHayViajesCargadosAun')
                     }}</span>
-                </template>
-            </p></template>
+                </p>
+            </template>
             <template #loading><p class="alert alert-info" role="alert">
                 <img
                     :src="$publicImg('loader.gif')"
@@ -560,6 +582,7 @@ import {
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
+import { splitTripsBySearchDate } from '../../utils/tripSearchDateSplit.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
 import AppButton from '../ui/AppButton.vue';
@@ -574,6 +597,7 @@ export default {
             runningSearch: false,
             alreadySubscribe: false,
             resultaOfSearch: false,
+            showNearbyTrips: false,
             pendingScrollRestore: null,
             showModal: false,
             showModalInstallApp: false,
@@ -745,6 +769,7 @@ export default {
             this.filtered = true;
             this.readySub = false;
             this.alreadySubscribe = false;
+            this.showNearbyTrips = false;
             this.search(params);
             this.findSubscriptions();
             this.updateTripsQuery(params);
@@ -840,22 +865,6 @@ export default {
                     this.pendingScrollRestore = null;
                 });
             });
-        },
-        isComplementary(trip, searchParams, index) {
-            let isComplementary = false;
-            if (searchParams.data && searchParams.data.date) {
-                var searchDate = dayjs(searchParams.data.date).toDate();
-                var tripDate = dayjs(trip.trip_date).toDate();
-                tripDate.setHours(0);
-                tripDate.setMinutes(0);
-                tripDate.setSeconds(0);
-                if (searchDate.getTime() === tripDate.getTime()) {
-                    isComplementary = false;
-                } else {
-                    isComplementary = true;
-                }
-            }
-            return isComplementary;
         },
         // TODO filter trips that not are main route
         // REVIEW wich is the best way to do it?
@@ -1258,13 +1267,39 @@ export default {
             if (!this.user) {
                 return [];
             }
-            return splitFriendTrips(this.trips).friendTrips;
+            return splitFriendTrips(this.exactTrips).friendTrips;
         },
         otherTripsList() {
             if (!this.user) {
                 return [];
             }
-            return splitFriendTrips(this.trips).otherTrips;
+            return splitFriendTrips(this.exactTrips).otherTrips;
+        },
+        searchDate() {
+            return (
+                (this.searchParams &&
+                    this.searchParams.data &&
+                    this.searchParams.data.date) ||
+                null
+            );
+        },
+        hasDateSearch() {
+            return Boolean(this.searchDate);
+        },
+        tripsByDate() {
+            return splitTripsBySearchDate(this.trips, this.searchDate);
+        },
+        exactTrips() {
+            return this.tripsByDate.exactTrips;
+        },
+        nearbyTrips() {
+            return this.tripsByDate.nearbyTrips;
+        },
+        tripsLoadingData() {
+            if (this.filtered && this.hasDateSearch) {
+                return this.exactTrips;
+            }
+            return this.trips;
         },
         showFriendTripSections() {
             return this.friendTripsList.length > 0;
@@ -1480,5 +1515,76 @@ export default {
     .trips-donation-banner {
         margin-bottom: 0;
     }
+}
+
+.trips-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.25rem 3rem;
+}
+
+.trips-empty__icon {
+    width: 6.5rem;
+    height: auto;
+    margin-bottom: 1.25rem;
+}
+
+.trips-empty__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #22211f;
+}
+
+.trips-empty__question {
+    margin: 0 0 0.75rem;
+    max-width: 22rem;
+    color: #404040;
+    line-height: 1.45;
+}
+
+.trips-empty__alert-link,
+.trips-empty__nearby-link,
+.trips-search-alert__link {
+    border: 0;
+    background: transparent;
+    color: var(--ds-action, #1e5f9e);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.trips-empty__or {
+    margin: 1.25rem 0 0.35rem;
+    color: #737373;
+}
+
+.trips-search-alert {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.trips-search-alert__question {
+    margin: 0 0 0.5rem;
+    color: #404040;
+    line-height: 1.45;
+}
+
+.trips-nearby {
+    margin: 1.5rem 0 2rem;
+}
+
+.trips-nearby__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.trips-nearby__subtitle {
+    margin: 0 0 1rem;
 }
 </style>
