@@ -49,13 +49,13 @@ export function formatTripReviewPrice(price) {
 }
 
 export function buildTripReviewPreferenceTags({
-    allow_kids = false,
-    allow_smoking = false,
-    allow_animals = false
+    allowKids = false,
+    allowSmoking = false,
+    allowAnimals = false
 } = {}) {
     return [
-        { key: 'kids', allowed: Boolean(allow_kids) },
-        { key: 'smoking', allowed: Boolean(allow_smoking) },
-        { key: 'pets', allowed: Boolean(allow_animals) }
+        { key: 'kids', allowed: Boolean(allowKids) },
+        { key: 'smoking', allowed: Boolean(allowSmoking) },
+        { key: 'pets', allowed: Boolean(allowAnimals) }
     ];
 }
