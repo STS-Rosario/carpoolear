@@ -41,8 +41,45 @@ export function hasAdvancedSearchFilters(parameters = {}) {
         parameters.hide_carpooleado ||
             parameters.allow_animals !== undefined ||
             parameters.allow_smoking !== undefined ||
-            parameters.allow_kids !== undefined
+            parameters.allow_kids !== undefined ||
+            parameters.from_date ||
+            parameters.to_date
     );
+}
+
+export function appendDateSearchParams(
+    params,
+    { dateRangeEnabled, date, fromDate, toDate } = {}
+) {
+    if (dateRangeEnabled) {
+        if (fromDate) {
+            params.from_date = fromDate;
+        }
+        if (toDate) {
+            params.to_date = toDate;
+        }
+        return;
+    }
+    if (date) {
+        params.date = date;
+    }
+}
+
+export function hydrateDateRangeSearch(parameters = {}) {
+    const fromDate = parameters.from_date || '';
+    const toDate = parameters.to_date || '';
+    if (fromDate || toDate) {
+        return {
+            dateRangeEnabled: true,
+            fromDate,
+            toDate
+        };
+    }
+    return {
+        dateRangeEnabled: false,
+        fromDate: parameters.date || '',
+        toDate: ''
+    };
 }
 
 const ALLOW_PREFERENCE_QUERY_FIELDS = [
