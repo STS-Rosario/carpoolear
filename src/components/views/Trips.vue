@@ -768,7 +768,7 @@ export default {
         getSearchParamsFromQuery() {
             const query = this.getRouteQuery();
             const params = {};
-            const textFields = ['origin_name', 'destination_name', 'date'];
+            const textFields = ['origin_name', 'destination_name', 'date', 'from_date', 'to_date'];
             textFields.forEach((field) => {
                 if (typeof query[field] === 'string' && query[field].trim()) {
                     params[field] = query[field];
