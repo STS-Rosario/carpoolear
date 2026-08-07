@@ -11,9 +11,20 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("$t('tripContributionPerPerson')");
         expect(componentSource).toContain("$t('tripContributionSuggested'");
         expect(componentSource).toContain('suggestedExpanded');
-        expect(componentSource).toContain('applySuggested');
+        expect(componentSource).toContain('toggleSuggested');
+        expect(componentSource).not.toContain('applySuggested');
         expect(componentSource).toContain("$t('tripContributionHowCalculated')");
         expect(componentSource).toContain("$t('tripContributionImportantTitle')");
         expect(componentSource).toContain('tripContributionImportantBody');
+    });
+
+    it('does not write the suggested amount into the price input on click', () => {
+        expect(componentSource).not.toContain('contributionUnitsFromCents');
+        expect(componentSource).toMatch(
+            /@click="toggleSuggested"/
+        );
+        expect(componentSource).toMatch(
+            /toggleSuggested\(\)\s*\{\s*this\.suggestedExpanded\s*=\s*!this\.suggestedExpanded;\s*\}/
+        );
     });
 });
