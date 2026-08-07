@@ -216,11 +216,11 @@
                                 </template>
                             </i18n-t>
                             <a
-                                href="/donar"
+                                href="/aportar"
                                 target="_blank"
                                 v-on:click.prevent="
                                     onOpenLink(
-                                        'https://carpoolear.com.ar/donar?u=' +
+                                        'https://carpoolear.com.ar/aportar?u=' +
                                             user.id
                                     )
                                 "
@@ -367,11 +367,11 @@
                                         </template>
                                     </i18n-t>
                                     <a
-                                        href="/donar"
+                                        href="/aportar"
                                         target="_blank"
                                         v-on:click.prevent="
                                             onOpenLink(
-                                                'https://carpoolear.com.ar/donar'
+                                                'https://carpoolear.com.ar/aportar'
                                             )
                                         "
                                     >
@@ -964,7 +964,7 @@ export default {
         async onDonate() {
             // if we're in Capacitor iOS, do not show the modal, just open the link in the browser
             if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                let url = 'https://carpoolear.com.ar/donar';
+                let url = 'https://carpoolear.com.ar/aportar';
                 if (this.user && this.user.id) {
                     url = `${url}?u=${this.user.id}`;
                 }

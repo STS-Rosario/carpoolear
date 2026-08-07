@@ -43,7 +43,7 @@
                 <div class="text-center">
                     <br />
                     <a
-                        href="/donar"
+                        href="/aportar"
                         target="_blank"
                         v-on:click.prevent="openDonationLink()"
                     >
@@ -117,7 +117,7 @@ export default {
             }
         },
         async openDonationLink() {
-            let url = 'https://carpoolear.com.ar/donar';
+            let url = 'https://carpoolear.com.ar/aportar';
             if (this.user && this.user.id) {
                 url = `${url}?u=${this.user.id}`;
             }

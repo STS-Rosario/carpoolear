@@ -55,7 +55,7 @@
                         class="mobile-header-bar__donate"
                         variant="header-donate"
                         size="sm"
-                        href="/donar"
+                        href="/aportar"
                     >
                         {{ $t('donar') }}
                         <template #iconRight>
@@ -211,7 +211,7 @@
                     class="header_donate-btn"
                     variant="header-donate"
                     size="sm"
-                    href="/donar"
+                    href="/aportar"
                 >
                     {{ $t('donar') }}
                     <template #iconRight>
