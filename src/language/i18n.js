@@ -265,6 +265,8 @@ const messages = {
         porQueDonar: 'Por qué aportar a Carpoolear',
         oCreandoUnaCuentaCon: 'o creando una cuenta con',
         resultadosCercanos: 'Resultados cercanos',
+        resultadosCercanosDescripcion:
+            'Viajes cercanos a la fecha que elegiste (+- 3 días), revisá bien la fecha del viaje',
         viajesCercanos: 'Viajes cercanos',
         viajesCercanosSubtitle:
             'Viajes de hasta 3 días antes o después de la fecha buscada.',
@@ -2156,6 +2158,8 @@ const messages = {
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
         porQueDonar: 'Por qué aportar a Apalan-car',
         resultadosCercanos: 'Resultados cercanos',
+        resultadosCercanosDescripcion:
+            'Viajes cercanos a la fecha que elegiste (+- 3 días), revisá bien la fecha del viaje',
         viajesCercanos: 'Viajes cercanos',
         viajesCercanosSubtitle:
             'Viajes de hasta 3 días antes o después de la fecha buscada.',
@@ -3675,6 +3679,8 @@ const messages = {
         porQueDonar: 'Why contribute to Carpoolear',
         oCreandoUnaCuentaCon: 'or by creating an account with',
         resultadosCercanos: 'Nearby results',
+        resultadosCercanosDescripcion:
+            'Nearby trips around the date you chose (± 3 days), double-check the trip date',
         viajesCercanos: 'Nearby trips',
         viajesCercanosSubtitle:
             'Trips up to 3 days before or after your searched date.',

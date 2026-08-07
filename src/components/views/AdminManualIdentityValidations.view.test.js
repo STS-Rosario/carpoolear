@@ -27,13 +27,14 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('getShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('saveShowResolvedManualIdentityValidations');
         expect(viewSource).toContain('show_resolved');
-        expect(viewSource).toContain(':data="displayedList"');
-        expect(viewSource).toContain('v-for="item in displayedList"');
+        expect(viewSource).toContain(':data="list"');
+        expect(viewSource).toContain('v-for="item in list"');
     });
 
     it('renders sortable column headers for manual validation rows', () => {
         expect(viewSource).toContain('MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS');
-        expect(viewSource).toContain('sortManualIdentityValidationsList');
+        expect(viewSource).toContain('buildManualIdentityValidationListParams');
+        expect(viewSource).toContain('parseManualIdentityValidationListFromRoute');
         expect(viewSource).toContain('getNextManualIdentityValidationSortState');
         expect(viewSource).toContain('toggleSort(');
         expect(viewSource).toContain('admin-manual-th-sort');
@@ -48,5 +49,13 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('adminUserSupportTicketsRoute');
         expect(viewSource).toContain('account_verification');
         expect(viewSource).toContain('createdByAdmin: true');
+    });
+
+    it('sends sort and pagination params to the API instead of sorting locally', () => {
+        expect(viewSource).not.toContain('sortManualIdentityValidationsList');
+        expect(viewSource).toContain('syncRouteQuery');
+        expect(viewSource).toContain('buildManualIdentityValidationListParams');
+        expect(viewSource).toContain('sortKey: this.sortKey');
+        expect(viewSource).toContain('sortDir: this.sortDir');
     });
 });

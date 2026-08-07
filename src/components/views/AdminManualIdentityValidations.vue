@@ -9,7 +9,7 @@
                         {{ $t('mostrarResueltos') }}
                     </label>
                 </div>
-                <Loading :data="displayedList">
+                <Loading :data="list">
                     <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -31,7 +31,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in displayedList" :key="item.id">
+                            <tr v-for="item in list" :key="item.id">
                                 <th scope="row">{{ item.id }}</th>
                                 <td>{{ item.user_name || $t('na') }}</td>
                                 <td>{{ item.paid_at ? formatDate(item.paid_at) : '-' }}</td>
@@ -122,11 +122,12 @@ import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import {
+    buildManualIdentityValidationListParams,
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
     MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
-    saveShowResolvedManualIdentityValidations,
-    sortManualIdentityValidationsList
+    parseManualIdentityValidationListFromRoute,
+    saveShowResolvedManualIdentityValidations
 } from '../../utils/adminManualIdentityValidationsList';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
@@ -149,20 +150,18 @@ export default {
             sortableColumns: MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS
         };
     },
-    computed: {
-        displayedList() {
-            if (!Array.isArray(this.list)) {
-                return this.list;
-            }
-
-            return sortManualIdentityValidationsList(this.list, this.sortKey, this.sortDir);
-        }
-    },
     watch: {
+        '$route.query': {
+            deep: true,
+            handler() {
+                this.initFromRouteQuery();
+                this.fetchList();
+            }
+        },
         showResolved(value) {
             saveShowResolvedManualIdentityValidations(value);
             this.listPage = 1;
-            this.fetchList();
+            this.syncRouteQuery();
         }
     },
     methods: {
@@ -192,6 +191,33 @@ export default {
             const approved = status === 'approved' || status === 'approve';
             return approved && item.has_images === true;
         },
+        initFromRouteQuery() {
+            const parsed = parseManualIdentityValidationListFromRoute(this.$route.query || {});
+            this.listPage = parsed.page;
+            this.listPerPage = parsed.perPage;
+            this.sortKey = parsed.sortKey;
+            this.sortDir = parsed.sortDir;
+            if (this.$route.query.show_resolved != null) {
+                this.showResolved = parsed.showResolved;
+            }
+        },
+        syncRouteQuery() {
+            const query = {};
+            if (this.listPage > 1) {
+                query.page = String(this.listPage);
+            }
+            if (this.listPerPage !== DEFAULT_ADMIN_PER_PAGE) {
+                query.per_page = String(this.listPerPage);
+            }
+            if (this.showResolved) {
+                query.show_resolved = '1';
+            }
+            if (this.sortKey) {
+                query.sort = this.sortKey;
+                query.direction = this.sortDir;
+            }
+            this.$router.replace({ query });
+        },
         toggleSort(column) {
             const next = getNextManualIdentityValidationSortState(
                 this.sortKey,
@@ -201,16 +227,19 @@ export default {
 
             this.sortKey = next.sortKey;
             this.sortDir = next.sortDir;
+            this.listPage = 1;
+            this.syncRouteQuery();
         },
         fetchList() {
             const api = new AdminApi();
-            const params = {
+            const params = buildManualIdentityValidationListParams({
                 page: this.listPage,
-                per_page: this.listPerPage
-            };
-            if (this.showResolved) {
-                params.show_resolved = '1';
-            }
+                perPage: this.listPerPage,
+                showResolved: this.showResolved,
+                sortKey: this.sortKey,
+                sortDir: this.sortDir
+            });
+
             return api.getManualIdentityValidations(params).then((res) => {
                 this.list = res.data || [];
                 this.listMeta = res.meta || null;
@@ -225,7 +254,7 @@ export default {
                 return;
             }
             this.listPage = pagination.current_page - 1;
-            this.fetchList();
+            this.syncRouteQuery();
         },
         goNextPage() {
             const pagination = this.listMeta && this.listMeta.pagination;
@@ -233,15 +262,16 @@ export default {
                 return;
             }
             this.listPage = pagination.current_page + 1;
-            this.fetchList();
+            this.syncRouteQuery();
         },
         onPerPageChange(perPage) {
             this.listPerPage = perPage;
             this.listPage = 1;
-            this.fetchList();
+            this.syncRouteQuery();
         }
     },
     mounted() {
+        this.initFromRouteQuery();
         this.fetchList();
     },
     components: {
