@@ -65,9 +65,19 @@ describe('SearchTrip advanced filters', () => {
 
     it('stacks hide-carpooleado and date-range checkboxes with matching dark grey labels', () => {
         expect(source).toContain('trips-search__advanced-checkboxes');
-        expect(source).toMatch(
-            /trips-search__advanced-checkboxes[\s\S]*?hide-carpooleado-select_wrapper[\s\S]*?date-range-search-select_wrapper/
+        const desktop = source.slice(
+            source.indexOf('search-advanced-filters-desktop'),
+            source.indexOf('search-advanced-filters-mobile')
         );
+        const mobile = source.slice(
+            source.indexOf('search-advanced-filters-mobile')
+        );
+        for (const block of [desktop, mobile]) {
+            const dateAt = block.indexOf('date-range-search-select_wrapper');
+            const hideAt = block.indexOf('hide-carpooleado-select_wrapper');
+            expect(dateAt).toBeGreaterThan(-1);
+            expect(hideAt).toBeGreaterThan(dateAt);
+        }
         expect(cssSource).toMatch(
             /\.trips-search__advanced-checkboxes\s*\{[^}]*flex-direction:\s*column/
         );
