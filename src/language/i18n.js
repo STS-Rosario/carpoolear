@@ -1051,7 +1051,7 @@ const messages = {
         buscoPasajero: 'Busco Pasajero',
         encontraTuProximoViaje: 'Encontrá tu próximo viaje',
         compartiAutoTagline:
-            'Compartí el auto, ahorrá dinero y cuidá el planeta',
+            'Compartí tu viaje, ahorrá dinero y cuidá el planeta',
         viajesPublicados: 'Viajes publicados',
         buscoTitulo: 'Busco...',
         precioAsiento: 'Contribución por persona (incluída quien conduce)',
