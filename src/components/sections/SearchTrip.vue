@@ -208,27 +208,29 @@
                 v-show="showAdvancedFilters && !isMobile"
             >
                 <div class="trips-search__advanced-content search-advanced-filters__content">
-                    <div class="hide-carpooleado-select_wrapper">
-                        <input
-                            type="checkbox"
-                            v-model="hideCarpooleado"
-                            id="cbxHideCarpooleado"
-                            class="cbx"
-                        />
-                        <label for="cbxHideCarpooleado" class="cbx_label">
-                            {{ $t('esconderViajesCarpooleados') }}
-                        </label>
-                    </div>
-                    <div class="date-range-search-select_wrapper">
-                        <input
-                            type="checkbox"
-                            v-model="dateRangeEnabled"
-                            id="cbxDateRangeSearch"
-                            class="cbx"
-                        />
-                        <label for="cbxDateRangeSearch" class="cbx_label">
-                            {{ $t('buscarEnRangoDeFechas') }}
-                        </label>
+                    <div class="trips-search__advanced-checkboxes">
+                        <div class="hide-carpooleado-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="hideCarpooleado"
+                                id="cbxHideCarpooleado"
+                                class="cbx"
+                            />
+                            <label for="cbxHideCarpooleado" class="cbx_label">
+                                {{ $t('esconderViajesCarpooleados') }}
+                            </label>
+                        </div>
+                        <div class="date-range-search-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="dateRangeEnabled"
+                                id="cbxDateRangeSearch"
+                                class="cbx"
+                            />
+                            <label for="cbxDateRangeSearch" class="cbx_label">
+                                {{ $t('buscarEnRangoDeFechas') }}
+                            </label>
+                        </div>
                     </div>
                     <div
                         v-for="field in allowPreferenceFilterFields"
@@ -275,27 +277,29 @@
                 v-show="showAdvancedFilters && isMobile && !autoSearch"
             >
                 <div class="trips-search__advanced-content search-advanced-filters__content">
-                    <div class="hide-carpooleado-select_wrapper">
-                        <input
-                            type="checkbox"
-                            v-model="hideCarpooleado"
-                            id="cbxHideCarpooleadoMobile"
-                            class="cbx"
-                        />
-                        <label for="cbxHideCarpooleadoMobile" class="cbx_label">
-                            {{ $t('esconderViajesCarpooleados') }}
-                        </label>
-                    </div>
-                    <div class="date-range-search-select_wrapper">
-                        <input
-                            type="checkbox"
-                            v-model="dateRangeEnabled"
-                            id="cbxDateRangeSearchMobile"
-                            class="cbx"
-                        />
-                        <label for="cbxDateRangeSearchMobile" class="cbx_label">
-                            {{ $t('buscarEnRangoDeFechas') }}
-                        </label>
+                    <div class="trips-search__advanced-checkboxes">
+                        <div class="hide-carpooleado-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="hideCarpooleado"
+                                id="cbxHideCarpooleadoMobile"
+                                class="cbx"
+                            />
+                            <label for="cbxHideCarpooleadoMobile" class="cbx_label">
+                                {{ $t('esconderViajesCarpooleados') }}
+                            </label>
+                        </div>
+                        <div class="date-range-search-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="dateRangeEnabled"
+                                id="cbxDateRangeSearchMobile"
+                                class="cbx"
+                            />
+                            <label for="cbxDateRangeSearchMobile" class="cbx_label">
+                                {{ $t('buscarEnRangoDeFechas') }}
+                            </label>
+                        </div>
                     </div>
                     <div
                         v-for="field in allowPreferenceFilterFields"
