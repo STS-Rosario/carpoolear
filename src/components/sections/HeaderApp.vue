@@ -559,6 +559,7 @@ export default {
     opacity: 0.9;
     outline: none;
     box-shadow: none;
+    border-bottom: 2px solid #fff;
 }
 .header_nav-link:focus-visible {
     outline: none;
