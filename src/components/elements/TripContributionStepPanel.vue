@@ -35,7 +35,7 @@
             :class="{
                 'trip-contribution-step__suggested--expanded': suggestedExpanded
             }"
-            @click="applySuggested"
+            @click="toggleSuggested"
         >
             <span class="trip-contribution-step__suggested-main">
                 {{
@@ -74,10 +74,7 @@
 </template>
 
 <script>
-import {
-    contributionUnitsFromCents,
-    formatContributionDisplayAmount
-} from '../../utils/tripContributionDisplay.js';
+import { formatContributionDisplayAmount } from '../../utils/tripContributionDisplay.js';
 
 export default {
     name: 'trip-contribution-step-panel',
@@ -118,13 +115,7 @@ export default {
     },
 
     methods: {
-        applySuggested() {
-            const units = contributionUnitsFromCents(
-                this.recommendedSeatPriceCents
-            );
-            if (units !== '') {
-                this.$emit('update:price', units);
-            }
+        toggleSuggested() {
             this.suggestedExpanded = !this.suggestedExpanded;
         }
     }
