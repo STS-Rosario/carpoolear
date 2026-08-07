@@ -63,6 +63,15 @@ describe('HeaderApp desktop menu', () => {
         expect(headerSource).toMatch(
             /isDesktopNavActive\s*\(\s*section\s*\)\s*\{/
         );
+        expect(headerSource).toMatch(
+            /\.header_nav-link--active\s*\{[^}]*border-bottom:\s*2px solid #fff/
+        );
+    });
+
+    it('underlines desktop nav links on hover like the current page', () => {
+        expect(headerSource).toMatch(
+            /\.header_nav-link:hover,\s*\.header_nav-link:focus\s*\{[^}]*border-bottom:\s*2px solid #fff/
+        );
     });
 
     it('removes the focus outline from desktop nav links', () => {
