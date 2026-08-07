@@ -13,6 +13,7 @@ describe('adminSupportTicketListFilters', () => {
                 priority: 'high',
                 needsReply: true,
                 open: true,
+                createdByAdmin: true,
                 userId: 42,
                 page: 2,
                 perPage: 50
@@ -22,6 +23,7 @@ describe('adminSupportTicketListFilters', () => {
             priority: 'high',
             needs_reply: '1',
             open: '1',
+            created_by_admin: '1',
             user_id: '42',
             page: 2,
             per_page: 50
@@ -35,7 +37,8 @@ describe('adminSupportTicketListFilters', () => {
                 type: '',
                 priority: '',
                 needsReply: false,
-                open: false
+                open: false,
+                createdByAdmin: false
             })
         ).toEqual({});
     });
@@ -47,6 +50,7 @@ describe('adminSupportTicketListFilters', () => {
                 priority: 'low',
                 needs_reply: '1',
                 open: '1',
+                created_by_admin: '1',
                 user_id: '99',
                 page: '3',
                 per_page: '30'
@@ -56,6 +60,7 @@ describe('adminSupportTicketListFilters', () => {
             priority: 'low',
             needsReply: true,
             open: true,
+            createdByAdmin: true,
             userId: 99,
             page: 3,
             perPage: 30
@@ -69,6 +74,7 @@ describe('adminSupportTicketListFilters', () => {
                 priority: '',
                 needsReply: false,
                 open: false,
+                createdByAdmin: false,
                 userId: 5
             })
         ).toBe(true);
@@ -80,8 +86,23 @@ describe('adminSupportTicketListFilters', () => {
         expect(filtersAreActive({ type: '', priority: '', needsReply: false, open: true })).toBe(
             true
         );
-        expect(filtersAreActive({ type: '', priority: '', needsReply: false, open: false })).toBe(
-            false
-        );
+        expect(
+            filtersAreActive({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: true
+            })
+        ).toBe(true);
+        expect(
+            filtersAreActive({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: false
+            })
+        ).toBe(false);
     });
 });

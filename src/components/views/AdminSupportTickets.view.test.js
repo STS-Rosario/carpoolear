@@ -112,6 +112,12 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('userId: this.filterUserId');
     });
 
+    it('preserves createdByAdmin filter from route query for admin ticket list fetch', () => {
+        expect(viewSource).toContain('filterCreatedByAdmin');
+        expect(viewSource).toContain('createdByAdmin: this.filterCreatedByAdmin');
+        expect(viewSource).toContain("query.created_by_admin = '1'");
+    });
+
     it('shows assigned admin column in tickets table', () => {
         expect(viewSource).toContain("{{ capitalizeFirst($t('asignadoA')) }}");
         expect(viewSource).toContain('assignedAdminDisplayName(ticket)');

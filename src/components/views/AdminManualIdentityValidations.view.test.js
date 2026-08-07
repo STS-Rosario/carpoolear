@@ -47,5 +47,6 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('accountVerificationTicketsRoute');
         expect(viewSource).toContain('adminUserSupportTicketsRoute');
         expect(viewSource).toContain('account_verification');
+        expect(viewSource).toContain('createdByAdmin: true');
     });
 });
