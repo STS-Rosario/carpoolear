@@ -1,6 +1,7 @@
 import UIKit
 import Capacitor
 import UserNotifications
+import FirebaseCore
 
 
 @UIApplicationMain
@@ -11,11 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        // Initialize Firebase
-        // FirebaseApp.configure()
-
-        // Configure push notifications
-        // UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()
 
         return true
     }
