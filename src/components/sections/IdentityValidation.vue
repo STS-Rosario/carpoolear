@@ -21,6 +21,18 @@
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
+                <p
+                    v-if="showMpIntegrationDisconnectHint"
+                    class="identity-verification-success-banner__text"
+                >
+                    {{ $t('identityVerificationSuccessMpDisconnectLead') }}
+                    <a
+                        :href="mercadoPagoMyAppsUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="identity-verification-success-banner__link identity-verification-success-banner__link--inline"
+                    >{{ $t('identityVerificationSuccessMpDisconnectLink') }}</a>{{ $t('identityVerificationSuccessMpDisconnectTail') }}
+                </p>
                 <IdentityValidationAdminReviewNote
                     :note="displayableManualApprovalReviewNote"
                     :label-key="manualApprovalReviewNoteLabelKey"
@@ -309,6 +321,7 @@
                         <ul class="identity-validation-card-bullets">
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
                         </ul>
                         <AppButton
                             variant="primary"
@@ -387,6 +400,7 @@
                         <ul class="identity-validation-card-bullets">
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
                         </ul>
                         <AppButton
                             variant="primary"
@@ -465,6 +479,10 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
+import {
+    MERCADO_PAGO_MY_APPS_URL,
+    shouldShowMercadoPagoIntegrationDisconnectHint
+} from '../../utils/mercadoPagoIntegrationDisconnectHint';
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 import AppButton from '../ui/AppButton.vue';
@@ -602,6 +620,15 @@ export default {
                 manualStatus: this.manualStatus,
                 resultMessage: this.resultMessage
             });
+        },
+        showMpIntegrationDisconnectHint() {
+            return shouldShowMercadoPagoIntegrationDisconnectHint({
+                resultMessage: this.resultMessage,
+                user: this.user
+            });
+        },
+        mercadoPagoMyAppsUrl() {
+            return MERCADO_PAGO_MY_APPS_URL;
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
@@ -814,6 +841,12 @@ export default {
 .identity-verification-success-banner__link:focus {
     color: #286090;
     text-decoration: none;
+}
+
+.identity-verification-success-banner__link--inline {
+    display: inline;
+    font-size: inherit;
+    font-weight: 600;
 }
 
 .identity-validation-component .alert {

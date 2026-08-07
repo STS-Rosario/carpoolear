@@ -59,6 +59,7 @@
                             </li>
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
                         </ul>
                     </li>
                     <li v-if="showManualOption" class="identity-validation-prompt-option-block">

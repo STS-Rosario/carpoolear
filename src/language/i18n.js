@@ -772,6 +772,8 @@ const messages = {
         identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
+        identidadModalAutoPuedeEliminarMp:
+            'Luego de verificar, podés eliminar la integración con MP',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -845,6 +847,11 @@ const messages = {
         identityVerificationSuccessEmphasis:
             'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
         identityVerificationSuccessHomeLink: 'Ir a Inicio',
+        identityVerificationSuccessMpDisconnectLead:
+            '¡Todo listo! Ya verificamos tu identidad y podés ',
+        identityVerificationSuccessMpDisconnectLink:
+            'eliminar la integración con Mercado Pago',
+        identityVerificationSuccessMpDisconnectTail: ' si así lo deseás.',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -2498,6 +2505,8 @@ const messages = {
         identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
+        identidadModalAutoPuedeEliminarMp:
+            'Luego de verificar, podés eliminar la integración con MP',
         identidadModalManualTitulo: 'Verificación manual',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -2571,6 +2580,11 @@ const messages = {
         identityVerificationSuccessEmphasis:
             'Ya podés publicar viajes y enviar mensajes dentro de la comunidad.',
         identityVerificationSuccessHomeLink: 'Ir a Inicio',
+        identityVerificationSuccessMpDisconnectLead:
+            '¡Todo listo! Ya verificamos tu identidad y podés ',
+        identityVerificationSuccessMpDisconnectLink:
+            'eliminar la integración con Mercado Pago',
+        identityVerificationSuccessMpDisconnectTail: ' si así lo deseás.',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -4183,6 +4197,11 @@ const messages = {
         identityVerificationSuccessEmphasis:
             'You can now post trips and send messages in the community.',
         identityVerificationSuccessHomeLink: 'Go to Home',
+        identityVerificationSuccessMpDisconnectLead:
+            "All set! We've verified your identity and you can ",
+        identityVerificationSuccessMpDisconnectLink:
+            'remove the Mercado Pago integration',
+        identityVerificationSuccessMpDisconnectTail: ' if you want.',
         resultError: 'An error occurred. Please try again.',
         resultDniMismatch:
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",
@@ -4363,6 +4382,8 @@ const messages = {
         identidadModalAutoMp: 'With your Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
+        identidadModalAutoPuedeEliminarMp:
+            'After verifying, you can remove the MP integration',
         identidadModalManualTitulo: 'Manual verification',
         identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
         identidadModalManualCosto: 'There is a cost',
