@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import messages from './i18n';
 
 const FRIENDS_OVERHAUL_LABELS_ES = {
-    invitarAmigos: 'Invitar a amigos',
+    invitarAmigos: 'Invitar a amistades',
     recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
     detenerAlertasViajeAmigo: 'No recibir más alertas de viaje de {name}',
     alertasViajeAmigoActivadas: 'Ahora recibirás alertas de viaje de {name}',
@@ -11,22 +11,22 @@ const FRIENDS_OVERHAUL_LABELS_ES = {
     errorAlertasViajeAmigo:
         'No pudimos actualizar las alertas de viaje. Intentá de nuevo.',
     aceptarPedidosAmigosAutomaticamente:
-        'Aceptar pedidos de asiento de amigos automáticamente',
-    queresInvitarTusAmigos: '¿Querés invitar a tus amigos a este viaje?',
-    invitarATodosMisAmigos: 'Invitar a todos mis amigos',
-    invitarAmigosAlViaje: 'Invitar amigos al viaje',
+        'Aceptar pedidos de asiento de amistades automáticamente',
+    queresInvitarTusAmigos: '¿Querés invitar a tus amistades a este viaje?',
+    invitarATodosMisAmigos: 'Invitar a todas mis amistades',
+    invitarAmigosAlViaje: 'Invitar amistades al viaje',
     invitarAmigosSelladoPendiente:
-        'Una vez que pagues el sellado vas a poder invitar a tus amigos',
-    viajesDeMisAmigos: 'Viajes de mis amigos',
+        'Una vez que pagues el sellado vas a poder invitar a tus amistades',
+    viajesDeMisAmigos: 'Viajes de mis amistades',
     otrosViajes: 'Otros viajes',
     tenesInvitacionesAmigosClickParaVerlas:
-        'Tenés invitaciones a amigos, click acá para verlas',
-    tenesInvitacionesAmigosAntesClick: 'Tenés invitaciones de amigos,',
+        'Tenés invitaciones a amistades, click acá para verlas',
+    tenesInvitacionesAmigosAntesClick: 'Tenés invitaciones de amistades,',
     clickAca: 'click acá',
     paraVerlasInvitacionesAmigos: 'para verlas',
-    noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amigos',
+    noVolverAMostrarInvitarAmigos: 'No volver a mostrar invitar amistades',
     solicitudAmistadEnviada: 'Enviada',
-    solicitudesDeAmigoPendientes: 'Solicitudes de amigo pendientes',
+    solicitudesDeAmigoPendientes: 'Solicitudes de amistad pendientes',
     quitarSolicitudAmigo: 'Quitar'
 };
 

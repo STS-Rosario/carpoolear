@@ -41,20 +41,20 @@
                         {{ rate.reply_comment }}
                     </span>
                 </template>
-                <button
-                    type="button"
-                    class="btn btn-default btn-sm admin-rating-card__edit"
+                <AppButton
+                    variant="secondary"
+                    size="sm"
+                    class="admin-rating-card__edit"
                     @click="$emit('edit')"
                 >
                     {{ $t('adminUsuariosEditarFila') }}
-                </button>
+                </AppButton>
             </div>
             <template v-else-if="editing">
-                <div class="form-group">
-                    <label>{{ $t('adminUsuariosCalificacion') }}</label>
+                <AppField :label="$t('adminUsuariosCalificacion')">
                     <select
                         :value="editForm.rating"
-                        class="form-control"
+                        class="admin-rating-card__select"
                         @input="
                             $emit('update:editForm', {
                                 ...editForm,
@@ -66,57 +66,52 @@
                         <option :value="2">{{ $t('rateItemNeutral') }}</option>
                         <option :value="0">{{ $t('rateItemNegativa') }}</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label>{{ $t('adminUsuariosComentario') }}</label>
-                    <textarea
-                        :value="editForm.comment"
-                        class="form-control"
-                        rows="3"
-                        @input="
-                            $emit('update:editForm', {
-                                ...editForm,
-                                comment: $event.target.value
-                            })
-                        "
-                    ></textarea>
-                </div>
-                <div class="form-group">
-                    <label>{{ $t('adminUsuariosRespuesta') }}</label>
-                    <textarea
-                        :value="editForm.reply_comment"
-                        class="form-control"
-                        rows="2"
-                        @input="
-                            $emit('update:editForm', {
-                                ...editForm,
-                                reply_comment: $event.target.value
-                            })
-                        "
-                    ></textarea>
-                </div>
-                <button
-                    type="button"
-                    class="btn btn-primary"
+                </AppField>
+                <AppTextarea
+                    :label="$t('adminUsuariosComentario')"
+                    :model-value="editForm.comment"
+                    :rows="3"
+                    @update:model-value="
+                        $emit('update:editForm', {
+                            ...editForm,
+                            comment: $event
+                        })
+                    "
+                />
+                <AppTextarea
+                    :label="$t('adminUsuariosRespuesta')"
+                    :model-value="editForm.reply_comment"
+                    :rows="2"
+                    @update:model-value="
+                        $emit('update:editForm', {
+                            ...editForm,
+                            reply_comment: $event
+                        })
+                    "
+                />
+                <AppButton
+                    variant="primary"
                     :disabled="saving"
                     @click="$emit('save')"
                 >
                     {{ $t('adminUsuariosGuardar') }}
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-default"
+                </AppButton>
+                <AppButton
+                    variant="secondary"
                     :disabled="saving"
                     @click="$emit('cancel')"
                 >
                     {{ $t('adminUsuariosCancelar') }}
-                </button>
+                </AppButton>
             </template>
         </div>
     </div>
 </template>
 
 <script>
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     isNegativeRating,
@@ -126,6 +121,11 @@ import {
 
 export default {
     name: 'admin-rating-card',
+    components: {
+        AppButton,
+        AppField,
+        AppTextarea
+    },
     props: {
         rate: {
             type: Object,
@@ -225,6 +225,25 @@ export default {
 .admin-rating-card__edit {
     flex-shrink: 0;
     margin-left: auto;
+}
+
+.admin-rating-card__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-rating-card__select:focus {
+    outline: none;
 }
 
 .admin-rating-pill {

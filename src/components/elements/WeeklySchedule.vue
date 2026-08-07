@@ -36,14 +36,15 @@
             <span v-if="readonly" class="weekly-schedule-time">
                 {{ dayjs(weeklyScheduleTime).format('HH:mm') }} {{ $t('horas') }}
             </span>
-            <input
+            <AppInput
                 v-else
                 type="time"
-                :value="weeklyScheduleTime"
-                @input="$emit('update:weeklyScheduleTime', $event.target.value)"
-                v-maska="'##:##'"
-                class="form-control form-control-with-icon form-control-time"
-                :class="{ 'has-error': hasError }"
+                :model-value="weeklyScheduleTime"
+                mask="##:##"
+                icon-left="fa fa-clock-o"
+                @update:modelValue="
+                    $emit('update:weeklyScheduleTime', $event)
+                "
             />
         </div>
     </div>
@@ -51,6 +52,7 @@
 
 <script>
 import dayjs from '../../dayjs';
+import AppInput from '../ui/AppInput.vue';
 
 const WEEKLY_DAYS = [
     { key: 'domingo', bit: 64 },
@@ -64,6 +66,10 @@ const WEEKLY_DAYS = [
 
 export default {
     name: 'WeeklySchedule',
+
+    components: {
+        AppInput
+    },
     
     props: {
         weeklySchedule: {

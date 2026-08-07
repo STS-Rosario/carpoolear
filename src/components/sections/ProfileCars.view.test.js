@@ -27,12 +27,31 @@ describe('ProfileCars CRUD section', () => {
         expect(viewSource).toContain("$t('autos')");
     });
 
-    it('uses readable text colors and mobile-only page heading', () => {
+    it('places the Autos title inside the content card', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
 
-        expect(viewSource).toContain('visible-xs-block');
-        expect(viewSource).toContain('color: #036686');
+        expect(viewSource).toMatch(
+            /profile-cars__card[\s\S]*profile-cars__heading[\s\S]*CarsEditorPanel/
+        );
+        expect(viewSource).not.toContain('visible-xs-block');
+    });
+
+    it('uses readable text colors', () => {
+        const viewSource = fs.readFileSync(viewPath, 'utf8');
+
         expect(viewSource).toContain('var(--main-font-color');
+        expect(viewSource).toMatch(
+            /@media only screen and \(max-width: 768px\)[\s\S]*\.profile-cars[\s\S]*padding:\s*1em/
+        );
+    });
+
+    it('wraps the cars editor in a content card', () => {
+        const viewSource = fs.readFileSync(viewPath, 'utf8');
+
+        expect(viewSource).toContain('profile-cars__card');
+        expect(viewSource).toMatch(
+            /profile-cars__card[\s\S]*CarsEditorPanel/
+        );
     });
 });
 

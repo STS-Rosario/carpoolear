@@ -50,14 +50,13 @@
                             class="tooltip-bottom trip-invite-friends-trigger__tooltip"
                             :data-tooltip="inviteFriendsSelladoTooltip"
                         >
-                            <button
-                                type="button"
-                                class="btn btn-primary"
+                            <AppButton
+                                variant="primary"
                                 :disabled="inviteFriendsBlockedByUnpaidSellado"
                                 @click="showInviteFriendsModal = true"
                             >
                                 {{ $t('invitarAmigosAlViaje') }}
-                            </button>
+                            </AppButton>
                         </span>
                     </div>
                 </div>
@@ -107,14 +106,13 @@
                             class="tooltip-bottom trip-invite-friends-trigger__tooltip"
                             :data-tooltip="inviteFriendsSelladoTooltip"
                         >
-                            <button
-                                type="button"
-                                class="btn btn-primary"
+                            <AppButton
+                                variant="primary"
                                 :disabled="inviteFriendsBlockedByUnpaidSellado"
                                 @click="showInviteFriendsModal = true"
                             >
                                 {{ $t('invitarAmigosAlViaje') }}
-                            </button>
+                            </AppButton>
                         </span>
                     </div>
                 </div>
@@ -145,6 +143,7 @@ import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
 import modal from '../Modal';
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
+import AppButton from '../ui/AppButton.vue';
 import dayjs from '../../dayjs';
 import { isUpcomingTrip } from '../../utils/isUpcomingTrip.js';
 import {
@@ -240,7 +239,8 @@ export default {
     components: {
         SvgItem,
         modal,
-        TripInviteFriends
+        TripInviteFriends,
+        AppButton
     }
 };
 </script>

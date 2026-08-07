@@ -32,6 +32,14 @@ describe('Notifications view', () => {
         expect(viewSource).toContain("name: 'identity_validation'");
     });
 
+    it('routes friends notifications to Solicitudes Recibidas', () => {
+        expect(viewSource).toContain("case 'friends':");
+        expect(viewSource).toContain('FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE');
+        expect(viewSource).toContain(
+            'router.push(FRIENDS_SOLICITUDES_RECIBIDAS_ROUTE)'
+        );
+    });
+
     it('routes identity_validation_manual notifications to manual validation upload page', () => {
         expect(viewSource).toContain("case 'identity_validation_manual':");
         expect(viewSource).toContain("name: 'identity_validation_manual'");
@@ -45,5 +53,23 @@ describe('Notifications view', () => {
         );
         expect(viewSource).toContain('const tripRoute = resolveTripDetailRoute(n)');
         expect(viewSource).toContain('router.push(tripRoute)');
+    });
+});
+
+describe('Notifications.vue list and permission warning UI', () => {
+    it('bolds unread notification text only, not already seen items', () => {
+        expect(viewSource).toMatch(
+            /<strong[\s\S]*?!n\.readed[\s\S]*?>\{\{\s*n\.text\s*\}\}<\/strong>/
+        );
+        expect(viewSource).not.toMatch(
+            /<strong>\{\{\s*n\.text\s*\}\}<\/strong>/
+        );
+    });
+
+    it('rounds the permission warning card like newer cards', () => {
+    });
+
+    it('uses light blue unread row background like conversations', () => {
+        expect(viewSource).not.toContain('rgba(254, 153, 0');
     });
 });

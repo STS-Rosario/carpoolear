@@ -4,149 +4,144 @@
             class="buttons-container"
             v-if="!isPassengersView || (isPassengersView && owner)"
         >
-            <router-link
-                class="btn btn-primary"
+            <AppButton
                 v-if="owner && !expired"
+                variant="primary"
+                block
                 :to="{ name: 'update-trip', params: { id: trip.id } }"
             >
-                {{ $t('editar') }}
-            </router-link>
-            <a
-                class="btn btn-primary"
+                {{ $t('editarViaje') }}
+            </AppButton>
+            <AppButton
                 v-if="owner && !expired"
-                @click="$emit('deleteTrip')"
+                variant="tertiary"
+                tone="destructive"
+                block
                 :disabled="sendingStatus"
+                :loading="Boolean(sending && sending.deleteAction)"
+                @click="$emit('deleteTrip')"
             >
-                <spinner
-                    class="blue"
-                    v-if="sending && sending.deleteAction"
-                ></spinner>
-                <span v-else>{{ $t('cancelarViaje') }}</span>
-            </a>
-            <template
-                v-if="
-                    !owner &&
-                    !expired &&
-                    (!canRequest ||
-                        !config.module_coordinate_by_message ||
-                        (config.module_coordinate_by_message && isPassenger))
-                "
-            >
-                <button
-                    class="btn btn-primary"
-                    @click="$emit('toMessages')"
+                {{ $t('cancelarViaje') }}
+                <template #loading>
+                    <spinner class="blue"></spinner>
+                </template>
+            </AppButton>
+            <template v-if="showMessageButton">
+                <AppButton
                     v-if="!owner"
-                    :disabled="sendingStatus || seatRequestLimitReached"
+                    variant="primary"
+                    block
+                    :disabled="sendingStatus || (seatRequestLimitReached && canRequest)"
+                    :loading="Boolean(sending && sending.sendMessageAction)"
+                    @click="$emit('toMessages')"
                 >
-                    <spinner
-                        class="blue"
-                        v-if="sending && sending.sendMessageAction"
-                    ></spinner>
-                    <span v-else>{{ $t('enviarMensaje') }}</span>
-                </button>
+                    {{ $t('enviarMensaje') }}
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
             </template>
             <template v-if="!owner && !trip.is_passenger && !expired">
                 <template v-if="!isPassenger">
-                    <button
-                        class="btn btn-primary"
+                    <AppButton
+                        :variant="showMessageButton ? 'secondary' : 'primary'"
+                        block
                         @click="$emit('onMakeRequest')"
                         v-if="canRequest && trip.seats_available > 0"
                         :disabled="sendingStatus || seatRequestLimitReached"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        :class="{ 'trip-detail__cta-secondary': showMessageButton }"
                     >
-                        <template v-if="sending && sending.requestAction">
+                        <template v-if="trip.user.autoaccept_requests">
+                            <template
+                                v-if="
+                                    config &&
+                                    config.module_trip_seats_payment
+                                "
+                            >
+                                {{ $t('reservar') }}
+                                <template
+                                    v-if="isVoluntaryContributionSeatPrice(trip.seat_price_cents)"
+                                    >{{ $t('loQueSePuedaAportar') }}</template
+                                >
+                                <template v-else>{{
+                                    $n(trip.seat_price_cents / 100, 'currency')
+                                }}</template>
+                            </template>
+                            <template v-else>{{ $t('reservar') }}</template>
+                        </template>
+                        <template
+                            v-else-if="config.module_coordinate_by_message"
+                        >
+                            {{ $t('enviarMensaje') }}
+                        </template>
+                        <template v-else>{{ $t('solicitarAsiento') }}</template>
+                        <template #loading>
                             <spinner class="blue"></spinner>
                         </template>
-                        <template v-else>
-                            <template v-if="trip.user.autoaccept_requests">
-                                <template
-                                    v-if="
-                                        config &&
-                                        config.module_trip_seats_payment
-                                    "
-                                >
-                                    {{ $t('reservar') }}
-                                    <template
-                                        v-if="isVoluntaryContributionSeatPrice(trip.seat_price_cents)"
-                                        >{{ $t('loQueSePuedaAportar') }}</template
-                                    >
-                                    <template v-else>{{
-                                        $n(trip.seat_price_cents / 100, 'currency')
-                                    }}</template>
-                                </template>
-                                <template v-else>{{ $t('reservar') }}</template>
-                            </template>
-                            <template
-                                v-else-if="config.module_coordinate_by_message"
-                            >
-                                {{ $t('enviarMensaje') }}
-                            </template>
-                            <template v-else>{{ $t('solicitarAsiento') }}</template>
-                        </template>
-                    </button>
-                    <button
-                        class="btn"
+                    </AppButton>
+                    <AppButton
                         v-if="!canRequest"
-                        @click="$emit('cancelRequest')"
+                        variant="danger"
+                        block
                         :disabled="sendingStatus"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        @click="$emit('cancelRequest')"
                     >
-                        <spinner
-                            class="blue"
-                            v-if="sending && sending.requestAction"
-                        ></spinner>
-                        <span v-else>{{ $t('solicitadoRetirar') }}</span>
-                    </button>
+                        {{ $t('retirarSolicitudDeAsiento') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
                 </template>
 
                 <template v-if="isPassenger">
-                    <button
-                        class="btn btn-primary"
-                        @click="$emit('cancelRequest')"
+                    <AppButton
                         v-if="canRequest"
+                        variant="danger"
+                        block
                         :disabled="sendingStatus"
+                        :loading="Boolean(sending && sending.requestAction)"
+                        @click="$emit('cancelRequest')"
                     >
-                        <spinner
-                            class="blue"
-                            v-if="sending && sending.requestAction"
-                        ></spinner>
-                        <span v-else>{{ $t('bajarmeViaje') }}</span>
-                    </button>
+                        {{ $t('bajarmeViaje') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
                 </template>
             </template>
-            <template v-if="expired">
-                <button class="btn btn-primary" disabled>{{ $t('finalizado') }}</button>
-            </template>
-            <router-link
+            <AppButton
                 v-if="showLiveLocationShare"
-                class="btn btn-primary live-location-share-btn"
+                class="live-location-share-btn"
+                variant="secondary"
+                block
+                icon-left="fa fa-wifi"
                 :to="{ name: 'trip_live_share', params: { id: trip.id } }"
             >
-                <i class="fa fa-wifi live-location-share-btn__icon" aria-hidden="true"></i>
                 {{ $t('compartirUbicacionTiempoReal') }}
-            </router-link>
-            <button
+            </AppButton>
+            <AppButton
                 v-if="showGroupChatButton"
-                class="btn btn-primary group-chat-btn"
-                @click="$emit('toGroupChat')"
+                class="group-chat-btn"
+                variant="secondary"
+                block
+                icon-left="fa fa-comments"
                 :disabled="sendingStatus"
+                :loading="Boolean(sending && sending.groupChatAction)"
+                @click="$emit('toGroupChat')"
             >
-                <spinner
-                    class="blue"
-                    v-if="sending && sending.groupChatAction"
-                ></spinner>
-                <template v-else>
-                    <i class="fa fa-comments" aria-hidden="true"></i>
-                    {{ $t('groupChatButton') }}
-                    <span
-                        v-if="groupChatUnreadCount > 0"
-                        class="group-chat-btn__badge"
-                    >
-                        {{ groupChatUnreadCount }}
-                    </span>
+                {{ $t('groupChatButton') }}
+                <span
+                    v-if="groupChatUnreadCount > 0"
+                    class="group-chat-btn__badge"
+                >
+                    {{ groupChatUnreadCount }}
+                </span>
+                <template #loading>
+                    <spinner class="blue"></spinner>
                 </template>
-            </button>
-            <template v-if="trip.seats_available === 0 && !trip.is_passenger">
-                <div class="carpooled-trip">{{ $t('viajeCarpooleado') }}</div>
-            </template>
+            </AppButton>
             <div
                 class="alert alert-warning"
                 role="alert"
@@ -173,18 +168,19 @@
         </div>
         <div class="buttons-container" v-if="isPassengersView && !owner">
             <template v-if="true">
-                <button
-                    class="btn btn-primary"
-                    @click="$emit('toMessages')"
+                <AppButton
                     v-if="!owner"
-                    :disabled="sendingStatus || seatRequestLimitReached"
+                    variant="primary"
+                    block
+                    :disabled="sendingStatus || (seatRequestLimitReached && canRequest)"
+                    :loading="Boolean(sending && sending.sendMessageAction)"
+                    @click="$emit('toMessages')"
                 >
-                    <spinner
-                        class="blue"
-                        v-if="sending && sending.sendMessageAction"
-                    ></spinner>
-                    <span v-else>{{ $t('enviarMensaje') }}</span>
-                </button>
+                    {{ $t('enviarMensaje') }}
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
             </template>
         </div>
     </div>
@@ -196,6 +192,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import dayjs from '../../dayjs';
 import spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
 import Transactions from '../views/transactions.vue';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
 import { shouldShowLiveLocationShare } from '../../utils/ongoingTrip.js';
@@ -207,6 +204,11 @@ export default {
         return {};
     },
     props: ['sending'],
+    components: {
+        spinner,
+        AppButton,
+        Transactions
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -240,6 +242,16 @@ export default {
         canRequest() {
             return !this.owner && !this.trip.request;
         },
+        showMessageButton() {
+            return (
+                !this.owner &&
+                !this.expired &&
+                (!this.canRequest ||
+                    !this.config.module_coordinate_by_message ||
+                    (this.config.module_coordinate_by_message &&
+                        this.isPassenger))
+            );
+        },
         seatRequestLimitReached() {
             return Boolean(this.trip && this.trip.seat_request_limit_reached);
         },
@@ -267,10 +279,6 @@ export default {
         isPassengersView() {
             return this.trip.is_passenger;
         }
-    },
-    components: {
-        spinner,
-        Transactions
     },
     methods: {
         isVoluntaryContributionSeatPrice,
@@ -324,20 +332,30 @@ export default {
 };
 </script>
 <style scoped>
-.buttons-container button:first-child {
-    margin-right: 0;
-}
-.buttons-container button {
-    margin-bottom: 0.4em;
-}
 .buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4em;
     text-align: center;
     margin-top: 1em;
     padding-bottom: 2rem;
 }
-.live-location-share-btn__icon {
+.buttons-container .app-button,
+.buttons-container .btn {
+    width: 100%;
+    box-sizing: border-box;
+}
+.live-location-share-btn :deep(.app-button__icon--left) {
     transform: rotate(90deg);
-    margin-right: 0.35rem;
+}
+.live-location-share-btn :deep(.app-button__label) {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+}
+.group-chat-btn {
+    text-transform: none;
 }
 .group-chat-btn__badge {
     display: inline-block;
@@ -352,9 +370,6 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
-    .buttons-container button:first-child {
-        margin-right: 1em;
-    }
     .buttons-container {
         margin-top: 1.5em;
     }

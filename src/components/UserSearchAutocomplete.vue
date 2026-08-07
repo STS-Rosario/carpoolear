@@ -4,7 +4,7 @@
             ref="inputRef"
             v-model.trim="inputText"
             type="text"
-            class="form-control"
+            class="app-input__control"
             :class="inputClass"
             :disabled="disabled"
             :placeholder="placeholder"

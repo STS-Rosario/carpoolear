@@ -12,6 +12,12 @@ describe('Trips.vue app banner', () => {
         expect(viewSource).toContain('v-if="showAppBanner"');
     });
 
+    it('does not pull the account verification banner under the fixed header', () => {
+        expect(viewSource).not.toMatch(
+            /\.banner\s*\{[^}]*margin:\s*-1em/
+        );
+    });
+
     it('resolves banner image URL for Capacitor bundled host', () => {
         expect(viewSource).toContain('bannerImageSrc');
         expect(viewSource).toContain('resolveCapacitorBundledHostUrl');
@@ -66,6 +72,17 @@ describe('Trips.vue ongoing trip card', () => {
     });
 });
 
+describe('Trips.vue incomplete trip draft card', () => {
+    it('shows trip creation draft card for logged-in users', () => {
+        expect(viewSource).toContain('TripCreationDraftCard');
+        expect(viewSource).toContain('ref="tripCreationDraftCard"');
+        expect(viewSource).toContain('refreshTripCreationDraftCard');
+        expect(viewSource).toMatch(
+            /OngoingTripCard[\s\S]*TripCreationDraftCard[\s\S]*PendingFriendRequestsCard/
+        );
+    });
+});
+
 describe('Trips.vue pending friend invitations card', () => {
     it('shows pending friend requests card linking to friends settings', () => {
         expect(viewSource).toContain('PendingFriendRequestsCard');
@@ -113,18 +130,35 @@ describe('Trips.vue friend-first trip sections', () => {
     it('splits logged-in trip list into friend and other sections', () => {
         expect(viewSource).toContain('splitFriendTrips');
         expect(viewSource).toContain("$t('viajesDeMisAmigos')");
-        expect(viewSource).toContain("$t('otrosViajes')");
+        expect(viewSource).toContain("$t('viajesPublicados')");
+        expect(viewSource).not.toContain("$t('otrosViajes')");
         expect(viewSource).toContain('friendTripsList');
         expect(viewSource).toContain('otherTripsList');
     });
 
     it('renders section headings as block elements above trip rows', () => {
-        expect(viewSource).toContain('class="trips-section"');
-        expect(viewSource).toContain('class="trips-section-heading"');
-        expect(viewSource).toContain('class="trips-section__list row"');
         expect(viewSource).toMatch(
             /<section[\s\S]*?trips-section-heading[\s\S]*?trips-section__list row/s
         );
+    });
+
+    it('left-aligns trip lists with fewer than 4 cards, otherwise space-between', () => {
+        expect(viewSource).toMatch(
+            /trips-section__list--start['"]?\s*:\s*friendTripsList\.length\s*<\s*4/
+        );
+        expect(viewSource).toMatch(
+            /trips-section__list--start['"]?\s*:\s*otherTripsList\.length\s*<\s*4/
+        );
+        expect(viewSource).toMatch(
+            /trips-section__list--start['"]?\s*:\s*exactTrips\.length\s*<\s*4/
+        );
+    });
+
+    it('hides the mobile Viajes publicados heading above the donation card', () => {
+        expect(viewSource).toMatch(
+            /v-if="isMobile && !lookSearch && !showSplitDonationPanel"/
+        );
+        expect(viewSource).toContain('trips-mobile-home__heading');
     });
 
     it('shows the donation banner before friend and other sections', () => {
@@ -134,14 +168,22 @@ describe('Trips.vue friend-first trip sections', () => {
             /showSplitDonationPanel[\s\S]*?showFriendTripSections[\s\S]*?viajesDeMisAmigos/s
         );
         expect(viewSource).not.toMatch(
-            /friendTripsList[\s\S]*?panel-donar[\s\S]*?otrosViajes/s
+            /friendTripsList[\s\S]*?panel-donar[\s\S]*?viajesPublicados/s
         );
+    });
+
+    it('renders the logged-out donation panel full-width so trip cards do not wrap beside it', () => {
+        const loggedOutDonation = viewSource.match(
+            /isDonationTime\(\)[\s\S]*?<div\s+class="panel panel-default panel-donar"/
+        )?.[0];
+        expect(loggedOutDonation).toBeTruthy();
+        expect(loggedOutDonation).toContain('class="col-xs-24"');
     });
 
     it('hides section headings when there are no friend trips', () => {
         expect(viewSource).toContain('showFriendTripSections');
         expect(viewSource).toMatch(
-            /v-if="showFriendTripSections"[\s\S]*?viajesDeMisAmigos[\s\S]*?otrosViajes/s
+            /v-if="showFriendTripSections"[\s\S]*?viajesDeMisAmigos[\s\S]*?viajesPublicados/s
         );
 
         const flatTripsListBlock = viewSource.match(
@@ -151,6 +193,7 @@ describe('Trips.vue friend-first trip sections', () => {
         expect(flatTripsListBlock).toBeTruthy();
         expect(flatTripsListBlock).not.toContain('trips-section-heading');
         expect(flatTripsListBlock).not.toContain("$t('viajesDeMisAmigos')");
+        expect(flatTripsListBlock).not.toContain("$t('viajesPublicados')");
         expect(flatTripsListBlock).not.toContain("$t('otrosViajes')");
     });
 });
@@ -193,11 +236,20 @@ describe('Trips.vue persisted search state', () => {
         expect(viewSource).toContain('readAllowPreferenceParamsFromQuery');
         expect(viewSource).toContain("from '../../utils/searchAdvancedFilters.js'");
     });
+
+    it('restores from_date and to_date from the route query', () => {
+        expect(viewSource).toContain(
+            "const textFields = ['origin_name', 'destination_name', 'date', 'from_date', 'to_date']"
+        );
+    });
 });
 
 describe('Trips.vue donation modal', () => {
     it('uses shared donation picker and Mercado Pago helpers', () => {
         expect(viewSource).toContain('DonationAmountPicker');
+        expect(viewSource).toMatch(
+            /components:\s*\{[^}]*DonationAmountPicker/s
+        );
         expect(viewSource).toContain('getDonationOnceUrl');
         expect(viewSource).toContain('getDonationMonthlyUrl');
         expect(viewSource).not.toContain('value="2000"');
@@ -205,55 +257,34 @@ describe('Trips.vue donation modal', () => {
     });
 });
 
-describe('Trips.vue nearby results header', () => {
-    it('delegates complementary header visibility to shouldShowNearbyResultsHeader', () => {
-        expect(viewSource).toContain(
-            "from '../../utils/nearbyTripResults.js'"
+describe('Trips.vue search alert and install modal CTAs', () => {
+    it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
+        const installModal = viewSource.match(
+            /showModalInstallApp[\s\S]*?<\/modal>/
+        )?.[0];
+        expect(installModal).toBeTruthy();
+        expect(installModal).toMatch(
+            /variant="primary"[\s\S]*?\$t\('instalar'\)/
         );
-        expect(viewSource).toContain('shouldShowNearbyResultsHeader');
-        const methodBlock = viewSource.match(
-            /isComplementary\([^)]*\)\s*\{[\s\S]*?\n\s*\},/
+        expect(installModal).toMatch(
+            /variant="secondary"[\s\S]*?\$t\('entendido'\)/
         );
-        expect(methodBlock).not.toBeNull();
-        expect(methodBlock[0]).toContain('shouldShowNearbyResultsHeader');
-        expect(methodBlock[0]).toContain('previousTrips');
-    });
-
-    it('passes each section trip list so only the first nearby trip shows the header', () => {
-        expect(viewSource).toContain(
-            'isComplementary(trip, searchParams, friendTripsList, index)'
-        );
-        expect(viewSource).toContain(
-            'isComplementary(trip, searchParams, otherTripsList, index)'
-        );
-        expect(viewSource).toMatch(
-            /isComplementary\(\s*trip,\s*searchParams,\s*trips,\s*index\s*\)/
+        expect(installModal).toMatch(
+            /variant="tertiary"[\s\S]*?\$t\('noMostrarDeNuevo'\)/
         );
     });
+});
 
-    it('shows a description under the nearby results heading', () => {
-        const complementaryBlocks = [
-            ...viewSource.matchAll(
-                /class="trip-complementary"[\s\S]*?<\/div>/g
-            )
-        ].map((match) => match[0]);
-
-        expect(complementaryBlocks.length).toBeGreaterThan(0);
-        complementaryBlocks.forEach((block) => {
-            expect(block).toContain("$t('resultadosCercanos')");
-            expect(block).toContain("$t('resultadosCercanosDescripcion')");
-        });
-    });
-
-    it('styles the nearby heading without bottom margin and a smaller spaced description', () => {
-        expect(viewSource).toMatch(
-            /\.trip-complementary h2\s*\{[^}]*margin-bottom:\s*0;/
-        );
-        expect(viewSource).toMatch(
-            /\.trip-complementary p\s*\{[^}]*font-size:\s*1\.2rem;/
-        );
-        expect(viewSource).toMatch(
-            /\.trip-complementary p\s*\{[^}]*margin:[^}]*0\.75rem;/
-        );
+describe('Trips.vue empty search and nearby section', () => {
+    it('shows loupe empty state and reuses nearby trips without refetch', () => {
+        expect(viewSource).toContain('loupe-car.svg');
+        expect(viewSource).toContain("$t('searchNoResultsTitle')");
+        expect(viewSource).toContain("$t('searchSeeNearbyTrips')");
+        expect(viewSource).toContain("$t('viajesCercanos')");
+        expect(viewSource).toContain('splitTripsBySearchDate');
+        expect(viewSource).toContain('showNearbyTrips');
+        expect(viewSource).toContain('nearbyTrips');
+        expect(viewSource).toContain('exactTrips');
+        expect(viewSource).not.toContain('isComplementary(');
     });
 });

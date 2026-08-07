@@ -10,12 +10,14 @@ const headerPath = path.resolve(__dirname, 'HeaderApp.vue');
 const headerSource = fs.readFileSync(headerPath, 'utf8');
 
 describe('PendingRatingsBanner', () => {
-    it('exists and uses warning styling with i18n banner text', () => {
+    it('uses cream prompt-banner styling with i18n banner text', () => {
         const bannerSource = fs.readFileSync(bannerPath, 'utf8');
         expect(bannerSource).toContain('pending-ratings-banner');
+        expect(bannerSource).toContain('home-prompt-banner');
         expect(bannerSource).toContain("$t('pendingRatingsBanner')");
         expect(bannerSource).toContain("name: 'my-trips'");
         expect(bannerSource).not.toContain('#c00');
+        expect(bannerSource).not.toContain('#f0ad4e');
     });
 });
 

@@ -1,76 +1,91 @@
 <template>
-    <div class="user-form container">
-        <router-link v-if="!isMobile" :to="{ name: 'trips' }">
-            <img :src="carpoolear_logo" />
-        </router-link>
-        <h1 v-if="tripCardTheme !== 'light'">
-            {{ $t('recuperarContraseña') }}
-        </h1>
-        <div class="form row" v-if="send">
-            <h3>
-                {{ $t('seHaEnviadoEmailIndicacionesRestablecerContrasena') }}
-            </h3>
-        </div>
-        <div class="form row message" v-else-if="!token">
-            <h1 v-if="tripCardTheme === 'light'">
-                {{ $t('recuperarContraseña') }}
-            </h1>
-            <label for="txt_email">{{ $t('email') }}</label>
-            <input
-                v-jump
-                type="email"
-                id="txt_email"
-                name="email"
-                autocomplete="username"
-                autocapitalize="none"
-                autocorrect="off"
-                spellcheck="false"
-                inputmode="email"
-                v-model="email"
-            />
-            <span class="error" v-if="error">{{ error }}</span>
-            <button
-                v-jump
-                class="btn btn-primary btn-shadowed-black btn-outline"
-                @click="reset"
-                :disabled="loading"
-            >
-                <span v-if="!loading">{{ $t('recuperarContraseña') }}</span>
-                <spinner class="blue" v-if="loading"></spinner>
-            </button>
-        </div>
-        <div class="form row" v-else-if="token">
-            <label for="txt_password">{{ $t('password') }}</label>
-            <input
-                v-jump
-                type="password"
-                id="txt_password"
-                name="password"
-                autocomplete="new-password"
-                v-model="password"
-            />
-            <label for="txt_password_confirmation">{{
-                $t('repetirContrasena')
-            }}</label>
-            <input
-                v-jump
-                type="password"
-                id="txt_password_confirmation"
-                name="password_confirmation"
-                autocomplete="new-password"
-                v-model="password_confirmation"
-            />
-            <span class="error" v-if="error">{{ error }}</span>
-            <button
-                v-jump
-                class="btn btn-primary"
-                @click="change"
-                :disabled="loading"
-            >
-                <span v-if="!loading">{{ $t('cambiarPassword') }}</span>
-                <spinner class="blue" v-if="loading"></spinner>
-            </button>
-        </div>
+    <div
+        class="user-form user-form--inputs user-form--reset-password container"
+        :class="{ 'user-form--reset-password-mobile': isMobile }"
+    >
+        <AppAuthPage>
+            <div class="form row reset-form" v-if="send">
+                <AppPageTitle>{{ $t('recuperarContraseña') }}</AppPageTitle>
+                <p class="reset-form__success-message">
+                    {{ $t('seHaEnviadoEmailIndicacionesRestablecerContrasena') }}
+                </p>
+            </div>
+            <div class="form row reset-form" v-else-if="!token">
+                <AppPageTitle>{{ $t('recuperarContraseña') }}</AppPageTitle>
+                <AppInput
+                    v-jump
+                    ref="txt_email"
+                    :label="$t('email')"
+                    v-model="email"
+                    type="email"
+                    id="txt_email"
+                    name="email"
+                    :placeholder="$t('loginUsuarioPlaceholder')"
+                    autocomplete="username"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    inputmode="email"
+                    :error="error || ''"
+                />
+                <AppButton
+                    v-jump
+                    variant="primary"
+                    block
+                    class="reset-form__submit"
+                    :loading="loading"
+                    :label="$t('recuperarContraseña')"
+                    @click="reset"
+                >
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
+            </div>
+            <div class="form row reset-form" v-else>
+                <AppPageTitle>{{ $t('cambiarPassword') }}</AppPageTitle>
+                <AppInput
+                    v-jump
+                    ref="txt_password"
+                    :label="$t('password')"
+                    v-model="password"
+                    password
+                    id="txt_password"
+                    name="password"
+                    :placeholder="$t('loginPasswordPlaceholder')"
+                    autocomplete="new-password"
+                    :show-password-label="$t('mostrarContrasena')"
+                    :hide-password-label="$t('ocultarContrasena')"
+                />
+                <AppInput
+                    v-jump
+                    ref="txt_password_confirmation"
+                    :label="$t('repetirContrasena')"
+                    v-model="password_confirmation"
+                    password
+                    id="txt_password_confirmation"
+                    name="password_confirmation"
+                    :placeholder="$t('loginPasswordPlaceholder')"
+                    autocomplete="new-password"
+                    :show-password-label="$t('mostrarContrasena')"
+                    :hide-password-label="$t('ocultarContrasena')"
+                    :error="error || ''"
+                />
+                <AppButton
+                    v-jump
+                    variant="primary"
+                    block
+                    class="reset-form__submit"
+                    :loading="loading"
+                    :label="$t('cambiarPassword')"
+                    @click="change"
+                >
+                    <template #loading>
+                        <spinner class="blue"></spinner>
+                    </template>
+                </AppButton>
+            </div>
+        </AppAuthPage>
     </div>
 </template>
 
@@ -78,9 +93,12 @@
 import { mapState, mapActions } from 'pinia';
 import { useDeviceStore } from '../../stores/device';
 import { useAuthStore } from '../../stores/auth';
-import bus from '../../services/bus-event';
-import router from '../../router';
 import Spinner from '../Spinner.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppPageTitle from '../ui/AppPageTitle.vue';
+import AppAuthPage from '../ui/AppAuthPage.vue';
+
 let emailRegex =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
@@ -100,23 +118,24 @@ export default {
             error: null,
             send: false,
             password_confirmation: '',
-            password: '',
-            carpoolear_logo:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_logo.png'
+            password: ''
         };
     },
     computed: {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
-        }),
-        ...mapState(useAuthStore, {
-            settings: 'appConfig'
-        }),
-        tripCardTheme() {
-            return this.settings ? this.settings.trip_card_design : '';
+        })
+    },
+
+    watch: {
+        email() {
+            this.error = null;
+        },
+        password() {
+            this.error = null;
+        },
+        password_confirmation() {
+            this.error = null;
         }
     },
 
@@ -166,22 +185,15 @@ export default {
             } else {
                 this.error = this.$t('noCoincidenCampos');
             }
-        },
-        onBackClick() {
-            router.back();
         }
     },
 
-    mounted() {
-        bus.on('back-click', this.onBackClick);
-    },
-
-    beforeUnmount() {
-        bus.off('back-click', this.onBackClick);
-    },
-
     components: {
-        Spinner
+        Spinner,
+        AppInput,
+        AppButton,
+        AppPageTitle,
+        AppAuthPage
     }
 };
 </script>
@@ -189,36 +201,5 @@ export default {
 <style>
 .app-container {
     min-height: 100vh;
-}
-</style>
-
-<style scoped>
-h3 {
-    margin-bottom: 2em;
-    font-size: 18px;
-}
-label {
-    display: block;
-    margin-top: 0.3em;
-    margin-bottom: 0.6em;
-}
-input {
-    margin-bottom: 0.8em;
-}
-loading {
-    margin-left: 1em;
-}
-.message > span {
-    vertical-align: -0.6em;
-    color: red;
-    margin-left: 2em;
-}
-h3 {
-    color: #fff;
-}
-@media only screen and (min-width: 768px) {
-    h3 {
-        color: #036686;
-    }
 }
 </style>

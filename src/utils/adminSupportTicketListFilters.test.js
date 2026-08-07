@@ -12,6 +12,8 @@ describe('adminSupportTicketListFilters', () => {
                 type: 'bug_report',
                 priority: 'high',
                 needsReply: true,
+                open: true,
+                createdByAdmin: true,
                 userId: 42,
                 page: 2,
                 perPage: 50
@@ -20,6 +22,8 @@ describe('adminSupportTicketListFilters', () => {
             type: 'bug_report',
             priority: 'high',
             needs_reply: '1',
+            open: '1',
+            created_by_admin: '1',
             user_id: '42',
             page: 2,
             per_page: 50
@@ -28,7 +32,15 @@ describe('adminSupportTicketListFilters', () => {
 
     it('buildAdminSupportTicketListParams omits empty filter values', () => {
         expect(buildAdminSupportTicketListParams({})).toEqual({});
-        expect(buildAdminSupportTicketListParams({ type: '', priority: '', needsReply: false })).toEqual({});
+        expect(
+            buildAdminSupportTicketListParams({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: false
+            })
+        ).toEqual({});
     });
 
     it('parseAdminSupportTicketListFiltersFromRoute reads route query', () => {
@@ -37,6 +49,8 @@ describe('adminSupportTicketListFilters', () => {
                 type: 'contact',
                 priority: 'low',
                 needs_reply: '1',
+                open: '1',
+                created_by_admin: '1',
                 user_id: '99',
                 page: '3',
                 per_page: '30'
@@ -45,6 +59,8 @@ describe('adminSupportTicketListFilters', () => {
             type: 'contact',
             priority: 'low',
             needsReply: true,
+            open: true,
+            createdByAdmin: true,
             userId: 99,
             page: 3,
             perPage: 30
@@ -52,12 +68,41 @@ describe('adminSupportTicketListFilters', () => {
     });
 
     it('filtersAreActive is true when userId filter is set', () => {
-        expect(filtersAreActive({ type: '', priority: '', needsReply: false, userId: 5 })).toBe(true);
+        expect(
+            filtersAreActive({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: false,
+                userId: 5
+            })
+        ).toBe(true);
     });
 
     it('filtersAreActive is true when any filter is set', () => {
         expect(filtersAreActive({ type: 'feedback', priority: '', needsReply: false })).toBe(true);
         expect(filtersAreActive({ type: '', priority: '', needsReply: true })).toBe(true);
-        expect(filtersAreActive({ type: '', priority: '', needsReply: false })).toBe(false);
+        expect(filtersAreActive({ type: '', priority: '', needsReply: false, open: true })).toBe(
+            true
+        );
+        expect(
+            filtersAreActive({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: true
+            })
+        ).toBe(true);
+        expect(
+            filtersAreActive({
+                type: '',
+                priority: '',
+                needsReply: false,
+                open: false,
+                createdByAdmin: false
+            })
+        ).toBe(false);
     });
 });

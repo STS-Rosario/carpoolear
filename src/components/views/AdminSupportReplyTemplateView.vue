@@ -13,9 +13,12 @@
         <hr />
         <div class="template-body-html" v-html="markdownToHtml(row.body_markdown || '')"></div>
         <p class="mtop-10">
-            <router-link class="btn btn-default" :to="{ name: 'admin-support-reply-template-edit', params: { templateId: row.id } }">
+            <AppButton
+                variant="secondary"
+                :to="{ name: 'admin-support-reply-template-edit', params: { templateId: row.id } }"
+            >
                 {{ $t('accionEditar') }}
-            </router-link>
+            </AppButton>
         </p>
     </AdminLayout>
     <AdminLayout v-else-if="error">
@@ -30,6 +33,7 @@
 <script>
 import { mapActions } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import { markdownToHtml } from '../../services/markdown';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dayjs from '../../dayjs';
@@ -83,7 +87,8 @@ export default {
         this.load();
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AppButton
     }
 };
 </script>

@@ -15,7 +15,7 @@
                 <div class="form-group">
                     <label>{{ $t('usuario') }}</label>
                     <p
-                        class="form-control-static selected-user-value"
+                        class="selected-user-value"
                         v-if="selectedUser && selectedUser.id"
                     >
                         {{ selectedUser.id }} - {{ selectedUser.name || '' }}
@@ -23,9 +23,12 @@
                     <p class="text-danger" v-else>{{ $t('errorDatos') }}</p>
                 </div>
 
-                <div class="form-group">
-                    <label>{{ $t('categoriaTicket') }}</label>
-                    <select v-model="createForm.type" class="form-control">
+                <AppField :label="$t('categoriaTicket')" label-for="admin-support-ticket-new-type">
+                    <select
+                        id="admin-support-ticket-new-type"
+                        v-model="createForm.type"
+                        class="admin-support-ticket-new__type-select"
+                    >
                         <option value="account_recovery">{{ $t('ticketTypeAccountRecovery') }}</option>
                         <option value="account_verification">{{ $t('ticketTypeAccountVerification') }}</option>
                         <option value="bug_report">{{ $t('ticketTypeBug') }}</option>
@@ -33,18 +36,16 @@
                         <option value="feedback">{{ $t('ticketTypeSuggestion') }}</option>
                         <option value="report">{{ $t('ticketTypeReport') }}</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label>{{ $t('asuntoTicket') }}</label>
-                    <input v-model="createForm.subject" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>{{ $t('mensajeTicket') }}</label>
-                    <textarea v-model="createForm.message_markdown" class="form-control" rows="4"></textarea>
-                </div>
-                <button class="btn btn-primary" :disabled="createDisabled" @click="createTicket">
+                </AppField>
+                <AppInput v-model="createForm.subject" :label="$t('asuntoTicket')" />
+                <AppTextarea
+                    v-model="createForm.message_markdown"
+                    :label="$t('mensajeTicket')"
+                    :rows="4"
+                />
+                <AppButton variant="primary" :disabled="createDisabled" @click="createTicket">
                     {{ creating ? $t('guardando') : $t('crearTicket') }}
-                </button>
+                </AppButton>
             </div>
         </div>
     </AdminLayout>
@@ -54,6 +55,10 @@
 import { mapActions } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs';
 
@@ -153,7 +158,11 @@ export default {
     },
     components: {
         AdminLayout,
-        UserSearchAutocomplete
+        UserSearchAutocomplete,
+        AppButton,
+        AppField,
+        AppInput,
+        AppTextarea
     }
 };
 </script>
@@ -161,5 +170,24 @@ export default {
 <style scoped>
 .selected-user-value {
     margin-top: 0;
+}
+
+.admin-support-ticket-new__type-select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-support-ticket-new__type-select:focus {
+    outline: none;
 }
 </style>

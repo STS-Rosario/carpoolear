@@ -40,8 +40,9 @@ test.describe('Trips search page', () => {
     await page.goto('/trips');
     await waitForPageReady(page);
 
-    const alert = page.locator('.alert.alert-warning');
-    await expect(alert.first()).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByText(/¡ups! no se han creado ningún viaje/i)
+    ).toBeVisible({ timeout: 10000 });
   });
 
   test('renders a single trip card when there is 1 trip', async ({ page }) => {
@@ -65,7 +66,7 @@ test.describe('Trips search page', () => {
     await expect(page.getByText('Buenos Aires').first()).toBeVisible();
 
     // No "loading more" indicator (single page)
-    await expect(page.locator('.more-trips-loading')).not.toBeVisible();
+    await expect(page.getByText(/cargando más resultados/i)).not.toBeVisible();
   });
 
   test('renders many trips when paginated (total_pages > 1)', async ({ page }) => {
@@ -104,7 +105,7 @@ test.describe('Trips search page', () => {
     await expect(page.getByText('Ana Fernández')).toBeVisible();
   });
 
-  test('full trip shows .trip-fill class when seats_available is 0', async ({ page }) => {
+  test('full trip shows Carpooleado when seats_available is 0', async ({ page }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
@@ -120,7 +121,8 @@ test.describe('Trips search page', () => {
     await page.goto('/trips');
     await waitForPageReady(page);
 
-    const tripFill = page.locator('.trip-fill');
-    await expect(tripFill).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Carpooleado', { exact: true })).toBeVisible({
+      timeout: 10000,
+    });
   });
 });

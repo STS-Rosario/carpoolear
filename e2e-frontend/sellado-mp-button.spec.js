@@ -26,11 +26,12 @@ async function mockMercadoPagoSDK(page) {
           return new Promise(function (resolve) {
             var container = document.getElementById(containerId);
             if (!container) { resolve(); return; }
-            var btn = document.createElement('div');
+            var btn = document.createElement('button');
+            btn.type = 'button';
             btn.className = 'mock-mp-wallet-button';
             btn.setAttribute('data-preference-id', opts.initialization.preferenceId);
             btn.textContent = 'Pagar con Mercado Pago';
-            btn.style.cssText = 'background:#009ee3;color:#fff;padding:12px;text-align:center;border-radius:4px;cursor:pointer;';
+            btn.style.cssText = 'background:#009ee3;color:#fff;padding:12px;text-align:center;border-radius:4px;cursor:pointer;border:0;width:100%;';
             container.appendChild(btn);
             resolve({ unmount: function () {} });
           });
@@ -157,18 +158,14 @@ test.describe('Sellado - MercadoPago wallet button', () => {
     await waitForPageReady(page);
 
     // 3. Verify the sellado banner is visible with correct text
-    const banner = page.locator('.alert-sellado-viaje');
-    await expect(banner).toBeVisible({ timeout: 15000 });
-    await expect(banner).toContainText('Sellado de Viaje');
+    await expect(page.getByText(/sellado de viaje/i).first()).toBeVisible({
+      timeout: 15000,
+    });
 
-    // 4. Verify the walletBrick_container exists inside the banner
-    const container = page.locator('#walletBrick_container');
-    await expect(container).toBeAttached({ timeout: 5000 });
-
-    // 5. Verify the mock MP wallet button rendered (component calls enablePayment automatically)
-    const mpButton = page.locator('#walletBrick_container .mock-mp-wallet-button').first();
-    await expect(mpButton).toBeVisible({ timeout: 10000 });
-    await expect(mpButton).toHaveText('Pagar con Mercado Pago');
+    // 4. Verify the Mercado Pago pay action rendered
+    await expect(
+      page.getByRole('button', { name: /pagar con mercado pago/i })
+    ).toBeVisible({ timeout: 10000 });
   });
 
   test('does NOT show the sellado banner on a normal active trip', async ({ page }) => {
@@ -201,12 +198,11 @@ test.describe('Sellado - MercadoPago wallet button', () => {
     // Wait for trip to load
     await expect(page.getByText('Test trip for sellado MP button')).toBeVisible({ timeout: 15000 });
 
-    // The sellado banner should NOT be visible
-    const banner = page.locator('.alert-sellado-viaje');
-    await expect(banner).not.toBeVisible({ timeout: 5000 });
-
-    // The MP button should not exist
-    const mpButton = page.locator('.mock-mp-wallet-button');
-    await expect(mpButton).toHaveCount(0);
+    await expect(page.getByText(/sellado de viaje/i)).not.toBeVisible({
+      timeout: 5000,
+    });
+    await expect(
+      page.getByRole('button', { name: /pagar con mercado pago/i })
+    ).toHaveCount(0);
   });
 });

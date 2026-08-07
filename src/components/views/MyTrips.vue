@@ -139,8 +139,8 @@
                 <template #title><h2>{{ $t('suscripcionesViajes') }}</h2></template>
                 <div class="trips-list row">
                     <div
-                        class="col-xs-24 col-md-12"
-                        v-for="subs in subscriptions"
+                        class="col-xs-24"
+                        v-for="subs in sortedSubscriptions"
                         v-bind:key="subs.id"
                         :key="subs.id"
                     >
@@ -237,6 +237,7 @@ import Tab from '../elements/Tab';
 import bus from '../../services/bus-event.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { shouldPromptDonationAfterRating } from '../../utils/donationAfterRating.js';
+import { sortSubscriptions } from '../../utils/sortSubscriptions.js';
 
 export default {
     name: 'my-trips',
@@ -282,7 +283,10 @@ export default {
         }),
         ...mapState(useSubscriptionsStore, {
             subscriptions: 'subscriptions'
-        })
+        }),
+        sortedSubscriptions() {
+            return sortSubscriptions(this.subscriptions);
+        }
     },
 
     methods: {
@@ -389,5 +393,10 @@ export default {
 <style scoped>
 h2 {
     font-weight: 300;
+    margin-top: 0;
+}
+
+.request-list {
+    margin-top: 0;
 }
 </style>

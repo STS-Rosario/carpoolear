@@ -1,0 +1,326 @@
+.app-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ds-button-gap);
+    border-radius: var(--ds-radius-button);
+    border: var(--ds-button-border-width) solid transparent;
+    font-family: inherit;
+    font-weight: var(--ds-button-font-weight);
+    line-height: var(--ds-button-line-height);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+a.app-button,
+a.app-button:hover,
+a.app-button:focus,
+a.app-button:active,
+a.app-button:visited,
+.app-button:hover,
+.app-button:focus,
+.app-button:active,
+.app-button:visited {
+    text-decoration: none;
+}
+
+.app-button:focus {
+    outline: none;
+}
+
+.app-button:focus-visible {
+    box-shadow: var(--ds-focus-ring);
+}
+
+.app-button:disabled,
+.app-button[aria-disabled='true'] {
+    cursor: not-allowed;
+}
+
+.app-button--sm {
+    font-size: var(--ds-button-font-size-sm);
+    padding: var(--ds-button-padding-y-sm) var(--ds-button-padding-x-sm);
+}
+
+.app-button--md {
+    font-size: var(--ds-button-font-size-md);
+    padding: var(--ds-button-padding-y-md) var(--ds-button-padding-x-md);
+}
+
+.app-button--lg {
+    font-size: var(--ds-button-font-size-lg);
+    padding: var(--ds-button-padding-y-lg) var(--ds-button-padding-x-lg);
+}
+
+.app-button--block {
+    width: 100%;
+}
+
+.app-button--primary {
+    background: var(--ds-action);
+    border-color: var(--ds-action);
+    color: var(--ds-action-on);
+}
+
+.app-button--primary:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-action-hover);
+    border-color: var(--ds-action-hover);
+    color: var(--ds-action-on);
+}
+
+.app-button--primary:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-action-active);
+    border-color: var(--ds-action-active);
+}
+
+.app-button--primary:disabled,
+.app-button--primary[aria-disabled='true'] {
+    background: var(--ds-button-disabled-bg);
+    border-color: var(--ds-button-disabled-bg);
+    color: var(--ds-button-disabled-text);
+}
+
+.app-button--secondary {
+    background: var(--ds-neutral-bg);
+    border-color: var(--ds-action-border);
+    color: var(--ds-action-text);
+}
+
+.app-button--secondary:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-action-bg);
+    border-color: var(--ds-action-border);
+    color: var(--ds-action-text);
+}
+
+.app-button--secondary:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-info-bg);
+    border-color: var(--ds-action-hover);
+    color: var(--ds-action-hover);
+}
+
+.app-button--secondary:disabled,
+.app-button--secondary[aria-disabled='true'] {
+    background: var(--ds-neutral-bg);
+    border-color: var(--ds-button-disabled-border);
+    color: var(--ds-text-muted);
+}
+
+.app-button--tertiary {
+    background: transparent;
+    border-color: transparent;
+    color: var(--ds-action-text);
+}
+
+.app-button--tertiary:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-action-bg);
+    color: var(--ds-action-hover);
+}
+
+.app-button--tertiary:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-info-bg);
+    color: var(--ds-action-active);
+}
+
+.app-button--tertiary:disabled,
+.app-button--tertiary[aria-disabled='true'] {
+    background: transparent;
+    color: var(--ds-text-muted);
+}
+
+.app-button--tertiary-destructive {
+    color: var(--ds-destructive);
+}
+
+.app-button--tertiary-destructive:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-error-bg);
+    color: var(--ds-error-text);
+}
+
+.app-button--danger {
+    background: var(--ds-error-solid);
+    border-color: var(--ds-error-solid);
+    color: var(--ds-action-on);
+}
+
+.app-button--danger:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-destructive);
+    border-color: var(--ds-destructive);
+}
+
+.app-button--danger:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-error-text);
+    border-color: var(--ds-error-text);
+}
+
+.app-button--danger:disabled,
+.app-button--danger[aria-disabled='true'] {
+    background: var(--ds-button-disabled-bg);
+    border-color: var(--ds-button-disabled-bg);
+    color: var(--ds-button-disabled-text);
+}
+
+.app-button--success {
+    background: var(--ds-success-solid);
+    border-color: var(--ds-success-solid);
+    color: var(--ds-action-on);
+}
+
+.app-button--success:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-success-text);
+    border-color: var(--ds-success-text);
+}
+
+.app-button--warning {
+    background: var(--ds-warning-solid);
+    border-color: var(--ds-warning-solid);
+    color: var(--ds-action-on);
+}
+
+.app-button--warning:hover:not(:disabled):not([aria-disabled='true']) {
+    color: var(--ds-action-on);
+    filter: brightness(0.92);
+}
+
+.app-button--icon-only {
+    padding: 0;
+}
+
+.app-button--icon-only.app-button--sm {
+    width: var(--ds-button-icon-only-sm);
+    height: var(--ds-button-icon-only-sm);
+}
+
+.app-button--icon-only.app-button--md {
+    width: var(--ds-button-icon-only-md);
+    height: var(--ds-button-icon-only-md);
+}
+
+.app-button--icon-only.app-button--lg {
+    width: var(--ds-button-icon-only-lg);
+    height: var(--ds-button-icon-only-lg);
+}
+
+.app-button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    float: none;
+    width: auto;
+    color: inherit;
+}
+
+.app-button .app-button__icon > .fa,
+.app-button .app-button__icon .fa {
+    float: none;
+    width: auto;
+    color: inherit;
+    font-size: 1em;
+    line-height: 1;
+}
+
+.app-button__label {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.app-button__unread {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--ds-brand);
+    flex-shrink: 0;
+}
+
+.app-button__spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-button--loading {
+    position: relative;
+}
+
+.app-button--loading .app-button__label,
+.app-button--loading .app-button__icon,
+.app-button--loading .app-button__unread {
+    visibility: hidden;
+}
+
+.app-button--loading .app-button__spinner {
+    position: absolute;
+    inset: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+.app-button--header-create {
+    background: var(--ds-header-create-bg);
+    border-color: var(--ds-header-create-bg);
+    color: var(--ds-header-create-text);
+}
+
+.app-button--header-create:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-create-hover-bg);
+    border-color: var(--ds-header-create-hover-bg);
+    color: var(--ds-header-create-text);
+}
+
+.app-button--header-create:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-info-bg);
+    border-color: var(--ds-info-bg);
+    color: var(--ds-action-hover);
+}
+
+.app-button--header-outline {
+    background: var(--ds-header-outline-bg);
+    border-color: var(--ds-header-outline-border);
+    color: var(--ds-header-outline-text);
+}
+
+.app-button--header-outline:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-outline-hover-bg);
+    border-color: var(--ds-header-outline-hover-border);
+    color: var(--ds-header-outline-text);
+}
+
+.app-button--header-outline:active:not(:disabled):not([aria-disabled='true']) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--ds-header-outline-border);
+    color: var(--ds-header-outline-text);
+}
+
+.app-button--header-donate {
+    background: var(--ds-header-donate-bg);
+    border-color: var(--ds-header-donate-border);
+    color: var(--ds-action-on);
+}
+
+.app-button--header-donate:hover:not(:disabled):not([aria-disabled='true']) {
+    background: var(--ds-header-donate-hover-bg);
+    border-color: var(--ds-header-donate-hover-border);
+    color: var(--ds-action-on);
+}
+
+.app-button--header-donate:active:not(:disabled):not([aria-disabled='true']) {
+    background: #398439;
+    border-color: #398439;
+    color: var(--ds-action-on);
+}
+
+.app-button__gift-icon {
+    width: 1rem;
+    height: 1rem;
+    display: block;
+}

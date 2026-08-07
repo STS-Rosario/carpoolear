@@ -55,10 +55,10 @@ const initializeCapacitorPlugins = async () => {
         return;
     }
 
-    // Configure StatusBar to fix overlay issues
+    // Configure StatusBar so the branded header paints under the notch once.
     await StatusBar.setStyle({ style: Style.Light });
-    await StatusBar.setBackgroundColor({ color: '#ffffff' });
-    await StatusBar.setOverlaysWebView({ overlay: false });
+    await StatusBar.setBackgroundColor({ color: '#1E5F9E' });
+    await StatusBar.setOverlaysWebView({ overlay: true });
 
     // Hide splash screen after app loads
     setTimeout(async () => {
@@ -104,25 +104,6 @@ bus.on('system-ready', () => {
     const assetBase = import.meta.env.BASE_URL;
     app.config.globalProperties.$publicImg = (filename) =>
         `${assetBase}img/${String(filename).replace(/^\/+/, '')}`;
-
-    // Use correct Intl locale for currency so es-AR gets comma decimal, period thousands.
-    const numberFormatLocaleMap = appLocaleToBCP47;
-    const original$n = app.config.globalProperties.$n;
-    app.config.globalProperties.$n = function (value, ...args) {
-        if (args[0] === 'currency') {
-            const intlLocale =
-                numberFormatLocaleMap[this.$i18n.locale] || this.$i18n.locale;
-            if (args.length === 1) { return this.$i18n.n(value, 'currency', intlLocale); }
-            if (args.length === 2 && typeof args[1] === 'object') {
-                return this.$i18n.n(value, {
-                    key: 'currency',
-                    locale: intlLocale,
-                    ...args[1]
-                });
-            }
-        }
-        return original$n.call(this, value, ...args);
-    };
 
     app.config.errorHandler = function (err, instance, info) {
         const data = {};

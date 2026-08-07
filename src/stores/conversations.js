@@ -73,6 +73,12 @@ export const useConversationsStore = defineStore('conversations', {
         /** Selected conversation id (number) for active row highlight. */
         selectedId: (state) => state.selectedID,
 
+        unreadCount: (state) => {
+            const list = deduplicateList(state._list);
+            if (!list) return 0;
+            return list.filter((conversation) => conversation.unread).length;
+        },
+
         msgObj: (state) => state.messages[state.selectedID],
         messagesList: (state) => {
             const messages = state.messages[state.selectedID];
@@ -377,7 +383,7 @@ export const useConversationsStore = defineStore('conversations', {
             const read = true;
             return conversationApi
                 .getMessages(nid, { read, unread, pageSize, timestamp })
-                .then((response) => {
+                .then(async (response) => {
                     if (!more) {
                         this.blankMessages({ id: nid });
                     }
@@ -389,6 +395,10 @@ export const useConversationsStore = defineStore('conversations', {
                             messages,
                             id: nid
                         });
+                    }
+                    if (!more) {
+                        const { useNotificationsStore } = await import('./notifications');
+                        await useNotificationsStore().countAction();
                     }
                 })
                 .catch((error) => {

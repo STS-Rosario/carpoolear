@@ -5,12 +5,12 @@
                 <div class="col-md-22 col-md-offset-1">
                     <div class="admin-user-migrations__header">
                         <h3 class="admin-user-migrations__title">{{ $t('migrarUsuarios') }}</h3>
-                        <router-link
-                            class="btn btn-primary"
+                        <AppButton
+                            variant="primary"
                             :to="{ name: 'admin-user-migration-new' }"
                         >
                             {{ $t('nuevaMigracionDeUsuario') }}
-                        </router-link>
+                        </AppButton>
                     </div>
                     <div v-if="listLoading" class="alert alert-info">
                         <img
@@ -77,6 +77,7 @@
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
+import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
@@ -155,7 +156,8 @@ export default {
     },
     components: {
         AdminLayout,
-        AdminPaginationBar
+        AdminPaginationBar,
+        AppButton
     }
 };
 </script>

@@ -77,7 +77,7 @@ test.describe('Notifications page', () => {
     await expect(page.getByText('Siguiente')).toBeVisible();
   });
 
-  test('unread notifications have .unread class and bell icon', async ({ page }) => {
+  test('shows unread and read notifications', async ({ page }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
@@ -92,15 +92,10 @@ test.describe('Notifications page', () => {
     await page.goto('/notifications');
     await waitForPageReady(page);
 
-    await expect(page.getByText('Unread notification')).toBeVisible({ timeout: 10000 });
-
-    // Unread notification should have .unread class
-    const unreadItem = page.locator('.unread');
-    await expect(unreadItem).toHaveCount(1);
-
-    // Unread notification should have bell icon
-    const bellIcon = unreadItem.locator('.fa-bell-o');
-    await expect(bellIcon).toBeAttached();
+    await expect(page.getByText('Unread notification', { exact: true })).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.getByText('Read notification', { exact: true })).toBeVisible();
   });
 
   test('clicking a friend trip alert notification opens trip detail', async ({ page }) => {

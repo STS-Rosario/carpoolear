@@ -162,7 +162,8 @@ describe('adminManualIdentityValidationsList', () => {
                 'submitted_at',
                 'waiting_time',
                 'paid',
-                'review_status'
+                'review_status',
+                'open_account_verification_tickets_count'
             ]);
         });
     });

@@ -24,12 +24,12 @@
                     </span>
 
                 <span
-                    class="pull-right clickeable"
+                    class="pull-right clickeable rate-item-reply-toggle"
                     v-if="canReply"
                     @click="showReply = !showReply"
                 >
-                    <!--   -->
                     <i class="fa fa-reply" aria-hidden="true"></i>
+                    {{ $t('responder') }}
                 </span>
             </div>
 
@@ -103,11 +103,12 @@
                                 ></i>
                             </span>
                             <span
-                                class="pull-right clickeable"
+                                class="pull-right clickeable rate-item-reply-toggle"
                                 v-if="canReply"
                                 @click="showReply = !showReply"
                             >
                                 <i class="fa fa-reply" aria-hidden="true"></i>
+                                {{ $t('responder') }}
                             </span>
                         </template>
                     </div>
@@ -130,16 +131,20 @@
             </div>
         </template>
         <div class="reply-box" v-if="showReply && canReply">
-            <label for="reply" class="label label-reply"
-                >{{ $t('rateItemResponderALaCalificacion') }}</label>
-            <textarea maxlength="260" v-model="comment" id="reply"></textarea>
+            <AppTextarea
+                id="reply"
+                v-model="comment"
+                :label="$t('rateItemResponderALaCalificacion')"
+                maxlength="260"
+                rows="3"
+            />
             <div class="reply-btns">
-                <button class="btn btn-primary" @click="onReply">
+                <AppButton variant="primary" @click="onReply">
                     {{ $t('rateItemResponder') }}
-                </button>
-                <button class="btn btn-primary" @click="onCancelReply">
+                </AppButton>
+                <AppButton variant="secondary" @click="onCancelReply">
                     {{ $t('rateItemCancelar') }}
-                </button>
+                </AppButton>
             </div>
         </div>
         <div
@@ -168,7 +173,13 @@ import {
     isNeutralRating,
     isPositiveRating
 } from '../utils/tripRating';
+import AppButton from './ui/AppButton.vue';
+import AppTextarea from './ui/AppTextarea.vue';
 export default {
+    components: {
+        AppButton,
+        AppTextarea
+    },
     data() {
         return {
             showReply: false,
@@ -294,6 +305,16 @@ export default {
 .rate-item-author-link:hover strong {
     text-decoration: underline;
 }
+.rate-item-reply-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-action, var(--secondary-background, #016587));
+}
+.rate-item-reply-toggle .fa {
+    margin: 0;
+}
 .reply_comment_content {
     margin-top: 1.25em;
     padding-left: 1em;
@@ -306,27 +327,14 @@ export default {
     color: #999;
 }
 .reply-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
     margin-top: 1em;
-}
-.label-reply {
-    display: block;
-    font-weight: bold;
-    margin-top: 1.5em;
-
-    padding: 0;
-    font-size: 0.9rem;
-    font-weight: bold;
-    line-height: 1.5em;
-    color: #333;
-    text-align: left;
-    border-radius: 0;
 }
 .reply-box {
     width: 100%;
     float: left;
-}
-textarea {
-    height: 6.6em;
 }
 .reply_comment_content[data-v-79e4aac3] {
     word-wrap: break-word;

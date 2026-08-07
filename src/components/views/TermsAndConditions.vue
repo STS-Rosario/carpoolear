@@ -1,16 +1,22 @@
 <template>
-    <div class="terms-page container" v-html="termText"></div>
+    <AccountSettingsLayout page-title-key="legales">
+        <div class="terms-page container" v-html="termText"></div>
+    </AccountSettingsLayout>
 </template>
 
 <style scoped></style>
 
 <script>
+import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import { mapActions } from 'pinia';
 import { useProfileStore } from '../../stores/profile';
 export default {
     name: 'about',
+    components: {
+        AccountSettingsLayout
+    },
     data() {
         return {
             termText: ''

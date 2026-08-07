@@ -71,7 +71,7 @@ export default {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 1em;
+    gap: 0.4em;
     font-size: 13px;
     white-space: nowrap;
 }
@@ -79,17 +79,12 @@ export default {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
+    gap: 0.25em;
 }
 .user-ratings-counts__pair--positive,
+.user-ratings-counts__pair--neutral,
 .user-ratings-counts__pair--negative {
-    gap: 0.65em;
-}
-.user-ratings-counts__pair--neutral {
-    gap: 0.35em;
-    margin-right: 0.15em;
-}
-.user-ratings-counts__pair--negative {
-    margin-left: 0.15em;
+    gap: 0.25em;
 }
 .user-ratings-counts__icon-slot {
     display: inline-flex;
@@ -100,8 +95,9 @@ export default {
     flex-shrink: 0;
 }
 .user-ratings-counts__icon-slot--neutral {
-    width: 1.15em;
-    padding-top: 0.6em;
+    width: 1em;
+    height: 1em;
+    padding-top: 0;
 }
 .user-ratings-counts__icon--positive {
     color: #59b200;
@@ -118,6 +114,7 @@ export default {
 .rate-neutral-icon {
     display: inline-block;
     line-height: 1;
+    transform-origin: center center;
 }
 .user-ratings-counts--inverse .user-ratings-counts__icon--positive,
 .user-ratings-counts--inverse .user-ratings-counts__icon--neutral,
@@ -126,11 +123,12 @@ export default {
 }
 @media only screen and (max-width: 768px) {
     .user-ratings-counts {
-        gap: 1.25em;
+        gap: 0.45em;
     }
     .user-ratings-counts__pair--positive,
+    .user-ratings-counts__pair--neutral,
     .user-ratings-counts__pair--negative {
-        gap: 0.7em;
+        gap: 0.25em;
     }
 }
 </style>

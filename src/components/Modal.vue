@@ -25,12 +25,12 @@
 
                     <div class="modal-footer" v-if="!hideFooter">
                         <slot name="footer">
-                            <button
-                                class="modal-default-button btn btn-link"
+                            <AppButton
+                                variant="secondary"
                                 @click="$emit('close')"
                             >
                                 {{ $t('cerrar') }}
-                            </button>
+                            </AppButton>
                         </slot>
                     </div>
                 </div>
@@ -40,8 +40,13 @@
 </template>
 
 <script>
+import AppButton from './ui/AppButton.vue';
+
 export default {
     name: 'modal',
+    components: {
+        AppButton
+    },
     data() {
         return {
             // Avoid treating the same click that opened the modal (e.g. table row) as an outside click.
@@ -86,6 +91,15 @@ export default {
         },
         name: {
             required: false
+        },
+        // Absorb legacy unused attrs so they do not fall through as HTML title/body.
+        title: {
+            type: String,
+            default: ''
+        },
+        body: {
+            type: String,
+            default: ''
         }
     }
 };
@@ -110,22 +124,22 @@ export default {
 
 .modal-wrapper {
     display: flex;
-    width: 100%;
-    max-width: 600px;
+    width: fit-content;
+    max-width: 100%;
     justify-content: center;
     flex: 0 1 auto;
     min-height: 0;
 }
 
 .modal-container {
-    max-width: 600px;
-    width: 100%;
+    width: fit-content;
+    max-width: min(32rem, calc(100vw - 2rem));
     max-height: calc(100vh - 2rem);
     margin: 0;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    padding: 1.25rem 1.5rem;
+    background: var(--ds-card-bg, #fff);
+    border-radius: var(--ds-card-radius, 20px);
+    box-shadow: var(--ds-card-shadow, 3px 3px 7.3px 0 rgba(0, 0, 0, 0.05));
     transition: all 0.3s ease;
     color: #333333;
     display: flex;
@@ -134,9 +148,21 @@ export default {
     min-height: 0;
 }
 
+.modal-container :deep(p),
+.modal-container :deep(label),
+.modal-container :deep(h3),
+.modal-container :deep(li) {
+    color: #333333;
+}
+
+.modal-container :deep(a) {
+    color: var(--ds-action, #1e5f9e);
+}
+
 .modal-header {
     position: relative;
     flex-shrink: 0;
+    border-bottom: none;
 }
 
 .modal-header-with-close {
@@ -168,11 +194,12 @@ export default {
 
 .modal-footer {
     flex-shrink: 0;
-}
-
-.modal-default-button {
-    float: right;
-    color: #91b64c !important;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    text-align: center;
+    border-top: none;
 }
 
 /*

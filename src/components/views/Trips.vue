@@ -10,14 +10,8 @@
                 <img alt="" :src="bannerImageSrc" />
             </a>
         </template>
-        <div v-show="!user && isMobile">
-            <router-link :to="{ name: 'login' }" class="login_usuario">
-                {{ $t('ingresaORegistrate') }}
-                <span class="underline">{{ $t('aqui') }}</span>
-                {{ $t('paraComenzar') }}
-            </router-link>
-        </div>
         <OngoingTripCard v-if="ongoingTrip" :trip="ongoingTrip" />
+        <TripCreationDraftCard v-if="user" ref="tripCreationDraftCard" />
         <PendingFriendRequestsCard v-if="user" />
         <div
             v-if="user && notificationsEnabledForPlatform && !hasNotificationPermission && showNotificationWarning"
@@ -45,14 +39,49 @@
                 </button>
             </div>
         </div>
+        <div v-if="isMobile && !lookSearch" class="trips-mobile-home">
+            <div class="trips-mobile-home__role-grid">
+                <button
+                    type="button"
+                    class="trips-mobile-home__role-card"
+                    @click="openMobileSearch(false)"
+                >
+                    <i class="fa fa-car" aria-hidden="true"></i>
+                    <span>{{ $t('buscoConductor') }}</span>
+                </button>
+                <button
+                    type="button"
+                    class="trips-mobile-home__role-card"
+                    @click="openMobileSearch(true)"
+                >
+                    <img :src="pasajeroSearchIcon" alt="" />
+                    <span>{{ $t('buscoPasajeros') }}</span>
+                </button>
+            </div>
+            <AppButton
+                class="trips-mobile-home__create"
+                variant="primary"
+                block
+                icon-left="fa fa-plus"
+                :to="{ name: 'new-trip' }"
+            >
+                {{ $t('crearViaje') }}
+            </AppButton>
+        </div>
         <SearchBox
             :params="searchParams"
             v-on:trip-search="research"
             v-show="!isMobile || lookSearch"
             ref="searchBox"
         ></SearchBox>
-        <Loading :data="trips" v-if="showingTrips">
+        <Loading :data="tripsLoadingData" v-if="showingTrips">
             <div class="trips-list">
+                <h2
+                    v-if="isMobile && !lookSearch && !showSplitDonationPanel"
+                    class="trips-mobile-home__heading"
+                >
+                    {{ $t('viajesPublicados') }}
+                </h2>
                 <modal
                     :name="'modal'"
                     v-if="showModal"
@@ -85,21 +114,26 @@
                                 }}</span>
                             </label>
                         </DonationAmountPicker>
-                        <div>
-                            <button
-                                class="btn btn-success btn-unica-vez"
+                        <div class="donation-actions">
+                            <AppButton
+                                class="donation-actions__btn"
+                                variant="primary"
+                                @click="onDonateMonthly"
+                            >
+                                <span class="donation-actions__label">
+                                    {{ $t('MENSUAL') }}
+                                </span>
+                                <span class="donation-actions__hint">
+                                    ({{ $t('cancelaCuando') }})
+                                </span>
+                            </AppButton>
+                            <AppButton
+                                class="donation-actions__btn"
+                                variant="secondary"
                                 @click="onDonateOnceTime"
                             >
                                 {{ $t('unicaVez') }}
-                            </button>
-                            <button
-                                class="btn btn-info btn-mensualmente"
-                                @click="onDonateMonthly"
-                            >
-                                {{ $t('MENSUAL') }}
-                                <br />
-                                ( {{ $t('cancelaCuando') }})
-                            </button>
+                            </AppButton>
                         </div>
                     </div></template>
                 </modal>
@@ -116,29 +150,28 @@
                     <template #body><div class="">
                         <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || $t('instalarWebAppPWA')">
                         </p>
-                        <div style="margin-bottom: 10px">
-                            <button
+                        <div class="install-modal-actions">
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showInstallButton"
-                                class="btn btn-danger"
+                                variant="primary"
                                 @click="installApp()"
                             >
                                 {{ $t('instalar') }}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showCloseButton"
-                                class="btn btn-primary"
+                                variant="secondary"
                                 @click="closeInstallModal()"
                             >
                                 {{ $t('entendido') }}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 v-if="getInstallModalContent() && getInstallModalContent().showDontShowAgainButton"
-                                class="btn btn-default"
+                                variant="tertiary"
                                 @click="dontShowAgainInstallModal()"
-                                style="margin-left: 10px;"
                             >
                                 {{ $t('noMostrarDeNuevo') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div></template>
                 </modal>
@@ -147,21 +180,47 @@
                         v-if="showSplitDonationPanel"
                         class="panel panel-default panel-donar trips-donation-banner"
                     >
-                        <div class="panel-body">
-                            <button
-                                class="btn btn-success pull-right btn-donar"
+                        <div class="panel-body panel-donar__body">
+                            <AppButton
+                                class="btn-donar"
+                                variant="header-donate"
                                 @click="onDonate"
                             >
                                 {{ $t('donar') }}
-                            </button>
-                            <h2>{{ $t('ayudanos') }}</h2>
-
+                                <template #iconRight>
+                                    <img
+                                        :src="$publicImg('gift.svg')"
+                                        alt=""
+                                        class="app-button__gift-icon"
+                                    />
+                                </template>
+                            </AppButton>
+                            <i18n-t
+                                keypath="ayudanos"
+                                tag="h2"
+                                class="panel-donar__title"
+                            >
+                                <template #lead>
+                                    <strong>{{ $t('ayudanosLead') }}</strong>
+                                </template>
+                                <template #open>
+                                    <strong>{{ $t('ayudanosOpen') }}</strong>
+                                </template>
+                                <template #collab>
+                                    <strong>{{ $t('ayudanosCollab') }}</strong>
+                                </template>
+                                <template #nonprofit>
+                                    <strong>{{
+                                        $t('ayudanosNonprofit')
+                                    }}</strong>
+                                </template>
+                            </i18n-t>
                             <a
-                                href="/donar"
+                                href="/aportar"
                                 target="_blank"
                                 v-on:click.prevent="
                                     onOpenLink(
-                                        'https://carpoolear.com.ar/donar?u=' +
+                                        'https://carpoolear.com.ar/aportar?u=' +
                                             user.id
                                     )
                                 "
@@ -178,22 +237,17 @@
                             <h2 class="trips-section-heading">
                                 {{ $t('viajesDeMisAmigos') }}
                             </h2>
-                            <div class="trips-section__list row">
+                            <div
+                                class="trips-section__list row"
+                                :class="{
+                                    'trips-section__list--start':
+                                        friendTripsList.length < 4
+                                }"
+                            >
                                 <template
                                     v-for="(trip, index) in friendTripsList"
                                     :key="'friend-' + (trip.id != null ? trip.id : index)"
                                 >
-                                    <div
-                                        v-if="
-                                            isComplementary(trip, searchParams, friendTripsList, index)
-                                        "
-                                        class="col-xs-24"
-                                    >
-                                        <div class="trip-complementary">
-                                            <h2>{{ $t('resultadosCercanos') }}</h2>
-                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
-                                        </div>
-                                    </div>
                                     <Trip :trip="trip" :user="user"></Trip>
                                 </template>
                             </div>
@@ -203,24 +257,19 @@
                             class="trips-section"
                         >
                             <h2 class="trips-section-heading">
-                                {{ $t('otrosViajes') }}
+                                {{ $t('viajesPublicados') }}
                             </h2>
-                            <div class="trips-section__list row">
+                            <div
+                                class="trips-section__list row"
+                                :class="{
+                                    'trips-section__list--start':
+                                        otherTripsList.length < 4
+                                }"
+                            >
                                 <template
                                     v-for="(trip, index) in otherTripsList"
                                     :key="'other-' + (trip.id != null ? trip.id : index)"
                                 >
-                                    <div
-                                        v-if="
-                                            isComplementary(trip, searchParams, otherTripsList, index)
-                                        "
-                                        class="col-xs-24"
-                                    >
-                                        <div class="trip-complementary">
-                                            <h2>{{ $t('resultadosCercanos') }}</h2>
-                                            <p>{{ $t('resultadosCercanosDescripcion') }}</p>
-                                        </div>
-                                    </div>
                                     <Trip :trip="trip" :user="user"></Trip>
                                 </template>
                             </div>
@@ -229,30 +278,28 @@
                     <div
                         v-else-if="otherTripsList.length"
                         class="trips-section__list row"
+                        :class="{
+                            'trips-section__list--start':
+                                otherTripsList.length < 4
+                        }"
                     >
                         <template
                             v-for="(trip, index) in otherTripsList"
                             :key="'flat-' + (trip.id != null ? trip.id : index)"
                         >
-                            <div
-                                v-if="
-                                    isComplementary(trip, searchParams, otherTripsList, index)
-                                "
-                                class="col-xs-24"
-                            >
-                                <div class="trip-complementary">
-                                    <h2>{{ $t('resultadosCercanos') }}</h2>
-                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
-                                </div>
-                            </div>
                             <Trip :trip="trip" :user="user"></Trip>
                         </template>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="trips-section__list row">
+                    <div
+                        class="trips-section__list row"
+                        :class="{
+                            'trips-section__list--start': exactTrips.length < 4
+                        }"
+                    >
                     <template
-                        v-for="(trip, index) in trips"
+                        v-for="(trip, index) in exactTrips"
                         :key="trip.id != null ? trip.id : index"
                     >
                         <template
@@ -263,7 +310,7 @@
                             "
                         >
                             <div
-                                class="panel panel-default panel-donar"
+                                class="col-xs-24"
                                 v-if="
                                     (index +
                                         parseFloat(
@@ -275,22 +322,56 @@
                                     0
                                 "
                             >
-                                <div class="panel-body">
-                                    <button
-                                        class="btn btn-success pull-right btn-donar"
+                            <div
+                                class="panel panel-default panel-donar"
+                            >
+                                <div class="panel-body panel-donar__body">
+                                    <AppButton
+                                        class="btn-donar"
+                                        variant="header-donate"
                                         @click="onDonate"
                                     >
                                         {{ $t('donar') }}
-                                    </button>
-                                    <h2>{{ $t('ayudanos') }}</h2>
-
+                                        <template #iconRight>
+                                            <img
+                                                :src="$publicImg('gift.svg')"
+                                                alt=""
+                                                class="app-button__gift-icon"
+                                            />
+                                        </template>
+                                    </AppButton>
+                                    <i18n-t
+                                        keypath="ayudanos"
+                                        tag="h2"
+                                        class="panel-donar__title"
+                                    >
+                                        <template #lead>
+                                            <strong>{{
+                                                $t('ayudanosLead')
+                                            }}</strong>
+                                        </template>
+                                        <template #open>
+                                            <strong>{{
+                                                $t('ayudanosOpen')
+                                            }}</strong>
+                                        </template>
+                                        <template #collab>
+                                            <strong>{{
+                                                $t('ayudanosCollab')
+                                            }}</strong>
+                                        </template>
+                                        <template #nonprofit>
+                                            <strong>{{
+                                                $t('ayudanosNonprofit')
+                                            }}</strong>
+                                        </template>
+                                    </i18n-t>
                                     <a
-                                        href="/donar"
+                                        href="/aportar"
                                         target="_blank"
                                         v-on:click.prevent="
                                             onOpenLink(
-                                                'https://carpoolear.com.ar/donar?u=' +
-                                                    user.id
+                                                'https://carpoolear.com.ar/aportar'
                                             )
                                         "
                                     >
@@ -298,15 +379,6 @@
                                     </a>
                                 </div>
                             </div>
-                        </template>
-                        <template
-                            v-if="isComplementary(trip, searchParams, trips, index)"
-                        >
-                            <div class="col-xs-24">
-                                <div class="trip-complementary">
-                                    <h2>{{ $t('resultadosCercanos') }}</h2>
-                                    <p>{{ $t('resultadosCercanosDescripcion') }}</p>
-                                </div>
                             </div>
                         </template>
                         <Trip :trip="trip" :user="user"></Trip>
@@ -314,27 +386,45 @@
                     </div>
                 </template>
             </div>
-            <div class="row">
-                <p
-                    class="alert alert-warning"
-                    role="alert"
-                    :class="isMobile ? 'mobile-alert' : ''"
-                    v-if="resultaOfSearch && !alreadySubscribe"
-                >
-                    <span class="sentence">
-                        <strong :class="isMobile ? 'sentence' : ''">
-                            {{ $t('podesSubscribirte') }}
-                        </strong>
-                        <button
-                            class="btn btn-primary"
-                            v-if="user"
-                            @click="subscribeSearch"
-                        >
-                            {{ $t('crearAlerta') }}
-                        </button>
-                    </span>
+            <div
+                v-if="resultaOfSearch && !alreadySubscribe && exactTrips.length"
+                class="trips-search-alert"
+            >
+                <p class="trips-search-alert__question">
+                    {{ $t('searchNoResultsAlertQuestion') }}
                 </p>
+                <button
+                    v-if="user"
+                    type="button"
+                    class="trips-search-alert__link"
+                    @click="subscribeSearch"
+                >
+                    {{ $t('searchCreateAlertNow') }}
+                </button>
             </div>
+            <section
+                v-if="nearbyTrips.length && exactTrips.length"
+                class="trips-nearby"
+                data-testid="trips-nearby-section"
+            >
+                <h2 class="trips-nearby__title">{{ $t('viajesCercanos') }}</h2>
+                <p class="trips-nearby__subtitle label-soft">
+                    {{ $t('viajesCercanosSubtitle') }}
+                </p>
+                <div
+                    class="trips-section__list row"
+                    :class="{
+                        'trips-section__list--start': nearbyTrips.length < 4
+                    }"
+                >
+                    <Trip
+                        v-for="(trip, index) in nearbyTrips"
+                        :key="'nearby-' + (trip.id != null ? trip.id : index)"
+                        :trip="trip"
+                        :user="user"
+                    ></Trip>
+                </div>
+            </section>
             <div v-if="runningSearch" class="more-trips-loading">
                 <img
                     :src="$publicImg('loader.gif')"
@@ -343,32 +433,83 @@
                 />
                 {{ $t('cargandoMasResultados') }}
             </div>
-            <template #no-data><p
-                class="alert alert-warning"
-                role="alert"
-                :class="isMobile ? 'mobile-alert' : ''"
-            >
-                <template v-if="filtered">
-                    <span class="sentence">{{ $t('noHayViajes') }}</span>
-                    <span class="sentence" v-if="!alreadySubscribe">
-                        <strong :class="isMobile ? 'sentence' : ''">
-                            {{ $t('subscribirteAViajes') }}
-                        </strong>
+            <template #no-data>
+                <div v-if="filtered" class="trips-empty">
+                    <img
+                        :src="$publicImg('loupe-car.svg')"
+                        alt=""
+                        class="trips-empty__icon"
+                    />
+                    <h3 class="trips-empty__title">
+                        {{ $t('searchNoResultsTitle') }}
+                    </h3>
+                    <p
+                        v-if="!alreadySubscribe"
+                        class="trips-empty__question"
+                    >
+                        {{ $t('searchNoResultsAlertQuestion') }}
+                    </p>
+                    <button
+                        v-if="user && !alreadySubscribe"
+                        type="button"
+                        class="trips-empty__alert-link"
+                        @click="subscribeSearch"
+                    >
+                        {{ $t('searchCreateAlertNow') }}
+                    </button>
+                    <template
+                        v-if="hasDateSearch && nearbyTrips.length && !showNearbyTrips"
+                    >
+                        <p class="trips-empty__or">{{ $t('searchOr') }}</p>
                         <button
-                            class="btn btn-primary"
-                            v-if="user"
-                            @click="subscribeSearch"
+                            type="button"
+                            class="trips-empty__nearby-link"
+                            @click="showNearbyTrips = true"
                         >
-                            {{ $t('crearAlerta') }}
+                            {{ $t('searchSeeNearbyTrips') }}
                         </button>
-                    </span>
-                </template>
-                <template v-else>
+                    </template>
+                    <section
+                        v-if="showNearbyTrips && nearbyTrips.length"
+                        class="trips-nearby"
+                        data-testid="trips-nearby-section"
+                    >
+                        <h2 class="trips-nearby__title">
+                            {{ $t('viajesCercanos') }}
+                        </h2>
+                        <p class="trips-nearby__subtitle label-soft">
+                            {{ $t('viajesCercanosSubtitle') }}
+                        </p>
+                        <div
+                            class="trips-section__list row"
+                            :class="{
+                                'trips-section__list--start':
+                                    nearbyTrips.length < 4
+                            }"
+                        >
+                            <Trip
+                                v-for="(trip, index) in nearbyTrips"
+                                :key="
+                                    'nearby-empty-' +
+                                    (trip.id != null ? trip.id : index)
+                                "
+                                :trip="trip"
+                                :user="user"
+                            ></Trip>
+                        </div>
+                    </section>
+                </div>
+                <p
+                    v-else
+                    class="alert alert-warning"
+                    role="alert"
+                    :class="isMobile ? 'mobile-alert' : ''"
+                >
                     <span class="sentence">{{
                         $t('noHayViajesCargadosAun')
                     }}</span>
-                </template>
-            </p></template>
+                </p>
+            </template>
             <template #loading><p class="alert alert-info" role="alert">
                 <img
                     :src="$publicImg('loader.gif')"
@@ -390,7 +531,8 @@
     margin-bottom: 1em;
 }
 
-.mobile-alert .btn {
+.mobile-alert .btn,
+.mobile-alert .app-button {
     margin: 0 auto;
     display: block;
 }
@@ -398,6 +540,7 @@
 <script>
 import Trip from '../sections/Trip.vue';
 import OngoingTripCard from '../elements/OngoingTripCard.vue';
+import TripCreationDraftCard from '../elements/TripCreationDraftCard.vue';
 import PendingFriendRequestsCard from '../elements/PendingFriendRequestsCard.vue';
 import SearchBox from '../sections/SearchTrip.vue';
 import Loading from '../Loading.vue';
@@ -439,9 +582,11 @@ import {
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
+import { splitTripsBySearchDate } from '../../utils/tripSearchDateSplit.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
-import { shouldShowNearbyResultsHeader } from '../../utils/nearbyTripResults.js';
+import AppButton from '../ui/AppButton.vue';
+import { useActionbarsStore } from '../../stores/actionbars';
 
 export default {
     name: 'trips',
@@ -452,13 +597,16 @@ export default {
             runningSearch: false,
             alreadySubscribe: false,
             resultaOfSearch: false,
+            showNearbyTrips: false,
             pendingScrollRestore: null,
             showModal: false,
             showModalInstallApp: false,
             installAppEvent: null,
             donateValue: 0,
             hasNotificationPermission: false,
-            showNotificationWarning: true
+            showNotificationWarning: true,
+            pasajeroSearchIcon:
+                process.env.ROUTE_BASE + 'img/icono-pasajero-gris.png'
         };
     },
     props: ['clearSearch', 'keepSearch'],
@@ -490,6 +638,9 @@ export default {
         ...mapActions(useFriendsStore, {
             fetchPendingFriends: 'pending'
         }),
+        refreshTripCreationDraftCard() {
+            this.$refs.tripCreationDraftCard?.refresh?.();
+        },
         // setActionButton: 'actionbars/setHeaderButtons'
         isInternalBannerUrl(url) {
             return typeof url === 'string' && url.trim().startsWith('/');
@@ -614,9 +765,11 @@ export default {
         research(params) {
             this.resultaOfSearch = true;
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.filtered = true;
             this.readySub = false;
             this.alreadySubscribe = false;
+            this.showNearbyTrips = false;
             this.search(params);
             this.findSubscriptions();
             this.updateTripsQuery(params);
@@ -640,7 +793,7 @@ export default {
         getSearchParamsFromQuery() {
             const query = this.getRouteQuery();
             const params = {};
-            const textFields = ['origin_name', 'destination_name', 'date'];
+            const textFields = ['origin_name', 'destination_name', 'date', 'from_date', 'to_date'];
             textFields.forEach((field) => {
                 if (typeof query[field] === 'string' && query[field].trim()) {
                     params[field] = query[field];
@@ -713,18 +866,6 @@ export default {
                 });
             });
         },
-        isComplementary(trip, searchParams, sectionTrips, index) {
-            const searchDate =
-                searchParams.data && searchParams.data.date
-                    ? searchParams.data.date
-                    : null;
-            const previousTrips = (sectionTrips || []).slice(0, index);
-            return shouldShowNearbyResultsHeader(
-                trip,
-                searchDate,
-                previousTrips
-            );
-        },
         // TODO filter trips that not are main route
         // REVIEW wich is the best way to do it?
         // maybe rethink render
@@ -744,10 +885,49 @@ export default {
 
         onSearchButton() {
             console.log('onSearchButton');
+            this.openMobileSearch(false);
+        },
+
+        openMobileSearch(isPassenger) {
             this.lookSearch = true;
-            // this.setActionButton(['clear']);
+            this.$nextTick(() => {
+                if (this.$refs.searchBox) {
+                    this.$refs.searchBox.setPassengerMode(isPassenger);
+                }
+            });
+            this.setMobileSearchHeader(true);
             bus.on('backbutton', this.onBackBottom);
-            // Desactivo reaccionar al Scroll
+        },
+
+        setMobileSearchHeader(active) {
+            if (!this.isMobile) {
+                return;
+            }
+            const actionbarsStore = useActionbarsStore();
+            if (active) {
+                actionbarsStore.setTitle(this.$t('buscoTitulo'));
+                actionbarsStore.setHeaderButtons(['back']);
+                actionbarsStore.showHeaderLogo(false);
+                bus.off('back-click', this.onMobileSearchBack);
+                bus.on('back-click', this.onMobileSearchBack);
+                return;
+            }
+            actionbarsStore.setHeaderButtons(['search']);
+            actionbarsStore.showHeaderLogo(true);
+            let appName = import.meta.env.VITE_TARGET_APP || 'Carpoolear';
+            const config = this.appConfig;
+            if (config) {
+                appName = config.app_name ? config.app_name : config.name_app;
+            }
+            if (appName && appName.length) {
+                appName = appName.charAt(0).toUpperCase() + appName.slice(1);
+            }
+            actionbarsStore.setTitle(appName);
+            bus.off('back-click', this.onMobileSearchBack);
+        },
+
+        onMobileSearchBack() {
+            this.onBackBottom();
         },
 
         onClearButton() {
@@ -756,6 +936,7 @@ export default {
             // this.setActionButton(['search']);
             this.filtered = false;
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
             this.search({ is_passenger: false });
             if (this.$refs.searchBox) {
@@ -777,12 +958,13 @@ export default {
         onBackBottom() {
             bus.off('backbutton', this.onBackBottom);
             this.lookSearch = false;
+            this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
         },
         async onDonate() {
             // if we're in Capacitor iOS, do not show the modal, just open the link in the browser
             if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                let url = 'https://carpoolear.com.ar/donar';
+                let url = 'https://carpoolear.com.ar/aportar';
                 if (this.user && this.user.id) {
                     url = `${url}?u=${this.user.id}`;
                 }
@@ -982,6 +1164,11 @@ export default {
             this.fetchOngoingTrip();
             this.fetchPendingFriends();
         }
+
+        this.refreshTripCreationDraftCard();
+    },
+    activated() {
+        this.refreshTripCreationDraftCard();
     },
     updated(a) {
         // {{ $t('pendienteNoSeLimpiaBuscador') }}
@@ -993,6 +1180,11 @@ export default {
         bus.off('backbutton', this.onBackBottom);
     },
     watch: {
+        '$route.name'(name) {
+            if (name === 'trips') {
+                this.refreshTripCreationDraftCard();
+            }
+        },
         user(value) {
             if (value) {
                 this.fetchOngoingTrip();
@@ -1075,13 +1267,39 @@ export default {
             if (!this.user) {
                 return [];
             }
-            return splitFriendTrips(this.trips).friendTrips;
+            return splitFriendTrips(this.exactTrips).friendTrips;
         },
         otherTripsList() {
             if (!this.user) {
                 return [];
             }
-            return splitFriendTrips(this.trips).otherTrips;
+            return splitFriendTrips(this.exactTrips).otherTrips;
+        },
+        searchDate() {
+            return (
+                (this.searchParams &&
+                    this.searchParams.data &&
+                    this.searchParams.data.date) ||
+                null
+            );
+        },
+        hasDateSearch() {
+            return Boolean(this.searchDate);
+        },
+        tripsByDate() {
+            return splitTripsBySearchDate(this.trips, this.searchDate);
+        },
+        exactTrips() {
+            return this.tripsByDate.exactTrips;
+        },
+        nearbyTrips() {
+            return this.tripsByDate.nearbyTrips;
+        },
+        tripsLoadingData() {
+            if (this.filtered && this.hasDateSearch) {
+                return this.exactTrips;
+            }
+            return this.trips;
         },
         showFriendTripSections() {
             return this.friendTripsList.length > 0;
@@ -1101,10 +1319,12 @@ export default {
     components: {
         Trip,
         OngoingTripCard,
+        TripCreationDraftCard,
         PendingFriendRequestsCard,
         Loading,
         SearchBox,
         modal,
+        AppButton,
         DonationAmountPicker
     }
 };
@@ -1112,7 +1332,7 @@ export default {
 <style scoped>
 .banner {
     display: block;
-    margin: -1em auto 1em;
+    margin: 0 auto 1em;
     text-align: center;
 }
 
@@ -1122,12 +1342,96 @@ export default {
     max-width: 934px;
 }
 
+.donation-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.donation-actions__btn {
+    width: 100%;
+    min-height: 4.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: normal;
+    text-align: center;
+}
+
+.donation-actions__btn.app-button--secondary {
+    min-height: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.donation-actions__btn :deep(.app-button__label) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    line-height: 1.25;
+}
+
+.donation-actions__label {
+    display: block;
+}
+
+.donation-actions__hint {
+    display: block;
+    font-size: 0.85em;
+    font-weight: var(--ds-font-weight-normal, 400);
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .donation-actions {
+        flex-direction: row;
+    }
+
+    .donation-actions__btn {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+
 .btn-donar {
-    margin-left: 2em;
-    margin-right: 2em;
-    margin-top: 1em;
-    padding: 1em 2em;
-    font-size: 1.3em;
+    float: right;
+    margin: 0 0 0.5rem 0.75rem;
+}
+
+.panel.panel-donar {
+    border: none;
+    border-radius: var(--ds-card-radius);
+    background: var(--ds-card-bg);
+    box-shadow: var(--ds-card-shadow);
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.panel-donar > .panel-body.panel-donar__body {
+    display: block;
+    overflow: visible;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+}
+
+.panel-donar > .panel-body.panel-donar__body::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.panel.panel-default.panel-donar h2.panel-donar__title,
+.panel.panel-default.panel-donar .panel-donar__title {
+    margin: 0 0 0.75rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    font-size: 1.25rem;
+    line-height: 1.35;
+    color: var(--ds-action, #1e5f9e);
+}
+
+.panel.panel-default.panel-donar .panel-donar__title :deep(strong),
+.panel.panel-default.panel-donar .panel-donar__title strong {
+    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .ios-safari-warning {
@@ -1162,6 +1466,14 @@ export default {
 
 .notification-warning-buttons .btn {
     margin: 0;
+}
+
+.install-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -1199,14 +1511,80 @@ export default {
     margin-bottom: 1.5rem;
 }
 
-.trip-complementary h2 {
-    margin-bottom: 0;
+@media (min-width: 768px) {
+    .trips-donation-banner {
+        margin-bottom: 0;
+    }
 }
 
-.trip-complementary p {
-    margin: 0.35rem 0 0.75rem;
-    font-size: 1rem;
-    line-height: 1.4;
-    color: #555;
+.trips-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.25rem 3rem;
+}
+
+.trips-empty__icon {
+    width: 6.5rem;
+    height: auto;
+    margin-bottom: 1.25rem;
+}
+
+.trips-empty__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #22211f;
+}
+
+.trips-empty__question {
+    margin: 0 0 0.75rem;
+    max-width: 22rem;
+    color: #404040;
+    line-height: 1.45;
+}
+
+.trips-empty__alert-link,
+.trips-empty__nearby-link,
+.trips-search-alert__link {
+    border: 0;
+    background: transparent;
+    color: var(--ds-action, #1e5f9e);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.trips-empty__or {
+    margin: 1.25rem 0 0.35rem;
+    color: #737373;
+}
+
+.trips-search-alert {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.trips-search-alert__question {
+    margin: 0 0 0.5rem;
+    color: #404040;
+    line-height: 1.45;
+}
+
+.trips-nearby {
+    margin: 1.5rem 0 2rem;
+}
+
+.trips-nearby__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.trips-nearby__subtitle {
+    margin: 0 0 1rem;
 }
 </style>

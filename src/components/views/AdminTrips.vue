@@ -49,27 +49,26 @@
                                             ? $t('borrado')
                                             : $t('activo')
                                 }}
-                                <button
+                                <AppButton
                                     v-if="!viaje.deleted"
-                                    class="btn btn-primary"
-                                    v-on:click.stop="
-                                        onChangeVisibility(viaje.id)
-                                    "
+                                    variant="primary"
+                                    @click.stop="onChangeVisibility(viaje.id)"
                                 >
                                     {{ viaje.hidden ? $t('activar') : $t('ocultar') }}
-                                </button>
+                                </AppButton>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="row" v-if="viajes.length > 0">
-                    <button
+                    <AppButton
                         type="button"
-                        class="btn btn-default pull-right"
-                        v-on:click="nextPage"
+                        variant="secondary"
+                        class="pull-right"
+                        @click="nextPage"
                     >
                         {{ $t('siguiente') }}
-                    </button>
+                    </AppButton>
                 </div>
                 <tripDisplay
                     v-if="showTrip"
@@ -83,6 +82,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import adminSearchTrip from '../sections/AdminSearchTrips';
 import { mapActions } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
@@ -359,6 +359,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AppButton,
         adminSearchTrip,
         tripDisplay
     }

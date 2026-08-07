@@ -21,4 +21,15 @@ describe('TripPointDetailFields', () => {
         expect(viewSource).toContain('showPuntoPartidaPersonalAddressWarning');
         expect(viewSource).toContain('showPuntoLlegadaPersonalAddressWarning');
     });
+
+    it('can render only partida or only llegada via fields prop', () => {
+        expect(viewSource).toContain('fields: {');
+        expect(viewSource).toContain("default: 'both'");
+        expect(viewSource).toContain('showPuntoPartida');
+        expect(viewSource).toContain('showPuntoLlegada');
+        expect(viewSource).toContain('shouldShowPuntoPartidaInput');
+        expect(viewSource).toContain('shouldShowPuntoLlegadaInput');
+        expect(viewSource).toContain('v-if="showPuntoPartida"');
+        expect(viewSource).toContain('v-if="showPuntoLlegada"');
+    });
 });

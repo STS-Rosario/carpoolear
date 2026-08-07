@@ -4,12 +4,13 @@
             <div class="row">
                 <div class="col-md-22 col-md-offset-1">
                     <p class="admin-user-migration-new__back">
-                        <router-link
+                        <AppButton
+                            variant="secondary"
+                            size="sm"
                             :to="{ name: 'admin-user-migrations' }"
-                            class="btn btn-default btn-sm"
                         >
                             {{ $t('migrarUsuariosVolverAlListado') }}
-                        </router-link>
+                        </AppButton>
                     </p>
                     <h3>{{ $t('nuevaMigracionDeUsuario') }}</h3>
 
@@ -136,14 +137,16 @@
                             >
                                 {{ $t('advertenciaMigracionUsuarios') }}
                             </p>
-                            <button
+                            <AppButton
                                 type="button"
-                                class="btn btn-primary admin-user-migration-new__submit"
+                                variant="primary"
+                                class="admin-user-migration-new__submit"
                                 :disabled="migrateDisabled || migrating"
+                                :loading="migrating"
                                 @click="onMigrateClick"
                             >
                                 {{ migrating ? $t('guardando') : $t('migrar') }}
-                            </button>
+                            </AppButton>
                         </div>
                     </div>
                 </div>
@@ -154,6 +157,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -377,6 +381,7 @@ export default {
     },
     components: {
         AdminLayout,
+        AppButton,
         UserSearchAutocomplete
     }
 };

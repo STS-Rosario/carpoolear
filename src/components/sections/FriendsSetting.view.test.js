@@ -4,17 +4,52 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'FriendsSetting.vue');
 const friendApiPath = path.resolve(__dirname, '../../services/api/FriendApi.js');
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const friendApiSource = fs.readFileSync(friendApiPath, 'utf8');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+
+describe('FriendsSetting.vue Amigos / Solicitudes tabs', () => {
+    it('places Mis amigos title inside the content card with Amigos/Solicitudes tabs', () => {
+        expect(viewSource).toContain('friends-page');
+        expect(viewSource).toContain('friends-page__heading');
+        expect(viewSource).toMatch(
+            /friends-page__card[\s\S]*friends-page__heading[\s\S]*\$t\('misAmigos'\)[\s\S]*tabset/
+        );
+        expect(viewSource).toContain("$t('amigos')");
+        expect(viewSource).toContain("$t('solicitudes')");
+        expect(viewSource).toContain('keytabset="friends"');
+    });
+
+    it('wraps Amigos content in a white content card', () => {
+        expect(viewSource).toContain('friends-page__card');
+        expect(viewSource).toMatch(/friends-page__card[\s\S]*tabset/);
+    });
+
+    it('shows Recibidas/Enviadas FilterChips under Solicitudes with counts', () => {
+        expect(viewSource).toContain('FilterChips');
+        expect(viewSource).toContain('requestsFilter');
+        expect(viewSource).toContain('requestFilterOptions');
+        expect(viewSource).toContain("$t('filtroSolicitudesRecibidas')");
+        expect(viewSource).toContain("$t('filtroSolicitudesEnviadas')");
+        expect(i18nSource).toContain("filtroSolicitudesRecibidas: 'Recibidas'");
+        expect(i18nSource).toContain("filtroSolicitudesEnviadas: 'Enviadas'");
+        expect(i18nSource).toContain("filtroSolicitudesRecibidas: 'Received'");
+        expect(i18nSource).toContain("filtroSolicitudesEnviadas: 'Sent'");
+    });
+
+    it('applies tab and filter query deep links for Solicitudes Recibidas', () => {
+        expect(viewSource).toContain('applyFriendsSettingDeepLink');
+        expect(viewSource).toContain("from '../../utils/friendsDeepLinks'");
+        expect(viewSource).toContain('this.$route.query');
+        expect(viewSource).toContain('activateTab');
+    });
+});
 
 describe('FriendsSetting.vue incoming friend requests', () => {
     it('renders incoming friend request cards with labeled accept and reject actions', () => {
         expect(viewSource).toContain('IncomingFriendRequestCard');
         expect(viewSource).toContain('incoming-friend-requests-list');
-        expect(viewSource).toContain('align-items: flex-start');
-        expect(viewSource).toMatch(
-            /\.incoming-friend-requests-list[\s\S]*?width: 100%/
-        );
         expect(viewSource).toContain('refreshFriendsData');
         expect(viewSource).toContain('activated()');
         expect(viewSource).toContain('onAcceptClick');
@@ -28,11 +63,10 @@ describe('FriendsSetting.vue incoming friend requests', () => {
 });
 
 describe('FriendsSetting.vue friends list', () => {
-    it('renders friend list cards with delete action and left-aligned layout', () => {
+    it('renders friend list cards with delete action', () => {
         expect(viewSource).toContain('FriendRequestCard');
         expect(viewSource).toContain('friends-list');
         expect(viewSource).toContain('onDeleteClick');
-        expect(viewSource).toMatch(/\.friends-list[\s\S]*?align-items: flex-start/);
         const friendsListSection = viewSource.match(
             /id="friends-list"[\s\S]*?<\/div>\s*<template #no-data/
         )?.[0];
@@ -43,43 +77,20 @@ describe('FriendsSetting.vue friends list', () => {
 
 describe('FriendsSetting.vue outgoing pending requests', () => {
     it('shows sent pending requests as inline-flex name chips with remove action', () => {
-        expect(viewSource).toContain("$t('solicitudesDeAmigoPendientes')");
         expect(viewSource).toContain('sentPendings');
         expect(viewSource).toContain('sentPending');
         expect(viewSource).toContain('cancelRequest');
         expect(viewSource).toContain('sent-pending-list');
-        expect(viewSource).toContain('display: inline-flex');
         expect(viewSource).toContain('sent-pending-chip');
         expect(viewSource).toContain('sent-pending-chip__name');
         expect(viewSource).toContain('sent-pending-chip__remove');
-        expect(viewSource).toContain('friends-page-heading');
-        expect(viewSource).toContain('friends-section-heading');
-        expect(viewSource).toContain('font-size: 1.625rem');
-        expect(viewSource).toContain('font-size: 1.375rem');
+        expect(viewSource).not.toContain('friends-page-heading');
         expect(viewSource).not.toContain('sent-pending-heading');
-        const amigosH1 = viewSource.match(
-            /<h1 class="friends-page-heading">\{\{\s*\$t\('amigos'\)/
-        );
-        const sentPendingH2 = viewSource.match(
-            /<h2 class="friends-section-heading">\{\{\s*\$t\('solicitudesDeAmigoPendientes'\)/
-        );
-        const misAmigosH2 = viewSource.match(
-            /<h2 class="friends-section-heading">\{\{\s*\$t\('misAmigos'\)/
-        );
-        expect(amigosH1).toBeTruthy();
-        expect(sentPendingH2).toBeTruthy();
-        expect(misAmigosH2).toBeTruthy();
-        const amigosIndex = viewSource.indexOf('friends-page-heading');
-        const sentPendingTitleIndex = viewSource.indexOf(
-            "$t('solicitudesDeAmigoPendientes')"
-        );
-        expect(amigosIndex).toBeGreaterThan(-1);
-        expect(sentPendingTitleIndex).toBeGreaterThan(amigosIndex);
         expect(viewSource).toContain("$t('quitarSolicitudAmigo')");
         expect(viewSource).toContain('onCancelRequestClick');
         expect(viewSource).toContain('fa fa-times');
         const sentPendingSection = viewSource.match(
-            /id="sent-pending-list"[\s\S]*?<\/div>\s*<template #loading/
+            /id="sent-pending-list"[\s\S]*?<\/div>\s*<template #(?:no-data|loading)/
         )?.[0];
         expect(sentPendingSection).toBeTruthy();
         expect(sentPendingSection).not.toContain('FriendCard');

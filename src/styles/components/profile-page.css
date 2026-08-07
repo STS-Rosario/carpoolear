@@ -1,0 +1,743 @@
+/* Public profile visual layer — scoped under .profile-page */
+
+.profile-page {
+    --profile-tab-active: var(--secondary-background, #016587);
+    --profile-tab-muted: #9a9a9a;
+    --profile-baseline: #d0d0d0;
+    --profile-card-bg: #fff;
+    --profile-canvas: #f0f0f0;
+    --profile-verified: #2e7d32;
+    --profile-privacy-bg: #e8f4f8;
+    --profile-chip-active: var(--secondary-background, #016587);
+    --profile-divider: #e6e6e6;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+    color: var(--ds-text-primary, #333);
+    padding: 0.75rem 1rem 1.25rem;
+    background: var(--profile-canvas);
+    box-sizing: border-box;
+}
+
+.profile-page strong,
+.profile-page b,
+.profile-page .profile-identity-header__name,
+.profile-page .profile-info-panel__section-label,
+.profile-page .profile-info-panel__tile-title,
+.profile-page .rate-item-title strong,
+.profile-page .profile-filter-chip--active {
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
+.profile-page .tabset > .nav-tabs {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    display: flex;
+    background-color: transparent;
+    border-bottom: 1px solid #d0d0d0;
+    z-index: 1;
+}
+
+.profile-page .tabset > .nav-tabs > li {
+    float: none;
+    width: auto;
+    flex: 1 1 0;
+    text-align: center;
+}
+
+.profile-page .tabset > .nav-tabs > li > a {
+    border: none;
+    color: var(--profile-tab-muted);
+    font-family: var(--ds-font-family);
+    font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    padding: 0.85rem 0.5rem;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.profile-page .tabset > .nav-tabs > li > a:hover,
+.profile-page .tabset > .nav-tabs > li > a:focus,
+.profile-page .tabset > .nav-tabs > li > a:focus-visible {
+    border: none;
+    color: var(--profile-tab-active);
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.profile-page .tabset > .nav-tabs > li > a.active {
+    color: var(--profile-tab-active);
+    border-bottom: 4px solid var(--profile-tab-active);
+    margin-bottom: -1px;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .tabset > .nav-tabs::after {
+    display: none;
+}
+
+.profile-page .tabset .nav > li > a.active::after {
+    display: none;
+}
+
+.profile-page .tabset > .tab-content {
+    margin-top: 0;
+    min-height: 0;
+    background: transparent;
+}
+
+.profile-page .tabset .tab-pane.container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+/* Nested Bootstrap .container uses viewport breakpoints (e.g. 1170px) and
+   overflows the profile content card — force full-bleed of the card. */
+.profile-page .profile-rates-component.container,
+.profile-page .profile-trip-component.container,
+.profile-page .profile-info-component.container,
+.profile-page .trips.container {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+}
+
+.profile-page .profile-info-component {
+    padding-bottom: 1rem;
+}
+
+.profile-page__content-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    padding: 0.75rem 1rem 1rem;
+    background: var(--profile-card-bg);
+    border-radius: 0.75rem;
+}
+
+.profile-page .tab-content,
+.profile-page .tab-pane {
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.profile-identity-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.25rem 1rem 1rem;
+    background: var(--profile-card-bg);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
+}
+
+.profile-identity-header__avatar {
+    width: 7.5rem;
+    height: 7.5rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 0.85rem;
+}
+
+.profile-identity-header__name-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-identity-header__name {
+    font-size: 1.35rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    color: #222;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.profile-identity-header__verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: #e8f5e9;
+    color: var(--profile-verified);
+    font-size: 0.75rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    margin: 0;
+}
+
+.profile-identity-header__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem 0.65rem;
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-identity-header__stats-sep {
+    color: #bbb;
+}
+
+.profile-identity-header__ratings {
+    display: inline-flex;
+}
+
+/* Calificaciones: tinted active chip by rating type (base chips in filter-chips.css) */
+.profile-rates-component .profile-filter-chip--all.profile-filter-chip--active {
+    background: #e3f2f8;
+    border-color: #016587;
+    color: #016587;
+}
+
+.profile-rates-component .filter-chip--all.filter-chip--active {
+    background: #e3f2f8;
+    border-color: #016587;
+    color: #016587;
+}
+
+.profile-rates-component .profile-filter-chip--positive.profile-filter-chip--active {
+    background: #e8f5e9;
+    border-color: #2e7d32;
+    color: #2e7d32;
+}
+
+.profile-rates-component .filter-chip--positive.filter-chip--active {
+    background: #e8f5e9;
+    border-color: #2e7d32;
+    color: #2e7d32;
+}
+
+.profile-rates-component .profile-filter-chip--neutral.profile-filter-chip--active {
+    background: #ececec;
+    border-color: #757575;
+    color: #616161;
+}
+
+.profile-rates-component .filter-chip--neutral.filter-chip--active {
+    background: #ececec;
+    border-color: #757575;
+    color: #616161;
+}
+
+.profile-rates-component .profile-filter-chip--negative.profile-filter-chip--active {
+    background: #fdecea;
+    border-color: #c62828;
+    color: #c62828;
+}
+
+.profile-rates-component .filter-chip--negative.filter-chip--active {
+    background: #fdecea;
+    border-color: #c62828;
+    color: #c62828;
+}
+
+/* Perfil content */
+.profile-info-panel {
+    padding: 0.25rem 0 1.5rem;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-info-component .edit-action.profile-friend-actions {
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.profile-info-panel__section-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.7rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.profile-info-panel__bio {
+    margin: 0 0 1.25rem;
+    color: #333;
+    line-height: 1.45;
+    font-size: 0.95rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-info-panel__tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0.75rem 0 1rem;
+}
+
+.profile-info-panel__tile {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #f0f0f0;
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon-wrap--verified {
+    background: #c8e6c9;
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon {
+    float: none;
+    width: 1em;
+    height: 1em;
+    margin: 0;
+    padding: 0;
+    color: #666;
+    font-size: 1.15rem;
+    line-height: 1;
+    text-align: center;
+    display: block;
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon::before {
+    /* Font Awesome glyphs sit optically high in the em-box */
+    display: block;
+    line-height: 1;
+    transform: translateY(0.08em);
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon--verified {
+    color: var(--profile-verified, #2e7d32);
+}
+
+.profile-info-panel__tile-title {
+    font-weight: var(--ds-font-weight-bold, 700);
+    color: #222;
+    margin: 0 0 0.15rem;
+    font-size: 0.95rem;
+}
+
+.profile-info-panel__tile-sub {
+    margin: 0;
+    color: #777;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-info-panel__privacy {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: 1.25rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.65rem;
+    background: var(--profile-privacy-bg);
+    color: var(--profile-tab-active);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-info-panel__privacy i {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+    float: none;
+    width: auto;
+}
+
+/* Override legacy float icon layout that overlaps text */
+.profile-page .profile-info-panel__details .list-group-item,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.85rem 0;
+    border: none;
+    border-top: 1px solid var(--profile-divider);
+    background: transparent;
+    text-align: left;
+}
+
+.profile-page .profile-info-panel__details .list-group-item i,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item i {
+    float: none;
+    width: 1.5rem;
+    flex-shrink: 0;
+    margin: 0.15rem 0 0;
+    line-height: 1;
+    font-size: 1.15rem;
+}
+
+.profile-page .profile-info-panel__details .list-group-item .list-group-item--content,
+.profile-page .profile-info-component .profile-info-panel__details .list-group-item .list-group-item--content {
+    display: block;
+    width: auto;
+    flex: 1 1 auto;
+    padding-right: 0;
+    text-align: left;
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+/* Rating rows — beat desktop card chrome from base.css */
+.profile-page .tab-content .profile-rates-component .list-group-item,
+.profile-page .profile-rates-component .list-group-item {
+    border: none;
+    border-bottom: 1px solid var(--profile-divider);
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: 1rem 0;
+    border-radius: 0;
+}
+
+.profile-page .profile-rates-component .rate-item {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-rates-component .rate-item-detail {
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-rates-component .list-group {
+    display: block;
+}
+
+.profile-page .profile-rates-component .column-rating {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+/* Section headings — login title voice, sized by tag (h2).
+   Exclude the home search hero title (blue + centered). */
+.profile-page h2,
+.profile-page .tabset h2,
+.trips.container h2:not(.trips-search__hero-title) {
+    margin: 1.25rem 0 0.75rem;
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-bold, 700);
+    font-size: var(--ds-heading-h2-size);
+    line-height: 1.15;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
+}
+
+.trips.container .panel-donar h2,
+.trips.container .panel-donar .panel-donar__title {
+    margin: 0 0 0.75rem;
+    color: var(--ds-action);
+    font-weight: var(--ds-font-weight-normal, 400);
+    font-size: 1.25rem;
+    line-height: 1.35;
+}
+
+.trips.container .panel-donar h2 strong,
+.trips.container .panel-donar .panel-donar__title strong {
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
+.trips.container .trips-search__hero {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.trips.container .trips-search__hero-title {
+    margin: 0 0 0.5rem;
+    color: var(--ds-action);
+    font-family: var(--ds-font-family);
+    font-size: 2rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    line-height: 1.15;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: center;
+}
+
+.profile-page h3,
+.trips.container h3 {
+    margin: 1rem 0 0.5rem;
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-bold, 700);
+    font-size: var(--ds-heading-h3-size);
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
+}
+
+.profile-page .profile-rates-component .referencias-section-description,
+.profile-page .profile-rates-component .alert {
+    font-weight: var(--ds-font-weight-normal, 400);
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Profile trip cards — neutralize Bootstrap col floats from Trip.vue */
+.profile-trip-component .trips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    width: 100%;
+}
+
+.profile-trip-card {
+    border: 1px solid #ddd;
+    border-radius: 0.65rem;
+    padding: 0.85rem 0.875rem 0.85rem;
+    margin-bottom: 0;
+    background: #fff;
+    width: 100%;
+    max-width: 100%;
+    float: none;
+    clear: both;
+}
+
+.profile-trip-card .trip-card-shell {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.profile-trip-card__role {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #888;
+    font-size: 0.8rem;
+    font-weight: var(--ds-font-weight-normal, 400);
+    margin: 0 0 0.65rem;
+    margin-left: 5px;
+    padding: 0;
+}
+
+.profile-trip-card > [class*='col-'] {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+    display: block;
+}
+
+.profile-trip-card .trip {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.profile-page .profile-trip-component {
+    font-family: var(--ds-font-family);
+    font-weight: var(--ds-font-weight-normal, 400);
+}
+
+.profile-page .profile-trip-component .container,
+.profile-page .profile-trip-component .col-xs-24 {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    float: none;
+}
+
+.profile-page .profile-rates-component .list-group,
+.profile-page .profile-info-panel {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width: 767px) {
+    .profile-page {
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .profile-identity-header {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 1.25rem;
+        padding: 1.5rem 1rem;
+    }
+
+    .profile-identity-header__avatar {
+        margin-bottom: 0;
+        width: 6.5rem;
+        height: 6.5rem;
+        flex-shrink: 0;
+    }
+
+    .profile-identity-header__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .profile-identity-header__name-row {
+        justify-content: flex-start;
+        gap: 0.65rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .profile-identity-header__stats {
+        justify-content: flex-start;
+    }
+
+    .profile-page {
+        padding: 0;
+        background: transparent;
+    }
+
+    .profile-page .profile-identity-header {
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        margin-bottom: 1rem;
+    }
+
+    .profile-page .profile-page__content-card {
+        background: var(--profile-card-bg);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .profile-page--public {
+        background: var(--profile-canvas);
+        padding: 1.5rem 1rem 2rem;
+        min-height: calc(100vh - 6rem);
+    }
+
+    .profile-page--public .profile-identity-header {
+        max-width: 960px;
+        margin: 0 auto 1rem;
+        padding: 1.5rem;
+    }
+
+    .profile-page--public .profile-identity-header__verified {
+        background: transparent;
+        border: 1px solid var(--profile-verified);
+        padding: 0.15rem 0.55rem;
+    }
+
+    .profile-page--public .profile-page__content-card {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+
+    .profile-page .profile-info-component {
+        padding-bottom: 0;
+    }
+
+    .profile-page .list-container {
+        margin: 0;
+    }
+
+    .profile-info-panel__tiles {
+        flex-direction: row;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .profile-info-panel__tile {
+        flex: 1 1 0;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        padding: 1rem;
+    }
+
+    /* Keep ratings as a single stacked list on desktop too */
+    .profile-page .profile-rates-component .column-rating {
+        float: none;
+        width: 100%;
+    }
+
+    /* Profile Viajes: date/time as second column beside route */
+    .profile-trip-card .trip-card-shell__body {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .profile-trip-card .trip-card-shell__route {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .profile-trip-card .trip-card-shell__schedule {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: space-between;
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 8.5rem;
+        align-self: stretch;
+    }
+
+    .profile-trip-card .trip-card-shell__chip {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+/* Own profile inside settings column */
+.settings-component .profile-page .tabset > .nav-tabs {
+    width: 100%;
+}

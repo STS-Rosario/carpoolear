@@ -3,10 +3,73 @@
         <IdentityValidationCountdownBanner />
         <PendingRatingsBanner />
         <div
-            class="actionbar actionbar-top visible-xs"
-            :class="{ 'actionbar-top--with-ratings': headerRatings }"
+            class="mobile-header-bar visible-xs"
+            v-if="$route.name !== 'mobile-menu'"
+            :class="{
+                'mobile-header-bar--with-ratings': headerRatings,
+                'mobile-header-bar--branded': showBrandedMobileHeader
+            }"
         >
-            <div class="actionbar_section actionbar_icon">
+            <template v-if="showBrandedMobileHeader">
+                <div class="mobile-header-bar__brand">
+                    <router-link
+                        :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                        v-on:click.native="tripsClick"
+                        class="mobile-header-bar__logo-link"
+                    >
+                        <img
+                            :src="header_logo"
+                            alt=""
+                            class="mobile-header-bar__logo"
+                        />
+                    </router-link>
+                </div>
+                <div class="mobile-header-bar__trailing">
+                    <div
+                        class="mobile-header-bar__actions"
+                        v-if="logged"
+                    >
+                        <span
+                            class="mobile-header-bar__action"
+                            @click="toNotifications"
+                            aria-label="Notificaciones"
+                        >
+                            <svgItem size="22" icon="bell"></svgItem>
+                            <span
+                                class="mobile-header-bar__badge"
+                                v-if="notificationsCount > 0"
+                            ></span>
+                        </span>
+                    </div>
+                    <AppButton
+                        v-if="!logged"
+                        class="mobile-header-bar__donate"
+                        variant="header-create"
+                        size="sm"
+                        :to="{ name: 'login' }"
+                    >
+                        {{ $t('iniciarSesion') }}
+                    </AppButton>
+                    <AppButton
+                        v-else-if="!shouldHideDonationOnIOSCapacitor(user)"
+                        class="mobile-header-bar__donate"
+                        variant="header-donate"
+                        size="sm"
+                        href="/aportar"
+                    >
+                        {{ $t('donar') }}
+                        <template #iconRight>
+                            <img
+                                :src="gift_icon"
+                                alt=""
+                                class="app-button__gift-icon"
+                            />
+                        </template>
+                    </AppButton>
+                </div>
+            </template>
+            <template v-else>
+            <div class="mobile-header-bar__section mobile-header-bar__icon">
                 <span v-if="showLogo">
                     <router-link
                         :to="{ name: 'trips', query: { clearSearch: 'true' } }"
@@ -26,7 +89,7 @@
                 </template>
             </div>
             <div
-                class="actionbar_section actionbar_title"
+                class="mobile-header-bar__section mobile-header-bar__title"
                 :class="[
                     subTitle !== '' ? 'header--with-subtitle' : '',
                     headerRatings ? 'header--with-ratings' : '',
@@ -55,13 +118,29 @@
                     class="header--ratings"
                 />
             </div>
-            <div class="actionbar_section actionbar_icon pull-right">
-                <template v-for="item in rightHeaderButton" :key="item.id">
+            <div class="mobile-header-bar__section mobile-header-bar__icon mobile-header-bar__icon--right">
+                <template v-for="item in mobileUtilityHeaderButtons" :key="item.id">
                     <span v-if="item.show" @click="onClick(item)">
                         <i :class="'fa ' + item.icon" aria-hidden="true"></i>
                     </span>
                 </template>
-                <div class="dropdown-right" v-if="showMenu || isMobile">
+                <div
+                    class="mobile-header-bar__actions"
+                    v-if="isMobile && logged"
+                >
+                    <span
+                        class="mobile-header-bar__action"
+                        @click="toNotifications"
+                        aria-label="Notificaciones"
+                    >
+                        <svgItem size="22" icon="bell"></svgItem>
+                        <span
+                            class="mobile-header-bar__badge"
+                            v-if="notificationsCount > 0"
+                        ></span>
+                    </span>
+                </div>
+                <div class="dropdown-right" v-if="showMenu && !isMobile">
                     <dropdown type="icon">
                         <template #button>
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -111,87 +190,77 @@
                         </li>
                     </dropdown>
                 </div>
-            </div>
-
-            <div
-                class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && user && !shouldHideDonationOnIOSCapacitor(user)"
-            >
-                <a
-                    href="/donar"
-                    class="btn btn-primary btn-donar-header btn-header-small btn-lg"
-                >
-                    {{ $t('donar') }}
-                </a>
-            </div>
-            <div
-                class="actionbar_section actionbar_icon pull-right"
-                v-if="isMobile && !user"
-            >
-                <router-link
-                    v-if="isTripsPage"
-                    tag="a"
-                    :to="{ name: 'login' }"
-                    class="btn btn-primary btn-login-header btn-header-small btn-lg"
-                >
-                    Ingresar
-                </router-link>
-            </div>
+                </div>
+            </template>
         </div>
         <div class="header_content hidden-xs">
-            <router-link
-                :to="{ name: 'trips', query: { clearSearch: 'true' } }"
-                v-on:click.native="tripsClick"
-            >
-                <div class="header_panel-left" v-if="logoHeaderVisibility">
-                    <img
-                        :src="background_desktop_mini"
-                        v-if="
-                            isNotLargeDesktop ||
-                            (config && config.trip_card_design === 'light')
-                        "
-                    />
-                    <img
-                        :src="background_desktop"
-                        v-if="
-                            !isNotLargeDesktop &&
-                            config &&
-                            config.trip_card_design !== 'light'
-                        "
-                    />
-                    <img :src="app_logo" />
-                </div>
-            </router-link>
-            <div class="header_panel-right">
-                <div class="header-social-links">
-                    <a
-                        href="https://www.instagram.com/carpoolear/?hl=en"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="header-social-link"
-                        aria-label="Instagram Carpoolear"
-                    >
-                        <img :src="instagram_logo" alt="" />
-                    </a>
-                    <a
-                        href="https://www.facebook.com/Carpoolear"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="header-social-link"
-                        aria-label="Facebook Carpoolear"
-                    >
-                        <img :src="facebook_logo" alt="" />
-                    </a>
-                </div>
+            <div class="header_panel-left" v-if="logoHeaderVisibility">
                 <router-link
-                    v-if="config.trip_card_design !== 'light'"
-                    class="btn btn-link trips-link"
                     :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                    v-on:click.native="tripsClick"
+                    class="header_logo-link"
                 >
-                    {{ $t('viajes') }}
+                    <img
+                        :src="header_logo"
+                        alt=""
+                        class="header_logo-image"
+                    />
                 </router-link>
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'trips'}">Información</router-link>-->
-                <!--<router-link class="btn btn-link" v-if="!logged" :to="{name: 'register'}">Registrarme</router-link>-->
+                <AppButton
+                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
+                    class="header_donate-btn"
+                    variant="header-donate"
+                    size="sm"
+                    href="/aportar"
+                >
+                    {{ $t('donar') }}
+                    <template #iconRight>
+                        <img
+                            :src="gift_icon"
+                            alt=""
+                            class="app-button__gift-icon"
+                        />
+                    </template>
+                </AppButton>
+            </div>
+            <nav class="header_panel-center" v-if="logged" aria-label="main">
+                <router-link
+                    class="header_nav-link"
+                    :class="{
+                        'header_nav-link--active': isDesktopNavActive('trips')
+                    }"
+                    :to="{ name: 'trips', query: { clearSearch: 'true' } }"
+                    v-on:click.native="tripsClick"
+                >
+                    {{ $t('inicio') }}
+                </router-link>
+                <router-link
+                    class="header_nav-link header_nav-my-trips"
+                    :class="{
+                        'header_nav-link--active': isDesktopNavActive('my-trips')
+                    }"
+                    :to="{ name: 'my-trips' }"
+                >
+                    {{ $t('misViajes') }}
+                    <span class="badge" v-if="myTripsCount > 0">
+                        {{ myTripsCount }}
+                    </span>
+                </router-link>
+                <router-link
+                    class="header_nav-link header_nav-messages"
+                    :class="{
+                        'header_nav-link--active':
+                            isDesktopNavActive('conversations')
+                    }"
+                    :to="{ name: 'conversations-list' }"
+                >
+                    {{ $t('mensajes') }}
+                    <span class="badge" v-if="messagesCount > 0">
+                        {{ messagesCount }}
+                    </span>
+                </router-link>
+            </nav>
+            <div class="header_panel-right">
                 <dropdown type="link" v-if="!logged">
                     <template #button>
                         {{ currentLocaleShortLabel }}
@@ -203,114 +272,49 @@
                         <a @click="setLocale('en')">English</a>
                     </li>
                 </dropdown>
-                <router-link
-                    class="btn btn-primary"
-                    btn-lg
-                    v-if="!logged"
-                    :to="{ name: 'login' }"
-                >
-                    {{ $t('inicio') }}
-                </router-link>
+                <template v-if="!logged">
+                    <AppButton
+                        class="header_auth-btn"
+                        variant="header-create"
+                        size="sm"
+                        :to="{ name: 'login' }"
+                    >
+                        {{ $t('iniciarSesion') }}
+                    </AppButton>
+                    <AppButton
+                        class="header_auth-btn"
+                        variant="header-outline"
+                        size="sm"
+                        :to="{ name: 'register' }"
+                    >
+                        {{ $t('RegistrarNuevoUsuario') }}
+                    </AppButton>
+                </template>
 
+                <AppButton
+                    v-if="logged"
+                    id="btn-create-trip"
+                    class="header_create-trip-btn"
+                    variant="header-create"
+                    size="sm"
+                    icon-left="fa fa-plus"
+                    :to="{ name: 'new-trip' }"
+                >
+                    {{ $t('crearViaje') }}
+                </AppButton>
                 <span
                     class="header_notifications"
                     @click="toNotifications"
                     v-if="logged"
+                    aria-label="Notificaciones"
                 >
-                    <span class="fa-container">
-                        <i class="fa fa-bell background" aria-hidden="true"></i>
-                        <i
-                            :style="
-                                notificationsCount > 0 ? 'color: white' : ''
-                            "
-                            class="fa fa-bell"
-                            aria-hidden="true"
-                        ></i>
-                    </span>
+                    <svgItem size="22" icon="bell"></svgItem>
                     <span class="badge" v-if="notificationsCount > 0">
                         {{ notificationsCount }}
                     </span>
                 </span>
-
-                <div class="header_profile" v-if="user">
-                    <span>{{ user.name }}</span>
-                    <dropdown type="info" v-if="logged">
-                        <template #button>
-                            <div
-                                class="circle-box header_profile_image"
-                                v-imgSrc:profile="user.image"
-                            ></div>
-                        </template>
-                        <li>
-                            <router-link :to="{ name: 'my-trips' }">
-                                {{ $t('misViajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link :to="{ name: 'conversations-list' }">
-                                {{ $t('mensajes') }}
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'profile', params: { id: 'me' } }"
-                            >
-                                {{ $t('perfil') }}
-                            </router-link>
-                        </li>
-                        <!-- /soporte (mesa de ayuda), desktop -->
-                        <li>
-                            <router-link :to="{ name: 'tickets' }">{{
-                                $t('soporte')
-                            }}</router-link>
-                        </li>
-                        <li v-if="showChangelogNav">
-                            <a @click="openChangelog">{{ $t('ultimosCambios') }}</a>
-                        </li>
-                        <li v-if="user.is_admin">
-                            <router-link :to="{ name: 'admin-dashboard' }">
-                                {{ $t('administracion') }}
-                            </router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a @click="setLocale('arg')">Español</a>
-                        </li>
-                        <li>
-                            <a @click="setLocale('en')">English</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <!--<li>
-                            <router-link :to="{name: 'acerca_de'}">Acerca</router-link>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <router-link :to="{name: 'profile_update'}">Configuración</router-link>
-                        </li>-->
-                        <li>
-                            <a @click="logout" v-if="!isFacebokApp">{{
-                                $t('cerrarSesion')
-                            }}</a>
-                        </li>
-                    </dropdown>
-                </div>
-
-                <a
-                    v-if="!shouldHideDonationOnIOSCapacitor(user)"
-                    href="/donar"
-                    class="btn btn-primary btn-donar-header btn-lg"
-                    >{{ $t('donar') }}</a
-                >
-                <router-link
-                    v-if="logged"
-                    :to="{ name: 'new-trip' }"
-                    id="btn-create-trip"
-                    class="btn btn-primary btn-lg"
-                >
-                    {{ $t('crearViaje') }}
-                </router-link>
+                <header-menu-dropdown v-if="logged" />
             </div>
-            <div class="cf"></div>
         </div>
     </header>
 </template>
@@ -329,6 +333,9 @@ import bus from '../../services/bus-event.js';
 import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBanner.vue';
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
+import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
+import svgItem from '../SvgItem';
+import AppButton from '../ui/AppButton.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { UserApi } from '../../services/api';
 import {
@@ -344,23 +351,13 @@ export default {
 
     data() {
         return {
-            background_desktop_mini:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_background_desktop_mini.png',
-            background_desktop:
-                process.env.ROUTE_BASE +
-                'img/' +
-                process.env.TARGET_APP +
-                '_background_desktop.png',
+            header_logo: process.env.ROUTE_BASE + 'img/logo2.svg',
+            gift_icon: process.env.ROUTE_BASE + 'img/gift.svg',
             app_logo:
                 process.env.ROUTE_BASE +
                 'img/' +
                 process.env.TARGET_APP +
-                '_logo.png',
-            facebook_logo: process.env.ROUTE_BASE + 'img/fb_logo.png',
-            instagram_logo: process.env.ROUTE_BASE + 'img/instagram-logo.png'
+                '_logo.png'
         };
     },
 
@@ -385,7 +382,9 @@ export default {
             config: 'appConfig'
         }),
         ...mapState(useNotificationsStore, {
-            notificationsCount: 'count'
+            notificationsCount: 'count',
+            messagesCount: 'messagesCount',
+            myTripsCount: 'myTripsCount'
         }),
         ...mapState(useActionbarsStore, {
             title: 'title',
@@ -418,12 +417,17 @@ export default {
             }
             return true;
         },
-        isTripsPage() {
-            return this.$route.name === 'trips';
-        },
-        currentLocaleLabel() {
-            const labels = { arg: 'Español', en: 'English' };
-            return labels[this.$i18n.locale] || 'Español';
+        showBrandedMobileHeader() {
+            const authShellRoutes = [
+                'login',
+                'register',
+                'reset-password',
+                'reset-password-confirm'
+            ];
+            if (this.isMobile && authShellRoutes.includes(this.$route.name)) {
+                return true;
+            }
+            return this.isMobile && this.showLogo;
         },
         currentLocaleShortLabel() {
             const short = { arg: 'ES', en: 'EN' };
@@ -432,8 +436,14 @@ export default {
         actionbarTitleWidthClass() {
             const n = this.$route && this.$route.name;
             return n === 'identity_validation' || n === 'identity_validation_manual'
-                ? 'actionbar_title--settings-wide'
+                ? 'mobile-header-bar__title--settings-wide'
                 : '';
+        },
+        mobileUtilityHeaderButtons() {
+            if (!this.isMobile) {
+                return this.rightHeaderButton;
+            }
+            return this.rightHeaderButton.filter((item) => item.id !== 'search');
         }
     },
 
@@ -461,6 +471,22 @@ export default {
             useTripsStore().tripsSearch({ is_passenger: false });
         },
 
+        isDesktopNavActive(section) {
+            const name = this.$route && this.$route.name;
+            if (section === 'trips') {
+                return name === 'trips';
+            }
+            if (section === 'my-trips') {
+                return name === 'my-trips';
+            }
+            if (section === 'conversations') {
+                return (
+                    name === 'conversations-list' || name === 'conversation-chat'
+                );
+            }
+            return false;
+        },
+
         onHeaderChange() {
             // console.log('header-change', this.title);
         },
@@ -479,45 +505,172 @@ export default {
         dropdown,
         IdentityValidationCountdownBanner,
         UserRatingsCounts,
-        PendingRatingsBanner
+        PendingRatingsBanner,
+        HeaderMenuDropdown,
+        svgItem,
+        AppButton
     }
 };
 </script>
 
 <style scoped>
-.trips-link {
-    font-weight: bold;
+.header_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: var(--ds-header-desktop-padding-y);
+    padding-bottom: var(--ds-header-desktop-padding-y);
 }
-.header-social-links {
+.header_panel-left {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    float: none;
+    line-height: normal;
+}
+.header_logo-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    margin-right: 3rem;
-    vertical-align: middle;
 }
-.header-social-link img {
-    width: 22px;
-    height: 22px;
+.header_panel-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 0;
+}
+.header_nav-link {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    text-transform: none;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid transparent;
+}
+.header_nav-link:hover,
+.header_nav-link:focus {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.9;
+    outline: none;
+    box-shadow: none;
+    border-bottom: 2px solid #fff;
+}
+.header_nav-link:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+.header_nav-link--active {
+    border-bottom: 2px solid #fff;
+}
+.header_nav-messages .badge,
+.header_nav-my-trips .badge {
+    position: absolute;
+    top: calc(-0.55rem + 3px);
+    right: -0.85rem;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #e53935;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.15rem;
+    text-align: center;
+}
+.header_notifications .badge {
+    position: absolute;
+    top: calc(-0.55rem + 3px);
+    right: calc(-0.85rem + 9px);
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #e53935;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.15rem;
+    text-align: center;
+}
+.header_panel-right {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    float: none;
+    min-width: auto;
+    text-align: right;
+    line-height: normal;
+}
+.header_notifications {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding-left: 10px;
+    padding-right: 6px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 0;
+}
+.header_notifications :deep(svg) {
+    fill: #fff;
     display: block;
-    object-fit: contain;
+}
+.mobile-header-bar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    margin-left: 0.5rem;
+    padding-right: 1.3rem;
     vertical-align: middle;
-    margin-right: 1rem;
 }
-.header-social-link:hover img {
-    opacity: 0.85;
+.mobile-header-bar__action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    line-height: 0;
+    vertical-align: middle;
 }
-.actionbar_icon img {
+.mobile-header-bar__action :deep(svg) {
+    fill: #fff;
+    display: block;
+}
+.mobile-header-bar__badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e53935;
+}
+.mobile-header-bar__icon img {
     margin-bottom: 2px;
     width: 26px;
     margin-left: 0.3em;
 }
-.header_panel-right {
-    min-width: 50%;
-    text-align: right;
+.header_logo-image {
+    display: block;
+    height: 2rem;
+    width: auto;
 }
-@media (max-width: 1050px) {
-    .header_panel-right {
-        min-width: 70%;
-    }
+.header_donate-btn {
+    flex-shrink: 0;
+}
+.header_create-trip-btn {
+    flex-shrink: 0;
+}
+.header_auth-btn {
+    flex-shrink: 0;
 }
 </style>

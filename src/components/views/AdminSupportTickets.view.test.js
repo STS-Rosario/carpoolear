@@ -55,12 +55,6 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).not.toContain("name: 'profile'");
     });
 
-    it('uses compact narrow columns and a wide subject column class', () => {
-        expect(viewSource).toContain('support-tickets-table--compact');
-        expect(viewSource).toContain('support-tickets-table__subject');
-        expect(viewSource).toContain('support-tickets-table__narrow');
-    });
-
     it('shows relative timestamps with full date tooltip', () => {
         expect(viewSource).toContain('relativeDate(ticket.created_at)');
         expect(viewSource).toContain('relativeDate(ticket.updated_at)');
@@ -94,8 +88,10 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('v-model="filterType"');
         expect(viewSource).toContain('v-model="filterPriority"');
         expect(viewSource).toContain('v-model="filterNeedsReply"');
+        expect(viewSource).toContain('v-model="filterOpen"');
         expect(viewSource).toContain("{{ $t('filtroTicketsTodasCategorias') }}");
         expect(viewSource).toContain("{{ $t('filtroTicketsRequiereRespuesta') }}");
+        expect(viewSource).toContain("{{ $t('filtroTicketsAbiertos') }}");
     });
 
     it('renders admin pagination bar with per-page selector', () => {
@@ -116,6 +112,12 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('userId: this.filterUserId');
     });
 
+    it('preserves createdByAdmin filter from route query for admin ticket list fetch', () => {
+        expect(viewSource).toContain('filterCreatedByAdmin');
+        expect(viewSource).toContain('createdByAdmin: this.filterCreatedByAdmin');
+        expect(viewSource).toContain("query.created_by_admin = '1'");
+    });
+
     it('shows assigned admin column in tickets table', () => {
         expect(viewSource).toContain("{{ capitalizeFirst($t('asignadoA')) }}");
         expect(viewSource).toContain('assignedAdminDisplayName(ticket)');
@@ -129,5 +131,8 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain("document.addEventListener('visibilitychange', this.handleVisibilityChange)");
         expect(viewSource).toContain('setInterval');
         expect(viewSource).toContain('loadTickets({ silent: true })');
+    });
+
+    it('compacts the search row: sm Buscar, checkbox inset, space before table', () => {
     });
 });

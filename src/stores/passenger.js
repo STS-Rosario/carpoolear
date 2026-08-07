@@ -18,8 +18,8 @@ export const usePassengerStore = defineStore('passenger', {
     }),
 
     getters: {
-        // pendingRequest and pendingPaymentRequests are accessed via mapState
-        // which maps state properties directly — no redundant getters needed.
+        pendingRequestCount: (state) =>
+            state.pendingRequest ? state.pendingRequest.length : 0
     },
 
     actions: {
@@ -68,18 +68,21 @@ export const usePassengerStore = defineStore('passenger', {
 
         // Business logic actions
         getPendingRequest() {
+            this.pendingRequest = null;
             return passengerApi.allRequest().then((response) => {
                 this.setPending(response.data);
             });
         },
 
         getPendingPaymentRequests() {
+            this.pendingPaymentRequests = null;
             return passengerApi.pendingPaymentRequests().then((response) => {
                 this.setPendingPayment(response.data);
             });
         },
 
         getSeatRequests() {
+            this.seatRequests = null;
             return passengerApi.seatRequests().then((response) => {
                 this.setSeatRequests(response.data);
             });

@@ -9,8 +9,12 @@
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
         <div v-else>
             <div class="form-group">
-                <label>{{ $t('changelogVersion') }} *</label>
-                <input v-model="form.version" class="form-control" type="text" placeholder="3.2.3" />
+                <AppInput
+                    v-model="form.version"
+                    :label="$t('changelogVersion')"
+                    type="text"
+                    placeholder="3.2.3"
+                />
             </div>
             <div class="form-group">
                 <label>{{ $t('changelogContenido') }} *</label>
@@ -23,9 +27,9 @@
                     height="240px"
                 />
             </div>
-            <button class="btn btn-primary" :disabled="saving" @click="save">
+            <AppButton variant="primary" :disabled="saving" :loading="saving" @click="save">
                 {{ saving ? $t('guardando') : $t('guardarChangelog') }}
-            </button>
+            </AppButton>
         </div>
     </AdminLayout>
 </template>
@@ -34,6 +38,8 @@
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useChangelogStore } from '../../stores/changelog';
 import dialogs from '../../services/dialogs';
 
@@ -148,7 +154,9 @@ export default {
     },
     components: {
         editor: ToastUiEditor,
-        AdminLayout
+        AdminLayout,
+        AppButton,
+        AppInput
     }
 };
 </script>

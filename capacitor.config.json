@@ -22,8 +22,8 @@
     },
     "StatusBar": {
       "style": "LIGHT",
-      "backgroundColor": "#ffffff",
-      "overlaysWebView": false
+      "backgroundColor": "#1E5F9E",
+      "overlaysWebView": true
     },
     "SplashScreen": {
       "launchAutoHide": true,

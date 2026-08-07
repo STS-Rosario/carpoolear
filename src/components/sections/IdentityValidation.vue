@@ -1,5 +1,7 @@
 <template>
     <div class="identity-validation-component">
+        <div class="identity-validation-page__card">
+            <h1 class="identity-validation-page__heading">{{ $t('validarIdentidad') }}</h1>
         <div
             v-if="showVerificationSuccessBanner"
             class="identity-verification-success-banner"
@@ -18,6 +20,18 @@
                 </p>
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
+                </p>
+                <p
+                    v-if="showMpIntegrationDisconnectHint"
+                    class="identity-verification-success-banner__text"
+                >
+                    {{ $t('identityVerificationSuccessMpDisconnectLead') }}
+                    <a
+                        :href="mercadoPagoMyAppsUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="identity-verification-success-banner__link identity-verification-success-banner__link--inline"
+                    >{{ $t('identityVerificationSuccessMpDisconnectLink') }}</a>{{ $t('identityVerificationSuccessMpDisconnectTail') }}
                 </p>
                 <IdentityValidationAdminReviewNote
                     :note="displayableManualApprovalReviewNote"
@@ -87,14 +101,14 @@
                 <div class="panel-heading">{{ $t('esperandoPagoValidacionManual') }}</div>
                 <div class="panel-body">
                     <p>{{ $t('debesPagarParaContinuar') }}</p>
-                    <button
-                        class="btn btn-primary"
+                    <AppButton
+                        variant="primary"
                         :disabled="loadingPreference"
+                        :loading="loadingPreference"
                         @click="payManualValidation"
                     >
-                        <span v-if="loadingPreference">{{ $t('guardando') }}</span>
-                        <span v-else>{{ $t('pagarAhora') }}</span>
-                    </button>
+                        {{ $t('pagarAhora') }}
+                    </AppButton>
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
@@ -206,16 +220,16 @@
                     <strong>{{ $t('estado') }}:</strong>
                     {{ $t('estadoEsperandoFotos') }}
                 </p>
-                <router-link
+                <AppButton
                     v-if="manualStatus.request_id"
+                    variant="primary"
                     :to="{
                         name: 'identity_validation_manual',
                         query: { request_id: manualStatus.request_id, payment_success: '1' }
                     }"
-                    class="btn btn-primary"
                 >
                     {{ $t('subirDocumentacion') }}
-                </router-link>
+                </AppButton>
             </div>
 
             <!-- Manual validation: approved (read-only summary) -->
@@ -307,17 +321,20 @@
                         <ul class="identity-validation-card-bullets">
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
+                            :loading="loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
-                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
-                        </button>
+                            {{ $t('validarConMercadoPago') }}
+                        </AppButton>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -337,15 +354,17 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        <AppButton
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </button>
+                        </AppButton>
                     </div>
                 </div>
             </div>
@@ -381,17 +400,20 @@
                         <ul class="identity-validation-card-bullets">
                             <li>{{ $t('identidadModalAutoGratis') }}</li>
                             <li>{{ $t('identidadModalAutoInmediata') }}</li>
+                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-danger btn-lg btn-block identity-validation-btn-cta"
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
+                            :loading="loadingOAuth"
                             @click="startMercadoPagoOAuth"
                         >
-                            <span v-if="loadingOAuth">{{ $t('guardando') }}</span>
-                            <span v-else>{{ $t('validarConMercadoPago') }}</span>
-                        </button>
+                            {{ $t('validarConMercadoPago') }}
+                        </AppButton>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -411,18 +433,21 @@
                             </li>
                             <li>{{ $t('identityValidationTimeLine') }}</li>
                         </ul>
-                        <button
-                            type="button"
-                            class="btn btn-lg btn-block identity-validation-btn-outline"
+                        <AppButton
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="identity-validation-choice-cta"
                             :style="identityValidationButtonSizingStyle"
                             :disabled="isIdentityValidationBlockedByMissingDni"
                             @click="goToManualValidation"
                         >
                             {{ $t('solicitarVerificacionManual') }}
-                        </button>
+                        </AppButton>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -454,15 +479,21 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
+import {
+    MERCADO_PAGO_MY_APPS_URL,
+    shouldShowMercadoPagoIntegrationDisconnectHint
+} from '../../utils/mercadoPagoIntegrationDisconnectHint';
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
+import AppButton from '../ui/AppButton.vue';
 
 const EMPTY_WARNING_PARTS = { layout: null, leadKey: null, tailKey: null };
 
 export default {
     name: 'IdentityValidation',
     components: {
-        IdentityValidationAdminReviewNote
+        IdentityValidationAdminReviewNote,
+        AppButton
     },
     data() {
         return {
@@ -589,6 +620,15 @@ export default {
                 manualStatus: this.manualStatus,
                 resultMessage: this.resultMessage
             });
+        },
+        showMpIntegrationDisconnectHint() {
+            return shouldShowMercadoPagoIntegrationDisconnectHint({
+                resultMessage: this.resultMessage,
+                user: this.user
+            });
+        },
+        mercadoPagoMyAppsUrl() {
+            return MERCADO_PAGO_MY_APPS_URL;
         },
         checkCircleIconSrc() {
             const base = process.env.ROUTE_BASE || '/';
@@ -721,6 +761,29 @@ export default {
     color: #333;
 }
 
+.identity-validation-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.identity-validation-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+@media only screen and (max-width: 768px) {
+    .identity-validation-component {
+        padding: 1em;
+    }
+}
+
 .identity-verification-success-banner {
     display: flex;
     align-items: center;
@@ -780,24 +843,10 @@ export default {
     text-decoration: none;
 }
 
-.identity-validation-component .btn-primary,
-.identity-validation-component .btn-danger {
-    color: #fff;
-}
-
-.identity-validation-component .btn-primary[disabled],
-.identity-validation-component .btn-danger[disabled] {
-    color: #fff;
-    opacity: 0.65;
-}
-
-.identity-validation-component .identity-validation-btn-outline {
-    color: #337ab7;
-}
-
-.identity-validation-component .identity-validation-btn-outline:hover,
-.identity-validation-component .identity-validation-btn-outline:focus {
-    color: #286090;
+.identity-verification-success-banner__link--inline {
+    display: inline;
+    font-size: inherit;
+    font-weight: 600;
 }
 
 .identity-validation-component .alert {
@@ -1217,31 +1266,9 @@ export default {
     margin-bottom: 0.25rem;
 }
 
-.identity-validation-btn-cta {
+.identity-validation-choice-cta {
     text-transform: uppercase;
-    font-weight: 600;
     letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1.125rem;
-}
-
-.identity-validation-btn-outline {
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    border-radius: 4px;
-    font-size: 1.125rem;
-    background: #fff;
-    border: 2px solid #337ab7;
-    color: #337ab7;
-}
-
-.identity-validation-btn-outline:hover,
-.identity-validation-btn-outline:focus {
-    background: #f5f9fc;
-    border-color: #286090;
-    color: #286090;
-    text-decoration: none;
 }
 
 .identity-validation-hint {

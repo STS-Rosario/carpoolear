@@ -14,13 +14,10 @@ describe('Trip card quick actions', () => {
 });
 
 describe('Trip public visibility tooltip', () => {
-    it('uses visibilidadPublico title for friendship_type_id 2', () => {
-        expect(source).toMatch(
-            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadPublico'\)"/s
-        );
-        expect(source).not.toMatch(
-            /friendship_type_id === 2[\s\S]*?:title="\$t\('visibilidadAmigosDeAmigos'\)"/s
-        );
+    it('does not show trip visibility icons on the redesigned card', () => {
+        expect(source).not.toContain('trip_visibility');
+        expect(source).not.toContain("$t('visibilidadPublico')");
+        expect(source).not.toContain('friendship_type_id === 2');
     });
 });
 
@@ -49,14 +46,15 @@ describe('Trip clickModal', () => {
         );
     });
 
-    it('opens modal from the trip card only, not the modal wrapper', () => {
+    it('opens modal or navigates to detail via the shell detail-click handler', () => {
         const wrapperOpen = source.match(
             /:class="\[tripCardCountClass, \{ 'trip-needs-sellado': showSelladoPending \}\]"\s*\n\s*v-on:click="clickModal/
         );
         expect(wrapperOpen).toBeNull();
 
+        expect(source).toContain('@detail-click="onShellDetailClick"');
         expect(source).toMatch(
-            /class="trip"[\s\S]*?v-on:click="clickModal \? openModal\(\) : goToDetail\(false\)"/
+            /onShellDetailClick[\s\S]*?\{[\s\S]*?this\.clickModal[\s\S]*?openModal\(\)[\s\S]*?else[\s\S]*?goToDetail\(false\)/
         );
     });
 
@@ -72,5 +70,121 @@ describe('Trip card seat request limit warning', () => {
         expect(source).toContain('shouldShowDriverSeatRequestLimitWarning');
         expect(source).toContain("$t('tripSeatRequestLimitDriverWarning')");
         expect(source).toContain('seat_request_limit_reached');
+    });
+});
+
+describe('Trip card redesign shell', () => {
+    it('composes TripCardShell for the list card layout', () => {
+        expect(source).toContain('TripCardShell');
+        expect(source).toContain("from '../elements/TripCardShell.vue'");
+        expect(source).toContain('getTripLocationLabels');
+        expect(source).toContain('formatTripCardDate');
+        expect(source).toContain('formatTripCardTime');
+        expect(source).toContain('normalizeTripsCount');
+    });
+
+    it('removes the light/default theme forks from the card layout', () => {
+        expect(source).not.toMatch(/tripCardTheme === 'light'/);
+        expect(source).not.toMatch(/tripCardTheme !== 'light'/);
+        expect(source).not.toContain('tripCardTheme');
+    });
+
+    it('does not render star ratings on the card', () => {
+        expect(source).not.toContain('trip_stars');
+        expect(source).not.toContain('SvgItem');
+        expect(source).not.toContain('icon="\'star\'');
+    });
+
+    it('routes profile clicks and detail clicks through the shell events', () => {
+        expect(source).toContain('@profile-click="goToProfile"');
+        expect(source).toContain('@detail-click="onShellDetailClick"');
+    });
+
+    it('guards goToProfile against being called without a native event', () => {
+        expect(source).toMatch(
+            /goToProfile[^{]*\{\s*if\s*\(event[\s\S]*?event\.stopPropagation\(\)/
+        );
+    });
+
+    it('passes a shellUser computed with the resolved avatar image to the shell', () => {
+        expect(source).toContain(':user="shellUser"');
+        expect(source).toMatch(/shellUser\(\)\s*\{[\s\S]*?getUserImage/);
+    });
+
+    it('passes ratings, trips count, cities, provinces, puntos and date labels to the shell', () => {
+        expect(source).toContain(':ratings="driverRatings"');
+        expect(source).toContain(':trips-count-label="driverTripsLabel"');
+        expect(source).toContain(':from-city="locationLabels.fromCity"');
+        expect(source).toContain(':from-region="locationLabels.fromRegion"');
+        expect(source).toContain(':from-point="locationLabels.fromPoint"');
+        expect(source).toContain(':to-city="locationLabels.toCity"');
+        expect(source).toContain(':to-region="locationLabels.toRegion"');
+        expect(source).toContain(':to-point="locationLabels.toPoint"');
+        expect(source).toContain(':date-label="cardDateLabel"');
+        expect(source).toContain(':time-label="cardTimeLabel"');
+    });
+
+    it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
+        expect(source).toMatch(
+            /driverTripsLabel\(\)\s*\{[\s\S]*trips_count\s*==\s*null[\s\S]*perfilViajesParticipados[\s\S]*normalizeTripsCount\(this\.trip\.user\.trips_count\)/
+        );
+    });
+
+    it('keeps sellado legend, seat warning and seat controls as shell extras without visibility icons', () => {
+        expect(source).toContain('#body-extra');
+        expect(source).not.toContain('trip_visibility');
+        expect(source).toMatch(/#body-extra[\s\S]*?showSelladoPending[\s\S]*?faltaPagarSellado/);
+        expect(source).toMatch(/#body-extra[\s\S]*?showSeatRequestLimitWarning/);
+        expect(source).toContain('#footer-extra');
+        expect(source).toContain('changeSeatsNumber');
+    });
+});
+
+describe('Trip card future owner footer actions', () => {
+    const footerExtra = source.match(
+        /#footer-extra[\s\S]*?<\/template>/
+    )?.[0] || '';
+
+    it('stacks editar, lugares libres, chat grupal and cancelar after ver detalle', () => {
+        expect(footerExtra).toContain("$t('lugaresLibres')");
+        expect(footerExtra).toContain('trip-seats-control');
+        expect(footerExtra).toContain("$t('editarViaje')");
+        expect(footerExtra).toContain("$t('groupChatButton')");
+        expect(footerExtra).toContain('showGroupChatButton');
+        expect(footerExtra).toContain("$t('cancelarViaje')");
+        expect(footerExtra).toContain('deleteTrip');
+        expect(source).toMatch(
+            /showGroupChatButton\(\)\s*\{[\s\S]*group_chat_conversation_id/
+        );
+
+        const editIdx = footerExtra.indexOf("$t('editarViaje')");
+        const seatsIdx = footerExtra.indexOf("$t('lugaresLibres')");
+        const chatIdx = footerExtra.indexOf("$t('groupChatButton')");
+        const cancelIdx = footerExtra.indexOf("$t('cancelarViaje')");
+        expect(editIdx).toBeGreaterThan(-1);
+        expect(seatsIdx).toBeGreaterThan(editIdx);
+        expect(chatIdx).toBeGreaterThan(seatsIdx);
+        expect(cancelIdx).toBeGreaterThan(chatIdx);
+    });
+
+    it('keeps lugares libres label on the same row as the seat stepper', () => {
+        expect(footerExtra).toMatch(
+            /trip-seats-control[\s\S]*trip-seats-control__label[\s\S]*trip-seats-control__stepper/
+        );
+    });
+
+    it('removes icon-only eye edit trash controls from footer-extra', () => {
+        expect(footerExtra).not.toContain('fa-eye');
+        expect(footerExtra).not.toContain('fa-pencil');
+        expect(footerExtra).not.toContain('fa-trash');
+        expect(footerExtra).not.toContain('trip-inline-controls');
+    });
+
+    it('wires group chat navigation through openTripGroupChat', () => {
+        expect(source).toContain('openTripGroupChat');
+        expect(source).toContain('toGroupChat');
+        expect(source).toMatch(
+            /toGroupChat[\s\S]*?openTripGroupChat[\s\S]*?conversation-chat/
+        );
     });
 });

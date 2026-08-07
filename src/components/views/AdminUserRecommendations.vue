@@ -2,12 +2,13 @@
     <AdminLayout>
         <div class="container admin-user-recommendations">
             <p class="admin-user-detail__back">
-                <router-link
+                <AppButton
+                    variant="secondary"
+                    size="sm"
                     :to="hubRoute"
-                    class="btn btn-default btn-sm"
                 >
                     {{ $t('adminUsuariosVolverResumen') }}
-                </router-link>
+                </AppButton>
             </p>
             <div v-if="loading" class="alert alert-info">
                 <img
@@ -46,6 +47,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import AdminReferenceCard from '../elements/AdminReferenceCard.vue';
 import { UserApi, AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -54,6 +56,7 @@ export default {
     name: 'admin-user-recommendations',
     components: {
         AdminLayout,
+        AppButton,
         AdminReferenceCard
     },
     data() {

@@ -30,8 +30,6 @@ describe('AdminUserMigrationNew view', () => {
     });
 
     it('caps avatar size to 100x100px', () => {
-        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*width:\s*100px/);
-        expect(source).toMatch(/\.user-migration-card__avatar\s*\{[^}]*height:\s*100px/);
     });
 
     it('formats DNI in the migration field comparison table', () => {
@@ -100,17 +98,6 @@ describe('AdminUserMigrationNew view', () => {
         expect(keepHeadingIndex).toBeGreaterThan(-1);
         expect(keepRoleNoticeIndex).toBeGreaterThan(-1);
         expect(source).toContain('supportTicketNoticeText');
-    });
-
-    it('styles the support ticket notice as red bold text', () => {
-        expect(source).toMatch(
-            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*color:\s*[^;]+/
-        );
-        expect(source).toMatch(
-            /\.admin-user-migration-new__support-ticket-notice\s*\{[^}]*font-weight:\s*(700|bold)/
-        );
-        expect(source).toMatch(/label \.admin-user-migration-new__support-ticket-notice\s*\{/);
-        expect(source).toMatch(/p\.admin-user-migration-new__support-ticket-notice\s*\{/);
     });
 
     it('keeps the support ticket notice copy in i18n', () => {

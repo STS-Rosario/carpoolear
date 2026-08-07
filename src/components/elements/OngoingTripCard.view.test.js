@@ -6,29 +6,45 @@ const viewPath = path.resolve(__dirname, 'OngoingTripCard.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('OngoingTripCard.vue', () => {
-    it('shows the ongoing trip heading and card layout', () => {
+    it('shows the ongoing trip heading and uses TripCardShell', () => {
         expect(viewSource).toContain('viajeEnProgreso');
-        expect(viewSource).toContain('ongoing-trip-card');
+        expect(viewSource).toContain('TripCardShell');
         expect(viewSource).toContain('getTripLocationLabels');
     });
 
-    it('shows driver info, schedule and actions', () => {
-        expect(viewSource).toContain('UserNameWithBadge');
-        expect(viewSource).toContain('UserRatingsCounts');
+    it('shows driver info, schedule and actions via shell', () => {
+        expect(viewSource).toContain('TripCardShell');
         expect(viewSource).toContain('compartirUbicacionTiempoReal');
         expect(viewSource).toContain('compartiendoUbicacionTiempoReal');
         expect(viewSource).toContain('isSharingLiveLocation');
-        expect(viewSource).toContain('ongoing-trip-card__share--active');
         expect(viewSource).toContain('loadLiveShareStatus');
-        expect(viewSource).toContain('verDetalle');
         expect(viewSource).toContain("name: 'trip_live_share'");
         expect(viewSource).toContain('shouldShowLiveLocationShare');
         expect(viewSource).toContain('showShareLocationLink');
+        expect(viewSource).toContain('#footer-extra');
+        expect(viewSource).not.toContain('#actions-extra');
     });
 
-    it('aligns neutral rating icon without extra top padding in the ongoing trip card', () => {
+    it('routes profile and detail clicks through the shell', () => {
+        expect(viewSource).toContain('@profile-click="onProfileClick"');
+        expect(viewSource).toContain('@detail-click="onDetailClick"');
+        expect(viewSource).toContain("name: 'profile'");
+        expect(viewSource).toContain("name: 'detail_trip'");
+    });
+
+    it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
         expect(viewSource).toMatch(
-            /\.ongoing-trip-card__driver-meta\s*:deep\(\.user-ratings-counts__icon-slot--neutral\)\s*\{[\s\S]*padding-top:\s*0/
+            /driverTripsLabel\(\)\s*\{[\s\S]*trips_count\s*==\s*null[\s\S]*perfilViajesParticipados[\s\S]*normalizeTripsCount/
         );
+        expect(viewSource).toContain(':trips-count-label="driverTripsLabel"');
+    });
+
+    it('passes city, province and punto labels to the shell', () => {
+        expect(viewSource).toContain(':from-city="locations.fromCity"');
+        expect(viewSource).toContain(':from-region="locations.fromRegion"');
+        expect(viewSource).toContain(':from-point="locations.fromPoint"');
+        expect(viewSource).toContain(':to-city="locations.toCity"');
+        expect(viewSource).toContain(':to-region="locations.toRegion"');
+        expect(viewSource).toContain(':to-point="locations.toPoint"');
     });
 });

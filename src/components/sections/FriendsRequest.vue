@@ -2,27 +2,22 @@
     <div class="friends-component">
         <div class="clearfix">
             <h2>{{ $t('buscarContacto') }}</h2>
-            <li class="list-group-item">
-                <div class="input-group">
-                    <input
-                        v-model="text"
-                        v-debounceInput="onTextChange"
-                        type="text"
-                        class="form-control"
-                        id="input-name"
-                        :placeholder="$t('buscarPersonas')"
-                    />
-                    <span class="input-group-btn">
-                        <button
-                            class="btn btn-default"
-                            type="button"
-                            @click="onTextChange"
-                        >
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </span>
-                </div>
-            </li>
+            <div class="friends-request__search">
+                <AppInput
+                    id="input-name"
+                    class="friends-request__search-input"
+                    v-model="text"
+                    :placeholder="$t('buscarPersonas')"
+                    @update:modelValue="onSearchInput"
+                />
+                <AppButton
+                    variant="secondary"
+                    icon-left="fa fa-search"
+                    icon-only
+                    :aria-label="$t('buscarPersonas')"
+                    @click="onTextChange"
+                />
+            </div>
             <template v-if="text.length > 0">
                 <Loading class="conversation_chat--chats" :data="users">
                     <li
@@ -122,6 +117,9 @@ import Loading from '../Loading.vue';
 import FriendCard from './FriendCard';
 import bus from '../../services/bus-event.js';
 import spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
+import { debounce } from '../../services/utility';
 
 export default {
     name: 'friends_request',
@@ -129,7 +127,8 @@ export default {
         return {
             text: '',
             idRequesting: {},
-            searchingRequest: null
+            searchingRequest: null,
+            debouncedSearch: null
         };
     },
     computed: {
@@ -137,12 +136,22 @@ export default {
             users: 'users'
         })
     },
+    created() {
+        this.debouncedSearch = debounce(() => {
+            this.onTextChange();
+        }, 800);
+    },
     methods: {
         ...mapActions(useFriendsStore, {
             search: 'searchUsers',
             request: 'request',
             clearUserSearch: 'clearUserSearch'
         }),
+        onSearchInput() {
+            if (this.debouncedSearch) {
+                this.debouncedSearch();
+            }
+        },
         onTextChange() {
             this.search(this.text);
         },
@@ -174,13 +183,25 @@ export default {
     components: {
         Loading,
         FriendCard,
-        spinner
+        spinner,
+        AppButton,
+        AppInput
     }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.friends-request__search {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.friends-request__search-input {
+    flex: 1;
+    min-width: 0;
+}
 .btn {
     border: solid 2px #fff;
     width: 132px;
@@ -233,14 +254,6 @@ i {
     }
 }
 @media only screen and (max-width: 400px) {
-    .input-group-btn:last-child > .btn,
-    .input-group-btn:last-child > .btn-group {
-        height: 26px;
-    }
-    .form-control {
-        padding: 0.3em 0.8em;
-        font-size: 12px;
-    }
     .friends-component {
         padding: 0;
     }
@@ -260,9 +273,6 @@ i {
     }
     .media-right[data-v-9c187428] {
         top: 2px;
-    }
-    .input-group-btn .btn {
-        width: 50px;
     }
     .alert {
         font-size: 12px;

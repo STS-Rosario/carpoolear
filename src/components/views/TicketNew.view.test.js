@@ -41,3 +41,20 @@ describe('TicketNew view', () => {
         expect(source).toContain('focusPrefilledTicketEditorAtStart');
     });
 });
+
+describe('TicketNew page card', () => {
+    it('uses account settings layout without a layout page title so the in-card heading is used', () => {
+        expect(source).toContain('AccountSettingsLayout');
+        expect(source).not.toContain('page-title-key="soporte"');
+    });
+
+    it('wraps content in a white card with Mesa de ayuda as page title', () => {
+        expect(source).toContain('ticket-new-page__card');
+        expect(source).toContain('ticket-new-page__heading');
+        expect(source).toMatch(
+            /ticket-new-page__card[\s\S]*ticket-new-page__heading[\s\S]*\$t\('soporte'\)/
+        );
+        expect(source).not.toContain('panel panel-default');
+        expect(source).not.toContain('panel-heading');
+    });
+});

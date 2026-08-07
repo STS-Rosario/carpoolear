@@ -1,7 +1,13 @@
 <template>
     <div class="container">
         <template v-if="trip">
-            <div class="trip-detail-component">
+            <div
+                class="trip-detail-component trip-detail"
+                :class="{
+                    'trip-detail--mobile': isMobile,
+                    'trip-detail--desktop': !isMobile
+                }"
+            >
                 <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
                     <p>{{ $t('pagoFallo') }}</p>
                     <p>{{ $t('viajeNoVisiblePagoFallo') }}</p>
@@ -43,344 +49,284 @@
                         {{ $t('tripSeatRequestsDriverWarning') }}
                     </router-link>
                 </div>
-                <div class="row form">
-                    <div
-                        ref="rightPanel"
-                        class="white-background"
-                        :class="themeClasses"
-                    >
-                        <div class="row">
-                            <div
-                                :class="columnClass[0]"
-                                class="column"
-                                v-if="
-                                    columnComponent[0] &&
-                                    columnComponent[0].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[0]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                            <div
-                                :class="columnClass[1]"
-                                class="column"
-                                v-if="
-                                    columnComponent[1] &&
-                                    columnComponent[1].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[1]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                            <div
-                                :class="columnClass[2]"
-                                class="column"
-                                v-if="
-                                    columnComponent[2] &&
-                                    columnComponent[2].length
-                                "
-                            >
-                                <template
-                                    v-for="childComponent in columnComponent[2]"
-                                    :key="childComponent._scopeId"
-                                >
-                                    <component
-                                        :is="childComponent"
-                                    ></component>
-                                </template>
-                            </div>
-                            <modal
-                                :name="'modal'"
-                                v-if="showModalRequestSeat"
-                                @close="onModalClose"
-                                :title="$t('carpoodatos')"
-                                :body="'Body'"
-                            >
-                                <template #header><h3>
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3></template>
-                                <template #body><div>
-                                    <div class="text-left carpoodatos">
-                                        <p>
-                                            {{ $t('carpoodatosAntesSolicitud') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosCompromisoViaje') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosCalificarCancelar') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosNoPidasAsiento') }}
-                                        </p>
-                                        <p>
-                                            <span>{{ $t('mesaAyudaContactoLead') }}</span>
-                                            <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="check"
-                                        style="margin-bottom: 10px"
-                                    >
-                                        <label class="check-inline">
-                                            <input
-                                                type="checkbox"
-                                                name="acceptPassengerValor"
-                                                value="0"
-                                                v-model="acceptPassengerValue"
-                                            />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <template
-                                            v-if="
-                                                config.module_coordinate_by_message
-                                            "
-                                        >
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMakeRequest"
-                                                v-if="!owner"
-                                            >
-                                                {{ $t('enviarMensaje') }}
-                                            </button>
-                                        </template>
-                                        <template v-else>
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMessages"
-                                                v-if="!owner"
-                                            >
-                                                {{ $t('enviarMensaje') }}
-                                            </button>
-                                            <button
-                                                class="btn btn-primary"
-                                                @click="toMakeRequest"
-                                            >
-                                                {{ $t('solicitarAsiento') }}
-                                            </button>
-                                        </template>
-                                    </div>
-                                </div></template>
-                            </modal>
-                            <modal
-                                :name="'modal'"
-                                v-if="showModalPricing"
-                                @close="onModalClose"
-                                :title="$t('carpoodatos')"
-                                :body="'Body'"
-                            >
-                                <template #header><h3>
-                                    <span>{{ $t('carpoodatos') }}</span>
-                                    <i
-                                        v-on:click="onModalClose"
-                                        class="fa fa-times float-right-close"
-                                    ></i>
-                                </h3></template>
-                                <template #body><div>
-                                    <div class="text-left carpoodatos">
-                                        <p>
-                                            {{ $t('carpoodatosAntesConfirmar') }}
-                                        </p>
-                                        <ul>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet1') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet2') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet3') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet4') }}</li>
-                                            <li>{{ $t('carpoodatosAntesConfirmarBullet5') }}</li>
-                                        </ul>
-                                        <p>
-                                            {{ $t('carpoodatosContribucionMaxima') }}
-                                        </p>
-                                        <p>
-                                            {{ $t('carpoodatosContribucionComprobantes') }}
-                                        </p>
-                                        <p>
-                                            <span>{{ $t('carpoodatosAntesConfirmarDudaLead') }}</span>
-                                            <router-link :to="{ name: 'tickets' }">{{ $t('carpoodatosAntesConfirmarDudaLink') }}</router-link>{{ $t('carpoodatosAntesConfirmarDudaTail') }}
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="check"
-                                        style="margin-bottom: 10px"
-                                    >
-                                        <label class="check-inline">
-                                            <input
-                                                type="checkbox"
-                                                name="acceptPricing"
-                                                value="0"
-                                                v-model="acceptPricing"
-                                            />
-                                            <span
-                                                >{{ $t('noVolverAMostrarMensaje') }}</span
-                                            >
-                                        </label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button
-                                            class="btn btn-primary"
-                                            @click="toMessageForce"
-                                            v-if="!owner"
-                                        >
-                                            {{ $t('enviarMensaje') }}
-                                        </button>
-                                    </div>
-                                </div></template>
-                            </modal>
+                <modal
+                    :name="'modal'"
+                    v-if="showModalRequestSeat"
+                    @close="onModalClose"
+                >
+                    <template #header><h3>
+                        <span>{{ $t('carpoodatos') }}</span>
+                    </h3></template>
+                    <template #body><div>
+                        <div class="text-left carpoodatos">
+                            <p>
+                                {{ $t('carpoodatosAntesSolicitud') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosCompromisoViaje') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosCalificarCancelar') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosNoPidasAsiento') }}
+                            </p>
+                            <p>
+                                <span>{{ $t('mesaAyudaContactoLead') }}</span>
+                                <router-link :to="{ name: 'tickets' }">{{ $t('mesaAyuda') }}</router-link>{{ $t('mesaAyudaContactoTail') }}
+                            </p>
                         </div>
-                        <TripButtons
-                            @deleteTrip="deleteTrip()"
-                            @toMessages="toMessages()"
-                            @toGroupChat="toGroupChat()"
-                            @onMakeRequest="onMakeRequest()"
-                            @cancelRequest="cancelRequest()"
-                            :sending="sending"
-                            :isPassengersView="isPassengersView"
-                        />
-                        <TripStats
-                            v-if="!isMobile && tripCardTheme === 'light'"
-                        />
-                    </div>
-                    <div
-                        :style="calculatedHeight"
-                        class="col-xs-24 col-sm-9 col-sm-pull-15 col-md-8 col-md-pull-16 col-lg-7 col-lg-pull-17 driver-container"
-                        v-if="!isPassengersView && tripCardTheme !== 'light'"
-                    >
-                        <TripDriver />
-                    </div>
-
-                    <div
-                        class="col-xs-24 structure-div"
-                        v-if="!isPassengersView"
-                    >
                         <div
-                            class="col-xs-24 col-sm-12 col-md-9 matcheo-passengers"
-                            v-if="matchingUsers && matchingUsers.length > 0"
+                            class="check"
+                            style="margin-bottom: 10px"
                         >
-                            <div>
-                                <div v-if="owner">
-                                    <h3 class="title-margined">
-                                        {{ $t('matcheosDelViaje') }}
+                            <label class="check-inline">
+                                <input
+                                    type="checkbox"
+                                    name="acceptPassengerValor"
+                                    value="0"
+                                    v-model="acceptPassengerValue"
+                                />
+                                <span
+                                    >{{ $t('noVolverAMostrarMensaje') }}</span
+                                >
+                            </label>
+                        </div>
+                        <div class="trip-detail__modal-actions">
+                            <template
+                                v-if="
+                                    config.module_coordinate_by_message
+                                "
+                            >
+                                <AppButton
+                                    variant="primary"
+                                    @click="toMakeRequest"
+                                    v-if="!owner"
+                                >
+                                    {{ $t('enviarMensaje') }}
+                                </AppButton>
+                            </template>
+                            <template v-else>
+                                <AppButton
+                                    variant="primary"
+                                    @click="toMessages"
+                                    v-if="!owner"
+                                >
+                                    {{ $t('enviarMensaje') }}
+                                </AppButton>
+                                <AppButton
+                                    variant="primary"
+                                    @click="toMakeRequest"
+                                >
+                                    {{ $t('solicitarAsiento') }}
+                                </AppButton>
+                            </template>
+                        </div>
+                    </div></template>
+                </modal>
+                <modal
+                    :name="'modal'"
+                    v-if="showModalPricing"
+                    @close="onModalClose"
+                >
+                    <template #header><h3>
+                        <span>{{ $t('carpoodatos') }}</span>
+                    </h3></template>
+                    <template #body><div>
+                        <div class="text-left carpoodatos">
+                            <p>
+                                {{ $t('carpoodatosAntesConfirmar') }}
+                            </p>
+                            <ul>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet1') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet2') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet3') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet4') }}</li>
+                                <li>{{ $t('carpoodatosAntesConfirmarBullet5') }}</li>
+                            </ul>
+                            <p>
+                                {{ $t('carpoodatosContribucionMaxima') }}
+                            </p>
+                            <p>
+                                {{ $t('carpoodatosContribucionComprobantes') }}
+                            </p>
+                            <p>
+                                <span>{{ $t('carpoodatosAntesConfirmarDudaLead') }}</span>
+                                <router-link :to="{ name: 'tickets' }">{{ $t('carpoodatosAntesConfirmarDudaLink') }}</router-link>{{ $t('carpoodatosAntesConfirmarDudaTail') }}
+                            </p>
+                        </div>
+                        <div
+                            class="check"
+                            style="margin-bottom: 10px"
+                        >
+                            <label class="check-inline">
+                                <input
+                                    type="checkbox"
+                                    name="acceptPricing"
+                                    value="0"
+                                    v-model="acceptPricing"
+                                />
+                                <span
+                                    >{{ $t('noVolverAMostrarMensaje') }}</span
+                                >
+                            </label>
+                        </div>
+                        <div class="trip-detail__modal-actions">
+                            <AppButton
+                                variant="primary"
+                                @click="toMessageForce"
+                                v-if="!owner"
+                            >
+                                {{ $t('enviarMensaje') }}
+                            </AppButton>
+                        </div>
+                    </div></template>
+                </modal>
+                <div
+                    v-if="trip && !isPassengersView"
+                    class="trip-detail__stack"
+                >
+                    <div class="trip-detail__card">
+                    <header
+                        v-if="!isMobile"
+                        class="trip-detail__page-header"
+                    >
+                        <h1 class="trip-detail__page-title">
+                            {{ $t('tripDetailPageTitle') }}
+                        </h1>
+                    </header>
+                    <TripDriver />
+                    <section class="trip-detail__section">
+                        <h3 class="trip-detail__section-title">
+                            {{ $t('tripDetailSection') }}
+                        </h3>
+                        <div class="trip-detail__detalle-grid">
+                            <div class="trip-detail__detalle-main">
+                                <TripDetailRoute />
+                            </div>
+                            <div class="trip-detail__detalle-stats">
+                                <TripStats />
+                            </div>
+                            <div
+                                v-if="!isMobile"
+                                class="trip-detail__detalle-aside"
+                            >
+                                <div class="trip-detail__condiciones">
+                                    <h3 class="trip-detail__section-title">
+                                        {{ $t('tripDetailConditions') }}
                                     </h3>
-                                    <div class="row matching-user-list">
-                                        <div
-                                            v-for="p in matchingUsers"
-                                            class="list-item col-sm-24"
-                                            v-bind:key="p.id"
-                                        >
-                                            <div class="passenger-match">
-                                                <input
-                                                    type="checkbox"
-                                                    v-model="
-                                                        selectedMatchingUser
-                                                    "
-                                                    v-bind:id="p.id"
-                                                    v-bind:value="p.id"
-                                                />
-                                                <span
-                                                    @click="toUserProfile(p)"
-                                                    class="trip_driver_img circle-box passenger trip_passenger_image"
-                                                    v-imgSrc:profile="p.image"
-                                                ></span>
-                                                <a
-                                                    href="#"
-                                                    @click="toUserProfile(p)"
-                                                    class="trip_passenger_name"
-                                                >
-                                                    {{ p.name }}
-                                                </a>
-                                                <button
-                                                    @click="toUserMessages(p)"
-                                                    :aria-label="$t('irAMensajes')"
-                                                    class="trip_passenger-chat"
-                                                >
-                                                    <i
-                                                        class="fa fa-comments"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <small>
-                                                    {{ $t('viajaEl') }}
-                                                    {{
-                                                        dayjs(p.tripMatch.trip_date).format('DD/MM')
-                                                    }}
-                                                    <strong>
-                                                        {{
-                                                            dayjs(p.tripMatch.trip_date).format('HH:mm')
-                                                        }}
-                                                    </strong>
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div
-                                            class="form-inline col-xs-24 send_to_all-form"
-                                        >
-                                            <div class="input-group">
-                                                <label
-                                                    for="message_all"
-                                                    class="sr-only"
-                                                >
-                                                    {{ $t('mensajeParaUsuariosSeleccionados') }}
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    id="message_all"
-                                                    class="form-control"
-                                                    :placeholder="$t('enviaASeleccionados')"
-                                                    v-model="messageToUsers"
-                                                />
-                                                <span class="input-group-btn">
-                                                    <button
-                                                        class="btn btn-success"
-                                                        @click="onSendToAll"
-                                                    >
-                                                        <i
-                                                            class="fa fa-arrow-right"
-                                                            aria-hidden="true"
-                                                        ></i>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                            <!-- /input-group -->
-                                        </div>
-                                    </div>
+                                    <TripData />
                                 </div>
                             </div>
                         </div>
-                        <div
-                            ref="tripMapEl"
-                            class="trip-route-map"
-                            style="
-                                width: calc(100% + 20px);
-                                height: 461px;
-                                overflow: hidden;
-                                margin-left: -10px;
-                                z-index: 0;
-                            "
-                        ></div>
+                    </section>
+                    <section
+                        v-if="trip.description"
+                        class="trip-detail__section"
+                    >
+                        <h3 class="trip-detail__section-title">
+                            {{ $t('tripDetailDriverMessage') }}
+                        </h3>
+                        <p class="trip-detail__driver-message">
+                            {{ trip.description }}
+                        </p>
+                    </section>
+
+                    <template v-if="isMobile">
+                        <section class="trip-detail__section">
+                            <h3 class="trip-detail__section-title">
+                                {{ $t('tripDetailConditions') }}
+                            </h3>
+                            <div class="trip-detail__condiciones">
+                                <TripPrice />
+                                <TripData />
+                            </div>
+                        </section>
+                        <TripPassengers
+                            :section-title="$t('tripDetailJoined')"
+                        />
+                        <div class="trip-detail__cta">
+                            <TripButtons
+                                @deleteTrip="deleteTrip()"
+                                @toMessages="toMessages()"
+                                @toGroupChat="toGroupChat()"
+                                @onMakeRequest="onMakeRequest()"
+                                @cancelRequest="cancelRequest()"
+                                :sending="sending"
+                                :isPassengersView="isPassengersView"
+                            />
+                        </div>
+                    </template>
+                    <template v-else>
+                        <section
+                            class="trip-detail__section trip-detail__actions-grid"
+                        >
+                            <div class="trip-detail__lugares-col">
+                                <div
+                                    v-if="tripCardTheme === 'light' || !trip.is_passenger"
+                                    class="trip-detail__lugares"
+                                >
+                                    <h3 class="trip-detail__section-title">
+                                        {{ $t('lugaresLibres') }}
+                                    </h3>
+                                    <div
+                                        class="trip-detail__seats-pill"
+                                        :class="
+                                            'trip-detail__seats-pill--' +
+                                            seatsTone
+                                        "
+                                    >
+                                        <i
+                                            class="fa fa-user"
+                                            aria-hidden="true"
+                                        ></i>
+                                        {{ seatsLabel }}
+                                    </div>
+                                    <div
+                                        v-if="isTripExpired"
+                                        class="trip-detail__finished-pill"
+                                    >
+                                        {{ $t('viajeFinalizado') }}
+                                    </div>
+                                </div>
+                                <div class="trip-detail__joined">
+                                    <TripPassengers
+                                        :section-title="$t('tripDetailJoined')"
+                                    />
+                                </div>
+                            </div>
+                            <div class="trip-detail__contribucion">
+                                <TripPrice />
+                            </div>
+                            <div class="trip-detail__cta">
+                                <TripButtons
+                                    @deleteTrip="deleteTrip()"
+                                    @toMessages="toMessages()"
+                                    @toGroupChat="toGroupChat()"
+                                    @onMakeRequest="onMakeRequest()"
+                                    @cancelRequest="cancelRequest()"
+                                    :sending="sending"
+                                    :isPassengersView="isPassengersView"
+                                />
+                            </div>
+                        </section>
+                    </template>
+
+                    <div
+                        ref="tripMapEl"
+                        class="trip-route-map"
+                        :style="
+                            isMobile
+                                ? {
+                                      width: 'calc(100% + 20px)',
+                                      height: '461px',
+                                      overflow: 'hidden',
+                                      marginLeft: '-10px',
+                                      zIndex: 0
+                                  }
+                                : undefined
+                        "
+                    ></div>
                     </div>
                 </div>
             </div>
@@ -416,17 +362,18 @@ import {
     resolveRequestSeatModalConfirm,
     shouldShowPricingHint
 } from '../../utils/tripPassengerMessageFlow.js';
-import TripLocation from '../elements/TripLocation';
+import {
+    getSeatsPillLabel,
+    getSeatsPillTone
+} from '../../utils/tripCardDisplay.js';
 import TripDriver from '../elements/TripDriver';
-import TripDate from '../elements/TripDate';
-import TripSeats from '../elements/TripSeats';
+import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
 import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
-import TripDescription from '../elements/TripDescription';
-import TripShare from '../elements/TripShare';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
+import AppButton from '../ui/AppButton.vue';
 
 import { useHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -469,9 +416,6 @@ export default {
                     location: null
                 }
             ],
-            matchingUsers: [],
-            messageToUsers: '',
-            selectedMatchingUser: [],
             url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -479,8 +423,7 @@ export default {
             showModalPricing: false,
             paymentBrickRendering: false,
             acceptPassengerValue: 0,
-            acceptPricing: 0,
-            calculatedHeight: {}
+            acceptPricing: 0
         };
     },
 
@@ -492,7 +435,6 @@ export default {
         ...mapActions(useConversationsStore, {
             lookConversation: 'createConversation',
             selectConversation: 'select',
-            sendToAll: 'sendToAll',
             openTripGroupChat: 'openTripGroupChat'
         }),
         ...mapActions(usePassengerStore, {
@@ -501,7 +443,6 @@ export default {
         }),
         ...mapActions(useTripsStore, {
             remove: 'remove',
-            searchMatchers: 'searchMatchers',
             searchAgain: 'searchAgain'
         }),
         ...mapActions(useProfileStore, {
@@ -510,17 +451,6 @@ export default {
         ...mapActions(useMyTripsStore, {
             removeTrip: 'removeTrip'
         }),
-        calculateHeight() {
-            this.$nextTick(() => {
-                this.calculatedHeight = !this.isMobile
-                    ? {
-                          'min-height': this.$refs.rightPanel
-                              ? this.$refs.rightPanel.clientHeight + 'px'
-                              : '440px'
-                      }
-                    : {};
-            });
-        },
         profileComplete() {
             if (
                 !this.user.image ||
@@ -558,26 +488,12 @@ export default {
                     // this.trip = trip;
                     this.points = trip.points;
                     var self = this;
-                    this.calculateHeight();
                     this.$nextTick(function () { self.enablePayment(); });
                     self.$nextTick(() => {
                         self.$nextTick(() => {
                             self.syncTripRouteMap();
                         });
                     });
-                    if (this.owner) {
-                        this.searchMatchers({ trip: this.trip }).then(
-                            (users) => {
-                                this.matchingUsers = users;
-                                if (users && users.length) {
-                                    this.selectedMatchingUser = users.map(
-                                        (u) => u.id
-                                    );
-                                    // console.log('selectedMatchingUser', users);
-                                }
-                            }
-                        );
-                    }
                 })
                 .catch((error) => {
                     console.log('Error loading trip:', error);
@@ -700,17 +616,6 @@ export default {
                 });
         },
 
-        toUserProfile(user) {
-            router.replace({
-                name: 'profile',
-                params: {
-                    id: user.id,
-                    userProfile: user,
-                    activeTab: 1
-                }
-            });
-        },
-
         onMakeRequest() {
             if (this.profileComplete()) {
                 if (
@@ -798,6 +703,18 @@ export default {
 
         onBackClick() {
             router.back();
+        },
+
+        syncTripDetailMobilePageClass(forceOff) {
+            if (typeof document === 'undefined' || !document.body) {
+                return;
+            }
+            const enabled =
+                forceOff === false ? false : Boolean(this.isMobile);
+            document.body.classList.toggle(
+                'trip-detail-mobile-page',
+                enabled
+            );
         },
 
         destroyTripRouteMap() {
@@ -902,31 +819,6 @@ export default {
                 }
             }
         },
-        onSendToAll() {
-            if (this.$redirectToIdentityValidationIfRequired()) return;
-            if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
-            let users = this.matchingUsers.filter(
-                (u) => this.selectedMatchingUser.indexOf(u.id) >= 0
-            );
-            if (this.messageToUsers && users && users.length) {
-                this.sendToAll({
-                    message: this.messageToUsers,
-                    users: users
-                })
-                    .then(() => {
-                        this.messageToUsers = '';
-                        dialogs.message(this.$t('mensajeEnviado'));
-                    })
-                    .catch((error) => {
-                        if (this.$checkError(error, 'identity_validation_required')) {
-                            this.$router.push({ name: 'identity_validation' });
-                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
-                                estado: 'error'
-                            });
-                        }
-                    });
-            }
-        },
         onModalClose() {
             if (this.acceptPassengerValue) {
                 let data = {
@@ -991,11 +883,8 @@ export default {
 
     mounted() {
         this.loadTrip();
+        this.syncTripDetailMobilePageClass();
         bus.on('back-click', this.onBackClick);
-        bus.on('calculate-height', this.calculateHeight);
-        this.$nextTick(() => {
-            this.calculateHeight();
-        });
 
         // Load Mercado Pago SDK if not already loaded
         if (typeof MercadoPago === 'undefined') {
@@ -1011,16 +900,16 @@ export default {
 
     beforeUnmount() {
         this.destroyTripRouteMap();
+        this.syncTripDetailMobilePageClass(false);
         bus.off('back-click', this.onBackClick);
-        bus.off('calculate-height', this.calculateHeight);
     },
 
     watch: {
+        isMobile: function () {
+            this.syncTripDetailMobilePageClass();
+        },
         id: function (value) {
             this.loadTrip();
-        },
-        resolutionWidth: function () {
-            this.calculateHeight();
         },
         trip: {
             deep: true,
@@ -1068,51 +957,8 @@ export default {
             trip: 'currentTrip'
         }),
         ...mapState(useDeviceStore, {
-            isMobile: 'isMobile',
-            resolution: 'resolution'
+            isMobile: 'isMobile'
         }),
-        resolutionWidth() {
-            return this.resolution.width;
-        },
-        themeClasses() {
-            return this.tripCardTheme === 'light'
-                ? 'col-xs-24'
-                : 'col-xs-24 col-sm-push-9 col-sm-15 col-md-push-8 col-md-16 col-lg-17 col-lg-push-7';
-        },
-        columnClass() {
-            return this.tripCardTheme === 'light'
-                ? [
-                      'col-sm-8 col-md-8 col-lg-7',
-                      'col-sm-9 col-md-10 col-lg-11',
-                      'col-sm-7 col-md-6 col-lg-5'
-                  ]
-                : ['col-sm-14 col-md-14', 'col-sm-10 col-md-10'];
-        },
-        columnComponent() {
-            if (this.tripCardTheme === 'light' && this.isMobile) {
-                return [
-                    [TripDriver, TripLocation],
-                    [
-                        TripData,
-                        TripStats,
-                        TripDescription,
-                        TripShare,
-                        TripPassengers
-                    ]
-                ];
-            } else if (this.tripCardTheme === 'light') {
-                return [
-                    [TripDriver, TripDescription],
-                    [TripLocation, TripDate,TripPrice, TripSeats, TripPassengers],
-                    [TripData]
-                ];
-            } else {
-                return [
-                    [TripLocation, TripDate, TripPrice, TripSeats],
-                    [TripData, TripStats, TripShare, TripPassengers]
-                ];
-            }
-        },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
         },
@@ -1140,23 +986,32 @@ export default {
         },
         zoom() {
             return this.config.map_zoom;
+        },
+        seatsTone() {
+            return getSeatsPillTone(this.trip?.seats_available);
+        },
+        seatsLabel() {
+            return getSeatsPillLabel(this.trip?.seats_available, this.$t);
+        },
+        isTripExpired() {
+            if (!this.trip || !this.trip.trip_date) {
+                return false;
+            }
+            return dayjs(this.trip.trip_date).format() < dayjs().format();
         }
     },
 
     components: {
         svgItem,
         modal,
-        TripLocation,
         TripDriver,
-        TripDate,
-        TripSeats,
+        TripDetailRoute,
         TripData,
         TripStats,
-        TripDescription,
-        TripShare,
         TripPassengers,
         TripButtons,
-        TripPrice
+        TripPrice,
+        AppButton
     },
 
     props: ['id', 'location']
@@ -1164,6 +1019,13 @@ export default {
 </script>
 
 <style scoped>
+.trip-detail__modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+}
+
 .trip-seat-requests-warning {
     display: flex;
     align-items: flex-start;
@@ -1180,163 +1042,16 @@ export default {
     font-weight: 500;
     text-decoration: underline;
 }
-.trip-detail-component .structure-div {
-    margin-top: 1rem;
-    z-index: 0;
-    position: relative;
-    min-height: 418px;
-    /* overflow: hidden; */
-    top: 0;
-}
 .trip-route-map :deep(.leaflet-container) {
     height: 100%;
     width: 100%;
 }
-.trip-detail-component .driver-container {
-    margin-top: 0;
-}
-.trip-detail-component .driver-container::after {
-    top: -23px;
-    left: 4.4em;
-    border: solid transparent;
-    content: ' ';
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(136, 183, 213, 0);
-    border-bottom-color: var(--secondary-background);
-    border-width: 12px;
-    margin-left: -12px;
-    z-index: 1;
-}
 .container {
     padding-top: 0;
-}
-.trip-detail-component .column {
-    padding: 0 4em;
-}
-.trip-detail-component .column:first-of-type {
-    padding: 0 1em;
-}
-.trip-detail-component .white-background {
-    padding-top: 1.1rem;
-}
-.matcheo-passengers {
-    background: #fff;
-    box-shadow: 0 0 4px 1px #ccc;
-    border-radius: 0.4em;
-    position: absolute;
-    left: 1em;
-    top: 1em;
-    max-height: 400px;
-    z-index: 100;
-}
-.matcheo-passengers h3 {
-    font-size: 1.4em;
-}
-.matcheo-passengers .list-item {
-    border: 0;
-}
-.matcheo-passengers .list-item .trip_passenger_name {
-    color: var(--trip-mostly-free-color);
-    font-weight: bold;
-}
-.matcheo-passengers .passenger-match {
-    margin: 0 0.5em;
-    padding: 0.5em 0;
-}
-.passenger-match input {
-    margin-right: 1em;
-}
-.passenger-match button {
-    color: var(--secondary-background);
-}
-
-.passenger-match .trip_driver_img.circle-box.passenger {
-    border: 2px solid var(--trip-almost-fill-color);
-}
-.send_to_all-form {
-    padding: 1em;
-}
-.form-inline .input-group {
-    width: 100%;
-}
-.send_to_all-form .btn {
-    min-width: 100%;
-}
-.matching-user-list {
-    max-height: 270px;
-    overflow-y: auto;
-}
-.matching-user-list small {
-    margin-left: 50px;
-}
-.matching-user-list .list-item:after {
-    content: ' ';
-    display: block;
-    width: 90%;
-    margin: 0 auto;
-    border-bottom: 1px solid #ccc;
-    margin-top: 0.5rem;
-}
-@media only screen and (min-width: 400px) and (max-width: 767px) {
-    .trip-detail-component .structure-div {
-        top: -15px;
-    }
 }
 @media only screen and (min-width: 768px) {
     .container {
         padding-top: 1.5em;
-    }
-    .trip-detail-component .white-background {
-        padding-top: 0;
-        min-height: 440px;
-    }
-    .trip-detail-component .driver-container {
-        margin-top: 0;
-    }
-    .trip-detail-component .driver-container::after {
-        top: 36px;
-        right: -23px;
-        left: unset;
-        border-color: rgba(136, 183, 213, 0);
-        border-left-color: var(--secondary-background);
-        border-width: 12px;
-        margin-left: -12px;
-        z-index: 1;
-    }
-    .trip-detail-component .structure-div {
-        margin-top: 0;
-        margin-bottom: 2rem;
-    }
-    .trip-detail-component .column,
-    .trip-detail-component .column:first-of-type {
-        padding: 2em 1em 2em 1em;
-    }
-}
-@media only screen and (max-width: 768px) {
-    .trip-detail-component .driver-container {
-        border-radius: 0;
-    }
-    .trip-detail-component .structure-div {
-        overflow: visible;
-        padding: 0;
-        margin-bottom: 3.5em;
-    }
-    .matcheo-passengers {
-        position: static;
-        left: 0;
-        top: 0;
-        max-height: auto;
-        float: none;
-        margin: 1.5rem 0 -1rem 0;
-        border-radius: 0;
-        padding-bottom: 1em;
-    }
-    .matcheo-passengers .title-margined {
-        margin: 0;
-        padding: 1em 0;
     }
 }
 #walletBrick_container {

@@ -1,185 +1,262 @@
 <template>
-    <div>
-        <div
-            class="row text-center search-filters-desktop foreignCountry-select foreignCountry-select-desktop"
-            v-show="!isMobile"
-        >
-            <div class="foreignCountry-select_wrapper">
-                <input
-                    type="checkbox"
-                    v-model="allowForeignPoints"
-                    id="cbxAllowForeignPoints"
-                    class="cbx"
-                />
-                <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
-                    {{ config ? config.country_name : '' }}
-                </label>
-                <span
-                    class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
-                ></span>
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
-            </div>
-            <div class="advanced-filters-toggle_wrapper advanced-filters-toggle-desktop">
-                <a
-                    href="#"
-                    class="advanced-filters-toggle_link"
-                    :aria-expanded="showAdvancedFilters"
-                    @click.prevent="toggleAdvancedFilters"
-                >
-                    <i class="fa fa-cog" aria-hidden="true"></i>
-                    {{ $t('filtrosAvanzados') }}
-                </a>
-            </div>
+    <div
+        class="trips-search"
+        :class="{ 'trips-search--mobile': isMobile }"
+    >
+        <div v-if="!isMobile" class="trips-search__hero">
+            <h2 class="trips-search__hero-title">
+                {{ $t('encontraTuProximoViaje') }}
+            </h2>
+            <p class="trips-search__hero-subtitle">
+                {{ $t('compartiAutoTagline') }}
+            </p>
         </div>
-        <div
-            class="row text-center search-advanced-filters search-advanced-filters-desktop"
-            v-show="showAdvancedFilters && !isMobile"
-        >
-            <div class="search-advanced-filters__content">
-                <div class="hide-carpooleado-select_wrapper">
-                    <input
-                        type="checkbox"
-                        v-model="hideCarpooleado"
-                        id="cbxHideCarpooleado"
-                        class="cbx"
-                    />
-                    <label for="cbxHideCarpooleado" class="cbx_label">
-                        {{ $t('esconderViajesCarpooleados') }}
-                    </label>
-                </div>
-                <div
-                    v-for="field in allowPreferenceFilterFields"
-                    :key="'desktop-' + field.idPrefix"
-                    class="allow-preference-filter"
-                >
-                    <label :for="field.idPrefix + 'Desktop'">{{ $t(field.labelKey) }}</label>
-                    <select
-                        :id="field.idPrefix + 'Desktop'"
-                        v-model="$data[field.modelKey]"
-                        class="form-control"
-                    >
-                        <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                        <option value="yes">{{ $t('filtroPermitido') }}</option>
-                        <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="row search-section">
-            <div class="col-xs-12 col-md-3">
-                <button
-                    class="btn btn-option"
-                    :class="{ active: !isPassenger }"
-                    @click="isPassenger = false"
-                >
-                    <span class="fa fa-car" aria-hidden="true"></span>
-                    <span v-html="$t('buscoConductor')"></span>
-                </button>
-            </div>
-            <div class="col-xs-12 col-md-3">
-                <button
-                    class="btn btn-option"
-                    :class="{ active: isPassenger }"
-                    @click="isPassenger = true"
-                >
-                    <img
-                        alt=""
-                        :src="
-                            isPassenger
-                                ? pasajero_logo_blanco
-                                : pasajero_logo_gris
-                        "
-                    />
-                    <span>{{ $t('buscoPasajero') }}</span>
-                </button>
-            </div>
+
+        <div class="trips-search__card">
+            <AppSegmentToggle
+                v-model="isPassenger"
+                class="trips-search__toggle"
+                :options="roleToggleOptions"
+            />
+
             <div
-                class="row text-center foreignCountry-select foreignCountry-select-mobile"
-                v-show="isMobile"
+                v-if="isMobile"
+                class="trips-search__foreign-box foreignCountry-select foreignCountry-select-mobile"
             >
                 <div class="foreignCountry-select_wrapper">
                     <input
                         type="checkbox"
                         v-model="allowForeignPoints"
-                        id="cbxAllowForeignPoints"
+                        id="cbxAllowForeignPointsMobile"
                         class="cbx"
                     />
-                <label for="cbxAllowForeignPoints" class="cbx_label">
-                    {{ $t('origenODestinoFueraDe') }}
-                    {{ config ? config.country_name : '' }}
-                </label>
-                <span
-                    class="tooltip-bottom"
-                    :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
-                ></span>
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <label for="cbxAllowForeignPointsMobile" class="cbx_label">
+                        {{ $t('origenODestinoFueraDe') }}
+                        {{ config ? config.country_name : '' }}
+                    </label>
+                    <span
+                        class="trips-search__foreign-info tooltip-bottom"
+                        :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                        tabindex="0"
+                        role="img"
+                        :aria-label="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                    >
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
                 </div>
             </div>
-            <div class="col-xs-24 col-md-5 location-autocomplete origin">
-                <autocomplete
-                    :placeholder="$t('origen')"
-                    name="from_town"
-                    ref="from_town"
-                    :model-value="from_town.name"
-                    v-on:place_changed="(data) => getPlace(0, data)"
-                    :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                    :country="allowForeignPoints ? null : 'AR'"
-                ></autocomplete>
-                <div class="date-picker--cross">
-                    <i
-                        v-on:click="resetInput('from_town')"
-                        class="fa fa-times"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-                <div class="swap btn">
-                    <img
-                        alt="swap"
-                        class="swap-horizontal"
-                        :src="swap_horizontal"
+
+            <div class="trips-search__fields">
+                <div class="trips-search__fields-row">
+                    <AppField
+                        class="trips-search__field trips-search__field--origin"
+                        :label="$t('origen')"
+                        optional
+                        icon-left="fa fa-map-marker"
+                    >
+                        <autocomplete
+                            :placeholder="$t('origen')"
+                            name="from_town"
+                            ref="from_town"
+                            :model-value="from_town.name"
+                            v-on:place_changed="(data) => getPlace(0, data)"
+                            :classes="'trips-search__autocomplete-input'"
+                            :country="allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                        <template #actionRight>
+                            <button
+                                type="button"
+                                class="trips-search__clear"
+                                @click="resetInput('from_town')"
+                            >
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </template>
+                    </AppField>
+
+                    <button
+                        type="button"
+                        class="trips-search__swap"
                         @click="swapCities"
-                    />
-                    <img
-                        alt="swap"
-                        class="swap-vertical"
-                        :src="swap_vertical"
-                        @click="swapCities"
-                    />
+                    >
+                        <img
+                            alt=""
+                            class="swap-horizontal"
+                            :src="swap_horizontal"
+                        />
+                        <img
+                            alt=""
+                            class="swap-vertical"
+                            :src="swap_vertical"
+                        />
+                    </button>
+
+                    <AppField
+                        class="trips-search__field trips-search__field--destiny"
+                        :label="$t('destino')"
+                        optional
+                        icon-left="fa fa-map-marker"
+                    >
+                        <autocomplete
+                            :placeholder="$t('destino')"
+                            name="to_town"
+                            ref="to_town"
+                            :model-value="to_town.name"
+                            v-on:place_changed="(data) => getPlace(1, data)"
+                            :classes="'trips-search__autocomplete-input'"
+                            :country="allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                        <template #actionRight>
+                            <button
+                                type="button"
+                                class="trips-search__clear"
+                                @click="resetInput('to_town')"
+                            >
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </template>
+                    </AppField>
+
+                    <AppField
+                        class="trips-search__field trips-search__field--date"
+                        :label="dateRangeEnabled ? $t('desde') : $t('fecha')"
+                        optional
+                        icon-left="fa fa-calendar"
+                    >
+                        <DatePicker
+                            ref="datepicker"
+                            :model-value="date"
+                            :minDate="minDate"
+                            :class="{ 'has-error': dateError.state }"
+                            v-on:date_changed="onFromDateChanged"
+                        ></DatePicker>
+                    </AppField>
+
+                    <AppField
+                        v-if="dateRangeEnabled"
+                        class="trips-search__field trips-search__field--date"
+                        :label="$t('hasta')"
+                        optional
+                        icon-left="fa fa-calendar"
+                    >
+                        <DatePicker
+                            ref="datepickerTo"
+                            :model-value="toDate"
+                            :minDate="minDate"
+                            :class="{ 'has-error': dateError.state }"
+                            v-on:date_changed="onToDateChanged"
+                        ></DatePicker>
+                    </AppField>
+
+                    <div
+                        v-if="!autoSearch && !isMobile"
+                        class="trips-search__submit"
+                        data-testid="trips-search-submit"
+                    >
+                        <AppButton
+                            variant="primary"
+                            icon-left="fa fa-search"
+                            :label="$t('buscar')"
+                            @click="emit"
+                        />
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-24 col-md-5 location-autocomplete destiny">
-                <autocomplete
-                    :placeholder="$t('destino')"
-                    name="to_town"
-                    ref="to_town"
-                    :model-value="to_town.name"
-                    v-on:place_changed="(data) => getPlace(1, data)"
-                    :classes="'form-control form-control-with-icon form-control-map-autocomplete'"
-                    :country="allowForeignPoints ? null : 'AR'"
-                ></autocomplete>
-                <div class="date-picker--cross">
-                    <i
-                        v-on:click="resetInput('to_town')"
-                        class="fa fa-times"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
-            <div class="col-xs-24 col-md-4 no-padding">
-                <DatePicker
-                    ref="datepicker"
-                    :model-value="date"
-                    :minDate="minDate"
-                    :class="{ 'has-error': dateError.state }"
-                ></DatePicker>
-                <div class="optional-warning text-center">({{ $t('opcional') }})</div>
-            </div>
+
             <div
-                class="col-xs-24 advanced-filters-toggle-mobile"
+                v-if="!isMobile"
+                class="trips-search__filters search-filters-desktop"
+            >
+                <div class="trips-search__foreign-box foreignCountry-select foreignCountry-select-desktop">
+                    <div class="foreignCountry-select_wrapper">
+                        <input
+                            type="checkbox"
+                            v-model="allowForeignPoints"
+                            id="cbxAllowForeignPoints"
+                            class="cbx"
+                        />
+                        <label for="cbxAllowForeignPoints" class="cbx_label">
+                            {{ $t('origenODestinoFueraDe') }}
+                            {{ config ? config.country_name : '' }}
+                        </label>
+                        <span
+                            class="trips-search__foreign-info tooltip-bottom"
+                            :data-tooltip="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                            tabindex="0"
+                            role="img"
+                            :aria-label="$t('marcandoEstaOpcionPodrasSeleccionar')"
+                        >
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="advanced-filters-toggle_wrapper advanced-filters-toggle-desktop">
+                    <a
+                        href="#"
+                        class="advanced-filters-toggle_link"
+                        :aria-expanded="showAdvancedFilters"
+                        @click.prevent="toggleAdvancedFilters"
+                    >
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        {{ $t('filtrosAvanzados') }}
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="trips-search__advanced search-advanced-filters search-advanced-filters-desktop"
+                v-show="showAdvancedFilters && !isMobile"
+            >
+                <div class="trips-search__advanced-content search-advanced-filters__content">
+                    <div class="trips-search__advanced-checkboxes">
+                        <div class="date-range-search-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="dateRangeEnabled"
+                                id="cbxDateRangeSearch"
+                                class="cbx"
+                            />
+                            <label for="cbxDateRangeSearch" class="cbx_label">
+                                {{ $t('buscarEnRangoDeFechas') }}
+                            </label>
+                        </div>
+                        <div class="hide-carpooleado-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="hideCarpooleado"
+                                id="cbxHideCarpooleado"
+                                class="cbx"
+                            />
+                            <label for="cbxHideCarpooleado" class="cbx_label">
+                                {{ $t('esconderViajesCarpooleados') }}
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        v-for="field in allowPreferenceFilterFields"
+                        :key="'desktop-' + field.idPrefix"
+                        class="allow-preference-filter"
+                    >
+                        <AppField
+                            :label="$t(field.labelKey)"
+                            :label-for="field.idPrefix + 'Desktop'"
+                        >
+                            <select
+                                :id="field.idPrefix + 'Desktop'"
+                                v-model="$data[field.modelKey]"
+                                class="trips-search__preference-select"
+                            >
+                                <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
+                                <option value="yes">{{ $t('filtroPermitido') }}</option>
+                                <option value="no">{{ $t('filtroNoPermitido') }}</option>
+                            </select>
+                        </AppField>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="advanced-filters-toggle-mobile"
                 v-show="isMobile && !autoSearch"
             >
                 <div class="advanced-filters-toggle_wrapper">
@@ -194,44 +271,71 @@
                     </a>
                 </div>
             </div>
+
             <div
-                class="col-xs-24 search-advanced-filters search-advanced-filters-mobile"
+                class="trips-search__advanced search-advanced-filters search-advanced-filters-mobile"
                 v-show="showAdvancedFilters && isMobile && !autoSearch"
             >
-                <div class="search-advanced-filters__content">
-                    <div class="hide-carpooleado-select_wrapper">
-                        <input
-                            type="checkbox"
-                            v-model="hideCarpooleado"
-                            id="cbxHideCarpooleadoMobile"
-                            class="cbx"
-                        />
-                        <label for="cbxHideCarpooleadoMobile" class="cbx_label">
-                            {{ $t('esconderViajesCarpooleados') }}
-                        </label>
+                <div class="trips-search__advanced-content search-advanced-filters__content">
+                    <div class="trips-search__advanced-checkboxes">
+                        <div class="date-range-search-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="dateRangeEnabled"
+                                id="cbxDateRangeSearchMobile"
+                                class="cbx"
+                            />
+                            <label for="cbxDateRangeSearchMobile" class="cbx_label">
+                                {{ $t('buscarEnRangoDeFechas') }}
+                            </label>
+                        </div>
+                        <div class="hide-carpooleado-select_wrapper">
+                            <input
+                                type="checkbox"
+                                v-model="hideCarpooleado"
+                                id="cbxHideCarpooleadoMobile"
+                                class="cbx"
+                            />
+                            <label for="cbxHideCarpooleadoMobile" class="cbx_label">
+                                {{ $t('esconderViajesCarpooleados') }}
+                            </label>
+                        </div>
                     </div>
                     <div
                         v-for="field in allowPreferenceFilterFields"
                         :key="'mobile-' + field.idPrefix"
                         class="allow-preference-filter"
                     >
-                        <label :for="field.idPrefix + 'Mobile'">{{ $t(field.labelKey) }}</label>
-                        <select
-                            :id="field.idPrefix + 'Mobile'"
-                            v-model="$data[field.modelKey]"
-                            class="form-control"
+                        <AppField
+                            :label="$t(field.labelKey)"
+                            :label-for="field.idPrefix + 'Mobile'"
                         >
-                            <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
-                            <option value="yes">{{ $t('filtroPermitido') }}</option>
-                            <option value="no">{{ $t('filtroNoPermitido') }}</option>
-                        </select>
+                            <select
+                                :id="field.idPrefix + 'Mobile'"
+                                v-model="$data[field.modelKey]"
+                                class="trips-search__preference-select"
+                            >
+                                <option :value="anyAllowFilter">{{ $t('filtroCualquiera') }}</option>
+                                <option value="yes">{{ $t('filtroPermitido') }}</option>
+                                <option value="no">{{ $t('filtroNoPermitido') }}</option>
+                            </select>
+                        </AppField>
                     </div>
                 </div>
             </div>
-            <div v-if="!autoSearch" class="col-xs-24 col-md-3 col-lg-4">
-                <button class="btn btn-primary btn-search" @click="emit">
-                    {{ $t('buscar') }} 
-                </button>
+
+            <div
+                v-if="isMobile && !autoSearch"
+                class="trips-search__submit trips-search__submit--mobile"
+                data-testid="trips-search-submit"
+            >
+                <AppButton
+                    variant="primary"
+                    block
+                    icon-left="fa fa-search"
+                    :label="$t('buscar')"
+                    @click="emit"
+                />
             </div>
         </div>
     </div>
@@ -243,14 +347,18 @@ import { useDeviceStore } from '../../stores/device';
 import { useAuthStore } from '../../stores/auth';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete.vue';
-import bus from '../../services/bus-event.js';
+import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
+import AppField from '../ui/AppField.vue';
+import AppButton from '../ui/AppButton.vue';
 import dayjs from '../../dayjs';
 import dialogs from '../../services/dialogs.js';
 import {
     ANY_ALLOW_FILTER,
     ALLOW_PREFERENCE_FILTER_FIELDS,
     appendAllowPreferenceParams,
+    appendDateSearchParams,
     hydrateAllowPreferenceFilters,
+    hydrateDateRangeSearch,
     hasAdvancedSearchFilters
 } from '../../utils/searchAdvancedFilters.js';
 
@@ -274,6 +382,9 @@ export default {
             },
             date: '',
             dateAnswer: '',
+            toDate: '',
+            toDateAnswer: '',
+            dateRangeEnabled: false,
             dateError: {
                 message: '',
                 state: ''
@@ -313,6 +424,20 @@ export default {
         },
         allowPreferenceFilterFields() {
             return ALLOW_PREFERENCE_FILTER_FIELDS;
+        },
+        roleToggleOptions() {
+            return [
+                {
+                    value: false,
+                    label: this.$t('comoConductor'),
+                    icon: 'fa fa-car'
+                },
+                {
+                    value: true,
+                    label: this.$t('comoPasajero'),
+                    icon: 'fa fa-user'
+                }
+            ];
         }
     },
     watch: {
@@ -331,6 +456,23 @@ export default {
                 this.emit();
             }
         },
+        toDateAnswer() {
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
+        dateRangeEnabled(enabled) {
+            if (!enabled) {
+                this.toDate = '';
+                this.toDateAnswer = '';
+                if (this.$refs.datepickerTo) {
+                    this.$refs.datepickerTo.clear();
+                }
+            }
+            if (this.autoSearch) {
+                this.emit();
+            }
+        },
         isPassenger() {
             if (this.autoSearch) {
                 this.emit();
@@ -338,7 +480,6 @@ export default {
         }
     },
     mounted() {
-        bus.on('date-change', this.dateChange);
         this.loadParams(this.params);
         this.from_town.country = this.config.osm_country;
         this.to_town.country = this.config.osm_country;
@@ -352,11 +493,18 @@ export default {
             this.checkInput
         );
         this.$refs['to_town'].$el.removeEventListener('input', this.checkInput);
-        bus.off('date-change', this.dateChange);
     },
     methods: {
-        dateChange(value) {
+        setPassengerMode(isPassenger) {
+            this.isPassenger = Boolean(isPassenger);
+        },
+        onFromDateChanged(value) {
+            this.date = value;
             this.dateAnswer = value;
+        },
+        onToDateChanged(value) {
+            this.toDate = value;
+            this.toDateAnswer = value;
         },
         checkInput(event) {
             let value = event.target.value;
@@ -368,7 +516,6 @@ export default {
         getPlace(i, data) {
             console.log('getPlace', data);
             let obj = {};
-            // FIXME falta bounding box
             if (data) {
                 obj = {
                     name: data.name,
@@ -430,9 +577,12 @@ export default {
             ) {
                 foreignCountry++;
             }
-            if (this.dateAnswer) {
-                params.date = this.dateAnswer;
-            }
+            appendDateSearchParams(params, {
+                dateRangeEnabled: this.dateRangeEnabled,
+                date: this.dateAnswer,
+                fromDate: this.dateAnswer,
+                toDate: this.toDateAnswer
+            });
             params.is_passenger = this.isPassenger;
             if (this.hideCarpooleado) {
                 params.hide_carpooleado = this.hideCarpooleado;
@@ -443,7 +593,6 @@ export default {
                 allowKids: this.allowKidsFilter
             });
             if (foreignCountry < 2) {
-                // console.log('trip-search', params);
                 this.$emit('trip-search', params);
             } else {
                 dialogs.message(
@@ -472,8 +621,7 @@ export default {
             temp = this['to_town'];
             this['to_town'] = Object.assign({}, this['from_town']);
             this['from_town'] = Object.assign({}, temp);
-            
-            // Search will only auto-trigger on desktop
+
             if (!this.isMobile && this.autoSearch) {
                 this.emit();
             }
@@ -484,6 +632,12 @@ export default {
             this.resetInput('to_town');
             this.$refs['to_town'].input = '';
             this.$refs.datepicker.clear();
+            if (this.$refs.datepickerTo) {
+                this.$refs.datepickerTo.clear();
+            }
+            this.toDate = '';
+            this.toDateAnswer = '';
+            this.dateAnswer = '';
             this.resetAdvancedFilters();
         },
         toggleAdvancedFilters() {
@@ -492,6 +646,7 @@ export default {
         resetAdvancedFilters() {
             this.showAdvancedFilters = false;
             this.hideCarpooleado = false;
+            this.dateRangeEnabled = false;
             this.allowAnimalsFilter = ANY_ALLOW_FILTER;
             this.allowSmokingFilter = ANY_ALLOW_FILTER;
             this.allowKidsFilter = ANY_ALLOW_FILTER;
@@ -526,11 +681,12 @@ export default {
                 } else {
                     this.isPassenger = false;
                 }
-                if (parameters.date) {
-                    this.date = parameters.date;
-                } else {
-                    this.date = '';
-                }
+                const dateRange = hydrateDateRangeSearch(parameters);
+                this.date = dateRange.fromDate;
+                this.dateAnswer = dateRange.fromDate;
+                this.toDate = dateRange.toDate;
+                this.toDateAnswer = dateRange.toDate;
+                this.dateRangeEnabled = dateRange.dateRangeEnabled;
                 const allowFilters = hydrateAllowPreferenceFilters(parameters);
                 this.allowAnimalsFilter = allowFilters.allowAnimals;
                 this.allowSmokingFilter = allowFilters.allowSmoking;
@@ -547,60 +703,15 @@ export default {
     props: ['params'],
     components: {
         DatePicker,
-        autocomplete
+        autocomplete,
+        AppSegmentToggle,
+        AppField,
+        AppButton
     }
 };
 </script>
 
 <style scoped>
-.search-section {
-    padding-left: 0;
-    padding-right: 0;
-}
-.search-section .btn-option {
-    width: 100%;
-    margin-bottom: 1em;
-}
-.btn-option {
-    height: 72px;
-}
-.btn-option .fa,
-.btn-option img {
-    width: 20px;
-    display: inline-block;
-    top: 10px;
-    margin-right: 0;
-    font-size: 20px;
-}
-.btn-option span {
-    vertical-align: middle;
-    display: inline-block;
-    width: calc(100% - 30px);
-}
-.swap {
-    display: none;
-}
-.swap-horizontal {
-    display: none;
-}
-.foreignCountry-select {
-    margin-bottom: 1em;
-}
-.foreignCountry-select-mobile {
-    width: 100%;
-}
-.search-filters-desktop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.foreignCountry-select-desktop .foreignCountry-select_wrapper {
-    margin-left: -10%;
-}
-.advanced-filters-toggle-desktop {
-    margin-left: 2em;
-}
 .advanced-filters-toggle_link {
     cursor: pointer;
     display: inline-flex;
@@ -609,140 +720,55 @@ export default {
     text-decoration: none;
     color: inherit;
 }
+
 .advanced-filters-toggle_link:hover,
 .advanced-filters-toggle_link:focus {
     text-decoration: underline;
     color: inherit;
 }
-.advanced-filters-toggle_link .fa {
-    cursor: pointer;
-}
-.advanced-filters-toggle-mobile,
-.search-advanced-filters-mobile {
-    margin-bottom: 1em;
-}
-.search-advanced-filters {
-    margin-bottom: 1em;
-}
-.search-advanced-filters__content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1em 2em;
-}
+
 .allow-preference-filter {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    min-width: 180px;
+    align-items: stretch;
+    gap: var(--ds-input-gap);
+    min-width: 11.25rem;
 }
-.allow-preference-filter label {
-    margin-bottom: 0.25em;
+
+.allow-preference-filter :deep(.app-field) {
+    margin-bottom: 0;
 }
-.allow-preference-filter select {
+
+.trips-search__preference-select {
     width: 100%;
-}
-.cbx,
-.cbx_label {
-    vertical-align: middle;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
     margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
 }
-.cbx_label {
-    margin-left: 0.5em;
+
+.trips-search__preference-select:focus {
+    outline: none;
 }
-.optional-warning {
-    font-size: 0.8em;
-    color: #999;
-    position: relative;
-    top: -0.8em;
-    clear: both;
+
+.swap-horizontal {
+    display: none;
 }
-@media only screen and (min-width: 300px) {
-    .swap {
-        bottom: -6px;
-        left: -30px;
-        border-radius: 0;
-        position: absolute;
-        z-index: 1;
-        text-align: center;
-        cursor: pointer;
-        background-color: #eee;
-        box-sizing: border-box;
-        padding: 2px 6px 3px;
-        border: 1px solid #aaa;
-        display: inline-block;
-        margin: 0em;
-    }
-    .search-section {
-        margin-left: 30px;
-        padding-right: 15px;
-    }
-}
-@media only screen and (min-width: 429px) {
-    .btn-option {
-        height: initial;
-    }
-    .btn-option img {
-        width: initial;
-        display: initial;
-        top: initial;
-        margin-right: 6px;
-    }
-    .btn-option span {
-        display: initial;
-        width: initial;
-    }
-}
-@media only screen and (min-width: 768px) {
-    .search-section {
-        padding-left: 0;
-        padding-right: 0;
-        width: calc(100% - 30px);
-    }
-}
-@media only screen and (min-width: 856px) {
-    .search-section {
-        width: 100%;
-        margin-left: 0;
-        padding-left: 0;
-    }
-}
-@media only screen and (min-width: 992px) {
-    .swap {
-        bottom: unset;
-        top: 20px;
-        right: -17px;
-        left: unset;
-    }
-    .btn-option {
-        height: 66px;
-        padding: 1em 0.4em;
-    }
-    .btn-option span {
-        vertical-align: middle;
-        display: inline-block;
-        width: calc(100% - 30px);
-    }
-    .btn-option img {
-        width: 20px;
-        display: inline-block;
-        top: 10px;
-        margin-right: 0;
-    }
-}
+
 @media only screen and (min-width: 992px) {
     .swap-horizontal {
         display: block;
     }
+
     .swap-vertical {
         display: none;
     }
-}
-.search-section {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  flex-wrap: wrap;
 }
 </style>

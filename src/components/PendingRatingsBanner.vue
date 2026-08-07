@@ -1,12 +1,21 @@
 <template>
     <div
         v-if="visible"
-        class="pending-ratings-banner"
+        class="home-prompt-banner pending-ratings-banner"
+        role="button"
+        tabindex="0"
         @click="goToMyTrips"
+        @keydown.enter.prevent="goToMyTrips"
+        @keydown.space.prevent="goToMyTrips"
     >
-        <span class="banner-text">
-            {{ $t('pendingRatingsBanner') }}
-        </span>
+        <div class="home-prompt-banner__icon" aria-hidden="true">
+            <i class="fa fa-star"></i>
+        </div>
+        <div class="home-prompt-banner__body">
+            <p class="home-prompt-banner__text">
+                {{ $t('pendingRatingsBanner') }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -35,20 +44,12 @@ export default {
 
 <style scoped>
 .pending-ratings-banner {
-    width: 100%;
-    padding: 10px 14px;
-    background: #f0ad4e;
-    color: #333;
-    text-align: center;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 1.4;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-.pending-ratings-banner:hover {
-    background: #ec971f;
-}
-.banner-text {
-    display: inline-block;
+    width: auto;
+    margin-top: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0.75rem;
+    margin-left: 1rem;
+    box-shadow: none;
+    text-align: left;
 }
 </style>

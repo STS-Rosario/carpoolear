@@ -1,0 +1,57 @@
+.user-form--register .register-form__terms-label {
+    margin: 0;
+    color: var(--ds-text-primary);
+    font-size: var(--ds-font-size-base);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: var(--ds-info-card-line-height);
+    text-transform: none;
+}
+
+.user-form--register .register-form__terms-link {
+    color: var(--ds-link);
+    font-weight: var(--ds-link-font-weight);
+    text-decoration: underline;
+}
+
+.user-form--register .register-form__terms-link:hover,
+.user-form--register .register-form__terms-link:focus {
+    color: var(--ds-action-hover);
+    text-decoration: underline;
+}
+
+.user-form--register .register-form__terms-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+}
+
+.user-form--register .register-form__terms-row input[type='checkbox'] {
+    margin: 0.2rem 0 0 5px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.user-form--register .register-form__submit {
+    margin-top: 0.25rem;
+}
+
+.app-container.blue.register .user-form--register .register-form__terms-label {
+    color: var(--ds-text-primary);
+    text-transform: none;
+}
+
+@media (max-width: 767px) {
+    .app-container.blue.register {
+        background: #ffffff;
+        background-image: none;
+        filter: none;
+        color: var(--ds-text-primary);
+    }
+
+    .app-container.blue.register .user-form--register-mobile {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        color: var(--ds-text-primary);
+    }
+}

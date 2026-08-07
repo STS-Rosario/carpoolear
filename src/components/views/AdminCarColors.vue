@@ -4,17 +4,15 @@
         <form class="admin-car-color-form" @submit.prevent="createColor">
             <div class="row">
                 <div class="col-sm-4">
-                    <input
+                    <AppInput
                         v-model="form.name"
-                        class="form-control"
                         :placeholder="$t('color')"
                         required
                     />
                 </div>
                 <div class="col-sm-3">
-                    <input
+                    <AppInput
                         v-model="form.hex"
-                        class="form-control"
                         :placeholder="$t('colorHexPlaceholder')"
                     />
                 </div>
@@ -26,9 +24,9 @@
                     />
                 </div>
                 <div class="col-sm-3">
-                    <button type="submit" class="btn btn-primary">
+                    <AppButton type="submit" variant="primary">
                         {{ $t('agregar') }}
-                    </button>
+                    </AppButton>
                 </div>
             </div>
         </form>
@@ -52,13 +50,13 @@
                     </td>
                     <td>{{ row.hex || '-' }}</td>
                     <td>
-                        <button
-                            type="button"
-                            class="btn btn-xs btn-danger"
+                        <AppButton
+                            variant="danger"
+                            size="sm"
                             @click="removeColor(row.id)"
                         >
                             {{ $t('accionEliminar') }}
-                        </button>
+                        </AppButton>
                     </td>
                 </tr>
             </tbody>
@@ -69,11 +67,13 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAdminCarCatalogStore } from '../../stores/adminCarCatalog';
 
 export default {
     name: 'admin-car-colors',
-    components: { AdminLayout },
+    components: { AdminLayout, AppButton, AppInput },
     data() {
         return {
             form: {

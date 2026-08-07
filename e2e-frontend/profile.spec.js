@@ -54,7 +54,9 @@ test.describe('Profile page', () => {
     await page.goto(`/profile/${MOCK_PROFILE_USER.id}`);
     await waitForPageReady(page);
 
-    await expect(page.locator('.profile-info--name.desktop').getByText('Perfil de Prueba')).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByRole('heading', { name: 'Perfil de Prueba' })
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('ratings tab — shows empty state with 0 ratings', async ({ page }) => {
@@ -161,7 +163,9 @@ test.describe('Profile page', () => {
     await page.goto(`/profile/${MOCK_PROFILE_USER.id}`);
     await waitForPageReady(page);
 
-    await expect(page.locator('.profile-info--name.desktop').getByText('Perfil de Prueba')).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByRole('heading', { name: 'Perfil de Prueba' })
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('admin viewing another user past passenger trip navigates to detail, not modal', async ({
@@ -219,7 +223,7 @@ test.describe('Profile page', () => {
     });
     await expect(page.getByText('Buenos Aires').first()).toBeVisible();
 
-    await page.locator('.profile-trip-component .trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();

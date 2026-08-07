@@ -1,0 +1,459 @@
+.trips-search {
+    width: 100%;
+}
+
+.trips.container > .trips-search,
+.trips.container > .trips-list {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.trips-search__hero {
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+
+.trips-search__hero-title {
+    margin: 0 0 0.5rem;
+    color: var(--ds-action);
+    font-size: 2rem;
+    font-weight: var(--ds-font-weight-bold);
+    line-height: 1.15;
+}
+
+.trips-search__hero-subtitle {
+    margin: 0;
+    color: var(--ds-text-secondary);
+    font-size: 1.125rem;
+    line-height: 1.35;
+}
+
+.trips-search__card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trips-search__toggle {
+    margin: 0 auto 1.25rem;
+    max-width: 28rem;
+}
+
+.trips-search__foreign-box {
+    margin: 0 0 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--ds-radius-input);
+    background: #eceae6;
+}
+
+.trips-search__foreign-box .foreignCountry-select_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.trips-search__foreign-info {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding-left: 0.25rem;
+    color: var(--ds-action);
+    line-height: 1;
+}
+
+.trips-search__foreign-info .fa {
+    font-size: 0.875rem;
+}
+
+.trips-search__foreign-box .cbx_label {
+    margin: 0;
+    color: var(--ds-text-primary);
+    font-size: 0.875rem;
+    font-weight: var(--ds-font-weight-normal);
+    line-height: 1.25rem;
+    text-transform: none;
+}
+
+.trips-search__foreign-box .cbx {
+    margin-top: 0.2rem;
+}
+
+.trips-search__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.trips-search__fields-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.trips-search__field--origin {
+    position: relative;
+}
+
+.trips-search__swap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin: -0.25rem 0 0.5rem auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.trips-search__swap img {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(742%)
+        hue-rotate(176deg) brightness(92%) contrast(92%);
+}
+
+.trips-search__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ds-action);
+    cursor: pointer;
+}
+
+.trips-search__filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 2rem;
+    margin: 0.5rem 0 0;
+}
+
+.trips-search .advanced-filters-toggle_link {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.trips-search .advanced-filters-toggle_link .fa {
+    font-size: 0.875rem;
+}
+
+.trips-search__advanced {
+    margin: 0.5rem 0 0;
+}
+
+.trips-search__advanced-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem 2rem;
+}
+
+.trips-search .trips-search__advanced-checkboxes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.trips-search .trips-search__advanced-checkboxes .hide-carpooleado-select_wrapper,
+.trips-search .trips-search__advanced-checkboxes .date-range-search-select_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-sizing: border-box;
+}
+
+.trips-search .trips-search__advanced-checkboxes .cbx {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.trips-search .trips-search__advanced-checkboxes .cbx_label {
+    margin: 0;
+    color: var(--ds-input-label);
+    font-size: var(--ds-input-font-size);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: 1.3;
+}
+
+.trips-search .allow-preference-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ds-input-gap);
+    min-width: 11.25rem;
+}
+
+.trips-search .allow-preference-filter > label {
+    margin: 0;
+    color: var(--ds-input-label);
+    font-size: var(--ds-input-label-size);
+    font-weight: var(--ds-input-label-font-weight);
+    line-height: var(--ds-input-label-line-height, 1.2);
+    text-transform: none;
+}
+
+.trips-search .allow-preference-filter select.form-control {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--ds-input-border);
+    border-radius: var(--ds-radius-input) !important;
+    background-color: var(--ds-input-bg);
+    color: var(--ds-input-text);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    padding: var(--ds-input-padding-y) 2.5rem var(--ds-input-padding-y)
+        var(--ds-input-padding-x);
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23737373' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 0.75rem 0.5rem;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.trips-search .allow-preference-filter select.form-control:focus {
+    outline: none;
+    border-color: var(--ds-input-focus-border);
+    box-shadow: var(--ds-input-focus-ring);
+}
+
+.trips-search__submit {
+    margin-top: 0.5rem;
+}
+
+.trips-search__submit .app-button {
+    width: fit-content;
+}
+
+.trips-search--mobile {
+    padding: 0 0 5rem;
+}
+
+.trips-search--mobile .trips-search__submit {
+    position: static;
+    margin-top: 1rem;
+}
+
+.trips-search--mobile .trips-search__submit .app-button {
+    width: 100%;
+}
+
+.trips-mobile-home__role-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+}
+
+.trips-mobile-home__role-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 7.5rem;
+    padding: 1rem;
+    border: 1.5px solid var(--ds-action-border);
+    border-radius: 12px;
+    background: var(--ds-neutral-bg);
+    color: var(--ds-action);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: var(--ds-font-weight-bold);
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+}
+
+.trips-mobile-home__role-card img,
+.trips-mobile-home__role-card .fa {
+    font-size: 1.75rem;
+    color: var(--ds-action);
+}
+
+.trips-mobile-home__role-card img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(742%)
+        hue-rotate(176deg) brightness(92%) contrast(92%);
+}
+
+.trips-mobile-home__create {
+    margin: 0 0 1.5rem;
+}
+
+.trips-mobile-home__create .app-button {
+    width: 100%;
+}
+
+.trips-mobile-home__heading {
+    margin: 0 0 1rem;
+    color: var(--ds-text-primary);
+    font-size: 1.5rem;
+    font-weight: var(--ds-font-weight-bold);
+    line-height: 1.2;
+}
+
+/* Date field: match origin/destino control height inside app-field */
+.trips-search .date-picker {
+    margin: 0;
+}
+
+.trips-search .date-picker .date-picker__surface {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    min-height: 0;
+    box-shadow: none;
+}
+
+.trips-search .carpoolear-vue-dp {
+    width: 100%;
+    --dp-font-family: var(--ds-font-family);
+    --dp-font-size: var(--ds-input-font-size);
+    --dp-input-padding: var(--ds-input-padding-y) 2rem var(--ds-input-padding-y) 0;
+    --dp-input-icon-padding: 0;
+}
+
+.trips-search .carpoolear-vue-dp .dp__input_wrap {
+    width: 100%;
+}
+
+.trips-search .app-field .carpoolear-vue-dp .dp__input {
+    min-height: 0;
+    line-height: 1.3;
+    padding-top: var(--ds-input-padding-y);
+    padding-right: 2rem;
+    padding-bottom: var(--ds-input-padding-y);
+    padding-left: 0 !important;
+    border: 0;
+    background: transparent;
+    background-image: none !important;
+    box-shadow: none;
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-input-font-size);
+    font-weight: var(--ds-font-weight-normal);
+    color: var(--ds-input-text);
+}
+
+.trips-search .app-field .carpoolear-vue-dp .dp__input::placeholder {
+    color: var(--ds-input-placeholder);
+    opacity: 1;
+    font-family: var(--ds-font-family);
+    font-size: var(--ds-input-font-size);
+    font-weight: var(--ds-font-weight-normal);
+}
+
+.trips-search .date-picker .date-picker--cross {
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    color: var(--ds-action);
+}
+
+.trips-search .date-picker .date-picker--cross i {
+    color: var(--ds-action);
+}
+
+@media (min-width: 992px) {
+    .trips-search__card {
+        padding: 1.5rem 2rem 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: var(--ds-card-radius);
+        background: var(--ds-card-bg);
+        box-shadow: var(--ds-card-shadow);
+    }
+
+    .trips-search__toggle {
+        max-width: 32rem;
+        margin-bottom: 1rem;
+    }
+
+    .trips-search__fields-row {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .trips-search__fields-row .app-field {
+        margin-bottom: 0;
+    }
+
+    .trips-search__field--origin,
+    .trips-search__field--destiny,
+    .trips-search__field--date {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .trips-search__field--origin {
+        position: relative;
+    }
+
+    .trips-search__swap {
+        position: absolute;
+        top: 2.35rem;
+        right: -1rem;
+        margin: 0;
+        z-index: 1;
+    }
+
+    .trips-search__filters {
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        margin: 0;
+    }
+
+    .trips-search__foreign-box {
+        display: inline-flex;
+        align-items: center;
+        width: auto;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .trips-search__foreign-box .foreignCountry-select_wrapper {
+        align-items: center;
+    }
+
+    .trips-search__foreign-box .cbx {
+        margin-top: 0;
+    }
+
+    .trips-search__submit {
+        flex-shrink: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: calc(
+            var(--ds-input-label-line-height) + var(--ds-input-gap)
+        );
+    }
+
+    .trips-search__submit .app-button {
+        min-width: 8rem;
+    }
+}

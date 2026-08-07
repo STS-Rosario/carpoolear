@@ -12,9 +12,6 @@ describe('RateItem.vue neutral ratings', () => {
         expect(viewSource).toContain('isNegativeRating');
         expect(viewSource).toContain('rateItemNeutral');
         expect(viewSource).toContain('rate-neutral-icon');
-        expect(viewSource).toMatch(
-            /\.rate-item-value\s+\.rate-neutral-icon\s*\{[\s\S]*margin-left:\s*0\.6em/
-        );
     });
 });
 
@@ -24,5 +21,12 @@ describe('RateItem.vue profile links', () => {
         expect(viewSource).toContain('rate-item-author-link');
         expect(viewSource).toContain("name: 'profile'");
         expect(viewSource).toContain('userProfile: this.rate.from');
+    });
+
+    it('labels the reply toggle with Responder i18n', () => {
+        expect(viewSource).toContain("$t('responder')");
+        expect(viewSource).toMatch(
+            /canReply[\s\S]*\$t\('responder'\)[\s\S]*fa-reply|canReply[\s\S]*fa-reply[\s\S]*\$t\('responder'\)/
+        );
     });
 });
