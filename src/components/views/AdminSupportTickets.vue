@@ -164,6 +164,7 @@ export default {
             filterPriority: '',
             filterNeedsReply: false,
             filterOpen: false,
+            filterCreatedByAdmin: false,
             filterUserId: null,
             listPage: 1,
             listPerPage: DEFAULT_ADMIN_PER_PAGE,
@@ -188,6 +189,7 @@ export default {
                 priority: this.filterPriority,
                 needsReply: this.filterNeedsReply,
                 open: this.filterOpen,
+                createdByAdmin: this.filterCreatedByAdmin,
                 userId: this.filterUserId,
                 page: this.listPage,
                 perPage: this.listPerPage
@@ -214,6 +216,7 @@ export default {
             this.filterPriority = parsed.priority;
             this.filterNeedsReply = parsed.needsReply;
             this.filterOpen = parsed.open;
+            this.filterCreatedByAdmin = parsed.createdByAdmin;
             this.filterUserId = parsed.userId;
             this.listPage = parsed.page;
             this.listPerPage = parsed.perPage;
@@ -231,6 +234,9 @@ export default {
             }
             if (this.filterOpen) {
                 query.open = '1';
+            }
+            if (this.filterCreatedByAdmin) {
+                query.created_by_admin = '1';
             }
             if (this.filterUserId) {
                 query.user_id = String(this.filterUserId);

@@ -16,6 +16,9 @@ export function buildAdminSupportTicketListParams(filters = {}) {
     if (filters.open) {
         params.open = '1';
     }
+    if (filters.createdByAdmin) {
+        params.created_by_admin = '1';
+    }
     if (filters.userId) {
         params.user_id = String(filters.userId);
     }
@@ -31,6 +34,8 @@ export function buildAdminSupportTicketListParams(filters = {}) {
 export function parseAdminSupportTicketListFiltersFromRoute(query = {}) {
     const needsReplyRaw = query.needs_reply != null ? String(query.needs_reply).toLowerCase() : '';
     const openRaw = query.open != null ? String(query.open).toLowerCase() : '';
+    const createdByAdminRaw =
+        query.created_by_admin != null ? String(query.created_by_admin).toLowerCase() : '';
     const userIdRaw = query.user_id != null ? parseInt(String(query.user_id), 10) : NaN;
     const pagination = parseAdminPaginationFromRoute(query);
     return {
@@ -38,6 +43,7 @@ export function parseAdminSupportTicketListFiltersFromRoute(query = {}) {
         priority: query.priority ? String(query.priority) : '',
         needsReply: TRUTHY_QUERY_VALUES.has(needsReplyRaw),
         open: TRUTHY_QUERY_VALUES.has(openRaw),
+        createdByAdmin: TRUTHY_QUERY_VALUES.has(createdByAdminRaw),
         userId: Number.isNaN(userIdRaw) || userIdRaw <= 0 ? null : userIdRaw,
         page: pagination.page,
         perPage: pagination.perPage
@@ -50,6 +56,7 @@ export function filtersAreActive(filters = {}) {
             filters.priority ||
             filters.needsReply ||
             filters.open ||
+            filters.createdByAdmin ||
             filters.userId
     );
 }

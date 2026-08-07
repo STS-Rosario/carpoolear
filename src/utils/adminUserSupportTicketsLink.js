@@ -9,6 +9,9 @@ export function adminUserSupportTicketsRoute(userId, options = {}) {
     if (options.open) {
         query.open = '1';
     }
+    if (options.createdByAdmin) {
+        query.created_by_admin = '1';
+    }
     return {
         name: 'admin-support-tickets',
         query

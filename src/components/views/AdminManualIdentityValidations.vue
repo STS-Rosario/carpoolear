@@ -170,7 +170,8 @@ export default {
         accountVerificationTicketsRoute(userId) {
             return adminUserSupportTicketsRoute(userId, {
                 type: 'account_verification',
-                open: true
+                open: true,
+                createdByAdmin: true
             });
         },
         formatDate(value) {
