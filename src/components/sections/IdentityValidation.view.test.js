@@ -115,6 +115,34 @@ describe('IdentityValidation rejection warnings', () => {
 });
 
 describe('IdentityValidation Mercado Pago ownership warning', () => {
+    it('lists that MP integration can be removed after verifying', () => {
+        expect(viewSource).toContain("$t('identidadModalAutoPuedeEliminarMp')");
+        const autoInmediata = viewSource.indexOf(
+            "$t('identidadModalAutoInmediata')"
+        );
+        const puedeEliminar = viewSource.indexOf(
+            "$t('identidadModalAutoPuedeEliminarMp')"
+        );
+        expect(autoInmediata).toBeGreaterThan(-1);
+        expect(puedeEliminar).toBeGreaterThan(autoInmediata);
+    });
+
+    it('shows MP apps disconnect hint with link on MP verification success', () => {
+        expect(viewSource).toContain('showMpIntegrationDisconnectHint');
+        expect(viewSource).toContain('shouldShowMercadoPagoIntegrationDisconnectHint');
+        expect(viewSource).toContain('MERCADO_PAGO_MY_APPS_URL');
+        expect(viewSource).toContain(
+            "$t('identityVerificationSuccessMpDisconnectLead')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityVerificationSuccessMpDisconnectLink')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityVerificationSuccessMpDisconnectTail')"
+        );
+        expect(viewSource).toContain(':href="mercadoPagoMyAppsUrl"');
+    });
+
     it('shows ownership warning with profile edit link on MP verification card', () => {
         expect(viewSource).toContain('identity-validation-mp-warning');
         expect(viewSource).toContain(
