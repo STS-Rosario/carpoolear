@@ -63,6 +63,19 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('resetAdvancedFilters');
     });
 
+    it('stacks hide-carpooleado and date-range checkboxes with matching dark grey labels', () => {
+        expect(source).toContain('trips-search__advanced-checkboxes');
+        expect(source).toMatch(
+            /trips-search__advanced-checkboxes[\s\S]*?hide-carpooleado-select_wrapper[\s\S]*?date-range-search-select_wrapper/
+        );
+        expect(cssSource).toMatch(
+            /\.trips-search__advanced-checkboxes\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(cssSource).toMatch(
+            /\.trips-search__advanced-checkboxes[\s\S]*?\.cbx_label\s*\{[^}]*color:\s*var\(--ds-input-label\)/
+        );
+    });
+
     it('adds Buscar en rango de fechas checkbox and Desde/Hasta date pickers', () => {
         expect(source).toContain("$t('buscarEnRangoDeFechas')");
         expect(source).toContain('v-model="dateRangeEnabled"');
