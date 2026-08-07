@@ -4,6 +4,10 @@ import { initializeApp } from 'firebase/app';
 import { Capacitor } from '@capacitor/core';
 import { useCordovaStore } from '../stores/cordova';
 import { useDeviceStore } from '../stores/device';
+import {
+    isIosNativePlatform,
+    persistPushDeviceToken
+} from './nativePushDeviceToken.js';
 
 function getFirebaseConfig() {
     let raw = import.meta.env.VITE_FIREBASE_PARAMS;
@@ -225,22 +229,61 @@ export default {
                 return;
             }
 
+            const platform = Capacitor.getPlatform();
+            const useIosFcmToken = isIosNativePlatform(platform);
+
+            const persistToken = (token) =>
+                persistPushDeviceToken(token, {
+                    setDeviceId: (value) => useCordovaStore().setDeviceId(value),
+                    register: () => useDeviceStore().register()
+                }).catch((error) => {
+                    console.error('❌ Device registration failed:', error);
+                });
+
+            let FirebaseMessaging = null;
+            const persistIosFcmToken = async () => {
+                if (!FirebaseMessaging) {
+                    return;
+                }
+                try {
+                    const result = await FirebaseMessaging.getToken();
+                    await persistToken(result && result.token);
+                } catch (error) {
+                    console.error('❌ Failed to get iOS FCM token:', error);
+                }
+            };
+
+            if (useIosFcmToken) {
+                try {
+                    const messagingModule = await import(
+                        '@capacitor-firebase/messaging'
+                    );
+                    FirebaseMessaging = messagingModule.FirebaseMessaging;
+                    await FirebaseMessaging.addListener(
+                        'tokenReceived',
+                        (event) => {
+                            persistToken(event && event.token);
+                        }
+                    );
+                } catch (error) {
+                    console.error(
+                        '❌ Firebase Messaging plugin not available:',
+                        error
+                    );
+                    return;
+                }
+            }
+
             // IMPORTANTE: Configurar listeners ANTES de registrar
             PushNotifications.addListener('registration', (token) => {
-                useCordovaStore().setDeviceId(token.value);
+                if (useIosFcmToken) {
+                    // Capacitor registration yields the APNs token on iOS.
+                    // Backend send path expects an FCM registration token.
+                    persistIosFcmToken();
+                    return;
+                }
 
-                // Add a small delay to ensure state is updated before registering with backend
-                setTimeout(() => {
-                    useDeviceStore()
-                        .register()
-                        .then(() => {})
-                        .catch((error) => {
-                            console.error(
-                                '❌ Device registration failed:',
-                                error
-                            );
-                        });
-                }, 100); // 100ms delay to ensure state is updated
+                persistToken(token && token.value);
             });
 
             // Listener para errores de registro - DEBE estar antes del register()

@@ -26,15 +26,14 @@ describe('push-capacitor.js native iOS FCM token', () => {
         expect(source).toContain('persistPushDeviceToken');
         expect(source).toContain('getToken');
         expect(source).toContain('tokenReceived');
-        expect(source).toMatch(
-            /isIosNativePlatform\([\s\S]*?getPlatform\(\)/
-        );
+        expect(source).toContain('Capacitor.getPlatform()');
+        expect(source).toContain('isIosNativePlatform(platform)');
     });
 
     it('does not persist Capacitor registration token on iOS', () => {
-        expect(source).toMatch(
-            /registration[\s\S]*?isIosNativePlatform[\s\S]*?persistIosFcmToken|isIosNativePlatform[\s\S]*?registration/
-        );
         expect(source).toContain('persistIosFcmToken');
+        expect(source).toMatch(
+            /PushNotifications\.addListener\(\s*'registration'[\s\S]*?useIosFcmToken[\s\S]*?persistIosFcmToken/
+        );
     });
 });
