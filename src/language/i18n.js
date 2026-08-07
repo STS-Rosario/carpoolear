@@ -262,7 +262,7 @@ const messages = {
         ayudanosCollab: 'colaborativa',
         ayudanosNonprofit: 'sin fines de lucro',
         oNuestrasRedesSociales: 'o nuestras redes sociales.',
-        porQueDonar: 'Por qué donar a Carpoolear',
+        porQueDonar: 'Por qué aportar a Carpoolear',
         oCreandoUnaCuentaCon: 'o creando una cuenta con',
         resultadosCercanos: 'Resultados cercanos',
         viajesCercanos: 'Viajes cercanos',
