@@ -29,6 +29,7 @@ const MOCK_CONFIG = {
   disable_user_hints: false,
   login_custom_header: false,
   module_trip_seats_payment: false,
+  module_seat_price_enabled: true,
   module_validated_drivers: false,
   trip_stars: false,
   api_price: false,

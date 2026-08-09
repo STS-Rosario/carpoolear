@@ -180,7 +180,9 @@ test.describe('Screenshot tests', () => {
             );
         });
 
-        for (let step = 1; step <= 9; step += 1) {
+        // Steps 1–10 match STEP.* including contribution (8) and last details (10).
+        // Contribution UI requires MOCK_CONFIG.module_seat_price_enabled.
+        for (let step = 1; step <= 10; step += 1) {
             test(`new trip wizard step ${step}`, async ({ page }) => {
                 if (step === 1) {
                     await page.addInitScript(() => {
