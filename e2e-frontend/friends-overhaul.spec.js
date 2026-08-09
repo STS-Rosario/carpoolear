@@ -44,7 +44,7 @@ test.describe('Friends overhaul', () => {
         await waitForPageReady(page);
 
         const inviteLink = page.getByRole('link', {
-            name: /invitaciones de amigos/i
+            name: /invitaciones de amistades/i
         });
         await expect(inviteLink).toBeVisible({ timeout: 15000 });
         await inviteLink.click();
@@ -89,7 +89,7 @@ test.describe('Friends overhaul', () => {
         await waitForPageReady(page);
 
         await expect(
-            page.getByRole('button', { name: /invitar a amigos/i })
+            page.getByRole('button', { name: /invitar a amistades/i })
         ).toBeVisible({
             timeout: 15000
         });
@@ -270,7 +270,7 @@ test.describe('Friends overhaul', () => {
         await waitForPageReady(page);
 
         await expect(
-            page.getByRole('heading', { name: /viajes de mis amigos/i })
+            page.getByRole('heading', { name: /viajes de mis amistades/i })
         ).toBeVisible({
             timeout: 15000
         });
