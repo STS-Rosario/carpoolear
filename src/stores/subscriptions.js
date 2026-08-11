@@ -14,6 +14,7 @@ export const useSubscriptionsStore = defineStore('subscriptions', {
 
     actions: {
         index(data = {}) {
+            this.subscriptions = null;
             return subscriptionApi
                 .index(data)
                 .then((response) => {

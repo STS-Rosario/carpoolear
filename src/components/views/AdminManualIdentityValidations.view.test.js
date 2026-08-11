@@ -43,6 +43,14 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).not.toContain("@click=\"toggleSort('acciones')\"");
     });
 
+    it('links open account verification ticket counts to filtered support tickets', () => {
+        expect(viewSource).toContain('open_account_verification_tickets_count');
+        expect(viewSource).toContain('accountVerificationTicketsRoute');
+        expect(viewSource).toContain('adminUserSupportTicketsRoute');
+        expect(viewSource).toContain('account_verification');
+        expect(viewSource).toContain('createdByAdmin: true');
+    });
+
     it('sends sort and pagination params to the API instead of sorting locally', () => {
         expect(viewSource).not.toContain('sortManualIdentityValidationsList');
         expect(viewSource).toContain('syncRouteQuery');

@@ -9,6 +9,22 @@ export function shouldShowTripPointDetailInputs(points) {
     return Boolean(origin?.json && destination?.json);
 }
 
+export function shouldShowPuntoPartidaInput(points) {
+    if (!Array.isArray(points) || points.length < 1) {
+        return false;
+    }
+
+    return Boolean(points[0]?.json);
+}
+
+export function shouldShowPuntoLlegadaInput(points) {
+    if (!Array.isArray(points) || points.length < 2) {
+        return false;
+    }
+
+    return Boolean(points[points.length - 1]?.json);
+}
+
 export function isTripPointDetailEmpty(value) {
     return !value || !String(value).trim();
 }

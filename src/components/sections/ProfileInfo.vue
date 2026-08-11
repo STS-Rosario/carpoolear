@@ -1,227 +1,240 @@
 <template>
-    <div class="profile-info-component" v-if="profile">
-        <div class="list-group">
-            <div class="pic-info col-sm-6">
-                <div
-                    class="circle-box profile"
-                    v-imgSrc:profile="profile.image"
-                ></div>
-                <div class="profile-info">
-                    <div class="profile-info--name mobile">
-                        <UserNameWithBadge :user="profile" />
-                    </div>
-                    <div class="profile-info--ratings">
-                        <UserRatingsCounts :ratings="profileRatings" />
-                    </div>
-                    <div
-                        v-if="memberSinceLabel || participatedTripsLabel"
-                        class="profile-info--member-stats"
-                    >
-                        <div v-if="memberSinceLabel">{{ memberSinceLabel }}</div>
-                        <div v-if="participatedTripsLabel">
-                            {{ participatedTripsLabel }}
-                        </div>
-                    </div>
+    <div class="profile-info-component profile-info-panel" v-if="profile">
+        <template v-if="profile.description">
+            <h3 class="profile-info-panel__section-label">{{ $t('sobreMi') }}</h3>
+            <p class="profile-info-panel__bio">{{ profile.description }}</p>
+        </template>
+
+        <div class="profile-info-panel__tiles">
+            <div
+                class="profile-info-panel__tile"
+                data-testid="profile-identity-tile"
+            >
+                <span
+                    class="profile-info-panel__tile-icon-wrap"
+                    :class="{
+                        'profile-info-panel__tile-icon-wrap--verified':
+                            isIdentityVerified
+                    }"
+                    :data-testid="
+                        isIdentityVerified
+                            ? 'profile-identity-verified'
+                            : 'profile-identity-unverified'
+                    "
+                    :aria-label="
+                        isIdentityVerified
+                            ? $t('usuarioVerificado')
+                            : $t('identidadNoVerificadaTitulo')
+                    "
+                >
+                    <i
+                        class="fa profile-info-panel__tile-icon"
+                        :class="{
+                            'fa-shield': isIdentityVerified,
+                            'fa-user': !isIdentityVerified,
+                            'profile-info-panel__tile-icon--verified':
+                                isIdentityVerified
+                        }"
+                        aria-hidden="true"
+                    ></i>
+                </span>
+                <div>
+                    <p class="profile-info-panel__tile-title">
+                        {{
+                            isIdentityVerified
+                                ? $t('identidadVerificadaTitulo')
+                                : $t('identidadNoVerificadaTitulo')
+                        }}
+                    </p>
+                    <p class="profile-info-panel__tile-sub">
+                        {{
+                            isIdentityVerified
+                                ? $t('identidadVerificadaSub')
+                                : $t('identidadNoVerificadaSub')
+                        }}
+                    </p>
                 </div>
-                <div v-if="badges.length" class="profile-badges">
-                    <img
-                        v-for="badge in badges"
-                        :key="badge.id"
-                        :src="badgeImageUrl(badge.image_path)"
-                        :alt="badge.title"
-                        :title="badge.description || badge.title"
-                        class="profile-badge"
-                    />
+            </div>
+            <div
+                v-if="showResponseTile"
+                class="profile-info-panel__tile"
+                data-testid="profile-response-tile"
+            >
+                <span class="profile-info-panel__tile-icon-wrap">
+                    <i
+                        class="fa fa-comment profile-info-panel__tile-icon"
+                        aria-hidden="true"
+                    ></i>
+                </span>
+                <div>
+                    <p class="profile-info-panel__tile-title">
+                        {{ responseRateLabel || $t('sinDatosRespuestaTitulo') }}
+                    </p>
+                    <p class="profile-info-panel__tile-sub">
+                        {{
+                            responseDelayLabel || $t('sinDatosRespuestaSub')
+                        }}
+                    </p>
                 </div>
-                <div class="profile-social-accounts">
-                    <div v-for="account in profile.accounts" class="row">
-                        <div class="col-xs-24">
-                            <a
-                                :href="
-                                    'https://www.facebook.com/search/top/?q=' +
-                                    encodeURIComponent(profile.name)
-                                "
-                                target="_blank"
-                                class="btn-primary btn-search"
-                                style="border: 0"
-                                :title="$t('cambioFacebook')"
-                            >
-                                <span class="">{{ $t('buscarFacebook') }}</span>
-                            </a>
-                            <!-- app_scoped_user_id -->
-                        </div>
-                    </div>
-                    <div
-                        class="row"
-                        v-if="profile.accounts && profile.accounts.length"
+            </div>
+        </div>
+
+        <div
+            v-if="badges.length"
+            class="profile-badges"
+        >
+            <img
+                v-for="badge in badges"
+                :key="badge.id"
+                :src="badgeImageUrl(badge.image_path)"
+                :alt="badge.title"
+                :title="badge.description || badge.title"
+                class="profile-badge"
+            />
+        </div>
+
+        <div class="list-container profile-info-panel__details" v-if="hasPrivateDetails">
+            <div class="list-group-item" v-if="profile.email">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <div class="list-group-item--content">
+                    {{ profile.email }}
+                </div>
+            </div>
+            <div class="list-group-item" v-if="formattedNroDoc">
+                <i class="fa fa-id-card" aria-hidden="true"></i>
+                <div class="list-group-item--content">
+                    {{ formattedNroDoc }}
+                </div>
+            </div>
+            <div
+                class="list-group-item"
+                v-if="
+                    config &&
+                    config.module_facebook_profile_url_enabled &&
+                    profile.facebook_profile_url
+                "
+            >
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                <div class="list-group-item--content">
+                    <a
+                        :href="profile.facebook_profile_url"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
-                        <div class="col-xs-24">
-                            <small>{{ $t('cambioFacebook') }}</small>
-                        </div>
+                        {{ profile.facebook_profile_url }}
+                    </a>
+                </div>
+            </div>
+            <div class="list-group-item" v-if="profile.mobile_phone">
+                <i class="fa fa-mobile bigger" aria-hidden="true"></i>
+                <div class="list-group-item--content">
+                    {{ profile.mobile_phone }}
+                </div>
+            </div>
+            <div
+                class="list-group-item profile-cars"
+                v-if="visibleCars.length"
+            >
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <div class="list-group-item--content">
+                    <div
+                        v-for="car in visibleCars"
+                        :key="car.id"
+                        class="profile-car-patente"
+                    >
+                        {{ car.patente }}
                     </div>
                 </div>
             </div>
-            <div class="data-info col-sm-offset-2 col-sm-16 col-md-offset-1">
-                <div class="profile-info--name desktop"><UserNameWithBadge :user="profile" /></div>
-                <div class="list-container">
-                    <div class="list-group-item" v-if="profile.description">
-                        <i class="fa fa-quote-left" aria-hidden="true"></i>
-                        <div class="list-group-item--content italic">
-                            {{ profile.description }}
-                        </div>
-                    </div>
+        </div>
 
-                    <div class="list-group-item" v-if="profile.email">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        <div class="list-group-item--content">
-                            {{ profile.email }}
-                        </div>
-                    </div>
-                    <div class="list-group-item">
-                        <i class="fa fa-id-card" aria-hidden="true"></i>
-                        <div class="list-group-item--content">
-                            {{ formattedNroDoc }}
-                        </div>
-                    </div>
-                    <div
-                        class="list-group-item"
-                        v-if="
-                            config &&
-                            config.module_facebook_profile_url_enabled &&
-                            profile.facebook_profile_url
+        <div class="profile-social-accounts" v-if="profile.accounts && profile.accounts.length">
+            <div v-for="account in profile.accounts" :key="account.id || account" class="row">
+                <div class="col-xs-24">
+                    <a
+                        :href="
+                            'https://www.facebook.com/search/top/?q=' +
+                            encodeURIComponent(profile.name)
                         "
+                        target="_blank"
+                        class="btn-primary btn-search"
+                        style="border: 0"
+                        :title="$t('cambioFacebook')"
                     >
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
-                        <div class="list-group-item--content">
-                            <a
-                                :href="profile.facebook_profile_url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {{ profile.facebook_profile_url }}
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="list-group-item" v-if="profile.mobile_phone">
-                        <i class="fa fa-mobile bigger" aria-hidden="true"></i>
-                        <div class="list-group-item--content">
-                            {{ profile.mobile_phone }}
-                        </div>
-                    </div>
-
-                    <div
-                        class="list-group-item profile-cars"
-                        v-if="visibleCars.length"
-                    >
-                        <i class="fa fa-car" aria-hidden="true"></i>
-                        <div class="list-group-item--content">
-                            <div
-                                v-for="car in visibleCars"
-                                :key="car.id"
-                                class="profile-car-patente"
-                            >
-                                {{ car.patente }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="edit-action profile-friend-actions"
-                    v-if="user && profile.id !== user.id && showFriendActions"
-                >
-                    <button
-                        v-if="profile.friendship_state === 'none'"
-                        class="btn btn-primary"
-                        :disabled="friendActionLoading"
-                        v-on:click="onInviteFriend()"
-                    >
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        {{ $t('invitarAmigos') }}
-                    </button>
-                    <button
-                        v-else-if="profile.friendship_state === 'pending_sent'"
-                        class="btn btn-primary"
-                        disabled
-                    >
-                        {{ $t('solicitudEnviada') }}
-                    </button>
-                    <template v-else-if="profile.friendship_state === 'pending_received'">
-                        <button
-                            class="btn btn-primary"
-                            :disabled="friendActionLoading"
-                            v-on:click="onAcceptFriend()"
-                        >
-                            {{ $t('aceptar') }}
-                        </button>
-                        <button
-                            class="btn btn-default"
-                            :disabled="friendActionLoading"
-                            v-on:click="onRejectFriend()"
-                        >
-                            {{ $t('rechazar') }}
-                        </button>
-                    </template>
-                    <button
-                        v-else-if="profile.friendship_state === 'friend'"
-                        class="btn btn-primary"
-                        :disabled="friendActionLoading"
-                        v-on:click="onToggleTripAlerts()"
-                    >
-                        {{ tripAlertsButtonLabel }}
-                    </button>
-                </div>
-                <div
-                    class="edit-action"
-                    v-if="user.is_admin && profile.id !== user.id"
-                >
-                    <button
-                        class="btn btn-primary btn-circle"
-                        v-on:click="messageUser()"
-                    >
-                        {{ $t('enviarMensaje') }}
-                    </button>
-                </div>
-                <div class="edit-action" v-if="profile.id === user.id">
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'profile_update' }"
-                    >
-                        {{ $t('editarPerfil') }}
-                    </router-link>
-                    <router-link
-                        v-if="identityValidationAvailable"
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'identity_validation' }"
-                    >
-                        {{ $t('validarIdentidad') }}
-                    </router-link>
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'friends_setting' }"
-                    >
-                        {{ $t('verAmigos') }}
-                    </router-link>
-                    <router-link
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'debug_setting' }"
-                    >
-                        {{ $t('debug') }}
-                    </router-link>
-                    <router-link
-                        v-if="config && config.module_trip_seats_payment"
-                        class="btn btn-primary"
-                        tag="button"
-                        :to="{ name: 'transacciones' }"
-                    >
-                        {{ $t('transacciones') }}
-                    </router-link>
+                        <span>{{ $t('buscarFacebook') }}</span>
+                    </a>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-24">
+                    <small>{{ $t('cambioFacebook') }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="profile-info-panel__privacy"
+            v-if="!hasPrivateDetails"
+        >
+            <i class="fa fa-lock" aria-hidden="true"></i>
+            <span>{{ $t('contactoPrivacidadPerfil') }}</span>
+        </div>
+
+        <div
+            class="edit-action profile-friend-actions"
+            v-if="user && profile.id !== user.id && showFriendActions"
+        >
+            <AppButton
+                v-if="profile.friendship_state === 'none'"
+                variant="primary"
+                icon-left="fa fa-user"
+                :disabled="friendActionLoading"
+                :loading="friendActionLoading"
+                @click="onInviteFriend()"
+            >
+                {{
+                    friendActionLoading
+                        ? $t('enviandoSolicitudAmistad')
+                        : $t('invitarAmigos')
+                }}
+            </AppButton>
+            <AppButton
+                v-else-if="profile.friendship_state === 'pending_sent'"
+                variant="danger"
+                :disabled="friendActionLoading"
+                :loading="friendActionLoading"
+                @click="onCancelFriendRequest()"
+            >
+                {{ $t('cancelarSolicitudAmistad') }}
+            </AppButton>
+            <template v-else-if="profile.friendship_state === 'friend'">
+                <AppButton
+                    variant="primary"
+                    @click="messageUser()"
+                >
+                    {{ $t('enviarMensaje') }}
+                </AppButton>
+                <AppButton
+                    variant="secondary"
+                    :disabled="friendActionLoading"
+                    @click="onToggleTripAlerts()"
+                >
+                    {{ tripAlertsButtonLabel }}
+                </AppButton>
+            </template>
+        </div>
+        <div
+            class="edit-action profile-friend-actions"
+            v-if="
+                user &&
+                user.is_admin &&
+                profile.id !== user.id &&
+                profile.friendship_state !== 'friend'
+            "
+        >
+            <AppButton variant="primary" @click="messageUser()">
+                {{ $t('enviarMensaje') }}
+            </AppButton>
         </div>
     </div>
 </template>
@@ -233,20 +246,13 @@ import { useConversationsStore } from '../../stores/conversations';
 import { useFriendsStore } from '../../stores/friends';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
-import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
-import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import { formatId } from '../../services/utility';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
-import {
-    formatMemberSinceMonthYear,
-    normalizeTripsCount
-} from '../../utils/profileMemberStats.js';
-import { userRatingsFromProfile } from '../../utils/tripRating';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
     components: {
-        UserNameWithBadge,
-        UserRatingsCounts
+        AppButton
     },
     data() {
         return {
@@ -262,45 +268,81 @@ export default {
             profile: 'user',
             badges: 'badges'
         }),
-        identityValidationAvailable() {
-            const c = this.config;
-            return (
-                c &&
-                c.identity_validation_enabled === true &&
-                (c.identity_validation_mercado_pago_enabled === true ||
-                    c.identity_validation_manual_enabled === true)
-            );
-        },
         formattedNroDoc() {
+            if (!this.profile || !this.profile.nro_doc) {
+                return '';
+            }
             return formatId(this.profile.nro_doc, this.config.profile_id_format);
         },
         visibleCars() {
             return activeCarsWithPlate(this.profile?.cars);
         },
-        memberSinceLabel() {
-            const date = formatMemberSinceMonthYear(this.profile?.created_at);
-            return date ? this.$t('miembroDesde', { date }) : '';
+        isIdentityVerified() {
+            return !!(
+                this.profile &&
+                (this.profile.identity_validated ||
+                    this.profile.identity_validated_at)
+            );
         },
-        participatedTripsLabel() {
-            if (!this.profile || this.profile.trips_count == null) {
+        hasPrivateDetails() {
+            return !!(
+                this.profile &&
+                (this.profile.email ||
+                    this.formattedNroDoc ||
+                    this.profile.mobile_phone ||
+                    this.visibleCars.length ||
+                    (this.config &&
+                        this.config.module_facebook_profile_url_enabled &&
+                        this.profile.facebook_profile_url))
+            );
+        },
+        responseRateLabel() {
+            if (
+                !this.profile ||
+                !this.profile.conversation_opened_count ||
+                !this.config?.module_conversation_average_delay
+            ) {
                 return '';
             }
-
-            return this.$t('perfilViajesParticipados', {
-                count: normalizeTripsCount(this.profile.trips_count)
+            const percentage =
+                this.profile.conversation_answered_count /
+                this.profile.conversation_opened_count;
+            return this.$t('respondeMensajesPorcentaje', {
+                percent: Math.round(percentage * 100)
             });
         },
-        profileRatings() {
-            return userRatingsFromProfile(this.profile);
+        responseDelayLabel() {
+            if (
+                !this.profile ||
+                !this.profile.conversation_answered_count ||
+                !this.config?.module_conversation_average_delay
+            ) {
+                return '';
+            }
+            const time =
+                this.profile.answer_delay_sum /
+                this.profile.conversation_answered_count;
+            let delay;
+            if (time / 3600 > 24) {
+                delay = this.$t('masDeUnDia');
+            } else if (time / 3600 > 12) {
+                delay = this.$t('enElDia');
+            } else if (time / 3600 > 1) {
+                delay = this.$t('enUnParDeHoras');
+            } else {
+                delay = this.$t('enElMomento');
+            }
+            return this.$t('tiempoPromedioRespuesta', { delay });
+        },
+        showResponseTile() {
+            return Boolean(this.config?.module_conversation_average_delay);
         },
         showFriendActions() {
             if (!this.profile || !this.user) {
                 return false;
             }
             const state = this.profile.friendship_state || 'none';
-            return ['none', 'pending_sent', 'pending_received', 'friend'].includes(
-                state
-            );
+            return ['none', 'pending_sent', 'friend'].includes(state);
         },
         tripAlertsButtonLabel() {
             if (!this.profile || !this.profile.name) {
@@ -318,8 +360,7 @@ export default {
         }),
         ...mapActions(useFriendsStore, {
             requestFriend: 'request',
-            acceptFriend: 'accept',
-            rejectFriend: 'reject',
+            cancelFriendRequest: 'cancelRequest',
             toggleTripAlerts: 'toggleTripAlerts'
         }),
         ...mapActions(useProfileStore, {
@@ -343,11 +384,8 @@ export default {
         onInviteFriend() {
             this.runFriendAction(this.requestFriend, 'pending_sent');
         },
-        onAcceptFriend() {
-            this.runFriendAction(this.acceptFriend, 'friend');
-        },
-        onRejectFriend() {
-            this.runFriendAction(this.rejectFriend, 'none');
+        onCancelFriendRequest() {
+            this.runFriendAction(this.cancelFriendRequest, 'none');
         },
         onToggleTripAlerts() {
             this.friendActionLoading = true;
@@ -378,7 +416,6 @@ export default {
                 });
         },
         messageUser() {
-            console.log('messageUser profileInfo', this.profile);
             this.lookConversation(this.profile).then((conversation) => {
                 router.push({
                     name: 'conversation-chat',
@@ -398,35 +435,6 @@ export default {
 };
 </script>
 <style scoped>
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.profile-info--member-stats {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    text-align: center;
-    max-width: 230px;
-}
-
-.profile-info--ratings {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    max-width: 230px;
-    overflow: visible;
-}
-
-@media only screen and (min-width: 768px) {
-    .profile-info--member-stats {
-        white-space: nowrap;
-    }
-}
-
 .profile-badges {
     display: flex;
     justify-content: center;
@@ -442,20 +450,41 @@ export default {
     object-fit: contain;
 }
 
-.btn-primary {
-    display: inline-block;
+.profile-info-panel__details .list-group-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border: none;
+    border-top: 1px solid #e6e6e6;
+    background: transparent;
 }
-.label-reply {
+
+.profile-info-panel__details .list-group-item i {
+    float: none !important;
+    width: 1.5rem !important;
+    flex-shrink: 0;
+    margin: 0.15rem 0 0;
+}
+
+.profile-info-panel__details .list-group-item .list-group-item--content {
     display: block;
-    padding: 0;
-    font-size: 0.9rem;
-    font-weight: bold;
-    line-height: 1.5em;
-    color: #333;
+    width: auto;
+    flex: 1 1 auto;
+    padding-right: 0;
     text-align: left;
-    border-radius: 0;
+    font-weight: 400;
 }
-.reply-btns button {
-    min-width: 7rem;
+
+.profile-friend-actions {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
 }
 </style>

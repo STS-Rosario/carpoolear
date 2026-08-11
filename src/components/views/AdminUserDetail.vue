@@ -4,12 +4,13 @@
             <div class="row">
                 <div class="col-md-20 col-md-offset-2">
                     <p class="admin-user-detail__back">
-                        <router-link
+                        <AppButton
+                            variant="secondary"
+                            size="sm"
                             :to="{ name: 'admin-users' }"
-                            class="btn btn-default btn-sm"
                         >
                             {{ $t('adminUsuariosVolverAlListado') }}
-                        </router-link>
+                        </AppButton>
                     </p>
                     <div v-if="loading" class="alert alert-info">
                         <img
@@ -88,14 +89,14 @@
                                 v-if="canClearIdentityVerification"
                                 class="admin-user-detail__identity-verification-actions"
                             >
-                                <button
+                                <AppButton
                                     type="button"
-                                    class="btn btn-warning"
+                                    variant="warning"
                                     :disabled="clearingIdentity"
                                     @click="confirmClearIdentityValidation"
                                 >
                                     {{ $t('removerValidacionIdentidad') }}
-                                </button>
+                                </AppButton>
                             </p>
                         </section>
                         <dl class="admin-user-detail__properties">
@@ -122,75 +123,72 @@
                             </div>
                         </dl>
                         <p class="user-admin-view-nav">
-                            <router-link
+                            <AppButton
+                                variant="secondary"
                                 :to="{
                                     name: 'admin-users-trips',
                                     params: { userId: String(user.id) }
                                 }"
-                                class="btn btn-default"
                             >
                                 {{ adminUserNavLabel('adminUsuariosVerViajes', user.admin_trips_count) }}
-                            </router-link>
-                            <router-link
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
                                 :to="{
                                     name: 'admin-users-ratings',
                                     params: { userId: String(user.id) }
                                 }"
-                                class="btn btn-default"
                             >
                                 {{ adminUserNavLabel('adminUsuariosVerCalificaciones', user.admin_ratings_count) }}
-                            </router-link>
-                            <router-link
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
                                 :to="{
                                     name: 'admin-users-recommendations',
                                     params: { userId: String(user.id) }
                                 }"
-                                class="btn btn-default"
                             >
                                 {{ adminUserNavLabel('adminUsuariosVerReferencias', user.references) }}
-                            </router-link>
+                            </AppButton>
                         </p>
                         <p class="user-admin-view-actions">
-                            <router-link
+                            <AppButton
+                                variant="primary"
                                 :to="{
                                     name: 'admin-users-edit',
                                     params: { userId: String(user.id) }
                                 }"
-                                class="btn btn-primary"
                             >
                                 {{ $t('adminUsuariosEditar') }}
-                            </router-link>
-                            <router-link
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
                                 :to="supportTicketRoute(user)"
-                                class="btn btn-default"
                             >
                                 {{ $t('crearTicketSoporte') }}
-                            </router-link>
-                            <router-link
+                            </AppButton>
+                            <AppButton
                                 v-if="user.support_tickets_count"
+                                variant="secondary"
                                 :to="adminUserSupportTicketsRoute(user.id)"
-                                class="btn btn-default"
                             >
                                 {{ $t('adminUsuarioVerTicketsSoporte', { count: user.support_tickets_count }) }}
-                            </router-link>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 v-if="user && !user.is_admin"
                                 type="button"
-                                class="btn btn-warning"
+                                variant="warning"
                                 @click="startImpersonation"
                             >
                                 {{ $t('adminUsuariosImpersonate') }}
-                            </button>
-                            <button
+                            </AppButton>
+                            <AppButton
                                 type="button"
-                                class="btn btn-success btn-circle"
+                                variant="success"
+                                icon-only
+                                icon-left="fa fa-comments medium-icon"
                                 @click="toUserMessages"
-                            >
-                                <i
-                                    class="fa fa-comments medium-icon"
-                                    aria-hidden="true"
-                                ></i>
-                            </button>
+                            />
                         </p>
                     </div>
                 </div>
@@ -204,6 +202,7 @@ import { mapActions, mapState } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import { formatAdminUserNavLabelFromKey } from '../../utils/adminUserNavLabel';
 import {
@@ -363,7 +362,8 @@ export default {
         this.load();
     },
     components: {
-        AdminLayout
+        AdminLayout,
+        AppButton
     }
 };
 </script>
@@ -379,10 +379,20 @@ export default {
     margin-top: 0;
 }
 
-.user-admin-view-nav .btn,
-.user-admin-view-actions .btn {
-    margin-right: 8px;
-    margin-bottom: 8px;
+.user-admin-view-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.user-admin-view-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
 }
 
 .medium-icon {

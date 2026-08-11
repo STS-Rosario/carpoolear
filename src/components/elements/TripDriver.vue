@@ -1,8 +1,90 @@
 <template>
     <div class="trip-driver">
+        <div class="trip-driver__mobile" v-if="trip && trip.user">
+            <div class="trip-driver__mobile-top">
+                <router-link
+                    class="trip-driver-profile-link trip_driver_img_container"
+                    :to="driverProfileRoute"
+                >
+                    <div
+                        class="trip_driver_img circle-box"
+                        v-imgSrc:profile="getUserImage"
+                    ></div>
+                </router-link>
+                <div class="trip-driver__mobile-info">
+                    <div class="trip-driver__mobile-name-row">
+                        <div class="trip-driver__mobile-name-cluster">
+                            <router-link
+                                class="trip-driver-profile-link trip-driver__mobile-name"
+                                :to="driverProfileRoute"
+                            >
+                                {{ trip.user.name }}
+                            </router-link>
+                            <span
+                                v-if="isDriverVerified"
+                                class="trip-driver__verified"
+                                :title="$t('usuarioVerificado')"
+                                :aria-label="$t('usuarioVerificado')"
+                            >
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div
+                            v-if="!trip.is_passenger && isMobile"
+                            class="trip-driver__seats"
+                            :class="'trip-driver__seats--' + seatsTone"
+                        >
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {{ seatsLabel }}
+                        </div>
+                    </div>
+                    <div class="trip-driver__mobile-meta">
+                        <UserRatingsCounts :ratings="driverRatings" />
+                        <span
+                            v-if="driverTripsLabel"
+                            class="trip-driver__mobile-trips"
+                        >
+                            &middot; {{ driverTripsLabel }}
+                        </span>
+                    </div>
+                    <div
+                        v-if="membershipLabel || showResponseStats"
+                        class="trip-driver__mobile-secondary"
+                    >
+                        <p
+                            v-if="membershipLabel || responsePercentLabel"
+                            class="trip-driver__mobile-line"
+                        >
+                            <template v-if="membershipLabel">{{
+                                membershipLabel
+                            }}</template>
+                            <template
+                                v-if="membershipLabel && responsePercentLabel"
+                            >
+                                &nbsp;&middot;&nbsp;
+                            </template>
+                            <template v-if="responsePercentLabel">{{
+                                responsePercentLabel
+                            }}</template>
+                        </p>
+                        <p
+                            v-if="responseDelayLabel"
+                            class="trip-driver__mobile-line"
+                        >
+                            {{ responseDelayLabel }}
+                        </p>
+                    </div>
+                </div>
+                <TripCarDetails
+                    v-if="showDriverCarDetails"
+                    class="trip-driver__car"
+                    :car="trip.car"
+                />
+            </div>
+        </div>
         <div
             class="panel-heading card_heading"
-            v-if="tripCardTheme === 'light'"
+            v-else-if="tripCardTheme === 'light'"
         >
             <div class="panel-title card-trip_title row">
                 <span class="trip-data--subtitle" v-if="!isMobile"
@@ -169,9 +251,18 @@ import { useTripsStore } from '../../stores/trips';
 import { useDeviceStore } from '../../stores/device';
 import TripDate from './TripDate';
 import TripDescription from './TripDescription';
+import TripCarDetails from './TripCarDetails.vue';
 import SvgItem from '../SvgItem';
 import UserRatingsCounts from './UserRatingsCounts.vue';
 import { sumUserRatings, userRatingsFromProfile } from '../../utils/tripRating';
+import {
+    getMembershipDuration,
+    normalizeTripsCount
+} from '../../utils/profileMemberStats.js';
+import {
+    getSeatsPillLabel,
+    getSeatsPillTone
+} from '../../utils/tripCardDisplay.js';
 
 export default {
     name: 'TripDriver',
@@ -215,6 +306,95 @@ export default {
             }
 
             return userRatingsFromProfile(this.trip.user);
+        },
+        isDriverVerified() {
+            const driver = this.trip?.user;
+            return !!(
+                driver &&
+                (driver.identity_validated || driver.identity_validated_at)
+            );
+        },
+        driverTripsLabel() {
+            if (!this.trip?.user || this.trip.user.trips_count == null) {
+                return '';
+            }
+            return this.$t('perfilViajesParticipados', {
+                count: normalizeTripsCount(this.trip.user.trips_count)
+            });
+        },
+        seatsTone() {
+            return getSeatsPillTone(this.trip?.seats_available);
+        },
+        seatsLabel() {
+            return getSeatsPillLabel(this.trip?.seats_available, this.$t);
+        },
+        membershipLabel() {
+            const duration = getMembershipDuration(this.trip?.user?.created_at);
+            if (!duration) {
+                return '';
+            }
+            if (duration.unit === 'years') {
+                return duration.count === 1
+                    ? this.$t('miembroHaceUnAnio')
+                    : this.$t('miembroHaceAnios', { count: duration.count });
+            }
+            if (duration.unit === 'months') {
+                return duration.count === 1
+                    ? this.$t('miembroHaceUnMes')
+                    : this.$t('miembroHaceMeses', { count: duration.count });
+            }
+            return duration.count === 1
+                ? this.$t('miembroHaceUnDia')
+                : this.$t('miembroHaceDias', { count: duration.count });
+        },
+        showResponseStats() {
+            return Boolean(
+                this.config?.module_conversation_average_delay && this.trip?.user
+            );
+        },
+        responsePercentValue() {
+            if (
+                !this.trip?.user?.conversation_opened_count ||
+                this.trip.user.conversation_opened_count <= 0
+            ) {
+                return null;
+            }
+            const percentage =
+                this.trip.user.conversation_answered_count /
+                this.trip.user.conversation_opened_count;
+            return Math.round(percentage * 100);
+        },
+        responsePercentLabel() {
+            if (!this.showResponseStats || this.responsePercentValue == null) {
+                return '';
+            }
+            return this.$t('respondeMensajesPorcentaje', {
+                percent: this.responsePercentValue
+            });
+        },
+        responseDelayLabel() {
+            if (!this.showResponseStats) {
+                return '';
+            }
+            return this.$t('tiempoPromedioRespuesta', {
+                delay: this.averageDelay
+            });
+        },
+        showDriverCarDetails() {
+            if (
+                !this.trip ||
+                this.trip.is_passenger ||
+                !this.trip.car ||
+                !this.trip.car.patente ||
+                !this.user
+            ) {
+                return false;
+            }
+            if (this.user.is_admin) {
+                return true;
+            }
+            // Viewer is a passenger (not the trip driver)
+            return this.user.id !== this.trip.user.id;
         },
         tripStars() {
             if (this.trip && this.trip.user) {
@@ -299,6 +479,7 @@ export default {
     components: {
         SvgItem,
         UserRatingsCounts,
+        TripCarDetails,
         TripDate,
         TripDescription
     },
@@ -319,6 +500,144 @@ export default {
 };
 </script>
 <style scoped>
+.trip-driver__mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+.trip-driver__mobile-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+.trip-driver__car {
+    flex: 0 0 auto;
+    margin-left: auto;
+    text-align: left;
+    color: var(--ds-text-secondary, #666);
+}
+.trip-driver__car :deep(.trip-car-details) {
+    margin: 0;
+}
+.trip-driver__car :deep(.trip-car-details__title) {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+.trip-driver__car :deep(.trip-car-details__line) {
+    margin: 0 0 0.1em;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--ds-text-secondary, #666);
+}
+.trip-driver__mobile .trip_driver_img_container {
+    display: block;
+    flex: 0 0 auto;
+    float: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+.trip-driver__mobile .trip_driver_img {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    margin: 0;
+}
+.trip-driver__mobile-info {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.2rem;
+    min-width: 0;
+    text-align: left;
+}
+.trip-driver__mobile-name-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
+}
+.trip-driver__mobile-name-cluster {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    line-height: 1.25;
+}
+.trip-driver__mobile-name {
+    display: inline;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: left;
+    overflow-wrap: anywhere;
+    margin-right: 0.35rem;
+}
+.trip-driver__verified {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    color: #2e7d32;
+    font-size: 1rem;
+    line-height: 1;
+}
+.trip-driver__seats {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 0 0 auto;
+    margin-top: 0.05rem;
+    margin-left: 0;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.trip-driver__seats--high {
+    background: var(--ds-success-bg);
+    color: var(--ds-success-text);
+}
+.trip-driver__seats--medium {
+    background: var(--ds-warning-bg);
+    color: var(--ds-warning-solid);
+}
+.trip-driver__seats--low {
+    background: var(--ds-error-bg);
+    color: var(--ds-error-solid);
+}
+.trip-driver__seats--full {
+    background: var(--ds-input-disabled-bg);
+    color: var(--ds-text-muted);
+}
+.trip-driver__mobile-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    color: var(--ds-text-secondary, #666);
+    font-size: 0.85rem;
+}
+.trip-driver__mobile-secondary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    width: 100%;
+}
+.trip-driver__mobile-line {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--ds-text-secondary, #666);
+    text-align: left;
+}
+.trip-driver__mobile-line strong {
+    color: var(--ds-text-primary, #333);
+    font-weight: 700;
+}
 .trip-driver-profile-link {
     cursor: pointer;
     color: inherit;
@@ -357,6 +676,39 @@ export default {
     }
 }
 @media only screen and (min-width: 768px) {
+    .trip-driver__mobile-top {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: stretch;
+        column-gap: 0.75rem;
+    }
+    .trip-driver__mobile .trip_driver_img_container {
+        position: relative;
+        display: block;
+        grid-column: 1;
+        height: 100%;
+        width: auto;
+        aspect-ratio: 1 / 1;
+        flex: none;
+        align-self: stretch;
+        justify-self: start;
+    }
+    .trip-driver__mobile .trip_driver_img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+    }
+    .trip-driver__mobile-info {
+        grid-column: 2;
+    }
+    .trip-driver__car {
+        grid-column: 3;
+        margin-left: 0;
+    }
     .driver-profile div.row:last-child {
         min-height: 11rem;
     }

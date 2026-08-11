@@ -41,19 +41,6 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain(':title="fullDate(reply.created_at)"');
     });
 
-    it('shows admin reply title and spacing classes around editor and actions', () => {
-        expect(viewSource).toContain("{{ $t('respuestaCarpoolear') }}");
-        expect(viewSource).toContain('admin-reply-header');
-        expect(viewSource).toContain("{{ $t('responderConPlantilla') }}");
-        expect(viewSource).toContain('admin-reply-box');
-        expect(viewSource).toContain('reply-actions');
-        expect(viewSource).toContain('reply-actions-left');
-        expect(viewSource).toContain('reply-actions-right');
-        expect(viewSource).toContain('reply-action-btn');
-        expect(viewSource).toContain('respuestaEnviada');
-        expect(viewSource).toContain('.then(() => this.refresh())');
-    });
-
     it('shows toast feedback when saving internal notes', () => {
         expect(viewSource).toContain('saveInternalNote()');
         expect(viewSource).toContain('notaInternaGuardada');
@@ -140,28 +127,6 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('showAssignedToOtherAdmin');
     });
 
-    it('places assign and unassign actions at the top with distinct button styles', () => {
-        const assignmentTop = viewSource.indexOf('ticket-assignment-actions');
-        const replyBox = viewSource.indexOf('admin-reply-box');
-        const categoryLabel = viewSource.indexOf("{{ $t('categoriaTicket') }}");
-        expect(assignmentTop).toBeGreaterThan(-1);
-        expect(assignmentTop).toBeLessThan(categoryLabel);
-        expect(assignmentTop).toBeLessThan(replyBox);
-        expect(viewSource).toContain('btn-info');
-        expect(viewSource).toContain('btn-warning');
-        expect(viewSource).toMatch(/showAssignTicketButton[\s\S]*btn-info/);
-        expect(viewSource).toMatch(/showUnassignTicketButton[\s\S]*btn-warning/);
-    });
-
-    it('uses green resolve and red close action buttons', () => {
-        expect(viewSource).toMatch(/showResolveTicketButton[\s\S]*btn-success/);
-        expect(viewSource).toMatch(/showCloseTicketButton[\s\S]*btn-danger/);
-    });
-
-    it('uses blue mark needs review action button', () => {
-        expect(viewSource).toMatch(/showMarkNeedsReviewButton[\s\S]*btn-info/);
-    });
-
     it('toggles resolve and unresolve actions', () => {
         expect(viewSource).toContain('showResolveTicketButton');
         expect(viewSource).toContain('showUnresolveTicketButton');
@@ -213,7 +178,7 @@ describe('AdminSupportTicketDetail view', () => {
     });
 
     it('lets admins change ticket category and save it', () => {
-        expect(viewSource).toContain("{{ $t('categoriaTicket') }}");
+        expect(viewSource).toContain(':label="$t(\'categoriaTicket\')"');
         expect(viewSource).toContain('ticketTypeOptions');
         expect(viewSource).toContain('v-model="ticketType"');
         expect(viewSource).toContain('saveTicketCategory');

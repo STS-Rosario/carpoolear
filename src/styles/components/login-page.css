@@ -1,0 +1,155 @@
+.user-form--login .login-form__link,
+.user-form--login a.login-form__link {
+    color: var(--ds-link);
+    font-weight: var(--ds-link-font-weight);
+    text-decoration: underline;
+}
+
+.user-form--login .login-form__link:hover,
+.user-form--login .login-form__link:focus,
+.user-form--login a.login-form__link:hover,
+.user-form--login a.login-form__link:focus {
+    color: var(--ds-action-hover);
+    text-decoration: underline;
+}
+
+.user-form--login .login-form__forgot {
+    display: block;
+    margin: -0.25rem 0 1.25rem;
+    text-align: left;
+}
+
+.user-form--login .login-form__submit {
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.user-form--login .login-form__remember {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.user-form--login .login-form__remember label {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: var(--ds-font-weight-normal);
+    text-transform: none;
+    color: var(--ds-text-primary);
+}
+
+.app-container.blue.login .user-form--login .login-form__remember label {
+    color: var(--ds-text-primary);
+}
+
+.user-form--login .login-form__remember input {
+    margin: 0;
+    width: auto;
+}
+
+.user-form--login .login-form__register-prompt {
+    color: var(--ds-text-primary);
+    font-size: var(--ds-register-prompt-font-size);
+    line-height: var(--ds-register-prompt-line-height);
+}
+
+.user-form--login .login-form__register-prompt .login-form__link {
+    font-weight: var(--ds-font-weight-bold);
+}
+
+@media (max-width: 767px) {
+    .app-container.blue.login {
+        background: #ffffff;
+        color: var(--ds-text-primary);
+    }
+
+    .app-container.blue.login .user-form--login-mobile {
+        color: var(--ds-text-primary);
+        min-height: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .app-container.blue.login .user-form--login-mobile .form {
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .app-container.blue.login .user-form--login-mobile .form > div:last-child,
+    .app-container.blue.login .user-form--login-mobile .register,
+    .app-container.blue.login .user-form--login-mobile .password-not,
+    .app-container.blue.login .user-form--login-mobile label {
+        color: var(--ds-text-primary);
+    }
+
+    .app-container.blue.login .user-form--login-mobile .login-form__link,
+    .app-container.blue.login .user-form--login-mobile a.login-form__link {
+        color: var(--ds-link);
+        font-weight: var(--ds-link-font-weight);
+        text-decoration: underline;
+    }
+
+    .app-container.blue.login .user-form--login-mobile .login-form__link:hover,
+    .app-container.blue.login .user-form--login-mobile .login-form__link:focus,
+    .app-container.blue.login .user-form--login-mobile a.login-form__link:hover,
+    .app-container.blue.login .user-form--login-mobile a.login-form__link:focus {
+        color: var(--ds-action-hover);
+        text-decoration: underline;
+    }
+
+    .user-form--login-mobile .app-input__control {
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
+    }
+
+    .user-form--login-mobile .login-form__forgot {
+        display: block;
+        margin: -0.25rem 0 1.25rem;
+        text-align: left;
+    }
+
+    .user-form--login-mobile .login-form__submit {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .user-form--login-mobile .login-form__remember {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0 0 1.5rem;
+        padding-left: 5px;
+        text-align: left;
+    }
+
+    .user-form--login-mobile .login-form__remember label {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: var(--ds-font-weight-normal);
+        text-transform: none;
+    }
+
+    .user-form--login-mobile .login-form__remember input {
+        margin: 0;
+        width: auto;
+    }
+
+    .user-form--login-mobile .login-form__divider {
+        margin: 0 0 1.25rem;
+        border: 0;
+        border-top: 1px solid var(--ds-input-border);
+    }
+
+    .user-form--login-mobile .login-form__register-prompt {
+        margin: 0 0 1.25rem;
+        text-align: center;
+    }
+
+    .user-form--login-mobile .login-form__footer {
+        margin-top: 0.25rem;
+    }
+}

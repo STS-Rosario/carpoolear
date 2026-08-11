@@ -1,0 +1,293 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const wizardPath = path.resolve(__dirname, 'NewTripCreationWizard.vue');
+const wizardSource = fs.readFileSync(wizardPath, 'utf8');
+const templateUtilPath = path.resolve(__dirname, '../../utils/tripCreationTemplate.js');
+const templateUtilSource = fs.readFileSync(templateUtilPath, 'utf8');
+const newTripPath = path.resolve(__dirname, 'NewTrip.vue');
+const newTripSource = fs.readFileSync(newTripPath, 'utf8');
+
+describe('NewTripCreationWizard.vue', () => {
+    it('uses stepper and step navigation controls', () => {
+        expect(wizardSource).toContain('TripCreationStepper');
+        expect(wizardSource).toContain('data-testid="trip-creation-next"');
+        expect(wizardSource).toContain('data-testid="trip-creation-back"');
+        expect(wizardSource).toContain('data-testid="trip-creation-submit"');
+    });
+
+    it('skips car step for passengers via tripCreationSteps helpers', () => {
+        expect(wizardSource).toContain('getNextStep');
+        expect(wizardSource).toContain('getPreviousStep');
+        expect(wizardSource).toContain('validateStep');
+    });
+
+    it('persists create drafts', () => {
+        expect(wizardSource).toContain('saveTripCreationDraft');
+        expect(wizardSource).toContain('loadTripCreationDraft');
+        expect(wizardSource).toContain('draftSavingEnabled');
+        expect(wizardSource).toContain('beforeUnmount()');
+        expect(wizardSource).toContain('cancelDraftSave');
+    });
+
+    it('binds schedule DatePicker to dateAnswer so revisiting the step shows the chosen date', () => {
+        expect(wizardSource).toContain(':model-value="form.dateAnswer"');
+    });
+
+    it('opens TripCarsModal from the car step editar autos action', () => {
+        expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
+    });
+
+    it('uses preferences and review step panels', () => {
+        expect(wizardSource).toContain('TripPreferencesStepPanel');
+        expect(wizardSource).toContain('TripReviewStepPanel');
+        expect(wizardSource).toContain('isSubmitDisabled');
+        expect(wizardSource).toContain('tripCreationPublish');
+        expect(wizardSource).not.toContain('new-trip-wizard__last-section--return');
+        expect(wizardSource).not.toContain('cargarViajeRegreso');
+    });
+
+    it('restores cleared schedule fields from return-trip draft without keeping outbound values', () => {
+        expect(wizardSource).toContain('applyTripCreationTemplateToForm(this.form, draft)');
+        expect(templateUtilSource).toContain("'dateAnswer' in templateData");
+        expect(templateUtilSource).toContain("'date' in templateData");
+        expect(templateUtilSource).toContain('resolveTemplateScheduleTime');
+        expect(templateUtilSource).toContain('getDefaultTripCreationTime');
+    });
+
+    it('shows role selection only on step 1 without persistent top toggle', () => {
+        expect(wizardSource).toContain('currentStep === STEP.ROLE');
+        expect(wizardSource).toContain('tripCreationStepRoleQuestion');
+        expect(wizardSource).toContain('tripCreationRoleDriverTitle');
+        expect(wizardSource).toContain('tripCreationRolePassengerTitle');
+        expect(wizardSource).not.toMatch(
+            /new-trip-wizard__type[\s\S]*v-if="!form\.updatingTrip"/
+        );
+    });
+
+    it('closes the template modal before applying selected template data', () => {
+        expect(wizardSource).toMatch(
+            /onSelectTemplate\(templateName, templateData\)\s*\{[\s\S]*?closeTemplateModal\(\);[\s\S]*?applyTripCreationTemplateToForm\(this\.form, templateData,[\s\S]*?\)/
+        );
+    });
+
+    it('uses the default trip creation schedule time when applying templates', () => {
+        expect(wizardSource).toContain('useDefaultScheduleTime: true');
+        expect(templateUtilSource).toContain('getDefaultTripCreationTime');
+        expect(templateUtilSource).toContain('useDefaultScheduleTime');
+        expect(templateUtilSource).toMatch(
+            /applyTripCreationTemplateToForm\([\s\S]*getDefaultTripCreationTime\(/
+        );
+    });
+
+    it('offers saved templates on step 1 when the user has any', () => {
+        expect(wizardSource).toContain('refreshAvailableTemplates');
+        expect(wizardSource).toContain('activated()');
+        expect(wizardSource).toContain('data-testid="trip-creation-use-template"');
+        expect(wizardSource).toContain("$t('tripCreationUseTemplate')");
+        expect(wizardSource).toContain("$t('tripCreationChooseTemplateTitle')");
+        expect(wizardSource).toContain("$t('tripCreationChooseTemplatePlaceholder')");
+        expect(wizardSource).toContain("$t('tripCreationOr')");
+        expect(wizardSource).toContain('new-trip-wizard__template-or');
+        expect(wizardSource).toContain('fa-bookmark');
+        expect(wizardSource).toContain('listTripCreationTemplates');
+        expect(wizardSource).toContain('loadTripCreationTemplate');
+        expect(wizardSource).toContain('applyTripCreationTemplateToForm');
+        expect(wizardSource).toContain('getWizardNavigationAfterTemplateApply');
+        expect(wizardSource).toContain('data-testid="trip-creation-template-select"');
+        expect(wizardSource).toContain('onTemplateSelectChange');
+        expect(wizardSource).toContain('new-trip-wizard__template-modal');
+        expect(wizardSource).toContain('color-black');
+        expect(wizardSource).toMatch(
+            /<AppField[\s\S]*?tripCreationTemplateNameLabel[\s\S]*?<select[\s\S]*?data-testid="trip-creation-template-select"/
+        );
+        expect(wizardSource).not.toContain('new-trip-wizard__template-list');
+        expect(wizardSource).toMatch(
+            /v-if="[^"]*hasAvailableTemplates[^"]*"[\s\S]*new-trip-wizard__template-or[\s\S]*new-trip-wizard__role-cards/
+        );
+    });
+
+    it('offers intermediate stops checkbox on destination and a dedicated stops step', () => {
+        expect(wizardSource).toContain('wantsIntermediateStops');
+        expect(wizardSource).toContain('tripCreationWantsIntermediateStops');
+        expect(wizardSource).toContain('currentStep === STEP.STOPS');
+        expect(wizardSource).toContain('tripCreationStepStopsQuestion');
+        expect(wizardSource).toContain('form.addPoint');
+        expect(wizardSource).toContain('wantsIntermediateStops');
+    });
+
+    it('passes intermediate-stop preference into step navigation', () => {
+        expect(wizardSource).toContain('navigationOptions');
+        expect(wizardSource).toContain('wantsIntermediateStops');
+        expect(wizardSource).toContain('removeEmptyIntermediatePoints');
+    });
+
+    it('syncs wizard steps to the step query param for deep links', () => {
+        expect(wizardSource).toContain('tripCreationStepQuery');
+        expect(wizardSource).toContain('syncStepToRoute');
+        expect(wizardSource).toContain('applyStepFromRouteQuery');
+        expect(wizardSource).toMatch(/trip-creation-wizard-step-\$\{currentStep\}/);
+    });
+
+    it('starts fresh create at step 1 and resumes draft without stale step query jumps', () => {
+        expect(wizardSource).toContain('getTripCreationWizardMountState');
+        expect(wizardSource).toMatch(
+            /getTripCreationWizardMountState\(\{[\s\S]*resumeDraft:/
+        );
+        expect(wizardSource).toMatch(
+            /mounted\(\)[\s\S]*getTripCreationWizardMountState[\s\S]*ignoreRouteStep/
+        );
+        expect(wizardSource).toMatch(
+            /shouldRestoreDraft[\s\S]*restoreDraft/
+        );
+    });
+
+    it('detects edit flow from route id before trip data finishes loading', () => {
+        expect(wizardSource).toContain('isEditTripFlow');
+        expect(wizardSource).toMatch(
+            /isEditTripFlow\(\)\s*\{[\s\S]*form\.id[\s\S]*form\.updatingTrip/
+        );
+        expect(wizardSource).toMatch(
+            /mounted\(\)[\s\S]*isEditTripFlow[\s\S]*STEP\.ORIGIN/
+        );
+        expect(wizardSource).toMatch(
+            /stepQueryContext\(\)[\s\S]*isEdit:\s*this\.isEditTripFlow/
+        );
+        expect(wizardSource).toContain('currentStep === STEP.ROLE && !isEditTripFlow');
+    });
+
+    it('disables next on destination until trip-info succeeds', () => {
+        expect(wizardSource).toContain('shouldDisableTripCreationNext');
+        expect(wizardSource).toContain('form.tripInfoStatus');
+        expect(wizardSource).toMatch(
+            /data-testid="trip-creation-next"[\s\S]*:disabled="isNextDisabled"/
+        );
+        expect(wizardSource).toMatch(
+            /goNext\(\)[\s\S]*shouldDisableTripCreationNext\([\s\S]*form\.tripInfoStatus/
+        );
+    });
+});
+
+describe('NewTrip.vue wizard integration', () => {
+    it('renders wizard for create and edit flows', () => {
+        expect(newTripSource).toContain('NewTripCreationWizard');
+        expect(newTripSource).toContain('provide()');
+        expect(newTripSource).toContain('newTripForm');
+    });
+
+    it('shows success screen after create instead of inviteFriends redirect', () => {
+        expect(newTripSource).toContain('TripCreationSuccess');
+        expect(newTripSource).toContain('showWizardSuccess');
+        expect(newTripSource).not.toContain('inviteFriends: \'1\'');
+    });
+
+    it('starts return trip creation from success with inverted draft', () => {
+        expect(newTripSource).toContain(
+            '@start-return-trip="startReturnTripCreation"'
+        );
+        expect(newTripSource).toContain('buildReturnTripCreationDraftFromSnapshot');
+        expect(newTripSource).toContain('parentTripId');
+    });
+
+    it('filters empty intermediate points before saving trip data', () => {
+        expect(newTripSource).toContain('filterTripPointsForSave');
+        expect(newTripSource).toContain('removeEmptyIntermediatePoints');
+        expect(newTripSource).toContain('wantsIntermediateStops');
+    });
+
+    it('tracks trip-info status while calculating route info', () => {
+        expect(newTripSource).toContain('tripInfoStatus');
+        expect(newTripSource).toContain('TRIP_INFO_STATUS.LOADING');
+        expect(newTripSource).toContain('TRIP_INFO_STATUS.READY');
+        expect(newTripSource).toMatch(
+            /calcRoute\(type\)[\s\S]*tripInfoStatus = TRIP_INFO_STATUS\.LOADING/s
+        );
+    });
+});
+
+describe('NewTripCreationWizard.vue redesign styling', () => {
+    it('does not render the duplicate blue wizard title (page heading covers it)', () => {
+        expect(wizardSource).not.toContain('new-trip-wizard__title');
+        expect(wizardSource).not.toContain('wizardTitle');
+        expect(wizardSource).not.toContain("$t('crearViajeTitulo')");
+        expect(wizardSource).not.toContain("$t('tripCreationTitleDriver')");
+        expect(wizardSource).not.toContain("$t('tripCreationTitlePassenger')");
+    });
+
+    it('shows Creando... on the submit button while the trip is saving', () => {
+        expect(wizardSource).toMatch(
+            /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/
+        );
+        expect(wizardSource).toContain(':loading="form.saving"');
+        expect(wizardSource).toMatch(
+            /#loading[\s\S]*?savingLabel|savingLabel[\s\S]*?#loading/
+        );
+    });
+
+    it('opens the native time picker from a down-caret control', () => {
+        expect(wizardSource).toContain('fa-chevron-down');
+        expect(wizardSource).toContain('new-trip-wizard__time-caret');
+        expect(wizardSource).toContain('openWizardTimePicker');
+        expect(wizardSource).toContain('showPicker');
+        expect(wizardSource).toContain('ref="wizardTimeInput"');
+        expect(wizardSource).toMatch(
+            /wizardTimeInput[\s\S]*?\$refs\.inputEl|inputEl[\s\S]*?showPicker/
+        );
+    });
+
+    it('shows punto partida only on origin and punto llegada only on destination', () => {
+        const originBlock = wizardSource.match(
+            /currentStep === STEP\.ORIGIN[\s\S]*?(?=currentStep === STEP\.DESTINATION)/
+        )?.[0];
+        const destinationBlock = wizardSource.match(
+            /currentStep === STEP\.DESTINATION[\s\S]*?(?=currentStep === STEP\.STOPS|<!-- Step)/
+        )?.[0];
+
+        expect(originBlock).toBeTruthy();
+        expect(destinationBlock).toBeTruthy();
+        expect(originBlock).toContain('fields="partida"');
+        expect(originBlock).not.toContain('fields="llegada"');
+        expect(destinationBlock).toContain('fields="llegada"');
+        expect(destinationBlock).not.toContain('fields="partida"');
+    });
+
+    it('requires punto partida and llegada before leaving origin and destination steps', () => {
+        expect(wizardSource).toContain('puntoPartida: this.form.trip.punto_partida');
+        expect(wizardSource).toContain('puntoLlegada: this.form.trip.punto_llegada');
+        expect(wizardSource).toContain('syncPuntoDetailErrors');
+        expect(wizardSource).toMatch(
+            /validateCurrentStep\(\)[\s\S]*syncPuntoDetailErrors/
+        );
+        expect(wizardSource).toContain('puntoPartidaError');
+        expect(wizardSource).toContain('puntoLlegadaError');
+    });
+
+    it('on submit failure navigates to the car step when car selection is missing', () => {
+        expect(wizardSource).toMatch(
+            /async onSubmit\(\)[\s\S]*await this\.form\.save\(\)/
+        );
+        expect(wizardSource).toContain('handleSaveFailure');
+        expect(wizardSource).toMatch(
+            /handleSaveFailure\(\)[\s\S]*carSelectionError[\s\S]*STEP\.CAR/
+        );
+    });
+
+    it('guards router replace when syncing wizard step to the URL', () => {
+        expect(wizardSource).toMatch(
+            /syncStepToRoute\(step\)[\s\S]*typeof navigation\.catch === 'function'/
+        );
+    });
+
+    it('validates contribution price on the contribution step', () => {
+        expect(wizardSource).toContain('TripContributionStepPanel');
+        expect(wizardSource).toContain('seatPriceEnabled:');
+        expect(wizardSource).toContain('price: this.form.price');
+        expect(wizardSource).toContain('syncSeatPriceErrors');
+        expect(wizardSource).toContain('STEP.CONTRIBUTION');
+        expect(wizardSource).not.toContain('ensureContributionPrefill');
+        expect(wizardSource).toMatch(
+            /validateCurrentStep\(\)[\s\S]*syncSeatPriceErrors/
+        );
+    });
+});

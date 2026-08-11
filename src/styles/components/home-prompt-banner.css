@@ -1,0 +1,55 @@
+.home-prompt-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    border: 1px solid #a67c52;
+    border-radius: 0.5rem;
+    background: #fff5e6;
+    color: #5d4037;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.home-prompt-banner:hover,
+.home-prompt-banner:focus {
+    color: #5d4037;
+    text-decoration: none;
+    background: #ffefd9;
+}
+
+.home-prompt-banner__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c49a3c;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.home-prompt-banner__body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.home-prompt-banner__title {
+    margin: 0 0 0.15rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #5d4037;
+}
+
+.home-prompt-banner__text {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #5d4037;
+}
+
+.home-prompt-banner__text strong {
+    font-weight: 700;
+}

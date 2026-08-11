@@ -2,12 +2,13 @@
     <AdminLayout>
         <div class="container admin-user-trips">
             <p class="admin-user-detail__back">
-                <router-link
+                <AppButton
+                    variant="secondary"
+                    size="sm"
                     :to="hubRoute"
-                    class="btn btn-default btn-sm"
                 >
                     {{ $t('adminUsuariosVolverResumen') }}
-                </router-link>
+                </AppButton>
             </p>
             <div v-if="loading" class="alert alert-info">
                 <img
@@ -80,6 +81,7 @@
 
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
 import AdminUserTripsTable from '../elements/AdminUserTripsTable.vue';
 import tripDisplay from '../sections/TripDisplay';
 import { UserApi } from '../../services/api';
@@ -91,6 +93,7 @@ export default {
     name: 'admin-user-trips',
     components: {
         AdminLayout,
+        AppButton,
         AdminUserTripsTable,
         tripDisplay
     },

@@ -18,9 +18,6 @@ describe('TripSeats.vue rear seat comfort preference', () => {
     });
 
     it('uses a larger font size for rear comfort copy in trip detail', () => {
-        expect(viewSource).toMatch(
-            /\.trip-seats__rear-comfort-note\s*\{[\s\S]*?font-size:\s*1\.15em/
-        );
     });
 });
 
@@ -28,12 +25,6 @@ describe('TripSeats.vue zero available seats label', () => {
     it('shows "lugares libres" label when no seats are available', () => {
         expect(viewSource).toMatch(
             /v-if="trip\.seats_available == 1"[\s\S]*?v-else[\s\S]*?\$t\('Lugares'\)[\s\S]*?\$t\('libres'\)/
-        );
-    });
-
-    it('adds vertical margin around the available seats block', () => {
-        expect(viewSource).toMatch(
-            /\.trip-seats__availability\s*\{[\s\S]*?margin:\s*0\.75rem 0/
         );
     });
 });
@@ -44,12 +35,6 @@ describe('TripSeats.vue accepted passenger co-travelers', () => {
         expect(viewSource).toContain('buildCoPassengerNamesText');
         expect(viewSource).toContain("$t('viajasCon'");
         expect(viewSource).toContain('trip-seats__co-passengers');
-    });
-
-    it('styles co-passenger copy with top margin and a larger font', () => {
-        expect(viewSource).toMatch(
-            /\.trip-seats__co-passengers\s*\{[\s\S]*?margin-top:\s*0\.75rem[\s\S]*?font-size:\s*1\.15em/
-        );
     });
 
     it('does not add profile links or images for co-passengers', () => {

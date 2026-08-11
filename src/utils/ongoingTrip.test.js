@@ -172,8 +172,10 @@ describe('getTripLocationLabels', () => {
         expect(getTripLocationLabels(trip)).toEqual({
             fromCity: 'Rosario',
             fromRegion: 'Santa Fe',
+            fromPoint: '',
             toCity: 'Buenos Aires',
-            toRegion: 'CABA'
+            toRegion: 'CABA',
+            toPoint: ''
         });
     });
 
@@ -186,8 +188,28 @@ describe('getTripLocationLabels', () => {
         expect(getTripLocationLabels(trip)).toEqual({
             fromCity: 'Rosario',
             fromRegion: 'Santa Fe',
+            fromPoint: '',
             toCity: 'Buenos Aires',
-            toRegion: 'CABA'
+            toRegion: 'CABA',
+            toPoint: ''
+        });
+    });
+
+    it('includes punto_partida and punto_llegada as point labels', () => {
+        const trip = {
+            from_town: 'Rosario, Santa Fe',
+            to_town: 'Buenos Aires, CABA',
+            punto_partida: 'Terminal de Ómnibus',
+            punto_llegada: 'Plaza Principal'
+        };
+
+        expect(getTripLocationLabels(trip)).toEqual({
+            fromCity: 'Rosario',
+            fromRegion: 'Santa Fe',
+            fromPoint: 'Terminal de Ómnibus',
+            toCity: 'Buenos Aires',
+            toRegion: 'CABA',
+            toPoint: 'Plaza Principal'
         });
     });
 });

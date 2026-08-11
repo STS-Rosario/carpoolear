@@ -14,14 +14,12 @@
         <div v-if="loadError" class="alert alert-danger">{{ loadError }}</div>
         <div v-else-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</div>
         <div v-else>
-            <div class="form-group">
-                <label>{{ $t('nombrePlantilla') }} *</label>
-                <input v-model="form.name" class="form-control" type="text" />
-            </div>
-            <div class="form-group">
-                <label>{{ $t('descripcionCortaPlantilla') }}</label>
-                <input v-model="form.short_description" class="form-control" type="text" />
-            </div>
+            <AppInput v-model="form.name" :label="$t('nombrePlantilla')" type="text" />
+            <AppInput
+                v-model="form.short_description"
+                :label="$t('descripcionCortaPlantilla')"
+                type="text"
+            />
             <div class="form-group">
                 <label>{{ $t('cuerpoPlantillaMensaje') }} *</label>
                 <editor
@@ -33,9 +31,9 @@
                     height="200px"
                 />
             </div>
-            <button class="btn btn-primary" :disabled="saving" @click="save">
+            <AppButton variant="primary" :disabled="saving" @click="save">
                 {{ saving ? $t('guardando') : $t('guardarPlantilla') }}
-            </button>
+            </AppButton>
         </div>
     </AdminLayout>
 </template>
@@ -44,6 +42,8 @@
 import { mapActions } from 'pinia';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dialogs from '../../services/dialogs';
 
@@ -159,7 +159,9 @@ export default {
     },
     components: {
         editor: ToastUiEditor,
-        AdminLayout
+        AdminLayout,
+        AppButton,
+        AppInput
     }
 };
 </script>

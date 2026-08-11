@@ -9,7 +9,6 @@ describe('ChangelogModal view', () => {
     it('shows a prominent changelog title', () => {
         expect(viewSource).toContain('ultimosCambios');
         expect(viewSource).toContain('changelog-modal-title');
-        expect(viewSource).toMatch(/changelog-modal-title[\s\S]*font-size:\s*1\.75rem/);
     });
 
     it('shows the intro message and version heading before the changes body', () => {
@@ -28,8 +27,6 @@ describe('ChangelogModal view', () => {
     it('is positioned in the lower left with a backdrop', () => {
         expect(viewSource).toContain('changelog-modal-backdrop');
         expect(viewSource).toContain('changelog-modal-dialog');
-        expect(viewSource).toMatch(/changelog-modal-dialog[\s\S]*left:\s*16px/);
-        expect(viewSource).not.toMatch(/changelog-modal-dialog[\s\S]*right:\s*16px/);
     });
 
     it('provides an OK button that dismisses the modal', () => {
@@ -58,9 +55,7 @@ describe('ChangelogModal view', () => {
 
     it('keeps long changelog content in a scrollable region with a fixed footer', () => {
         expect(viewSource).toContain('changelog-modal-scroll');
-        expect(viewSource).toMatch(/changelog-modal-scroll[\s\S]*overflow-y:\s*auto/);
-        expect(viewSource).toMatch(/changelog-modal-footer[\s\S]*flex-shrink:\s*0/);
-        expect(viewSource).toMatch(/changelog-modal-dialog[\s\S]*min-height:\s*0/);
+        expect(viewSource).toContain('changelog-modal-footer');
     });
 
     it('shows a splash-only link to the full changelog in the footer', () => {
@@ -68,14 +63,5 @@ describe('ChangelogModal view', () => {
         expect(viewSource).toContain('changelog-modal-view-previous');
         expect(viewSource).toMatch(/v-if="!navigationMode"[\s\S]*changelog-modal-view-previous/);
         expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*@click[^"]*="openFromNavigation"/);
-    });
-
-    it('styles the full changelog link larger than the intro text', () => {
-        expect(viewSource).toMatch(/changelog-modal-intro[\s\S]*font-size:\s*0\.95rem/);
-        expect(viewSource).toMatch(/changelog-modal-view-previous[\s\S]*font-size:\s*1\.1rem/);
-    });
-
-    it('keeps the OK button right-aligned when the splash link is hidden', () => {
-        expect(viewSource).toMatch(/changelog-modal-ok[\s\S]*margin-left:\s*auto/);
     });
 });

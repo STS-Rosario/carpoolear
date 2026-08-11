@@ -1,6 +1,6 @@
 <template>
     <div
-        class="conversation-list-page"
+        class="conversation-list-page messages-page"
         :class="[
             config.module_coordinate_by_message
                 ? 'module--coordinate-by-message'
@@ -17,44 +17,44 @@
             class="conversation-component container"
             :class="config.enable_footer ? 'with-footer' : 'without-footer'"
         >
-            <div class="row">
+            <div class="row messages-page__shell">
                 <div class="col-sm-8 col-md-8" :class="{ 'hidden-xs': hide }">
                     <div class="conversation_list">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <div class="input-group">
-                                    <input
-                                        v-jump:click="'btn-search'"
+                            <li class="list-group-item messages-page__list-header">
+                                <h1 class="messages-page__title hidden-xs">
+                                    {{ $t('mensajes') }}
+                                </h1>
+                                <div class="messages-page__search">
+                                    <AppInput
+                                        id="btn-search-input"
                                         v-model="textSearch"
-                                        v-debounceInput="onSearchUser"
-                                        type="text"
-                                        class="form-control"
                                         :placeholder="$t('escribeUnNombreYPresionaBuscar')"
+                                        @update:modelValue="onSearchInput"
                                     />
-                                    <span class="input-group-btn">
-                                        <!--  -->
-                                        <button
-                                            v-jump
-                                            id="btn-search"
-                                            class="btn btn-default"
-                                            type="button"
-                                            @click="onSearchUser"
-                                        >
-                                            <i
-                                                class="fa fa-search"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </button>
-                                    </span>
+                                    <AppButton
+                                        variant="secondary"
+                                        icon-left="fa fa-search"
+                                        icon-only
+                                        id="btn-search"
+                                        :aria-label="$t('escribeUnNombreYPresionaBuscar')"
+                                        @click="onSearchUser"
+                                    />
                                 </div>
+                                <FilterChips
+                                    v-if="textSearch.length === 0"
+                                    v-model="messagesFilter"
+                                    class="messages-page__filters"
+                                    :options="messagesFilterChips"
+                                />
                             </li>
                             <template v-if="textSearch.length == 0">
                                 <Loading
                                     class="conversation_chat--chats"
-                                    :data="conversations"
+                                    :data="filteredConversations"
                                 >
                                     <li
-                                        v-for="conversation in conversations"
+                                        v-for="conversation in filteredConversations"
                                         class="list-group-item conversation_header"
                                         @click="
                                             onChangeConversation(conversation)
@@ -63,13 +63,31 @@
                                             unread: conversation.unread,
                                             active:
                                                 selectedId != null &&
-                                                conversation.id === selectedId
+                                                conversation.id === selectedId,
+                                            'conversation_header--group':
+                                                isTripGroupConversation(
+                                                    conversation
+                                                )
                                         }"
                                         :key="conversation.id"
                                     >
                                         <div class="media">
                                             <div class="media-left">
                                                 <div
+                                                    v-if="
+                                                        isTripGroupConversation(
+                                                            conversation
+                                                        )
+                                                    "
+                                                    class="conversation_image conversation_image--group circle-box"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i
+                                                        class="fa fa-car"
+                                                    ></i>
+                                                </div>
+                                                <div
+                                                    v-else
                                                     class="conversation_image circle-box"
                                                     v-imgSrc:conversation="
                                                         conversation.image
@@ -127,17 +145,29 @@
                                                     }}
                                                 </span>
                                             </div>
-                                            <div
-                                                class="media-right"
-                                                v-if="conversation.last_message"
-                                            >
-                                                {{
-                                                    dayjs(
-                                                        conversation
-                                                            .last_message
-                                                            .created_at
-                                                    ).fromNow()
-                                                }}
+                                            <div class="media-right messages-page__row-meta">
+                                                <span
+                                                    v-if="conversation.last_message"
+                                                    class="conversation-time"
+                                                >
+                                                    {{
+                                                        dayjs(
+                                                            conversation
+                                                                .last_message
+                                                                .created_at
+                                                        ).fromNow()
+                                                    }}
+                                                </span>
+                                                <span
+                                                    v-if="
+                                                        conversation.unread ||
+                                                        isSelectedConversation(
+                                                            conversation
+                                                        )
+                                                    "
+                                                    class="conversation_header__unread-dot"
+                                                    aria-hidden="true"
+                                                ></span>
                                             </div>
                                         </div>
                                     </li>
@@ -145,12 +175,13 @@
                                         v-if="moreConversations"
                                         class="list-group-item"
                                     >
-                                        <button
-                                            class="btn btn-primary btn-block"
+                                        <AppButton
+                                            variant="primary"
+                                            block
                                             @click="nextPage"
                                         >
                                             {{ $t('masResultados') }}
-                                        </button>
+                                        </AppButton>
                                     </li>
                                     <template #no-data><li
                                         class="list-group-item alert alert-warning"
@@ -223,6 +254,7 @@ import { useActionbarsStore } from '../../stores/actionbars';
 import { Thread } from '../../classes/Threads.js';
 import Loading from '../Loading.vue';
 import UserNameWithBadge from '../elements/UserNameWithBadge.vue';
+import FilterChips from '../elements/FilterChips.vue';
 import router from '../../router';
 import CoordinateTrip from '../elements/CoordinateTrip';
 import dayjs from '../../dayjs';
@@ -230,12 +262,21 @@ import {
     formatTripGroupChatTitle,
     isTripGroupConversation
 } from '../../utils/tripGroupChatTitle';
+import {
+    countConversationsByKind,
+    filterConversationsByKind
+} from '../../utils/conversationListFilter';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
+import { debounce } from '../../services/utility';
 
 export default {
     name: 'conversation-list',
     data() {
         return {
-            textSearch: ''
+            textSearch: '',
+            messagesFilter: 'all',
+            debouncedSearch: null
         };
     },
 
@@ -258,12 +299,45 @@ export default {
 
         hide() {
             return this.$route.meta.hide;
+        },
+        messagesFilterCounts() {
+            return countConversationsByKind(this.conversations);
+        },
+        messagesFilterChips() {
+            const counts = this.messagesFilterCounts;
+            return [
+                {
+                    id: 'all',
+                    label: `${this.$t('filtroMensajesTodos')} ${counts.all}`
+                },
+                {
+                    id: 'group',
+                    label: `${this.$t('filtroMensajesGrupales')} ${counts.group}`
+                },
+                {
+                    id: 'individual',
+                    label: `${this.$t('filtroMensajesIndividuales')} ${counts.individual}`
+                }
+            ];
+        },
+        filteredConversations() {
+            return filterConversationsByKind(
+                this.conversations,
+                this.messagesFilter
+            );
         }
     },
 
     methods: {
         dayjs,
         isTripGroupConversation,
+        isSelectedConversation(conversation) {
+            return (
+                this.selectedId != null &&
+                conversation &&
+                conversation.id === this.selectedId
+            );
+        },
         conversationTitle(conversation) {
             if (isTripGroupConversation(conversation)) {
                 return formatTripGroupChatTitle(
@@ -289,6 +363,12 @@ export default {
 
         onSearchUser() {
             this.searchUser(this.textSearch);
+        },
+
+        onSearchInput() {
+            if (this.debouncedSearch) {
+                this.debouncedSearch();
+            }
         },
 
         createConversation(user) {
@@ -348,11 +428,19 @@ export default {
             router.push({ name: 'conversation-chat' });
         }
     },
+    created() {
+        this.debouncedSearch = debounce(() => {
+            this.onSearchUser();
+        }, 800);
+    },
     updated() {},
     components: {
         Loading,
         CoordinateTrip,
-        UserNameWithBadge
+        UserNameWithBadge,
+        FilterChips,
+        AppButton,
+        AppInput
     }
 };
 </script>
@@ -474,11 +562,14 @@ export default {
     .conversation-component.container {
         padding-left: 10px;
         padding-right: 10px;
+        padding-bottom: 0;
+        margin-bottom: 0;
         overflow-y: hidden;
-        height: calc(100vh - 150px);
+        /* Header measured via --app-header-offset (includes identity banner); + footer approx */
+        height: calc(100vh - var(--app-header-offset, 5.6rem) - 3.75rem);
     }
     .without-footer.conversation-component.container {
-        height: calc(100vh - 5.6rem);
+        height: calc(100vh - var(--app-header-offset, 5.6rem));
     }
     .conversation-component > .row {
         padding-left: 20px;
@@ -495,22 +586,28 @@ export default {
      * Open conversation on mobile: fixed column height under the app header.
      * Trip strip (consulta + warning + actions) stays at the top; composer at the bottom;
      * only #messagesWrapper scrolls (flex middle).
-     */
-    /*
-     * Explicit height above fixed .actionbar-bottom (52px + safe area).
-     * Do not subtract 5.6rem here: that matches desktop .view-container padding
-     * (min-width: 768px in base.css). Mobile view-container uses ~51px/77px + safe
-     * top padding already, so 5.6rem would double-count and shrink the chat column.
+     *
+     * Height uses measured --app-header-offset (includes identity / ratings banners)
+     * because .view-container already pads by that amount. Conversation-chat hides the
+     * mobile footer, so do not subtract a footer bar height here.
      */
     .conversation-list-page--mobile-chat {
         display: flex;
         flex-direction: column;
         min-height: 0;
         box-sizing: border-box;
-        height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
-        height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-        max-height: calc(100dvh - 52px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
-        max-height: calc(100dvh - 52px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        height: calc(
+            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
+        );
+        height: calc(
+            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
+        );
+        max-height: calc(
+            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
+        );
+        max-height: calc(
+            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
+        );
         overflow: hidden;
         background-color: #fff;
     }
@@ -527,6 +624,7 @@ export default {
         flex-direction: column;
         overflow: hidden;
         margin-bottom: 0;
+        padding-top: 0;
         padding-bottom: 0;
         padding-left: 0;
         padding-right: 0;
@@ -582,12 +680,6 @@ export default {
         z-index: 9;
         background: #fff;
         box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
-    }
-    .conversation-list-page--mobile-chat--tall-header {
-        height: calc(100dvh - 64px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
-        height: calc(100dvh - 64px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-        max-height: calc(100dvh - 64px - constant(safe-area-inset-top, 0px) - constant(safe-area-inset-bottom, 0px));
-        max-height: calc(100dvh - 64px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     }
 }
 .media-right {

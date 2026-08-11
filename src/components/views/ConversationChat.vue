@@ -3,7 +3,16 @@
         <div class="list-group">
             <div class="list-group-item conversation_user_header hidden-xs">
                 <template v-if="isGroupChat">
-                    <h2>{{ groupChatTitle }}</h2>
+                    <div class="conversation_user_header_title_row">
+                        <h2>{{ groupChatTitle }}</h2>
+                        <router-link
+                            v-if="groupTripId"
+                            class="messages-page__trip-link"
+                            :to="{ name: 'detail_trip', params: { id: groupTripId } }"
+                        >
+                            {{ $t('verDetalleViaje') }}
+                        </router-link>
+                    </div>
                     <ConversationParticipants :users="conversation.users" />
                     <button
                         type="button"
@@ -19,8 +28,8 @@
                 </template>
                 <template v-else>
                 <router-link
-                    v-if="conversation.users.length === 2"
-                    :to="{ name: 'profile', params: userProfile() }"
+                    v-if="otherUserProfileRoute"
+                    :to="otherUserProfileRoute"
                     v-show="isMobile"
                 >
                     <div
@@ -29,14 +38,17 @@
                     ></div>
                 </router-link>
                 <div
-                    v-if="conversation.users.length === 2"
+                    v-if="otherUserProfileRoute"
                     class="conversation_user_header_title_row"
                 >
-                    <router-link
-                        :to="{ name: 'profile', params: userProfile() }"
-                    >
-                        <h2>{{ conversation.title }}</h2>
-                    </router-link>
+                    <h2>
+                        <router-link
+                            class="conversation_user_header__name-link"
+                            :to="otherUserProfileRoute"
+                        >
+                            {{ conversation.title }}
+                        </router-link>
+                    </h2>
                     <UserRatingsCounts :ratings="otherUserRatings" />
                 </div>
                 <h2 v-else>{{ conversation.title }}</h2>
@@ -65,14 +77,26 @@
                         {{ $t('verMasMensajes') }}
                     </button>
                 </div>
-                <MessageView
-                    v-for="m in messages"
-                    :key="m.id"
-                    :message="m"
-                    :user="user"
-                    :users="conversation.users"
-                    :isGroupChat="isGroupChat"
-                ></MessageView>
+                <template
+                    v-for="item in messagesWithDaySeparators"
+                    :key="item.type === 'day' ? item.key : item.message.id"
+                >
+                    <div
+                        v-if="item.type === 'day'"
+                        class="message-day-separator"
+                    >
+                        <span class="message-day-separator__label">{{
+                            item.label
+                        }}</span>
+                    </div>
+                    <MessageView
+                        v-else
+                        :message="item.message"
+                        :user="user"
+                        :users="conversation.users"
+                        :isGroupChat="isGroupChat"
+                    ></MessageView>
+                </template>
             </div>
             <div class="list-group-item message-composer">
                 <div class="message-composer-editor-wrap">
@@ -95,8 +119,9 @@
                         @click="sendMessage"
                         :disabled="sending.message"
                         :title="$t('enviarMensaje')"
+                        :aria-label="$t('enviarMensaje')"
                     >
-                        <i class="fa fa-play" aria-hidden="true"></i>
+                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -131,6 +156,7 @@ import {
     getOtherParticipant,
     getOtherParticipantRatings
 } from '../../utils/conversationOtherUserRatings.js';
+import { buildMessagesWithDaySeparators } from '../../utils/chatMessageDaySeparators.js';
 
 export default {
     name: 'conversation-chat',
@@ -193,6 +219,23 @@ export default {
                 this.user?.id
             );
         },
+        otherUserProfileRoute() {
+            const otherUser = getOtherParticipant(
+                this.conversation?.users,
+                this.user?.id
+            );
+            if (!otherUser?.id) {
+                return null;
+            }
+            return {
+                name: 'profile',
+                params: {
+                    id: otherUser.id,
+                    userProfile: otherUser,
+                    activeTab: 1
+                }
+            };
+        },
         lastConnectionFormatted() {
             const raw = this.lastConnectionRaw;
             if (raw == null || raw === '') {
@@ -212,6 +255,19 @@ export default {
                 this.$t.bind(this),
                 this.conversation?.trip_date
             );
+        },
+        groupTripId() {
+            return (
+                this.conversation?.trip?.id ||
+                this.conversation?.trip_id ||
+                null
+            );
+        },
+        messagesWithDaySeparators() {
+            return buildMessagesWithDaySeparators(
+                this.messages,
+                this.$t.bind(this)
+            );
         }
     },
     methods: {
@@ -230,16 +286,6 @@ export default {
             setHeaderRatings: 'setHeaderRatings',
             setImgTitle: 'setImgTitle'
         }),
-
-        userProfile() {
-            let id = 0;
-            if (this.conversation.users[0].id === this.user.id) {
-                id = 1;
-            }
-            return {
-                id: this.conversation.users[id].id
-            };
-        },
 
         onEditorChange() {
             const editor = this.$refs.messageEditor;
@@ -335,7 +381,11 @@ export default {
             if (otherUser) {
                 this.setTitleLink({
                     name: 'profile',
-                    params: { id: otherUser.id }
+                    params: {
+                        id: otherUser.id,
+                        userProfile: otherUser,
+                        activeTab: 1
+                    }
                 });
             } else {
                 this.setTitleLink({});
@@ -412,27 +462,32 @@ export default {
     margin-top: 1.5rem;
 }
 #btn-send {
-    color: #ccc;
-    transition: color 200ms linear;
+    color: #fff;
+    transition: opacity 200ms linear, background-color 200ms linear;
 }
 #btn-send.active {
-    color: #333;
+    color: #fff;
 }
 .message-composer-editor-wrap {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
+    position: relative;
+    display: block;
 }
 .message-composer-editor {
-    flex: 1;
+    width: 100%;
     min-width: 0;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 0.75rem;
 }
 .message-composer-send {
-    flex-shrink: 0;
-    height: 36px;
-    min-width: 44px;
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    z-index: 50;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    border-radius: 0.5rem;
+    padding: 0;
 }
 @media only screen and (max-width: 768px) {
     .list-group-item {
@@ -440,13 +495,13 @@ export default {
     }
     .message-composer {
         position: static;
-        border-top: 1px solid #ddd;
-        padding-left: 4px;
-        padding-right: 4px;
+        border-top: none;
+        padding-left: 8px;
+        padding-right: 8px;
     }
     .message-composer-editor-wrap {
-        align-items: stretch;
-        gap: 4px;
+        position: relative;
+        display: block;
     }
     .message-composer-editor {
         overflow: hidden;
@@ -460,7 +515,9 @@ export default {
         border-radius: 0;
     }
     .message-composer-send {
-        height: 44px;
+        width: 2.75rem;
+        height: 2.75rem;
+        min-width: 2.75rem;
     }
     .btn,
     .btn-primary,

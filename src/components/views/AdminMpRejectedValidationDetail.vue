@@ -2,9 +2,14 @@
     <AdminLayout>
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
-                <router-link :to="{ name: 'admin-mp-rejected-validations' }" class="btn btn-default btn-sm mb-2">
+                <AppButton
+                    variant="secondary"
+                    size="sm"
+                    class="mb-2"
+                    :to="{ name: 'admin-mp-rejected-validations' }"
+                >
                     {{ $t('volver') }}
-                </router-link>
+                </AppButton>
                 <div v-if="loading" class="text-center">
                     <img :src="$publicImg('loader.gif')" alt="" class="ajax-loader" />
                     <p>{{ $t('cargando') }}</p>
@@ -44,9 +49,10 @@
                             :user-id="item.user_id"
                             :support-tickets-count="item.support_tickets_count || 0"
                         />
-                        <router-link
+                        <AppButton
                             v-if="item.user_id"
-                            class="btn btn-default btn-sm"
+                            variant="secondary"
+                            size="sm"
                             :to="{
                                 name: 'admin-support-ticket-new',
                                 query: {
@@ -58,56 +64,63 @@
                             }"
                         >
                             {{ $t('crearTicketSoporte') }}
-                        </router-link>
+                        </AppButton>
                         <p><strong>{{ $t('motivoRechazo') }}:</strong> {{ getRejectReasonLabel(item.reject_reason) }}</p>
                         <p><strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.created_at) }}</p>
                         <div class="form-group private-admin-note-group">
-                            <label>{{ $t('notaPrivadaSoloAdmins') }}</label>
-                            <textarea
+                            <AppTextarea
                                 v-model="privateAdminNote"
-                                class="form-control"
-                                rows="3"
+                                :label="$t('notaPrivadaSoloAdmins')"
                                 :placeholder="$t('notaPrivadaSoloAdmins')"
-                            ></textarea>
-                            <button
-                                class="btn btn-default btn-sm private-admin-note-save-btn"
+                                :rows="3"
+                            />
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
+                                class="private-admin-note-save-btn"
                                 :disabled="savingPrivateNote"
+                                :loading="savingPrivateNote"
                                 @click="savePrivateAdminNote"
                             >
-                                <span v-if="savingPrivateNote">{{ $t('guardando') }}</span>
-                                <span v-else>{{ $t('guardar') }}</span>
-                            </button>
+                                <template v-if="savingPrivateNote">{{ $t('guardando') }}</template>
+                                <template v-else>{{ $t('guardar') }}</template>
+                            </AppButton>
                         </div>
 
                         <div v-if="!item.review_status" class="review-actions mt-3">
                             <h4>{{ $t('accion') }}</h4>
                             <div class="form-group">
                                 <label>{{ $t('comentarioRevisar') }}</label>
-                                <textarea v-model="reviewNote" class="form-control" rows="3" :placeholder="$t('comentarioRevisar')"></textarea>
+                                <AppTextarea
+                                    v-model="reviewNote"
+                                    :placeholder="$t('comentarioRevisar')"
+                                    :rows="3"
+                                />
                             </div>
-                            <button
-                                class="btn btn-success"
+                            <AppButton
+                                variant="success"
                                 :disabled="submitting"
+                                :loading="submitting"
                                 @click="review('approve')"
                             >
                                 {{ $t('aprobar') }}
-                            </button>
-                            <button
-                                class="btn btn-warning"
+                            </AppButton>
+                            <AppButton
+                                variant="warning"
                                 :disabled="!hasComment || submitting"
                                 :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                 @click="review('pending')"
                             >
                                 {{ $t('marcarPendiente') }}
-                            </button>
-                            <button
-                                class="btn btn-danger"
+                            </AppButton>
+                            <AppButton
+                                variant="danger"
                                 :disabled="!hasComment || submitting"
                                 :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
                                 @click="review('reject')"
                             >
                                 {{ $t('rechazar') }}
-                            </button>
+                            </AppButton>
                             <p v-if="reviewError" class="text-danger">{{ reviewError }}</p>
                         </div>
 
@@ -125,6 +138,8 @@ import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminReviewSubjectUserLine from '../AdminReviewSubjectUserLine.vue';
 import AdminUserSupportTicketsWarning from '../AdminUserSupportTicketsWarning.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
@@ -269,7 +284,9 @@ export default {
     components: {
         AdminLayout,
         AdminReviewSubjectUserLine,
-        AdminUserSupportTicketsWarning
+        AdminUserSupportTicketsWarning,
+        AppButton,
+        AppTextarea
     }
 };
 </script>

@@ -208,6 +208,9 @@ export default {
     color: #808080;
     margin-top: 0.2em;
 }
+.trip_seats-available_label {
+    text-transform: none;
+}
 .trip_seats-available_label > span {
     display: inline;
 }

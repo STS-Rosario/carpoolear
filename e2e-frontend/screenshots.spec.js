@@ -105,7 +105,8 @@ test.describe('Screenshot tests', () => {
             await page.goto('/trips');
             await waitForPageReady(page);
             await page
-                .locator('.trips-list')
+                .getByText(/rosario|viajes publicados|no hay viajes/i)
+                .first()
                 .waitFor({ state: 'visible', timeout: 10000 })
                 .catch(() => {});
             await expect(page).toHaveScreenshot(
@@ -171,7 +172,7 @@ test.describe('Screenshot tests', () => {
         });
 
         test('new trip page', async ({ page }) => {
-            await page.goto('/trips/create');
+            await page.goto('/trips/create?step=1');
             await waitForPageReady(page);
             await expect(page).toHaveScreenshot(
                 'new-trip.png',
@@ -179,12 +180,58 @@ test.describe('Screenshot tests', () => {
             );
         });
 
+        // Steps 1–10 match STEP.* including contribution (8) and last details (10).
+        // Contribution UI requires MOCK_CONFIG.module_seat_price_enabled.
+        for (let step = 1; step <= 10; step += 1) {
+            test(`new trip wizard step ${step}`, async ({ page }) => {
+                if (step === 1) {
+                    await page.addInitScript(() => {
+                        localStorage.removeItem('TRIP_CREATION_DRAFT');
+                    });
+                    await page.goto('/trips/create?step=1');
+                } else {
+                    await page.addInitScript((stepNum) => {
+                        localStorage.setItem(
+                            'TRIP_CREATION_DRAFT',
+                            JSON.stringify({
+                                1: {
+                                    currentStep: stepNum,
+                                    maxVisitedStep: stepNum,
+                                    trip: { is_passenger: 0 }
+                                }
+                            })
+                        );
+                    }, step);
+                    await page.goto('/trips/create?resumeDraft=1');
+                }
+                await waitForPageReady(page);
+                await expect(
+                    page.getByTestId(`trip-creation-wizard-step-${step}`)
+                ).toBeVisible();
+                await expect(page).toHaveScreenshot(
+                    `new-trip-step-${step}.png`,
+                    SCREENSHOT_OPTIONS
+                );
+            });
+        }
+
         test('update trip page', async ({ page }) => {
             await page.route(/\/api\/trips\/1(\?.*)?$/, (route) => {
                 route.fulfill({
                     status: 200,
                     contentType: 'application/json',
-                    body: JSON.stringify({ data: MOCK_TRIP_DETAIL })
+                    body: JSON.stringify({
+                        data: {
+                            ...MOCK_TRIP_DETAIL,
+                            user: {
+                                id: MOCK_USER.id,
+                                name: MOCK_USER.name,
+                                image: MOCK_USER.image,
+                                positive_ratings: MOCK_USER.positive_ratings,
+                                negative_ratings: MOCK_USER.negative_ratings
+                            }
+                        }
+                    })
                 });
             });
             await page.goto('/trips/update/1');

@@ -12,6 +12,24 @@ describe('adminUserSupportTicketsLink', () => {
         });
     });
 
+    it('adminUserSupportTicketsRoute can filter by type, open, and admin-created tickets', () => {
+        expect(
+            adminUserSupportTicketsRoute(42, {
+                type: 'account_verification',
+                open: true,
+                createdByAdmin: true
+            })
+        ).toEqual({
+            name: 'admin-support-tickets',
+            query: {
+                user_id: '42',
+                type: 'account_verification',
+                open: '1',
+                created_by_admin: '1'
+            }
+        });
+    });
+
     it('adminUserSupportTicketsRoute returns list route without query when userId is missing', () => {
         expect(adminUserSupportTicketsRoute(null)).toEqual({
             name: 'admin-support-tickets',

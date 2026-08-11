@@ -122,14 +122,19 @@ function parseTownLabel(town) {
 }
 
 export function getTripLocationLabels(trip) {
+    const fromPoint = (trip && trip.punto_partida) || '';
+    const toPoint = (trip && trip.punto_llegada) || '';
+
     if (trip && trip.points && trip.points.length >= 2) {
-        const fromPoint = trip.points[0];
-        const toPoint = trip.points[trip.points.length - 1];
+        const fromPointData = trip.points[0];
+        const toPointData = trip.points[trip.points.length - 1];
         return {
-            fromCity: getLocationName(fromPoint),
-            fromRegion: getStateName(fromPoint),
-            toCity: getLocationName(toPoint),
-            toRegion: getStateName(toPoint)
+            fromCity: getLocationName(fromPointData),
+            fromRegion: getStateName(fromPointData),
+            fromPoint,
+            toCity: getLocationName(toPointData),
+            toRegion: getStateName(toPointData),
+            toPoint
         };
     }
 
@@ -138,7 +143,9 @@ export function getTripLocationLabels(trip) {
     return {
         fromCity: from.city,
         fromRegion: from.region,
+        fromPoint,
         toCity: to.city,
-        toRegion: to.region
+        toRegion: to.region,
+        toPoint
     };
 }

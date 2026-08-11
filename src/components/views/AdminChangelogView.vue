@@ -12,9 +12,12 @@
         <hr />
         <MarkdownPreview class="changelog-body-html" :source="row.body_markdown || ''" />
         <p class="mtop-10">
-            <router-link class="btn btn-default" :to="{ name: 'admin-changelog-edit', params: { changelogId: row.id } }">
+            <AppButton
+                variant="secondary"
+                :to="{ name: 'admin-changelog-edit', params: { changelogId: row.id } }"
+            >
                 {{ $t('accionEditar') }}
-            </router-link>
+            </AppButton>
         </p>
     </AdminLayout>
     <AdminLayout v-else-if="error">
@@ -30,6 +33,7 @@
 import { mapActions } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import MarkdownPreview from '../elements/MarkdownPreview.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useChangelogStore } from '../../stores/changelog';
 import dayjs from '../../dayjs';
 
@@ -82,7 +86,8 @@ export default {
     },
     components: {
         AdminLayout,
-        MarkdownPreview
+        MarkdownPreview,
+        AppButton
     }
 };
 </script>

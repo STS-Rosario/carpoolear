@@ -31,7 +31,6 @@ describe('CarsEditorPanel', () => {
         expect(source).toContain("$t('accionEliminar')");
         expect(source).not.toContain("$t('eliminarAuto')");
         expect(source).toContain('carDisplayLabel');
-        expect(source).toContain('btn-danger');
         expect(source).toContain('fa-pencil');
         expect(source).toContain('fa-trash-o');
         expect(source).toContain('fa-plus');

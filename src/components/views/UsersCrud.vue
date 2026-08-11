@@ -20,15 +20,16 @@
                     >
                         <div class="settings-container">
                             <p class="user-admin-edit-nav">
-                                <router-link
+                                <AppButton
+                                    variant="secondary"
+                                    size="sm"
                                     :to="{
                                         name: 'admin-users-user',
                                         params: { userId: String(currentUser.id) }
                                     }"
-                                    class="btn btn-default btn-sm"
                                 >
                                     {{ $t('adminUsuariosVolverResumen') }}
-                                </router-link>
+                                </AppButton>
                                 <button
                                     type="button"
                                     class="btn btn-link btn-sm"
@@ -37,137 +38,94 @@
                                     {{ $t('adminUsuariosVolverAlListado') }}
                                 </button>
                             </p>
-                            <div class="form-group">
-                                <label for="input-name"
-                                    >{{ $t('nombreYApellido') }}</label
-                                >
-                                <input
-                                    maxlength="25"
-                                    v-model="newInfo.name"
-                                    type="text"
-                                    class="form-control"
-                                    id="input-name"
-                                    :placeholder="$t('nombre')"
-                                />
-                                <span class="error" v-if="nombreError.state">
-                                    {{ nombreError.message }}
-                                </span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="input-email">{{ $t('eMail') }}</label>
-                                <input
-                                    maxlength="40"
-                                    v-model="newInfo.email"
-                                    type="text"
-                                    class="form-control"
-                                    id="input-email"
-                                    :placeholder="$t('eMail')"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="input-description"
-                                    >{{ $t('acercaDeMi') }}</label
-                                >
-                                <textarea
-                                    maxlength="1000"
-                                    v-model="newInfo.description"
-                                    :placeholder="$t('descripcion')"
-                                ></textarea>
-                                <span
-                                    class="error textarea"
-                                    v-if="descError.state"
-                                >
-                                    {{ descError.message }}
-                                </span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="input-private-note"
-                                    >{{ $t('notaPrivada') }}</label
-                                >
-                                <textarea
-                                    maxlength="1000"
-                                    v-model="newInfo.private_note"
-                                    :placeholder="$t('notaSoloVisiblePorAdmins')"
-                                ></textarea>
-                            </div>
-                            <div
-                                class="form-group"
-                                v-if="settings.module_facebook_profile_url_enabled"
+                            <AppInput
+                                id="input-name"
+                                maxlength="25"
+                                v-model="newInfo.name"
+                                :placeholder="$t('nombre')"
+                                :error="nombreError.state ? nombreError.message : ''"
                             >
-                                <label for="input-facebook-profile-url">
+                                <template #label>{{ $t('nombreYApellido') }}</template>
+                            </AppInput>
+
+                            <AppInput
+                                id="input-email"
+                                maxlength="40"
+                                v-model="newInfo.email"
+                                :placeholder="$t('eMail')"
+                            >
+                                <template #label>{{ $t('eMail') }}</template>
+                            </AppInput>
+
+                            <AppTextarea
+                                id="input-description"
+                                maxlength="1000"
+                                v-model="newInfo.description"
+                                :placeholder="$t('descripcion')"
+                                :error="descError.state ? descError.message : ''"
+                            >
+                                <template #label>{{ $t('acercaDeMi') }}</template>
+                            </AppTextarea>
+
+                            <AppTextarea
+                                id="input-private-note"
+                                maxlength="1000"
+                                v-model="newInfo.private_note"
+                                :placeholder="$t('notaSoloVisiblePorAdmins')"
+                            >
+                                <template #label>{{ $t('notaPrivada') }}</template>
+                            </AppTextarea>
+                            <AppInput
+                                v-if="settings.module_facebook_profile_url_enabled"
+                                id="input-facebook-profile-url"
+                                v-model="newInfo.facebook_profile_url"
+                                type="url"
+                                placeholder="https://facebook.com/tuperfil"
+                                @blur="onFacebookProfileUrlBlur"
+                            >
+                                <template #label>
                                     Perfil de Facebook (opcional)
                                     <span class="description">
                                         Opcional. Para generar confianza podés poner tu
                                         link a tu perfil de Facebook
                                     </span>
-                                </label>
-                                <input
-                                    v-model="newInfo.facebook_profile_url"
-                                    type="url"
-                                    class="form-control"
-                                    id="input-facebook-profile-url"
-                                    placeholder="https://facebook.com/tuperfil"
-                                    @blur="onFacebookProfileUrlBlur"
-                                />
-                            </div>
+                                </template>
+                            </AppInput>
 
-                            <div class="form-group">
-                                <label for="input-dni"
-                                    >{{ $t('numeroDeDocumento') }}</label
-                                >
-                                <input
-                                    type="tel"
-                                    v-model="newInfo.nro_doc"
-                                    @input="handleDniInput"
-                                    class="form-control"
-                                    id="input-dni"
-                                    :placeholder="$t('doc')"
-                                    :maxlength="(settings.profile_id_format).length"
-                                />
-                                <span class="error" v-if="dniError.state">
-                                    {{ dniError.message }}
-                                </span>
-                            </div>
+                            <AppInput
+                                id="input-dni"
+                                type="tel"
+                                :model-value="newInfo.nro_doc"
+                                @update:modelValue="onDniModelUpdate"
+                                :placeholder="$t('doc')"
+                                :maxlength="(settings.profile_id_format).length"
+                                :error="dniError.state ? dniError.message : ''"
+                            >
+                                <template #label>{{ $t('numeroDeDocumento') }}</template>
+                            </AppInput>
 
-                            <div class="form-group">
-                                <label for="input-telefono"
-                                    >{{ $t('numeroDeTelefono') }}</label
-                                >
-                                <input
-                                    maxlength="20"
-                                    @keydown="isNumber"
-                                    v-on:paste="isNumber"
-                                    v-model="newInfo.mobile_phone"
-                                    type="tel"
-                                    class="form-control"
-                                    id="input-phone"
-                                    :placeholder="$t('numeroDeTelefonoAlMenos7Numeros')"
-                                />
-                                <span class="error" v-if="phoneError.state">
-                                    {{ phoneError.message }}
-                                </span>
-                            </div>
+                            <AppInput
+                                id="input-phone"
+                                maxlength="20"
+                                type="tel"
+                                @keydown="isNumber"
+                                v-on:paste="isNumber"
+                                v-model="newInfo.mobile_phone"
+                                :placeholder="$t('numeroDeTelefonoAlMenos7Numeros')"
+                                :error="phoneError.state ? phoneError.message : ''"
+                            >
+                                <template #label>{{ $t('numeroDeTelefono') }}</template>
+                            </AppInput>
 
-                            <div class="form-group">
-                                <label for="input-patente"
-                                    >{{ $t('patente') }}</label
-                                >
-                                <input
-                                    maxlength="20"
-                                    v-model="newInfo.patente"
-                                    type="text"
-                                    class="form-control"
-                                    id="input-patente"
-                                    :class="{ 'has-error': patenteError.state }"
-                                    :placeholder="$t('patente')"
-                                />
-                                <span class="error" v-if="patenteError.state">
-                                    {{ patenteError.message }}
-                                </span>
-                            </div>
+                            <AppInput
+                                id="input-patente"
+                                maxlength="20"
+                                v-model="newInfo.patente"
+                                :placeholder="$t('patente')"
+                                :error="patenteError.state ? patenteError.message : ''"
+                            >
+                                <template #label>{{ $t('patente') }}</template>
+                            </AppInput>
 
                             <div
                                 v-if="newInfo.identity_validated_at"
@@ -177,42 +135,35 @@
                                 <p class="text-muted">
                                     {{ $t('identidadValidadaTooltip') }}
                                 </p>
-                                <button
+                                <AppButton
                                     type="button"
-                                    class="btn btn-warning"
+                                    variant="warning"
                                     :disabled="clearingIdentity"
                                     @click="confirmClearIdentityValidation"
                                 >
                                     {{ $t('removerValidacionIdentidad') }}
-                                </button>
+                                </AppButton>
                             </div>
 
-                            <div class="form-group">
-                                <label for="input-pass"
-                                    >{{ $t('ingreseSuNuevaContrasena') }}</label
-                                >
-                                <input
-                                    maxlength="40"
-                                    v-model="newInfo.pass.password"
-                                    type="password"
-                                    class="form-control"
-                                    id="input-pass"
-                                    :placeholder="$t('contrasena')"
-                                    autocomplete="new-password"
-                                />
-                                <input
-                                    maxlength="40"
-                                    v-model="newInfo.pass.password_confirmation"
-                                    type="password"
-                                    class="form-control"
-                                    id="input-pass-confirm"
-                                    :placeholder="$t('repetirContrasena')"
-                                    autocomplete="new-password"
-                                />
-                                <span class="error" v-if="passError.state">
-                                    {{ phoneError.message }}
-                                </span>
-                            </div>
+                            <AppInput
+                                id="input-pass"
+                                maxlength="40"
+                                v-model="newInfo.pass.password"
+                                password
+                                :placeholder="$t('contrasena')"
+                                autocomplete="new-password"
+                                :error="passError.state ? passError.message : ''"
+                            >
+                                <template #label>{{ $t('ingreseSuNuevaContrasena') }}</template>
+                            </AppInput>
+                            <AppInput
+                                id="input-pass-confirm"
+                                maxlength="40"
+                                v-model="newInfo.pass.password_confirmation"
+                                password
+                                :placeholder="$t('repetirContrasena')"
+                                autocomplete="new-password"
+                            />
                             <hr />
                             <div
                                 class="row"
@@ -235,71 +186,86 @@
                                 class="form-group"
                                 v-if="settings.module_validated_drivers"
                             >
-                                <label for="tipoDeCuenta">
-                                    {{ $t('tipoDeCuenta') }}
-                                    <span
-                                        class="required-field-flag"
-                                        :title="$t('tituloCampoRequerido')"
-                                    >
-                                        (*)
-                                    </span>
-                                </label>
-                                <select
-                                    v-model="newInfo.account_type"
-                                    id="tipoDeCuenta"
-                                    class="form-control"
+                                <AppField
+                                    label-for="tipoDeCuenta"
+                                    :error="
+                                        accountTypeError.state
+                                            ? accountTypeError.message
+                                            : ''
+                                    "
                                 >
-                                    <option
-                                        v-for="option in accountTypes"
-                                        v-bind:value="option.id"
+                                    <template #label>
+                                        {{ $t('tipoDeCuenta') }}
+                                        <span
+                                            class="required-field-flag"
+                                            :title="$t('tituloCampoRequerido')"
+                                        >
+                                            (*)
+                                        </span>
+                                    </template>
+                                    <select
+                                        id="tipoDeCuenta"
+                                        v-model="newInfo.account_type"
+                                        class="users-crud__select"
                                     >
-                                        {{ option.name }}
-                                    </option>
-                                </select>
-                                <span
-                                    class="error"
-                                    v-if="accountTypeError.state"
-                                >
-                                    {{ accountTypeError.message }}
-                                </span>
+                                        <option
+                                            v-for="option in accountTypes"
+                                            :key="option.id"
+                                            v-bind:value="option.id"
+                                        >
+                                            {{ option.name }}
+                                        </option>
+                                    </select>
+                                </AppField>
                             </div>
                             <div
                                 class="form-group"
                                 v-if="settings.module_validated_drivers"
                             >
-                                <label for="bancoDeCuenta">
-                                    {{ $t('bancoDeCuenta') }}
-                                    <span
-                                        class="required-field-flag"
-                                        :title="$t('tituloCampoRequerido')"
-                                    >
-                                        (*)
-                                    </span>
-                                </label>
-                                <select
-                                    v-model="newInfo.account_bank"
-                                    id=""
-                                    class="form-control"
+                                <AppField
+                                    label-for="bancoDeCuenta"
+                                    :error="
+                                        accountBankError.state
+                                            ? accountBankError.message
+                                            : ''
+                                    "
                                 >
-                                    <option
-                                        v-for="option in banks"
-                                        v-bind:value="option.id"
+                                    <template #label>
+                                        {{ $t('bancoDeCuenta') }}
+                                        <span
+                                            class="required-field-flag"
+                                            :title="$t('tituloCampoRequerido')"
+                                        >
+                                            (*)
+                                        </span>
+                                    </template>
+                                    <select
+                                        id="bancoDeCuenta"
+                                        v-model="newInfo.account_bank"
+                                        class="users-crud__select"
                                     >
-                                        {{ option.name }}
-                                    </option>
-                                </select>
-                                <span
-                                    class="error"
-                                    v-if="accountBankError.state"
-                                >
-                                    {{ accountBankError.message }}
-                                </span>
+                                        <option
+                                            v-for="option in banks"
+                                            :key="option.id"
+                                            v-bind:value="option.id"
+                                        >
+                                            {{ option.name }}
+                                        </option>
+                                    </select>
+                                </AppField>
                             </div>
-                            <div
-                                class="form-group"
+                            <AppInput
                                 v-if="settings.module_validated_drivers"
+                                id="accountNumber"
+                                v-model="newInfo.account_number"
+                                :placeholder="$t('numeroDeCuenta')"
+                                :error="
+                                    accountNumberError.state
+                                        ? accountNumberError.message
+                                        : ''
+                                "
                             >
-                                <label for="accountNumber">
+                                <template #label>
                                     {{ $t('numeroDeCuenta') }}
                                     <span
                                         class="required-field-flag"
@@ -307,21 +273,8 @@
                                     >
                                         (*)
                                     </span>
-                                </label>
-                                <input
-                                    v-model="newInfo.account_number"
-                                    type="text"
-                                    class="form-control"
-                                    id="accountNumber"
-                                    :placeholder="$t('numeroDeCuenta')"
-                                />
-                                <span
-                                    class="error"
-                                    v-if="accountNumberError.state"
-                                >
-                                    {{ accountNumberError.message }}
-                                </span>
-                            </div>
+                                </template>
+                            </AppInput>
                             <div
                                 class="checkbox"
                                 v-if="settings.module_validated_drivers"
@@ -356,37 +309,42 @@
                                     </label>
                                 </div>
                                 <div class="col-md-5 text-right">
-                                    <button
-                                        class="btn btn-primary"
-                                        v-on:click="save"
+                                    <AppButton
+                                        type="button"
+                                        variant="primary"
+                                        @click="save"
                                     >
                                         {{ $t('grabar') }}
-                                    </button>
+                                    </AppButton>
                                 </div>
                             </div>
                             <hr />
                             <div class="row" style="margin-top: 1em;">
-                                <div class="col-md-24">
-                                    <button
-                                        class="btn btn-danger btn-sm"
-                                        v-on:click="openConfirmModal('delete')"
-                                        style="margin-right: 8px;"
+                                <div class="col-md-24 users-crud__danger-actions">
+                                    <AppButton
+                                        type="button"
+                                        variant="danger"
+                                        size="sm"
+                                        @click="openConfirmModal('delete')"
                                     >
                                         {{ $t('eliminarUsuario') }}
-                                    </button>
-                                    <button
-                                        class="btn btn-warning btn-sm"
-                                        v-on:click="openConfirmModal('anonymize')"
-                                        style="margin-right: 8px;"
+                                    </AppButton>
+                                    <AppButton
+                                        type="button"
+                                        variant="warning"
+                                        size="sm"
+                                        @click="openConfirmModal('anonymize')"
                                     >
                                         {{ $t('anonimizarUsuario') }}
-                                    </button>
-                                    <button
-                                        class="btn btn-warning btn-sm"
-                                        v-on:click="openConfirmModal('banAndAnonymize')"
+                                    </AppButton>
+                                    <AppButton
+                                        type="button"
+                                        variant="warning"
+                                        size="sm"
+                                        @click="openConfirmModal('banAndAnonymize')"
                                     >
                                         {{ $t('anonimizarYBloquearUsuario') }}
-                                    </button>
+                                    </AppButton>
                                 </div>
                             </div>
                         </div>
@@ -402,27 +360,32 @@
         >
             <template #header><h3>
                 <span>{{ confirmModalTitle }}</span>
-                <i v-on:click="closeConfirmModal" class="fa fa-times float-right-close"></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black">
                     <p>{{ confirmModalMessage }}</p>
-                    <div v-if="pendingAction === 'banAndAnonymize'" class="form-group">
-                        <label>{{ $t('nota') }} ({{ $t('opcional') }})</label>
-                        <input v-model="banNote" type="text" class="form-control" />
-                    </div>
-                    <div class="text-center" style="margin-top: 1.5em;">
-                        <button
-                            class="btn btn-danger"
-                            @click="executePendingAction"
+                    <AppInput
+                        v-model="banNote"
+                        v-if="pendingAction === 'banAndAnonymize'"
+                        :label="`${$t('nota')} (${$t('opcional')})`"
+                    />
+                    <div class="text-center users-crud__modal-actions">
+                        <AppButton
+                            type="button"
+                            variant="danger"
                             :disabled="loadingAction"
+                            @click="executePendingAction"
                         >
                             <span v-if="!loadingAction">{{ $t('confirmar') }}</span>
                             <spinner v-if="loadingAction" class="blue"></spinner>
-                        </button>
-                        <button class="btn btn-default" @click="closeConfirmModal" style="margin-left: 8px;">
+                        </AppButton>
+                        <AppButton
+                            type="button"
+                            variant="secondary"
+                            @click="closeConfirmModal"
+                        >
                             {{ $t('cancelar') }}
-                        </button>
+                        </AppButton>
                     </div>
                 </div>
             </div></template>
@@ -440,6 +403,10 @@ import { inputIsNumber, formatId, cleanId } from '../../services/utility';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 import dialogs from '../../services/dialogs.js';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi, UserApi } from '../../services/api';
@@ -627,6 +594,9 @@ export default {
             event.target.value = formatted;
             // Update the Vue data model with the formatted value
             this.newInfo.nro_doc = formatted;
+        },
+        onDniModelUpdate(value) {
+            this.newInfo.nro_doc = formatId(value, this.settings.profile_id_format);
         },
 
         resetUserState() {
@@ -895,6 +865,10 @@ export default {
     updated() {},
     components: {
         AdminLayout,
+        AppButton,
+        AppField,
+        AppInput,
+        AppTextarea,
         modal,
         Spinner
     }
@@ -982,13 +956,40 @@ export default {
     height: auto;
 }
 
-.form-control {
-    margin-bottom: 0px;
+.users-crud__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
 }
+
+.users-crud__select:focus {
+    outline: none;
+}
+
+.users-crud__danger-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.users-crud__modal-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 1.5em;
+}
+
 .conversation-component.container {
     height: auto;
     overflow-y: auto;
 }
+
 .img-doc {
     height: 320px;
     background-size: cover;

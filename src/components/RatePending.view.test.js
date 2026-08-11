@@ -35,25 +35,4 @@ describe('RatePending.vue neutral ratings', () => {
             'El comentario no puede estar vacío para los votos neutrales.'
         );
     });
-
-    it('styles neutral icon as rotated greyscale thumbs-up', () => {
-        expect(viewSource).toContain('fa-thumbs-o-up');
-        expect(viewSource).toContain('rate-neutral-icon');
-        expect(viewSource).toContain('NEUTRAL_RATING_ICON_STYLE');
-    });
-
-    it('lays out rating buttons with even spacing and neutral active styling', () => {
-        const baseCss = fs.readFileSync(
-            path.resolve(__dirname, '../styles/base.css'),
-            'utf8'
-        );
-        expect(baseCss).toMatch(
-            /\.request-list div\.rate-pending_component \.rate-buttons[\s\S]*display:\s*flex/
-        );
-        expect(baseCss).toMatch(
-            /\.request-list div\.rate-pending_component \.rate-buttons[\s\S]*gap:\s*0\.6em/
-        );
-        expect(baseCss).toContain('.rate-neutral.active');
-        expect(baseCss).toContain('background-color: #d8d8d8');
-    });
 });

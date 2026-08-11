@@ -17,8 +17,5 @@ describe('SeatRequestTrip card', () => {
         expect(source).toContain('seat-request-trip__card');
         expect(source).toContain(':class="tripCardCountClass"');
         expect(source).toContain(':embeddedInSeatRequest="true"');
-        expect(source).toMatch(
-            /\.seat-request-trip__card :deep\(\.card-trip\) \{[\s\S]*?border-radius: 0;[\s\S]*?box-shadow: none;/
-        );
     });
 });

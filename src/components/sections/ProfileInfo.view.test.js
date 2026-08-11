@@ -7,41 +7,62 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
-describe('ProfileInfo ratings display', () => {
-    it('uses UserRatingsCounts for evenly spaced rating pairs', () => {
-        expect(viewSource).toContain('UserRatingsCounts');
-        expect(viewSource).toContain(':ratings="profileRatings"');
-        expect(viewSource).toContain('userRatingsFromProfile');
-        expect(viewSource).not.toContain('profile.neutral_ratings || 0');
-        expect(viewSource).toMatch(/\.profile-info--ratings\s*\{[\s\S]*justify-content:\s*center/);
+describe('ProfileInfo public panel', () => {
+    it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
+        expect(viewSource).toContain('data-testid="profile-identity-tile"');
+        expect(viewSource).toContain("$t('sobreMi')");
+        expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
+        expect(viewSource).toContain("$t('contactoPrivacidadPerfil')");
+        expect(viewSource).not.toContain('UserRatingsCounts');
+        expect(viewSource).not.toContain('fa-smile');
     });
-});
 
-describe('ProfileInfo member stats', () => {
-    it('shows member since and participated trips below rating counters', () => {
-        const ratingsIndex = viewSource.indexOf('profile-info--ratings');
-        const memberSinceIndex = viewSource.indexOf("$t('miembroDesde'");
-        const tripsIndex = viewSource.indexOf("$t('perfilViajesParticipados'");
-
-        expect(ratingsIndex).toBeGreaterThan(-1);
-        expect(memberSinceIndex).toBeGreaterThan(ratingsIndex);
-        expect(tripsIndex).toBeGreaterThan(memberSinceIndex);
-        expect(viewSource).toContain('formatMemberSinceMonthYear');
-        expect(viewSource).toContain('normalizeTripsCount');
-        expect(viewSource).toContain('profile-info--member-stats');
-        expect(viewSource).toMatch(/\.profile-info\s*\{[\s\S]*align-items:\s*center/);
-        expect(viewSource).toMatch(
-            /\.profile-info--member-stats\s*\{[\s\S]*text-align:\s*center/
+    it('always shows identity tile with verified or unverified copy', () => {
+        expect(viewSource).toContain('data-testid="profile-identity-tile"');
+        expect(viewSource).toContain("$t('identidadVerificadaTitulo')");
+        expect(viewSource).toContain("$t('identidadVerificadaSub')");
+        expect(viewSource).toContain("$t('identidadNoVerificadaTitulo')");
+        expect(viewSource).toContain("$t('identidadNoVerificadaSub')");
+        expect(viewSource).not.toMatch(
+            /v-if="isIdentityVerified"[\s\S]*?identidadVerificadaTitulo/
         );
     });
 
-    it('keeps member stats copy in i18n', () => {
-        expect(i18nSource).toContain('miembroDesde');
-        expect(i18nSource).toContain('perfilViajesParticipados');
-        expect(i18nSource).toContain('Miembro desde: {date}');
-        expect(i18nSource).toContain('{count} viajes');
-        expect(i18nSource).toContain('Member since: {date}');
-        expect(i18nSource).toContain('{count} trips');
+    it('marks verified identity with an accessible verified hook', () => {
+        expect(viewSource).toMatch(
+            /:data-testid="[\s\S]*?isIdentityVerified[\s\S]*?profile-identity-verified[\s\S]*?profile-identity-unverified/
+        );
+        expect(viewSource).toContain("$t('usuarioVerificado')");
+        expect(viewSource).toMatch(/['"]fa-shield['"]:\s*isIdentityVerified/);
+        expect(viewSource).toMatch(/['"]fa-user['"]:\s*!isIdentityVerified/);
+    });
+
+    it('always shows response tile when the conversation delay module is on', () => {
+        expect(viewSource).toContain('data-testid="profile-response-tile"');
+        expect(viewSource).toContain('showResponseTile');
+        expect(viewSource).toContain('respondeMensajesPorcentaje');
+        expect(viewSource).toContain("$t('sinDatosRespuestaTitulo')");
+        expect(viewSource).toContain("$t('sinDatosRespuestaSub')");
+        expect(viewSource).toContain('module_conversation_average_delay');
+    });
+
+    it('keeps profile panel copy in i18n', () => {
+        expect(i18nSource).toContain('sobreMi');
+        expect(i18nSource).toContain('identidadVerificadaTitulo');
+        expect(i18nSource).toContain('identidadVerificadaSub');
+        expect(i18nSource).toContain('identidadNoVerificadaTitulo');
+        expect(i18nSource).toContain('identidadNoVerificadaSub');
+        expect(i18nSource).toContain('sinDatosRespuestaTitulo');
+        expect(i18nSource).toContain('sinDatosRespuestaSub');
+        expect(i18nSource).toContain('contactoPrivacidadPerfil');
+        expect(i18nSource).toContain('usuarioVerificado');
+        expect(i18nSource).toContain(
+            'Identidad no verificada'
+        );
+        expect(i18nSource).toContain(
+            'Este usuario aún debe verificar su identidad'
+        );
+        expect(i18nSource).toContain('Sin datos de respuesta aún');
     });
 });
 
@@ -64,24 +85,58 @@ describe('ProfileInfo friend actions', () => {
         expect(viewSource).toContain("friendship_state === 'none'");
     });
 
-    it('shows sent-request state when friendship is pending_sent', () => {
-        expect(viewSource).toContain("friendship_state === 'pending_sent'");
-        expect(viewSource).toContain("$t('solicitudEnviada')");
+    it('shows Enviando solicitud while invite is in flight', () => {
+        expect(viewSource).toContain("$t('enviandoSolicitudAmistad')");
+        expect(viewSource).toMatch(
+            /friendship_state === 'none'[\s\S]*?friendActionLoading[\s\S]*?enviandoSolicitudAmistad[\s\S]*?invitarAmigos/
+        );
+        expect(i18nSource).toMatch(
+            /enviandoSolicitudAmistad:\s*'Enviando solicitud'/
+        );
+        expect(i18nSource).toMatch(
+            /enviandoSolicitudAmistad:\s*'Sending request'/
+        );
     });
 
-    it('shows accept and reject for incoming friend requests', () => {
-        expect(viewSource).toContain("friendship_state === 'pending_received'");
-        expect(viewSource).toContain('onAcceptFriend');
-        expect(viewSource).toContain('onRejectFriend');
-        expect(viewSource).toContain("$t('aceptar')");
-        expect(viewSource).toContain("$t('rechazar')");
+    it('shows danger cancel button when friendship is pending_sent', () => {
+        expect(viewSource).toContain("friendship_state === 'pending_sent'");
+        expect(viewSource).toContain("$t('cancelarSolicitudAmistad')");
+        expect(viewSource).toContain('onCancelFriendRequest');
+        expect(viewSource).not.toContain("$t('suSolicitudAmistadEnviada')");
+        expect(i18nSource).toMatch(
+            /cancelarSolicitudAmistad:\s*'Cancelar solicitud de amistad'/
+        );
+        expect(i18nSource).toMatch(
+            /cancelarSolicitudAmistad:\s*'Cancel friend request'/
+        );
+    });
+
+    it('does not render accept or reject buttons for incoming requests', () => {
+        expect(viewSource).not.toMatch(
+            /friendship_state === 'pending_received'[\s\S]*?onAcceptFriend/
+        );
+        expect(viewSource).not.toMatch(
+            /friendship_state === 'pending_received'[\s\S]*?\$t\('aceptar'\)/
+        );
+        expect(viewSource).not.toContain('onAcceptFriend');
+        expect(viewSource).not.toContain('onRejectFriend');
     });
 
     it('wires friend actions through friends store', () => {
         expect(viewSource).toContain('useFriendsStore');
         expect(viewSource).toContain('requestFriend');
-        expect(viewSource).toContain('acceptFriend');
-        expect(viewSource).toContain('rejectFriend');
+        expect(viewSource).toContain('cancelFriendRequest');
+        expect(viewSource).toContain("cancelFriendRequest: 'cancelRequest'");
+    });
+});
+
+describe('ProfileInfo own profile actions', () => {
+    it('does not duplicate account settings buttons covered by account nav', () => {
+        expect(viewSource).not.toContain("name: 'profile_update'");
+        expect(viewSource).not.toContain("name: 'friends_setting'");
+        expect(viewSource).not.toContain("name: 'debug_setting'");
+        expect(viewSource).not.toContain("name: 'transacciones'");
+        expect(viewSource).not.toContain("name: 'identity_validation'");
     });
 });
 
@@ -96,7 +151,9 @@ describe('ProfileInfo friend trip alerts toggle', () => {
     });
 
     it('shows snackbar feedback when toggling friend trip alerts', () => {
-        expect(viewSource).toContain("import dialogs from '../../services/dialogs.js'");
+        expect(viewSource).toContain(
+            "import dialogs from '../../services/dialogs.js'"
+        );
         expect(viewSource).toContain("'alertasViajeAmigoActivadas'");
         expect(viewSource).toContain("'alertasViajeAmigoDesactivadas'");
         expect(viewSource).toContain("this.$t('errorAlertasViajeAmigo')");

@@ -7,7 +7,7 @@ const componentSource = fs.readFileSync(componentPath, 'utf8');
 
 describe('AdminPaginationBar component', () => {
     it('renders per-page selector with allowed options', () => {
-        expect(componentSource).toContain("{{ $t('adminItemsPerPage') }}");
+        expect(componentSource).toContain(':label="$t(\'adminItemsPerPage\')"');
         expect(componentSource).toContain('ADMIN_PER_PAGE_OPTIONS');
         expect(componentSource).toContain('@change="onPerPageChange"');
         expect(componentSource).toContain("emit('update:perPage'");
@@ -20,5 +20,11 @@ describe('AdminPaginationBar component', () => {
         expect(perPageIndex).toBeGreaterThan(pagerIndex);
         expect(componentSource).toContain("{{ $t('anterior') }}");
         expect(componentSource).toContain("{{ $t('siguiente') }}");
+    });
+
+    it('sizes the bar and per-page field to content width', () => {
+        expect(componentSource).not.toMatch(
+            /\.admin-pagination-bar\s*\{[^}]*[^-\w]width:\s*100%/
+        );
     });
 });

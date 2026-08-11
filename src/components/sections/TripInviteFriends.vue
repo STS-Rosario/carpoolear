@@ -1,6 +1,8 @@
 <template>
     <div class="trip-invite-friends">
-        <p>{{ $t('queresInvitarTusAmigos') }}</p>
+        <p v-if="showPrompt" class="trip-invite-friends__prompt">
+            {{ $t('queresInvitarTusAmigos') }}
+        </p>
         <div v-if="friends && friends.length" class="trip-invite-friends__list">
             <div class="checkbox">
                 <label>
@@ -29,16 +31,25 @@
         </div>
         <p v-else class="text-muted">{{ $t('noTienesNingunAmigoAun') }}</p>
         <div class="trip-invite-friends__actions">
-            <button
-                class="btn btn-primary"
+            <AppButton
+                variant="primary"
+                block
+                class="trip-invite-friends__invite"
+                data-testid="trip-invite-friends-submit"
                 :disabled="submitting || !selectedFriendIds.length"
                 @click="onSubmit"
             >
                 {{ $t('invitarAmigos') }}
-            </button>
-            <button class="btn btn-default" @click="onClose">
+            </AppButton>
+            <AppButton
+                variant="secondary"
+                block
+                class="trip-invite-friends__close"
+                data-testid="trip-invite-friends-close"
+                @click="onClose"
+            >
                 {{ $t('cerrar') }}
-            </button>
+            </AppButton>
         </div>
     </div>
 </template>
@@ -46,18 +57,40 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useFriendsStore } from '../../stores/friends';
+import AppButton from '../ui/AppButton.vue';
 import TripApi from '../../services/api/Trips';
 import dialogs from '../../services/dialogs.js';
+import {
+    TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR,
+    resolveTripInviteFriendsClose
+} from '../../utils/tripInviteFriendsClose.js';
 
 const tripApi = new TripApi();
 
 export default {
     name: 'trip_invite_friends',
 
+    components: {
+        AppButton
+    },
+
     props: {
         tripId: {
             type: [Number, String],
             required: true
+        },
+        closeBehavior: {
+            type: String,
+            default: TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR.EMIT,
+            validator(value) {
+                return Object.values(TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR).includes(
+                    value
+                );
+            }
+        },
+        showPrompt: {
+            type: Boolean,
+            default: true
         }
     },
 
@@ -101,7 +134,7 @@ export default {
                     dialogs.message(this.$t('invitarAmigos'), {
                         estado: 'success'
                     });
-                    this.$emit('close');
+                    this.dismiss();
                 })
                 .catch(() => {
                     dialogs.message(this.$t('problemaAlCargarElViaje'), {
@@ -113,7 +146,15 @@ export default {
                 });
         },
         onClose() {
-            this.$emit('close');
+            this.dismiss();
+        },
+        dismiss() {
+            resolveTripInviteFriendsClose({
+                closeBehavior: this.closeBehavior,
+                tripId: this.tripId,
+                router: this.$router,
+                emit: (event) => this.$emit(event)
+            });
         }
     },
 
@@ -124,15 +165,34 @@ export default {
 </script>
 
 <style scoped>
+.trip-invite-friends__prompt {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
 .trip-invite-friends__friend {
     margin: 0.4rem 0;
 }
 
-.trip-invite-friends__actions {
-    margin-top: 1rem;
+.trip-invite-friends__list label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
 }
 
-.trip-invite-friends__actions .btn + .btn {
-    margin-left: 0.5rem;
+.trip-invite-friends__actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.trip-invite-friends__actions :deep(.app-button) {
+    width: 100%;
+    box-sizing: border-box;
 }
 </style>

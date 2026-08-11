@@ -9,7 +9,6 @@ describe('AdminSupportTicketNew view', () => {
     it('uses shared UserSearchAutocomplete for user lookup', () => {
         expect(source).toContain('UserSearchAutocomplete');
         expect(source).toContain('v-model="selectedUser"');
-        expect(source).not.toContain('class="list-group autocomplete-users"');
     });
 
     it('persists selected user and form fields in route query', () => {

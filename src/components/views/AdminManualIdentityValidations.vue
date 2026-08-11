@@ -52,18 +52,40 @@
                                 </td>
                                 <td>
                                     <router-link
+                                        v-if="
+                                            item.user_id &&
+                                            Number(
+                                                item.open_account_verification_tickets_count
+                                            ) > 0
+                                        "
+                                        :to="
+                                            accountVerificationTicketsRoute(
+                                                item.user_id
+                                            )
+                                        "
+                                        class="btn btn-link btn-sm"
+                                    >
+                                        {{
+                                            item.open_account_verification_tickets_count
+                                        }}
+                                    </router-link>
+                                    <span v-else>-</span>
+                                </td>
+                                <td>
+                                    <router-link
                                         v-if="item.user_id"
                                         :to="getAdminUserProfileRoute(item.user_id)"
                                         class="btn btn-link btn-sm"
                                     >
                                         {{ $t('verPerfil') }}
                                     </router-link>
-                                    <router-link
+                                    <AppButton
+                                        variant="primary"
+                                        size="sm"
                                         :to="{ name: 'admin-manual-identity-validation-review', params: { id: item.id } }"
-                                        class="btn btn-primary-blue btn-sm"
                                     >
                                         {{ $t('revisarSolicitud') }}
-                                    </router-link>
+                                    </AppButton>
                                 </td>
                             </tr>
                         </tbody>
@@ -95,8 +117,10 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import {
     buildManualIdentityValidationListParams,
     getNextManualIdentityValidationSortState,
@@ -142,6 +166,13 @@ export default {
     },
     methods: {
         getAdminUserProfileRoute,
+        accountVerificationTicketsRoute(userId) {
+            return adminUserSupportTicketsRoute(userId, {
+                type: 'account_verification',
+                open: true,
+                createdByAdmin: true
+            });
+        },
         formatDate(value) {
             if (!value) return '-';
             return new Date(value).toLocaleString();
@@ -246,7 +277,8 @@ export default {
     components: {
         AdminLayout,
         AdminPaginationBar,
-        Loading
+        Loading,
+        AppButton
     }
 };
 </script>

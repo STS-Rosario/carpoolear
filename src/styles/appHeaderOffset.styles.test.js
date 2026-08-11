@@ -20,4 +20,13 @@ describe('app header offset styles', () => {
             )
         );
     });
+
+    it('uses the measured header offset on desktop so top banners do not clip content', () => {
+        expect(baseCss).toMatch(
+            /\.view-container\s*\{\s*padding-top:\s*var\(--app-header-offset,\s*5\.6rem\)/
+        );
+        expect(baseCss).not.toMatch(
+            /\.view-container\s*\{\s*padding-top:\s*5\.6rem\s*;/
+        );
+    });
 });

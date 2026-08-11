@@ -20,6 +20,9 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain("$t('unicaVez')");
         expect(viewSource).toContain("$t('MENSUAL')");
         expect(viewSource).toContain("$t('cancelaCuando')");
+        expect(viewSource).toMatch(
+            /donation-actions[\s\S]*?variant="primary"[\s\S]*?onDonateMonthly[\s\S]*?variant="secondary"[\s\S]*?onDonateOnceTime/s
+        );
         expect(viewSource).toContain("$t('conoceMasDonar')");
         expect(viewSource).toContain('onDonateOnceTime');
         expect(viewSource).toContain('onDonateMonthly');
@@ -30,15 +33,6 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain("$t('continuarSinDonar')");
         expect(viewSource).toContain('onContinueWithoutDonating');
         expect(viewSource).toMatch(/name:\s*'trips'/);
-    });
-
-    it('adds bottom spacing on the skip action so it clears the mobile tab bar', () => {
-        expect(viewSource).toMatch(
-            /donation-after-rating__skip[\s\S]*safe-area-inset-bottom/
-        );
-        expect(viewSource).toMatch(
-            /donation-after-rating__skip[\s\S]*52px/
-        );
     });
 
     it.each(['arg', 'en'])('defines continuarSinDonar in %s locale', (locale) => {

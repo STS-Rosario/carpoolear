@@ -53,4 +53,15 @@ describe('CoordinateTrip.vue', () => {
             /v-if="conversation\.return_trip && !isTripGroupConversation\(conversation\)"/
         );
     });
+
+    it('keeps a space before the trip date on seat action buttons', () => {
+        const outboundDate = viewSource.match(
+            /v-if="!sending\.trip"[\s\S]*?<\/template>/
+        )?.[0];
+        const returnDate = viewSource.match(
+            /v-if="!sending\.returnTrip"[\s\S]*?<\/template>/
+        )?.[0];
+        expect(outboundDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
+        expect(returnDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
+    });
 });

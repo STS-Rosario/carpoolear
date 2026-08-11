@@ -1,5 +1,7 @@
 <template>
     <div class="update-profile-component" v-if="user">
+        <div class="update-profile-page__card">
+            <h1 class="update-profile-page__heading">{{ $t('editarPerfil') }}</h1>
         <div
             class="alert alert-info"
             v-if="
@@ -50,75 +52,77 @@
                 </span>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-24 col-sm-8 col-sm-push-16 profile_image">
-                <div class="profile_image-container">
-                    <div
-                        class="circle-box"
-                        v-imgSrc:profile="user.image"
-                        :class="{ loading: loadingImg }"
-                    >
-                        <div @click="changePhoto" class="profile_image-edit">
-                            <svgItem icon="addPhoto" size="28"></svgItem>
+        <div class="form">
+            <div class="profile-top-row">
+                <div class="profile-top-content">
+                    <div class="alert alert-info profile-top-alert">
+                        {{ $t('incentivoFoto') }}
+                    </div>
+                    <div class="profile-identity-fields">
+                        <AppInput
+                            id="input-name"
+                            maxlength="25"
+                            v-model="user.name"
+                            :placeholder="$t('placeholderNombre')"
+                            :disabled="isNameLockedByValidation"
+                            :title="nameInputTitle"
+                            :error="nombreError.state ? nombreError.message : ''"
+                        >
+                            <template #label>
+                                {{ $t('nombreYapellido') }}
+                                <span
+                                    class="required-field-flag"
+                                    :title="$t('tituloCampoRequerido')"
+                                    >(*)</span
+                                >
+                            </template>
+                        </AppInput>
+                        <AppInput
+                            id="input-email"
+                            maxlength="40"
+                            v-model="user.email"
+                            :placeholder="$t('eMail')"
+                            disabled
+                        >
+                            <template #label>
+                                {{ $t('email') }}
+                                <span
+                                    class="required-field-flag"
+                                    :title="$t('tituloCampoRequerido')"
+                                    >(*)</span
+                                >
+                            </template>
+                        </AppInput>
+                    </div>
+                </div>
+                <div class="profile_image profile_image-inline">
+                    <div class="profile_image-container">
+                        <div
+                            class="circle-box"
+                            v-imgSrc:profile="user.image"
+                            :class="{ loading: loadingImg }"
+                        >
+                            <div @click="changePhoto" class="profile_image-edit">
+                                <svgItem icon="addPhoto" size="28"></svgItem>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-24 col-sm-16 col-sm-pull-8">
-                <div class="form">
-                    <div class="alert alert-info">
-                        {{ $t('incentivoFoto') }}
-                    </div>
-                    <div class="form-group">
-                        <label for="input-name">
-                            {{ $t('nombreYapellido') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
-                        </label>
-                        <input
-                            maxlength="25"
-                            v-model="user.name"
-                            type="text"
-                            class="form-control"
-                            id="input-name"
-                            :placeholder="$t('placeholderNombre')"
-                            :class="{ 'has-error': nombreError.state }"
-                            :disabled="isNameLockedByValidation"
-                            :title="nameInputTitle"
-                        />
-                        <span class="error" v-if="nombreError.state">
-                            {{ nombreError.message }}
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-email">
-                            {{ $t('email') }}
-                            <span
-                                class="required-field-flag"
-                                :title="$t('tituloCampoRequerido')"
-                                >(*)</span
-                            >
-                        </label>
-                        <input
-                            maxlength="40"
-                            v-model="user.email"
-                            type="text"
-                            class="form-control"
-                            id="input-email"
-                            :placeholder="$t('eMail')"
-                            disabled
-                        />
-                    </div>
                     <!--<div class="form-group">
                     <label for="">Fecha de nacimiento <span class="required-field-flag" title="Campo requerido">(*)</span></label>
                     <DatePicker :model-value="dayjs(birthday).format('YYYY-MM-DD') " ref="ipt_calendar" name="ipt_calendar" :maxDate="maxDate" :minDate="minDate" :class="{'has-error': birthdayError.state}" ></DatePicker>
                     <span class="error" v-if="birthdayError.state"> {{birthdayError.message}} </span>
                 </div>-->
-                    <div class="form-group">
-                        <label for="input-description">
+                    <AppTextarea
+                        id="input-description"
+                        maxlength="2000"
+                        v-model="user.description"
+                        :placeholder="$t('placeholderDescripcion')"
+                        :error="descError.state ? descError.message : ''"
+                        rows="5"
+                    >
+                        <template #label>
                             {{ $t('acercaDeMi') }}
                             <span
                                 class="required-field-flag"
@@ -128,23 +132,24 @@
                             <span class="description">
                                 {{ $t('incentivoDescripcion') }}
                             </span>
-                        </label>
-                        <textarea
-                            maxlength="2000"
-                            v-model="user.description"
-                            :placeholder="$t('placeholderDescripcion')"
-                            :class="{ 'has-error': descError.state }"
-                        ></textarea>
-                        <span class="error textarea" v-if="descError.state">
-                            {{ descError.message }}
-                        </span>
-                    </div>
+                        </template>
+                    </AppTextarea>
                     <hr />
                     <p class="form-group">
                         {{ $t('siSosConductorDatosVisibles') }}
                     </p>
-                    <div class="form-group">
-                        <label for="input-dni">
+                    <AppInput
+                        id="input-dni"
+                        type="tel"
+                        :model-value="user.nro_doc"
+                        @update:modelValue="onDniModelUpdate"
+                        :placeholder="config.profile_id_format"
+                        :maxlength="(config.profile_id_format).length"
+                        :disabled="isDniLockedByValidation"
+                        :title="dniInputTitle"
+                        :error="dniError.state ? dniError.message : ''"
+                    >
+                        <template #label>
                             {{ $t('documento') }}
                             <span
                                 class="required-field-flag"
@@ -155,25 +160,19 @@
                                 {{ $t('incentivoDoc') }} {{ $t('doc') }}
                                 {{ $t('momentoViajar') }}
                             </span>
-                        </label>
-                        <input
-                            type="tel"
-                            v-model="user.nro_doc"
-                            @input="handleDniInput"
-                            class="form-control"
-                            id="input-dni"
-                            :placeholder="config.profile_id_format"
-                            :class="{ 'has-error': dniError.state }"
-                            :maxlength="(config.profile_id_format).length"
-                            :disabled="isDniLockedByValidation"
-                            :title="dniInputTitle"
-                        />
-                        <span class="error" v-if="dniError.state">
-                            {{ dniError.message }}
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-telefono">
+                        </template>
+                    </AppInput>
+                    <AppInput
+                        id="input-telefono"
+                        maxlength="20"
+                        type="tel"
+                        @keydown="isNumber"
+                        v-on:paste="isNumber"
+                        v-model="user.mobile_phone"
+                        :placeholder="$t('placeholderTelefono')"
+                        :error="phoneError.state ? phoneError.message : ''"
+                    >
+                        <template #label>
                             {{ $t('nroTel') }}
                             <span
                                 class="required-field-flag"
@@ -184,42 +183,24 @@
                                 ({{ $t('ejemploTelefono') }}).
                                 {{ $t('incentivoTelefono') }}
                             </span>
-                        </label>
-                        <input
-                            maxlength="20"
-                            @keydown="isNumber"
-                            v-on:paste="isNumber"
-                            v-model="user.mobile_phone"
-                            type="tel"
-                            class="form-control"
-                            id="input-telefono"
-                            :placeholder="$t('placeholderTelefono')"
-                            :class="{ 'has-error': phoneError.state }"
-                        />
-                        <span class="error" v-if="phoneError.state">
-                            {{ phoneError.message }}
-                        </span>
-                    </div>
-                    <div
-                        class="form-group"
+                        </template>
+                    </AppInput>
+                    <AppInput
                         v-if="settings.module_facebook_profile_url_enabled"
+                        id="input-facebook-profile-url"
+                        v-model="user.facebook_profile_url"
+                        type="url"
+                        placeholder="https://facebook.com/tuperfil"
+                        @blur="onFacebookProfileUrlBlur"
                     >
-                        <label for="input-facebook-profile-url">
+                        <template #label>
                             Perfil de Facebook (opcional)
                             <span class="description">
                                 Opcional. Para generar confianza podés poner tu link a
                                 tu perfil de Facebook
                             </span>
-                        </label>
-                        <input
-                            v-model="user.facebook_profile_url"
-                            type="url"
-                            class="form-control"
-                            id="input-facebook-profile-url"
-                            placeholder="https://facebook.com/tuperfil"
-                            @blur="onFacebookProfileUrlBlur"
-                        />
-                    </div>
+                        </template>
+                    </AppInput>
 
                     <div
                         ref="autosLinkBlock"
@@ -236,7 +217,7 @@
                             {{ $t('autos') }}
                         </router-link>
                     </div>
-                    <div class="checkbox">
+                    <div class="checkbox update-profile-datos-publicos">
                         <label>
                             <input
                                 type="checkbox"
@@ -263,71 +244,29 @@
                             {{ $t('notificacionesPorCorreo') }}
                         </label>
                     </div>
-                    <hr v-if="!isImpersonating" />
-                    <div class="checkbox" v-if="!isImpersonating">
-                        <label>
-                            <input
-                                type="checkbox"
-                                @change="changeShowPassword"
-                            />
-                            {{ $t('cambiarPassword') }}
-                        </label>
-                    </div>
-                    <div class="form-group" v-if="!isImpersonating && showChangePassword">
-                        <label for="input-pass">{{
-                            $t('ingreseNuevaPassword')
-                        }}</label>
-                        <input
-                            maxlength="40"
-                            v-model="pass.password"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass"
-                            :placeholder="$t('placeholderContrasena')"
-                        />
-                        <input
-                            maxlength="40"
-                            v-model="pass.password_confirmation"
-                            type="password"
-                            autocomplete="new-password"
-                            class="form-control"
-                            id="input-pass-confirm"
-                            :placeholder="$t('placeholderRepetirContrasena')"
-                        />
-                    </div>
 
                     <hr v-if="settings.module_unaswered_message_limit" />
-                    <div
-                        class="form-group"
+                    <AppInput
                         v-if="settings.module_unaswered_message_limit"
+                        id="input-unaswered_messages_limit"
+                        type="numer"
+                        data-max-length="8"
+                        v-model="user.unaswered_messages_limit"
+                        :error="
+                            unaswered_messages_limitError.state
+                                ? unaswered_messages_limitError.message
+                                : ''
+                        "
                     >
-                        <label for="input-unaswered_messages_limit">
+                        <template #label>
                             {{ $t('unaswered_messages_limit') }}
                             <span class="description">
                                 ({{
                                     $t('unaswered_messages_limitDescription')
                                 }})
                             </span>
-                        </label>
-                        <input
-                            type="numer"
-                            data-max-length="8"
-                            v-model="user.unaswered_messages_limit"
-                            class="form-control"
-                            id="input-unaswered_messages_limit"
-                            :class="{
-                                'has-error': unaswered_messages_limitError.state
-                            }"
-                        />
-                        <span
-                            class="error"
-                            v-if="unaswered_messages_limitError.state"
-                        >
-                            {{ unaswered_messages_limitError.message }}
-                        </span>
-                    </div>
-                    <hr />
+                        </template>
+                    </AppInput>
                     <div
                         class="checkbox"
                         v-if="
@@ -380,75 +319,88 @@
                         "
                     >
                         <div class="form-group">
-                            <label for="tipoDeCuenta">
-                                {{ $t('tipoDeCuenta') }}
-                                <span
-                                    class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
-                                    >(*)</span
-                                >
-                            </label>
-                            <select
-                                v-model="user.account_type"
-                                id="tipoDeCuenta"
-                                class="form-control"
+                            <AppField
+                                label-for="tipoDeCuenta"
+                                :error="
+                                    accountTypeError.state
+                                        ? accountTypeError.message
+                                        : ''
+                                "
                             >
-                                <option
-                                    v-for="option in accountTypes"
-                                    v-bind:value="option.id"
+                                <template #label>
+                                    {{ $t('tipoDeCuenta') }}
+                                    <span
+                                        class="required-field-flag"
+                                        :title="$t('tituloCampoRequerido')"
+                                        >(*)</span
+                                    >
+                                </template>
+                                <select
+                                    id="tipoDeCuenta"
+                                    v-model="user.account_type"
+                                    class="update-profile__select"
                                 >
-                                    {{ option.name }}
-                                </option>
-                            </select>
-                            <span class="error" v-if="accountTypeError.state">
-                                {{ accountTypeError.message }}
-                            </span>
+                                    <option
+                                        v-for="option in accountTypes"
+                                        :key="option.id"
+                                        v-bind:value="option.id"
+                                    >
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                            </AppField>
                         </div>
                         <div class="form-group">
-                            <label for="bancoDeCuenta">
-                                {{ $t('bancoDeCuenta') }}
-                                <span
-                                    class="required-field-flag"
-                                    :title="$t('tituloCampoRequerido')"
-                                    >(*)</span
-                                >
-                            </label>
-                            <select
-                                v-model="user.account_bank"
-                                id=""
-                                class="form-control"
+                            <AppField
+                                label-for="bancoDeCuenta"
+                                :error="
+                                    accountBankError.state
+                                        ? accountBankError.message
+                                        : ''
+                                "
                             >
-                                <option
-                                    v-for="option in banks"
-                                    v-bind:value="option.id"
+                                <template #label>
+                                    {{ $t('bancoDeCuenta') }}
+                                    <span
+                                        class="required-field-flag"
+                                        :title="$t('tituloCampoRequerido')"
+                                        >(*)</span
+                                    >
+                                </template>
+                                <select
+                                    id="bancoDeCuenta"
+                                    v-model="user.account_bank"
+                                    class="update-profile__select"
                                 >
-                                    {{ option.name }}
-                                </option>
-                            </select>
-                            <span class="error" v-if="accountBankError.state">
-                                {{ accountBankError.message }}
-                            </span>
+                                    <option
+                                        v-for="option in banks"
+                                        :key="option.id"
+                                        v-bind:value="option.id"
+                                    >
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                            </AppField>
                         </div>
-                        <div class="form-group">
-                            <label for="accountNumber">
+                        <AppInput
+                            id="accountNumber"
+                            v-model="user.account_number"
+                            :placeholder="$t('numeroDeCuenta')"
+                            :error="
+                                accountNumberError.state
+                                    ? accountNumberError.message
+                                    : ''
+                            "
+                        >
+                            <template #label>
                                 {{ $t('numeroDeCuenta') }}
                                 <span
                                     class="required-field-flag"
                                     :title="$t('tituloCampoRequerido')"
                                     >(*)</span
                                 >
-                            </label>
-                            <input
-                                v-model="user.account_number"
-                                type="text"
-                                class="form-control"
-                                id="accountNumber"
-                                :placeholder="$t('numeroDeCuenta')"
-                            />
-                            <span class="error" v-if="accountNumberError.state">
-                                {{ accountNumberError.message }}
-                            </span>
-                        </div>
+                            </template>
+                        </AppInput>
                     </div>
                     <div
                         class="row"
@@ -465,33 +417,22 @@
                     </div>
 
                     <div class="btn-container">
-                        <button
-                            class="btn btn-primary btn-donar-header"
-                            @click="grabar"
-                            :disabled="loading"
-                        >
-                            <span v-if="!loading">{{
-                                $t('guardarCambios')
-                            }}</span>
-                            <spinner class="blue" v-if="loading"></spinner>
-                        </button>
-                        <span
-                            class="required-field-flag"
-                            v-bind:class="{ 'required-field-info': isMobile }"
-                        >
+                        <span class="required-field-flag required-field-info">
                             {{ $t('camposObligatorios') }}
                         </span>
-                    </div>
-                    <hr />
-                    <div class="delete-account-container">
-                        <button
-                            class="btn btn-danger pull-right"
-                            @click="toggleModalDeleteAccount"
+                        <AppButton
+                            class="update-profile-save-btn"
+                            variant="primary"
+                            :loading="loading"
+                            :disabled="loading"
+                            @click="grabar"
                         >
-                            {{ $t('eliminarCuenta') }}
-                        </button>
+                            {{ $t('guardarCambios') }}
+                            <template #loading>
+                                <spinner class="blue"></spinner>
+                            </template>
+                        </AppButton>
                     </div>
-                    
                     <div
                         v-if="error"
                         class="alert alert-danger profile-save-error"
@@ -508,8 +449,7 @@
                         @change="onPhotoChange"
                         ref="file"
                     ></Uploadfile>
-                </div>
-            </div>
+        </div>
         </div>
 
         <modal
@@ -520,35 +460,55 @@
         >
             <template #header><h3>
                 <span>{{ $t('seguroEliminarCuenta') }}</span>
-                <i
-                    v-on:click="toggleModalDeleteAccount"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black" v-if="!showNegativeRatingsInModal">
-                    <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
-                    <div class="text-center" style="margin-top: 1em;">
-                        <button
-                            class="btn btn-default"
-                            @click="openMesaAyudaFromDelete"
-                        >
-                            {{ $t('contactarMesaAyuda') }}
-                        </button>
-                    </div>
-                    <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
-                    <div class="text-center" style="margin-top: 1.5em;">
-                        <button
-                            class="btn btn-danger"
-                            @click="deleteAccount"
-                            :disabled="loadingDeleteAccount"
-                        >
-                            <span v-if="!loadingDeleteAccount"
-                                >{{ $t('eliminarCuenta') }}</span
+                    <template v-if="!showDeleteAccountConfirmation">
+                        <p>{{ $t('eliminacionCuentaRecuperarCuenta') }}</p>
+                        <div class="text-center" style="margin-top: 1em;">
+                            <AppButton
+                                variant="primary"
+                                @click="openMesaAyudaFromDelete"
                             >
-                            <spinner class="blue" v-if="loadingDeleteAccount"></spinner>
-                        </button>
-                    </div>
+                                {{ $t('contactarMesaAyuda') }}
+                            </AppButton>
+                        </div>
+                        <p style="margin-top: 1.5em;">{{ $t('eliminacionCuentaOtroMotivo') }}</p>
+                        <div class="text-center" style="margin-top: 1.5em;">
+                            <AppButton
+                                variant="danger"
+                                @click="promptDeleteAccountConfirmation"
+                            >
+                                {{ $t('eliminarCuenta') }}
+                            </AppButton>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <p>{{ $t('eliminacionCuentaIrreversible') }}</p>
+                        <p>{{ $t('confirmarEliminarCuentaMensaje') }}</p>
+                        <div class="text-center delete-account-confirmation-actions">
+                            <button
+                                type="button"
+                                class="btn btn-default"
+                                @click="cancelDeleteAccountConfirmation"
+                            >
+                                {{ $t('cancelar') }}
+                            </button>
+                            <button
+                                class="btn btn-danger"
+                                @click="deleteAccount"
+                                :disabled="loadingDeleteAccount"
+                            >
+                                <span v-if="!loadingDeleteAccount">{{
+                                    $t('confirmar')
+                                }}</span>
+                                <spinner
+                                    class="blue"
+                                    v-if="loadingDeleteAccount"
+                                ></spinner>
+                            </button>
+                        </div>
+                    </template>
                 </div>
                 <div class="text-left color-black" v-else>
                     <p>
@@ -578,10 +538,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('mesaAyuda') }}</span>
-                <i
-                    v-on:click="showMesaAyudaModal = false"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">
@@ -600,10 +556,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('errorAlGuardar') }}</span>
-                <i
-                    v-on:click="toggleBannedDniModal"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">
@@ -622,10 +574,6 @@
         >
             <template #header><h3>
                 <span>{{ $t('datosEnUso') }}</span>
-                <i
-                    v-on:click="toggleDatosEnUsoModal"
-                    class="fa fa-times float-right-close"
-                ></i>
             </h3></template>
             <template #body><div>
                 <div class="text-left color-black login-modal">
@@ -651,6 +599,10 @@ import dialogs from '../../services/dialogs.js';
 import dayjs from '../../dayjs';
 import bus from '../../services/bus-event';
 import Spinner from '../Spinner.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
 import { getApiErrorMessage } from '../../utils/apiErrors.js';
@@ -660,6 +612,7 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { cloneProfileUser } from '../../utils/profileUserClone';
+import { DELETE_ACCOUNT_QUERY } from '../../utils/myAccountMenuItems';
 
 class Error {
     constructor(state = false, message = '') {
@@ -673,10 +626,6 @@ export default {
     data() {
         return {
             user: null,
-            pass: {
-                password: '',
-                password_confirmation: ''
-            },
             error: null,
             loading: false,
             loadingImg: false,
@@ -695,7 +644,6 @@ export default {
             minDate: dayjs('1900-01-01').toDate(),
             birthday: '',
             birthdayAnswer: '',
-            showChangePassword: false,
             showBeDriver: false,
             showProfileEmailNotificationsSetting: false,
             driverFiles: null,
@@ -703,6 +651,7 @@ export default {
             banks: [],
             accountTypes: [],
             showModalDeleteAccount: false,
+            showDeleteAccountConfirmation: false,
             loadingDeleteAccount: false,
             showDatosEnUsoModal: false,
             showBannedDniModal: false,
@@ -717,7 +666,7 @@ export default {
             firstTime: 'firstTime',
             settings: 'appConfig',
             config: 'appConfig',
-            isImpersonating: 'isImpersonating'
+
         }),
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
@@ -837,9 +786,6 @@ export default {
                 }
             });
         },
-        changeShowPassword() {
-            this.showChangePassword = !this.showChangePassword;
-        },
         changeBeDriver() {
             this.showBeDriver = !this.showBeDriver;
         },
@@ -852,6 +798,9 @@ export default {
             event.target.value = formatted;
             // Update the Vue data model with the formatted value
             this.user.nro_doc = formatted;
+        },
+        onDniModelUpdate(value) {
+            this.user.nro_doc = formatId(value, this.config.profile_id_format);
         },
         onPhotoChange(data) {
             this.loadingImg = true;
@@ -920,14 +869,6 @@ export default {
                     data.facebook_profile_url = normalized;
                 }
             }
-            if (this.pass.password && !this.isImpersonating) {
-                if (this.pass.password !== this.pass.password_confirmation) {
-                    this.error = this.$t('passwordNoCoincide');
-                    return;
-                }
-                data.password = this.pass.password;
-                data.password_confirmation = this.pass.password_confirmation;
-            }
             /* global FormData */
             let bodyFormData = new FormData();
             for (const key in data) {
@@ -955,8 +896,6 @@ export default {
             this.update(bodyFormData)
                 .then(() => {
                     this.error = null;
-                    this.pass.password = '';
-                    this.pass.password_confirmation = '';
                     this.loading = false;
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'));
                     // this.user.birthday = this.birthdayAnswer;
@@ -1131,11 +1070,33 @@ export default {
             return globalError;
         },
         toggleModalDeleteAccount() {
+            const wasOpen = this.showModalDeleteAccount;
             this.showModalDeleteAccount = !this.showModalDeleteAccount;
             this.showNegativeRatingsInModal = false;
+            this.showDeleteAccountConfirmation = false;
+            if (wasOpen) {
+                this.clearDeleteAccountRouteQuery();
+            }
+        },
+        isDeleteAccountRouteQuery() {
+            return this.$route.query.action === DELETE_ACCOUNT_QUERY.action;
+        },
+        openDeleteAccountModalFromRoute() {
+            if (this.isDeleteAccountRouteQuery()) {
+                this.showModalDeleteAccount = true;
+            }
+        },
+        clearDeleteAccountRouteQuery() {
+            if (!this.isDeleteAccountRouteQuery()) {
+                return;
+            }
+            const query = { ...this.$route.query };
+            delete query.action;
+            this.$router.replace({ name: 'profile_update', query });
         },
         openMesaAyudaFromDelete() {
             this.showModalDeleteAccount = false;
+            this.clearDeleteAccountRouteQuery();
             this.showMesaAyudaModal = true;
         },
         toggleDatosEnUsoModal() {
@@ -1143,6 +1104,12 @@ export default {
         },
         toggleBannedDniModal() {
             this.showBannedDniModal = !this.showBannedDniModal;
+        },
+        promptDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = true;
+        },
+        cancelDeleteAccountConfirmation() {
+            this.showDeleteAccountConfirmation = false;
         },
         deleteAccount() {
             this.loadingDeleteAccount = true;
@@ -1231,6 +1198,11 @@ export default {
         '$route.query.missing'() {
             this.redirectMissingPatenteToAutos();
             this.scrollToAutosLinkIfNeeded();
+        },
+        '$route.query.action'(action) {
+            if (action === DELETE_ACCOUNT_QUERY.action) {
+                this.showModalDeleteAccount = true;
+            }
         }
     },
 
@@ -1245,6 +1217,7 @@ export default {
         
         this.redirectMissingPatenteToAutos();
         this.scrollToAutosLinkIfNeeded();
+        this.openDeleteAccountModalFromRoute();
         bus.on('date-change', this.dateChange);
         this.syncProfileDraftFromStore();
         console.log('USUARIO', this.userData);
@@ -1276,6 +1249,10 @@ export default {
         Uploadfile,
         SvgItem,
         Spinner,
+        AppButton,
+        AppField,
+        AppInput,
+        AppTextarea,
         modal
     }
 };
@@ -1283,26 +1260,155 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.update-profile-page__heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+    color: #333;
+}
+
+.update-profile-page__card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--profile-card-bg, #fff);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.update-profile-component {
+    padding-left: 0;
+}
+
+.update-profile-component .form {
+    max-width: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.update-profile-datos-publicos {
+    margin-left: 5px;
+}
+
+.update-profile__select {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.update-profile__select:focus {
+    outline: none;
+}
+
+.update-profile-component :deep(.app-input__label .description) {
+    display: block;
+    font-weight: 400;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
 .profile-autos-link p {
     margin-bottom: 0.75rem;
 }
 
-.delete-account-container {
-    display: flex;
-    justify-content: flex-end;
+@media only screen and (max-width: 768px) {
+    .update-profile-component {
+        padding: 1em;
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    }
 }
+
 .required-field-flag {
     color: red;
 }
 .required-field-info {
     display: block;
-    padding: 1em 0;
+    padding: 0 0 1em;
 }
 .profile_image-container.error .circle-box {
     border: solid 2px red;
 }
 .profile_image-container.error .span {
     color: red;
+}
+.profile-top-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+.profile-top-content {
+    min-width: 0;
+}
+.profile-top-alert {
+    margin-bottom: 1rem;
+}
+.profile_image-inline {
+    order: -1;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.profile_image-inline .profile_image-container {
+    margin: 0 auto;
+    position: relative;
+    width: 160px;
+}
+.profile_image-inline .circle-box {
+    width: 160px;
+    height: 160px;
+    max-width: 160px;
+    max-height: 160px;
+    margin: 0;
+}
+.profile-identity-fields {
+    min-width: 0;
+}
+.profile-identity-fields .form-group:last-child {
+    margin-bottom: 0;
+}
+@media only screen and (min-width: 768px) {
+    .profile-top-row {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .profile-top-content {
+        order: 1;
+        flex: 1;
+    }
+    .profile_image-inline {
+        order: 2;
+        flex: 0 0 auto;
+        margin-bottom: 0;
+        align-self: stretch;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+    .profile_image-inline .profile_image-container {
+        width: 220px;
+    }
+    .profile_image-inline .circle-box {
+        width: 220px;
+        height: 220px;
+        max-width: 220px;
+        max-height: 220px;
+    }
+    .profile-identity-fields .form-group:last-child {
+        margin-bottom: 15px;
+    }
 }
 span.error {
     display: block;
@@ -1349,6 +1455,14 @@ span.error.textarea {
 
 hr {
     border-top: 1px solid #cccccc;
+}
+
+.delete-account-confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5em;
 }
 </style>
 

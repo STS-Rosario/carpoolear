@@ -86,8 +86,12 @@ test.describe('My Trips page', () => {
     await expect(page.getByText('Laura Martínez')).toBeVisible();
 
     // Accept and reject buttons should be present
-    await expect(page.locator('.btn-accept-request').first()).toBeVisible();
-    await expect(page.getByText('Rechazar').first()).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /^aceptar$/i }).first()
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /^rechazar$/i }).first()
+    ).toBeVisible();
   });
 
   test('shows multiple pending requests with correct user info', async ({ page }) => {
@@ -280,7 +284,7 @@ test.describe('My Trips page', () => {
 
     await expect(page.getByText('Buenos Aires').first()).toBeVisible({ timeout: 10000 });
 
-    await page.locator('.trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();
@@ -332,7 +336,7 @@ test.describe('My Trips page', () => {
     await page.goto('/my-trips');
     await waitForPageReady(page);
 
-    await page.locator('.trip').first().click();
+    await page.getByRole('button', { name: /ver detalle/i }).first().click();
     await page.waitForURL(`**/trips/${TRIP_ID}`, { timeout: 10000 });
 
     await expect(page.getByRole('heading', { name: 'Detalles del viaje' })).not.toBeVisible();

@@ -4,17 +4,16 @@
         <form class="admin-car-model-form" @submit.prevent="createModel">
             <div class="row">
                 <div class="col-sm-8">
-                    <input
+                    <AppInput
                         v-model="form.name"
-                        class="form-control"
                         :placeholder="$t('modelo')"
                         required
                     />
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="btn btn-primary">
+                    <AppButton type="submit" variant="primary">
                         {{ $t('agregar') }}
-                    </button>
+                    </AppButton>
                 </div>
             </div>
         </form>
@@ -29,13 +28,13 @@
                 <tr v-for="row in models" :key="row.id">
                     <td>{{ row.name }}</td>
                     <td>
-                        <button
-                            type="button"
-                            class="btn btn-xs btn-danger"
+                        <AppButton
+                            variant="danger"
+                            size="sm"
                             @click="removeModel(row.id)"
                         >
                             {{ $t('accionEliminar') }}
-                        </button>
+                        </AppButton>
                     </td>
                 </tr>
             </tbody>
@@ -46,11 +45,13 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAdminCarCatalogStore } from '../../stores/adminCarCatalog';
 
 export default {
     name: 'admin-car-models',
-    components: { AdminLayout },
+    components: { AdminLayout, AppButton, AppInput },
     props: {
         brandId: {
             type: [String, Number],

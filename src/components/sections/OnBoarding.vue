@@ -17,44 +17,28 @@
                     <h1>{{ $t(`onBoardingcardMessage${number}`) }}</h1>
                 </div>
                 <div class="on-boarding--bottom-container">
-                    <button
-                        class="btn btn-secondary"
+                    <AppButton
                         v-if="number > 1"
-                        @click="number > 1 && cardNumber--"
+                        class="on-boarding--prev"
+                        variant="secondary"
+                        @click="goPrev"
                     >
                         {{ $t('anterior') }}
-                    </button>
-                    <button
-                        class="btn btn-success"
-                        @click="complete"
+                    </AppButton>
+                    <AppButton
                         v-if="number === cardsLength"
+                        variant="primary"
+                        @click="complete"
                     >
                         {{ $t('comenzar') }}
-                    </button>
-                    <button
+                    </AppButton>
+                    <AppButton
                         v-else
-                        class="btn btn-primary"
-                        @click="number < cardsLength && cardNumber++"
+                        variant="primary"
+                        @click="goNext"
                     >
                         {{ $t('siguiente') }}
-                    </button>
-                </div>
-            </div>
-        </template>
-        <template v-else>
-            <div :style="styleCardObject" class="on-boarding--container">
-                <div class="on-boarding--top-container">
-                    <img class="on-boarding--img" :src="srcCard(cardNumber)" />
-                    <h1>{{ $t(`onBoardingcardMessage${cardNumber}`) }}</h1>
-                </div>
-                <div class="on-boarding--bottom-container">
-                    <button class="btn btn-secondary" v-if="cardNumber > 1">
-                        {{ $t('anterior') }}
-                    </button>
-                    <button class="btn btn-success" v-if="cardNumber > 1">
-                        {{ $t('comenzar') }}
-                    </button>
-                    <button class="btn btn-primary" v-else>{{ $t('siguiente') }}</button>
+                    </AppButton>
                 </div>
             </div>
         </template>
@@ -65,9 +49,13 @@
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
+import AppButton from '../ui/AppButton.vue';
 
 export default {
     name: 'onBoarding',
+    components: {
+        AppButton
+    },
     data() {
         return {
             cardNumber: 1,
@@ -107,6 +95,16 @@ export default {
                 process.env.ROUTE_BASE +
                 `img/onBoarding/${process.env.TARGET_APP}_placa${number}.jpg`;
             return src;
+        },
+        goPrev() {
+            if (this.cardNumber > 1) {
+                this.cardNumber -= 1;
+            }
+        },
+        goNext() {
+            if (this.cardNumber < this.cardsLength) {
+                this.cardNumber += 1;
+            }
         },
         firstTransitionEnd() {
             this.cardsLength =
@@ -167,21 +165,15 @@ export default {
 </script>
 
 <style scoped>
-.btn-secondary {
+.on-boarding--prev {
     margin-right: 1em;
-    background-color: transparent;
 }
-.btn-success {
-    position: relative;
-    min-width: 5rem;
-    min-height: 42px;
-    border: 2px solid #ffffff;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    border-radius: 0;
-    padding: 1em;
-}
-.btn-success:hover {
-    border-color: #fff;
+
+.on-boarding--bottom-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
+    <AccountSettingsLayout page-title-key="acercaDe">
     <div class="about-page container">
-        <div class="jumbotron">
+        <div class="jumbotron visible-xs">
             <h1>Acerca de Carpoolear</h1>
         </div>
         <p class="lead">
@@ -156,6 +157,7 @@
             alt="Realizado con el apoyo de Espacio Santafesino, Ministerio de Innovación y Cultura de Santa Fe. Convocatoria 2016."
         />
     </div>
+    </AccountSettingsLayout>
 </template>
 <style scoped>
 .about-page {
@@ -188,10 +190,14 @@ h2 {
 </style>
 
 <script>
+import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import bus from '../../services/bus-event.js';
 
 export default {
     name: 'about',
+    components: {
+        AccountSettingsLayout
+    },
     data() {
         return {};
     },

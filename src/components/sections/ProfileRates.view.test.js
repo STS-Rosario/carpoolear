@@ -9,10 +9,6 @@ const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const profileRatesSource = fs.readFileSync(profileRatesPath, 'utf8');
 const profileInfoSource = fs.readFileSync(profileInfoPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
-const referenceActionSpacingRule =
-    /\.edit-action-reference\s*\{[\s\S]*margin-bottom:\s*1rem/;
-const referenceLabelColorRule = /\.label-reply\s*\{[\s\S]*color:\s*#333/;
-const referenceLabelSizeRule = /\.label-reply\s*\{[\s\S]*font-size:\s*1rem/;
 const referenceMessageFirstKey = 'confirmarReferenciaUsuarioMensajeReferencia';
 const referenceMessageSecondKey = 'confirmarReferenciaUsuarioMensajeCalificacion';
 const referencePersonCopy =
@@ -66,6 +62,18 @@ describe('ProfileRates reference action', () => {
         expect(profileRatesSource).toMatch(/@click="confirmReferenceWriting"/);
     });
 
+    it('uses Continuar primary then Cancelar secondary in the confirmation modal footer', () => {
+        const footer = profileRatesSource.match(
+            /name="reference-confirmation-modal"[\s\S]*?<template #footer>([\s\S]*?)<\/template>/
+        );
+        expect(footer).not.toBeNull();
+        const footerHtml = footer[1];
+        const continuarIndex = footerHtml.indexOf("$t('continuar')");
+        const cancelarIndex = footerHtml.indexOf("$t('cancelar')");
+        expect(continuarIndex).toBeGreaterThan(-1);
+        expect(cancelarIndex).toBeGreaterThan(continuarIndex);
+    });
+
     it('renders the reference explanation as two translated paragraphs', () => {
         expect(profileRatesSource).toMatch(referenceModalParagraphsRule);
     });
@@ -80,20 +88,37 @@ describe('ProfileRates reference action', () => {
         expect(i18nSource).toContain('Cancel');
     });
 
-    it('adds bottom spacing to the reference action before the list', () => {
-        expect(profileRatesSource).toMatch(referenceActionSpacingRule);
-    });
-
-    it('styles the reference form label as black and larger text', () => {
-        expect(profileRatesSource).toMatch(referenceLabelColorRule);
-        expect(profileRatesSource).toMatch(referenceLabelSizeRule);
-    });
-
-    it('styles calificaciones neutral icons with the shared transform helper', () => {
-        expect(profileRatesSource).toContain('RateItem');
-        expect(profileRatesSource).toMatch(
-            /\.profile-rates-component\s*:deep\(\.rate-neutral-icon\)\s*\{[\s\S]*margin-left:\s*0\.6em/
+    it('uses Guardar referencia on the write form', () => {
+        expect(profileRatesSource).toContain("$t('guardarReferencia')");
+        expect(profileRatesSource).not.toMatch(
+            /sendReference[\s\S]*?\$t\('comentar'\)/
         );
-        expect(profileRatesSource).not.toMatch(/padding-bottom:\s*0\.3em/);
+        expect(i18nSource).toMatch(
+            /guardarReferencia:\s*'Guardar referencia'/
+        );
+        expect(i18nSource).toMatch(
+            /guardarReferencia:\s*'Save reference'/
+        );
+    });
+
+    it('renders calificaciones with RateItem', () => {
+        expect(profileRatesSource).toContain('RateItem');
+    });
+
+    it('filters ratings with chips Todas Positivas Neutras Negativas', () => {
+        expect(profileRatesSource).toContain('FilterChips');
+        expect(profileRatesSource).toContain('ratingFilter');
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesTodas')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesPositivas')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesNeutras')");
+        expect(profileRatesSource).toContain("$t('filtroCalificacionesNegativas')");
+        expect(profileRatesSource).toContain('filteredRates');
+        expect(profileRatesSource).not.toContain('fa-smile');
+    });
+
+    it('adds rating-type class on each calificaciones filter chip', () => {
+        expect(profileRatesSource).toContain('ratingFilterChips');
+        expect(profileRatesSource).toMatch(/id:\s*'all'/);
+        expect(profileRatesSource).toMatch(/id:\s*'positive'/);
     });
 });

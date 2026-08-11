@@ -8,44 +8,52 @@
                 <p v-if="!hasCoordinates" class="alert alert-info">
                     {{ $t('liveLocationWaitingForPosition') }}
                 </p>
-                <label class="live-location-share__label" for="live-share-url">{{
-                    $t('liveLocationShareUrlLabel')
-                }}</label>
-                <div class="live-location-share__url-row">
-                    <input
+                <div class="live-location-share__url-block">
+                    <AppInput
                         id="live-share-url"
-                        class="form-control live-location-share__url"
-                        :value="shareUrl"
+                        class="live-location-share__url"
+                        :model-value="shareUrl"
+                        :label="$t('liveLocationShareUrlLabel')"
                         readonly
                     />
-                    <button type="button" class="btn btn-default" @click="copyShareUrl">
-                        {{ $t('liveLocationCopyUrl') }}
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-primary live-location-share__share-btn"
-                        @click="shareLiveUrl"
-                    >
-                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                        {{ $t('compartirUbicacionTiempoReal') }}
-                    </button>
+                    <div class="live-location-share__url-row">
+                        <AppButton variant="secondary" @click="copyShareUrl">
+                            {{ $t('liveLocationCopyUrl') }}
+                        </AppButton>
+                        <AppButton
+                            class="live-location-share__share-btn"
+                            variant="primary"
+                            icon-left="fa fa-share-alt"
+                            @click="shareLiveUrl"
+                        >
+                            {{ $t('compartirUbicacionTiempoReal') }}
+                        </AppButton>
+                    </div>
                 </div>
-                <button
-                    type="button"
-                    class="btn btn-danger live-location-share__stop"
+                <AppButton
+                    variant="danger"
+                    class="live-location-share__stop"
                     @click="stopSharing"
                 >
                     {{ $t('liveLocationStopSharing') }}
-                </button>
+                </AppButton>
             </div>
             <div v-else class="live-location-share__inactive">
                 <p v-if="shareIntroKey" class="live-location-share__intro">
                     {{ $t(shareIntroKey) }}
                 </p>
-                <button type="button" class="btn btn-primary" @click="startSharing">
-                    <i class="fa fa-wifi live-location-share__share-icon" aria-hidden="true"></i>
+                <AppButton
+                    variant="primary"
+                    @click="startSharing"
+                >
+                    <template #iconLeft>
+                        <i
+                            class="fa fa-wifi live-location-share__share-icon"
+                            aria-hidden="true"
+                        ></i>
+                    </template>
                     {{ $t('compartirUbicacionTiempoReal') }}
-                </button>
+                </AppButton>
                 <p v-if="errorMessage" class="alert alert-warning">{{ errorMessage }}</p>
             </div>
         </Loading>
@@ -56,6 +64,8 @@
 import { mapActions, mapState } from 'pinia';
 import Loading from '../Loading.vue';
 import LiveLocationLastUpdated from '../elements/LiveLocationLastUpdated.vue';
+import AppButton from '../ui/AppButton.vue';
+import AppInput from '../ui/AppInput.vue';
 import { useAuthStore } from '../../stores/auth.js';
 import { useRootStore } from '../../stores/root.js';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
@@ -212,6 +222,8 @@ export default {
         this.resetStore();
     },
     components: {
+        AppButton,
+        AppInput,
         Loading,
         LiveLocationLastUpdated
     }
@@ -250,15 +262,11 @@ export default {
 }
 
 .live-location-share__url {
-    flex: 1 1 220px;
-}
-
-.live-location-share__share-btn i {
-    margin-right: 0.35rem;
+    width: 100%;
+    margin-bottom: 0;
 }
 
 .live-location-share__share-icon {
     transform: rotate(90deg);
-    margin-right: 0.35rem;
 }
 </style>

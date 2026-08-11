@@ -10,7 +10,11 @@ export const MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS = [
     { key: 'submitted_at', labelKey: 'fechaEnvio' },
     { key: 'waiting_time', labelKey: 'tiempoDeEspera' },
     { key: 'paid', labelKey: 'pagado' },
-    { key: 'review_status', labelKey: 'estado' }
+    { key: 'review_status', labelKey: 'estado' },
+    {
+        key: 'open_account_verification_tickets_count',
+        labelKey: 'ticketsVerificacionCuenta'
+    }
 ];
 
 function createMemoryStorage() {
@@ -158,6 +162,11 @@ const SORT_COMPARATORS = {
     review_status: (a, b, direction) => compareNumbers(
         getReviewStatusSortRank(a),
         getReviewStatusSortRank(b),
+        direction
+    ),
+    open_account_verification_tickets_count: (a, b, direction) => compareNumbers(
+        Number(a.open_account_verification_tickets_count || 0),
+        Number(b.open_account_verification_tickets_count || 0),
         direction
     )
 };

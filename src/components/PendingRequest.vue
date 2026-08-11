@@ -1,129 +1,125 @@
 <template>
-    <div class="col-xs-24 col-md-16 col-lg-12">
-        <div class="rate-pending_component clearfix">
-            <div class="rate-pending_photo">
-                <router-link
-                    :to="{
-                        name: 'profile',
-                        params: {
-                            id: user.id,
-                            userProfile: user,
-                            activeTab: 1
-                        }
-                    }"
-                >
-                    <div
-                        class="trip_driver_img circle-box"
-                        v-imgSrc:profile="user.image"
-                    ></div>
-                </router-link>
-            </div>
-            <modal
-                :name="'modal'"
-                v-if="showModalRequestSeat"
-                @close="onModalClose"
-                :title="$t('pendingRequestCarpoodatos')"
-                :body="'Body'"
+    <div class="pending-request-card">
+        <div class="pending-request-card__photo">
+            <router-link
+                :to="{
+                    name: 'profile',
+                    params: {
+                        id: user.id,
+                        userProfile: user,
+                        activeTab: 1
+                    }
+                }"
             >
-                <template #header><h3>
-                    <span>{{ $t('pendingRequestCarpoodatos') }}</span>
-                    <i
-                        v-on:click="onModalClose"
-                        class="fa fa-times float-right-close"
-                    ></i>
-                </h3></template>
-                <template #body><div>
-                    <div class="text-left carpoodatos">
-                        <p>
-                            {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
-                        </p>
-                        <p>
-                            {{ $t('pendingRequestSiAceptasUnaSolicitud') }}
-                        </p>
-                        <p>
-                            {{ $t('pendingRequestPodranCalificarseAunque') }}
-                        </p>
-                        <p>
-                            {{ $t('pendingRequestNoPidasAsiento') }}
-                        </p>
-                        <p>
-                            {{ $t('pendingRequestCualquierDudaEscribinos') }}
-                            <a :href="'mailto:' + config.admin_email">
-                                {{ config.admin_email }}
-                            </a>
-                            {{ $t('pendingRequestONuestrasRedesSociales') }}
-                        </p>
-                    </div>
-                    <div class="check" style="margin-bottom: 10px">
-                        <label class="check-inline">
-                            <input
-                                type="checkbox"
-                                name="acceptRequestValor"
-                                value="0"
-                                v-model="acceptRequestValue"
-                            />
-                            <span>{{ $t('pendingRequestNoVolverAMostrarMensaje') }}</span>
-                        </label>
-                    </div>
-                    <div class="text-center">
-                        <button
-                            class="btn btn-accept-request"
-                            :disabled="acceptInProcess"
-                            @click="toAcceptRequest"
-                        >
-                            <spinner
-                                class="blue"
-                                v-if="acceptInProcess"
-                            ></spinner>
-                            <span v-else>{{ $t('pendingRequestAceptar') }}</span>
-                        </button>
-                        <button
-                            class="btn btn-secondary"
-                            @click="onModalToChat"
-                        >
-                            {{ $t('pendingRequestEnviarMensaje') }}
-                        </button>
-                    </div>
-                </div></template>
-            </modal>
-            <div class="rate-pending-message">
-                <div class="rate-pending-message--content">
-                    <strong>{{ user.name }}</strong>
-                    {{ $t('pendingRequestQuiereSubirseAlViaje') }}
-                    <strong>{{
-                        trip.points[trip.points.length - 1].json_address.ciudad
-                    }}</strong>
-                    {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
-                    {{ dayjs(trip.trip_date).format('HH:mm') }}.
-                    <div class="pending-buttons">
-                        <button
-                            class="btn btn-accept-request"
-                            :disabled="acceptInProcess || rejectInProcess"
-                            @click="onAcceptRequest"
-                        >
-                            <spinner
-                                class="blue"
-                                v-if="acceptInProcess"
-                            ></spinner>
-                            <span v-else>{{ $t('pendingRequestAceptar') }}</span>
-                        </button>
-                        <button
-                            class="btn btn-primary"
-                            :disabled="rejectInProcess || acceptInProcess"
-                            @click="reject"
-                        >
-                            <spinner
-                                class="blue"
-                                v-if="rejectInProcess"
-                            ></spinner>
-                            <span v-else>{{ $t('pendingRequestRechazar') }}</span>
-                        </button>
-                    </div>
-                    <div class="message-button">
-                        <button class="btn btn-secondary" @click="chat">
-                            {{ $t('pendingRequestEnviarMensaje') }}
-                        </button>
-                    </div>
+                <div
+                    class="pending-request-card__avatar circle-box"
+                    v-imgSrc:profile="user.image"
+                ></div>
+            </router-link>
+        </div>
+        <modal
+            :name="'modal'"
+            v-if="showModalRequestSeat"
+            @close="onModalClose"
+        >
+            <template #header><h3>
+                <span>{{ $t('pendingRequestCarpoodatos') }}</span>
+            </h3></template>
+            <template #body><div>
+                <div class="text-left carpoodatos">
+                    <p>
+                        {{ $t('pendingRequestAntesDeAceptarSolicitud') }}
+                    </p>
+                    <p>
+                        {{ $t('pendingRequestSiAceptasUnaSolicitud') }}
+                    </p>
+                    <p>
+                        {{ $t('pendingRequestPodranCalificarseAunque') }}
+                    </p>
+                    <p>
+                        {{ $t('pendingRequestNoPidasAsiento') }}
+                    </p>
+                    <p>
+                        {{ $t('pendingRequestCualquierDudaEscribinos') }}
+                        <a :href="'mailto:' + config.admin_email">
+                            {{ config.admin_email }}
+                        </a>
+                        {{ $t('pendingRequestONuestrasRedesSociales') }}
+                    </p>
+                </div>
+                <div class="check" style="margin-bottom: 10px">
+                    <label class="check-inline">
+                        <input
+                            type="checkbox"
+                            name="acceptRequestValor"
+                            value="0"
+                            v-model="acceptRequestValue"
+                        />
+                        <span>{{ $t('pendingRequestNoVolverAMostrarMensaje') }}</span>
+                    </label>
+                </div>
+                <div class="pending-request-card__modal-actions">
+                    <AppButton
+                        variant="success"
+                        :disabled="acceptInProcess"
+                        :loading="acceptInProcess"
+                        @click="toAcceptRequest"
+                    >
+                        {{ $t('pendingRequestAceptar') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
+                    <AppButton
+                        variant="secondary"
+                        @click="onModalToChat"
+                    >
+                        {{ $t('pendingRequestEnviarMensaje') }}
+                    </AppButton>
+                </div>
+            </div></template>
+        </modal>
+        <div class="pending-request-card__message">
+            <div class="pending-request-card__content">
+                <strong>{{ user.name }}</strong>
+                {{ $t('pendingRequestQuiereSubirseAlViaje') }}
+                <strong>{{
+                    trip.points[trip.points.length - 1].json_address.ciudad
+                }}</strong>
+                {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
+                {{ dayjs(trip.trip_date).format('HH:mm') }}.
+                <div class="pending-request-card__actions">
+                    <AppButton
+                        variant="success"
+                        size="sm"
+                        :disabled="acceptInProcess || rejectInProcess"
+                        :loading="acceptInProcess"
+                        @click="onAcceptRequest"
+                    >
+                        {{ $t('pendingRequestAceptar') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
+                    <AppButton
+                        variant="danger"
+                        size="sm"
+                        :disabled="rejectInProcess || acceptInProcess"
+                        :loading="rejectInProcess"
+                        @click="reject"
+                    >
+                        {{ $t('pendingRequestRechazar') }}
+                        <template #loading>
+                            <spinner class="blue"></spinner>
+                        </template>
+                    </AppButton>
+                    <AppButton
+                        variant="secondary"
+                        size="sm"
+                        @click="chat"
+                    >
+                        {{ $t('pendingRequestEnviarMensaje') }}
+                    </AppButton>
                 </div>
             </div>
         </div>
@@ -141,6 +137,7 @@ import dialogs from '../services/dialogs.js';
 import spinner from './Spinner.vue';
 import bus from '../services/bus-event.js';
 import dayjs from '../dayjs';
+import AppButton from './ui/AppButton.vue';
 
 export default {
     data() {
@@ -296,9 +293,90 @@ export default {
 
     components: {
         modal,
-        spinner
+        spinner,
+        AppButton
     },
 
     props: ['user', 'trip']
 };
 </script>
+
+<style scoped>
+.pending-request-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    background: var(--ds-card-bg);
+    border-radius: var(--ds-card-radius);
+    box-shadow: var(--ds-card-shadow);
+    margin: 0 0 1rem;
+    padding: 1.2em;
+    position: relative;
+}
+
+.pending-request-card__photo {
+    flex-shrink: 0;
+    width: auto;
+}
+
+.pending-request-card__avatar {
+    width: 5em;
+    height: 5em;
+}
+
+.pending-request-card__message {
+    flex: 0 1 auto;
+    min-width: 0;
+    width: auto;
+}
+
+.pending-request-card__content {
+    margin-left: 0;
+}
+
+.pending-request-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.8em;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.pending-request-card__modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 767px) {
+    .pending-request-card__avatar {
+        width: 3.5em;
+        height: 3.5em;
+    }
+
+    .pending-request-card__content {
+        font-size: 1rem;
+        line-height: 1.45;
+    }
+
+    .pending-request-card__actions {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .pending-request-card__actions :deep(.app-button) {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+        justify-content: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+</style>

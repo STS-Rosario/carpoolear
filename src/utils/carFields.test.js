@@ -7,6 +7,8 @@ import {
     carsNeedingCompletion,
     carDetailRows,
     carDisplayLabel,
+    formatCarSelectLabel,
+    formatCarDropdownLabel,
     carPayloadFromForm,
     CATALOG_OTHER_VALUE,
     CAR_YEAR_MIN,
@@ -137,10 +139,35 @@ describe('carFields', () => {
             })
         ).toEqual([
             { labelKey: 'marca', value: 'Toyota' },
-            { labelKey: 'modelo', value: 'Corolla' },
-            { labelKey: 'anio', value: '2020' },
+            { labelKey: 'modelo', value: 'Corolla 2020' },
             { labelKey: 'patente', value: 'AB123CD' }
         ]);
+    });
+
+    it('combines model and year on one modelo row', () => {
+        expect(
+            carDetailRows({
+                model_name: 'Gol',
+                year: 2015
+            })
+        ).toEqual([
+            { labelKey: 'marca', value: '' },
+            { labelKey: 'modelo', value: 'Gol 2015' },
+            { labelKey: 'patente', value: '' }
+        ]);
+
+        expect(
+            carDetailRows({
+                model_other: 'MiModelo',
+                year: ''
+            })[1]
+        ).toEqual({ labelKey: 'modelo', value: 'MiModelo' });
+
+        expect(
+            carDetailRows({
+                year: 2018
+            })[1]
+        ).toEqual({ labelKey: 'modelo', value: '2018' });
     });
 
     it('builds display label with catalog names', () => {
@@ -153,6 +180,42 @@ describe('carFields', () => {
                 year: 2020
             })
         ).toBe('Toyota · Corolla · 2020 · Blanco · AB123CD');
+    });
+
+    it('formats car select label as patente (make model)', () => {
+        expect(
+            formatCarSelectLabel({
+                patente: 'AE255HI',
+                brand_name: 'Renault',
+                model_name: 'Sandero'
+            })
+        ).toBe('AE255HI (Renault Sandero)');
+
+        expect(
+            formatCarSelectLabel({
+                patente: 'ABC123',
+                brand_other: 'Custom',
+                model_other: 'Van'
+            })
+        ).toBe('ABC123 (Custom Van)');
+
+        expect(formatCarSelectLabel({ patente: 'ONLY1' })).toBe('ONLY1');
+    });
+
+    it('formats car dropdown label as make model · patente', () => {
+        expect(
+            formatCarDropdownLabel({
+                patente: 'NSG345',
+                brand_name: 'Peugeot',
+                model_name: '405'
+            })
+        ).toBe('Peugeot 405 · NSG345');
+
+        expect(
+            formatCarDropdownLabel({
+                patente: 'ONLY1'
+            })
+        ).toBe('ONLY1');
     });
 
     it('builds payload for catalog brand with other model', () => {

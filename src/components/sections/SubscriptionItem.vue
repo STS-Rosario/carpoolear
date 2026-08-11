@@ -1,85 +1,62 @@
 <template>
     <div
-        class="suscription-item_component panel panel-default"
+        class="subscription-alert-card"
+        data-testid="subscription-alert-card"
         @click="search(true)"
     >
-        <div class="row panel-body">
-            <div class="col-xs-20">
-                <div
-                    class="suscription-item-detail"
-                    v-if="subscription.from_address"
-                >
-                    <div class="suscription-item-detail--content">
-                        <span>{{ $t('origen') }}:</span>
-                        <strong>{{ subscription.from_address }}</strong>
-                    </div>
-                </div>
-                <div
-                    class="suscription-item-detail"
-                    v-if="subscription.to_address"
-                >
-                    <div class="suscription-item-detail--content">
-                        <span>{{ $t('destino') }}:</span>
-                        <strong>{{ subscription.to_address }}</strong>
-                    </div>
-                </div>
-                <div
-                    class="suscription-item-detail"
-                    v-if="subscription.trip_date"
-                >
-                    <div class="suscription-item-detail--content">
-                        <span>{{ $t('fechaAproximada') }}:</span>
-                        <strong>{{
-                            dayjs(subscription.trip_date).format('DD/MM/YYYY')
-                        }}</strong>
-                    </div>
-                </div>
-                <div
-                    class="suscription-item-detail"
-                    v-if="subscription.is_passenger == 1"
-                >
-                    <div class="suscription-item-detail--content">
-                        <span>{{ $t('buscoPasajeros') }}</span>
-                    </div>
-                </div>
-                <div
-                    class="suscription-item-detail"
-                    v-else
-                >
-                    <div class="suscription-item-detail--content">
-                        <span v-html="$t('buscoConductor')"></span>
-                    </div>
-                </div>
-                <div class="suscription-item-detail" v-if="resultCount > 0">
-                    <div class="suscription-item-detail--content">
-                        <span>{{ $t('coincidencias') }}:</span>
-                        <span class="badge">
-                            {{ resultCount }}
-                            {{ resultCount === 20 ? '+' : '' }}
-                        </span>
-                    </div>
-                </div>
+        <div class="subscription-alert-card__body">
+            <div class="subscription-alert-card__detail">
+                <span>{{ $t('origen') }}:</span>
+                <strong>{{ subscription.from_address || emptyPlace }}</strong>
             </div>
-            <div class="col-xs-4">
-                <button
-                    v-on:click.stop="remove"
-                    :disabled="inProgress"
-                    class="btn btn-default"
-                    :aria-label="$t('eliminarSuscripcion')"
-                >
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </button>
+            <div class="subscription-alert-card__detail">
+                <span>{{ $t('destino') }}:</span>
+                <strong>{{ subscription.to_address || emptyPlace }}</strong>
+            </div>
+            <div class="subscription-alert-card__detail">
+                <span>{{ $t('fechaAproximada') }}</span>
+                <strong>{{ formattedTripDate || emptyPlace }}</strong>
+            </div>
+            <div
+                class="subscription-alert-card__detail subscription-alert-card__role"
+            >
+                <span>{{ roleLabel }}</span>
+            </div>
+            <div
+                class="subscription-alert-card__detail"
+                v-if="resultCount > 0"
+            >
+                <span>{{ $t('coincidencias') }}:</span>
+                <span class="subscription-alert-card__badge">
+                    {{ resultCount }}
+                    {{ resultCount === 20 ? '+' : '' }}
+                </span>
             </div>
         </div>
+        <AppButton
+            class="subscription-alert-card__delete"
+            data-testid="subscription-alert-delete"
+            variant="danger"
+            size="sm"
+            icon-left="fa fa-trash-o"
+            :label="$t('borrar')"
+            :disabled="inProgress"
+            :aria-label="$t('eliminarSuscripcion')"
+            @click.stop="remove"
+        />
     </div>
 </template>
 <script>
 import { mapActions } from 'pinia';
 import { useSubscriptionsStore } from '../../stores/subscriptions';
 import { useTripsStore } from '../../stores/trips';
+import AppButton from '../ui/AppButton.vue';
 import dayjs from '../../dayjs';
 export default {
     name: 'subscriptions-item',
+    components: {
+        AppButton
+    },
     props: {
         subscription: {
             type: Object,
@@ -99,8 +76,23 @@ export default {
     data() {
         return {
             inProgress: false,
-            resultCount: 0
+            resultCount: 0,
+            emptyPlace: '—'
         };
+    },
+    computed: {
+        formattedTripDate() {
+            if (!this.subscription || !this.subscription.trip_date) {
+                return '';
+            }
+            return dayjs(this.subscription.trip_date).format('DD/MM/YYYY');
+        },
+        roleLabel() {
+            if (this.subscription && this.subscription.is_passenger == 1) {
+                return this.$t('buscoPasajeros');
+            }
+            return String(this.$t('buscoConductor')).replace(/<[^>]+>/g, '');
+        }
     },
     mounted() {
         this.search(false);
@@ -113,7 +105,10 @@ export default {
         ...mapActions(useTripsStore, {
             searchTrip: 'tripsSearch'
         }),
-        remove() {
+        remove(event) {
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
+            }
             this.inProgress = true;
             this.removeStore(this.subscription)
                 .then(() => {
@@ -136,7 +131,6 @@ export default {
                 params.origin_lng = this.subscription.from_lng;
                 params.origin_radio = this.subscription.from_radio;
                 params.origin_id = this.subscription.from_id;
-                // this.subscription.from_json_address = [];
             }
             if (this.subscription.to_address) {
                 params.destination_name = this.subscription.to_address;
@@ -144,7 +138,6 @@ export default {
                 params.destination_lng = this.subscription.to_lng;
                 params.destination_radio = this.subscription.to_radio;
                 params.destination_id = this.subscription.to_id;
-                // this.subscription.to_json_address = [];
             }
             params.is_passenger = this.subscription.is_passenger;
             this.searchTrip(params).then((res) => {
@@ -161,7 +154,59 @@ export default {
 };
 </script>
 <style scoped>
-.badge {
-    background: red;
+.subscription-alert-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: none;
+    border-radius: var(--ds-card-radius);
+    background: var(--ds-card-bg);
+    box-shadow: var(--ds-card-shadow);
+    color: var(--ds-text-primary);
+    font-family: var(--ds-font-family);
+    cursor: pointer;
+}
+
+.subscription-alert-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.subscription-alert-card__detail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: var(--ds-text-secondary);
+}
+
+.subscription-alert-card__detail strong {
+    color: var(--ds-text-primary);
+    font-weight: var(--ds-font-weight-bold, 700);
+}
+
+.subscription-alert-card__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: var(--ds-action, #1e5f9e);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: var(--ds-font-weight-bold, 700);
+    line-height: 1.2;
+}
+
+.subscription-alert-card__delete {
+    flex: 0 0 auto;
 }
 </style>

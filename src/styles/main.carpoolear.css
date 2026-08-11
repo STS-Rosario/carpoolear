@@ -2,7 +2,6 @@
 
 :root {
     --main-background: #F0F0F0;
-    --main-font-color: #555;
     --main-error: #D72521;
     --medium-font-color: #666666;
     --soft-font-color: #BBBBBB;
@@ -28,7 +27,7 @@ html {
 body {
     background: var(--main-background);
     color: var(--main-font-color);
-    font-family: 'Roboto', 'Muli', sans-serif !important;
+    font-family: var(--ds-font-family) !important;
     font-weight: 400;
     padding: 0;
 }
@@ -208,6 +207,15 @@ input[type="checkbox"] {
     vertical-align: -2px;
     transform: scale(1.4);
     margin-left: 8px;
+    accent-color: #555;
+}
+
+.checkbox label,
+label:has(> input[type="checkbox"]) {
+    color: #555;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5em;
 }
 
 .btn-full-width {
@@ -738,10 +746,6 @@ textarea {
 }
 
 .header_notifications {
-    border: 1px solid #0180a9;
-    border-right: 0;
-    border-bottom: 0;
-    border-top: 0;
     padding-left: 10px;
     padding-right: 6px;
     cursor: pointer;
@@ -781,7 +785,13 @@ textarea {
     vertical-align: middle;
 }
 
-.header .header_panel-left>img:last-child {
+.header .header_panel-left .header_logo-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.header .header_panel-left .header_logo-link img:last-child {
     left: 22px;
     top: -12px;
     position: absolute;
@@ -1982,7 +1992,7 @@ textarea {
     border-right: 0;
 }
 
-.actionbar_icon i {
+.mobile-header-bar__icon i {
     cursor: pointer;
 }
 
@@ -2131,83 +2141,96 @@ textarea {
     height: 44px;
 }
 
-.actionbar {
-    position: fixed;
-    left: 0;
-    background: var(--main-background);
-    height: 52px;
-    width: 100%;
-    z-index: 10;
-
-}
-
-.actionbar-bottom {
-    bottom: 0;
-    border-top: 1px solid var(--medium-font-color);
-    text-align: center;
-    padding: 7px 0;
-}
-
-.actionbar-top {
+.mobile-header-bar {
     position: relative;
     top: 0;
     border-top: 1px solid var(--secondary-background);
     padding: 4px 10px;
     background-color: var(--secondary-background);
-    /*white-space: nowrap;*/
 }
 
-.actionbar-bottom .actionbar_item {
+.mobile-footer-bar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+    background: #eee;
+    border-top: 1px solid #e4e4e4;
+    box-shadow: none;
+    text-align: center;
+    padding: 5px 0 14px;
+}
+
+.mobile-footer-bar__item {
+    position: relative;
     vertical-align: middle;
-    display: inline-block;
-    color: var(--medium-font-color);
-    font-size: 26px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    color: #666;
     width: 20%;
     cursor: pointer;
 }
 
-.actionbar-bottom .actionbar_item i {
+.mobile-footer-bar__icon {
+    display: flex;
+    line-height: 0;
+}
+
+.mobile-footer-bar__icon .svgItem {
+    display: block;
+    line-height: 0;
+}
+
+.mobile-footer-bar__icon svg {
+    display: block;
+}
+
+.mobile-footer-bar__item i {
     font-size: 26px !important;
 }
 
-.actionbar_icon.pull-right {
+.mobile-header-bar__icon--right {
     cursor: pointer;
 }
 
-.actionbar-bottom .actionbar_item.active {
+.mobile-footer-bar__item.active {
     color: var(--secondary-background);
 }
 
-.actionbar-bottom .actionbar_item span {
-    vertical-align: middle;
-    padding: 2px 6px;
+.mobile-footer-bar__item.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -14px;
+    height: 4px;
+    background-color: var(--secondary-background);
 }
 
-.actionbar-bottom .actionbar_item .big {
-    color: var(--secondary-font-color);
-    background: red;
-    vertical-align: top;
+.mobile-footer-bar__item svg path {
+    fill: currentColor;
+    stroke: none;
 }
 
-.actionbar_section {
+.mobile-header-bar__section {
     display: inline-block;
     margin-top: 2px;
 }
 
-.actionbar_icon {
+.mobile-header-bar__icon {
     font-size: 26px;
-    /* width: 30px; */
 }
 
-.actionbar_title {
+.mobile-header-bar__title {
     font-size: 26px;
-    font-family: 'Muli';
+    font-family: var(--ds-font-family);
     font-weight: 300;
     margin-left: .5em;
 }
 
-/* Long titles on cuenta / identity settings (base.css caps title at 50% width) */
-.actionbar_title.actionbar_title--settings-wide {
+.mobile-header-bar__title.mobile-header-bar__title--settings-wide {
     max-width: 72%;
     font-size: 18px;
     font-weight: 600;
@@ -2280,14 +2303,10 @@ textarea {
 
 .app-container.blue {
     min-height: 100vh;
-    background: rgba(1, 155, 225, 1);
-    background: -moz-linear-gradient(-45deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(1, 155, 225, 1)), color-stop(100%, rgba(1, 101, 135, 1)));
-    background: -webkit-linear-gradient(-45deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
-    background: -o-linear-gradient(-45deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
-    background: -ms-linear-gradient(-45deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
-    background: linear-gradient(135deg, rgba(1, 155, 225, 1) 0%, rgba(1, 101, 135, 1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#019be1', endColorstr='#016587', GradientType=1);
+    background: #ffffff;
+    background-image: none;
+    filter: none;
+    color: var(--ds-text-primary);
 }
 .app-container.blue.reset-password .user-form .btn-primary {
     width: fit-content;
@@ -2381,8 +2400,8 @@ h2 {
     font-weight: 400;
 }
 
-.blue h2,
-.blue p {
+.blue:not(.login):not(.register):not(.reset-password) h2,
+.blue:not(.login):not(.register):not(.reset-password) p {
     color: #fff;
 }
 
@@ -2466,7 +2485,7 @@ textarea.has-error {
 }
 
 .user-form button {
-    margin-top: 1em;
+    margin-top: 0.5rem;
 }
 
 .user-form .btn-primary {
@@ -3171,7 +3190,7 @@ ul {
         display: none;
     }
 
-    .header .header_panel-left>img:last-child {
+    .header .header_panel-left .header_logo-link img:last-child {
         top: -22px;
     }
 }
@@ -3285,7 +3304,7 @@ ul {
         margin: 0 0 0 4em;
     }
 
-    .header .header_panel-left>img:last-child {
+    .header .header_panel-left .header_logo-link img:last-child {
         left: 62px;
     }
 

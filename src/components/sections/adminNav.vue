@@ -1,14 +1,15 @@
 <template>
     <div class="admin-nav-wrapper">
         <div class="admin-nav-mobile-header visible-xs">
-            <button
+            <AppButton
                 type="button"
-                class="btn btn-default admin-nav-mobile-toggle"
-                @click="toggleMobile"
+                variant="secondary"
+                icon-only
+                icon-left="fa fa-bars"
+                class="admin-nav-mobile-toggle"
                 :aria-label="$t('navegacionAdministracion')"
-            >
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </button>
+                @click="toggleMobile"
+            />
             <span class="admin-nav-mobile-title">{{ $t('navegacionAdministracion') }}</span>
         </div>
 
@@ -61,8 +62,13 @@
     </div>
 </template>
 <script>
+import AppButton from '../ui/AppButton.vue';
+
 export default {
     name: 'admin-nav',
+    components: {
+        AppButton
+    },
     data() {
         return {
             mobileOpen: false
@@ -84,6 +90,7 @@ export default {
 <style scoped>
 .admin-nav-wrapper {
     margin-bottom: 16px;
+    margin-top: 0;
 }
 
 .admin-nav-sidebar {
@@ -133,6 +140,10 @@ export default {
 }
 
 @media (max-width: 767px) {
+    .admin-nav-wrapper {
+        margin-top: 8px;
+    }
+
     .admin-nav-sidebar {
         display: none;
     }

@@ -12,8 +12,11 @@ const friendsStoreSource = fs.readFileSync(friendsStorePath, 'utf8');
 
 describe('FriendsRequest.vue friend search UI', () => {
     it('searches on debounced input and explicit search button click', () => {
-        expect(viewSource).toContain('v-debounceInput="onTextChange"');
+        expect(viewSource).toContain('debouncedSearch');
         expect(viewSource).toContain('@click="onTextChange"');
+        expect(viewSource).toMatch(
+            /<AppInput[\s\S]*?v-model="text"[\s\S]*?buscarPersonas/
+        );
     });
 
     it('only renders results while a search term is present', () => {

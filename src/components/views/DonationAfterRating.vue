@@ -19,26 +19,31 @@
                     {{ $t('ayudanosPlataforma') }}
                 </div>
                 <DonationAmountPicker v-model="donateValue" />
-                <div>
-                    <button
-                        class="btn btn-success btn-unica-vez"
+                <div class="donation-actions">
+                    <AppButton
+                        class="donation-actions__btn"
+                        variant="primary"
+                        @click="onDonateMonthly"
+                    >
+                        <span class="donation-actions__label">
+                            {{ $t('MENSUAL') }}
+                        </span>
+                        <span class="donation-actions__hint">
+                            ({{ $t('cancelaCuando') }})
+                        </span>
+                    </AppButton>
+                    <AppButton
+                        class="donation-actions__btn"
+                        variant="secondary"
                         @click="onDonateOnceTime"
                     >
                         {{ $t('unicaVez') }}
-                    </button>
-                    <button
-                        class="btn btn-info btn-mensualmente"
-                        @click="onDonateMonthly"
-                    >
-                        {{ $t('MENSUAL') }}
-                        <br />
-                        {{ $t('cancelaCuando') }}
-                    </button>
+                    </AppButton>
                 </div>
                 <div class="text-center">
                     <br />
                     <a
-                        href="/donar"
+                        href="/aportar"
                         target="_blank"
                         v-on:click.prevent="openDonationLink()"
                     >
@@ -64,6 +69,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import dialogs from '../../services/dialogs.js';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
+import AppButton from '../ui/AppButton.vue';
 import {
     appendDonationTrackingUserId,
     getDonationMonthlyUrl,
@@ -75,7 +81,8 @@ import { Capacitor } from '@capacitor/core';
 export default {
     name: 'donation-after-rating',
     components: {
-        DonationAmountPicker
+        DonationAmountPicker,
+        AppButton
     },
     props: {
         tripId: {
@@ -110,7 +117,7 @@ export default {
             }
         },
         async openDonationLink() {
-            let url = 'https://carpoolear.com.ar/donar';
+            let url = 'https://carpoolear.com.ar/aportar';
             if (this.user && this.user.id) {
                 url = `${url}?u=${this.user.id}`;
             }
@@ -181,6 +188,58 @@ export default {
     margin-top: 0;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
+}
+
+.donation-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.donation-actions__btn {
+    width: 100%;
+    min-height: 4.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: normal;
+    text-align: center;
+}
+
+.donation-actions__btn.app-button--secondary {
+    min-height: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.donation-actions__btn :deep(.app-button__label) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    line-height: 1.25;
+}
+
+.donation-actions__label {
+    display: block;
+}
+
+.donation-actions__hint {
+    display: block;
+    font-size: 0.85em;
+    font-weight: var(--ds-font-weight-normal, 400);
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .donation-actions {
+        flex-direction: row;
+    }
+
+    .donation-actions__btn {
+        flex: 1 1 0;
+        width: auto;
+    }
 }
 
 /* Clear fixed .actionbar-bottom (52px + safe area) on mobile */

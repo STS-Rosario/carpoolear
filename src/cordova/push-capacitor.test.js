@@ -17,3 +17,23 @@ describe('push-capacitor.js initWebPush permission request', () => {
         expect(source).toContain('window.Notification.requestPermission()');
     });
 });
+
+describe('push-capacitor.js native iOS FCM token', () => {
+    it('uses Firebase Messaging for iOS device_id and keeps PushNotifications for Android', () => {
+        expect(source).toContain('@capacitor-firebase/messaging');
+        expect(source).toContain('FirebaseMessaging');
+        expect(source).toContain('isIosNativePlatform');
+        expect(source).toContain('persistPushDeviceToken');
+        expect(source).toContain('getToken');
+        expect(source).toContain('tokenReceived');
+        expect(source).toContain('Capacitor.getPlatform()');
+        expect(source).toContain('isIosNativePlatform(platform)');
+    });
+
+    it('does not persist Capacitor registration token on iOS', () => {
+        expect(source).toContain('persistIosFcmToken');
+        expect(source).toMatch(
+            /PushNotifications\.addListener\(\s*'registration'[\s\S]*?useIosFcmToken[\s\S]*?persistIosFcmToken/
+        );
+    });
+});
