@@ -142,6 +142,36 @@ function getReviewStatusSortRank(item) {
     return REVIEW_STATUS_SORT_ORDER[status] ?? REVIEW_STATUS_SORT_ORDER.pending;
 }
 
+const WORKFLOW_STATE_SORT_ORDER = {
+    unpaid: 0,
+    awaitingPhotos: 1,
+    pendingReview: 2,
+    approved: 3,
+    rejected: 4
+};
+
+function getManualIdentityValidationWorkflowStateSortRank(item) {
+    if (!item?.paid) {
+        return WORKFLOW_STATE_SORT_ORDER.unpaid;
+    }
+
+    if (!item.submitted_at) {
+        return WORKFLOW_STATE_SORT_ORDER.awaitingPhotos;
+    }
+
+    const status = item.review_status;
+
+    if (status === 'approved' || status === 'approve') {
+        return WORKFLOW_STATE_SORT_ORDER.approved;
+    }
+
+    if (status === 'rejected' || status === 'reject') {
+        return WORKFLOW_STATE_SORT_ORDER.rejected;
+    }
+
+    return WORKFLOW_STATE_SORT_ORDER.pendingReview;
+}
+
 const SORT_COMPARATORS = {
     id: (a, b, direction) => compareNumbers(a.id ?? 0, b.id ?? 0, direction),
     user_name: (a, b, direction) => compareNullableValues(
@@ -164,11 +194,23 @@ const SORT_COMPARATORS = {
         getReviewStatusSortRank(b),
         direction
     ),
-    open_account_verification_tickets_count: (a, b, direction) => compareNumbers(
-        Number(a.open_account_verification_tickets_count || 0),
-        Number(b.open_account_verification_tickets_count || 0),
-        direction
-    )
+    open_account_verification_tickets_count: (a, b, direction) => {
+        const ticketCompare = compareNumbers(
+            Number(a.open_account_verification_tickets_count || 0),
+            Number(b.open_account_verification_tickets_count || 0),
+            direction
+        );
+
+        if (ticketCompare !== 0) {
+            return ticketCompare;
+        }
+
+        return compareNumbers(
+            getManualIdentityValidationWorkflowStateSortRank(a),
+            getManualIdentityValidationWorkflowStateSortRank(b),
+            direction
+        );
+    }
 };
 
 export function sortManualIdentityValidationsList(list, sortKey, sortDir = 'asc', now = Date.now()) {
