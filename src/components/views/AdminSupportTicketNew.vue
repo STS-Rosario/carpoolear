@@ -35,6 +35,7 @@
                         <option value="contact">{{ $t('ticketTypeContact') }}</option>
                         <option value="feedback">{{ $t('ticketTypeSuggestion') }}</option>
                         <option value="report">{{ $t('ticketTypeReport') }}</option>
+                        <option value="excess_contribution">{{ $t('ticketTypeExcessContribution') }}</option>
                     </select>
                 </AppField>
                 <AppInput v-model="createForm.subject" :label="$t('asuntoTicket')" />

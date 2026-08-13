@@ -15,7 +15,6 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain('user_name');
         expect(viewSource).toContain('exceso_contribucion_status');
         expect(viewSource).toContain('excess_contribution_support_tickets_count');
-        expect(viewSource).toContain('adminTripSearchRoute');
         expect(viewSource).toContain('adminExcessContributionDetailRoute');
         expect(viewSource).toContain('excessContributionSupportTicketsRoute');
         expect(viewSource).toContain('excessContributionStatusLabel');
@@ -32,6 +31,7 @@ describe('AdminExcesoContribucionDetail view', () => {
         expect(viewSource).toContain('adminTripSearchRoute');
         expect(viewSource).toContain('excessContributionSupportTicketsRoute');
         expect(viewSource).toContain('excessContributionStatusActions');
-        expect(viewSource).toContain("{{ $t('marcarExcesoContribucionResuelto') }}");
+        expect(viewSource).toContain('excessContributionStatusActionLabel');
+        expect(viewSource).toContain('updateTripExcessContributionStatus');
     });
 });

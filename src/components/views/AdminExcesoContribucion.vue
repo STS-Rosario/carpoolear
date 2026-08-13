@@ -9,23 +9,60 @@
                             <thead>
                                 <tr>
                                     <th scope="col">{{ $t('id') }}</th>
+                                    <th scope="col">{{ $t('usuario') }}</th>
                                     <th scope="col">{{ $t('origen') }}</th>
                                     <th scope="col">{{ $t('destino') }}</th>
                                     <th scope="col">{{ $t('contribucion') }}</th>
                                     <th scope="col">{{ $t('contribucionPotencial') }}</th>
                                     <th scope="col">{{ $t('tieneNotas') }}</th>
+                                    <th scope="col">{{ $t('ticketSoporte') }}</th>
+                                    <th scope="col">{{ $t('estado') }}</th>
                                     <th scope="col">{{ $t('acciones') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="item in list" :key="item.id">
-                                    <th scope="row">{{ item.id }}</th>
+                                    <th scope="row">
+                                        <router-link :to="adminExcessContributionDetailRoute(item.id)">
+                                            {{ item.id }}
+                                        </router-link>
+                                    </th>
+                                    <td>{{ item.user_name || $t('na') }}</td>
                                     <td>{{ item.from_town }}</td>
                                     <td>{{ item.to_town }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.seat_price_cents) }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</td>
                                     <td>{{ item.has_private_note ? $t('si') : $t('no') }}</td>
                                     <td>
+                                        <router-link
+                                            v-if="
+                                                item.user_id &&
+                                                Number(item.excess_contribution_support_tickets_count) > 0
+                                            "
+                                            :to="excessContributionSupportTicketsRoute(item.user_id)"
+                                            class="btn btn-link btn-sm"
+                                        >
+                                            {{ item.excess_contribution_support_tickets_count }}
+                                        </router-link>
+                                        <span v-else>-</span>
+                                    </td>
+                                    <td>
+                                        <span :class="excessContributionStatusClass(item.exceso_contribucion_status)">
+                                            {{
+                                                excessContributionStatusLabel(
+                                                    item.exceso_contribucion_status,
+                                                    (key) => $t(key)
+                                                )
+                                            }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <router-link
+                                            :to="adminExcessContributionDetailRoute(item.id)"
+                                            class="btn btn-link btn-sm"
+                                        >
+                                            {{ $t('verDetalle') }}
+                                        </router-link>
                                         <router-link
                                             v-if="item.user_id"
                                             :to="getAdminUserProfileRoute(item.user_id)"
@@ -71,7 +108,13 @@ import Loading from '../Loading';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
-import { formatTripContributionPesosLabel } from '../../utils/adminTripExcessContributionList';
+import {
+    adminExcessContributionDetailRoute,
+    excessContributionStatusClass,
+    excessContributionStatusLabel,
+    excessContributionSupportTicketsRoute,
+    formatTripContributionPesosLabel
+} from '../../utils/adminTripExcessContributionList';
 
 export default {
     name: 'AdminExcesoContribucion',
@@ -85,6 +128,10 @@ export default {
     },
     methods: {
         formatTripContributionPesosLabel,
+        excessContributionStatusLabel,
+        excessContributionStatusClass,
+        adminExcessContributionDetailRoute,
+        excessContributionSupportTicketsRoute,
         getAdminUserProfileRoute,
         fetchList() {
             const api = new AdminApi();
