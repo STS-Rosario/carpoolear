@@ -2,28 +2,36 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const viewPath = path.resolve(__dirname, 'AdminExcesoContribucion.vue');
+const listPath = path.resolve(__dirname, 'AdminExcesoContribucion.vue');
+const detailPath = path.resolve(__dirname, 'AdminExcesoContribucionDetail.vue');
 
-describe('AdminExcesoContribucion view', () => {
-    it('exists and loads trip excess contribution list from admin API', () => {
-        const viewSource = fs.readFileSync(viewPath, 'utf8');
+describe('AdminExcesoContribucion list view', () => {
+    it('renders enriched columns and detail navigation', () => {
+        const viewSource = fs.readFileSync(listPath, 'utf8');
 
-        expect(viewSource).toContain('getTripExcessContributions');
-        expect(viewSource).toContain('formatTripContributionPesosLabel');
+        expect(viewSource).toContain("{{ $t('usuario') }}");
+        expect(viewSource).toContain("{{ $t('ticketSoporte') }}");
+        expect(viewSource).toContain("{{ $t('estado') }}");
+        expect(viewSource).toContain('user_name');
+        expect(viewSource).toContain('exceso_contribucion_status');
+        expect(viewSource).toContain('excess_contribution_support_tickets_count');
+        expect(viewSource).toContain('adminTripSearchRoute');
+        expect(viewSource).toContain('adminExcessContributionDetailRoute');
+        expect(viewSource).toContain('excessContributionSupportTicketsRoute');
+        expect(viewSource).toContain('excessContributionStatusLabel');
     });
+});
 
-    it('renders required table columns and profile link', () => {
-        const viewSource = fs.readFileSync(viewPath, 'utf8');
+describe('AdminExcesoContribucionDetail view', () => {
+    it('loads detail from API and exposes status actions', () => {
+        const viewSource = fs.readFileSync(detailPath, 'utf8');
 
-        expect(viewSource).toContain("{{ $t('id') }}");
-        expect(viewSource).toContain("{{ $t('origen') }}");
-        expect(viewSource).toContain("{{ $t('destino') }}");
-        expect(viewSource).toContain("{{ $t('contribucion') }}");
-        expect(viewSource).toContain("{{ $t('contribucionPotencial') }}");
-        expect(viewSource).toContain("{{ $t('tieneNotas') }}");
-        expect(viewSource).toContain("{{ $t('verPerfil') }}");
+        expect(viewSource).toContain('getTripExcessContribution');
+        expect(viewSource).toContain('updateTripExcessContributionStatus');
         expect(viewSource).toContain('getAdminUserProfileRoute');
-        expect(viewSource).toContain('has_private_note');
-        expect(viewSource).toContain('AdminPaginationBar');
+        expect(viewSource).toContain('adminTripSearchRoute');
+        expect(viewSource).toContain('excessContributionSupportTicketsRoute');
+        expect(viewSource).toContain('excessContributionStatusActions');
+        expect(viewSource).toContain("{{ $t('marcarExcesoContribucionResuelto') }}");
     });
 });
