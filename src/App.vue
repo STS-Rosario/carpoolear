@@ -143,13 +143,27 @@ export default {
         ...mapActions(useAuthStore, {
             getConfig: 'getConfig',
             applyUserLocaleToI18n: 'applyUserLocaleToI18n'
-        })
+        }),
+        syncMobileTabBarBodyClass() {
+            if (typeof document === 'undefined') {
+                return;
+            }
+            document.body.classList.toggle(
+                'has-mobile-tab-bar',
+                this.mobileFooterSpacing
+            );
+        }
     },
     created() {
         this.applyUserLocaleToI18n(this.$i18n);
     },
     beforeMount() {
         this.getConfig();
+    },
+    beforeUnmount() {
+        if (typeof document !== 'undefined') {
+            document.body.classList.remove('has-mobile-tab-bar');
+        }
     },
     mounted() {
         if (this.isFacebookApp) {
@@ -171,6 +185,8 @@ export default {
         setTimeout(() => {
             this.showCustomSplash = false;
         }, CUSTOM_SPLASH_DISMISS_MS);
+
+        this.syncMobileTabBarBodyClass();
     },
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
@@ -304,6 +320,9 @@ export default {
             if (value && !value.__isLocal) {
                 this.runVersionCheck(value);
             }
+        },
+        mobileFooterSpacing() {
+            this.syncMobileTabBarBodyClass();
         }
     },
     data() {

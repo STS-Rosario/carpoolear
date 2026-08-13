@@ -18,7 +18,7 @@
                             item.id === 'my-trips' || item.id === 'messages'
                     }"
                 >
-                    <svgItem size="50" :icon="item.icon"></svgItem>
+                    <svgItem size="40" :icon="item.icon"></svgItem>
                     <span
                         class="mobile-footer-bar__badge"
                         v-if="
@@ -33,6 +33,11 @@
                     ></span>
                 </span>
                 <span class="mobile-footer-bar__label">{{ $t(item.labelKey) }}</span>
+                <span
+                    v-if="item.active"
+                    class="mobile-footer-bar__indicator"
+                    aria-hidden="true"
+                ></span>
             </div>
         </div>
         <div class="container hidden-xs" v-if="config.enable_footer">
@@ -187,8 +192,8 @@ h3 {
 }
 .mobile-footer-bar__badge {
     position: absolute;
-    top: -2px;
-    right: -4px;
+    top: 2px;
+    right: 0;
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -196,9 +201,9 @@ h3 {
 }
 .mobile-footer-bar__label {
     display: block;
-    font-size: 15px;
-    line-height: 1.15;
-    margin-top: 5px;
+    font-size: 13px;
+    line-height: 1.1;
+    margin-top: 2px;
     color: inherit;
 }
 .mobile-footer-bar__item.active .mobile-footer-bar__label {
