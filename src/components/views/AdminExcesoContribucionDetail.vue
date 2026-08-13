@@ -5,7 +5,7 @@
                 <AppButton
                     variant="secondary"
                     size="sm"
-                    class="mb-2"
+                    class="admin-exceso-back"
                     :to="{ name: 'admin-exceso-contribucion' }"
                 >
                     {{ $t('volver') }}
@@ -19,6 +19,22 @@
                         <h3>{{ $t('excesoContribucion') }} #{{ item.id }}</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="admin-exceso-action-links admin-exceso-action-links--top">
+                            <router-link
+                                v-if="item.user_id"
+                                :to="getAdminUserProfileRoute(item.user_id)"
+                                class="admin-exceso-action-link"
+                            >
+                                {{ $t('verPerfil') }}
+                            </router-link>
+                            <router-link
+                                :to="adminTripSearchRoute(item.id)"
+                                class="admin-exceso-action-link"
+                            >
+                                {{ $t('verViaje') }}
+                            </router-link>
+                        </div>
+
                         <h4>{{ $t('datosViaje') }}</h4>
                         <p>
                             <strong>{{ $t('id') }}:</strong>
@@ -66,19 +82,6 @@
                         </p>
 
                         <div class="admin-exceso-actions">
-                            <router-link
-                                v-if="item.user_id"
-                                :to="getAdminUserProfileRoute(item.user_id)"
-                                class="btn btn-link btn-sm"
-                            >
-                                {{ $t('verPerfil') }}
-                            </router-link>
-                            <router-link
-                                :to="adminTripSearchRoute(item.id)"
-                                class="btn btn-link btn-sm"
-                            >
-                                {{ $t('verViaje') }}
-                            </router-link>
                             <AppButton
                                 v-if="item.user_id"
                                 variant="secondary"
@@ -102,7 +105,7 @@
                             <AppButton
                                 v-for="status in statusActions"
                                 :key="status"
-                                :variant="status === 'resuelto' ? 'success' : 'secondary'"
+                                :variant="excessContributionStatusButtonVariant(status)"
                                 size="sm"
                                 class="admin-exceso-status-action"
                                 :disabled="updatingStatus"
@@ -128,6 +131,7 @@ import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     adminTripSearchRoute,
     excessContributionStatusActionLabel,
+    excessContributionStatusButtonVariant,
     excessContributionStatusActions,
     excessContributionStatusClass,
     excessContributionStatusLabel,
@@ -164,6 +168,7 @@ export default {
         excessContributionStatusLabel,
         excessContributionStatusClass,
         excessContributionStatusActionLabel,
+        excessContributionStatusButtonVariant,
         adminTripSearchRoute,
         excessContributionSupportTicketsRoute,
         getAdminUserProfileRoute,
@@ -217,7 +222,25 @@ export default {
 </script>
 
 <style scoped>
+.admin-exceso-back {
+    margin-bottom: 16px;
+}
+
 .admin-exceso-status-action + .admin-exceso-status-action {
     margin-left: 8px;
+}
+
+.admin-exceso-action-link {
+    font-size: 16px;
+    margin-right: 16px;
+}
+
+.admin-exceso-action-links {
+    margin-top: 10px;
+}
+
+.admin-exceso-action-links--top {
+    margin-top: 0;
+    margin-bottom: 16px;
 }
 </style>

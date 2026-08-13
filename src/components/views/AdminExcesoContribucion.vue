@@ -3,20 +3,30 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('excesoContribucion') }}</h2>
+                <div class="requires-action-toggle">
+                    <label>
+                        <input v-model="requiresActionOnly" type="checkbox" />
+                        {{ $t('soloRequierenAccion') }}
+                    </label>
+                </div>
                 <Loading :data="list">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">{{ $t('id') }}</th>
-                                    <th scope="col">{{ $t('usuario') }}</th>
-                                    <th scope="col">{{ $t('origen') }}</th>
-                                    <th scope="col">{{ $t('destino') }}</th>
-                                    <th scope="col">{{ $t('contribucion') }}</th>
-                                    <th scope="col">{{ $t('contribucionPotencial') }}</th>
-                                    <th scope="col">{{ $t('tieneNotas') }}</th>
-                                    <th scope="col">{{ $t('ticketSoporte') }}</th>
-                                    <th scope="col">{{ $t('estado') }}</th>
+                                    <th
+                                        v-for="column in sortableColumns"
+                                        :key="column.key"
+                                        scope="col"
+                                        class="admin-exceso-th-sort"
+                                        @click="toggleSort(column.key)"
+                                    >
+                                        {{ $t(column.labelKey) }}
+                                        <span
+                                            v-if="sortKey === column.key"
+                                            class="admin-exceso-sort-hint"
+                                        >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                                    </th>
                                     <th scope="col">{{ $t('acciones') }}</th>
                                 </tr>
                             </thead>
@@ -57,12 +67,13 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <router-link
+                                        <AppButton
+                                            variant="primary"
+                                            size="sm"
                                             :to="adminExcessContributionDetailRoute(item.id)"
-                                            class="btn btn-link btn-sm"
                                         >
                                             {{ $t('verDetalle') }}
-                                        </router-link>
+                                        </AppButton>
                                         <router-link
                                             v-if="item.user_id"
                                             :to="getAdminUserProfileRoute(item.user_id)"
@@ -105,15 +116,22 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
     adminExcessContributionDetailRoute,
+    buildTripExcessContributionListParams,
     excessContributionStatusClass,
     excessContributionStatusLabel,
     excessContributionSupportTicketsRoute,
-    formatTripContributionPesosLabel
+    formatTripContributionPesosLabel,
+    getNextTripExcessContributionSortState,
+    getRequiresActionOnlyExcessContributions,
+    parseTripExcessContributionListFromRoute,
+    saveRequiresActionOnlyExcessContributions,
+    TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS
 } from '../../utils/adminTripExcessContributionList';
 
 export default {
@@ -123,8 +141,26 @@ export default {
             list: null,
             listMeta: null,
             listPage: 1,
-            listPerPage: DEFAULT_ADMIN_PER_PAGE
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
+            requiresActionOnly: getRequiresActionOnlyExcessContributions(),
+            sortKey: null,
+            sortDir: 'asc',
+            sortableColumns: TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS
         };
+    },
+    watch: {
+        '$route.query': {
+            deep: true,
+            handler() {
+                this.initFromRouteQuery();
+                this.fetchList();
+            }
+        },
+        requiresActionOnly(value) {
+            saveRequiresActionOnlyExcessContributions(value);
+            this.listPage = 1;
+            this.syncRouteQuery();
+        }
     },
     methods: {
         formatTripContributionPesosLabel,
@@ -133,13 +169,57 @@ export default {
         adminExcessContributionDetailRoute,
         excessContributionSupportTicketsRoute,
         getAdminUserProfileRoute,
+        initFromRouteQuery() {
+            const parsed = parseTripExcessContributionListFromRoute(this.$route.query || {});
+            this.listPage = parsed.page;
+            this.listPerPage = parsed.perPage;
+            this.sortKey = parsed.sortKey;
+            this.sortDir = parsed.sortDir;
+            if (this.$route.query.requires_action_only != null) {
+                this.requiresActionOnly = parsed.requiresActionOnly;
+            }
+        },
+        syncRouteQuery() {
+            const query = {};
+            if (this.listPage > 1) {
+                query.page = String(this.listPage);
+            }
+            if (this.listPerPage !== DEFAULT_ADMIN_PER_PAGE) {
+                query.per_page = String(this.listPerPage);
+            }
+            if (this.requiresActionOnly) {
+                query.requires_action_only = '1';
+            }
+            if (this.sortKey) {
+                query.sort = this.sortKey;
+                query.direction = this.sortDir;
+            }
+            this.$router.replace({ query });
+        },
+        toggleSort(column) {
+            const next = getNextTripExcessContributionSortState(
+                this.sortKey,
+                this.sortDir,
+                column
+            );
+
+            this.sortKey = next.sortKey;
+            this.sortDir = next.sortDir;
+            this.listPage = 1;
+            this.syncRouteQuery();
+        },
         fetchList() {
             const api = new AdminApi();
+            const params = buildTripExcessContributionListParams({
+                page: this.listPage,
+                perPage: this.listPerPage,
+                requiresActionOnly: this.requiresActionOnly,
+                sortKey: this.sortKey,
+                sortDir: this.sortDir
+            });
+
             return api
-                .getTripExcessContributions({
-                    page: this.listPage,
-                    per_page: this.listPerPage
-                })
+                .getTripExcessContributions(params)
                 .then((res) => {
                     this.list = res.data || [];
                     this.listMeta = res.meta || null;
@@ -155,7 +235,7 @@ export default {
                 return;
             }
             this.listPage = pagination.current_page - 1;
-            this.fetchList();
+            this.syncRouteQuery();
         },
         goNextPage() {
             const pagination = this.listMeta && this.listMeta.pagination;
@@ -163,21 +243,44 @@ export default {
                 return;
             }
             this.listPage = pagination.current_page + 1;
-            this.fetchList();
+            this.syncRouteQuery();
         },
         onPerPageChange(perPage) {
             this.listPerPage = perPage;
             this.listPage = 1;
-            this.fetchList();
+            this.syncRouteQuery();
         }
     },
     mounted() {
+        this.initFromRouteQuery();
         this.fetchList();
     },
     components: {
         AdminLayout,
         AdminPaginationBar,
-        Loading
+        Loading,
+        AppButton
     }
 };
 </script>
+<style scoped>
+.requires-action-toggle {
+    margin-bottom: 16px;
+}
+
+.admin-exceso-th-sort {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.admin-exceso-th-sort:hover {
+    background: #f5f5f5;
+}
+
+.admin-exceso-sort-hint {
+    color: #666;
+    margin-left: 4px;
+    font-size: 12px;
+}
+</style>

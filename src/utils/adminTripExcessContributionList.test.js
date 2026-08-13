@@ -2,11 +2,18 @@ import { describe, expect, it } from 'vitest';
 import {
     adminExcessContributionDetailRoute,
     adminTripSearchRoute,
+    buildTripExcessContributionListParams,
     excessContributionStatusActions,
+    excessContributionStatusButtonVariant,
     excessContributionStatusClass,
     excessContributionStatusLabel,
     excessContributionSupportTicketsRoute,
-    formatTripContributionPesosLabel
+    formatTripContributionPesosLabel,
+    getNextTripExcessContributionSortState,
+    getRequiresActionOnlyExcessContributions,
+    parseTripExcessContributionListFromRoute,
+    saveRequiresActionOnlyExcessContributions,
+    TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS
 } from './adminTripExcessContributionList.js';
 
 describe('adminTripExcessContributionList', () => {
@@ -68,12 +75,95 @@ describe('adminTripExcessContributionList', () => {
     });
 
     describe('excessContributionStatusActions', () => {
-        it('lists other statuses as available actions', () => {
+        it('lists other statuses with en proceso first and pendiente last', () => {
             expect(excessContributionStatusActions('pendiente')).toEqual([
+                'en_proceso',
+                'resuelto',
+                'descartado'
+            ]);
+            expect(excessContributionStatusActions('en_proceso')).toEqual([
                 'resuelto',
                 'descartado',
-                'en_proceso'
+                'pendiente'
             ]);
+        });
+    });
+
+    describe('excessContributionStatusButtonVariant', () => {
+        it('maps descartado to danger and resuelto to success', () => {
+            expect(excessContributionStatusButtonVariant('descartado')).toBe('danger');
+            expect(excessContributionStatusButtonVariant('resuelto')).toBe('success');
+            expect(excessContributionStatusButtonVariant('pendiente')).toBe('secondary');
+        });
+    });
+
+    describe('list filters and sorting params', () => {
+        it('defaults requires action only preference to true', () => {
+            const storage = new Map();
+
+            expect(getRequiresActionOnlyExcessContributions({
+                getItem: (key) => storage.get(key) ?? null,
+                setItem: (key, value) => storage.set(key, value)
+            })).toBe(true);
+        });
+
+        it('persists requires action only preference', () => {
+            const storage = new Map();
+            const memoryStorage = {
+                getItem: (key) => storage.get(key) ?? null,
+                setItem: (key, value) => storage.set(key, value)
+            };
+
+            saveRequiresActionOnlyExcessContributions(false, memoryStorage);
+            expect(getRequiresActionOnlyExcessContributions(memoryStorage)).toBe(false);
+        });
+
+        it('builds list params with filter and sort', () => {
+            expect(buildTripExcessContributionListParams({
+                page: 2,
+                perPage: 25,
+                requiresActionOnly: true,
+                sortKey: 'user_name',
+                sortDir: 'asc'
+            })).toEqual({
+                page: 2,
+                per_page: 25,
+                requires_action_only: '1',
+                sort: 'user_name',
+                direction: 'asc'
+            });
+        });
+
+        it('parses route query for filter and sort', () => {
+            expect(parseTripExcessContributionListFromRoute({
+                page: '3',
+                requires_action_only: '1',
+                sort: 'id',
+                direction: 'desc'
+            })).toEqual({
+                page: 3,
+                perPage: 20,
+                requiresActionOnly: true,
+                sortKey: 'id',
+                sortDir: 'desc'
+            });
+        });
+
+        it('toggles sort direction for active column', () => {
+            expect(getNextTripExcessContributionSortState('id', 'desc', 'id')).toEqual({
+                sortKey: 'id',
+                sortDir: 'asc'
+            });
+            expect(getNextTripExcessContributionSortState(null, 'asc', 'user_name')).toEqual({
+                sortKey: 'user_name',
+                sortDir: 'asc'
+            });
+        });
+
+        it('defines sortable columns for the list table', () => {
+            expect(TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key)).toContain(
+                'exceso_contribucion_status'
+            );
         });
     });
 });
