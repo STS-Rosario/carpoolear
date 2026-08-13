@@ -39,6 +39,8 @@ const AdminUserRatings = () => import('../components/views/AdminUserRatings.vue'
 const AdminUserRecommendations = () =>
     import('../components/views/AdminUserRecommendations.vue');
 const AdminTrips = () => import('../components/views/AdminTrips.vue');
+const AdminExcesoContribucion = () => import('../components/views/AdminExcesoContribucion.vue');
+const AdminExcesoContribucionDetail = () => import('../components/views/AdminExcesoContribucionDetail.vue');
 const UsersDeleteList = () => import('../components/views/UsersDeleteList.vue');
 const BannedUsersList = () => import('../components/views/BannedUsersList.vue');
 const AdminManualIdentityValidations = () => import('../components/views/AdminManualIdentityValidations.vue');
@@ -1000,6 +1002,43 @@ export default [
                 header: {
                     titleKey: 'adminTrips',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/exceso-contribucion',
+        name: 'admin-exceso-contribucion',
+        component: AdminExcesoContribucion,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'excesoContribucion',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/exceso-contribucion/:tripId',
+        name: 'admin-exceso-contribucion-detail',
+        component: AdminExcesoContribucionDetail,
+        props: true,
+        beforeEnter: authAdmin,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'excesoContribucion',
+                    buttons: ['back']
                 }
             }
         }

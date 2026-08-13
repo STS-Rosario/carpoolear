@@ -106,6 +106,20 @@ class AdminApi extends TaggedApi {
         return this.get('/api/admin/mercado-pago-rejected-validations', params);
     }
 
+    getTripExcessContributions(params = {}) {
+        return this.get('/api/admin/trip-excess-contributions', params);
+    }
+
+    getTripExcessContribution(tripId) {
+        return this.get('/api/admin/trip-excess-contributions/' + tripId, {});
+    }
+
+    updateTripExcessContributionStatus(tripId, status) {
+        return this.post('/api/admin/trip-excess-contributions/' + tripId + '/status', {
+            status
+        });
+    }
+
     getMercadoPagoRejectedValidation(id) {
         return this.get(
             '/api/admin/mercado-pago-rejected-validations/' + id,

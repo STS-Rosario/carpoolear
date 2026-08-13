@@ -5,7 +5,8 @@ export const TICKET_TYPE_LABEL_KEYS = {
     feedback: 'ticketTypeSuggestion',
     report: 'ticketTypeReport',
     account_verification: 'ticketTypeAccountVerification',
-    account_recovery: 'ticketTypeAccountRecovery'
+    account_recovery: 'ticketTypeAccountRecovery',
+    excess_contribution: 'ticketTypeExcessContribution'
 };
 
 /** i18n keys for SupportTicket.priority values */
