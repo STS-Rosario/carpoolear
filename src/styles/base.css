@@ -21,6 +21,8 @@
     --actionbar-bakground: #F0F0F0;
 
     --calification-star-size: 14;
+
+    --app-mobile-footer-offset: calc(5.5rem + env(safe-area-inset-bottom, 0px));
   }
   html {
       font-size: 16px;
@@ -1922,12 +1924,15 @@
       padding: 4px 10px;
       background-color: var(--ds-header-bg, var(--secondary-background));
       box-sizing: border-box;
-      padding-top: calc(4px + constant(safe-area-inset-top));
-      padding-top: calc(4px + env(safe-area-inset-top));
       padding-left: calc(10px + constant(safe-area-inset-left));
       padding-left: calc(10px + env(safe-area-inset-left));
       padding-right: calc(10px + constant(safe-area-inset-right));
       padding-right: calc(10px + env(safe-area-inset-right));
+  }
+
+  .header > .mobile-header-bar:first-child {
+      padding-top: calc(4px + constant(safe-area-inset-top));
+      padding-top: calc(4px + env(safe-area-inset-top));
   }
 
   .mobile-header-bar__section {
@@ -2041,6 +2046,9 @@
       /* Measured from .header via --app-header-offset; fallbacks match legacy heights */
       padding-top: var(--app-header-offset, calc(51px + constant(safe-area-inset-top)));
       padding-top: var(--app-header-offset, calc(51px + env(safe-area-inset-top)));
+  }
+  .view-container--mobile-footer {
+      padding-bottom: var(--app-mobile-footer-offset);
   }
   .ios .view-container {
     padding-top: var(--app-header-offset, calc(77px + constant(safe-area-inset-top)));

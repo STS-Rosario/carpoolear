@@ -18,6 +18,13 @@ const capacitorConfig = fs.readFileSync(
     path.resolve(__dirname, '../../../capacitor.config.json'),
     'utf8'
 );
+const countdownBannerSource = fs.readFileSync(
+    path.resolve(
+        __dirname,
+        '../../components/IdentityValidationCountdownBanner.vue'
+    ),
+    'utf8'
+);
 
 describe('iOS Capacitor mobile header safe-area', () => {
     it('pins the fixed header to the viewport top so html safe-area is not applied twice', () => {
@@ -32,21 +39,27 @@ describe('iOS Capacitor mobile header safe-area', () => {
         );
     });
 
-    it('applies safe-area inset once on the mobile header bar itself', () => {
-        expect(headerMobileCss).toMatch(
-            /padding-top:\s*calc\(\s*var\(--ds-header-mobile-padding-y\)\s*\+\s*env\(safe-area-inset-top\)\s*\)/
-        );
+    it('applies safe-area inset only on the topmost mobile header bar', () => {
         expect(baseCss).toMatch(
-            /\.mobile-header-bar\s*\{[^}]*padding-top:\s*calc\(4px\s*\+\s*env\(safe-area-inset-top\)\)/s
+            /\.header\s*>\s*\.mobile-header-bar:first-child\s*\{[^}]*padding-top:\s*calc\(4px\s*\+\s*env\(safe-area-inset-top\)\)/s
+        );
+        expect(headerMobileCss).toMatch(
+            /\.header\s*>\s*\.mobile-header-bar--branded\.visible-xs:first-child\s*\{[^}]*env\(safe-area-inset-top\)/s
         );
     });
 
-    it('lets the status bar overlay the webview so the blue header fills the notch area', () => {
+    it('applies safe-area inset to the identity countdown banner at the top of the stack', () => {
+        expect(countdownBannerSource).toMatch(
+            /padding-top:\s*calc\(10px\s*\+\s*env\(safe-area-inset-top\)\)/
+        );
+    });
+
+    it('keeps Android out of edge-to-edge while iOS can overlay the notch', () => {
         expect(capacitorConfig).toMatch(
-            /"overlaysWebView"\s*:\s*true/
+            /"overlaysWebView"\s*:\s*false/
         );
         expect(mainJs).toMatch(
-            /setOverlaysWebView\(\s*\{\s*overlay:\s*true\s*\}\s*\)/
+            /setOverlaysWebView\(\s*\{[^}]*overlay:\s*Capacitor\.getPlatform\(\)\s*===\s*'ios'/
         );
         expect(mainJs).toMatch(
             /setBackgroundColor\(\s*\{\s*color:\s*'#1E5F9E'\s*\}\s*\)/

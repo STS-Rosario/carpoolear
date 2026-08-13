@@ -27,7 +27,10 @@
             <ImpersonationBanner v-if="isImpersonating" />
             <headerApp></headerApp>
             <main id="main">
-                <div class="view-container clearfix">
+                <div
+                    class="view-container clearfix"
+                    :class="{ 'view-container--mobile-footer': mobileFooterSpacing }"
+                >
                     <router-view></router-view>
                 </div>
             </main>
@@ -43,6 +46,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from './stores/auth';
+import { useActionbarsStore } from './stores/actionbars';
 import { useCordovaStore } from './stores/cordova';
 import { useDeviceStore } from './stores/device';
 import { useBackgroundStore } from './stores/background';
@@ -199,8 +203,15 @@ export default {
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp',
             firsTimeMobileAppOpen: 'firsTimeMobileAppOpen',
-            isBrowser: 'isBrowser'
+            isBrowser: 'isBrowser',
+            isMobile: 'isMobile'
         }),
+        ...mapState(useActionbarsStore, {
+            footerShow: 'footerShow'
+        }),
+        mobileFooterSpacing() {
+            return this.footerShow && this.isMobile;
+        },
         ...mapState(useServerStatusStore, {
             serverUnavailable: 'serverUnavailable'
         }),

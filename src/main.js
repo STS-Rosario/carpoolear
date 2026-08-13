@@ -55,10 +55,12 @@ const initializeCapacitorPlugins = async () => {
         return;
     }
 
-    // Configure StatusBar so the branded header paints under the notch once.
+    // iOS: header paints under the notch. Android: keep content below the status bar.
     await StatusBar.setStyle({ style: Style.Light });
     await StatusBar.setBackgroundColor({ color: '#1E5F9E' });
-    await StatusBar.setOverlaysWebView({ overlay: true });
+    await StatusBar.setOverlaysWebView({
+        overlay: Capacitor.getPlatform() === 'ios'
+    });
 
     // Hide splash screen after app loads
     setTimeout(async () => {

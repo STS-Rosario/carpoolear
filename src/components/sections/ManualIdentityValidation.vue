@@ -35,8 +35,6 @@
 
             <div v-else-if="!canUpload" class="manual-validation-pay">
                 <div class="manual-validation-main">
-                    <h1 class="manual-validation-title visible-xs-block">{{ $t('validacionManual') }}</h1>
-
                     <div v-if="unpaidPending" class="alert alert-warning manual-validation-unpaid-alert">
                         <strong>{{ $t('esperandoPagoValidacionManual') }}</strong>
                         <p>{{ $t('debesPagarParaContinuar') }}</p>
@@ -128,7 +126,6 @@
                     >
                         ← {{ $t('manualValidationVolverOpcionesDesktop') }}
                     </router-link>
-                    <h1 class="manual-validation-title visible-xs-block">{{ $t('validacionManual') }}</h1>
 
                     <div
                         v-if="statusPaidAt || paymentSuccess"
@@ -557,7 +554,6 @@ export default {
 
 <style scoped>
 .manual-identity-validation-component {
-    margin-top: 4rem;
     padding: 0 0 1em 0;
     color: #333;
 }
@@ -610,14 +606,6 @@ export default {
 .manual-validation-back-desktop:hover,
 .manual-validation-back-desktop:focus {
     color: #286090;
-}
-
-.manual-validation-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
-    line-height: 1.3;
-    color: #333;
 }
 
 .manual-validation-pay-success {

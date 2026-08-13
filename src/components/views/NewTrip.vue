@@ -2363,7 +2363,6 @@ textarea.form-control {
     .new-trip-component {
         padding-left: 1em;
         padding-right: 1em;
-        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
     }
 
     .new-trip-component .form-trip {
