@@ -30,6 +30,11 @@ describe('FooterApp mobile navigation', () => {
         expect(footerSource).toContain('stroke: none');
         expect(footerSource).not.toContain('stroke: currentColor');
     });
+
+    it('renders a bottom indicator element for the active tab', () => {
+        expect(footerSource).toContain('mobile-footer-bar__indicator');
+        expect(footerSource).toContain('v-if="item.active"');
+    });
 });
 
 describe('actionbars store mobile footer icons', () => {

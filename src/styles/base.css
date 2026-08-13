@@ -21,6 +21,8 @@
     --actionbar-bakground: #F0F0F0;
 
     --calification-star-size: 14;
+
+    --app-mobile-footer-offset: calc(68px + env(safe-area-inset-bottom, 0px));
   }
   html {
       font-size: 16px;
@@ -50,6 +52,11 @@
       padding-right: 0;
       padding-bottom: constant(safe-area-inset-bottom);
       padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  body.has-mobile-tab-bar {
+      /* Tab bar is fixed and already pads for the home indicator. */
+      padding-bottom: 0;
   }
 
   .app-container {
@@ -1922,12 +1929,15 @@
       padding: 4px 10px;
       background-color: var(--ds-header-bg, var(--secondary-background));
       box-sizing: border-box;
-      padding-top: calc(4px + constant(safe-area-inset-top));
-      padding-top: calc(4px + env(safe-area-inset-top));
       padding-left: calc(10px + constant(safe-area-inset-left));
       padding-left: calc(10px + env(safe-area-inset-left));
       padding-right: calc(10px + constant(safe-area-inset-right));
       padding-right: calc(10px + env(safe-area-inset-right));
+  }
+
+  .header > .mobile-header-bar:first-child {
+      padding-top: calc(4px + constant(safe-area-inset-top));
+      padding-top: calc(4px + env(safe-area-inset-top));
   }
 
   .mobile-header-bar__section {
@@ -1971,27 +1981,28 @@
       background: #eee;
       border-top: 1px solid #e4e4e4;
       box-shadow: none;
-      text-align: center;
-      padding-top: 5px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      box-sizing: border-box;
+      padding-top: 2px;
       padding-left: constant(safe-area-inset-left);
       padding-left: env(safe-area-inset-left);
       padding-right: constant(safe-area-inset-right);
       padding-right: env(safe-area-inset-right);
-      padding-bottom: calc(14px + constant(safe-area-inset-bottom));
-      padding-bottom: calc(14px + env(safe-area-inset-bottom));
-      min-height: calc(60px + constant(safe-area-inset-bottom));
-      min-height: calc(60px + env(safe-area-inset-bottom));
   }
 
   .mobile-footer-bar__item {
       position: relative;
-      vertical-align: middle;
-      display: inline-flex;
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-end;
       color: #666;
-      width: 20%;
       cursor: pointer;
+      padding-bottom: 10px;
   }
 
   .mobile-footer-bar__icon {
@@ -2016,13 +2027,11 @@
       color: var(--secondary-background);
   }
 
-  .mobile-footer-bar__item.active::after {
-      content: '';
+  .mobile-footer-bar__indicator {
       position: absolute;
       left: 0;
       right: 0;
-      bottom: calc(-14px - constant(safe-area-inset-bottom));
-      bottom: calc(-14px - env(safe-area-inset-bottom));
+      bottom: 0;
       height: 4px;
       background-color: var(--secondary-background);
   }
@@ -2041,6 +2050,9 @@
       /* Measured from .header via --app-header-offset; fallbacks match legacy heights */
       padding-top: var(--app-header-offset, calc(51px + constant(safe-area-inset-top)));
       padding-top: var(--app-header-offset, calc(51px + env(safe-area-inset-top)));
+  }
+  .view-container--mobile-footer {
+      padding-bottom: var(--app-mobile-footer-offset);
   }
   .ios .view-container {
     padding-top: var(--app-header-offset, calc(77px + constant(safe-area-inset-top)));

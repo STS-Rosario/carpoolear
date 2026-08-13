@@ -27,7 +27,10 @@
             <ImpersonationBanner v-if="isImpersonating" />
             <headerApp></headerApp>
             <main id="main">
-                <div class="view-container clearfix">
+                <div
+                    class="view-container clearfix"
+                    :class="{ 'view-container--mobile-footer': mobileFooterSpacing }"
+                >
                     <router-view></router-view>
                 </div>
             </main>
@@ -43,6 +46,7 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from './stores/auth';
+import { useActionbarsStore } from './stores/actionbars';
 import { useCordovaStore } from './stores/cordova';
 import { useDeviceStore } from './stores/device';
 import { useBackgroundStore } from './stores/background';
@@ -139,13 +143,27 @@ export default {
         ...mapActions(useAuthStore, {
             getConfig: 'getConfig',
             applyUserLocaleToI18n: 'applyUserLocaleToI18n'
-        })
+        }),
+        syncMobileTabBarBodyClass() {
+            if (typeof document === 'undefined') {
+                return;
+            }
+            document.body.classList.toggle(
+                'has-mobile-tab-bar',
+                this.mobileFooterSpacing
+            );
+        }
     },
     created() {
         this.applyUserLocaleToI18n(this.$i18n);
     },
     beforeMount() {
         this.getConfig();
+    },
+    beforeUnmount() {
+        if (typeof document !== 'undefined') {
+            document.body.classList.remove('has-mobile-tab-bar');
+        }
     },
     mounted() {
         if (this.isFacebookApp) {
@@ -167,6 +185,8 @@ export default {
         setTimeout(() => {
             this.showCustomSplash = false;
         }, CUSTOM_SPLASH_DISMISS_MS);
+
+        this.syncMobileTabBarBodyClass();
     },
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
@@ -199,8 +219,15 @@ export default {
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp',
             firsTimeMobileAppOpen: 'firsTimeMobileAppOpen',
-            isBrowser: 'isBrowser'
+            isBrowser: 'isBrowser',
+            isMobile: 'isMobile'
         }),
+        ...mapState(useActionbarsStore, {
+            footerShow: 'footerShow'
+        }),
+        mobileFooterSpacing() {
+            return this.footerShow && this.isMobile;
+        },
         ...mapState(useServerStatusStore, {
             serverUnavailable: 'serverUnavailable'
         }),
@@ -293,6 +320,9 @@ export default {
             if (value && !value.__isLocal) {
                 this.runVersionCheck(value);
             }
+        },
+        mobileFooterSpacing() {
+            this.syncMobileTabBarBodyClass();
         }
     },
     data() {

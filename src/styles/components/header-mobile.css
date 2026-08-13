@@ -6,12 +6,7 @@
         justify-content: space-between;
         flex-wrap: nowrap;
         gap: 0.75rem;
-        padding-top: calc(
-            var(--ds-header-mobile-padding-y) + constant(safe-area-inset-top)
-        );
-        padding-top: calc(
-            var(--ds-header-mobile-padding-y) + env(safe-area-inset-top)
-        );
+        padding-top: var(--ds-header-mobile-padding-y);
         padding-right: calc(
             var(--ds-header-mobile-padding-x) + constant(safe-area-inset-right)
         );
@@ -26,6 +21,15 @@
             var(--ds-header-mobile-padding-x) + env(safe-area-inset-left)
         );
         min-height: 3.5rem;
+    }
+
+    .header > .mobile-header-bar--branded.visible-xs:first-child {
+        padding-top: calc(
+            var(--ds-header-mobile-padding-y) + constant(safe-area-inset-top)
+        );
+        padding-top: calc(
+            var(--ds-header-mobile-padding-y) + env(safe-area-inset-top)
+        );
     }
 
     .mobile-header-bar--branded .mobile-header-bar__brand {

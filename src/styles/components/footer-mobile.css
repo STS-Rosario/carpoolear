@@ -1,0 +1,8 @@
+@media (max-width: 767px) {
+    /* Bootstrap .visible-xs sets display:block !important; keep tabs on one row */
+    .mobile-footer-bar.visible-xs {
+        display: flex !important;
+        flex-direction: row;
+        align-items: flex-end;
+    }
+}

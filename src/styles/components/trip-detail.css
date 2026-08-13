@@ -342,7 +342,7 @@
 
     .trip-detail--mobile,
     .trip-detail.trip-detail--mobile {
-        padding: 0 0 calc(5.5rem + env(safe-area-inset-bottom, 0px));
+        padding: 0;
         background: var(--trip-detail-canvas);
     }
 

@@ -83,6 +83,8 @@ export default {
 .identity-validation-countdown-banner {
     width: 100%;
     padding: 10px 14px;
+    padding-top: calc(10px + constant(safe-area-inset-top));
+    padding-top: calc(10px + env(safe-area-inset-top));
     background: #c00;
     color: #fff;
     text-align: center;
