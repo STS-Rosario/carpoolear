@@ -37,6 +37,9 @@
                     <router-link :to="{ name: 'admin-trips' }">{{ $t('adminNavViajes') }}</router-link>
                 </li>
                 <li>
+                    <router-link :to="{ name: 'admin-exceso-contribucion' }">{{ $t('adminNavExcesoContribucion') }}</router-link>
+                </li>
+                <li>
                     <router-link :to="{ name: 'admin-banned-users' }">{{ $t('usuariosBloqueados') }}</router-link>
                 </li>
                 <li>
