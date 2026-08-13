@@ -123,6 +123,7 @@ import {
     removeEmptyIntermediatePoints
 } from '../../utils/tripCreationPoints.js';
 import { TRIP_INFO_STATUS } from '../../utils/tripCreationTripInfo.js';
+import { buildTripDateForApi } from '../../utils/tripDateForApi.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
 
@@ -792,7 +793,7 @@ export default {
             if (trip.trip_date) {
                 this.date = dayjs(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
                 this.dateAnswer = dayjs(trip.trip_date.split(' ')[0]).format('YYYY-MM-DD');
-                this.time = trip.trip_date.split(' ')[1];
+                this.time = dayjs(trip.trip_date).format('HH:mm');
             }
         }
         
@@ -1311,7 +1312,10 @@ export default {
 
             if (!useWeeklySchedule) {
                 // Only include trip_date when in specific date view (not using weekly schedule)
-                tripInfo.trip_date = tripObj.dateAnswer + ' ' + tripObj.time + ':00';
+                tripInfo.trip_date = buildTripDateForApi(
+                    tripObj.dateAnswer,
+                    tripObj.time
+                );
             } else {
                 // Only include weekly_schedule when in weekly schedule view
                 tripInfo.weekly_schedule = this.weeklySchedule;
