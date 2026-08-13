@@ -151,6 +151,55 @@ describe('adminManualIdentityValidationsList', () => {
             expect(sortManualIdentityValidationsList(list, 'review_status', 'asc').map((item) => item.id))
                 .toEqual([4, 2, 1, 3]);
         });
+
+        it('sorts by open account verification ticket count descending', () => {
+            const list = [
+                { id: 1, open_account_verification_tickets_count: 0 },
+                { id: 2, open_account_verification_tickets_count: 2 },
+                { id: 3, open_account_verification_tickets_count: 1 }
+            ];
+
+            expect(
+                sortManualIdentityValidationsList(
+                    list,
+                    'open_account_verification_tickets_count',
+                    'desc'
+                ).map((item) => item.id)
+            ).toEqual([2, 3, 1]);
+        });
+
+        it('sorts by open account verification ticket count then workflow state', () => {
+            const list = [
+                {
+                    id: 1,
+                    paid: true,
+                    submitted_at: '2026-06-01 10:00:00',
+                    review_status: 'pending',
+                    open_account_verification_tickets_count: 1
+                },
+                {
+                    id: 2,
+                    paid: false,
+                    review_status: 'pending',
+                    open_account_verification_tickets_count: 1
+                },
+                {
+                    id: 3,
+                    paid: true,
+                    submitted_at: null,
+                    review_status: 'awaiting_photos',
+                    open_account_verification_tickets_count: 1
+                }
+            ];
+
+            expect(
+                sortManualIdentityValidationsList(
+                    list,
+                    'open_account_verification_tickets_count',
+                    'asc'
+                ).map((item) => item.id)
+            ).toEqual([2, 3, 1]);
+        });
     });
 
     describe('MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS', () => {
@@ -193,6 +242,22 @@ describe('adminManualIdentityValidationsList', () => {
                 per_page: 20
             });
         });
+
+        it('includes open account verification ticket sort params for the API', () => {
+            expect(
+                buildManualIdentityValidationListParams({
+                    page: 1,
+                    perPage: 20,
+                    sortKey: 'open_account_verification_tickets_count',
+                    sortDir: 'desc'
+                })
+            ).toEqual({
+                page: 1,
+                per_page: 20,
+                sort: 'open_account_verification_tickets_count',
+                direction: 'desc'
+            });
+        });
     });
 
     describe('parseManualIdentityValidationListFromRoute', () => {
@@ -233,6 +298,16 @@ describe('adminManualIdentityValidationsList', () => {
         it('defaults to ascending when selecting other columns for the first time', () => {
             expect(getNextManualIdentityValidationSortState(null, 'asc', 'user_name')).toEqual({
                 sortKey: 'user_name',
+                sortDir: 'asc'
+            });
+            expect(
+                getNextManualIdentityValidationSortState(
+                    null,
+                    'asc',
+                    'open_account_verification_tickets_count'
+                )
+            ).toEqual({
+                sortKey: 'open_account_verification_tickets_count',
                 sortDir: 'asc'
             });
         });
