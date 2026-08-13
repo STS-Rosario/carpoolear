@@ -177,6 +177,7 @@ export default {
             this.sortDir = parsed.sortDir;
             if (this.$route.query.requires_action_only != null) {
                 this.requiresActionOnly = parsed.requiresActionOnly;
+                saveRequiresActionOnlyExcessContributions(parsed.requiresActionOnly);
             }
         },
         syncRouteQuery() {
@@ -253,6 +254,7 @@ export default {
     },
     mounted() {
         this.initFromRouteQuery();
+        saveRequiresActionOnlyExcessContributions(this.requiresActionOnly);
         this.fetchList();
     },
     components: {

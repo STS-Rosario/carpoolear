@@ -22,7 +22,8 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain("{{ $t('soloRequierenAccion') }}");
         expect(viewSource).toContain('requiresActionOnly');
         expect(viewSource).toContain('toggleSort');
-        expect(viewSource).toContain('buildTripExcessContributionListParams');
+        expect(viewSource).toContain('saveRequiresActionOnlyExcessContributions');
+        expect(viewSource).toContain('getRequiresActionOnlyExcessContributions');
         expect(viewSource).toContain('admin-exceso-th-sort');
     });
 });
