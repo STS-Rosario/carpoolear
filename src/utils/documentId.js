@@ -82,7 +82,8 @@ export function resolveProfileIdFormats(config = {}) {
     return [];
 }
 
-export function formatDocumentId(value, formats) {
+export function formatDocumentId(value, formats, options = {}) {
+    const { allowPartial = false } = options;
     const cleaned = cleanDocumentIdValue(value);
     if (!cleaned) {
         return '';
@@ -92,6 +93,10 @@ export function formatDocumentId(value, formats) {
     const best = findBestPatternMatch(cleaned, patterns, true);
     if (best) {
         return best.match.formatted;
+    }
+
+    if (!allowPartial) {
+        return '';
     }
 
     const partialBest = findBestPatternMatch(cleaned, patterns, false);
@@ -155,4 +160,6 @@ export function getMaxDocumentIdInputLengthFromConfig(config) {
     return getMaxDocumentIdInputLength(resolveProfileIdFormats(config));
 }
 
-export { cleanDocumentIdValue, formatId };
+export function formatDocumentIdInput(value, formats) {
+    return formatDocumentId(value, formats, { allowPartial: true });
+}
