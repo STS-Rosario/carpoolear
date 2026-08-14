@@ -1,5 +1,6 @@
 import {
     formatDocumentId,
+    parseProfileIdFormat,
     resolveProfileIdFormats
 } from './documentId';
 
@@ -11,14 +12,13 @@ function resolveFormats(profileIdFormatOrConfig) {
     if (
         profileIdFormatOrConfig &&
         typeof profileIdFormatOrConfig === 'object' &&
-        (profileIdFormatOrConfig.profile_id_formats ||
-            profileIdFormatOrConfig.profile_id_format)
+        profileIdFormatOrConfig.profile_id_format
     ) {
         return resolveProfileIdFormats(profileIdFormatOrConfig);
     }
 
-    if (profileIdFormatOrConfig) {
-        return [{ type: 'default', pattern: profileIdFormatOrConfig }];
+    if (typeof profileIdFormatOrConfig === 'string') {
+        return parseProfileIdFormat(profileIdFormatOrConfig);
     }
 
     return [];

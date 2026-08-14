@@ -159,6 +159,9 @@
                             <span class="description">
                                 {{ $t('incentivoDoc') }} {{ $t('doc') }}
                                 {{ $t('momentoViajar') }}
+                                <span v-if="documentIdPlaceholder">
+                                    ({{ documentIdPlaceholder }})
+                                </span>
                             </span>
                         </template>
                     </AppInput>

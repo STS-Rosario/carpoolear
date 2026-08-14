@@ -101,7 +101,15 @@
                                 :maxlength="documentIdMaxLength"
                                 :error="dniError.state ? dniError.message : ''"
                             >
-                                <template #label>{{ $t('numeroDeDocumento') }}</template>
+                                <template #label>
+                                    {{ $t('numeroDeDocumento') }}
+                                    <span
+                                        v-if="documentIdPlaceholder"
+                                        class="description"
+                                    >
+                                        ({{ documentIdPlaceholder }})
+                                    </span>
+                                </template>
                             </AppInput>
 
                             <AppInput

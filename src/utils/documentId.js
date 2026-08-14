@@ -45,7 +45,7 @@ function resolvePatterns(formats) {
     }
 
     if (typeof formats === 'string' && formats.length > 0) {
-        return [formats];
+        return parseProfileIdFormat(formats);
     }
 
     return [];
@@ -68,13 +68,20 @@ function findBestPatternMatch(cleaned, patterns, requireComplete = false) {
     return best;
 }
 
-export function resolveProfileIdFormats(config = {}) {
-    if (Array.isArray(config.profile_id_formats) && config.profile_id_formats.length) {
-        return config.profile_id_formats;
+export function parseProfileIdFormat(value) {
+    if (!value || typeof value !== 'string') {
+        return [];
     }
 
+    return value
+        .split(',')
+        .map((pattern) => pattern.trim())
+        .filter(Boolean);
+}
+
+export function resolveProfileIdFormats(config = {}) {
     if (config.profile_id_format) {
-        return [{ type: 'default', pattern: config.profile_id_format }];
+        return parseProfileIdFormat(config.profile_id_format);
     }
 
     return [];
@@ -159,9 +166,7 @@ export function getMaxDocumentIdInputLengthFromConfig(config) {
 }
 
 export function getDocumentIdPlaceholderFromConfig(config) {
-    return resolveProfileIdFormats(config)
-        .map((entry) => entry.pattern)
-        .join(' / ');
+    return resolveProfileIdFormats(config).join(' / ');
 }
 
 export function formatDocumentIdInput(value, formats) {
