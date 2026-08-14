@@ -41,6 +41,14 @@ describe('formatMigrationFieldValue', () => {
         ).toBe('30.123.456');
     });
 
+    it('formats passport nro_doc for display', () => {
+        expect(
+            formatMigrationFieldValue('nro_doc', { nro_doc: 'A33070219' }, {
+                profileIdFormat: '##.###.###,A########'
+            })
+        ).toBe('A33070219');
+    });
+
     it('returns em dash when user or value is missing', () => {
         expect(formatMigrationFieldValue('nro_doc', null, {})).toBe('—');
         expect(formatMigrationFieldValue('email', { email: '' }, {})).toBe('—');

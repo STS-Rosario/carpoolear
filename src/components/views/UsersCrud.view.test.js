@@ -6,13 +6,14 @@ const viewPath = path.resolve(__dirname, 'UsersCrud.vue');
 const source = fs.readFileSync(viewPath, 'utf8');
 
 describe('UsersCrud admin edit view', () => {
-    it('formats DNI via model-value and update handler like UpdateProfile', () => {
+    it('formats document id via model-value and update handler like UpdateProfile', () => {
         expect(source).toMatch(
             /<AppInput[\s\S]*?id="input-dni"[\s\S]*?:model-value="newInfo\.nro_doc"/
         );
         expect(source).toMatch(/@update:modelValue="onDniModelUpdate"/);
         expect(source).toContain('onDniModelUpdate(value)');
-        expect(source).toContain('formatId(value, this.settings.profile_id_format)');
+        expect(source).toContain('formatDocumentIdInput(');
+        expect(source).toContain('resolveProfileIdFormats(this.settings)');
     });
 
     it('keeps phone number keydown and paste guards on AppInput', () => {

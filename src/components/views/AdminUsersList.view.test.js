@@ -15,7 +15,7 @@ describe('AdminUsersList view', () => {
         expect(viewSource).toContain('{{ displayDniOrDash(u.nro_doc) }}');
         expect(viewSource).toContain('{{ displayOrDash(u.mobile_phone) }}');
         expect(viewSource).toContain('displayDniOrDash(value)');
-        expect(viewSource).toContain('profile_id_format');
+        expect(viewSource).toContain('this.config');
     });
 
     it('syncs search, page and sorting in route query for back navigation persistence', () => {

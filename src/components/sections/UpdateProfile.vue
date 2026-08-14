@@ -143,8 +143,8 @@
                         type="tel"
                         :model-value="user.nro_doc"
                         @update:modelValue="onDniModelUpdate"
-                        :placeholder="config.profile_id_format"
-                        :maxlength="(config.profile_id_format).length"
+                        :placeholder="documentIdPlaceholder"
+                        :maxlength="documentIdMaxLength"
                         :disabled="isDniLockedByValidation"
                         :title="dniInputTitle"
                         :error="dniError.state ? dniError.message : ''"
@@ -159,6 +159,9 @@
                             <span class="description">
                                 {{ $t('incentivoDoc') }} {{ $t('doc') }}
                                 {{ $t('momentoViajar') }}
+                                <span v-if="documentIdPlaceholder">
+                                    ({{ documentIdPlaceholder }})
+                                </span>
                             </span>
                         </template>
                     </AppInput>
@@ -591,7 +594,16 @@ import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useProfileStore } from '../../stores/profile';
-import { inputIsNumber, formatId, cleanId } from '../../services/utility';
+import { inputIsNumber } from '../../services/utility';
+import {
+    cleanDocumentIdForStorageFromConfig,
+    formatDocumentIdFromConfig,
+    formatDocumentIdInput,
+    getDocumentIdPlaceholderFromConfig,
+    getMaxDocumentIdInputLengthFromConfig,
+    isValidDocumentIdForConfig,
+    resolveProfileIdFormats
+} from '../../utils/documentId';
 import Uploadfile from '../Uploadfile';
 import DatePicker from '../DatePicker';
 import SvgItem from '../SvgItem';
@@ -671,6 +683,12 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
+        documentIdMaxLength() {
+            return getMaxDocumentIdInputLengthFromConfig(this.config);
+        },
+        documentIdPlaceholder() {
+            return getDocumentIdPlaceholderFromConfig(this.config);
+        },
         iptUser() {
             if (this.user) {
                 return this.user.name;
@@ -750,9 +768,9 @@ export default {
         syncProfileDraftFromStore() {
             this.user = cloneProfileUser(this.userData);
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = formatId(
+                this.user.nro_doc = formatDocumentIdFromConfig(
                     this.user.nro_doc,
-                    this.config.profile_id_format
+                    this.config
                 );
             }
         },
@@ -793,14 +811,11 @@ export default {
             inputIsNumber(value);
         },
         // Handle DNI input - format using pattern
-        handleDniInput(event) {
-            const formatted = formatId(event.target.value, this.config.profile_id_format);
-            event.target.value = formatted;
-            // Update the Vue data model with the formatted value
-            this.user.nro_doc = formatted;
-        },
         onDniModelUpdate(value) {
-            this.user.nro_doc = formatId(value, this.config.profile_id_format);
+            this.user.nro_doc = formatDocumentIdInput(
+                value,
+                resolveProfileIdFormats(this.config)
+            );
         },
         onPhotoChange(data) {
             this.loadingImg = true;
@@ -842,7 +857,10 @@ export default {
             this.loading = true;
             // Ensure user.nro_doc is raw value (no dots) before sending
             if (this.user && this.user.nro_doc) {
-                this.user.nro_doc = cleanId(this.user.nro_doc, this.config.profile_id_format);
+                this.user.nro_doc = cleanDocumentIdForStorageFromConfig(
+                    this.user.nro_doc,
+                    this.config
+                );
             }
             // Only send properties the backend allows for profile edit (email is read-only)
             const allowedProfileUpdateKeys = [
@@ -1018,14 +1036,14 @@ export default {
 
             // Get raw DNI value (strip any dots that might be present)
             const dniRaw = this.user && this.user.nro_doc
-                ? cleanId(this.user.nro_doc, this.config.profile_id_format)
+                ? cleanDocumentIdForStorageFromConfig(this.user.nro_doc, this.config)
                 : '';
-            
+
             if (!dniRaw || dniRaw.length < 1) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('olvidasteDni');
                 globalError = true;
-            } else if (dniRaw.length > 0 && dniRaw.length < 7) {
+            } else if (!isValidDocumentIdForConfig(this.user.nro_doc, this.config)) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;

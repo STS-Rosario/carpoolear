@@ -538,7 +538,7 @@ export default {
         },
         mismatchDetails() {
             return getIdentityValidationMismatchDetails(this.$route.query || {}, {
-                profileIdFormat: this.config && this.config.profile_id_format
+                profileIdFormat: this.config
             });
         },
         mismatchSupportWarningKey() {

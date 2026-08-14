@@ -34,7 +34,7 @@ describe('AdminUserMigrationNew view', () => {
 
     it('formats DNI in the migration field comparison table', () => {
         expect(source).toContain('formatMigrationFieldValue');
-        expect(source).toContain('profile_id_format');
+        expect(source).toContain('profileIdFormat: this.config');
     });
 
     it('renders the user email and a friendly join date in the field comparison table', () => {
