@@ -1,5 +1,3 @@
-import { formatId } from '../services/utility';
-
 function cleanDocumentIdValue(value) {
     return String(value || '')
         .replace(/[^a-zA-Z0-9]/g, '')
