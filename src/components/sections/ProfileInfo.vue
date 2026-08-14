@@ -246,7 +246,7 @@ import { useConversationsStore } from '../../stores/conversations';
 import { useFriendsStore } from '../../stores/friends';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
-import { formatId } from '../../services/utility';
+import { formatDocumentIdFromConfig } from '../../utils/documentId';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
 import AppButton from '../ui/AppButton.vue';
 
@@ -272,7 +272,7 @@ export default {
             if (!this.profile || !this.profile.nro_doc) {
                 return '';
             }
-            return formatId(this.profile.nro_doc, this.config.profile_id_format);
+            return formatDocumentIdFromConfig(this.profile.nro_doc, this.config);
         },
         visibleCars() {
             return activeCarsWithPlate(this.profile?.cars);

@@ -44,6 +44,10 @@ const MOCK_CONFIG = {
   trips_focus_next: false,
   autocomplete_select_first: false,
   profile_id_format: '##.###.###',
+  profile_id_formats: [
+    { type: 'dni', pattern: '##.###.###' },
+    { type: 'passport', pattern: 'A########' }
+  ],
   weekly_schedule: false,
   web_push_notification: false,
   price_show_cents: false,

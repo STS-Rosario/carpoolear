@@ -275,7 +275,7 @@ export default {
             }
             if (fieldKey === 'nro_doc') {
                 return formatMigrationFieldValue(fieldKey, user, {
-                    profileIdFormat: this.config && this.config.profile_id_format
+                    profileIdFormat: this.config
                 });
             }
             const value = user[fieldKey];

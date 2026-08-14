@@ -97,8 +97,8 @@
                                 type="tel"
                                 :model-value="newInfo.nro_doc"
                                 @update:modelValue="onDniModelUpdate"
-                                :placeholder="$t('doc')"
-                                :maxlength="(settings.profile_id_format).length"
+                                :placeholder="documentIdPlaceholder"
+                                :maxlength="documentIdMaxLength"
                                 :error="dniError.state ? dniError.message : ''"
                             >
                                 <template #label>{{ $t('numeroDeDocumento') }}</template>
@@ -399,7 +399,16 @@ import { useAuthStore } from '../../stores/auth';
 import { useAdminStore } from '../../stores/admin';
 import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
-import { inputIsNumber, formatId, cleanId } from '../../services/utility';
+import { inputIsNumber } from '../../services/utility';
+import {
+    cleanDocumentIdForStorageFromConfig,
+    formatDocumentIdFromConfig,
+    formatDocumentIdInput,
+    getDocumentIdPlaceholderFromConfig,
+    getMaxDocumentIdInputLengthFromConfig,
+    isValidDocumentIdForConfig,
+    resolveProfileIdFormats
+} from '../../utils/documentId';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
 import dialogs from '../../services/dialogs.js';
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -468,6 +477,12 @@ export default {
         ...mapState(useAuthStore, {
             settings: 'appConfig'
         }),
+        documentIdMaxLength() {
+            return getMaxDocumentIdInputLengthFromConfig(this.settings);
+        },
+        documentIdPlaceholder() {
+            return getDocumentIdPlaceholderFromConfig(this.settings);
+        },
         confirmModalTitle() {
             if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
             if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuario');
@@ -554,9 +569,7 @@ export default {
             this.currentUser = user;
             console.log('selectUser', user);
             // Ensure nro_doc is stored as raw value (no dots) when loaded from backend
-            const nroDocRaw = this.currentUser.nro_doc
-                ? cleanId(this.currentUser.nro_doc, this.settings.profile_id_format)
-                : '';
+            const nroDocRaw = this.currentUser.nro_doc || '';
             this.newInfo = {
                 name: this.currentUser.name,
                 email: this.currentUser.email,
@@ -581,22 +594,21 @@ export default {
             };
             // Format nro_doc for display after loading
             if (this.newInfo.nro_doc) {
-                this.newInfo.nro_doc = formatId(this.newInfo.nro_doc, this.settings.profile_id_format);
+                this.newInfo.nro_doc = formatDocumentIdFromConfig(
+                    nroDocRaw,
+                    this.settings
+                );
             }
         },
         isNumber(value) {
             inputIsNumber(value);
         },
 
-        // Handle DNI input - format using pattern
-        handleDniInput(event) {
-            const formatted = formatId(event.target.value, this.settings.profile_id_format);
-            event.target.value = formatted;
-            // Update the Vue data model with the formatted value
-            this.newInfo.nro_doc = formatted;
-        },
         onDniModelUpdate(value) {
-            this.newInfo.nro_doc = formatId(value, this.settings.profile_id_format);
+            this.newInfo.nro_doc = formatDocumentIdInput(
+                value,
+                resolveProfileIdFormats(this.settings)
+            );
         },
 
         resetUserState() {
@@ -738,6 +750,12 @@ export default {
                 globalError = true;
             } */
 
+            if (this.newInfo.nro_doc && !isValidDocumentIdForConfig(this.newInfo.nro_doc, this.settings)) {
+                this.dniError.state = true;
+                this.dniError.message = this.$t('dniNoValido');
+                globalError = true;
+            }
+
             // Validate patente if provided - allow all strings
             if (this.newInfo.patente && this.newInfo.patente.length > 0) {
                 // Basic validation: just check it's not empty and has reasonable length
@@ -760,7 +778,10 @@ export default {
             if (!this.validate()) {
                 // DNI: send raw value without dots (backend expects digits only)
                 const nroDocRaw = this.newInfo.nro_doc
-                    ? cleanId(this.newInfo.nro_doc, this.settings.profile_id_format)
+                    ? cleanDocumentIdForStorageFromConfig(
+                        this.newInfo.nro_doc,
+                        this.settings
+                    )
                     : this.newInfo.nro_doc;
 
                 // Patente: trim whitespace before sending

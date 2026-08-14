@@ -33,12 +33,30 @@ describe('userMigrationFields', () => {
 });
 
 describe('formatMigrationFieldValue', () => {
-    it('formats nro_doc using profile_id_format for display', () => {
+    it('formats nro_doc using allowed document masks for display', () => {
         expect(
             formatMigrationFieldValue('nro_doc', { nro_doc: '30123456' }, {
-                profileIdFormat: '##.###.###'
+                profileIdFormat: {
+                    profile_id_formats: [
+                        { type: 'dni', pattern: '##.###.###' },
+                        { type: 'passport', pattern: 'A########' }
+                    ]
+                }
             })
         ).toBe('30.123.456');
+    });
+
+    it('formats passport nro_doc for display', () => {
+        expect(
+            formatMigrationFieldValue('nro_doc', { nro_doc: 'A33070219' }, {
+                profileIdFormat: {
+                    profile_id_formats: [
+                        { type: 'dni', pattern: '##.###.###' },
+                        { type: 'passport', pattern: 'A########' }
+                    ]
+                }
+            })
+        ).toBe('A33070219');
     });
 
     it('returns em dash when user or value is missing', () => {

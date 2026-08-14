@@ -160,6 +160,14 @@ export function getMaxDocumentIdInputLengthFromConfig(config) {
     return getMaxDocumentIdInputLength(resolveProfileIdFormats(config));
 }
 
+export function getDocumentIdPlaceholderFromConfig(config) {
+    return resolveProfileIdFormats(config)
+        .map((entry) => entry.pattern)
+        .join(' / ');
+}
+
 export function formatDocumentIdInput(value, formats) {
     return formatDocumentId(value, formats, { allowPartial: true });
 }
+
+export { cleanDocumentIdValue };

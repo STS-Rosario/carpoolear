@@ -324,7 +324,7 @@ export default {
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,
-                this.config && this.config.profile_id_format,
+                this.config,
                 '-'
             );
         },
