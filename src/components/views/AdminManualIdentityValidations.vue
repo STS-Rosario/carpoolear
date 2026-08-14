@@ -79,13 +79,11 @@
                                     >
                                         {{ $t('verPerfil') }}
                                     </router-link>
-                                    <AppButton
-                                        variant="primary"
-                                        size="sm"
+                                    <AppPrimaryLink
                                         :to="{ name: 'admin-manual-identity-validation-review', params: { id: item.id } }"
                                     >
                                         {{ $t('revisarSolicitud') }}
-                                    </AppButton>
+                                    </AppPrimaryLink>
                                 </td>
                             </tr>
                         </tbody>
@@ -117,7 +115,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
-import AppButton from '../ui/AppButton.vue';
+import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
@@ -278,7 +276,7 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         Loading,
-        AppButton
+        AppPrimaryLink
     }
 };
 </script>

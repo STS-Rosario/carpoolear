@@ -67,13 +67,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <AppButton
-                                            variant="primary"
-                                            size="sm"
+                                        <AppPrimaryLink
                                             :to="adminExcessContributionDetailRoute(item.id)"
                                         >
                                             {{ $t('verDetalle') }}
-                                        </AppButton>
+                                        </AppPrimaryLink>
                                         <router-link
                                             v-if="item.user_id"
                                             :to="getAdminUserProfileRoute(item.user_id)"
@@ -116,7 +114,7 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
-import AppButton from '../ui/AppButton.vue';
+import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
@@ -261,7 +259,7 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         Loading,
-        AppButton
+        AppPrimaryLink
     }
 };
 </script>
