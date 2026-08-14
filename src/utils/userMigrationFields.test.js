@@ -33,15 +33,10 @@ describe('userMigrationFields', () => {
 });
 
 describe('formatMigrationFieldValue', () => {
-    it('formats nro_doc using allowed document masks for display', () => {
+    it('formats nro_doc using profile_id_format for display', () => {
         expect(
             formatMigrationFieldValue('nro_doc', { nro_doc: '30123456' }, {
-                profileIdFormat: {
-                    profile_id_formats: [
-                        { type: 'dni', pattern: '##.###.###' },
-                        { type: 'passport', pattern: 'A########' }
-                    ]
-                }
+                profileIdFormat: '##.###.###'
             })
         ).toBe('30.123.456');
     });
@@ -49,12 +44,7 @@ describe('formatMigrationFieldValue', () => {
     it('formats passport nro_doc for display', () => {
         expect(
             formatMigrationFieldValue('nro_doc', { nro_doc: 'A33070219' }, {
-                profileIdFormat: {
-                    profile_id_formats: [
-                        { type: 'dni', pattern: '##.###.###' },
-                        { type: 'passport', pattern: 'A########' }
-                    ]
-                }
+                profileIdFormat: '##.###.###,A########'
             })
         ).toBe('A33070219');
     });

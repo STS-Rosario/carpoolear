@@ -8,11 +8,7 @@ import {
 } from './documentId';
 
 const APP_CONFIG = {
-    profile_id_format: '##.###.###',
-    profile_id_formats: [
-        { type: 'dni', pattern: '##.###.###' },
-        { type: 'passport', pattern: 'A########' }
-    ]
+    profile_id_format: '##.###.###,A########'
 };
 
 describe('document id config helpers', () => {
