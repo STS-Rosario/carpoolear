@@ -2,9 +2,9 @@
     <AdminLayout>
         <h3>{{ $t('adminNavChangelog') }}</h3>
         <p class="mb-2">
-            <AppButton variant="primary" :to="{ name: 'admin-changelog-new' }">
+            <AppPrimaryLink size="md" :to="{ name: 'admin-changelog-new' }">
                 {{ $t('nuevoChangelog') }}
-            </AppButton>
+            </AppPrimaryLink>
         </p>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
         <p v-else-if="error" class="alert alert-danger">{{ error }}</p>
@@ -59,6 +59,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import AppButton from '../ui/AppButton.vue';
 import { useChangelogStore } from '../../stores/changelog';
 import dayjs from '../../dayjs';
@@ -117,7 +118,8 @@ export default {
     },
     components: {
         AdminLayout,
-        AppButton
+        AppButton,
+        AppPrimaryLink
     }
 };
 </script>

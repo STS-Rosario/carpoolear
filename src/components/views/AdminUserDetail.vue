@@ -152,15 +152,15 @@
                             </AppButton>
                         </p>
                         <p class="user-admin-view-actions">
-                            <AppButton
-                                variant="primary"
+                            <AppPrimaryLink
+                                size="md"
                                 :to="{
                                     name: 'admin-users-edit',
                                     params: { userId: String(user.id) }
                                 }"
                             >
                                 {{ $t('adminUsuariosEditar') }}
-                            </AppButton>
+                            </AppPrimaryLink>
                             <AppButton
                                 variant="secondary"
                                 :to="supportTicketRoute(user)"
@@ -202,6 +202,7 @@ import { mapActions, mapState } from 'pinia';
 import { useConversationsStore } from '../../stores/conversations';
 import { useAuthStore } from '../../stores/auth';
 import AdminLayout from '../layouts/AdminLayout.vue';
+import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import AppButton from '../ui/AppButton.vue';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import { formatAdminUserNavLabelFromKey } from '../../utils/adminUserNavLabel';
@@ -363,7 +364,8 @@ export default {
     },
     components: {
         AdminLayout,
-        AppButton
+        AppButton,
+        AppPrimaryLink
     }
 };
 </script>

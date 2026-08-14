@@ -2,12 +2,9 @@
     <AdminLayout>
         <h3>{{ $t('soporte') }}</h3>
         <p class="mb-2 support-tickets-admin-actions">
-            <AppButton
-                variant="primary"
-                :to="{ name: 'admin-support-ticket-new' }"
-            >
+            <AppPrimaryLink size="md" :to="{ name: 'admin-support-ticket-new' }">
                 {{ $t('crearTicket') }}
-            </AppButton>
+            </AppPrimaryLink>
             <AppButton
                 variant="secondary"
                 class="mleft-6"
@@ -134,6 +131,7 @@
 import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
+import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import { useTicketsStore } from '../../stores/tickets';
@@ -397,7 +395,8 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         AppButton,
-        AppField
+        AppField,
+        AppPrimaryLink
     }
 };
 </script>
