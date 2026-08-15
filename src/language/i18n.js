@@ -855,6 +855,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectLink:
             'eliminar la integración con Mercado Pago',
         identityVerificationSuccessMpDisconnectTail: ' si así lo deseás.',
+        identityVerificationSuccessMpDisconnectManualInstructions:
+            'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -2609,6 +2611,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectLink:
             'eliminar la integración con Mercado Pago',
         identityVerificationSuccessMpDisconnectTail: ' si así lo deseás.',
+        identityVerificationSuccessMpDisconnectManualInstructions:
+            'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
@@ -4247,6 +4251,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectLink:
             'remove the Mercado Pago integration',
         identityVerificationSuccessMpDisconnectTail: ' if you want.',
+        identityVerificationSuccessMpDisconnectManualInstructions:
+            "If the link doesn't work, you can do it manually from the Mercado Pago app by going to Menu -> Settings -> Account -> Security -> Connected apps -> Carpoolear-SelladoVIaje -> Remove permissions",
         resultError: 'An error occurred. Please try again.',
         resultDniMismatch:
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",

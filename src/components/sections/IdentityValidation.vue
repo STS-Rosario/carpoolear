@@ -33,6 +33,12 @@
                         class="identity-verification-success-banner__link identity-verification-success-banner__link--inline"
                     >{{ $t('identityVerificationSuccessMpDisconnectLink') }}</a>{{ $t('identityVerificationSuccessMpDisconnectTail') }}
                 </p>
+                <p
+                    v-if="showMpIntegrationDisconnectHint"
+                    class="identity-verification-success-banner__text"
+                >
+                    {{ $t('identityVerificationSuccessMpDisconnectManualInstructions') }}
+                </p>
                 <IdentityValidationAdminReviewNote
                     :note="displayableManualApprovalReviewNote"
                     :label-key="manualApprovalReviewNoteLabelKey"
