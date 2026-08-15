@@ -143,6 +143,19 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(viewSource).toContain(':href="mercadoPagoMyAppsUrl"');
     });
 
+    it('shows manual MP disconnect instructions when disconnect hint is visible', () => {
+        expect(viewSource).toContain(
+            "$t('identityVerificationSuccessMpDisconnectManualInstructions')"
+        );
+        const disconnectTailIndex = viewSource.indexOf(
+            "$t('identityVerificationSuccessMpDisconnectTail')"
+        );
+        const manualInstructionsIndex = viewSource.indexOf(
+            "$t('identityVerificationSuccessMpDisconnectManualInstructions')"
+        );
+        expect(manualInstructionsIndex).toBeGreaterThan(disconnectTailIndex);
+    });
+
     it('shows ownership warning with profile edit link on MP verification card', () => {
         expect(viewSource).toContain('identity-validation-mp-warning');
         expect(viewSource).toContain(
