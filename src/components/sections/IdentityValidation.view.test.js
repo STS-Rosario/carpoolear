@@ -147,6 +147,9 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(viewSource).toContain(
             "$t('identityVerificationSuccessMpDisconnectManualInstructions')"
         );
+        expect(viewSource).toContain(
+            'identity-verification-success-banner__mp-disconnect-manual'
+        );
         const disconnectTailIndex = viewSource.indexOf(
             "$t('identityVerificationSuccessMpDisconnectTail')"
         );
@@ -154,6 +157,22 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
             "$t('identityVerificationSuccessMpDisconnectManualInstructions')"
         );
         expect(manualInstructionsIndex).toBeGreaterThan(disconnectTailIndex);
+    });
+
+    it('groups MP disconnect copy under a single visibility guard', () => {
+        const templateStart = viewSource.indexOf(
+            '<template v-if="showMpIntegrationDisconnectHint">'
+        );
+        const manualInstructionsIndex = viewSource.indexOf(
+            "$t('identityVerificationSuccessMpDisconnectManualInstructions')"
+        );
+        const templateEnd = viewSource.indexOf(
+            '</template>',
+            templateStart
+        );
+        expect(templateStart).toBeGreaterThan(-1);
+        expect(manualInstructionsIndex).toBeGreaterThan(templateStart);
+        expect(manualInstructionsIndex).toBeLessThan(templateEnd);
     });
 
     it('shows ownership warning with profile edit link on MP verification card', () => {
