@@ -35,5 +35,10 @@ describe('MP disconnect copy', () => {
         expect(messages.arg.identityVerificationSuccessMpDisconnectTail).toBe(
             ' si así lo deseás.'
         );
+        expect(
+            messages.arg.identityVerificationSuccessMpDisconnectManualInstructions
+        ).toBe(
+            'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos'
+        );
     });
 });

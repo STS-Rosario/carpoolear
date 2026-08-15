@@ -21,18 +21,22 @@
                 <p class="identity-verification-success-banner__emphasis">
                     {{ $t('identityVerificationSuccessEmphasis') }}
                 </p>
-                <p
-                    v-if="showMpIntegrationDisconnectHint"
-                    class="identity-verification-success-banner__text"
-                >
-                    {{ $t('identityVerificationSuccessMpDisconnectLead') }}
-                    <a
-                        :href="mercadoPagoMyAppsUrl"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="identity-verification-success-banner__link identity-verification-success-banner__link--inline"
-                    >{{ $t('identityVerificationSuccessMpDisconnectLink') }}</a>{{ $t('identityVerificationSuccessMpDisconnectTail') }}
-                </p>
+                <template v-if="showMpIntegrationDisconnectHint">
+                    <p class="identity-verification-success-banner__text">
+                        {{ $t('identityVerificationSuccessMpDisconnectLead') }}
+                        <a
+                            :href="mercadoPagoMyAppsUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="identity-verification-success-banner__link identity-verification-success-banner__link--inline"
+                        >{{ $t('identityVerificationSuccessMpDisconnectLink') }}</a>{{ $t('identityVerificationSuccessMpDisconnectTail') }}
+                    </p>
+                    <p
+                        class="identity-verification-success-banner__text identity-verification-success-banner__mp-disconnect-manual"
+                    >
+                        {{ $t('identityVerificationSuccessMpDisconnectManualInstructions') }}
+                    </p>
+                </template>
                 <IdentityValidationAdminReviewNote
                     :note="displayableManualApprovalReviewNote"
                     :label-key="manualApprovalReviewNoteLabelKey"
