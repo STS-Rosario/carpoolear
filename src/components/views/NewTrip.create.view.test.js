@@ -15,9 +15,9 @@ describe('NewTrip duplicate create handling', () => {
 });
 
 describe('NewTrip incomplete profile handling', () => {
-    it('redirects to profile update when trip create returns profile_required', () => {
-        expect(newTripViewSource).toContain('isProfileRequiredTripError');
-        expect(newTripViewSource).toContain('redirectToIncompleteProfileForTripCreate');
+    it('uses centralized trip create error handler with profile redirect support', () => {
+        expect(newTripViewSource).toContain('handleTripCreateApiError');
+        expect(newTripViewSource).toContain('isEnabledAsync');
         expect(newTripViewSource).toContain('completaPerfilParaCrearViaje');
     });
 });

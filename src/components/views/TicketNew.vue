@@ -94,6 +94,8 @@ import {
     buildPrefilledTicketEditorMarkdown,
     focusPrefilledTicketEditorAtStart
 } from '../../utils/ticketMessagePrefill.js';
+import { handleGenericApiError } from '../../utils/genericApiErrorHandling.js';
+import { isEnabledAsync } from '../../services/debug';
 
 export default {
     name: 'ticket-new',
@@ -173,7 +175,15 @@ export default {
                 attachments
             }).then((ticket) => {
                 this.$router.push({ name: 'ticket-detail', params: { id: ticket.id } });
-            }).catch(() => dialogs.message(this.$t('errorDatos'), { estado: 'error' }));
+            }).catch(async (error) => {
+                await handleGenericApiError(error, {
+                    source: 'support_ticket_create',
+                    fallbackMessageKey: 'errorDatos',
+                    t: (key, params) => this.$t(key, params),
+                    dialogs,
+                    isDebugEnabled: isEnabledAsync
+                });
+            });
         },
         setTypeFromUrl() {
             const allowed = USER_TICKET_TYPE_VALUES;

@@ -60,6 +60,8 @@ import { useFriendsStore } from '../../stores/friends';
 import AppButton from '../ui/AppButton.vue';
 import TripApi from '../../services/api/Trips';
 import dialogs from '../../services/dialogs.js';
+import { handleGenericApiError } from '../../utils/genericApiErrorHandling.js';
+import { isEnabledAsync } from '../../services/debug';
 import {
     TRIP_INVITE_FRIENDS_CLOSE_BEHAVIOR,
     resolveTripInviteFriendsClose
@@ -136,9 +138,13 @@ export default {
                     });
                     this.dismiss();
                 })
-                .catch(() => {
-                    dialogs.message(this.$t('problemaAlCargarElViaje'), {
-                        estado: 'error'
+                .catch(async (error) => {
+                    await handleGenericApiError(error, {
+                        source: 'trip_invite_friends',
+                        fallbackMessageKey: 'problemaAlCargarElViaje',
+                        t: (key, params) => this.$t(key, params),
+                        dialogs,
+                        isDebugEnabled: isEnabledAsync
                     });
                 })
                 .finally(() => {
