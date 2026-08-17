@@ -54,5 +54,13 @@ function getInstance() {
     return defaultInstance;
 }
 
-export { init, getInstance, refreshSupportInfoSnapshot };
-export { isEnabledAsync } from './debugLogger.js';
+async function isEnabledAsync() {
+    const instance = getInstance();
+    if (!instance) {
+        return false;
+    }
+
+    return instance.isEnabledAsync();
+}
+
+export { init, getInstance, refreshSupportInfoSnapshot, isEnabledAsync };
