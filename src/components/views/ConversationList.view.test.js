@@ -104,4 +104,17 @@ describe('ConversationList.vue messages redesign', () => {
             /\.messages-page \.conversation_chat--chats\s*\{[^}]*height:\s*auto !important/s
         );
     });
+
+    it('styles the load-more row with dedicated spacing on desktop', () => {
+        expect(viewSource).toContain('messages-page__load-more');
+        const cssPath = path.resolve(
+            __dirname,
+            '../../styles/components/messages-page.css'
+        );
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toContain('.messages-page__load-more');
+        expect(css).toMatch(
+            /\.messages-page__load-more\s*\{[^}]*padding:/s
+        );
+    });
 });
