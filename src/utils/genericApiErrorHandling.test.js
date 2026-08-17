@@ -7,7 +7,7 @@ describe('genericApiErrorHandling', () => {
         const reportError = vi.fn().mockResolvedValue(undefined);
 
         await handleGenericApiError(
-            { status: 500, data: { message: 'Server Error' } },
+            { status: 500, data: {} },
             {
                 source: 'support_ticket_create',
                 fallbackMessageKey: 'errorDatos',
@@ -19,7 +19,7 @@ describe('genericApiErrorHandling', () => {
 
         expect(reportError).toHaveBeenCalledWith(
             'support_ticket_create',
-            { status: 500, data: { message: 'Server Error' } },
+            { status: 500, data: {} },
             { debugEnabled: false }
         );
         expect(dialogs.message).toHaveBeenCalledWith('errorDatos', {
