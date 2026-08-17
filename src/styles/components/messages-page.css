@@ -359,6 +359,24 @@
         border-right: 1px solid var(--messages-shell-border);
     }
 
+    .messages-page .conversation_list .list-group {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+    }
+
+    .messages-page__list-header {
+        flex: 0 0 auto;
+    }
+
+    .messages-page .conversation_chat--chats {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        overflow-y: auto;
+    }
+
     .messages-page .conversation_list .list-group-item {
         border-left-width: 0;
         border-right-width: 0;
