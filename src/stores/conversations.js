@@ -55,6 +55,7 @@ export const useConversationsStore = defineStore('conversations', {
             lastPage: false,
             data: {}
         },
+        listLoadingMore: false,
         listCurrentPage: 1,
         userList: null,
         selectedID: null,
@@ -102,8 +103,9 @@ export const useConversationsStore = defineStore('conversations', {
             let params = null;
             if (data.next) {
                 if (this.listSearchParam.lastPage) {
-                    return;
+                    return Promise.resolve();
                 }
+                this.listLoadingMore = true;
                 // NEXT_PAGE
                 this.listSearchParam.page++;
                 params = Object.assign({}, this.listSearchParam.data);
@@ -122,7 +124,7 @@ export const useConversationsStore = defineStore('conversations', {
                 params.page_size = this.listSearchParam.pageSize;
             }
             const promises = conversationApi.list(params);
-            promises
+            const listPromise = promises
                 .then((response) => {
                     if (
                         response.meta.pagination.total_pages ===
@@ -167,16 +169,23 @@ export const useConversationsStore = defineStore('conversations', {
                         // intentionally empty (matches original)
                     }
                     return Promise.reject(error);
+                })
+                .finally(() => {
+                    if (data.next) {
+                        this.listLoadingMore = false;
+                    }
                 });
 
             // Callback: create message buckets
-            promises.then((response) => {
-                (response.data || []).forEach((item) => {
-                    this.createMessages(normalizeId(item.id));
-                });
-            });
+            promises
+                .then((response) => {
+                    (response.data || []).forEach((item) => {
+                        this.createMessages(normalizeId(item.id));
+                    });
+                })
+                .catch(() => {});
 
-            return promises;
+            return listPromise;
         },
 
         clearUserList() {

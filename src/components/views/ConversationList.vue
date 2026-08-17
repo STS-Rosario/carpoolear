@@ -178,9 +178,14 @@
                                         <AppButton
                                             variant="primary"
                                             block
+                                            :loading="listLoadingMore"
                                             @click="nextPage"
                                         >
-                                            {{ $t('masResultados') }}
+                                            {{
+                                                listLoadingMore
+                                                    ? $t('cargando')
+                                                    : $t('masResultados')
+                                            }}
                                         </AppButton>
                                     </li>
                                     <template #no-data><li
@@ -284,6 +289,7 @@ export default {
         ...mapState(useConversationsStore, {
             conversations: 'list',
             moreConversations: 'listMorePage',
+            listLoadingMore: 'listLoadingMore',
             users: 'users',
             selectedId: 'selectedId'
         }),
@@ -358,6 +364,9 @@ export default {
         }),
 
         nextPage() {
+            if (this.listLoadingMore) {
+                return;
+            }
             this.conversationsSearch({ next: true });
         },
 
