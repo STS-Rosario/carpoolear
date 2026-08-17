@@ -1,6 +1,7 @@
 const HTML_TAG_PATTERN = /<[^>]*>/g;
 const SCRIPT_BLOCK_PATTERN = /<script\b[^>]*>[\s\S]*?<\/script>/gi;
 const STYLE_BLOCK_PATTERN = /<style\b[^>]*>[\s\S]*?<\/style>/gi;
+// eslint-disable-next-line no-control-regex -- intentional sanitization of control chars in logs
 const CONTROL_CHAR_PATTERN = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
 
 function removeScriptAndStyleBlocks(value) {

@@ -48,8 +48,6 @@ describe('tripCreateErrors', () => {
 });
 
 describe('resolveTripCreateError', () => {
-    const t = (key) => key;
-
     it('maps identity validation errors to a redirect and specific message', () => {
         const error = {
             status: 422,

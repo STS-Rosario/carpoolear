@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ConversationApi } from '../services/api';
 import dayjs from '../dayjs';
 import { checkError } from '../../utils/helpers';
-import { handleGenericApiError } from '../../utils/genericApiErrorHandling.js';
+import { handleGenericApiError } from '../utils/genericApiErrorHandling.js';
 import { isEnabledAsync } from '../services/debug';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
