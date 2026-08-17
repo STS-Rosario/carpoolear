@@ -121,8 +121,12 @@ describe('ConversationList.vue messages redesign', () => {
     it('shows loading label and disables load-more while fetching next page', () => {
         expect(viewSource).toContain('listLoadingMore');
         expect(viewSource).toMatch(/:loading="listLoadingMore"/);
+        expect(viewSource).toContain('loadMoreButtonLabel');
         expect(viewSource).toMatch(
-            /listLoadingMore\s*\?\s*\$t\('cargando'\)\s*:\s*\$t\('masResultados'\)/
+            /loadMoreButtonLabel\(\)\s*\{[^}]*\$t\('cargando'\)[^}]*\$t\('masResultados'\)/s
+        );
+        expect(viewSource).toMatch(
+            /nextPage\(\)\s*\{[^}]*if\s*\(\s*this\.listLoadingMore\s*\)\s*\{[^}]*return;/s
         );
     });
 });

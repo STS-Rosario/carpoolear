@@ -181,11 +181,7 @@
                                             :loading="listLoadingMore"
                                             @click="nextPage"
                                         >
-                                            {{
-                                                listLoadingMore
-                                                    ? $t('cargando')
-                                                    : $t('masResultados')
-                                            }}
+                                            {{ loadMoreButtonLabel }}
                                         </AppButton>
                                     </li>
                                     <template #no-data><li
@@ -331,6 +327,11 @@ export default {
                 this.conversations,
                 this.messagesFilter
             );
+        },
+        loadMoreButtonLabel() {
+            return this.listLoadingMore
+                ? this.$t('cargando')
+                : this.$t('masResultados');
         }
     },
 
