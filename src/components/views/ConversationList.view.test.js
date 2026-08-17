@@ -117,4 +117,12 @@ describe('ConversationList.vue messages redesign', () => {
             /\.messages-page__load-more\s*\{[^}]*padding:/s
         );
     });
+
+    it('shows loading label and disables load-more while fetching next page', () => {
+        expect(viewSource).toContain('listLoadingMore');
+        expect(viewSource).toMatch(/:loading="listLoadingMore"/);
+        expect(viewSource).toMatch(
+            /listLoadingMore\s*\?\s*\$t\('cargando'\)\s*:\s*\$t\('masResultados'\)/
+        );
+    });
 });

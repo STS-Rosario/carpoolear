@@ -15,32 +15,52 @@ const showByTripMock = vi.fn(() =>
     })
 );
 
-vi.mock('../services/api', () => ({
-    ConversationApi: class ConversationApiMock {
-        showByTrip = showByTripMock;
-
-        updateNotifications() {
-            return Promise.resolve({ data: { id: 9, notifications_enabled: false } });
-        }
-
-        show() {
-            return Promise.resolve({
-                data: {
-                    id: 9,
-                    type: 1,
-                    users: [
-                        { id: 1, name: 'Driver' },
-                        { id: 2, name: 'Passenger' }
-                    ]
-                }
-            });
-        }
-
-        getMessages() {
-            return Promise.resolve({ data: [] });
-        }
-    }
+const { listMock } = vi.hoisted(() => ({
+    listMock: vi.fn(() =>
+        Promise.resolve({
+            data: [],
+            meta: { pagination: { total_pages: 1, current_page: 1 } }
+        })
+    )
 }));
+
+vi.mock('../services/api', async (importOriginal) => {
+    const actual = await importOriginal();
+
+    return {
+        ...actual,
+        ConversationApi: class ConversationApiMock {
+            showByTrip = showByTripMock;
+
+            updateNotifications() {
+                return Promise.resolve({
+                    data: { id: 9, notifications_enabled: false }
+                });
+            }
+
+            show() {
+                return Promise.resolve({
+                    data: {
+                        id: 9,
+                        type: 1,
+                        users: [
+                            { id: 1, name: 'Driver' },
+                            { id: 2, name: 'Passenger' }
+                        ]
+                    }
+                });
+            }
+
+            getMessages() {
+                return Promise.resolve({ data: [] });
+            }
+
+            list() {
+                return listMock();
+            }
+        }
+    };
+});
 
 vi.mock('../services/dialogs.js', () => ({
     default: {
@@ -154,5 +174,48 @@ describe('conversations store unreadCount getter', () => {
         ];
 
         expect(store.unreadCount).toBe(2);
+    });
+});
+
+describe('conversations store listSearch load-more loading', () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+        listMock.mockReset();
+        listMock.mockResolvedValue({
+            data: [{ id: 2, title: 'User 2' }],
+            meta: { pagination: { total_pages: 2, current_page: 2 } }
+        });
+    });
+
+    it('sets listLoadingMore while fetching the next page and clears it after success', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        store._list = [{ id: 1, title: 'User 1' }];
+        store.listSearchParam.lastPage = false;
+
+        expect(store.listLoadingMore).toBe(false);
+
+        const promise = store.listSearch({ next: true });
+
+        expect(store.listLoadingMore).toBe(true);
+
+        await promise;
+
+        expect(store.listLoadingMore).toBe(false);
+    });
+
+    it('clears listLoadingMore when the next page request fails', async () => {
+        listMock.mockRejectedValueOnce(new Error('network'));
+
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        store._list = [{ id: 1, title: 'User 1' }];
+        store.listSearchParam.lastPage = false;
+
+        await expect(store.listSearch({ next: true })).rejects.toThrow('network');
+
+        expect(store.listLoadingMore).toBe(false);
     });
 });
