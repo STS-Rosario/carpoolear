@@ -178,7 +178,7 @@
                                         <AppButton
                                             variant="primary"
                                             block
-                                            :loading="listLoadingMore"
+                                            :disabled="listLoadingMore"
                                             @click="nextPage"
                                         >
                                             {{ loadMoreButtonLabel }}

@@ -120,7 +120,8 @@ describe('ConversationList.vue messages redesign', () => {
 
     it('shows loading label and disables load-more while fetching next page', () => {
         expect(viewSource).toContain('listLoadingMore');
-        expect(viewSource).toMatch(/:loading="listLoadingMore"/);
+        expect(viewSource).toMatch(/:disabled="listLoadingMore"/);
+        expect(viewSource).not.toMatch(/:loading="listLoadingMore"/);
         expect(viewSource).toContain('loadMoreButtonLabel');
         expect(viewSource).toMatch(
             /loadMoreButtonLabel\(\)\s*\{[^}]*\$t\('cargando'\)[^}]*\$t\('masResultados'\)/s
