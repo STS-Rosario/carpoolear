@@ -490,6 +490,10 @@ const messages = {
             'Tienes que ser verificado como conductor para poder cargar viajes.',
         problemaAlCargarElViaje:
             'Ocurrió un problema al cargar el viaje. Por favor vuelva a intentarlo.',
+        tripCreateCarIncomplete:
+            'Completá la marca y el modelo de tu auto antes de publicar el viaje.',
+        tripCreateBanned:
+            'Tu cuenta fue suspendida y no podés publicar viajes.',
         viajeYaPublicado:
             'Ya tenés un viaje publicado con el mismo origen, destino y horario. Te llevamos a ese viaje.',
         routingServiceTemporaryError:
@@ -3941,6 +3945,10 @@ const messages = {
             'You must be verified as a driver to be able to create trips.',
         problemaAlCargarElViaje:
             'A problem occurred while loading the trip. Please try again.',
+        tripCreateCarIncomplete:
+            'Complete your car brand and model before publishing the trip.',
+        tripCreateBanned:
+            'Your account was suspended and you cannot publish trips.',
         viajeYaPublicado:
             'You already have a trip with the same origin, destination, and time. Redirecting you to it.',
         routingServiceTemporaryError:

@@ -34,7 +34,9 @@ import { createHead } from '@unhead/vue/client';
 
 import bus from './services/bus-event';
 import { DebugApi } from './services/api';
-import { init as initDebugLogger } from './services/debug';
+import { init as initDebugLogger, isEnabledAsync } from './services/debug';
+import { reportClientError } from './utils/clientErrorReporting.js';
+import { sanitizeClientLogString } from './utils/clientLogSanitizer.js';
 import { installPrototypes } from './prototypes';
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -108,9 +110,26 @@ bus.on('system-ready', () => {
         `${assetBase}img/${String(filename).replace(/^\/+/, '')}`;
 
     app.config.errorHandler = function (err, instance, info) {
-        const data = {};
-        data.log = err.stack;
-        debugApi.log(data);
+        reportClientError({
+            source: 'vue_error',
+            message: err?.stack || String(err),
+            context: {
+                component: sanitizeClientLogString(
+                    instance?.$options?.name || instance?.type?.name || null,
+                    200
+                ),
+                info: sanitizeClientLogString(info, 200)
+            },
+            debugApi
+        });
+
+        isEnabledAsync()
+            .then((debugEnabled) => {
+                if (debugEnabled) {
+                    console.error('[vue_error]', err, info);
+                }
+            })
+            .catch(() => {});
     };
 
     const vm = app.mount('#app');

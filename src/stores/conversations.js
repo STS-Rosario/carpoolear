@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { ConversationApi } from '../services/api';
 import dayjs from '../dayjs';
 import { checkError } from '../../utils/helpers';
+import { handleGenericApiError } from '../utils/genericApiErrorHandling.js';
+import { isEnabledAsync } from '../services/debug';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
 import { fireLazyRouterPush, lazyRouterPush } from '../utils/routerLazy.js';
@@ -442,11 +444,14 @@ export const useConversationsStore = defineStore('conversations', {
                     this.pushConversation(conv);
                     return this.select(conv.id).then(() => conv);
                 })
-                .catch((error) => {
-                    dialogs.message(
-                        i18n.global.t('problemaAlCargarElViaje'),
-                        { estado: 'error' }
-                    );
+                .catch(async (error) => {
+                    await handleGenericApiError(error, {
+                        source: 'trip_group_chat_open',
+                        fallbackMessageKey: 'problemaAlCargarElViaje',
+                        t: (key, params) => i18n.global.t(key, params),
+                        dialogs,
+                        isDebugEnabled: isEnabledAsync
+                    });
                     return Promise.reject(error);
                 });
         },

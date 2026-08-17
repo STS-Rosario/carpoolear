@@ -126,6 +126,8 @@ import { TRIP_INFO_STATUS } from '../../utils/tripCreationTripInfo.js';
 import { buildTripDateForApi } from '../../utils/tripDateForApi.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
+import { handleTripCreateApiError } from '../../utils/tripCreateErrors.js';
+import { isEnabledAsync } from '../../services/debug';
 
 let tripApi = new TripApi();
 let userApi = new UserApi();
@@ -1413,34 +1415,14 @@ export default {
                         }
                         this.finalizeTripCreationSuccess(t);
                     })
-                    .catch((err) => {
+                    .catch(async (err) => {
                         console.log('error_creating', err);
-                        if (this.$checkError(err, 'identity_validation_required')) {
-                            this.$router.push({ name: 'identity_validation' });
-                            dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
-                                estado: 'error'
-                            });
-                        } else if (
-                            err &&
-                            err.data &&
-                            err.data.errors &&
-                            err.data.errors.driver_is_verified
-                        ) {
-                            dialogs.message(this.$t('tienesQueSerConductor'), {
-                                estado: 'error'
-                            });
-                        } else if (this.$checkError(err, 'routing_service_unavailable')) {
-                            dialogs.message(this.$t('routingServiceTemporaryError'), {
-                                estado: 'error'
-                            });
-                        } else {
-                            dialogs.message(
-                                this.$t('problemaAlCargarElViaje'),
-                                {
-                                    estado: 'error'
-                                }
-                            );
-                        }
+                        await handleTripCreateApiError(err, {
+                            t: (key, params) => this.$t(key, params),
+                            router: this.$router,
+                            dialogs,
+                            isDebugEnabled: isEnabledAsync
+                        });
                         this.jumpToError();
                         this.saving = false;
                     });
@@ -1458,17 +1440,14 @@ export default {
                             params: { id: this.trip.id }
                         });
                     })
-                    .catch((err) => {
+                    .catch(async (err) => {
                         this.saving = false;
-                        if (this.$checkError(err, 'routing_service_unavailable')) {
-                            dialogs.message(this.$t('routingServiceTemporaryError'), {
-                                estado: 'error'
-                            });
-                        } else {
-                            dialogs.message(this.$t('problemaAlCargarElViaje'), {
-                                estado: 'error'
-                            });
-                        }
+                        await handleTripCreateApiError(err, {
+                            t: (key, params) => this.$t(key, params),
+                            router: this.$router,
+                            dialogs,
+                            isDebugEnabled: isEnabledAsync
+                        });
                     });
             }
         },
