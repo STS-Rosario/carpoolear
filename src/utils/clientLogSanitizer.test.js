@@ -27,7 +27,7 @@ describe('clientLogSanitizer', () => {
             sanitizeClientLogContext({
                 status: 422,
                 source: 'trip_create',
-                nested: { ignored: true },
+                nested: { ignored: '<script>x</script>' },
                 errors: {
                     car_id: ['<b>missing plate</b>']
                 }
