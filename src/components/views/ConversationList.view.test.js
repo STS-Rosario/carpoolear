@@ -86,4 +86,35 @@ describe('ConversationList.vue messages redesign', () => {
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
+
+    it('sizes the conversation list scroll area below the header so load-more stays reachable', () => {
+        const cssPath = path.resolve(
+            __dirname,
+            '../../styles/components/messages-page.css'
+        );
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toContain('.messages-page .conversation_list .list-group');
+        expect(css).toMatch(
+            /\.messages-page \.conversation_list \.list-group\s*\{[^}]*display:\s*flex/s
+        );
+        expect(css).toMatch(
+            /\.messages-page \.conversation_chat--chats\s*\{[^}]*flex:\s*1 1 auto/s
+        );
+        expect(css).toMatch(
+            /\.messages-page \.conversation_chat--chats\s*\{[^}]*height:\s*auto !important/s
+        );
+    });
+
+    it('styles the load-more row with dedicated spacing on desktop', () => {
+        expect(viewSource).toContain('messages-page__load-more');
+        const cssPath = path.resolve(
+            __dirname,
+            '../../styles/components/messages-page.css'
+        );
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toContain('.messages-page__load-more');
+        expect(css).toMatch(
+            /\.messages-page__load-more\s*\{[^}]*padding:/s
+        );
+    });
 });

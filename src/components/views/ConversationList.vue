@@ -173,7 +173,7 @@
                                     </li>
                                     <li
                                         v-if="moreConversations"
-                                        class="list-group-item"
+                                        class="list-group-item messages-page__load-more"
                                     >
                                         <AppButton
                                             variant="primary"
