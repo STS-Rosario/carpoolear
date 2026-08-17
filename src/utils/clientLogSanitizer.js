@@ -50,7 +50,6 @@ function sanitizeContextLevel(context, depth, maxDepth) {
         const value = context[key];
 
         if (value == null) {
-            sanitized[safeKey] = null;
             return;
         }
 
