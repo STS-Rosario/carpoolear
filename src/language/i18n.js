@@ -623,9 +623,9 @@ const messages = {
             'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
         tripCreationStepLabelContribution: 'Contribución',
         tripContributionPerPerson: 'por persona',
-        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
-            '¿Cómo se calcula la contribución sugerida?',
+            '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
@@ -2404,9 +2404,9 @@ const messages = {
             'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
         tripCreationStepLabelContribution: 'Contribución',
         tripContributionPerPerson: 'por persona',
-        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
-            '¿Cómo se calcula la contribución sugerida?',
+            '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
@@ -4078,9 +4078,9 @@ const messages = {
             'This is what each passenger contributes to help with trip expenses.',
         tripCreationStepLabelContribution: 'Contribution',
         tripContributionPerPerson: 'per person',
-        tripContributionSuggested: 'Suggested contribution: $ {amount}',
+        tripContributionSuggested: 'Average contribution: $ {amount}',
         tripContributionHowCalculated:
-            'How is the suggested contribution calculated?',
+            'How is the average contribution calculated?',
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
             'This platform is for shared trips <strong>without profit</strong>. The contribution should only cover trip expenses, <strong>not generate profit</strong>. Requesting more than the suggested amount could make the trip look like a commercial activity or illegal passenger transport, with possible consequences for insurance coverage and liability to third parties.',
