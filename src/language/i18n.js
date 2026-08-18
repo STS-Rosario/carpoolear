@@ -623,12 +623,12 @@ const messages = {
             'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
         tripCreationStepLabelContribution: 'Contribución',
         tripContributionPerPerson: 'por persona',
-        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
-            '¿Cómo se calcula la contribución sugerida?',
+            '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
-            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
+            '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -776,7 +776,7 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
-        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
@@ -786,6 +786,11 @@ const messages = {
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identityValidationLearnMorePrefix:
+            '¿Querés saber más al respecto? Podés ',
+        identityValidationLearnMoreLink:
+            'leer más sobre la verificación de cuenta',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -812,7 +817,7 @@ const messages = {
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
-            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
@@ -2404,12 +2409,12 @@ const messages = {
             'Es lo que aporta cada pasajero para ayudar con los gastos del viaje.',
         tripCreationStepLabelContribution: 'Contribución',
         tripContributionPerPerson: 'por persona',
-        tripContributionSuggested: 'Contribución sugerida: $ {amount}',
+        tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
-            '¿Cómo se calcula la contribución sugerida?',
+            '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
-            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
+            '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -2532,7 +2537,7 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
-        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
@@ -2542,6 +2547,11 @@ const messages = {
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identityValidationLearnMorePrefix:
+            '¿Querés saber más al respecto? Podés ',
+        identityValidationLearnMoreLink:
+            'leer más sobre la verificación de cuenta',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -2568,7 +2578,7 @@ const messages = {
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
-            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
@@ -4078,12 +4088,12 @@ const messages = {
             'This is what each passenger contributes to help with trip expenses.',
         tripCreationStepLabelContribution: 'Contribution',
         tripContributionPerPerson: 'per person',
-        tripContributionSuggested: 'Suggested contribution: $ {amount}',
+        tripContributionSuggested: 'Average contribution: $ {amount}',
         tripContributionHowCalculated:
-            'How is the suggested contribution calculated?',
+            'How is the average contribution calculated?',
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
-            'This platform is for shared trips <strong>without profit</strong>. The contribution should only cover trip expenses, <strong>not generate profit</strong>. Requesting more than the suggested amount could make the trip look like a commercial activity or illegal passenger transport, with possible consequences for insurance coverage and liability to third parties.',
+            "<p>The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.</p><p>By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :D</p><p><strong>Requesting a contribution above the maximum goes against Carpoolear rules and will result in account suspension.</strong></p>",
         tripCreationStepDescriptionQuestion: 'Preferences and details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:
@@ -4215,7 +4225,7 @@ const messages = {
         identityValidationPageBullet3:
             'Build trust among people sharing trips.',
         identityValidationAutoCardDesc:
-            'Verify with your Mercado Pago account. The system checks your data against RENAPER.',
+            'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
             "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
         identityValidationCostLine: 'Cost: {cost}',
@@ -4438,7 +4448,7 @@ const messages = {
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
         identidadModalAutoTitulo: 'Automatic verification',
-        identidadModalAutoMp: 'With your Mercado Pago account',
+        identidadModalAutoMp: 'If you have a Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalAutoPuedeEliminarMp:
@@ -4448,6 +4458,9 @@ const messages = {
         identidadModalManualCosto: 'There is a cost',
         identidadModalManualPlazo: 'Approved within 48 business hours',
         identidadModalUnaVez: 'You only verify once.',
+        identityValidationLearnMorePrefix: 'Want to know more? You can ',
+        identityValidationLearnMoreLink: 'read more about account verification',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
         identidadModalOptionalInfo:

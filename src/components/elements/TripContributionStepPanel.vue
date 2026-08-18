@@ -65,10 +65,10 @@
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 <strong>{{ $t('tripContributionImportantTitle') }}</strong>
             </div>
-            <p
+            <div
                 class="trip-contribution-step__important-body"
                 v-html="$t('tripContributionImportantBody')"
-            ></p>
+            ></div>
         </div>
     </div>
 </template>
@@ -228,8 +228,15 @@ export default {
 }
 
 .trip-contribution-step__important-body {
-    margin: 0;
     line-height: 1.45;
+}
+
+.trip-contribution-step__important-body p {
+    margin: 0 0 0.75rem;
+}
+
+.trip-contribution-step__important-body p:last-child {
+    margin-bottom: 0;
 }
 
 .trip-contribution-step__important-body :deep(strong) {

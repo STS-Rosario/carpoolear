@@ -7,6 +7,19 @@ const modalPath = path.resolve(__dirname, 'IdentityValidationPromptModal.vue');
 const modalSource = fs.readFileSync(modalPath, 'utf8');
 
 describe('IdentityValidationPromptModal MP benefits', () => {
+    it('clarifies automatic verification is only for Mercado Pago account holders', () => {
+        expect(messages.arg.identidadModalAutoMp).toBe(
+            'Si tenés cuenta de Mercado Pago'
+        );
+        expect(messages.chl.identidadModalAutoMp).toBe(
+            'Si tenés cuenta de Mercado Pago'
+        );
+        expect(messages.en.identidadModalAutoMp).toBe(
+            'If you have a Mercado Pago account'
+        );
+        expect(modalSource).toContain("$t('identidadModalAutoMp')");
+    });
+
     it('lists that MP integration can be removed after verifying', () => {
         expect(modalSource).toContain("$t('identidadModalAutoGratis')");
         expect(modalSource).toContain("$t('identidadModalAutoInmediata')");
@@ -18,6 +31,34 @@ describe('IdentityValidationPromptModal MP benefits', () => {
             "$t('identidadModalAutoPuedeEliminarMp')"
         );
         expect(puedeEliminar).toBeGreaterThan(inmediata);
+    });
+});
+
+describe('IdentityValidationPromptModal learn more link', () => {
+    it('shows learn-more copy below the once-only note with link to verificacion cuenta', () => {
+        const footnoteIndex = modalSource.indexOf(
+            'identity-validation-prompt-footnote'
+        );
+        const learnMoreIndex = modalSource.indexOf(
+            'identity-validation-prompt-learn-more'
+        );
+
+        expect(footnoteIndex).toBeGreaterThan(-1);
+        expect(learnMoreIndex).toBeGreaterThan(footnoteIndex);
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMorePrefix')"
+        );
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMoreLink')"
+        );
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMoreSuffix')"
+        );
+        expect(modalSource).toContain("name: 'verificacion_cuenta'");
+    });
+
+    it('hides the modal while viewing the verificacion cuenta help page', () => {
+        expect(modalSource).toContain("n === 'verificacion_cuenta'");
     });
 });
 

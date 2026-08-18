@@ -199,6 +199,30 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
     });
 });
 
+describe('IdentityValidation learn more link', () => {
+    it('shows learn-more copy with link to verificacion cuenta page below once-only note', () => {
+        const onceIndex = viewSource.indexOf(
+            'class="identity-validation-once"'
+        );
+        const learnMoreIndex = viewSource.indexOf(
+            'identity-validation-learn-more'
+        );
+
+        expect(onceIndex).toBeGreaterThan(-1);
+        expect(learnMoreIndex).toBeGreaterThan(onceIndex);
+        expect(viewSource).toContain(
+            "$t('identityValidationLearnMorePrefix')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationLearnMoreLink')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationLearnMoreSuffix')"
+        );
+        expect(viewSource).toContain("name: 'verificacion_cuenta'");
+    });
+});
+
 describe('IdentityValidation manual admin review note', () => {
     it('shows admin review note in success banner and rejection notice when present', () => {
         expect(viewSource).toContain('IdentityValidationAdminReviewNote');

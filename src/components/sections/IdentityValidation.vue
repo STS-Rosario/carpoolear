@@ -384,6 +384,9 @@
                         <li>{{ $t('identityValidationPageBullet3') }}</li>
                     </ul>
                     <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
+                    <p class="identity-validation-learn-more">
+                        {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
+                    </p>
                 </header>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -1199,6 +1202,12 @@ export default {
 }
 
 .identity-validation-once {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.identity-validation-learn-more {
     margin: 0 0 1.75rem;
     font-size: 0.95rem;
     color: #333;
