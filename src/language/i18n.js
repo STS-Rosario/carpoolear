@@ -786,6 +786,11 @@ const messages = {
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identityValidationLearnMorePrefix:
+            '¿Querés saber más al respecto? Podés ',
+        identityValidationLearnMoreLink:
+            'leer más sobre la verificación de cuenta',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -2542,6 +2547,11 @@ const messages = {
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
         identidadModalUnaVez: 'La verificación sólo se realiza una vez.',
+        identityValidationLearnMorePrefix:
+            '¿Querés saber más al respecto? Podés ',
+        identityValidationLearnMoreLink:
+            'leer más sobre la verificación de cuenta',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -4448,6 +4458,9 @@ const messages = {
         identidadModalManualCosto: 'There is a cost',
         identidadModalManualPlazo: 'Approved within 48 business hours',
         identidadModalUnaVez: 'You only verify once.',
+        identityValidationLearnMorePrefix: 'Want to know more? You can ',
+        identityValidationLearnMoreLink: 'read more about account verification',
+        identityValidationLearnMoreSuffix: '.',
         identidadModalPlazoInfo:
             'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
         identidadModalOptionalInfo:
