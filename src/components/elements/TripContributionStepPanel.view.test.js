@@ -18,6 +18,30 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain('tripContributionImportantBody');
     });
 
+    it('links to division de gastos help after suspension warning in importante notice', () => {
+        expect(componentSource).toContain(
+            'trip-contribution-step__important-explainer'
+        );
+        expect(componentSource).toContain(
+            "$t('tripContributionDivisionExplainerPrefix')"
+        );
+        expect(componentSource).toContain(
+            "$t('tripContributionDivisionExplainerLink')"
+        );
+        expect(componentSource).toContain(
+            "$t('tripContributionDivisionExplainerSuffix')"
+        );
+        expect(componentSource).toContain("name: 'division_de_gastos'");
+        const suspensionIndex = componentSource.indexOf(
+            'tripContributionImportantBody'
+        );
+        const explainerIndex = componentSource.indexOf(
+            'trip-contribution-step__important-explainer'
+        );
+        expect(suspensionIndex).toBeGreaterThan(-1);
+        expect(explainerIndex).toBeGreaterThan(suspensionIndex);
+    });
+
     it('does not write the suggested amount into the price input on click', () => {
         expect(componentSource).not.toContain('contributionUnitsFromCents');
         expect(componentSource).toMatch(
