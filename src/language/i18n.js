@@ -817,7 +817,7 @@ const messages = {
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
-            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
@@ -2578,7 +2578,7 @@ const messages = {
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
         identityValidationAutoCardDesc:
-            'Validá con tu cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
             'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
         identityValidationCostLine: 'Costo: {cost}',
@@ -4225,7 +4225,7 @@ const messages = {
         identityValidationPageBullet3:
             'Build trust among people sharing trips.',
         identityValidationAutoCardDesc:
-            'Verify with your Mercado Pago account. The system checks your data against RENAPER.',
+            'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
             "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
         identityValidationCostLine: 'Cost: {cost}',
