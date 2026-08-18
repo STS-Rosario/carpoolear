@@ -9,13 +9,13 @@ const modalSource = fs.readFileSync(modalPath, 'utf8');
 describe('IdentityValidationPromptModal MP benefits', () => {
     it('clarifies automatic verification is only for Mercado Pago account holders', () => {
         expect(messages.arg.identidadModalAutoMp).toBe(
-            'Sólo si tenés cuenta de Mercado Pago'
+            'Si tenés cuenta de Mercado Pago'
         );
         expect(messages.chl.identidadModalAutoMp).toBe(
-            'Sólo si tenés cuenta de Mercado Pago'
+            'Si tenés cuenta de Mercado Pago'
         );
         expect(messages.en.identidadModalAutoMp).toBe(
-            'Only if you have a Mercado Pago account'
+            'If you have a Mercado Pago account'
         );
         expect(modalSource).toContain("$t('identidadModalAutoMp')");
     });
