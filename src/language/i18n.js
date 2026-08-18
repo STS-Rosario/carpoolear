@@ -629,6 +629,10 @@ const messages = {
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
+        tripContributionDivisionExplainerPrefix: 'En nuestra web explicamos ',
+        tripContributionDivisionExplainerLink:
+            'cómo se calcula la contribución por persona',
+        tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -2415,6 +2419,10 @@ const messages = {
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
+        tripContributionDivisionExplainerPrefix: 'En nuestra web explicamos ',
+        tripContributionDivisionExplainerLink:
+            'cómo se calcula la contribución por persona',
+        tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -4094,6 +4102,10 @@ const messages = {
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
             "<p>The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.</p><p>By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :D</p><p><strong>Requesting a contribution above the maximum goes against Carpoolear rules and will result in account suspension.</strong></p>",
+        tripContributionDivisionExplainerPrefix: 'On our website we explain ',
+        tripContributionDivisionExplainerLink:
+            'how per-person contribution is calculated',
+        tripContributionDivisionExplainerSuffix: ' for each trip.',
         tripCreationStepDescriptionQuestion: 'Preferences and details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:
