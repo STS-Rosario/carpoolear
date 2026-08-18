@@ -69,6 +69,9 @@
                 class="trip-contribution-step__important-body"
                 v-html="$t('tripContributionImportantBody')"
             ></div>
+            <p class="trip-contribution-step__important-explainer">
+                {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
+            </p>
         </div>
     </div>
 </template>
@@ -237,6 +240,11 @@ export default {
 
 .trip-contribution-step__important-body p:last-child {
     margin-bottom: 0;
+}
+
+.trip-contribution-step__important-explainer {
+    margin: 0.75rem 0 0;
+    line-height: 1.45;
 }
 
 .trip-contribution-step__important-body :deep(strong) {
