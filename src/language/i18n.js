@@ -632,7 +632,7 @@ const messages = {
         tripContributionDivisionExplainerPrefix: 'En nuestra web explicamos ',
         tripContributionDivisionExplainerLink:
             'cómo se calcula la contribución por persona',
-        tripContributionDivisionExplainerSuffix: ' para cada viaje',
+        tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -2422,7 +2422,7 @@ const messages = {
         tripContributionDivisionExplainerPrefix: 'En nuestra web explicamos ',
         tripContributionDivisionExplainerLink:
             'cómo se calcula la contribución por persona',
-        tripContributionDivisionExplainerSuffix: ' para cada viaje',
+        tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -4105,7 +4105,7 @@ const messages = {
         tripContributionDivisionExplainerPrefix: 'On our website we explain ',
         tripContributionDivisionExplainerLink:
             'how per-person contribution is calculated',
-        tripContributionDivisionExplainerSuffix: ' for each trip',
+        tripContributionDivisionExplainerSuffix: ' for each trip.',
         tripCreationStepDescriptionQuestion: 'Preferences and details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:

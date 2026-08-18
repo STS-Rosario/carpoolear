@@ -70,7 +70,7 @@
                 v-html="$t('tripContributionImportantBody')"
             ></div>
             <p class="trip-contribution-step__important-explainer">
-                {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
+                {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }" target="_blank" rel="noopener noreferrer">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
             </p>
         </div>
     </div>
