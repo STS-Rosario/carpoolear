@@ -202,7 +202,7 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
 describe('IdentityValidation learn more link', () => {
     it('shows learn-more copy with link to verificacion cuenta page below once-only note', () => {
         const onceIndex = viewSource.indexOf(
-            "class=\"identity-validation-once\""
+            'class="identity-validation-once"'
         );
         const learnMoreIndex = viewSource.indexOf(
             'identity-validation-learn-more'
