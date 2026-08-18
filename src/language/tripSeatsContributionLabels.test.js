@@ -5,6 +5,8 @@ const TRIP_CONTRIBUTION_IMPORTANT_FIRST_PARAGRAPH =
     'La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.';
 const TRIP_CONTRIBUTION_IMPORTANT_SECOND_PARAGRAPH =
     'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D';
+const TRIP_CONTRIBUTION_IMPORTANT_SUSPENSION_PARAGRAPH =
+    'Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.';
 
 describe('inclusive trip seating and contribution labels', () => {
     it('uses legacy maximum contribution guidance in trip creation importante notice', () => {
@@ -14,6 +16,9 @@ describe('inclusive trip seating and contribution labels', () => {
             );
             expect(messages[locale].tripContributionImportantBody).toContain(
                 `<p>${TRIP_CONTRIBUTION_IMPORTANT_SECOND_PARAGRAPH}</p>`
+            );
+            expect(messages[locale].tripContributionImportantBody).toContain(
+                `<p><strong>${TRIP_CONTRIBUTION_IMPORTANT_SUSPENSION_PARAGRAPH}</strong></p>`
             );
             expect(messages[locale].tripContributionImportantBody).not.toMatch(
                 /Esta plataforma está destinada/i
@@ -47,6 +52,9 @@ describe('inclusive trip seating and contribution labels', () => {
         );
         expect(messages.en.tripContributionImportantBody).toContain(
             "Let's have a good trip by taking care of each other :D</p>"
+        );
+        expect(messages.en.tripContributionImportantBody).toContain(
+            '<p><strong>Requesting a contribution above the maximum goes against Carpoolear rules and will result in account suspension.</strong></p>'
         );
         expect(messages.en.tripContributionImportantBody).not.toMatch(
             /This platform is for shared trips/i
