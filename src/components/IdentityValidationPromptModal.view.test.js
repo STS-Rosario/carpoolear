@@ -34,6 +34,34 @@ describe('IdentityValidationPromptModal MP benefits', () => {
     });
 });
 
+describe('IdentityValidationPromptModal learn more link', () => {
+    it('shows learn-more copy below the once-only note with link to verificacion cuenta', () => {
+        const footnoteIndex = modalSource.indexOf(
+            'identity-validation-prompt-footnote'
+        );
+        const learnMoreIndex = modalSource.indexOf(
+            'identity-validation-prompt-learn-more'
+        );
+
+        expect(footnoteIndex).toBeGreaterThan(-1);
+        expect(learnMoreIndex).toBeGreaterThan(footnoteIndex);
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMorePrefix')"
+        );
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMoreLink')"
+        );
+        expect(modalSource).toContain(
+            "$t('identityValidationLearnMoreSuffix')"
+        );
+        expect(modalSource).toContain("name: 'verificacion_cuenta'");
+    });
+
+    it('hides the modal while viewing the verificacion cuenta help page', () => {
+        expect(modalSource).toContain("n === 'verificacion_cuenta'");
+    });
+});
+
 describe('MP disconnect copy', () => {
     it('defines Argentinian Spanish strings', () => {
         expect(messages.arg.identidadModalAutoPuedeEliminarMp).toBe(
