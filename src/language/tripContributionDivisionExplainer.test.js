@@ -12,7 +12,7 @@ describe('tripContributionDivisionExplainer (i18n)', () => {
                 'cómo se calcula la contribución por persona'
             );
             expect(messages[locale].tripContributionDivisionExplainerSuffix).toBe(
-                ' para cada viaje'
+                ' para cada viaje.'
             );
         }
     );
@@ -25,7 +25,7 @@ describe('tripContributionDivisionExplainer (i18n)', () => {
             'how per-person contribution is calculated'
         );
         expect(messages.en.tripContributionDivisionExplainerSuffix).toBe(
-            ' for each trip'
+            ' for each trip.'
         );
     });
 });

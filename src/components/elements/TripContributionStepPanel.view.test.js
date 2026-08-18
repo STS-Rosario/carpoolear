@@ -32,6 +32,8 @@ describe('TripContributionStepPanel.vue', () => {
             "$t('tripContributionDivisionExplainerSuffix')"
         );
         expect(componentSource).toContain("name: 'division_de_gastos'");
+        expect(componentSource).toContain('target="_blank"');
+        expect(componentSource).toContain('rel="noopener noreferrer"');
         const suspensionIndex = componentSource.indexOf(
             'tripContributionImportantBody'
         );
