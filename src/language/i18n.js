@@ -776,7 +776,7 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
-        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoMp: 'Sólo si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
@@ -2537,7 +2537,7 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
-        identidadModalAutoMp: 'Con tu cuenta de Mercado Pago',
+        identidadModalAutoMp: 'Sólo si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
@@ -4448,7 +4448,7 @@ const messages = {
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
         identidadModalAutoTitulo: 'Automatic verification',
-        identidadModalAutoMp: 'With your Mercado Pago account',
+        identidadModalAutoMp: 'Only if you have a Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalAutoPuedeEliminarMp:
