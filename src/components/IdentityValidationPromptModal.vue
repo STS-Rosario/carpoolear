@@ -81,6 +81,9 @@
                 <p class="identity-validation-prompt-footnote">
                     {{ $t('identidadModalUnaVez') }}
                 </p>
+                <p class="identity-validation-prompt-learn-more">
+                    {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
+                </p>
 
                 <div
                     v-if="!isOptionalMode"
@@ -168,7 +171,9 @@ export default {
         hideForRoute() {
             const n = this.$route && this.$route.name;
             return (
-                n === 'identity_validation' || n === 'identity_validation_manual'
+                n === 'identity_validation' ||
+                n === 'identity_validation_manual' ||
+                n === 'verificacion_cuenta'
             );
         },
         showMpOption() {
@@ -364,6 +369,13 @@ export default {
 }
 
 .identity-validation-prompt-footnote {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+}
+
+.identity-validation-prompt-learn-more {
     font-size: 13px;
     color: #555;
     margin-top: 8px !important;
