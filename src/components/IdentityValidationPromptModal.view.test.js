@@ -7,6 +7,19 @@ const modalPath = path.resolve(__dirname, 'IdentityValidationPromptModal.vue');
 const modalSource = fs.readFileSync(modalPath, 'utf8');
 
 describe('IdentityValidationPromptModal MP benefits', () => {
+    it('clarifies automatic verification is only for Mercado Pago account holders', () => {
+        expect(messages.arg.identidadModalAutoMp).toBe(
+            'Sólo si tenés cuenta de Mercado Pago'
+        );
+        expect(messages.chl.identidadModalAutoMp).toBe(
+            'Sólo si tenés cuenta de Mercado Pago'
+        );
+        expect(messages.en.identidadModalAutoMp).toBe(
+            'Only if you have a Mercado Pago account'
+        );
+        expect(modalSource).toContain("$t('identidadModalAutoMp')");
+    });
+
     it('lists that MP integration can be removed after verifying', () => {
         expect(modalSource).toContain("$t('identidadModalAutoGratis')");
         expect(modalSource).toContain("$t('identidadModalAutoInmediata')");
