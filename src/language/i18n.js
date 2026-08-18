@@ -628,7 +628,7 @@ const messages = {
             '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
-            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
+            '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p>',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -2409,7 +2409,7 @@ const messages = {
             '¿Cómo se calcula la contribución promedio?',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
-            'Esta plataforma está destinada a viajes compartidos <strong>sin fines de lucro</strong>. La contribución debe cubrir únicamente los gastos del viaje, <strong>no generar ganancias</strong>. Solicitar un importe superior al sugerido podría hacer que el viaje sea considerado una actividad comercial o un transporte ilegal de pasajeros, con posibles consecuencias sobre la cobertura del seguro y la responsabilidad frente a terceros.',
+            '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p>',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
@@ -4083,7 +4083,7 @@ const messages = {
             'How is the average contribution calculated?',
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
-            'This platform is for shared trips <strong>without profit</strong>. The contribution should only cover trip expenses, <strong>not generate profit</strong>. Requesting more than the suggested amount could make the trip look like a commercial activity or illegal passenger transport, with possible consequences for insurance coverage and liability to third parties.',
+            "<p>The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.</p><p>By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :D</p>",
         tripCreationStepDescriptionQuestion: 'Preferences and details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:
