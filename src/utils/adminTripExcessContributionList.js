@@ -12,6 +12,8 @@ export const TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS = [
     { key: 'to_town', labelKey: 'destino' },
     { key: 'seat_price_cents', labelKey: 'contribucion' },
     { key: 'potential_seat_price_cents', labelKey: 'contribucionPotencial' },
+    { key: 'average_contribution_cents', labelKey: 'contribucionPromedio' },
+    { key: 'excess_contribution_percentage', labelKey: 'porcentajeExceso' },
     { key: 'has_private_note', labelKey: 'tieneNotas' },
     { key: 'excess_contribution_support_tickets_count', labelKey: 'ticketSoporte' },
     { key: 'exceso_contribucion_status', labelKey: 'estado' }
@@ -157,6 +159,24 @@ export function formatTripContributionPesosLabel(cents) {
     return `$${units}`;
 }
 
+export function formatAdminTripContributionLabel(cents) {
+    const units = contributionUnitsFromCents(cents);
+
+    if (!units) {
+        return null;
+    }
+
+    return `$${units}`;
+}
+
+export function formatAdminExcessContributionPercentageLabel(percentage) {
+    if (percentage == null || percentage === '') {
+        return null;
+    }
+
+    return `${percentage}%`;
+}
+
 export function excessContributionStatusLabel(status, t) {
     const key = EXCESO_CONTRIBUCION_STATUS_LABEL_KEYS[status];
     if (key) {
@@ -167,16 +187,16 @@ export function excessContributionStatusLabel(status, t) {
 
 export function excessContributionStatusClass(status) {
     switch (status) {
-        case 'resuelto':
-            return 'label label-success';
-        case 'descartado':
-            return 'label label-default';
-        case 'en_proceso':
-            return 'label label-info';
-        case 'pendiente':
-            return 'label label-warning';
-        default:
-            return 'label label-default';
+    case 'resuelto':
+        return 'label label-success';
+    case 'descartado':
+        return 'label label-default';
+    case 'en_proceso':
+        return 'label label-info';
+    case 'pendiente':
+        return 'label label-warning';
+    default:
+        return 'label label-default';
     }
 }
 

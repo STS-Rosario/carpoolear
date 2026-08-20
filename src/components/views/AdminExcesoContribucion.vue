@@ -42,6 +42,8 @@
                                     <td>{{ item.to_town }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.seat_price_cents) }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</td>
+                                    <td>{{ formatAdminTripContributionLabel(item.average_contribution_cents) ?? $t('noDisponible') }}</td>
+                                    <td>{{ formatAdminExcessContributionPercentageLabel(item.excess_contribution_percentage) ?? $t('noDisponible') }}</td>
                                     <td>{{ item.has_private_note ? $t('si') : $t('no') }}</td>
                                     <td>
                                         <router-link
@@ -125,6 +127,8 @@ import {
     excessContributionStatusLabel,
     excessContributionSupportTicketsRoute,
     formatTripContributionPesosLabel,
+    formatAdminTripContributionLabel,
+    formatAdminExcessContributionPercentageLabel,
     getNextTripExcessContributionSortState,
     getRequiresActionOnlyExcessContributions,
     parseTripExcessContributionListFromRoute,
@@ -162,6 +166,8 @@ export default {
     },
     methods: {
         formatTripContributionPesosLabel,
+        formatAdminTripContributionLabel,
+        formatAdminExcessContributionPercentageLabel,
         excessContributionStatusLabel,
         excessContributionStatusClass,
         adminExcessContributionDetailRoute,
