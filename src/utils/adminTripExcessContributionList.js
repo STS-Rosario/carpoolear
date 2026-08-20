@@ -187,16 +187,16 @@ export function excessContributionStatusLabel(status, t) {
 
 export function excessContributionStatusClass(status) {
     switch (status) {
-        case 'resuelto':
-            return 'label label-success';
-        case 'descartado':
-            return 'label label-default';
-        case 'en_proceso':
-            return 'label label-info';
-        case 'pendiente':
-            return 'label label-warning';
-        default:
-            return 'label label-default';
+    case 'resuelto':
+        return 'label label-success';
+    case 'descartado':
+        return 'label label-default';
+    case 'en_proceso':
+        return 'label label-info';
+    case 'pendiente':
+        return 'label label-warning';
+    default:
+        return 'label label-default';
     }
 }
 
