@@ -9,6 +9,8 @@ import {
     excessContributionStatusLabel,
     excessContributionSupportTicketsRoute,
     formatTripContributionPesosLabel,
+    formatAdminTripContributionLabel,
+    formatAdminExcessContributionPercentageLabel,
     getNextTripExcessContributionSortState,
     getRequiresActionOnlyExcessContributions,
     parseTripExcessContributionListFromRoute,
@@ -29,6 +31,28 @@ describe('adminTripExcessContributionList', () => {
             expect(formatTripContributionPesosLabel(null)).toBe('-');
             expect(formatTripContributionPesosLabel(0)).toBe('-');
             expect(formatTripContributionPesosLabel(-1)).toBe('-');
+        });
+    });
+
+    describe('formatAdminTripContributionLabel', () => {
+        it('formats positive seat price cents as peso label', () => {
+            expect(formatAdminTripContributionLabel(1000000)).toBe('$10000');
+        });
+
+        it('returns null for missing values so the UI can show N/D', () => {
+            expect(formatAdminTripContributionLabel(null)).toBeNull();
+            expect(formatAdminTripContributionLabel(0)).toBeNull();
+        });
+    });
+
+    describe('formatAdminExcessContributionPercentageLabel', () => {
+        it('formats stored percentage values', () => {
+            expect(formatAdminExcessContributionPercentageLabel(100)).toBe('100%');
+            expect(formatAdminExcessContributionPercentageLabel(140)).toBe('140%');
+        });
+
+        it('returns null for missing values so the UI can show N/D', () => {
+            expect(formatAdminExcessContributionPercentageLabel(null)).toBeNull();
         });
     });
 
@@ -161,8 +185,12 @@ describe('adminTripExcessContributionList', () => {
         });
 
         it('defines sortable columns for the list table', () => {
-            expect(TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key)).toContain(
-                'exceso_contribucion_status'
+            expect(TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key)).toEqual(
+                expect.arrayContaining([
+                    'average_contribution_cents',
+                    'excess_contribution_percentage',
+                    'exceso_contribucion_status'
+                ])
             );
         });
     });
