@@ -47,6 +47,8 @@
                         </p>
                         <p><strong>{{ $t('contribucion') }}:</strong> {{ formatTripContributionPesosLabel(item.seat_price_cents) }}</p>
                         <p><strong>{{ $t('contribucionPotencial') }}:</strong> {{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</p>
+                        <p><strong>{{ $t('contribucionPromedio') }}:</strong> {{ formatAdminTripContributionLabel(item.average_contribution_cents) ?? $t('noDisponible') }}</p>
+                        <p><strong>{{ $t('porcentajeExceso') }}:</strong> {{ formatAdminExcessContributionPercentageLabel(item.excess_contribution_percentage) ?? $t('noDisponible') }}</p>
                         <p v-if="item.description">
                             <strong>{{ $t('descripcion') }}:</strong> {{ item.description }}
                         </p>
@@ -136,7 +138,9 @@ import {
     excessContributionStatusClass,
     excessContributionStatusLabel,
     excessContributionSupportTicketsRoute,
-    formatTripContributionPesosLabel
+    formatTripContributionPesosLabel,
+    formatAdminTripContributionLabel,
+    formatAdminExcessContributionPercentageLabel
 } from '../../utils/adminTripExcessContributionList';
 
 export default {
@@ -165,6 +169,8 @@ export default {
     },
     methods: {
         formatTripContributionPesosLabel,
+        formatAdminTripContributionLabel,
+        formatAdminExcessContributionPercentageLabel,
         excessContributionStatusLabel,
         excessContributionStatusClass,
         excessContributionStatusActionLabel,

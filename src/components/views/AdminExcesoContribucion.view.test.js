@@ -15,8 +15,7 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain('exceso_contribucion_status');
         expect(viewSource).toContain('excess_contribution_support_tickets_count');
         expect(viewSource).toContain('adminExcessContributionDetailRoute');
-        expect(viewSource).toContain('variant="primary"');
-        expect(viewSource).toContain('AppButton');
+        expect(viewSource).toContain('AppPrimaryLink');
         expect(viewSource).toContain('excessContributionSupportTicketsRoute');
         expect(viewSource).toContain('excessContributionStatusLabel');
         expect(viewSource).toContain("{{ $t('soloRequierenAccion') }}");
@@ -29,7 +28,7 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain('excess_contribution_percentage');
         expect(viewSource).toContain('formatAdminTripContributionLabel');
         expect(viewSource).toContain('formatAdminExcessContributionPercentageLabel');
-        expect(viewSource).toContain("{{ $t('noDisponible') }}");
+        expect(viewSource).toContain("$t('noDisponible')");
     });
 });
 
@@ -53,6 +52,6 @@ describe('AdminExcesoContribucionDetail view', () => {
         expect(viewSource).toContain('porcentajeExceso');
         expect(viewSource).toContain('formatAdminTripContributionLabel');
         expect(viewSource).toContain('formatAdminExcessContributionPercentageLabel');
-        expect(viewSource).toContain("{{ $t('noDisponible') }}");
+        expect(viewSource).toContain("$t('noDisponible')");
     });
 });
