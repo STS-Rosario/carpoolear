@@ -223,6 +223,53 @@ describe('IdentityValidation learn more link', () => {
     });
 });
 
+describe('IdentityValidation unpaid manual verification payment', () => {
+    const pendingPaymentBlockStart = viewSource.indexOf(
+        'manualStatus.has_submission && manualStatus.paid === false'
+    );
+    const payOptionsPath = path.resolve(__dirname, 'ManualIdentityValidationPayOptions.vue');
+    const payOptionsSource = fs.readFileSync(payOptionsPath, 'utf8');
+
+    it('uses shared manual payment options with MP and QR handlers', () => {
+        expect(pendingPaymentBlockStart).toBeGreaterThan(-1);
+        const pendingPaymentBlock = viewSource.slice(
+            pendingPaymentBlockStart,
+            pendingPaymentBlockStart + 1200
+        );
+
+        expect(pendingPaymentBlock).toContain('ManualIdentityValidationPayOptions');
+        expect(pendingPaymentBlock).toContain(':qr-enabled="identityValidationManualQrEnabled"');
+        expect(pendingPaymentBlock).toContain('@pay-mp="payManualValidation"');
+        expect(pendingPaymentBlock).toContain('@pay-qr="createManualValidationQrOrderAndShow"');
+        expect(pendingPaymentBlock).not.toContain("$t('pagarAhora')");
+    });
+
+    it('shows the same manual payment instructions as the dedicated manual page', () => {
+        expect(payOptionsSource).toContain(
+            "$t('manualValidationPayIntro1', { cost: costDisplay })"
+        );
+        expect(payOptionsSource).toContain("$t('manualValidationPayIntro2')");
+        expect(payOptionsSource).toContain("$t('manualValidationPayListLead')");
+        expect(payOptionsSource).toContain("$t('manualValidationPayBulletDni')");
+        expect(payOptionsSource).toContain('manualValidationUploadWarningKey');
+        expect(payOptionsSource).toContain("$t('manualValidationPayClosing')");
+        expect(payOptionsSource).toContain("$t('manualValidationPagarMercadoPago')");
+        expect(payOptionsSource).toContain("$t('pagarConQR')");
+    });
+
+    it('shows QR payment panel and polling flow for unpaid manual verification', () => {
+        expect(viewSource).toContain('createManualIdentityValidationQrOrder');
+        expect(viewSource).toContain("import QRCode from 'qrcode'");
+        expect(viewSource).toContain('showQrPanel');
+        expect(payOptionsSource).toContain("$t('escaneáConAppMercadoPago')");
+        expect(payOptionsSource).toContain("$t('qrExpiraEn')");
+        expect(viewSource).toContain('closeManualValidationQrPanel');
+        expect(viewSource).toContain('startManualValidationQrPolling');
+        expect(viewSource).toContain('stopManualValidationQrPolling');
+        expect(viewSource).toContain('beforeUnmount');
+    });
+});
+
 describe('IdentityValidation manual admin review note', () => {
     it('shows admin review note in success banner and rejection notice when present', () => {
         expect(viewSource).toContain('IdentityValidationAdminReviewNote');

@@ -105,14 +105,17 @@
                 <div class="panel-heading">{{ $t('esperandoPagoValidacionManual') }}</div>
                 <div class="panel-body">
                     <p>{{ $t('debesPagarParaContinuar') }}</p>
-                    <AppButton
-                        variant="primary"
-                        :disabled="loadingPreference"
-                        :loading="loadingPreference"
-                        @click="payManualValidation"
-                    >
-                        {{ $t('pagarAhora') }}
-                    </AppButton>
+                    <ManualIdentityValidationPayOptions
+                        :cost-display="formattedManualCost"
+                        :qr-enabled="identityValidationManualQrEnabled"
+                        :loading-preference="loadingPreference"
+                        :loading-qr="loadingQr"
+                        :show-qr-panel="showQrPanel"
+                        :qr-image-url="qrImageUrl"
+                        @pay-mp="payManualValidation"
+                        @pay-qr="createManualValidationQrOrderAndShow"
+                        @close-qr="closeManualValidationQrPanel"
+                    />
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
@@ -463,6 +466,7 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
+import QRCode from 'qrcode';
 import {
     isIdentityValidationActionBlockedByMissingDni,
     PROFILE_EDIT_ROUTE,
@@ -492,6 +496,7 @@ import {
 } from '../../utils/mercadoPagoIntegrationDisconnectHint';
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
+import ManualIdentityValidationPayOptions from './ManualIdentityValidationPayOptions.vue';
 import AppButton from '../ui/AppButton.vue';
 
 const EMPTY_WARNING_PARTS = { layout: null, leadKey: null, tailKey: null };
@@ -500,6 +505,7 @@ export default {
     name: 'IdentityValidation',
     components: {
         IdentityValidationAdminReviewNote,
+        ManualIdentityValidationPayOptions,
         AppButton
     },
     data() {
@@ -517,7 +523,12 @@ export default {
                 can_resubmit_without_payment: false
             },
             loadingOAuth: false,
-            loadingPreference: false
+            loadingPreference: false,
+            loadingQr: false,
+            showQrPanel: false,
+            qrImageUrl: null,
+            qrData: null,
+            pollIntervalId: null
         };
     },
     computed: {
@@ -530,6 +541,9 @@ export default {
         },
         identityValidationManualEnabled() {
             return this.config && this.config.identity_validation_manual_enabled === true;
+        },
+        identityValidationManualQrEnabled() {
+            return this.config && this.config.identity_validation_manual_qr_enabled === true;
         },
         identityValidationEnabled() {
             return this.config && this.config.identity_validation_enabled === true;
@@ -722,6 +736,52 @@ export default {
                     this.loadingPreference = false;
                 });
         },
+        createManualValidationQrOrderAndShow() {
+            this.loadingQr = true;
+            const userApi = new UserApi();
+            userApi.createManualIdentityValidationQrOrder()
+                .then((res) => {
+                    const data = res.data || res;
+                    const qrData = data.qr_data;
+                    const requestId = data.request_id;
+                    if (qrData && requestId) {
+                        this.manualStatus.request_id = requestId;
+                        this.qrData = qrData;
+                        this.showQrPanel = true;
+                        this.qrImageUrl = null;
+                        QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
+                            if (!err) this.qrImageUrl = url;
+                        });
+                        this.startManualValidationQrPolling();
+                    }
+                    this.loadingQr = false;
+                })
+                .catch(() => {
+                    this.loadingQr = false;
+                });
+        },
+        closeManualValidationQrPanel() {
+            this.showQrPanel = false;
+            this.qrData = null;
+            this.qrImageUrl = null;
+            this.stopManualValidationQrPolling();
+        },
+        startManualValidationQrPolling() {
+            this.stopManualValidationQrPolling();
+            this.pollIntervalId = setInterval(() => {
+                this.fetchManualStatus().then(() => {
+                    if (this.manualStatus.paid === true) {
+                        this.closeManualValidationQrPanel();
+                    }
+                });
+            }, 3000);
+        },
+        stopManualValidationQrPolling() {
+            if (this.pollIntervalId) {
+                clearInterval(this.pollIntervalId);
+                this.pollIntervalId = null;
+            }
+        },
         startMercadoPagoOAuth() {
             if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
             this.loadingOAuth = true;
@@ -758,6 +818,9 @@ export default {
     },
     mounted() {
         this.fetchManualStatus();
+    },
+    beforeUnmount() {
+        this.stopManualValidationQrPolling();
     }
 };
 </script>
