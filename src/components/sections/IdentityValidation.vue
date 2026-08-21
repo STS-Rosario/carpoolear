@@ -105,14 +105,31 @@
                 <div class="panel-heading">{{ $t('esperandoPagoValidacionManual') }}</div>
                 <div class="panel-body">
                     <p>{{ $t('debesPagarParaContinuar') }}</p>
-                    <AppButton
-                        variant="primary"
-                        :disabled="loadingPreference"
-                        :loading="loadingPreference"
-                        @click="payManualValidation"
-                    >
-                        {{ $t('pagarAhora') }}
-                    </AppButton>
+                    <div class="manual-validation-pay-buttons">
+                        <AppButton
+                            variant="primary"
+                            size="lg"
+                            block
+                            class="manual-validation-pay-cta"
+                            :disabled="loadingPreference || loadingQr"
+                            :loading="loadingPreference"
+                            @click="payManualValidation"
+                        >
+                            {{ $t('manualValidationPagarMercadoPago') }}
+                        </AppButton>
+                        <AppButton
+                            v-if="identityValidationManualQrEnabled"
+                            variant="secondary"
+                            size="lg"
+                            block
+                            class="manual-validation-pay-cta"
+                            :disabled="loadingPreference || loadingQr"
+                            :loading="loadingQr"
+                            @click="createManualValidationQrOrderAndShow"
+                        >
+                            {{ $t('pagarConQR') }}
+                        </AppButton>
+                    </div>
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
@@ -517,7 +534,8 @@ export default {
                 can_resubmit_without_payment: false
             },
             loadingOAuth: false,
-            loadingPreference: false
+            loadingPreference: false,
+            loadingQr: false
         };
     },
     computed: {
@@ -530,6 +548,9 @@ export default {
         },
         identityValidationManualEnabled() {
             return this.config && this.config.identity_validation_manual_enabled === true;
+        },
+        identityValidationManualQrEnabled() {
+            return this.config && this.config.identity_validation_manual_qr_enabled === true;
         },
         identityValidationEnabled() {
             return this.config && this.config.identity_validation_enabled === true;
@@ -721,6 +742,9 @@ export default {
                 .catch(() => {
                     this.loadingPreference = false;
                 });
+        },
+        createManualValidationQrOrderAndShow() {
+            this.loadingQr = false;
         },
         startMercadoPagoOAuth() {
             if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
@@ -1048,6 +1072,18 @@ export default {
 
 .manual-status-panel {
     margin-bottom: 1.5em;
+}
+
+.manual-validation-pay-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.manual-validation-pay-cta {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .manual-status-switch-separator {
