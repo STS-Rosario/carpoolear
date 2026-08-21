@@ -223,6 +223,25 @@ describe('IdentityValidation learn more link', () => {
     });
 });
 
+describe('IdentityValidation unpaid manual verification payment', () => {
+    const pendingPaymentBlockStart = viewSource.indexOf(
+        'manualStatus.has_submission && manualStatus.paid === false'
+    );
+
+    it('shows Mercado Pago and QR payment buttons instead of pagar ahora', () => {
+        expect(pendingPaymentBlockStart).toBeGreaterThan(-1);
+        const pendingPaymentBlock = viewSource.slice(
+            pendingPaymentBlockStart,
+            pendingPaymentBlockStart + 2500
+        );
+
+        expect(pendingPaymentBlock).toContain("$t('manualValidationPagarMercadoPago')");
+        expect(pendingPaymentBlock).toContain("$t('pagarConQR')");
+        expect(pendingPaymentBlock).toContain('identityValidationManualQrEnabled');
+        expect(pendingPaymentBlock).not.toContain("$t('pagarAhora')");
+    });
+});
+
 describe('IdentityValidation manual admin review note', () => {
     it('shows admin review note in success banner and rejection notice when present', () => {
         expect(viewSource).toContain('IdentityValidationAdminReviewNote');
