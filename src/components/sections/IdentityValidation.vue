@@ -147,6 +147,26 @@
                             {{ $t('pagarConQR') }}
                         </AppButton>
                     </div>
+
+                    <div v-if="showQrPanel" class="qr-payment-panel panel panel-default">
+                        <div class="panel-body text-center">
+                            <p class="qr-instruction">{{ $t('escaneáConAppMercadoPago') }}</p>
+                            <div v-if="qrImageUrl" class="qr-image-wrap">
+                                <img :src="qrImageUrl" alt="QR" class="qr-image" />
+                            </div>
+                            <p v-else class="manual-validation-text">{{ $t('cargando') }}...</p>
+                            <p class="qr-expiry small">{{ $t('qrExpiraEn') }}</p>
+                            <AppButton
+                                variant="tertiary"
+                                size="sm"
+                                class="manual-validation-qr-close"
+                                @click="closeManualValidationQrPanel"
+                            >
+                                {{ $t('cerrar') }}
+                            </AppButton>
+                        </div>
+                    </div>
+
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
                         <p class="manual-status-switch-link">
@@ -497,6 +517,7 @@
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
+import QRCode from 'qrcode';
 import {
     isIdentityValidationActionBlockedByMissingDni,
     PROFILE_EDIT_ROUTE,
@@ -556,7 +577,11 @@ export default {
             },
             loadingOAuth: false,
             loadingPreference: false,
-            loadingQr: false
+            loadingQr: false,
+            showQrPanel: false,
+            qrImageUrl: null,
+            qrData: null,
+            pollIntervalId: null
         };
     },
     computed: {
@@ -771,7 +796,50 @@ export default {
                 });
         },
         createManualValidationQrOrderAndShow() {
-            this.loadingQr = false;
+            this.loadingQr = true;
+            const userApi = new UserApi();
+            userApi.createManualIdentityValidationQrOrder()
+                .then((res) => {
+                    const data = res.data || res;
+                    const qrData = data.qr_data;
+                    const requestId = data.request_id;
+                    if (qrData && requestId) {
+                        this.manualStatus.request_id = requestId;
+                        this.qrData = qrData;
+                        this.showQrPanel = true;
+                        this.qrImageUrl = null;
+                        QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
+                            if (!err) this.qrImageUrl = url;
+                        });
+                        this.startManualValidationQrPolling();
+                    }
+                    this.loadingQr = false;
+                })
+                .catch(() => {
+                    this.loadingQr = false;
+                });
+        },
+        closeManualValidationQrPanel() {
+            this.showQrPanel = false;
+            this.qrData = null;
+            this.qrImageUrl = null;
+            this.stopManualValidationQrPolling();
+        },
+        startManualValidationQrPolling() {
+            this.stopManualValidationQrPolling();
+            this.pollIntervalId = setInterval(() => {
+                this.fetchManualStatus().then(() => {
+                    if (this.manualStatus.paid === true) {
+                        this.closeManualValidationQrPanel();
+                    }
+                });
+            }, 3000);
+        },
+        stopManualValidationQrPolling() {
+            if (this.pollIntervalId) {
+                clearInterval(this.pollIntervalId);
+                this.pollIntervalId = null;
+            }
         },
         startMercadoPagoOAuth() {
             if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
@@ -809,6 +877,9 @@ export default {
     },
     mounted() {
         this.fetchManualStatus();
+    },
+    beforeUnmount() {
+        this.stopManualValidationQrPolling();
     }
 };
 </script>
@@ -1155,6 +1226,28 @@ export default {
 .manual-validation-pay-cta {
     text-transform: uppercase;
     letter-spacing: 0.02em;
+}
+
+.qr-payment-panel {
+    margin-top: 1.25rem;
+}
+
+.qr-image-wrap {
+    margin: 1em 0;
+}
+
+.qr-image {
+    max-width: 256px;
+    height: auto;
+}
+
+.qr-instruction {
+    font-weight: bold;
+    color: #333;
+}
+
+.qr-expiry {
+    color: #666;
 }
 
 .manual-status-switch-separator {
