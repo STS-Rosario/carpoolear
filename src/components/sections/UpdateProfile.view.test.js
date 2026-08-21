@@ -93,6 +93,14 @@ describe('UpdateProfile public data checkbox', () => {
     });
 });
 
+describe('UpdateProfile document field description', () => {
+    it('prepends DNI or passport hint before the document verification copy', () => {
+        expect(viewSource).toMatch(
+            /id="input-dni"[\s\S]*?\$t\('numeroDniOPasaporte'\)[\s\S]*?\$t\('incentivoDoc'\)/
+        );
+    });
+});
+
 describe('UpdateProfile delete account entry point', () => {
     it('opens the delete modal from the route query instead of an inline button', () => {
         expect(viewSource).toContain('DELETE_ACCOUNT_QUERY');
