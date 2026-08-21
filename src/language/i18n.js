@@ -5,6 +5,7 @@ const messages = {
         mostrarContrasena: 'Mostrar contraseña',
         ocultarContrasena: 'Ocultar contraseña',
         documento: 'Número de documento',
+        numeroDniOPasaporte: 'Número de DNI o Pasaporte',
         doc: 'DNI',
         soporte: 'Mesa de ayuda',
         navegacionAdministracion: 'Navegacion de administracion',
@@ -1881,6 +1882,7 @@ const messages = {
     chl: {
         loginUsuarioPlaceholder: 'Usuario',
         documento: 'Número de RUT',
+        numeroDniOPasaporte: 'Número de DNI o Pasaporte',
         doc: 'RUT',
         soporte: 'Mesa de ayuda',
         navegacionAdministracion: 'Navegacion de administracion',
@@ -3491,6 +3493,7 @@ const messages = {
         mostrarContrasena: 'Show password',
         ocultarContrasena: 'Hide password',
         documento: 'ID number',
+        numeroDniOPasaporte: 'DNI or passport number',
         doc: 'ID',
         soporte: 'Help desk',
         navegacionAdministracion: 'Administration navigation',

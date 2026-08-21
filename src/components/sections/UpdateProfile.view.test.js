@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'UpdateProfile.vue');
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
 
 describe('UpdateProfile missing patente routing', () => {
     it('redirects missing patente guidance to the Autos settings section', () => {
@@ -90,6 +92,33 @@ describe('UpdateProfile public data checkbox', () => {
     it('keeps the datos públicos checkbox label', () => {
         expect(viewSource).toContain('update-profile-datos-publicos');
         expect(viewSource).toContain("$t('datosVisiblesCheck')");
+    });
+});
+
+describe('UpdateProfile document field description', () => {
+    it('prepends DNI or passport hint before the document verification copy', () => {
+        expect(viewSource).toMatch(
+            /id="input-dni"[\s\S]*?\$t\('numeroDniOPasaporte'\)[\s\S]*?\$t\('incentivoDoc'\)/
+        );
+    });
+
+    it('does not append doc type and travel-time suffix to the description', () => {
+        const documentDescription = viewSource.match(
+            /id="input-dni"[\s\S]*?<span class="description">([\s\S]*?)<\/span>/
+        )?.[1];
+
+        expect(documentDescription).toBeDefined();
+        expect(documentDescription).not.toContain("$t('doc')");
+        expect(documentDescription).not.toContain("$t('momentoViajar')");
+    });
+
+    it('keeps document hint copy in i18n for all locales', () => {
+        expect(i18nSource).toMatch(
+            /numeroDniOPasaporte:\s*'Número de DNI o Pasaporte'/
+        );
+        expect(i18nSource).toMatch(
+            /numeroDniOPasaporte:\s*'DNI or passport number'/
+        );
     });
 });
 

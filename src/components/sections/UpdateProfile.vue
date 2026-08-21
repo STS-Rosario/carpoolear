@@ -157,8 +157,8 @@
                                 >(*)</span
                             >
                             <span class="description">
-                                {{ $t('incentivoDoc') }} {{ $t('doc') }}
-                                {{ $t('momentoViajar') }}
+                                {{ $t('numeroDniOPasaporte') }}.
+                                {{ $t('incentivoDoc') }}
                                 <span v-if="documentIdPlaceholder">
                                     ({{ documentIdPlaceholder }})
                                 </span>
