@@ -227,42 +227,42 @@ describe('IdentityValidation unpaid manual verification payment', () => {
     const pendingPaymentBlockStart = viewSource.indexOf(
         'manualStatus.has_submission && manualStatus.paid === false'
     );
+    const payOptionsPath = path.resolve(__dirname, 'ManualIdentityValidationPayOptions.vue');
+    const payOptionsSource = fs.readFileSync(payOptionsPath, 'utf8');
 
-    it('shows Mercado Pago and QR payment buttons instead of pagar ahora', () => {
+    it('uses shared manual payment options with MP and QR handlers', () => {
         expect(pendingPaymentBlockStart).toBeGreaterThan(-1);
         const pendingPaymentBlock = viewSource.slice(
             pendingPaymentBlockStart,
-            pendingPaymentBlockStart + 2500
+            pendingPaymentBlockStart + 1200
         );
 
-        expect(pendingPaymentBlock).toContain("$t('manualValidationPagarMercadoPago')");
-        expect(pendingPaymentBlock).toContain("$t('pagarConQR')");
-        expect(pendingPaymentBlock).toContain('identityValidationManualQrEnabled');
+        expect(pendingPaymentBlock).toContain('ManualIdentityValidationPayOptions');
+        expect(pendingPaymentBlock).toContain(':qr-enabled="identityValidationManualQrEnabled"');
+        expect(pendingPaymentBlock).toContain('@pay-mp="payManualValidation"');
+        expect(pendingPaymentBlock).toContain('@pay-qr="createManualValidationQrOrderAndShow"');
         expect(pendingPaymentBlock).not.toContain("$t('pagarAhora')");
     });
 
     it('shows the same manual payment instructions as the dedicated manual page', () => {
-        const pendingPaymentBlock = viewSource.slice(
-            pendingPaymentBlockStart,
-            pendingPaymentBlockStart + 3500
+        expect(payOptionsSource).toContain(
+            "$t('manualValidationPayIntro1', { cost: costDisplay })"
         );
-
-        expect(pendingPaymentBlock).toContain(
-            "$t('manualValidationPayIntro1', { cost: formattedManualCost })"
-        );
-        expect(pendingPaymentBlock).toContain("$t('manualValidationPayIntro2')");
-        expect(pendingPaymentBlock).toContain("$t('manualValidationPayListLead')");
-        expect(pendingPaymentBlock).toContain("$t('manualValidationPayBulletDni')");
-        expect(pendingPaymentBlock).toContain('manualValidationUploadWarningKey');
-        expect(pendingPaymentBlock).toContain("$t('manualValidationPayClosing')");
+        expect(payOptionsSource).toContain("$t('manualValidationPayIntro2')");
+        expect(payOptionsSource).toContain("$t('manualValidationPayListLead')");
+        expect(payOptionsSource).toContain("$t('manualValidationPayBulletDni')");
+        expect(payOptionsSource).toContain('manualValidationUploadWarningKey');
+        expect(payOptionsSource).toContain("$t('manualValidationPayClosing')");
+        expect(payOptionsSource).toContain("$t('manualValidationPagarMercadoPago')");
+        expect(payOptionsSource).toContain("$t('pagarConQR')");
     });
 
     it('shows QR payment panel and polling flow for unpaid manual verification', () => {
         expect(viewSource).toContain('createManualIdentityValidationQrOrder');
         expect(viewSource).toContain("import QRCode from 'qrcode'");
         expect(viewSource).toContain('showQrPanel');
-        expect(viewSource).toContain("$t('escaneáConAppMercadoPago')");
-        expect(viewSource).toContain("$t('qrExpiraEn')");
+        expect(payOptionsSource).toContain("$t('escaneáConAppMercadoPago')");
+        expect(payOptionsSource).toContain("$t('qrExpiraEn')");
         expect(viewSource).toContain('closeManualValidationQrPanel');
         expect(viewSource).toContain('startManualValidationQrPolling');
         expect(viewSource).toContain('stopManualValidationQrPolling');
