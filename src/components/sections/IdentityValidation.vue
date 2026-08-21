@@ -105,6 +105,23 @@
                 <div class="panel-heading">{{ $t('esperandoPagoValidacionManual') }}</div>
                 <div class="panel-body">
                     <p>{{ $t('debesPagarParaContinuar') }}</p>
+                    <p class="manual-validation-text">
+                        {{ $t('manualValidationPayIntro1', { cost: formattedManualCost }) }}
+                    </p>
+                    <p class="manual-validation-text">{{ $t('manualValidationPayIntro2') }}</p>
+                    <p class="manual-validation-text manual-validation-list-lead">
+                        {{ $t('manualValidationPayListLead') }}
+                    </p>
+                    <ul class="manual-validation-bullets">
+                        <li>{{ $t('manualValidationPayBulletDni') }}</li>
+                    </ul>
+                    <p class="manual-validation-upload-warning">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        {{ $t(manualValidationUploadWarningKey) }}
+                    </p>
+                    <p class="manual-validation-text manual-validation-closing">
+                        {{ $t('manualValidationPayClosing') }}
+                    </p>
                     <div class="manual-validation-pay-buttons">
                         <AppButton
                             variant="primary"
@@ -508,6 +525,10 @@ import {
     shouldShowMercadoPagoIntegrationDisconnectHint
 } from '../../utils/mercadoPagoIntegrationDisconnectHint';
 import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
+import {
+    getManualValidationUploadWarningKey,
+    MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
+} from '../../utils/manualValidationUploadWarning';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 import AppButton from '../ui/AppButton.vue';
 
@@ -684,6 +705,12 @@ export default {
         },
         showPendingManualSwitchLink() {
             return shouldShowPendingManualSwitchLink(this.config, this.manualStatus);
+        },
+        manualValidationUploadWarningKey() {
+            return getManualValidationUploadWarningKey();
+        },
+        manualValidationUploadWarningStyle() {
+            return MANUAL_VALIDATION_UPLOAD_WARNING_STYLE;
         }
     },
     methods: {
@@ -1079,6 +1106,50 @@ export default {
     flex-direction: column;
     gap: 0.75rem;
     margin-top: 0.25rem;
+}
+
+.manual-validation-text {
+    margin: 0 0 0.75rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.manual-validation-list-lead {
+    margin-bottom: 0.35rem;
+}
+
+.manual-validation-closing {
+    margin-bottom: 1.25rem;
+}
+
+.manual-validation-upload-warning {
+    margin: 0 0 1rem;
+    padding: 0.75rem 0.9rem;
+    border: v-bind('manualValidationUploadWarningStyle.border');
+    border-radius: 4px;
+    background: v-bind('manualValidationUploadWarningStyle.background');
+    color: v-bind('manualValidationUploadWarningStyle.color');
+    line-height: 1.4;
+}
+
+.manual-validation-upload-warning .fa {
+    margin-right: 0.5rem;
+}
+
+.identity-validation-component .manual-validation-bullets {
+    list-style-type: disc;
+    list-style-position: outside;
+    padding-left: 1.5rem;
+    margin: 0 0 1rem;
+    margin-left: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.identity-validation-component .manual-validation-bullets li {
+    display: list-item;
+    margin-bottom: 0.35rem;
 }
 
 .manual-validation-pay-cta {
