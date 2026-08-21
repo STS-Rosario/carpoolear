@@ -102,6 +102,16 @@ describe('UpdateProfile document field description', () => {
         );
     });
 
+    it('does not append doc type and travel-time suffix to the description', () => {
+        const documentDescription = viewSource.match(
+            /id="input-dni"[\s\S]*?<span class="description">([\s\S]*?)<\/span>/
+        )?.[1];
+
+        expect(documentDescription).toBeDefined();
+        expect(documentDescription).not.toContain("$t('doc')");
+        expect(documentDescription).not.toContain("$t('momentoViajar')");
+    });
+
     it('keeps document hint copy in i18n for all locales', () => {
         expect(i18nSource).toMatch(
             /numeroDniOPasaporte:\s*'Número de DNI o Pasaporte'/
