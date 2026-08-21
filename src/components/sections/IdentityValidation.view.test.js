@@ -240,6 +240,22 @@ describe('IdentityValidation unpaid manual verification payment', () => {
         expect(pendingPaymentBlock).toContain('identityValidationManualQrEnabled');
         expect(pendingPaymentBlock).not.toContain("$t('pagarAhora')");
     });
+
+    it('shows the same manual payment instructions as the dedicated manual page', () => {
+        const pendingPaymentBlock = viewSource.slice(
+            pendingPaymentBlockStart,
+            pendingPaymentBlockStart + 3500
+        );
+
+        expect(pendingPaymentBlock).toContain(
+            "$t('manualValidationPayIntro1', { cost: formattedManualCost })"
+        );
+        expect(pendingPaymentBlock).toContain("$t('manualValidationPayIntro2')");
+        expect(pendingPaymentBlock).toContain("$t('manualValidationPayListLead')");
+        expect(pendingPaymentBlock).toContain("$t('manualValidationPayBulletDni')");
+        expect(pendingPaymentBlock).toContain('manualValidationUploadWarningKey');
+        expect(pendingPaymentBlock).toContain("$t('manualValidationPayClosing')");
+    });
 });
 
 describe('IdentityValidation manual admin review note', () => {
