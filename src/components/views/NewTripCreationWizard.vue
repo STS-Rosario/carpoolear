@@ -497,6 +497,10 @@
             </template>
         </modal>
 
+        <TripFormValidationSummary
+            v-bind="form.tripFormValidationSummaryBindings"
+        />
+
         <div class="new-trip-wizard__nav">
             <button
                 v-if="previousStep"
@@ -544,6 +548,7 @@ import TripSeatMapPanel from '../elements/TripSeatMapPanel.vue';
 import TripContributionStepPanel from '../elements/TripContributionStepPanel.vue';
 import TripPreferencesStepPanel from '../elements/TripPreferencesStepPanel.vue';
 import TripReviewStepPanel from '../elements/TripReviewStepPanel.vue';
+import TripFormValidationSummary from '../elements/TripFormValidationSummary.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import DatePicker from '../DatePicker';
 import autocomplete from '../Autocomplete';
@@ -597,6 +602,7 @@ export default {
         TripContributionStepPanel,
         TripPreferencesStepPanel,
         TripReviewStepPanel,
+        TripFormValidationSummary,
         TripPointDetailFields,
         DatePicker,
         autocomplete,
