@@ -256,6 +256,18 @@ describe('IdentityValidation unpaid manual verification payment', () => {
         expect(pendingPaymentBlock).toContain('manualValidationUploadWarningKey');
         expect(pendingPaymentBlock).toContain("$t('manualValidationPayClosing')");
     });
+
+    it('shows QR payment panel and polling flow for unpaid manual verification', () => {
+        expect(viewSource).toContain('createManualIdentityValidationQrOrder');
+        expect(viewSource).toContain("import QRCode from 'qrcode'");
+        expect(viewSource).toContain('showQrPanel');
+        expect(viewSource).toContain("$t('escaneáConAppMercadoPago')");
+        expect(viewSource).toContain("$t('qrExpiraEn')");
+        expect(viewSource).toContain('closeManualValidationQrPanel');
+        expect(viewSource).toContain('startManualValidationQrPolling');
+        expect(viewSource).toContain('stopManualValidationQrPolling');
+        expect(viewSource).toContain('beforeUnmount');
+    });
 });
 
 describe('IdentityValidation manual admin review note', () => {
