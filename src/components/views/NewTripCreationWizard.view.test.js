@@ -215,6 +215,14 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).not.toContain("$t('tripCreationTitlePassenger')");
     });
 
+    it('shows validation summary above submit actions', () => {
+        expect(wizardSource).toContain('TripFormValidationSummary');
+        expect(wizardSource).toContain('form.tripFormValidationSummaryBindings');
+        expect(wizardSource).toMatch(
+            /TripFormValidationSummary[\s\S]*new-trip-wizard__nav/
+        );
+    });
+
     it('shows Creando... on the submit button while the trip is saving', () => {
         expect(wizardSource).toMatch(
             /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/

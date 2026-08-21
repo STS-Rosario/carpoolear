@@ -7,6 +7,7 @@ import {
     parseSeatPriceInput
 } from './tripSeatPrice.js';
 import { exceedsMaximumSeatPrice } from './tripMaxPriceValidation.js';
+import { hasTooManyForeignTripEndpoints } from './tripForeignEndpointsValidation.js';
 
 export const STEP = {
     ROLE: 1,
@@ -185,7 +186,12 @@ function validateOrigin({ points = [], puntoPartida = '' }) {
     return { valid: true, errors: {} };
 }
 
-function validateDestination({ points = [], puntoLlegada = '' }) {
+function validateDestination({
+    points = [],
+    puntoLlegada = '',
+    osmCountry = 'ARG',
+    allowForeignPoints = false
+}) {
     const destination = lastPoint(points);
     if (!destination || !destination.json) {
         return { valid: false, errors: { destination: 'localidadValida' } };
@@ -194,6 +200,16 @@ function validateDestination({ points = [], puntoLlegada = '' }) {
     const origin = points[0];
     if (origin && origin.json && origin.name === destination.name) {
         return { valid: false, errors: { destination: 'origenDestinoDistintos' } };
+    }
+
+    if (
+        allowForeignPoints &&
+        hasTooManyForeignTripEndpoints(points, osmCountry)
+    ) {
+        return {
+            valid: false,
+            errors: { destination: 'origenDestinoArgentina' }
+        };
     }
 
     if (isTripPointDetailEmpty(puntoLlegada)) {

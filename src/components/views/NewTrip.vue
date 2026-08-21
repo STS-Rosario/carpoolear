@@ -126,7 +126,16 @@ import { TRIP_INFO_STATUS } from '../../utils/tripCreationTripInfo.js';
 import { buildTripDateForApi } from '../../utils/tripDateForApi.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
+import TripFormValidationSummary from '../elements/TripFormValidationSummary.vue';
 import { handleTripCreateApiError } from '../../utils/tripCreateErrors.js';
+import { hasTooManyForeignTripEndpoints } from '../../utils/tripForeignEndpointsValidation.js';
+import {
+    collectActiveValidationMessages,
+    findFirstTripFormErrorElement,
+    formatTripValidationDialogMessage,
+    shouldShowTripFormValidationSummary
+} from '../../utils/tripFormValidationFeedback.js';
+import { getTripValidationErrorFields } from '../../utils/tripFormValidationFields.js';
 import { isEnabledAsync } from '../../services/debug';
 
 let tripApi = new TripApi();
@@ -158,7 +167,8 @@ export default {
         CompleteCarModal,
         TripCarsModal,
         NewTripCreationWizard,
-        TripCreationSuccess
+        TripCreationSuccess,
+        TripFormValidationSummary
     },
     provide() {
         return {
@@ -322,6 +332,7 @@ export default {
             creationSnapshot: null,
             parentTripId: null,
             tripInfoStatus: TRIP_INFO_STATUS.IDLE,
+            formValidationAttempted: false,
             tripCreationWizardKey: 0
         };
     },
@@ -492,14 +503,35 @@ export default {
                 return this.$t('contribucionRecomendadaCardDescripcionConSellado');
             }
             return this.$t('contribucionRecomendadaCardDescripcionSinSellado');
+        },
+        activeFormValidationMessages() {
+            return collectActiveValidationMessages(
+                getTripValidationErrorFields(this)
+            );
+        },
+        showTripValidationSummary() {
+            return shouldShowTripFormValidationSummary(
+                this.formValidationAttempted,
+                this.activeFormValidationMessages
+            );
+        },
+        tripFormValidationSummaryBindings() {
+            return {
+                attempted: this.formValidationAttempted,
+                messages: this.activeFormValidationMessages,
+                title: this.$t('algunosDatosNoValidos')
+            };
         }
     },
     watch: {
         cars() {
             this.preselectDriverCar();
         },
-        no_lucrar: function () {
+        no_lucrar() {
             this.lucrarError.state = false;
+        },
+        'trip.description': function () {
+            this.commentError.state = false;
         },
         'trip.rear_max_two_passengers': function() {
             if (this.trip.distance > 0) {
@@ -743,11 +775,24 @@ export default {
             this.dateAnswer = date;
         },
         jumpToError() {
+            const root = this.$refs.tripCreationWizard?.$el || this.$el;
+            const element = findFirstTripFormErrorElement(root);
+            if (element) {
+                this.$scrollToElement(element);
+                return;
+            }
+
             let hasError = document.getElementsByClassName('has-error');
             if (hasError.length) {
-                let element = hasError[0];
-                this.$scrollToElement(element);
+                let fallbackElement = hasError[0];
+                this.$scrollToElement(fallbackElement);
             }
+        },
+        getTripValidationDialogMessage() {
+            return formatTripValidationDialogMessage(
+                this.$t('algunosDatosNoValidos'),
+                this.activeFormValidationMessages
+            );
         },
     restoreData(trip) {
         this.no_lucrar = true;
@@ -902,7 +947,6 @@ export default {
 
         validate() {
             let globalError = false;
-            let foreignPoints = 0;
             let validTime = false;
             let validDate = false;
             let validOtherTripTime = false;
@@ -921,35 +965,46 @@ export default {
                     p.error.state = true;
                     p.error.message = this.$t('localidadValida');
                     globalError = true;
-                } else {
-                    foreignPoints +=
-                        p.json.country === this.config.osm_country ? 0 : 1;
                 }
             });
-            if (foreignPoints > 1) {
+            if (
+                hasTooManyForeignTripEndpoints(
+                    this.points,
+                    this.config.osm_country
+                )
+            ) {
                 globalError = true;
                 this.points[0].error.state = true;
                 this.points[0].error.message = this.$t(
                     'origenDestinoArgentina'
                 );
+                last(this.points).error.state = true;
+                last(this.points).error.message = this.$t(
+                    'origenDestinoArgentina'
+                );
             }
 
             if (this.showReturnTrip) {
-                foreignPoints = 0;
                 this.otherTrip.points.forEach((p) => {
                     if (!p.json) {
                         p.error.state = true;
                         p.error.message = this.$t('seleccioneLocalidadValida');
                         globalError = true;
-                    } else {
-                        foreignPoints +=
-                            p.json.country === this.config.osm_country ? 0 : 1;
                     }
                 });
-                if (foreignPoints > 1) {
+                if (
+                    hasTooManyForeignTripEndpoints(
+                        this.otherTrip.points,
+                        this.config.osm_country
+                    )
+                ) {
                     globalError = true;
                     this.otherTrip.points[0].error.state = true;
                     this.otherTrip.points[0].error.message = this.$t(
+                        'origenDestinoArgentina'
+                    );
+                    last(this.otherTrip.points).error.state = true;
+                    last(this.otherTrip.points).error.message = this.$t(
                         'origenDestinoArgentina'
                     );
                 }
@@ -1035,10 +1090,6 @@ export default {
                         estado: 'error'
                     }
                 );
-            } else if (globalError) {
-                dialogs.message(this.$t('algunosDatosNoValidos'), {
-                    estado: 'error'
-                });
             } else if (
                 !this.no_lucrar &&
                 this.trip.is_passenger.toString() !== '1'
@@ -1378,6 +1429,7 @@ export default {
                     return;
                 }
             }
+            this.formValidationAttempted = true;
             const validationResult = this.validate();
             if (validationResult) {
                 // Jump To Error
@@ -1386,6 +1438,7 @@ export default {
                 });
                 return;
             }
+            this.formValidationAttempted = false;
             /* eslint-disable no-unreachable */
             this.saving = true;
             if (!this.updatingTrip) {
@@ -1524,6 +1577,7 @@ export default {
                 defaultReturnTime: dayjs().add(2, 'hours').format('HH:00'),
                 ...options
             });
+            this.formValidationAttempted = false;
             this.tripCreationWizardKey += 1;
             this.preselectDriverCar();
             this.$nextTick(() => {
@@ -1537,6 +1591,7 @@ export default {
             this.$refs.tripCreationWizard?.cancelDraftSave?.();
             this.createdTrip = trip;
             this.showWizardSuccess = true;
+            this.formValidationAttempted = false;
             if (this.user?.id != null) {
                 clearTripCreationDraft(this.user.id);
             }

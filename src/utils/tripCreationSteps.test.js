@@ -335,4 +335,33 @@ describe('tripCreationSteps validateStep', () => {
             }).valid
         ).toBe(true);
     });
+
+    it('allows one foreign endpoint when the other is in the home country', () => {
+        expect(
+            validateStep(STEP.DESTINATION, {
+                points: [
+                    { json: { country: 'ARG' }, name: 'Santa Fe' },
+                    { json: { country: 'URY' }, name: 'Punta del Este' }
+                ],
+                osmCountry: 'ARG',
+                allowForeignPoints: true,
+                puntoLlegada: 'Terminal'
+            }).valid
+        ).toBe(true);
+    });
+
+    it('rejects trips with both endpoints outside the home country', () => {
+        const result = validateStep(STEP.DESTINATION, {
+            points: [
+                { json: { country: 'URY' }, name: 'Montevideo' },
+                { json: { country: 'URY' }, name: 'Punta del Este' }
+            ],
+            osmCountry: 'ARG',
+            allowForeignPoints: true,
+            puntoLlegada: 'Terminal'
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors.destination).toBe('origenDestinoArgentina');
+    });
 });
