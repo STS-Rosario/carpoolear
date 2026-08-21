@@ -1018,7 +1018,9 @@ export default {
                 ),
                 price: this.form.price,
                 maximumSeatPriceCents: this.form.maximum_seat_price_cents,
-                maximumTripPriceCents: this.form.maximum_trip_price_cents
+                maximumTripPriceCents: this.form.maximum_trip_price_cents,
+                osmCountry: this.form.config?.osm_country,
+                allowForeignPoints: this.form.allowForeignPoints
             };
         },
         syncPuntoDetailErrors(errors = {}) {
