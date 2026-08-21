@@ -788,6 +788,12 @@ export default {
                 this.$scrollToElement(fallbackElement);
             }
         },
+        getTripValidationDialogMessage() {
+            return formatTripValidationDialogMessage(
+                this.$t('algunosDatosNoValidos'),
+                this.activeFormValidationMessages
+            );
+        },
     restoreData(trip) {
         this.no_lucrar = true;
         this.points = [];
@@ -1571,6 +1577,7 @@ export default {
                 defaultReturnTime: dayjs().add(2, 'hours').format('HH:00'),
                 ...options
             });
+            this.formValidationAttempted = false;
             this.tripCreationWizardKey += 1;
             this.preselectDriverCar();
             this.$nextTick(() => {
@@ -1584,6 +1591,7 @@ export default {
             this.$refs.tripCreationWizard?.cancelDraftSave?.();
             this.createdTrip = trip;
             this.showWizardSuccess = true;
+            this.formValidationAttempted = false;
             if (this.user?.id != null) {
                 clearTripCreationDraft(this.user.id);
             }
