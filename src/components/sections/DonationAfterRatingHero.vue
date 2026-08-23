@@ -81,6 +81,7 @@ export default {
     max-width: 34rem;
     margin: 0 auto;
     aspect-ratio: 4 / 3;
+    overflow: visible;
 }
 
 .donation-after-rating-hero__image-backdrop,
@@ -99,6 +100,7 @@ export default {
 .donation-after-rating-hero__image {
     object-fit: cover;
     transform: rotate(-4deg);
+    z-index: 1;
 }
 
 @media (min-width: 768px) {
