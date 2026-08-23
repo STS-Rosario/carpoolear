@@ -1,5 +1,7 @@
 <template>
     <header class="header header-component">
+        <DonationAfterRatingHeader v-if="usesDonationAfterRatingHeader" />
+        <template v-else>
         <IdentityValidationCountdownBanner />
         <PendingRatingsBanner />
         <div
@@ -316,6 +318,7 @@
                 <header-menu-dropdown v-if="logged" />
             </div>
         </div>
+        </template>
     </header>
 </template>
 
@@ -334,6 +337,7 @@ import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBan
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
+import DonationAfterRatingHeader from './DonationAfterRatingHeader.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
@@ -343,6 +347,7 @@ import {
     syncLocaleToBackend,
 } from '../../utils/userLocale.js';
 import { installAppHeaderOffsetObserver } from '../../utils/appHeaderOffset.js';
+import { usesDonationAfterRatingHeader as isDonationAfterRatingHeaderRoute } from '../../utils/donationAfterRatingHeader.js';
 
 const userApi = new UserApi();
 
@@ -407,6 +412,9 @@ export default {
         }),
         showChangelogNav() {
             return this.logged && this.hasAnyChangelog;
+        },
+        usesDonationAfterRatingHeader() {
+            return isDonationAfterRatingHeaderRoute(this.$route.name);
         },
 
         showLogo() {
@@ -507,6 +515,7 @@ export default {
         UserRatingsCounts,
         PendingRatingsBanner,
         HeaderMenuDropdown,
+        DonationAfterRatingHeader,
         svgItem,
         AppButton
     }
