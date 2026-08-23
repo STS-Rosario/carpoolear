@@ -7,6 +7,13 @@ const viewPath = path.resolve(__dirname, 'DonationAfterRating.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('DonationAfterRating page content', () => {
+    it('shows the hero section above the donation prompt content', () => {
+        expect(viewSource).toContain('DonationAfterRatingHero');
+        expect(viewSource.indexOf('DonationAfterRatingHero')).toBeLessThan(
+            viewSource.indexOf('donation-after-rating__header')
+        );
+    });
+
     it('shows the donation prompt content from the post-rating modal', () => {
         expect(viewSource).toContain("$t('donaACarpoolear')");
         expect(viewSource).toContain("$t('proyectoDe')");
