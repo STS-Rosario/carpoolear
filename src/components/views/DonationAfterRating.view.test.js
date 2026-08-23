@@ -7,6 +7,15 @@ const viewPath = path.resolve(__dirname, 'DonationAfterRating.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('DonationAfterRating page content', () => {
+    it('renders the hero outside the constrained page container', () => {
+        expect(viewSource).toMatch(
+            /<DonationAfterRatingHero \/>[\s\S]*donation-after-rating__content container/
+        );
+        expect(viewSource).not.toMatch(
+            /class="donation-after-rating container"[\s\S]*<DonationAfterRatingHero/
+        );
+    });
+
     it('shows the hero section above the donation prompt content', () => {
         expect(viewSource).toContain('DonationAfterRatingHero');
         expect(viewSource.indexOf('DonationAfterRatingHero')).toBeLessThan(

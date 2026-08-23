@@ -39,4 +39,17 @@ describe('DonationAfterRatingHero', () => {
             /donation-after-rating-hero__media[\s\S]*width:\s*100%/
         );
     });
+
+    it('spans the full viewport width and keeps the title and image within bounds', () => {
+        expect(heroSource).toContain('donation-after-rating-hero--full-width');
+        expect(heroSource).toMatch(
+            /donation-after-rating-hero__title-line[\s\S]*max-width:\s*100%/
+        );
+        expect(heroSource).toMatch(
+            /donation-after-rating-hero__media[\s\S]*overflow:\s*hidden/
+        );
+        expect(heroSource).toMatch(
+            /@media \(min-width: 768px\)[\s\S]*align-items:\s*start/
+        );
+    });
 });
