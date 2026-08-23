@@ -1,7 +1,8 @@
 <template>
-    <div class="donation-after-rating container">
-        <div class="col-xs-24">
-            <DonationAfterRatingHero />
+    <div class="donation-after-rating">
+        <DonationAfterRatingHero />
+        <div class="donation-after-rating__content container">
+            <div class="col-xs-24">
             <h3 class="donation-after-rating__header">
                 <span>{{ $t('donaACarpoolear') }}</span>
                 <br class="hidden-sm hidden-md hidden-lg" />

@@ -1,5 +1,5 @@
 <template>
-    <section class="donation-after-rating-hero">
+    <section class="donation-after-rating-hero donation-after-rating-hero--full-width">
         <div class="donation-after-rating-hero__copy">
             <h1 class="donation-after-rating-hero__title">
                 <span
@@ -44,14 +44,28 @@ export default {
 </script>
 
 <style scoped>
+.donation-after-rating-hero--full-width {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+}
+
 .donation-after-rating-hero {
     display: grid;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+.donation-after-rating-hero__copy {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1rem;
+    container-type: inline-size;
 }
 
 .donation-after-rating-hero__title {
     margin: 0;
+    width: 100%;
     font-family: 'Dela Gothic One', var(--ds-font-family);
     font-weight: 400;
     line-height: 0.95;
@@ -60,7 +74,9 @@ export default {
 
 .donation-after-rating-hero__title-line {
     display: block;
-    font-size: clamp(2.75rem, 12vw, 4.5rem);
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(1.75rem, 9.5cqw, 4.5rem);
 }
 
 .donation-after-rating-hero__title-line--primary {
@@ -73,15 +89,19 @@ export default {
 
 .donation-after-rating-hero__media {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .donation-after-rating-hero__image-frame {
     position: relative;
     width: 100%;
-    max-width: 34rem;
+    max-width: 100%;
+    min-width: 0;
     margin: 0 auto;
     aspect-ratio: 4 / 3;
-    overflow: visible;
 }
 
 .donation-after-rating-hero__image-backdrop,
@@ -106,22 +126,26 @@ export default {
 @media (min-width: 768px) {
     .donation-after-rating-hero {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        align-items: center;
-        gap: 2.5rem;
+        align-items: start;
+        gap: 4rem;
+        padding: 0 2.5rem;
+    }
+
+    .donation-after-rating-hero__copy {
+        padding: 0;
     }
 
     .donation-after-rating-hero__title-line {
-        font-size: clamp(3.5rem, 5vw, 5.5rem);
+        font-size: clamp(2.75rem, 4.2vw, 5.5rem);
     }
 
     .donation-after-rating-hero__media {
-        justify-self: end;
-        width: 100%;
+        justify-self: stretch;
+        padding: 1.5rem 0 1.5rem 1.5rem;
     }
 
     .donation-after-rating-hero__image-frame {
-        margin: 0 0 0 auto;
-        max-width: none;
+        margin: 0;
     }
 }
 </style>
