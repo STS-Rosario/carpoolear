@@ -21,6 +21,7 @@
     "build-capacitor-android-local": "npm run build:android && cp -r dist/default/production/www/* www/ && npx cap run android --target d59fb3c7",
     "cap:sync:android": "npx cap sync android && node scripts/fix-capacitor-cordova-gradle.js",
     "preview:mp-rejection-warning": "node scripts/print-mp-rejection-preview-url.mjs",
+    "preview:donation-after-rating": "node scripts/print-donation-after-rating-preview-url.mjs",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --ext .js --fix src",
     "check": "npm run lint && npm run test:unit -- --run",

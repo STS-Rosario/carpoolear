@@ -6,19 +6,18 @@ const headerPath = path.resolve(__dirname, 'DonationAfterRatingHeader.vue');
 const headerSource = fs.readFileSync(headerPath, 'utf8');
 
 describe('DonationAfterRatingHeader', () => {
-    it('renders only a centered logo without navigation or donate actions', () => {
+    it('renders carpoolear and STS project branding in one line', () => {
         expect(headerSource).toContain('donation-after-rating-app-header');
-        expect(headerSource).toContain('donation-after-rating-app-header__logo');
-        expect(headerSource).toContain('header_logo');
-        expect(headerSource).toContain('justify-content: center');
+        expect(headerSource).toContain("$t('proyectoDe')");
+        expect(headerSource).toContain('logo_sts_nuevo_color.png');
+        expect(headerSource).toContain('flex-wrap: nowrap');
         expect(headerSource).toMatch(
-            /donation-after-rating-app-header__logo[\s\S]*height:\s*2\.75rem/
+            /donation-after-rating-app-header__project[\s\S]*color:\s*#fff/
+        );
+        expect(headerSource).toMatch(
+            /donation-after-rating-app-header__sts-logo[\s\S]*filter:\s*brightness\(0\)\s*invert\(1\)/
         );
         expect(headerSource).not.toContain('router-link');
         expect(headerSource).not.toContain('header-donate');
-        expect(headerSource).not.toContain('crearViaje');
-        expect(headerSource).not.toContain('HeaderMenuDropdown');
-        expect(headerSource).not.toContain('PendingRatingsBanner');
-        expect(headerSource).not.toContain('IdentityValidationCountdownBanner');
     });
 });

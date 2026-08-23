@@ -9,10 +9,10 @@ describe('DonationAfterRatingHero', () => {
     it('renders the two-line hero title with Dela Gothic One styling', () => {
         expect(heroSource).toContain('donation-after-rating-hero');
         expect(heroSource).toContain('donation-after-rating-hero__title');
-        expect(heroSource).toContain('NECESITAMOS');
-        expect(heroSource).toContain('TU APORTE');
+        expect(heroSource).toContain("$t('donationAfterRatingHeroTitlePrimary')");
+        expect(heroSource).toContain("$t('donationAfterRatingHeroTitleAccent')");
         expect(heroSource).toContain("'Dela Gothic One'");
-        expect(heroSource).toContain('--ds-text-primary');
+        expect(heroSource).toContain('--ds-text-secondary');
         expect(heroSource).toContain('--ds-header-donate-bg');
     });
 
@@ -31,25 +31,29 @@ describe('DonationAfterRatingHero', () => {
         );
     });
 
-    it('uses a side-by-side layout on desktop and stacks on mobile', () => {
+    it('centers the mobile hero title and uses an 85vw image width', () => {
         expect(heroSource).toMatch(
-            /@media \(min-width: 768px\)[\s\S]*donation-after-rating-hero[\s\S]*grid-template-columns/
+            /donation-after-rating-hero__copy[\s\S]*text-align:\s*center/
         );
         expect(heroSource).toMatch(
-            /donation-after-rating-hero__media[\s\S]*width:\s*100%/
+            /donation-after-rating-hero__image-frame[\s\S]*width:\s*85vw/
         );
+        expect(heroSource).toContain('margin-top: 1.5rem');
     });
 
-    it('spans the full viewport width and keeps the title and image within bounds', () => {
-        expect(heroSource).toContain('donation-after-rating-hero--full-width');
+    it('shows the mission copy and vertically centers content on wide desktops', () => {
+        expect(heroSource).toContain("$t('donationAfterRatingMissionLead')");
+        expect(heroSource).toContain("$t('donationAfterRatingMissionOrg')");
+        expect(heroSource).toContain("$t('donationAfterRatingMissionBody')");
+        expect(heroSource).toContain('donation-after-rating-hero__mission-lead-emphasis');
         expect(heroSource).toMatch(
-            /donation-after-rating-hero__title-line[\s\S]*max-width:\s*100%/
+            /@media \(min-width: 992px\)[\s\S]*donation-after-rating-hero__mission[\s\S]*display:\s*block/
         );
         expect(heroSource).toMatch(
-            /donation-after-rating-hero__media[\s\S]*overflow:\s*hidden/
+            /@media \(min-width: 768px\)[\s\S]*align-items:\s*center/
         );
         expect(heroSource).toMatch(
-            /@media \(min-width: 768px\)[\s\S]*align-items:\s*start/
+            /@media \(min-width: 992px\)[\s\S]*donation-after-rating-hero__image-frame[\s\S]*width:\s*30vw/
         );
     });
 });
