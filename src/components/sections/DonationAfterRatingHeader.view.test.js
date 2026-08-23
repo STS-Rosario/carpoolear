@@ -10,6 +10,10 @@ describe('DonationAfterRatingHeader', () => {
         expect(headerSource).toContain('donation-after-rating-app-header');
         expect(headerSource).toContain('donation-after-rating-app-header__logo');
         expect(headerSource).toContain('header_logo');
+        expect(headerSource).toContain('justify-content: center');
+        expect(headerSource).toMatch(
+            /donation-after-rating-app-header__logo[\s\S]*height:\s*2\.75rem/
+        );
         expect(headerSource).not.toContain('router-link');
         expect(headerSource).not.toContain('header-donate');
         expect(headerSource).not.toContain('crearViaje');

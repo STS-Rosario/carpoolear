@@ -241,7 +241,6 @@ export default [
                     active_id: 'home'
                 },
                 header: {
-                    titleKey: 'donaACarpoolear',
                     buttons: []
                 }
             }
@@ -1393,6 +1392,30 @@ export default [
             }
         }
     },
+    ...(import.meta.env.DEV
+        ? [
+              {
+                  path: '/preview/donation-after-rating/:tripId?',
+                  name: 'preview-donation-after-rating',
+                  component: DonationAfterRating,
+                  props: (route) => ({
+                      tripId: route.params.tripId || '0',
+                      preview: true
+                  }),
+                  meta: {
+                      actionbar: {
+                          footer: {
+                              show: true,
+                              active_id: 'home'
+                          },
+                          header: {
+                              buttons: []
+                          }
+                      }
+                  }
+              }
+          ]
+        : []),
     {
         path: '/:pathMatch(.*)*',
         redirect: '/trips'
