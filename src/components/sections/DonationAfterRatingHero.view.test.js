@@ -21,11 +21,13 @@ describe('DonationAfterRatingHero', () => {
         expect(heroSource).toContain('donation-after-rating-hero__image-frame');
         expect(heroSource).toContain('donation-after-rating-hero__image-backdrop');
         expect(heroSource).toContain('donation-after-rating-hero__image');
-        expect(heroSource).toMatch(
-            /donation-after-rating-hero__image-backdrop[\s\S]*transform:\s*rotate/
+        const backdropRule = heroSource.match(
+            /\.donation-after-rating-hero__image-backdrop\s*\{[^}]+\}/
         );
+        expect(backdropRule).not.toBeNull();
+        expect(backdropRule[0]).not.toMatch(/transform:\s*rotate/);
         expect(heroSource).toMatch(
-            /donation-after-rating-hero__image[\s\S]*transform:\s*rotate/
+            /\.donation-after-rating-hero__image\s*\{[\s\S]*?transform:\s*rotate/
         );
     });
 
