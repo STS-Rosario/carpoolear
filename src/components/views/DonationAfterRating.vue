@@ -1,6 +1,7 @@
 <template>
     <div class="donation-after-rating container">
         <div class="col-xs-24">
+            <DonationAfterRatingHero />
             <h3 class="donation-after-rating__header">
                 <span>{{ $t('donaACarpoolear') }}</span>
                 <br class="hidden-sm hidden-md hidden-lg" />
@@ -69,6 +70,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import dialogs from '../../services/dialogs.js';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
+import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import AppButton from '../ui/AppButton.vue';
 import {
     appendDonationTrackingUserId,
@@ -82,12 +84,17 @@ export default {
     name: 'donation-after-rating',
     components: {
         DonationAmountPicker,
+        DonationAfterRatingHero,
         AppButton
     },
     props: {
         tripId: {
             type: [String, Number],
             required: true
+        },
+        preview: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -123,7 +130,17 @@ export default {
             }
             await this.openExternalBrowser(url);
         },
+        notifyPreviewMode() {
+            dialogs.message('Preview mode: donation actions are disabled.', {
+                duration: 4,
+                estado: 'info'
+            });
+        },
         async onDonateOnceTime() {
+            if (this.preview) {
+                this.notifyPreviewMode();
+                return;
+            }
             if (this.donateValue > 0) {
                 let url = getDonationOnceUrl(this.donateValue);
                 url = appendDonationTrackingUserId(url, this.user && this.user.id);
@@ -143,6 +160,10 @@ export default {
             }
         },
         async onDonateMonthly() {
+            if (this.preview) {
+                this.notifyPreviewMode();
+                return;
+            }
             if (this.donateValue > 0) {
                 let url = getDonationMonthlyUrl(this.donateValue);
                 url = appendDonationTrackingUserId(url, this.user && this.user.id);
@@ -162,6 +183,10 @@ export default {
             }
         },
         async onContinueWithoutDonating() {
+            if (this.preview) {
+                this.notifyPreviewMode();
+                return;
+            }
             await this.registerDonation({
                 has_donated: 0,
                 has_denied: 1,
