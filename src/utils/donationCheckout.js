@@ -39,7 +39,7 @@ function normalizeTier(tier) {
 }
 
 export function isPlatformDonationsApiEnabled(appConfig) {
-    return Boolean(appConfig?.platform_donations_api_enabled);
+    return Boolean(appConfig?.['platform_donations_api_enabled']);
 }
 
 export async function startDonationCheckout({
@@ -61,7 +61,8 @@ export async function startDonationCheckout({
                 ? await donationApi.checkoutMonthly(payload)
                 : await donationApi.checkoutOnce(payload);
 
-        const initPoint = response?.init_point ?? response?.data?.init_point;
+        const initPoint =
+            response?.['init_point'] ?? response?.data?.['init_point'];
         if (initPoint) {
             return initPoint;
         }
