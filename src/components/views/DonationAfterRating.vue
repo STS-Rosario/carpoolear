@@ -99,11 +99,7 @@ import dialogs from '../../services/dialogs.js';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import AppButton from '../ui/AppButton.vue';
-import {
-    appendDonationTrackingUserId,
-    getDonationMonthlyUrl,
-    getDonationOnceUrl
-} from '../../utils/donationOptions.js';
+import { startDonationCheckout } from '../../utils/donationCheckout.js';
 import { DONATION_AFTER_RATING_BENEFIT_KEYS } from '../../utils/donationAfterRatingBenefits.js';
 import {
     CARPOOLEAR_COLLABORATE_URL,
@@ -137,7 +133,8 @@ export default {
     },
     computed: {
         ...mapState(useAuthStore, {
-            user: 'user'
+            user: 'user',
+            appConfig: 'appConfig'
         }),
         volunteerParagraphHtml() {
             const link = `<a href="${CARPOOLEAR_COLLABORATE_URL}" target="_blank" rel="noopener noreferrer">${this.$t('donationAfterRatingVolunteerLink')}</a>`;
@@ -176,15 +173,24 @@ export default {
                 return;
             }
             if (this.donateValue > 0) {
-                let url = getDonationOnceUrl(this.donateValue);
-                url = appendDonationTrackingUserId(url, this.user && this.user.id);
-                await this.openExternalBrowser(url);
-                await this.registerDonation({
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.tripId
-                });
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'once',
+                        amount: this.donateValue,
+                        source: 'after_rating',
+                        tripId: this.tripId,
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    await this.openExternalBrowser(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.$router.push({ name: 'trips' });
             } else {
                 dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
@@ -199,15 +205,24 @@ export default {
                 return;
             }
             if (this.donateValue > 0) {
-                let url = getDonationMonthlyUrl(this.donateValue);
-                url = appendDonationTrackingUserId(url, this.user && this.user.id);
-                await this.openExternalBrowser(url);
-                await this.registerDonation({
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.tripId
-                });
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'monthly',
+                        amount: this.donateValue,
+                        source: 'after_rating',
+                        tripId: this.tripId,
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    await this.openExternalBrowser(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.$router.push({ name: 'trips' });
             } else {
                 dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {

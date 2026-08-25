@@ -41,6 +41,7 @@
 
 <script>
 import { DONATION_TIERS } from '../../utils/donationOptions.js';
+import { fetchDonationTiers } from '../../utils/donationCheckout.js';
 
 /** i18n: donationTierCafe, donationTierBeer, donationTierFood */
 
@@ -73,9 +74,17 @@ export default {
         }
     },
     emits: ['update:modelValue'],
+    data() {
+        return {
+            loadedTiers: DONATION_TIERS
+        };
+    },
+    async mounted() {
+        this.loadedTiers = await fetchDonationTiers();
+    },
     computed: {
         tiers() {
-            return DONATION_TIERS;
+            return this.loadedTiers;
         }
     },
     methods: {
