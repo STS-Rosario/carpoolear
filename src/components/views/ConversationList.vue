@@ -403,7 +403,9 @@ export default {
     },
 
     beforeUnmount() {
-        this.thread.stop();
+        if (this.thread) {
+            this.thread.stop();
+        }
         this.select(null);
     },
 
@@ -411,11 +413,6 @@ export default {
         $route: function () {
             if (!this.$route.meta.hide) {
                 this.select(null);
-            }
-        },
-        isMobile: function () {
-            if (!this.isMobile) {
-                router.push({ name: 'conversation-chat' });
             }
         },
         textSearch: function (newValue, oldValue) {
@@ -434,9 +431,6 @@ export default {
             this.thread.run(20000);
         }
 
-        if (!this.isMobile) {
-            router.push({ name: 'conversation-chat' });
-        }
     },
     created() {
         this.debouncedSearch = debounce(() => {

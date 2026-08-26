@@ -713,8 +713,8 @@ export default {
             if (this.installAppEvent !== null) {
                 // Android - show install button
                 return {
-                    title: $t('instalarApp'),
-                    message: $t('instalarWebAppPWA'),
+                    title: this.$t('instalarApp'),
+                    message: this.$t('instalarWebAppPWA'),
                     showInstallButton: true,
                     showCloseButton: false,
                     showDontShowAgainButton: true
@@ -722,8 +722,8 @@ export default {
             } else if (this.isIOS()) {
                 // iOS - show installation instructions
                 return {
-                    title: $t('instalarAppEnIos'),
-                    message: $t('instalarAppEnIosInstrucciones'),
+                    title: this.$t('instalarAppEnIos'),
+                    message: this.$t('instalarAppEnIosInstrucciones'),
                     showInstallButton: false,
                     showCloseButton: true,
                     showDontShowAgainButton: true

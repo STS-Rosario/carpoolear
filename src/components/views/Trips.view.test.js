@@ -258,6 +258,14 @@ describe('Trips.vue donation modal', () => {
 });
 
 describe('Trips.vue search alert and install modal CTAs', () => {
+    it('uses this.$t inside getInstallModalContent', () => {
+        expect(viewSource).toContain("this.$t('instalarApp')");
+        expect(viewSource).toContain("this.$t('instalarWebAppPWA')");
+        expect(viewSource).toContain("this.$t('instalarAppEnIos')");
+        expect(viewSource).not.toContain('title: $t(');
+        expect(viewSource).not.toContain('message: $t(');
+    });
+
     it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
         const installModal = viewSource.match(
             /showModalInstallApp[\s\S]*?<\/modal>/

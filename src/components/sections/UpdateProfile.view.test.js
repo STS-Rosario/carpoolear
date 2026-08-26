@@ -13,6 +13,10 @@ describe('UpdateProfile missing patente routing', () => {
         expect(viewSource).toContain("$t('autosGestionarEnConfiguracion')");
         expect(viewSource).not.toContain('user-cars-block');
     });
+
+    it('does not call a missing scrollToMissingRouteField helper on mount', () => {
+        expect(viewSource).not.toContain('scrollToMissingRouteField');
+    });
 });
 
 describe('UpdateProfile save error feedback', () => {

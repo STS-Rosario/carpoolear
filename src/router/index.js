@@ -100,7 +100,7 @@ router.push = function (data, fnSuccess, fnFailure) {
     } else {
         router.stack = [];
     }
-    router._push(data, fnSuccess, fnFailure);
+    return router._push(data, fnSuccess, fnFailure);
 };
 
 router.replace = function (data) {
@@ -111,7 +111,7 @@ router.replace = function (data) {
     } else {
         router.stack = [];
     }
-    router._push(data);
+    return router._push(data);
 };
 
 router.go = function (number) {

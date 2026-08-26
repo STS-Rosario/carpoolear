@@ -312,12 +312,15 @@ export default {
             }
         },
         updateScroll() {
-            if (this.$route.query.loc) {
-                // window.scrollTo(0, document.body.scrollHeight);
-                // window.location.hash = this.$route.query.loc;
-                let domNode = document.getElementById(this.$route.query.loc);
-                window.scrollTo(0, domNode.offsetTop - 150);
+            if (!this.$route.query.loc) {
+                return;
             }
+            this.$nextTick(() => {
+                const domNode = document.getElementById(this.$route.query.loc);
+                if (domNode) {
+                    window.scrollTo(0, domNode.offsetTop - 150);
+                }
+            });
         },
         redirectToDonationPrompt(tripId) {
             if (shouldHideDonationOnIOSCapacitor(this.user)) {

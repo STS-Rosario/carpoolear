@@ -87,6 +87,18 @@ describe('ConversationList.vue messages redesign', () => {
         expect(viewSource).toContain('messages-page__shell');
     });
 
+    it('does not navigate to conversation-chat without a conversation id', () => {
+        expect(viewSource).not.toMatch(
+            /router\.push\(\{\s*name:\s*'conversation-chat'\s*\}\)/
+        );
+    });
+
+    it('guards thread cleanup when polling was never started', () => {
+        expect(viewSource).toMatch(
+            /beforeUnmount\(\)\s*\{[^}]*if\s*\(\s*this\.thread\s*\)\s*\{[^}]*this\.thread\.stop\(\)/s
+        );
+    });
+
     it('sizes the conversation list scroll area below the header so load-more stays reachable', () => {
         const cssPath = path.resolve(
             __dirname,
