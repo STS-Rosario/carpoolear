@@ -1257,7 +1257,6 @@ export default {
         } catch (ex) {
             console.log('exception', ex);
         }
-        this.scrollToMissingRouteField();
     },
     beforeUnmount() {
         bus.off('date-change', this.dateChange);

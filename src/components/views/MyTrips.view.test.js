@@ -54,6 +54,13 @@ describe('MyTrips pending rates carpoodatos modal', () => {
     });
 });
 
+describe('MyTrips scroll to query loc', () => {
+    it('waits for DOM and guards missing scroll targets', () => {
+        expect(source).toContain('this.$nextTick');
+        expect(source).toMatch(/if \(domNode\) \{[\s\S]*offsetTop/);
+    });
+});
+
 describe('MyTrips donation after positive rating', () => {
     it('does not render the donation request modal', () => {
         expect(source).not.toContain('showModalRequestDonation');
