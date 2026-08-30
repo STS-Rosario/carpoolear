@@ -42,6 +42,7 @@
             >
                 {{ $t('pagarConQR') }}
             </AppButton>
+            <ManualValidationQrPaymentHelp v-if="qrEnabled" />
         </div>
 
         <slot />
@@ -61,6 +62,7 @@
                 </div>
                 <p v-else class="manual-validation-text">{{ $t('cargando') }}...</p>
                 <p class="qr-expiry small">{{ $t('qrExpiraEn') }}</p>
+                <ManualValidationQrPaymentHelp />
                 <AppButton
                     variant="tertiary"
                     size="sm"
@@ -80,11 +82,13 @@ import {
     MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
 } from '../../utils/manualValidationUploadWarning';
 import AppButton from '../ui/AppButton.vue';
+import ManualValidationQrPaymentHelp from './ManualValidationQrPaymentHelp.vue';
 
 export default {
     name: 'ManualIdentityValidationPayOptions',
     components: {
-        AppButton
+        AppButton,
+        ManualValidationQrPaymentHelp
     },
     props: {
         costDisplay: {
