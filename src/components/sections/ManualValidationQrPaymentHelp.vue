@@ -43,7 +43,7 @@ export default {
 <style scoped>
 .qr-payment-help {
     margin-top: 0.75rem;
-    text-align: left;
+    text-align: center;
 }
 
 .qr-payment-help__toggle {
@@ -58,6 +58,7 @@ export default {
 
 .qr-payment-help__content {
     margin-top: 0.75rem;
+    text-align: left;
 }
 
 .qr-payment-help__title {
