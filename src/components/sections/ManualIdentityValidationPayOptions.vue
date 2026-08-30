@@ -75,7 +75,7 @@
         </div>
 
         <div v-if="showMpPanel" class="mp-payment-panel panel panel-default">
-            <div class="panel-body text-center">
+            <div class="panel-body mp-payment-panel__actions">
                 <AppButton
                     variant="primary"
                     size="lg"
@@ -279,8 +279,11 @@ export default {
     margin-top: 1.25rem;
 }
 
-.mp-payment-panel .manual-validation-pay-cta {
-    margin-bottom: 0.75rem;
+.mp-payment-panel__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
 }
 
 .qr-image-wrap {
