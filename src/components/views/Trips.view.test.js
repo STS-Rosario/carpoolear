@@ -296,3 +296,11 @@ describe('Trips.vue empty search and nearby section', () => {
         expect(viewSource).not.toContain('isComplementary(');
     });
 });
+
+describe('Trips.vue search box when the ref is missing', () => {
+    it('clears the search box through a helper that tolerates a missing ref', () => {
+        expect(viewSource).toContain('clearSearchBox');
+        expect(viewSource).toContain("from '../../utils/searchBox.js'");
+        expect(viewSource).not.toMatch(/this\.\$refs\.searchBox\.clear\(\)/);
+    });
+});
