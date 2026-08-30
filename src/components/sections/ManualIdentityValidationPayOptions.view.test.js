@@ -55,4 +55,43 @@ describe('ManualIdentityValidationPayOptions shared component', () => {
         const qrPanel = source.slice(source.indexOf('showQrPanel'));
         expect(qrPanel).toContain('ManualValidationQrPaymentHelp');
     });
+
+    it('shows copy and share payment link actions when Mercado Pago payment is selected', () => {
+        const source = fs.readFileSync(componentPath, 'utf8');
+        const identitySource = fs.readFileSync(identityValidationPath, 'utf8');
+        const manualSource = fs.readFileSync(manualValidationPath, 'utf8');
+
+        expect(source).toContain('showMpPanel');
+        expect(source).toContain('mpPaymentUrl');
+        expect(source).toContain("$t('copiarLinkDePago')");
+        expect(source).toContain("$t('enviarLinkDePago')");
+        expect(source).toContain("$t('manualValidationPagarMercadoPago')");
+        expect(source).toContain('copyTextToClipboard');
+        expect(source).toContain('shareContent');
+        expect(source).toContain('copyMpLink');
+        expect(source).toContain('shareMpLink');
+        expect(source).toContain('openMpCheckout');
+        expect(source).toContain("emit('close-mp')");
+
+        expect(identitySource).toContain(':show-mp-panel="showMpPanel"');
+        expect(identitySource).toContain(':mp-payment-url="mpPaymentUrl"');
+        expect(manualSource).toContain(':show-mp-panel="showMpPanel"');
+        expect(manualSource).toContain(':mp-payment-url="mpPaymentUrl"');
+
+        const identityPayMethod = identitySource.slice(
+            identitySource.indexOf('payManualValidation()'),
+            identitySource.indexOf('createManualValidationQrOrderAndShow')
+        );
+        expect(identityPayMethod).toContain('this.showMpPanel = true');
+        expect(identityPayMethod).toContain('this.mpPaymentUrl');
+        expect(identityPayMethod).not.toContain('window.location.href = initPoint');
+
+        const manualPayMethod = manualSource.slice(
+            manualSource.indexOf('createPreferenceAndRedirect()'),
+            manualSource.indexOf('createQrOrderAndShow')
+        );
+        expect(manualPayMethod).toContain('this.showMpPanel = true');
+        expect(manualPayMethod).toContain('this.mpPaymentUrl');
+        expect(manualPayMethod).not.toContain('window.location.href = initPoint');
+    });
 });
