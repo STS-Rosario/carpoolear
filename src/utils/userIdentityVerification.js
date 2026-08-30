@@ -8,6 +8,10 @@ export function isUserIdentityVerified(user) {
     return Number(user.identity_validated) > 0;
 }
 
+export function isIdentityVerificationSuccessResult(resultMessage) {
+    return resultMessage === 'success';
+}
+
 export function applySuccessfulIdentityVerificationToUser(
     user,
     verifiedAt = new Date().toISOString()
@@ -31,7 +35,7 @@ export function syncAuthUserAfterIdentityVerificationSuccess({
     setUser,
     fetchUser
 }) {
-    if (resultMessage !== 'success') {
+    if (!isIdentityVerificationSuccessResult(resultMessage)) {
         return Promise.resolve();
     }
 

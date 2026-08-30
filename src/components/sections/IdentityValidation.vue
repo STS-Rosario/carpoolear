@@ -681,10 +681,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(useAuthStore, {
-            setUser: 'setUser',
-            fetchUser: 'fetchUser'
-        }),
+        ...mapActions(useAuthStore, ['setUser', 'fetchUser']),
         formatDate(value) {
             if (!value) return '';
             const d = new Date(value);

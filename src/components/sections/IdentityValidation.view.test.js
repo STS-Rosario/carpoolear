@@ -28,8 +28,7 @@ describe('IdentityValidation auth state after success', () => {
             'syncAuthUserAfterIdentityVerificationSuccess'
         );
         expect(viewSource).toContain("import { mapState, mapActions } from 'pinia'");
-        expect(viewSource).toContain("setUser: 'setUser'");
-        expect(viewSource).toContain("fetchUser: 'fetchUser'");
+        expect(viewSource).toContain("mapActions(useAuthStore, ['setUser', 'fetchUser'])");
         expect(viewSource).toMatch(
             /mounted\(\)\s*\{[\s\S]*syncAuthUserAfterIdentityVerificationSuccess/
         );
