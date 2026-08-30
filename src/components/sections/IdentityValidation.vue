@@ -735,6 +735,7 @@ export default {
                         this.closeManualValidationQrPanel();
                         this.mpPaymentUrl = initPoint;
                         this.showMpPanel = true;
+                        this.startManualValidationQrPolling();
                     }
                     this.loadingPreference = false;
                 })
@@ -776,6 +777,7 @@ export default {
         closeManualValidationMpPanel() {
             this.showMpPanel = false;
             this.mpPaymentUrl = null;
+            this.stopManualValidationQrPolling();
         },
         startManualValidationQrPolling() {
             this.stopManualValidationQrPolling();
@@ -783,6 +785,7 @@ export default {
                 this.fetchManualStatus().then(() => {
                     if (this.manualStatus.paid === true) {
                         this.closeManualValidationQrPanel();
+                        this.closeManualValidationMpPanel();
                     }
                 });
             }, 3000);

@@ -374,6 +374,7 @@ export default {
                         this.closeQrPanel();
                         this.mpPaymentUrl = initPoint;
                         this.showMpPanel = true;
+                        this.startPollingStatus();
                     }
                     this.loadingPreference = false;
                 })
@@ -416,6 +417,7 @@ export default {
         closeMpPanel() {
             this.showMpPanel = false;
             this.mpPaymentUrl = null;
+            this.stopPollingStatus();
         },
         startPollingStatus() {
             this.stopPollingStatus();
@@ -423,6 +425,7 @@ export default {
                 this.fetchStatus().then(() => {
                     if (this.paymentSuccess) {
                         this.closeQrPanel();
+                        this.closeMpPanel();
                     }
                 });
             }, 3000);
