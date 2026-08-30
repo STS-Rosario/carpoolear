@@ -955,6 +955,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -2733,6 +2736,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -4393,6 +4399,9 @@ const messages = {
         manualValidationPayClosing:
             'This allows us to verify your account correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
+        copiarLinkDePago: 'Copy payment link',
+        enviarLinkDePago: 'Send payment link',
+        linkDePagoCopiado: 'Payment link copied',
         manualValidationVolverOpcionesDesktop: 'Back to verification options',
         manualValidationPagoProcesado: 'Payment processed successfully',
         manualValidationUploadIntro:

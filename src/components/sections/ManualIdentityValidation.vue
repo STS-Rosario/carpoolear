@@ -47,10 +47,13 @@
                         :loading-qr="loadingQr"
                         :show-qr-panel="showQrPanel"
                         :qr-image-url="qrImageUrl"
+                        :show-mp-panel="showMpPanel"
+                        :mp-payment-url="mpPaymentUrl"
                         :cost-unavailable="costCents <= 0"
                         @pay-mp="createPreferenceAndRedirect"
                         @pay-qr="createQrOrderAndShow"
                         @close-qr="closeQrPanel"
+                        @close-mp="closeMpPanel"
                     >
                         <template v-if="showSwitchToMercadoPagoLink">
                             <hr class="manual-validation-switch-mode-separator" />
@@ -222,6 +225,8 @@ export default {
             submitting: false,
             submitError: null,
             showQrPanel: false,
+            showMpPanel: false,
+            mpPaymentUrl: null,
             qrImageUrl: null,
             qrData: null,
             pollIntervalId: null,
@@ -366,10 +371,11 @@ export default {
                     const data = res.data || res;
                     const initPoint = data.init_point;
                     if (initPoint) {
-                        window.location.href = initPoint;
-                    } else {
-                        this.loadingPreference = false;
+                        this.closeQrPanel();
+                        this.mpPaymentUrl = initPoint;
+                        this.showMpPanel = true;
                     }
+                    this.loadingPreference = false;
                 })
                 .catch(() => {
                     this.loadingPreference = false;
@@ -387,6 +393,7 @@ export default {
                     if (qrData && requestId) {
                         this.requestId = requestId;
                         this.qrData = qrData;
+                        this.closeMpPanel();
                         this.showQrPanel = true;
                         this.qrImageUrl = null;
                         QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
@@ -405,6 +412,10 @@ export default {
             this.qrData = null;
             this.qrImageUrl = null;
             this.stopPollingStatus();
+        },
+        closeMpPanel() {
+            this.showMpPanel = false;
+            this.mpPaymentUrl = null;
         },
         startPollingStatus() {
             this.stopPollingStatus();

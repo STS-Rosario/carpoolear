@@ -79,16 +79,16 @@ describe('ManualIdentityValidationPayOptions shared component', () => {
         expect(manualSource).toContain(':mp-payment-url="mpPaymentUrl"');
 
         const identityPayMethod = identitySource.slice(
-            identitySource.indexOf('payManualValidation()'),
-            identitySource.indexOf('createManualValidationQrOrderAndShow')
+            identitySource.indexOf('payManualValidation() {'),
+            identitySource.indexOf('createManualValidationQrOrderAndShow() {')
         );
         expect(identityPayMethod).toContain('this.showMpPanel = true');
         expect(identityPayMethod).toContain('this.mpPaymentUrl');
         expect(identityPayMethod).not.toContain('window.location.href = initPoint');
 
         const manualPayMethod = manualSource.slice(
-            manualSource.indexOf('createPreferenceAndRedirect()'),
-            manualSource.indexOf('createQrOrderAndShow')
+            manualSource.indexOf('createPreferenceAndRedirect() {'),
+            manualSource.indexOf('createQrOrderAndShow() {')
         );
         expect(manualPayMethod).toContain('this.showMpPanel = true');
         expect(manualPayMethod).toContain('this.mpPaymentUrl');
