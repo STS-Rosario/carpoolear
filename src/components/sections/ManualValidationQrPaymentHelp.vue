@@ -29,9 +29,13 @@ export default {
     name: 'ManualValidationQrPaymentHelp',
     data() {
         return {
-            helpOpen: false,
-            carpoolearAppUrl: CARPOOLEAR_APP_URL
+            helpOpen: false
         };
+    },
+    computed: {
+        carpoolearAppUrl() {
+            return CARPOOLEAR_APP_URL;
+        }
     }
 };
 </script>

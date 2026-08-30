@@ -42,8 +42,8 @@
             >
                 {{ $t('pagarConQR') }}
             </AppButton>
-            <ManualValidationQrPaymentHelp v-if="qrEnabled" />
         </div>
+        <ManualValidationQrPaymentHelp v-if="qrEnabled" />
 
         <slot />
 
