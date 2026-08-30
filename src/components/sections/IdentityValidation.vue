@@ -463,7 +463,7 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { UserApi } from '../../services/api';
 import QRCode from 'qrcode';
@@ -490,6 +490,7 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
+import { syncAuthUserAfterIdentityVerificationSuccess } from '../../utils/userIdentityVerification';
 import {
     MERCADO_PAGO_MY_APPS_URL,
     shouldShowMercadoPagoIntegrationDisconnectHint
@@ -680,6 +681,10 @@ export default {
         }
     },
     methods: {
+        ...mapActions(useAuthStore, {
+            setUser: 'setUser',
+            fetchUser: 'fetchUser'
+        }),
         formatDate(value) {
             if (!value) return '';
             const d = new Date(value);
@@ -818,6 +823,12 @@ export default {
     },
     mounted() {
         this.fetchManualStatus();
+        syncAuthUserAfterIdentityVerificationSuccess({
+            resultMessage: this.resultMessage,
+            user: this.user,
+            setUser: this.setUser,
+            fetchUser: this.fetchUser
+        });
     },
     beforeUnmount() {
         this.stopManualValidationQrPolling();
