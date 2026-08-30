@@ -56,6 +56,24 @@ describe('ManualIdentityValidationPayOptions shared component', () => {
         expect(qrPanel).toContain('ManualValidationQrPaymentHelp');
     });
 
+    it('centers the QR payment how-to link', () => {
+        const helpSource = fs.readFileSync(
+            path.resolve(__dirname, 'ManualValidationQrPaymentHelp.vue'),
+            'utf8'
+        );
+        const helpBlock = helpSource.slice(
+            helpSource.indexOf('.qr-payment-help {'),
+            helpSource.indexOf('.qr-payment-help__toggle')
+        );
+        const contentBlock = helpSource.slice(
+            helpSource.indexOf('.qr-payment-help__content'),
+            helpSource.indexOf('.qr-payment-help__title')
+        );
+
+        expect(helpBlock).toContain('text-align: center');
+        expect(contentBlock).toContain('text-align: left');
+    });
+
     it('shows copy and share payment link actions when Mercado Pago payment is selected', () => {
         const source = fs.readFileSync(componentPath, 'utf8');
         const identitySource = fs.readFileSync(identityValidationPath, 'utf8');
