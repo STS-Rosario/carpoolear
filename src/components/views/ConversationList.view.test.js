@@ -99,6 +99,14 @@ describe('ConversationList.vue messages redesign', () => {
         );
     });
 
+    it('does not read window.Notification.permission on mount when the API is missing', () => {
+        expect(viewSource).not.toContain('window.Notification.permission');
+        expect(viewSource).toContain('isWebNotificationPermissionGranted');
+        expect(viewSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*isWebNotificationPermissionGranted\(\)/
+        );
+    });
+
     it('sizes the conversation list scroll area below the header so load-more stays reachable', () => {
         const cssPath = path.resolve(
             __dirname,
