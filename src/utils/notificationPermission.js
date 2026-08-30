@@ -31,6 +31,14 @@ export function isPlainWeb() {
     return !isNativePlatform() && !isPWA();
 }
 
+export function isWebNotificationPermissionGranted() {
+    return Boolean(
+        typeof window !== 'undefined' &&
+            window.Notification &&
+            window.Notification.permission === 'granted'
+    );
+}
+
 // Returns the dynamic module (a non-thenable ES module namespace), NOT the
 // plugin object. The @capacitor/push-notifications export is a Capacitor Proxy
 // that returns a wrapper for every property — including `then` — so awaiting
