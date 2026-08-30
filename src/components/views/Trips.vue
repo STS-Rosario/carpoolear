@@ -585,6 +585,7 @@ import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { splitTripsBySearchDate } from '../../utils/tripSearchDateSplit.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
+import { clearSearchBox } from '../../utils/searchBox.js';
 import AppButton from '../ui/AppButton.vue';
 import { useActionbarsStore } from '../../stores/actionbars';
 
@@ -939,9 +940,7 @@ export default {
             this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
             this.search({ is_passenger: false });
-            if (this.$refs.searchBox) {
-                this.$refs.searchBox.clear();
-            }
+            clearSearchBox(this.$refs.searchBox);
         },
         onScrollBottom() {
             if (this.morePages && !this.lookSearch) {
@@ -1097,9 +1096,7 @@ export default {
             }
             this.search(this.searchParams.data);
         } else {
-            if (this.$refs.searchBox) {
-                this.$refs.searchBox.clear();
-            }
+            clearSearchBox(this.$refs.searchBox);
         }
 
         const queryParams = this.getSearchParamsFromQuery();
@@ -1199,7 +1196,7 @@ export default {
                     this.refreshTrips(false);
                     this.lookSearch = false;
                     this.resultaOfSearch = false;
-                    this.$refs.searchBox.clear();
+                    clearSearchBox(this.$refs.searchBox);
                 }
             }
         }
