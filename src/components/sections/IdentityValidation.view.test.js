@@ -22,6 +22,19 @@ describe('IdentityValidation page card', () => {
     });
 });
 
+describe('IdentityValidation auth state after success', () => {
+    it('syncs the authenticated user after successful account verification', () => {
+        expect(viewSource).toContain(
+            'syncAuthUserAfterIdentityVerificationSuccess'
+        );
+        expect(viewSource).toContain("import { mapState, mapActions } from 'pinia'");
+        expect(viewSource).toContain("mapActions(useAuthStore, ['setUser', 'fetchUser'])");
+        expect(viewSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*syncAuthUserAfterIdentityVerificationSuccess/
+        );
+    });
+});
+
 describe('IdentityValidation admin review note contexts', () => {
     it('uses approval note helper in success banner', () => {
         expect(viewSource).toContain('displayableManualApprovalReviewNote');
