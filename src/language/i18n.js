@@ -935,6 +935,15 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        comoPagarElQR: '¿Cómo pagar el QR?',
+        comoHacerPagoQRTitulo: '¿Cómo hacer el pago con QR?',
+        comoHacerPagoQRCelular:
+            'Desde tu celular, le podes hacer una captura de pantalla al QR, luego tomas esa captura y se la enviás a otra persona amiga/familiar que tengas al lado. Puede ser cualquier app de chat que utilices (whatsapp o telegram). Cuando lo reciban, pedile que abran la captura en sus teléfonos así lo escaneas desde el tuyo, o también te lo podes enviar a tu misma cuenta de chat si podes levantar whatsapp web o telegram web en una computadora y escanear la imagen QR desde ahí.',
+        comoHacerPagoQRComputadoraPrefix:
+            'Desde una computadora, abris Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -946,6 +955,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -2704,6 +2716,15 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        comoPagarElQR: '¿Cómo pagar el QR?',
+        comoHacerPagoQRTitulo: '¿Cómo hacer el pago con QR?',
+        comoHacerPagoQRCelular:
+            'Desde tu celular, le podes hacer una captura de pantalla al QR, luego tomas esa captura y se la enviás a otra persona amiga/familiar que tengas al lado. Puede ser cualquier app de chat que utilices (whatsapp o telegram). Cuando lo reciban, pedile que abran la captura en sus teléfonos así lo escaneas desde el tuyo, o también te lo podes enviar a tu misma cuenta de chat si podes levantar whatsapp web o telegram web en una computadora y escanear la imagen QR desde ahí.',
+        comoHacerPagoQRComputadoraPrefix:
+            'Desde una computadora, abris Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -2715,6 +2736,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -4356,6 +4380,14 @@ const messages = {
         costoValidacionManual: 'Manual verification cost',
         pagarYContinuar: 'Pay and continue',
         pagarConQR: 'Pay with QR',
+        comoPagarElQR: 'How to pay with QR?',
+        comoHacerPagoQRTitulo: 'How to pay with QR',
+        comoHacerPagoQRCelular:
+            'From your phone, take a screenshot of the QR, then send that screenshot to a friend or family member next to you. You can use any chat app (WhatsApp or Telegram). When they receive it, ask them to open the screenshot on their phone so you can scan it from yours, or send it to your own chat account if you can open WhatsApp Web or Telegram Web on a computer and scan the QR image from there.',
+        comoHacerPagoQRComputadoraPrefix: 'From a computer, open Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:
@@ -4367,6 +4399,9 @@ const messages = {
         manualValidationPayClosing:
             'This allows us to verify your account correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
+        copiarLinkDePago: 'Copy payment link',
+        enviarLinkDePago: 'Send payment link',
+        linkDePagoCopiado: 'Payment link copied',
         manualValidationVolverOpcionesDesktop: 'Back to verification options',
         manualValidationPagoProcesado: 'Payment processed successfully',
         manualValidationUploadIntro:

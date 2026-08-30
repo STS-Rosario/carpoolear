@@ -112,9 +112,12 @@
                         :loading-qr="loadingQr"
                         :show-qr-panel="showQrPanel"
                         :qr-image-url="qrImageUrl"
+                        :show-mp-panel="showMpPanel"
+                        :mp-payment-url="mpPaymentUrl"
                         @pay-mp="payManualValidation"
                         @pay-qr="createManualValidationQrOrderAndShow"
                         @close-qr="closeManualValidationQrPanel"
+                        @close-mp="closeManualValidationMpPanel"
                     />
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
@@ -527,6 +530,8 @@ export default {
             loadingPreference: false,
             loadingQr: false,
             showQrPanel: false,
+            showMpPanel: false,
+            mpPaymentUrl: null,
             qrImageUrl: null,
             qrData: null,
             pollIntervalId: null
@@ -729,10 +734,12 @@ export default {
                     const data = res.data || res;
                     const initPoint = data.init_point;
                     if (initPoint) {
-                        window.location.href = initPoint;
-                    } else {
-                        this.loadingPreference = false;
+                        this.closeManualValidationQrPanel();
+                        this.mpPaymentUrl = initPoint;
+                        this.showMpPanel = true;
+                        this.startManualValidationQrPolling();
                     }
+                    this.loadingPreference = false;
                 })
                 .catch(() => {
                     this.loadingPreference = false;
@@ -749,6 +756,7 @@ export default {
                     if (qrData && requestId) {
                         this.manualStatus.request_id = requestId;
                         this.qrData = qrData;
+                        this.closeManualValidationMpPanel();
                         this.showQrPanel = true;
                         this.qrImageUrl = null;
                         QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
@@ -768,12 +776,18 @@ export default {
             this.qrImageUrl = null;
             this.stopManualValidationQrPolling();
         },
+        closeManualValidationMpPanel() {
+            this.showMpPanel = false;
+            this.mpPaymentUrl = null;
+            this.stopManualValidationQrPolling();
+        },
         startManualValidationQrPolling() {
             this.stopManualValidationQrPolling();
             this.pollIntervalId = setInterval(() => {
                 this.fetchManualStatus().then(() => {
                     if (this.manualStatus.paid === true) {
                         this.closeManualValidationQrPanel();
+                        this.closeManualValidationMpPanel();
                     }
                 });
             }, 3000);
