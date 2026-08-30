@@ -94,4 +94,33 @@ describe('ManualIdentityValidationPayOptions shared component', () => {
         expect(manualPayMethod).toContain('this.mpPaymentUrl');
         expect(manualPayMethod).not.toContain('window.location.href = initPoint');
     });
+
+    it('polls for payment after creating a Mercado Pago checkout link', () => {
+        const identitySource = fs.readFileSync(identityValidationPath, 'utf8');
+        const manualSource = fs.readFileSync(manualValidationPath, 'utf8');
+
+        const identityPayMethod = identitySource.slice(
+            identitySource.indexOf('payManualValidation() {'),
+            identitySource.indexOf('createManualValidationQrOrderAndShow() {')
+        );
+        expect(identityPayMethod).toContain('this.startManualValidationQrPolling()');
+
+        const identityCloseMp = identitySource.slice(
+            identitySource.indexOf('closeManualValidationMpPanel() {'),
+            identitySource.indexOf('startManualValidationQrPolling() {')
+        );
+        expect(identityCloseMp).toContain('this.stopManualValidationQrPolling()');
+
+        const manualPayMethod = manualSource.slice(
+            manualSource.indexOf('createPreferenceAndRedirect() {'),
+            manualSource.indexOf('createQrOrderAndShow() {')
+        );
+        expect(manualPayMethod).toContain('this.startPollingStatus()');
+
+        const manualCloseMp = manualSource.slice(
+            manualSource.indexOf('closeMpPanel() {'),
+            manualSource.indexOf('startPollingStatus() {')
+        );
+        expect(manualCloseMp).toContain('this.stopPollingStatus()');
+    });
 });
