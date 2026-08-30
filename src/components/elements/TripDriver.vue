@@ -263,6 +263,10 @@ import {
     getSeatsPillLabel,
     getSeatsPillTone
 } from '../../utils/tripCardDisplay.js';
+import {
+    getTripDriverImage,
+    getTripDriverProfileId
+} from '../../utils/tripDriverProfile.js';
 
 export default {
     name: 'TripDriver',
@@ -282,9 +286,7 @@ export default {
             isMobile: 'isMobile'
         }),
         getUserProfile() {
-            return this.trip.user.id === this.user.id
-                ? 'me'
-                : this.trip.user.id;
+            return getTripDriverProfileId(this.trip, this.user);
         },
         driverProfileRoute() {
             return {
@@ -296,9 +298,7 @@ export default {
             };
         },
         getUserImage() {
-            return this.user.id === this.trip.user.id
-                ? this.user.image
-                : this.trip.user.image;
+            return getTripDriverImage(this.trip, this.user);
         },
         driverRatings() {
             if (!this.trip?.user) {
