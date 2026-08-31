@@ -1,0 +1,59 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const heroPath = path.resolve(__dirname, 'DonationAfterRatingHero.vue');
+const heroSource = fs.readFileSync(heroPath, 'utf8');
+
+describe('DonationAfterRatingHero', () => {
+    it('renders the two-line hero title with Dela Gothic One styling', () => {
+        expect(heroSource).toContain('donation-after-rating-hero');
+        expect(heroSource).toContain('donation-after-rating-hero__title');
+        expect(heroSource).toContain("$t('donationAfterRatingHeroTitlePrimary')");
+        expect(heroSource).toContain("$t('donationAfterRatingHeroTitleAccent')");
+        expect(heroSource).toContain("'Dela Gothic One'");
+        expect(heroSource).toContain('--ds-text-secondary');
+        expect(heroSource).toContain('--ds-header-donate-bg');
+    });
+
+    it('shows the hero image from API_URL/img with a rotated green backdrop', () => {
+        expect(heroSource).toContain('getDonationAfterRatingHeroImageUrl');
+        expect(heroSource).toContain('donation-after-rating-hero__image-frame');
+        expect(heroSource).toContain('donation-after-rating-hero__image-backdrop');
+        expect(heroSource).toContain('donation-after-rating-hero__image');
+        const backdropRule = heroSource.match(
+            /\.donation-after-rating-hero__image-backdrop\s*\{[^}]+\}/
+        );
+        expect(backdropRule).not.toBeNull();
+        expect(backdropRule[0]).not.toMatch(/transform:\s*rotate/);
+        expect(heroSource).toMatch(
+            /\.donation-after-rating-hero__image\s*\{[\s\S]*?transform:\s*rotate/
+        );
+    });
+
+    it('centers the mobile hero title and uses an 85vw image width', () => {
+        expect(heroSource).toMatch(
+            /donation-after-rating-hero__copy[\s\S]*text-align:\s*center/
+        );
+        expect(heroSource).toMatch(
+            /donation-after-rating-hero__image-frame[\s\S]*width:\s*85vw/
+        );
+        expect(heroSource).toContain('margin-top: 1.5rem');
+    });
+
+    it('shows the mission copy and vertically centers content on wide desktops', () => {
+        expect(heroSource).toContain("$t('donationAfterRatingMissionLead')");
+        expect(heroSource).toContain("$t('donationAfterRatingMissionOrg')");
+        expect(heroSource).toContain("$t('donationAfterRatingMissionBody')");
+        expect(heroSource).toContain('donation-after-rating-hero__mission-lead-emphasis');
+        expect(heroSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*donation-after-rating-hero__mission[\s\S]*display:\s*block/
+        );
+        expect(heroSource).toMatch(
+            /@media \(min-width: 768px\)[\s\S]*align-items:\s*center/
+        );
+        expect(heroSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*donation-after-rating-hero__image-frame[\s\S]*width:\s*30vw/
+        );
+    });
+});

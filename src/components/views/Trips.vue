@@ -559,11 +559,7 @@ import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import modal from '../Modal';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
-import {
-    appendDonationTrackingUserId,
-    getDonationMonthlyUrl,
-    getDonationOnceUrl
-} from '../../utils/donationOptions.js';
+import { startDonationCheckout } from '../../utils/donationCheckout.js';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {
@@ -994,20 +990,24 @@ export default {
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
-                let url = getDonationOnceUrl(this.donateValue);
-                url = appendDonationTrackingUserId(
-                    url,
-                    this.user && this.user.id
-                );
-                // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'once',
+                        amount: this.donateValue,
+                        source: 'trips',
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    await this.openExternalBrowser(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('valorDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.showModal = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue)
-                };
-                this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,
@@ -1017,20 +1017,24 @@ export default {
         },
         async onDonateMonthly() {
             if (this.donateValue >= 0) {
-                let url = getDonationMonthlyUrl(this.donateValue);
-                url = appendDonationTrackingUserId(
-                    url,
-                    this.user && this.user.id
-                );
-                // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'monthly',
+                        amount: this.donateValue,
+                        source: 'trips',
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    await this.openExternalBrowser(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('valorDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.showModal = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue)
-                };
-                this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,
