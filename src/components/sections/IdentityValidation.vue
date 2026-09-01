@@ -1292,22 +1292,16 @@ export default {
     margin-bottom: 0.35rem;
 }
 
-.identity-validation-once {
-    margin: 0 0 0.75rem;
-    font-size: 0.95rem;
-    color: #333;
-}
-
-.identity-validation-learn-more {
+.identity-validation-once,
+.identity-validation-learn-more,
+.identity-validation-two-options {
     margin: 0 0 0.75rem;
     font-size: 0.95rem;
     color: #333;
 }
 
 .identity-validation-two-options {
-    margin: 0 0 1.75rem;
-    font-size: 0.95rem;
-    color: #333;
+    margin-bottom: 1.75rem;
 }
 
 .identity-validation-cards {
