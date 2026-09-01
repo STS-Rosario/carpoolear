@@ -381,7 +381,6 @@
 
             <div v-else class="identity-validation-main">
                 <header class="identity-validation-intro">
-                    <h1 class="identity-validation-title visible-xs-block">{{ $t('validarIdentidad') }}</h1>
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntroEstoPermite') }}</p>
                     <ul class="identity-validation-bullets">
