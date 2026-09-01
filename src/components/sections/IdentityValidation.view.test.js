@@ -20,6 +20,14 @@ describe('IdentityValidation page card', () => {
             /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
         );
     });
+
+    it('renders the account verification title once so it is not duplicated', () => {
+        const titleUsages = viewSource.match(/\$t\('validarIdentidad'\)/g) || [];
+        expect(titleUsages).toHaveLength(1);
+        expect(viewSource).not.toMatch(
+            /identity-validation-title[\s\S]{0,80}\$t\('validarIdentidad'\)/
+        );
+    });
 });
 
 describe('IdentityValidation auth state after success', () => {
