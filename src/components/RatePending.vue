@@ -22,9 +22,7 @@
                     <span v-if="rate.user_to_type === DRIVER">{{ $t('ratePendingConductor') }}</span>
                     <span v-if="rate.user_to_type === PASSENGER">{{ $t('ratePendingPasajero') }}</span>
                     {{ $t('ratePendingEnElViajeHacia') }}
-                    <strong>{{
-                        trip.points[trip.points.length - 1].json_address.ciudad
-                    }}</strong>
+                    <strong>{{ getTripDestinationCity(trip) }}</strong>
                     {{ $t('ratePendingElDia') }}
                     <strong>{{
                         dayjs(trip.trip_date).format('dddd DD [de] MMMM')
@@ -91,6 +89,7 @@ import {
     canSubmitRatingVote,
     getRequiredCommentMessageKey
 } from '../utils/tripRating';
+import { getTripDestinationCity } from '../utils/ongoingTrip';
 import AppButton from './ui/AppButton.vue';
 import AppTextarea from './ui/AppTextarea.vue';
 
@@ -118,6 +117,7 @@ export default {
 
     methods: {
         dayjs,
+        getTripDestinationCity,
         ...mapActions(useRatesStore, {
             emit: 'vote'
         }),

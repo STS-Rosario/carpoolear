@@ -270,6 +270,7 @@ import {
 import AppButton from '../ui/AppButton.vue';
 import AppInput from '../ui/AppInput.vue';
 import { debounce } from '../../services/utility';
+import { isWebNotificationPermissionGranted } from '../../utils/notificationPermission';
 
 export default {
     name: 'conversation-list',
@@ -424,7 +425,7 @@ export default {
 
     mounted() {
         this.conversationsSearch();
-        if (!this.config.web_push_notification || window.Notification.permission !== 'granted') {
+        if (!this.config.web_push_notification || !isWebNotificationPermissionGranted()) {
             this.thread = new Thread(() => {
                 this.unreadMessage();
             });

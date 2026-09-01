@@ -347,7 +347,7 @@ export default {
                     this.config &&
                     this.config.donation &&
                     this.config.donation.month_days > 0 &&
-                    !data.trip.needs_sellado
+                    !data.trip?.needs_sellado
                 ) {
                     this.redirectToDonationPrompt(data.trip_id);
                 }

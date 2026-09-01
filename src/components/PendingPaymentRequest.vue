@@ -6,12 +6,7 @@
                     <h3>{{ $t('pendingPaymentConfirmarTuAsiento') }}</h3>
                     {{ $t('pendingPaymentTeHanAceptadoEnElViajeHacia') }}
                     <strong>
-                        {{
-                            trip.points[trip.points.length - 1].json_address
-                                ? trip.points[trip.points.length - 1]
-                                      .json_address.name
-                                : trip.points[trip.points.length - 1].address
-                        }}
+                        {{ getTripDestinationCity(trip) }}
                         {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
                         {{ dayjs(trip.trip_date).format('HH:mm') }}
                     </strong>
@@ -46,6 +41,7 @@ import { useRootStore } from '../stores/root';
 import { usePassengerStore } from '../stores/passenger';
 import dialogs from '../services/dialogs.js';
 import dayjs from '../dayjs';
+import { getTripDestinationCity } from '../utils/ongoingTrip';
 export default {
     data() {
         return {
@@ -68,6 +64,7 @@ export default {
     },
     methods: {
         dayjs,
+        getTripDestinationCity,
         ...mapActions(useRootStore, {
             getTrip: 'getTrip'
         }),

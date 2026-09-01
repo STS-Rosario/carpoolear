@@ -3,6 +3,7 @@ import dayjs from '../dayjs';
 import {
     estimatedTimeToMinutes,
     getRatingAvailableAt,
+    getTripDestinationCity,
     getTripLocationLabels,
     isRatingAvailable,
     isWithinOngoingTripWindow,
@@ -211,5 +212,36 @@ describe('getTripLocationLabels', () => {
             toRegion: 'CABA',
             toPoint: 'Plaza Principal'
         });
+    });
+});
+
+describe('getTripDestinationCity', () => {
+    it('returns the last point city when points exist', () => {
+        expect(
+            getTripDestinationCity({
+                points: [
+                    { json_address: { ciudad: 'Rosario' } },
+                    { json_address: { ciudad: 'Córdoba' } }
+                ]
+            })
+        ).toBe('Córdoba');
+    });
+
+    it('returns an empty string when trip is missing', () => {
+        expect(getTripDestinationCity(undefined)).toBe('');
+        expect(getTripDestinationCity(null)).toBe('');
+    });
+
+    it('does not read points on an incomplete trip', () => {
+        expect(getTripDestinationCity({})).toBe('');
+        expect(getTripDestinationCity({ points: [] })).toBe('');
+    });
+
+    it('falls back to to_town when points are missing', () => {
+        expect(
+            getTripDestinationCity({
+                to_town: 'Mendoza, Mendoza, Argentina'
+            })
+        ).toBe('Mendoza');
     });
 });

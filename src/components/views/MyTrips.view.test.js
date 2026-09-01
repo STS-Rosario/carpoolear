@@ -72,4 +72,9 @@ describe('MyTrips donation after positive rating', () => {
         expect(source).toMatch(/name:\s*'donate-after-rating'/);
         expect(source).toMatch(/params:\s*\{\s*tripId/);
     });
+
+    it('does not read needs_sellado when the rated trip is missing', () => {
+        expect(source).not.toMatch(/!data\.trip\.needs_sellado/);
+        expect(source).toContain('data.trip?.needs_sellado');
+    });
 });

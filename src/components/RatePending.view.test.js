@@ -36,3 +36,13 @@ describe('RatePending.vue neutral ratings', () => {
         );
     });
 });
+
+describe('RatePending.vue destination city', () => {
+    it('does not read trip.points without a helper', () => {
+        expect(viewSource).not.toMatch(
+            /trip\.points\[trip\.points\.length/
+        );
+        expect(viewSource).toContain('getTripDestinationCity');
+        expect(viewSource).toContain("from '../utils/ongoingTrip'");
+    });
+});

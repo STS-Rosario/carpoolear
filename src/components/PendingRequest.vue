@@ -83,9 +83,7 @@
             <div class="pending-request-card__content">
                 <strong>{{ user.name }}</strong>
                 {{ $t('pendingRequestQuiereSubirseAlViaje') }}
-                <strong>{{
-                    trip.points[trip.points.length - 1].json_address.ciudad
-                }}</strong>
+                <strong>{{ getTripDestinationCity(trip) }}</strong>
                 {{ $t('pendingRequestDelDia') }} {{ dayjs(trip.trip_date).format('DD/MM/YYYY') }} {{ $t('pendingRequestALas') }}
                 {{ dayjs(trip.trip_date).format('HH:mm') }}.
                 <div class="pending-request-card__actions">
@@ -137,6 +135,7 @@ import dialogs from '../services/dialogs.js';
 import spinner from './Spinner.vue';
 import bus from '../services/bus-event.js';
 import dayjs from '../dayjs';
+import { getTripDestinationCity } from '../utils/ongoingTrip';
 import AppButton from './ui/AppButton.vue';
 
 export default {
@@ -156,6 +155,7 @@ export default {
     },
     methods: {
         dayjs,
+        getTripDestinationCity,
         ...mapActions(usePassengerStore, {
             passengerAccept: 'accept',
             passengerReject: 'reject'

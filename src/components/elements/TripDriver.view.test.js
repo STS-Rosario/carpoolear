@@ -5,6 +5,19 @@ import path from 'node:path';
 const viewPath = path.resolve(__dirname, 'TripDriver.vue');
 const source = fs.readFileSync(viewPath, 'utf8');
 
+describe('TripDriver profile and image when auth or driver is missing', () => {
+    it('resolves profile id and image through helpers instead of reading user.id unguarded', () => {
+        expect(source).toContain('getTripDriverProfileId');
+        expect(source).toContain('getTripDriverImage');
+        expect(source).not.toMatch(
+            /return this\.trip\.user\.id === this\.user\.id/
+        );
+        expect(source).not.toMatch(
+            /return this\.user\.id === this\.trip\.user\.id/
+        );
+    });
+});
+
 describe('TripDriver profile navigation', () => {
     it('uses router-link with a shared visible-link class instead of click handlers', () => {
         expect(source).toContain('trip-driver-profile-link');

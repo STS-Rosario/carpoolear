@@ -86,6 +86,51 @@ describe('isPWA', () => {
     });
 });
 
+describe('isWebNotificationPermissionGranted', () => {
+    afterEach(() => {
+        vi.resetModules();
+    });
+
+    it('returns false when the Notification API is missing', async () => {
+        globalThis.window = {};
+        const { isWebNotificationPermissionGranted } = await import(
+            './notificationPermission.js'
+        );
+        expect(isWebNotificationPermissionGranted()).toBe(false);
+    });
+
+    it('returns false when window is undefined', async () => {
+        const previousWindow = globalThis.window;
+        // eslint-disable-next-line no-global-assign
+        globalThis.window = undefined;
+        const { isWebNotificationPermissionGranted } = await import(
+            './notificationPermission.js'
+        );
+        expect(isWebNotificationPermissionGranted()).toBe(false);
+        globalThis.window = previousWindow;
+    });
+
+    it('returns false when permission is denied', async () => {
+        globalThis.window = {
+            Notification: { permission: 'denied' }
+        };
+        const { isWebNotificationPermissionGranted } = await import(
+            './notificationPermission.js'
+        );
+        expect(isWebNotificationPermissionGranted()).toBe(false);
+    });
+
+    it('returns true when web notification permission is granted', async () => {
+        globalThis.window = {
+            Notification: { permission: 'granted' }
+        };
+        const { isWebNotificationPermissionGranted } = await import(
+            './notificationPermission.js'
+        );
+        expect(isWebNotificationPermissionGranted()).toBe(true);
+    });
+});
+
 describe('getNotificationPermissionStatus', () => {
     afterEach(() => {
         vi.clearAllMocks();
