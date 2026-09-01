@@ -242,6 +242,30 @@ describe('IdentityValidation learn more link', () => {
         );
         expect(viewSource).toContain("name: 'verificacion_cuenta'");
     });
+
+    it('shows two verification options after the learn-more line with highlighted phrases', () => {
+        const learnMoreIndex = viewSource.indexOf(
+            'identity-validation-learn-more'
+        );
+        const twoOptionsIndex = viewSource.indexOf(
+            'identity-validation-two-options'
+        );
+
+        expect(learnMoreIndex).toBeGreaterThan(-1);
+        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
+        expect(viewSource).toContain(
+            'keypath="identityValidationTwoOptions"'
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>"
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>"
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>"
+        );
+    });
 });
 
 describe('IdentityValidation unpaid manual verification payment', () => {
