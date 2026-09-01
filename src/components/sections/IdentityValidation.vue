@@ -392,6 +392,21 @@
                     <p class="identity-validation-learn-more">
                         {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
                     </p>
+                    <i18n-t
+                        keypath="identityValidationTwoOptions"
+                        tag="p"
+                        class="identity-validation-two-options"
+                    >
+                        <template #twoOptions>
+                            <strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>
+                        </template>
+                        <template #automatic>
+                            <strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>
+                        </template>
+                        <template #manual>
+                            <strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>
+                        </template>
+                    </i18n-t>
                 </header>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -1284,6 +1299,12 @@ export default {
 }
 
 .identity-validation-learn-more {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.identity-validation-two-options {
     margin: 0 0 1.75rem;
     font-size: 0.95rem;
     color: #333;
