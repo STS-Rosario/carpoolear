@@ -1246,14 +1246,6 @@ export default {
     }
 }
 
-.identity-validation-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-    line-height: 1.3;
-    color: #333;
-}
-
 .identity-validation-lead {
     margin: 0 0 1rem;
     line-height: 1.5;
