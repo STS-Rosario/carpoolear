@@ -48,6 +48,14 @@ describe('adminManualIdentityValidationDisplay', () => {
         }, t)).toBe('estadoCerrado');
     });
 
+    it('labels unpaid closed requests as cerrado', () => {
+        expect(getManualIdentityValidationStatusLabel({
+            paid: false,
+            review_status: 'closed',
+            submitted_at: null
+        }, t)).toBe('estadoCerrado');
+    });
+
     it('uses default badge for closed requests', () => {
         expect(getManualIdentityValidationStatusBadgeClass({
             paid: true,
