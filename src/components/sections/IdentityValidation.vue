@@ -512,7 +512,13 @@ import {
     MERCADO_PAGO_MY_APPS_URL,
     shouldShowMercadoPagoIntegrationDisconnectHint
 } from '../../utils/mercadoPagoIntegrationDisconnectHint';
-import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute, isManualIdentityValidationTerminalStatus } from '../../utils/manualIdentityValidationStatus';
+import {
+    isManualRejectedWithChoiceCards,
+    canManualResubmitWithoutPayment,
+    getManualValidationResubmitRoute,
+    getManualValidationRestartRoute,
+    isManualIdentityValidationTerminalStatus
+} from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 import ManualIdentityValidationPayOptions from './ManualIdentityValidationPayOptions.vue';
 import AppButton from '../ui/AppButton.vue';
