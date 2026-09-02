@@ -1,11 +1,10 @@
-import { isManualIdentityValidationRejected } from './manualIdentityValidationStatus.js';
+import { isManualIdentityValidationRejected, isManualIdentityValidationTerminalStatus } from './manualIdentityValidationStatus.js';
 
 function isManualDocsPendingAdminReview(manualStatus) {
     if (!manualStatus || !manualStatus.has_submission || !manualStatus.paid || !manualStatus.submitted_at) {
         return false;
     }
-    const reviewStatus = manualStatus.review_status;
-    return reviewStatus !== 'approved' && reviewStatus !== 'rejected';
+    return !isManualIdentityValidationTerminalStatus(manualStatus.review_status);
 }
 
 export function shouldShowIdentityVerificationSuccessBanner({

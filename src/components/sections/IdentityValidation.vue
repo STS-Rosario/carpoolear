@@ -512,7 +512,7 @@ import {
     MERCADO_PAGO_MY_APPS_URL,
     shouldShowMercadoPagoIntegrationDisconnectHint
 } from '../../utils/mercadoPagoIntegrationDisconnectHint';
-import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
+import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute, isManualIdentityValidationTerminalStatus } from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 import ManualIdentityValidationPayOptions from './ManualIdentityValidationPayOptions.vue';
 import AppButton from '../ui/AppButton.vue';
@@ -592,7 +592,7 @@ export default {
             );
         },
         /**
-         * Paid + docs sent + not yet approved/rejected — still in admin queue.
+         * Paid + docs sent + not yet approved/rejected/closed — still in admin queue.
          * Must not be hidden behind the green "already verified" banner (user may still
          * carry identity_validated from MP or stale cache while manual review runs).
          */
@@ -600,17 +600,13 @@ export default {
             if (!this.identityValidationManualEnabled) return false;
             const m = this.manualStatus;
             if (!m || !m.has_submission || !m.paid || !m.submitted_at) return false;
-            if (m.review_status === 'approved' || m.review_status === 'rejected') {
-                return false;
-            }
-            return true;
+            return !isManualIdentityValidationTerminalStatus(m.review_status);
         },
-        /** Docs submitted, awaiting admin (not approved/rejected). */
+        /** Docs submitted, awaiting admin (not approved/rejected/closed). */
         showManualValidationSubmittedNotice() {
             const m = this.manualStatus;
             if (!m || !m.submitted_at) return false;
-            const rs = m.review_status;
-            return rs !== 'approved' && rs !== 'rejected';
+            return !isManualIdentityValidationTerminalStatus(m.review_status);
         },
         /** Blue card: right after upload redirect (?result=manual_submitted). */
         showManualPendingReviewBlue() {
