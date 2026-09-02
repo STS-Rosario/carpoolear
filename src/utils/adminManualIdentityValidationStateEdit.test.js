@@ -12,7 +12,8 @@ describe('adminManualIdentityValidationStateEdit', () => {
             { value: 'awaiting_photos', labelKey: 'estadoEsperandoFotos' },
             { value: 'pending', labelKey: 'estadoPendiente' },
             { value: 'approved', labelKey: 'estadoAprobado' },
-            { value: 'rejected', labelKey: 'estadoRechazado' }
+            { value: 'rejected', labelKey: 'estadoRechazado' },
+            { value: 'closed', labelKey: 'estadoCerrado' }
         ]);
     });
 
