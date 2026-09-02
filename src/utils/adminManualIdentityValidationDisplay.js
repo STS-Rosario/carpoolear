@@ -17,6 +17,7 @@ export function getManualIdentityValidationStatusLabel(item, t) {
     if (status === 'pending') return t('estadoPendienteRevision');
     if (status === 'approved' || status === 'approve') return t('estadoAprobado');
     if (status === 'rejected' || status === 'reject') return t('estadoRechazado');
+    if (status === 'closed') return t('estadoCerrado');
     return status || '-';
 }
 
@@ -25,6 +26,7 @@ export function getManualIdentityValidationStatusBadgeClass(item) {
     const status = item.review_status;
     if (status === 'approved' || status === 'approve') return 'label label-success';
     if (status === 'rejected' || status === 'reject') return 'label label-danger';
+    if (status === 'closed') return 'label label-default';
     if (!item.paid) return 'label label-default';
     return 'label label-warning';
 }

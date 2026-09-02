@@ -337,6 +337,7 @@ export default {
             if (status === 'awaiting_photos') return this.$t('estadoEsperandoFotos');
             if (status === 'approved') return this.$t('estadoAprobado');
             if (status === 'rejected') return this.$t('estadoRechazado');
+            if (status === 'closed') return this.$t('estadoCerrado');
             return status || '-';
         },
         getActionDateLabel(reviewStatus) {
