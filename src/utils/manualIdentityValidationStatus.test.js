@@ -158,6 +158,16 @@ describe('shouldShowManualValidationAlreadySubmitted', () => {
             })
         ).toBe(false);
     });
+
+    it('returns false when the manual request was closed', () => {
+        expect(
+            shouldShowManualValidationAlreadySubmitted({
+                submitted_at: '2026-06-19 09:42:00',
+                review_status: 'closed',
+                can_resubmit_without_payment: false
+            })
+        ).toBe(false);
+    });
 });
 
 describe('getManualValidationRestartRoute', () => {

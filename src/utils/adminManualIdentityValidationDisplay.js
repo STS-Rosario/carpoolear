@@ -11,6 +11,7 @@ export function isManualIdentityValidationAwaitingPhotos(item) {
 }
 
 export function getManualIdentityValidationStatusLabel(item, t) {
+    if (item.review_status === 'closed') return t('estadoCerrado');
     if (!item.paid) return t('estadoPendientePago');
     if (isManualIdentityValidationAwaitingPhotos(item)) return t('estadoEsperandoFotos');
     const status = item.review_status;
@@ -25,6 +26,7 @@ export function getManualIdentityValidationStatusBadgeClass(item) {
     const status = item.review_status;
     if (status === 'approved' || status === 'approve') return 'label label-success';
     if (status === 'rejected' || status === 'reject') return 'label label-danger';
+    if (status === 'closed') return 'label label-default';
     if (!item.paid) return 'label label-default';
     return 'label label-warning';
 }

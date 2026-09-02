@@ -1,5 +1,11 @@
 import { isUserIdentityVerified } from './userIdentityVerification.js';
 
+const TERMINAL_MANUAL_REVIEW_STATUSES = new Set(['approved', 'rejected', 'closed']);
+
+export function isManualIdentityValidationTerminalStatus(reviewStatus) {
+    return TERMINAL_MANUAL_REVIEW_STATUSES.has(reviewStatus);
+}
+
 export function isManualIdentityValidationRejected(manualStatus, user = null) {
     if (isUserIdentityVerified(user)) {
         return false;
@@ -63,7 +69,7 @@ export function shouldShowManualValidationAlreadySubmitted(manualStatus) {
     if (canManualResubmitWithoutPayment(manualStatus)) {
         return false;
     }
-    if (manualStatus.review_status === 'rejected') {
+    if (manualStatus.review_status === 'rejected' || manualStatus.review_status === 'closed') {
         return false;
     }
 
