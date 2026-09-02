@@ -55,7 +55,7 @@ export function saveShowResolvedManualIdentityValidations(showResolved, storage)
     );
 }
 
-const RESOLVED_REVIEW_STATUSES = new Set(['approved', 'approve', 'rejected', 'reject']);
+const RESOLVED_REVIEW_STATUSES = new Set(['approved', 'approve', 'rejected', 'reject', 'closed']);
 
 export function isManualIdentityValidationResolved(item) {
     const reviewStatus = item?.['review_status'];
