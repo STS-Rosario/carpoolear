@@ -40,6 +40,22 @@ describe('adminManualIdentityValidationDisplay', () => {
         })).toBe('label label-warning');
     });
 
+    it('labels closed paid requests as cerrado', () => {
+        expect(getManualIdentityValidationStatusLabel({
+            paid: true,
+            review_status: 'closed',
+            submitted_at: '2026-06-18 10:00:00'
+        }, t)).toBe('estadoCerrado');
+    });
+
+    it('uses default badge for closed requests', () => {
+        expect(getManualIdentityValidationStatusBadgeClass({
+            paid: true,
+            review_status: 'closed',
+            submitted_at: '2026-06-18 10:00:00'
+        })).toBe('label label-default');
+    });
+
     it('formats waiting time from submitted_at to now', () => {
         const now = new Date('2026-06-18 12:30:00').getTime();
         const result = formatManualIdentityValidationWaitingTime({

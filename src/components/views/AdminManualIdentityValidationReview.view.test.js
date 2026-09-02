@@ -52,6 +52,11 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('hasManualIdentityValidationStateChanges');
     });
 
+    it('labels closed review status as cerrado', () => {
+        expect(viewSource).toContain("status === 'closed'");
+        expect(viewSource).toContain('estadoCerrado');
+    });
+
     it('confirms mark pending when request is already pending', () => {
         expect(viewSource).toContain('confirmReview');
         expect(viewSource).toContain('@click="confirmReview(\'pending\')"');
