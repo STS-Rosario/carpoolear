@@ -331,3 +331,9 @@ describe('IdentityValidation manual admin review note', () => {
         );
     });
 });
+
+describe('IdentityValidation closed manual after MercadoPago', () => {
+    it('treats closed review status as terminal so pending notices are not shown', () => {
+        expect(viewSource).toContain('isManualIdentityValidationTerminalStatus');
+    });
+});
