@@ -26,6 +26,10 @@ describe('adminManualIdentityValidationsList', () => {
             expect(isManualIdentityValidationResolved({ review_status: 'reject' })).toBe(true);
         });
 
+        it('treats closed as resolved', () => {
+            expect(isManualIdentityValidationResolved({ review_status: 'closed' })).toBe(true);
+        });
+
         it('treats pending and other statuses as unresolved', () => {
             expect(isManualIdentityValidationResolved(pending)).toBe(false);
             expect(isManualIdentityValidationResolved({ review_status: null })).toBe(false);
