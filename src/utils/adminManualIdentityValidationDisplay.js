@@ -11,6 +11,7 @@ export function isManualIdentityValidationAwaitingPhotos(item) {
 }
 
 export function getManualIdentityValidationStatusLabel(item, t) {
+    if (item.review_status === 'closed') return t('estadoCerrado');
     if (!item.paid) return t('estadoPendientePago');
     if (isManualIdentityValidationAwaitingPhotos(item)) return t('estadoEsperandoFotos');
     const status = item.review_status;
