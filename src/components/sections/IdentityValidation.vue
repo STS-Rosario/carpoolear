@@ -381,7 +381,6 @@
 
             <div v-else class="identity-validation-main">
                 <header class="identity-validation-intro">
-                    <h1 class="identity-validation-title visible-xs-block">{{ $t('validarIdentidad') }}</h1>
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntroEstoPermite') }}</p>
                     <ul class="identity-validation-bullets">
@@ -393,6 +392,21 @@
                     <p class="identity-validation-learn-more">
                         {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
                     </p>
+                    <i18n-t
+                        keypath="identityValidationTwoOptions"
+                        tag="p"
+                        class="identity-validation-two-options"
+                    >
+                        <template #twoOptions>
+                            <strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>
+                        </template>
+                        <template #automatic>
+                            <strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>
+                        </template>
+                        <template #manual>
+                            <strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>
+                        </template>
+                    </i18n-t>
                 </header>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -1247,14 +1261,6 @@ export default {
     }
 }
 
-.identity-validation-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-    line-height: 1.3;
-    color: #333;
-}
-
 .identity-validation-lead {
     margin: 0 0 1rem;
     line-height: 1.5;
@@ -1286,16 +1292,16 @@ export default {
     margin-bottom: 0.35rem;
 }
 
-.identity-validation-once {
+.identity-validation-once,
+.identity-validation-learn-more,
+.identity-validation-two-options {
     margin: 0 0 0.75rem;
     font-size: 0.95rem;
     color: #333;
 }
 
-.identity-validation-learn-more {
-    margin: 0 0 1.75rem;
-    font-size: 0.95rem;
-    color: #333;
+.identity-validation-two-options {
+    margin-bottom: 1.75rem;
 }
 
 .identity-validation-cards {

@@ -796,6 +796,11 @@ const messages = {
         identityValidationLearnMoreLink:
             'leer más sobre la verificación de cuenta',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'Existen {twoOptions} para verificar tu cuenta: {automatic} o {manual}.',
+        identityValidationTwoOptionsCount: 'dos opciones',
+        identityValidationTwoOptionsAutomatic: 'verificación automática',
+        identityValidationTwoOptionsManual: 'verificación manual',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -2578,6 +2583,11 @@ const messages = {
         identityValidationLearnMoreLink:
             'leer más sobre la verificación de cuenta',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'Existen {twoOptions} para verificar tu cuenta: {automatic} o {manual}.',
+        identityValidationTwoOptionsCount: 'dos opciones',
+        identityValidationTwoOptionsAutomatic: 'verificación automática',
+        identityValidationTwoOptionsManual: 'verificación manual',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -4519,6 +4529,11 @@ const messages = {
         identityValidationLearnMorePrefix: 'Want to know more? You can ',
         identityValidationLearnMoreLink: 'read more about account verification',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'There are {twoOptions} to verify your account: {automatic} or {manual}.',
+        identityValidationTwoOptionsCount: 'two options',
+        identityValidationTwoOptionsAutomatic: 'automatic verification',
+        identityValidationTwoOptionsManual: 'manual verification',
         identidadModalPlazoInfo:
             'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
         identidadModalOptionalInfo:

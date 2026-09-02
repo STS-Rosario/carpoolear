@@ -20,6 +20,14 @@ describe('IdentityValidation page card', () => {
             /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
         );
     });
+
+    it('renders the account verification title once so it is not duplicated', () => {
+        const titleUsages = viewSource.match(/\$t\('validarIdentidad'\)/g) || [];
+        expect(titleUsages).toHaveLength(1);
+        expect(viewSource).not.toMatch(
+            /identity-validation-title[\s\S]{0,80}\$t\('validarIdentidad'\)/
+        );
+    });
 });
 
 describe('IdentityValidation auth state after success', () => {
@@ -233,6 +241,30 @@ describe('IdentityValidation learn more link', () => {
             "$t('identityValidationLearnMoreSuffix')"
         );
         expect(viewSource).toContain("name: 'verificacion_cuenta'");
+    });
+
+    it('shows two verification options after the learn-more line with highlighted phrases', () => {
+        const learnMoreIndex = viewSource.indexOf(
+            'identity-validation-learn-more'
+        );
+        const twoOptionsIndex = viewSource.indexOf(
+            'identity-validation-two-options'
+        );
+
+        expect(learnMoreIndex).toBeGreaterThan(-1);
+        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
+        expect(viewSource).toContain(
+            'keypath="identityValidationTwoOptions"'
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>"
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>"
+        );
+        expect(viewSource).toContain(
+            "<strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>"
+        );
     });
 });
 
