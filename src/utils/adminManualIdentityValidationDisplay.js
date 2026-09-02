@@ -18,7 +18,6 @@ export function getManualIdentityValidationStatusLabel(item, t) {
     if (status === 'pending') return t('estadoPendienteRevision');
     if (status === 'approved' || status === 'approve') return t('estadoAprobado');
     if (status === 'rejected' || status === 'reject') return t('estadoRechazado');
-    if (status === 'closed') return t('estadoCerrado');
     return status || '-';
 }
 
