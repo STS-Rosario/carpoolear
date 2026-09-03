@@ -258,6 +258,23 @@ describe('Trips.vue donation modal', () => {
 });
 
 describe('Trips.vue search alert and install modal CTAs', () => {
+    it('hides the PWA install prompt on native platforms', () => {
+        expect(viewSource).toContain('shouldShowPwaInstallModal');
+        expect(viewSource).toContain("from '../../utils/pwaInstallModal.js'");
+
+        const shouldShowBlock = viewSource.match(
+            /shouldShowInstallModal\(\)\s*\{[\s\S]*?\n\s*\},/
+        );
+        expect(shouldShowBlock).not.toBeNull();
+        expect(shouldShowBlock[0]).toContain('shouldShowPwaInstallModal');
+        expect(shouldShowBlock[0]).toContain('isNativePlatform');
+        expect(shouldShowBlock[0]).toContain('this.isIOS()');
+
+        expect(viewSource).toMatch(
+            /shouldShowPwaInstallModal\([\s\S]*?isNativePlatform[\s\S]*?this\.isIOS\(\)/
+        );
+    });
+
     it('uses this.$t inside getInstallModalContent', () => {
         expect(viewSource).toContain("this.$t('instalarApp')");
         expect(viewSource).toContain("this.$t('instalarWebAppPWA')");
