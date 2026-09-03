@@ -49,6 +49,15 @@ describe('IdentityValidationPromptModal verification options', () => {
             /identity-validation-prompt-option-block[\s\S]*?<ul>/
         );
     });
+
+    it('puts a space before the cost parentheses so Vue does not strip it', () => {
+        expect(modalSource).toContain(
+            "</span> ({{ $t('identidadModalAutoCostoEtiqueta') }})"
+        );
+        expect(modalSource).toContain(
+            "</span> ({{ $t('identidadModalManualCostoEtiqueta') }})"
+        );
+    });
 });
 
 describe('IdentityValidationPromptModal learn more link', () => {
