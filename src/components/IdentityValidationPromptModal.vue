@@ -52,14 +52,12 @@
                     <li v-if="showMpOption">
                         <span class="identity-validation-prompt-option-name">{{
                             $t('identidadModalAutoTitulo')
-                        }}</span>
-                        ({{ $t('identidadModalAutoCostoEtiqueta') }})
+                        }}</span> ({{ $t('identidadModalAutoCostoEtiqueta') }})
                     </li>
                     <li v-if="showManualOption">
                         <span class="identity-validation-prompt-option-name">{{
                             $t('identidadModalManualTitulo')
-                        }}</span>
-                        ({{ $t('identidadModalManualCostoEtiqueta') }})
+                        }}</span> ({{ $t('identidadModalManualCostoEtiqueta') }})
                     </li>
                 </ul>
 
