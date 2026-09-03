@@ -581,6 +581,7 @@ import {
     getNotificationPermissionStatus,
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
+import { shouldShowPwaInstallModal } from '../../utils/pwaInstallModal.js';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { splitTripsBySearchDate } from '../../utils/tripSearchDateSplit.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
@@ -707,8 +708,11 @@ export default {
             localStorage.setItem('pwa_notification_dismiss', Date.now());
         },
         shouldShowInstallModal() {
-            // Show modal if we have install event (Android) or if we're on iOS
-            return this.installAppEvent !== null || this.isIOS();
+            return shouldShowPwaInstallModal({
+                isNativePlatform: isNativePlatform(),
+                isIos: this.isIOS(),
+                hasInstallEvent: this.installAppEvent !== null
+            });
         },
         getInstallModalContent() {
             if (this.installAppEvent !== null) {
@@ -720,8 +724,14 @@ export default {
                     showCloseButton: false,
                     showDontShowAgainButton: true
                 };
-            } else if (this.isIOS()) {
-                // iOS - show installation instructions
+            } else if (
+                shouldShowPwaInstallModal({
+                    isNativePlatform: isNativePlatform(),
+                    isIos: this.isIOS(),
+                    hasInstallEvent: false
+                })
+            ) {
+                // iOS browser - show PWA installation instructions
                 return {
                     title: this.$t('instalarAppEnIos'),
                     message: this.$t('instalarAppEnIosInstrucciones'),
@@ -1133,8 +1143,14 @@ export default {
             console.log(`'beforeinstallprompt' event was fired.`);
         });
 
-        // Show install modal for iOS users (since beforeinstallprompt doesn't fire on iOS)
-        if (this.isIOS()) {
+        // Show install modal for iOS browser users (beforeinstallprompt does not fire on iOS)
+        if (
+            shouldShowPwaInstallModal({
+                isNativePlatform: isNativePlatform(),
+                isIos: this.isIOS(),
+                hasInstallEvent: false
+            })
+        ) {
             // Check if user hasn't permanently dismissed this before
             const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
             if (!hasDismissedInstallModal) {
