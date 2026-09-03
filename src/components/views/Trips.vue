@@ -715,8 +715,10 @@ export default {
             });
         },
         getInstallModalContent() {
+            if (!this.shouldShowInstallModal()) {
+                return null;
+            }
             if (this.installAppEvent !== null) {
-                // Android - show install button
                 return {
                     title: this.$t('instalarApp'),
                     message: this.$t('instalarWebAppPWA'),
@@ -724,14 +726,8 @@ export default {
                     showCloseButton: false,
                     showDontShowAgainButton: true
                 };
-            } else if (
-                shouldShowPwaInstallModal({
-                    isNativePlatform: isNativePlatform(),
-                    isIos: this.isIOS(),
-                    hasInstallEvent: false
-                })
-            ) {
-                // iOS browser - show PWA installation instructions
+            }
+            if (this.isIOS()) {
                 return {
                     title: this.$t('instalarAppEnIos'),
                     message: this.$t('instalarAppEnIosInstrucciones'),
@@ -1144,13 +1140,7 @@ export default {
         });
 
         // Show install modal for iOS browser users (beforeinstallprompt does not fire on iOS)
-        if (
-            shouldShowPwaInstallModal({
-                isNativePlatform: isNativePlatform(),
-                isIos: this.isIOS(),
-                hasInstallEvent: false
-            })
-        ) {
+        if (this.shouldShowInstallModal()) {
             // Check if user hasn't permanently dismissed this before
             const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
             if (!hasDismissedInstallModal) {
