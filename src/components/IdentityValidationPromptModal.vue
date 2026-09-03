@@ -327,28 +327,9 @@ export default {
     color: #333;
 }
 
-.identity-validation-prompt-option-block {
-    margin-bottom: 12px;
-    color: #333;
-}
-
 .identity-validation-prompt-option-name {
     font-weight: 700;
     color: #337ab7;
-}
-
-.identity-validation-prompt-option-block ul {
-    margin: 0;
-    padding-left: 1.1rem;
-    color: #333 !important;
-}
-
-.identity-validation-prompt-option-block ul li {
-    color: #333 !important;
-}
-
-.identity-validation-prompt-option-block ul li strong {
-    color: #333 !important;
 }
 
 .identity-validation-prompt-footnote {
