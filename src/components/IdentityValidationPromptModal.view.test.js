@@ -6,31 +6,48 @@ import messages from '../language/i18n';
 const modalPath = path.resolve(__dirname, 'IdentityValidationPromptModal.vue');
 const modalSource = fs.readFileSync(modalPath, 'utf8');
 
-describe('IdentityValidationPromptModal MP benefits', () => {
-    it('clarifies automatic verification is only for Mercado Pago account holders', () => {
-        expect(messages.arg.identidadModalAutoMp).toBe(
-            'Si tenés cuenta de Mercado Pago'
-        );
-        expect(messages.chl.identidadModalAutoMp).toBe(
-            'Si tenés cuenta de Mercado Pago'
-        );
-        expect(messages.en.identidadModalAutoMp).toBe(
-            'If you have a Mercado Pago account'
-        );
-        expect(modalSource).toContain("$t('identidadModalAutoMp')");
+describe('IdentityValidationPromptModal verification options', () => {
+    const spanishCostLabels = {
+        identidadModalAutoCostoEtiqueta: 'gratis',
+        identidadModalManualCostoEtiqueta: 'con costo'
+    };
+    const englishCostLabels = {
+        identidadModalAutoCostoEtiqueta: 'free',
+        identidadModalManualCostoEtiqueta: 'paid'
+    };
+
+    it.each(['arg', 'chl'])(
+        '%s locale labels automatic as free and manual as paid',
+        (locale) => {
+            Object.entries(spanishCostLabels).forEach(([key, label]) => {
+                expect(messages[locale][key]).toBe(label);
+            });
+        }
+    );
+
+    it('en locale labels automatic as free and manual as paid', () => {
+        Object.entries(englishCostLabels).forEach(([key, label]) => {
+            expect(messages.en[key]).toBe(label);
+        });
     });
 
-    it('lists that MP integration can be removed after verifying', () => {
-        expect(modalSource).toContain("$t('identidadModalAutoGratis')");
-        expect(modalSource).toContain("$t('identidadModalAutoInmediata')");
-        expect(modalSource).toContain("$t('identidadModalAutoPuedeEliminarMp')");
-        const inmediata = modalSource.indexOf(
-            "$t('identidadModalAutoInmediata')"
+    it('lists only the method names with cost, without extra bullets', () => {
+        expect(modalSource).toContain("$t('identidadModalAutoTitulo')");
+        expect(modalSource).toContain("$t('identidadModalAutoCostoEtiqueta')");
+        expect(modalSource).toContain("$t('identidadModalManualTitulo')");
+        expect(modalSource).toContain("$t('identidadModalManualCostoEtiqueta')");
+        expect(modalSource).toContain("$t('identidadModalUnaVez')");
+
+        expect(modalSource).not.toContain("$t('identidadModalAutoMp')");
+        expect(modalSource).not.toContain("$t('identidadModalAutoGratis')");
+        expect(modalSource).not.toContain("$t('identidadModalAutoInmediata')");
+        expect(modalSource).not.toContain("$t('identidadModalAutoPuedeEliminarMp')");
+        expect(modalSource).not.toContain("$t('identidadModalManualEquipo')");
+        expect(modalSource).not.toContain("$t('identidadModalManualCosto')");
+        expect(modalSource).not.toContain("$t('identidadModalManualPlazo')");
+        expect(modalSource).not.toMatch(
+            /identity-validation-prompt-option-block[\s\S]*?<ul>/
         );
-        const puedeEliminar = modalSource.indexOf(
-            "$t('identidadModalAutoPuedeEliminarMp')"
-        );
-        expect(puedeEliminar).toBeGreaterThan(inmediata);
     });
 });
 
