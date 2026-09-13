@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
 
 const RETRY_INTERVAL_MS = 15000;
+const HEALTH_MONITOR_INTERVAL_MS = 30000;
 
 export const useServerStatusStore = defineStore('serverStatus', {
     state: () => ({
         serverUnavailable: false,
         checking: false,
-        _retryTimerId: null
+        _retryTimerId: null,
+        _monitorTimerId: null
     }),
 
     actions: {
@@ -41,6 +43,24 @@ export const useServerStatusStore = defineStore('serverStatus', {
             this._retryTimerId = null;
         },
 
+        startHealthMonitoring() {
+            if (this._monitorTimerId) {
+                return;
+            }
+            this.tryRecover();
+            this._monitorTimerId = setInterval(() => {
+                this.tryRecover();
+            }, HEALTH_MONITOR_INTERVAL_MS);
+        },
+
+        stopHealthMonitoring() {
+            if (!this._monitorTimerId) {
+                return;
+            }
+            clearInterval(this._monitorTimerId);
+            this._monitorTimerId = null;
+        },
+
         async tryRecover() {
             if (this.checking) {
                 return;
@@ -58,9 +78,8 @@ export const useServerStatusStore = defineStore('serverStatus', {
 
             this.checking = true;
             try {
-                const { useAuthStore } = await import('./auth');
-                const authStore = useAuthStore();
-                await authStore.reloadConfigFromServer();
+                const { default: HealthApi } = await import('../services/api/HealthApi');
+                await new HealthApi().check();
             } catch (e) {
                 // Server still unreachable; keep blocking UI.
             } finally {
