@@ -10,9 +10,24 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
         expect(shouldConfirmAlreadyPendingReview('pending', 'pending')).toBe(true);
     });
 
-    it('does not require confirmation for pending action on other statuses', () => {
+    it('does not require already-pending confirmation for pending action on other statuses', () => {
         expect(shouldConfirmAlreadyPendingReview('pending', 'approved')).toBe(false);
         expect(shouldConfirmAlreadyPendingReview('pending', 'rejected')).toBe(false);
+    });
+
+    it('returns mark-pending confirmation message key when status is not pending', () => {
+        expect(getReviewActionConfirmMessageKey('pending', 'approved')).toBe('confirmarMarcarPendienteManualIdentity');
+    });
+
+    it('requires confirmation before marking a request as pending', () => {
+        let confirmCalled = false;
+        const confirmAction = () => {
+            confirmCalled = true;
+            return true;
+        };
+
+        expect(shouldProceedWithReviewAction('pending', 'approved', confirmAction)).toBe(true);
+        expect(confirmCalled).toBe(true);
     });
 
     it('does not require confirmation for non-pending actions', () => {
