@@ -41,6 +41,21 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
         expect(shouldProceedWithReviewAction('approve', 'pending', confirmAction)).toBe(false);
     });
 
+    it('returns reject confirmation message key', () => {
+        expect(getReviewActionConfirmMessageKey('reject', 'pending')).toBe('confirmarRechazarManualIdentity');
+    });
+
+    it('requires confirmation before rejecting a request', () => {
+        let confirmCalled = false;
+        const confirmAction = () => {
+            confirmCalled = true;
+            return true;
+        };
+
+        expect(shouldProceedWithReviewAction('reject', 'pending', confirmAction)).toBe(true);
+        expect(confirmCalled).toBe(true);
+    });
+
     it('uses confirm when marking pending an already pending request', () => {
         let confirmCalled = false;
         const confirmAction = () => {
