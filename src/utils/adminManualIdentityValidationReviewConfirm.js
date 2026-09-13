@@ -3,7 +3,7 @@ export function shouldConfirmAlreadyPendingReview(action, reviewStatus) {
 }
 
 export function shouldConfirmReviewAction(action) {
-    return action === 'approve' || action === 'reject';
+    return action === 'approve' || action === 'reject' || action === 'pending';
 }
 
 export function getReviewActionConfirmMessageKey(action, reviewStatus) {
@@ -19,16 +19,16 @@ export function getReviewActionConfirmMessageKey(action, reviewStatus) {
         return 'confirmMarcarPendienteYaPendiente';
     }
 
+    if (action === 'pending') {
+        return 'confirmarMarcarPendienteManualIdentity';
+    }
+
     return null;
 }
 
 export function shouldProceedWithReviewAction(action, reviewStatus, confirmAction) {
     if (!shouldConfirmReviewAction(action)) {
-        if (!shouldConfirmAlreadyPendingReview(action, reviewStatus)) {
-            return true;
-        }
-
-        return confirmAction();
+        return true;
     }
 
     return confirmAction();

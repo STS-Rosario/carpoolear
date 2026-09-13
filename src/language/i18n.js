@@ -1072,6 +1072,8 @@ const messages = {
             '¿Confirmás aprobar esta solicitud de verificación de identidad?',
         confirmarRechazarManualIdentity:
             '¿Confirmás rechazar esta solicitud de verificación de identidad?',
+        confirmarMarcarPendienteManualIdentity:
+            '¿Confirmás marcar esta solicitud como pendiente?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -2861,6 +2863,8 @@ const messages = {
             '¿Confirmás aprobar esta solicitud de verificación de identidad?',
         confirmarRechazarManualIdentity:
             '¿Confirmás rechazar esta solicitud de verificación de identidad?',
+        confirmarMarcarPendienteManualIdentity:
+            '¿Confirmás marcar esta solicitud como pendiente?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -4594,6 +4598,8 @@ const messages = {
             'Confirm approving this identity verification request?',
         confirmarRechazarManualIdentity:
             'Confirm rejecting this identity verification request?',
+        confirmarMarcarPendienteManualIdentity:
+            'Confirm marking this request as pending?',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',
