@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 const {
     MOCK_TRIP_DETAIL,
     MOCK_USER,
+    setupCatchAllMock,
     setupCommonMocks,
     setupAuthState,
     waitForPageReady
@@ -9,6 +10,7 @@ const {
 
 test.describe('trip creation wizard', () => {
     test.beforeEach(async ({ page }) => {
+        await setupCatchAllMock(page);
         await setupCommonMocks(page);
         await setupAuthState(page);
     });

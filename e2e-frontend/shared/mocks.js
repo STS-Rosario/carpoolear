@@ -627,6 +627,14 @@ async function setupCommonMocks(page) {
   await page.route('**/api/debug**', (route) => {
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
+
+  await page.route('**/api/health', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ status: 'ok' }),
+    });
+  });
 }
 
 /**
