@@ -220,7 +220,7 @@
                                     variant="danger"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                    @click="review('reject')"
+                                    @click="confirmReview('reject')"
                                 >
                                     {{ $t('rechazar') }}
                                 </AppButton>

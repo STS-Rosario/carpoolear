@@ -3,12 +3,16 @@ export function shouldConfirmAlreadyPendingReview(action, reviewStatus) {
 }
 
 export function shouldConfirmReviewAction(action) {
-    return action === 'approve';
+    return action === 'approve' || action === 'reject';
 }
 
 export function getReviewActionConfirmMessageKey(action, reviewStatus) {
     if (action === 'approve') {
         return 'confirmarAprobarManualIdentity';
+    }
+
+    if (action === 'reject') {
+        return 'confirmarRechazarManualIdentity';
     }
 
     if (shouldConfirmAlreadyPendingReview(action, reviewStatus)) {

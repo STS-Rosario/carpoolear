@@ -1070,6 +1070,8 @@ const messages = {
             'El estado ya es Pendiente por lo que no habrá cambios y no se notificará al usuario, está seguro que quiere hacerlo?',
         confirmarAprobarManualIdentity:
             '¿Confirmás aprobar esta solicitud de verificación de identidad?',
+        confirmarRechazarManualIdentity:
+            '¿Confirmás rechazar esta solicitud de verificación de identidad?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -2857,6 +2859,8 @@ const messages = {
             'El estado ya es Pendiente por lo que no habrá cambios y no se notificará al usuario, está seguro que quiere hacerlo?',
         confirmarAprobarManualIdentity:
             '¿Confirmás aprobar esta solicitud de verificación de identidad?',
+        confirmarRechazarManualIdentity:
+            '¿Confirmás rechazar esta solicitud de verificación de identidad?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -4588,6 +4592,8 @@ const messages = {
             'The status is already Pending so there will be no changes and the user will not be notified. Are you sure you want to proceed?',
         confirmarAprobarManualIdentity:
             'Confirm approving this identity verification request?',
+        confirmarRechazarManualIdentity:
+            'Confirm rejecting this identity verification request?',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',
