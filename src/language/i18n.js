@@ -1076,6 +1076,8 @@ const messages = {
             '¿Confirmás marcar esta solicitud como pendiente?',
         confirmarGuardarNotaPrivadaManualIdentity:
             '¿Confirmás guardar la nota privada de administración?',
+        confirmarGuardarEstadoManualIdentity:
+            '¿Confirmás guardar los cambios de estado de esta solicitud?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -2869,6 +2871,8 @@ const messages = {
             '¿Confirmás marcar esta solicitud como pendiente?',
         confirmarGuardarNotaPrivadaManualIdentity:
             '¿Confirmás guardar la nota privada de administración?',
+        confirmarGuardarEstadoManualIdentity:
+            '¿Confirmás guardar los cambios de estado de esta solicitud?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -4606,6 +4610,8 @@ const messages = {
             'Confirm marking this request as pending?',
         confirmarGuardarNotaPrivadaManualIdentity:
             'Confirm saving the private admin note?',
+        confirmarGuardarEstadoManualIdentity:
+            'Confirm saving the state changes for this request?',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',

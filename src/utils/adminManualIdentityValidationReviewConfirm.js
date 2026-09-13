@@ -38,6 +38,10 @@ export function getSavePrivateNoteConfirmMessageKey() {
     return 'confirmarGuardarNotaPrivadaManualIdentity';
 }
 
+export function getSaveStateConfirmMessageKey() {
+    return 'confirmarGuardarEstadoManualIdentity';
+}
+
 export function shouldProceedWithConfirmedAction(confirmAction) {
     return confirmAction();
 }

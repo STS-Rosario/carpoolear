@@ -82,7 +82,7 @@
                                 class="admin-manual-identity-state-edit-save"
                                 :disabled="!hasStateChanges || savingState"
                                 :loading="savingState"
-                                @click="saveManualIdentityValidationState"
+                                @click="confirmSaveManualIdentityValidationState"
                             >
                                 <template v-if="savingState">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -275,6 +275,7 @@ import {
 import {
     getReviewActionConfirmMessageKey,
     getSavePrivateNoteConfirmMessageKey,
+    getSaveStateConfirmMessageKey,
     shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
 } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
@@ -442,6 +443,19 @@ export default {
                 .finally(() => {
                     this.savingPrivateNote = false;
                 });
+        },
+        confirmSaveManualIdentityValidationState() {
+            if (!this.item || !this.hasStateChanges) {
+                return;
+            }
+
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSaveStateConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.saveManualIdentityValidationState();
         },
         saveManualIdentityValidationState() {
             if (!this.item || !this.hasStateChanges) {
