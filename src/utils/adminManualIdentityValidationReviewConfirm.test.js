@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+    getReviewActionConfirmMessageKey,
     shouldConfirmAlreadyPendingReview,
     shouldProceedWithReviewAction
 } from './adminManualIdentityValidationReviewConfirm.js';
@@ -17,6 +18,10 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
     it('does not require confirmation for non-pending actions', () => {
         expect(shouldConfirmAlreadyPendingReview('approve', 'pending')).toBe(false);
         expect(shouldConfirmAlreadyPendingReview('reject', 'pending')).toBe(false);
+    });
+
+    it('returns approve confirmation message key', () => {
+        expect(getReviewActionConfirmMessageKey('approve', 'pending')).toBe('confirmarAprobarManualIdentity');
     });
 
     it('requires confirmation before approving a request', () => {

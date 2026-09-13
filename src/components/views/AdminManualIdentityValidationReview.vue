@@ -204,7 +204,7 @@
                                     variant="success"
                                     :disabled="submitting"
                                     :loading="submitting"
-                                    @click="review('approve')"
+                                    @click="confirmReview('approve')"
                                 >
                                     {{ $t('aprobar') }}
                                 </AppButton>
@@ -272,7 +272,10 @@ import {
     hasManualIdentityValidationStateChanges,
     hasPhotosSubmitted
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
-import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import {
+    getReviewActionConfirmMessageKey,
+    shouldProceedWithReviewAction
+} from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -476,10 +479,14 @@ export default {
                 });
         },
         confirmReview(action) {
+            const messageKey = getReviewActionConfirmMessageKey(
+                action,
+                this.item && this.item.review_status
+            );
             const proceed = shouldProceedWithReviewAction(
                 action,
                 this.item && this.item.review_status,
-                () => confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+                () => confirm(this.$t(messageKey))
             );
             if (!proceed) {
                 return;
