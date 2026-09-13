@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
     getReviewActionConfirmMessageKey,
+    getSavePrivateNoteConfirmMessageKey,
     shouldConfirmAlreadyPendingReview,
+    shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
 } from './adminManualIdentityValidationReviewConfirm.js';
 
@@ -68,6 +70,21 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
         };
 
         expect(shouldProceedWithReviewAction('reject', 'pending', confirmAction)).toBe(true);
+        expect(confirmCalled).toBe(true);
+    });
+
+    it('returns save private note confirmation message key', () => {
+        expect(getSavePrivateNoteConfirmMessageKey()).toBe('confirmarGuardarNotaPrivadaManualIdentity');
+    });
+
+    it('requires confirmation before saving private admin note', () => {
+        let confirmCalled = false;
+        const confirmAction = () => {
+            confirmCalled = true;
+            return true;
+        };
+
+        expect(shouldProceedWithConfirmedAction(confirmAction)).toBe(true);
         expect(confirmCalled).toBe(true);
     });
 
