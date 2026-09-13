@@ -33,3 +33,11 @@ export function shouldProceedWithReviewAction(action, reviewStatus, confirmActio
 
     return confirmAction();
 }
+
+export function getSavePrivateNoteConfirmMessageKey() {
+    return 'confirmarGuardarNotaPrivadaManualIdentity';
+}
+
+export function shouldProceedWithConfirmedAction(confirmAction) {
+    return confirmAction();
+}

@@ -1074,6 +1074,8 @@ const messages = {
             '¿Confirmás rechazar esta solicitud de verificación de identidad?',
         confirmarMarcarPendienteManualIdentity:
             '¿Confirmás marcar esta solicitud como pendiente?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            '¿Confirmás guardar la nota privada de administración?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -2865,6 +2867,8 @@ const messages = {
             '¿Confirmás rechazar esta solicitud de verificación de identidad?',
         confirmarMarcarPendienteManualIdentity:
             '¿Confirmás marcar esta solicitud como pendiente?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            '¿Confirmás guardar la nota privada de administración?',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -4600,6 +4604,8 @@ const messages = {
             'Confirm rejecting this identity verification request?',
         confirmarMarcarPendienteManualIdentity:
             'Confirm marking this request as pending?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            'Confirm saving the private admin note?',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',

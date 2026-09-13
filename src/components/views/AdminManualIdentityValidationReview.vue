@@ -135,7 +135,7 @@
                                 class="private-admin-note-save-btn"
                                 :disabled="savingPrivateNote"
                                 :loading="savingPrivateNote"
-                                @click="savePrivateAdminNote"
+                                @click="confirmSavePrivateAdminNote"
                             >
                                 <template v-if="savingPrivateNote">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -274,6 +274,8 @@ import {
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
 import {
     getReviewActionConfirmMessageKey,
+    getSavePrivateNoteConfirmMessageKey,
+    shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
 } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
@@ -416,6 +418,15 @@ export default {
         },
         showFullSize(type) {
             this.fullSizeImage = this.blobUrls[type] || null;
+        },
+        confirmSavePrivateAdminNote() {
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSavePrivateNoteConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.savePrivateAdminNote();
         },
         savePrivateAdminNote() {
             if (!this.item) return;

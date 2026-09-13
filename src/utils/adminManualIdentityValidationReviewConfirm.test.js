@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
     getReviewActionConfirmMessageKey,
     getSavePrivateNoteConfirmMessageKey,
+    getSaveStateConfirmMessageKey,
     shouldConfirmAlreadyPendingReview,
     shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
