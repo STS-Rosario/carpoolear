@@ -19,12 +19,21 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
         expect(shouldConfirmAlreadyPendingReview('reject', 'pending')).toBe(false);
     });
 
-    it('proceeds without confirm when review action does not need it', () => {
+    it('requires confirmation before approving a request', () => {
+        let confirmCalled = false;
         const confirmAction = () => {
-            throw new Error('confirm should not run');
+            confirmCalled = true;
+            return true;
         };
 
         expect(shouldProceedWithReviewAction('approve', 'pending', confirmAction)).toBe(true);
+        expect(confirmCalled).toBe(true);
+    });
+
+    it('does not proceed when approve confirmation is cancelled', () => {
+        const confirmAction = () => false;
+
+        expect(shouldProceedWithReviewAction('approve', 'pending', confirmAction)).toBe(false);
     });
 
     it('uses confirm when marking pending an already pending request', () => {
