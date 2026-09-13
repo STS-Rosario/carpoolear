@@ -78,6 +78,21 @@ describe('adminManualIdentityValidationReviewConfirm', () => {
         expect(getSavePrivateNoteConfirmMessageKey()).toBe('confirmarGuardarNotaPrivadaManualIdentity');
     });
 
+    it('returns save state confirmation message key', () => {
+        expect(getSaveStateConfirmMessageKey()).toBe('confirmarGuardarEstadoManualIdentity');
+    });
+
+    it('requires confirmation before saving manual identity validation state', () => {
+        let confirmCalled = false;
+        const confirmAction = () => {
+            confirmCalled = true;
+            return false;
+        };
+
+        expect(shouldProceedWithConfirmedAction(confirmAction)).toBe(false);
+        expect(confirmCalled).toBe(true);
+    });
+
     it('requires confirmation before saving private admin note', () => {
         let confirmCalled = false;
         const confirmAction = () => {
