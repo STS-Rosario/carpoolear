@@ -3,7 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
-const viewSource = fs.readFileSync(viewPath, 'utf8');
+const choiceCardsPath = path.resolve(
+    __dirname,
+    'IdentityValidationChoiceCards.vue'
+);
+const viewSource =
+    fs.readFileSync(viewPath, 'utf8') +
+    fs.readFileSync(choiceCardsPath, 'utf8');
 
 describe('IdentityValidation paid awaiting photos', () => {
     it('shows esperando fotos status before documents are uploaded', () => {
@@ -217,11 +223,16 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
                 /identityValidationMercadoPagoOwnershipWarningPrefix/g
             ) || []
         ).length;
-        expect(prefixOccurrences).toBe(3);
+        expect(prefixOccurrences).toBe(2);
     });
 });
 
 describe('IdentityValidation choice cards', () => {
+    it('uses shared choice cards on the main and rejected verification flows', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('IdentityValidationChoiceCards');
+        expect(parentSource.match(/<IdentityValidationChoiceCards/g)).toHaveLength(2);
+    });
     it('renders option cards with icon, title, and compact badges instead of bullet lists', () => {
         expect(viewSource).toContain('identity-validation-card-header');
         expect(viewSource).toContain('identity-validation-card-badge');
