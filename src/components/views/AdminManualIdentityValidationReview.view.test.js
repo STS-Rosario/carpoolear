@@ -57,10 +57,25 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('estadoCerrado');
     });
 
-    it('confirms mark pending when request is already pending', () => {
+    it('confirms review actions before submitting', () => {
         expect(viewSource).toContain('confirmReview');
+        expect(viewSource).toContain('@click="confirmReview(\'approve\')"');
         expect(viewSource).toContain('@click="confirmReview(\'pending\')"');
-        expect(viewSource).toContain('confirmMarcarPendienteYaPendiente');
+        expect(viewSource).toContain('@click="confirmReview(\'reject\')"');
+        expect(viewSource).toContain('getReviewActionConfirmMessageKey');
         expect(viewSource).toContain('shouldProceedWithReviewAction');
+    });
+
+    it('confirms save actions before persisting changes', () => {
+        expect(viewSource).toContain('confirmSavePrivateAdminNote');
+        expect(viewSource).toContain('confirmSaveManualIdentityValidationState');
+        expect(viewSource).toContain('getSavePrivateNoteConfirmMessageKey');
+        expect(viewSource).toContain('getSaveStateConfirmMessageKey');
+        expect(viewSource).toContain('shouldProceedWithConfirmedAction');
+    });
+
+    it('confirms purge before deleting photos', () => {
+        expect(viewSource).toContain('confirmPurge');
+        expect(viewSource).toContain('@click="confirmPurge"');
     });
 });
