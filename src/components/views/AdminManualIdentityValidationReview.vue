@@ -82,7 +82,7 @@
                                 class="admin-manual-identity-state-edit-save"
                                 :disabled="!hasStateChanges || savingState"
                                 :loading="savingState"
-                                @click="saveManualIdentityValidationState"
+                                @click="confirmSaveManualIdentityValidationState"
                             >
                                 <template v-if="savingState">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -133,7 +133,7 @@
                                 class="private-admin-note-save-btn"
                                 :disabled="savingPrivateNote"
                                 :loading="savingPrivateNote"
-                                @click="savePrivateAdminNote"
+                                @click="confirmSavePrivateAdminNote"
                             >
                                 <template v-if="savingPrivateNote">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -202,7 +202,7 @@
                                     variant="success"
                                     :disabled="submitting"
                                     :loading="submitting"
-                                    @click="review('approve')"
+                                    @click="confirmReview('approve')"
                                 >
                                     {{ $t('aprobar') }}
                                 </AppButton>
@@ -218,7 +218,7 @@
                                     variant="danger"
                                     :disabled="!hasComment || submitting"
                                     :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                    @click="review('reject')"
+                                    @click="confirmReview('reject')"
                                 >
                                     {{ $t('rechazar') }}
                                 </AppButton>
@@ -274,7 +274,13 @@ import {
     hasManualIdentityValidationStateChanges,
     hasPhotosSubmitted
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
-import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import {
+    getReviewActionConfirmMessageKey,
+    getSavePrivateNoteConfirmMessageKey,
+    getSaveStateConfirmMessageKey,
+    shouldProceedWithConfirmedAction,
+    shouldProceedWithReviewAction
+} from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -412,6 +418,15 @@ export default {
         showFullSize(type) {
             this.fullSizeImage = this.blobUrls[type] || null;
         },
+        confirmSavePrivateAdminNote() {
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSavePrivateNoteConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.savePrivateAdminNote();
+        },
         savePrivateAdminNote() {
             if (!this.item) return;
             this.savingPrivateNote = true;
@@ -426,6 +441,19 @@ export default {
                 .finally(() => {
                     this.savingPrivateNote = false;
                 });
+        },
+        confirmSaveManualIdentityValidationState() {
+            if (!this.item || !this.hasStateChanges) {
+                return;
+            }
+
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSaveStateConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.saveManualIdentityValidationState();
         },
         saveManualIdentityValidationState() {
             if (!this.item || !this.hasStateChanges) {
@@ -474,10 +502,14 @@ export default {
                 });
         },
         confirmReview(action) {
+            const messageKey = getReviewActionConfirmMessageKey(
+                action,
+                this.item && this.item.review_status
+            );
             const proceed = shouldProceedWithReviewAction(
                 action,
                 this.item && this.item.review_status,
-                () => confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+                () => confirm(this.$t(messageKey))
             );
             if (!proceed) {
                 return;

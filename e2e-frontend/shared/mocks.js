@@ -640,6 +640,13 @@ async function setupCommonMocks(page) {
 /**
  * Auth-related mocks: sets localStorage token/user and mocks bootstrap APIs.
  */
+async function setupGuestState(page) {
+  await page.addInitScript(() => {
+    localStorage.removeItem('TOKEN');
+    localStorage.removeItem('USER');
+  });
+}
+
 async function setupAuthState(page, user = MOCK_USER) {
   const token = 'mock-jwt-token-for-testing';
 
@@ -804,6 +811,7 @@ module.exports = {
   freezeClock,
   setupCatchAllMock,
   setupCommonMocks,
+  setupGuestState,
   setupAuthState,
   waitForPageReady,
 };
