@@ -1,7 +1,7 @@
 <template>
     <div class="identity-validation-component">
         <div class="identity-validation-page__card">
-            <h1 class="identity-validation-page__heading">{{ $t('validarIdentidad') }}</h1>
+            <h1 class="identity-validation-page__heading hidden-xs">{{ $t('validarIdentidad') }}</h1>
         <div
             v-if="showVerificationSuccessBanner"
             class="identity-verification-success-banner"
@@ -382,31 +382,10 @@
             <div v-else class="identity-validation-main">
                 <header class="identity-validation-intro">
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
-                    <p class="identity-validation-lead">{{ $t('identityValidationPageIntroEstoPermite') }}</p>
-                    <ul class="identity-validation-bullets">
-                        <li>{{ $t('identityValidationPageBullet1') }}</li>
-                        <li>{{ $t('identityValidationPageBullet2') }}</li>
-                        <li>{{ $t('identityValidationPageBullet3') }}</li>
-                    </ul>
-                    <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
-                    <p class="identity-validation-learn-more">
-                        {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
+                    <p class="identity-validation-lead">
+                        {{ $t('identityValidationPageSummary') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationPageLearnMoreLink') }}</router-link>
                     </p>
-                    <i18n-t
-                        keypath="identityValidationTwoOptions"
-                        tag="p"
-                        class="identity-validation-two-options"
-                    >
-                        <template #twoOptions>
-                            <strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>
-                        </template>
-                        <template #automatic>
-                            <strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>
-                        </template>
-                        <template #manual>
-                            <strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>
-                        </template>
-                    </i18n-t>
+                    <p class="identity-validation-two-options">{{ $t('identityValidationPageTwoOptions') }}</p>
                 </header>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -1269,8 +1248,10 @@ export default {
     color: #333;
 }
 
-/* Bullets only on this screen — scoped to root, not global `ul` */
-.identity-validation-component .identity-validation-bullets,
+.identity-validation-lead a {
+    font-weight: 700;
+}
+
 .identity-validation-component .identity-validation-card-bullets {
     list-style-type: disc;
     list-style-position: outside;
@@ -1281,29 +1262,14 @@ export default {
     color: #333;
 }
 
-.identity-validation-component .identity-validation-bullets {
-    margin: 0 0 1rem;
-}
-
-.identity-validation-component .identity-validation-bullets li,
 .identity-validation-component .identity-validation-card-bullets li {
     display: list-item;
 }
 
-.identity-validation-component .identity-validation-bullets li {
-    margin-bottom: 0.35rem;
-}
-
-.identity-validation-once,
-.identity-validation-learn-more,
 .identity-validation-two-options {
-    margin: 0 0 0.75rem;
+    margin: 0 0 1.75rem;
     font-size: 0.95rem;
     color: #333;
-}
-
-.identity-validation-two-options {
-    margin-bottom: 1.75rem;
 }
 
 .identity-validation-cards {

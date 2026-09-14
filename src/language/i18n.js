@@ -812,7 +812,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -2614,7 +2618,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -4301,7 +4309,10 @@ const messages = {
         validarConMercadoPagoDesc:
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
-            'To keep the community safe, we need to confirm your account.',
+            'For a safer Carpoolear community, you need to verify your account.',
+        identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+        identityValidationPageLearnMoreLink: 'See all the details',
+        identityValidationPageTwoOptions: 'You have two options:',
         identityValidationPageIntroEstoPermite: 'This allows',
         identityValidationPageBullet1: 'Reduce fake profiles.',
         identityValidationPageBullet2:
