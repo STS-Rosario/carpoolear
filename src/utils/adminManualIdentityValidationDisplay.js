@@ -31,6 +31,11 @@ export function getManualIdentityValidationStatusBadgeClass(item) {
     return 'label label-warning';
 }
 
+export {
+    getReviewActionAdminLabelKey as getManualIdentityValidationReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction as shouldShowManualIdentityValidationReviewAdminAction
+} from './adminReviewActionDisplay.js';
+
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
     const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;
     if (!submitted) return '-';

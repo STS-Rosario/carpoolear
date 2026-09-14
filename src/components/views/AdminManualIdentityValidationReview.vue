@@ -112,11 +112,9 @@
                         >
                             {{ $t('crearTicketSoporte') }}
                         </AppButton>
-                        <p v-if="item.reviewed_at">
-                            <strong>{{ getActionDateLabel(item.review_status) }}:</strong> {{ formatDate(item.reviewed_at) }}
-                        </p>
-                        <p v-if="item.reviewed_by_name">
-                            <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name }}
+                        <p v-if="shouldShowReviewAdminAction(item)">
+                            <strong>{{ $t(getReviewActionAdminLabelKey(item.review_status)) }}:</strong>
+                            {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
                             <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
@@ -267,6 +265,10 @@ import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
 import {
+    getReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction
+} from '../../utils/adminReviewActionDisplay.js';
+import {
     MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
     buildManualIdentityValidationStatePayload,
     hasManualIdentityValidationStateChanges,
@@ -327,6 +329,8 @@ export default {
     },
     methods: {
         shouldShowPurgedPhotosMessage,
+        shouldShowReviewAdminAction,
+        getReviewActionAdminLabelKey,
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,
@@ -345,12 +349,6 @@ export default {
             if (status === 'rejected') return this.$t('estadoRechazado');
             if (status === 'closed') return this.$t('estadoCerrado');
             return status || '-';
-        },
-        getActionDateLabel(reviewStatus) {
-            if (reviewStatus === 'approved' || reviewStatus === 'approve') return this.$t('fechaAprobacion');
-            if (reviewStatus === 'rejected' || reviewStatus === 'reject') return this.$t('fechaRechazo');
-            if (reviewStatus === 'pending') return this.$t('fechaMarcadoPendiente');
-            return this.$t('fechaAccionAdmin');
         },
         applyResponseItem(res) {
             const data = res.data || res;

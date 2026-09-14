@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
     formatManualIdentityValidationWaitingTime,
+    getManualIdentityValidationReviewActionAdminLabelKey,
     getManualIdentityValidationStatusBadgeClass,
-    getManualIdentityValidationStatusLabel
+    getManualIdentityValidationStatusLabel,
+    shouldShowManualIdentityValidationReviewAdminAction
 } from './adminManualIdentityValidationDisplay.js';
 
 describe('adminManualIdentityValidationDisplay', () => {
@@ -71,5 +73,31 @@ describe('adminManualIdentityValidationDisplay', () => {
         }, t, now);
 
         expect(result).toBe('2 tiempoEsperaHoras 30 tiempoEsperaMinutos');
+    });
+
+    it('maps approved review status to approved-by label key', () => {
+        expect(getManualIdentityValidationReviewActionAdminLabelKey('approved')).toBe('aprobadoPor');
+        expect(getManualIdentityValidationReviewActionAdminLabelKey('approve')).toBe('aprobadoPor');
+    });
+
+    it('maps rejected review status to rejected-by label key', () => {
+        expect(getManualIdentityValidationReviewActionAdminLabelKey('rejected')).toBe('rechazadoPor');
+        expect(getManualIdentityValidationReviewActionAdminLabelKey('reject')).toBe('rechazadoPor');
+    });
+
+    it('maps pending review status to marked-pending-by label key', () => {
+        expect(getManualIdentityValidationReviewActionAdminLabelKey('pending')).toBe('marcadoPendientePor');
+    });
+
+    it('shows review admin action only when reviewed_at is present', () => {
+        expect(shouldShowManualIdentityValidationReviewAdminAction({
+            reviewed_at: '2026-06-18 10:00:00',
+            reviewed_by_name: 'Admin One'
+        })).toBe(true);
+
+        expect(shouldShowManualIdentityValidationReviewAdminAction({
+            reviewed_at: null,
+            reviewed_by_name: 'Admin One'
+        })).toBe(false);
     });
 });

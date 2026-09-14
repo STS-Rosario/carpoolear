@@ -78,4 +78,12 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('confirmPurge');
         expect(viewSource).toContain('@click="confirmPurge"');
     });
+
+    it('shows which admin took the review action with action-specific label', () => {
+        expect(viewSource).toContain('shouldShowReviewAdminAction');
+        expect(viewSource).toContain('getReviewActionAdminLabelKey');
+        expect(viewSource).toContain('item.reviewed_by_name || $t(\'na\')');
+        expect(viewSource).toContain('$t(\'el\')');
+        expect(viewSource).toContain('formatDate(item.reviewed_at)');
+    });
 });
