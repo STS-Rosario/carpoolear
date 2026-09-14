@@ -812,7 +812,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -828,10 +832,19 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -2614,7 +2627,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -2630,10 +2647,19 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -4301,7 +4327,10 @@ const messages = {
         validarConMercadoPagoDesc:
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
-            'To keep the community safe, we need to confirm your account.',
+            'For a safer Carpoolear community, you need to verify your account.',
+        identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+        identityValidationPageLearnMoreLink: 'See all the details',
+        identityValidationPageTwoOptions: 'You have two options:',
         identityValidationPageIntroEstoPermite: 'This allows',
         identityValidationPageBullet1: 'Reduce fake profiles.',
         identityValidationPageBullet2:
@@ -4311,7 +4340,10 @@ const messages = {
         identityValidationAutoCardDesc:
             'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
-            "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
+            "Don't have Mercado Pago? Upload your documents and we'll review them.",
+        identityValidationAutoBadgeFree: 'Free',
+        identityValidationAutoBadgeInstant: 'Instant',
+        identityValidationManualBadgeTime: 'Up to 48hrs.',
         identityValidationCostLine: 'Cost: {cost}',
         identityValidationTimeLine:
             'Verification time: up to 48 business hours',
@@ -4579,6 +4611,12 @@ const messages = {
             'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder. Your full name must match in Carpoolear and MP, you can ',
         identityValidationMercadoPagoOwnershipWarningProfileLink: 'edit it here',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder.',
+        identityValidationMpConfirmName:
+            'Your full name must match in Carpoolear and Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continue with verification',
+        identityValidationMpConfirmEditProfile: 'Edit my Carpoolear details',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',

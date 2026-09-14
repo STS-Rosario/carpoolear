@@ -3,7 +3,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'IdentityValidation.vue');
-const viewSource = fs.readFileSync(viewPath, 'utf8');
+const choiceCardsPath = path.resolve(
+    __dirname,
+    'IdentityValidationChoiceCards.vue'
+);
+const mpConfirmModalPath = path.resolve(
+    __dirname,
+    '../IdentityValidationMercadoPagoConfirmModal.vue'
+);
+const viewSource =
+    fs.readFileSync(viewPath, 'utf8') +
+    fs.readFileSync(choiceCardsPath, 'utf8') +
+    fs.readFileSync(mpConfirmModalPath, 'utf8');
 
 describe('IdentityValidation paid awaiting photos', () => {
     it('shows esperando fotos status before documents are uploaded', () => {
@@ -13,20 +24,21 @@ describe('IdentityValidation paid awaiting photos', () => {
 });
 
 describe('IdentityValidation page card', () => {
-    it('wraps content in a white card with the page title inside', () => {
+    it('wraps content in a white card with a desktop-only page title inside', () => {
         expect(viewSource).toContain('identity-validation-page__card');
         expect(viewSource).toContain('identity-validation-page__heading');
         expect(viewSource).toMatch(
-            /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
+            /identity-validation-page__heading[^>]*hidden-xs[\s\S]*\$t\('validarIdentidad'\)/
         );
     });
 
-    it('renders the account verification title once so it is not duplicated', () => {
+    it('renders the in-card account verification title once and hides it on mobile', () => {
         const titleUsages = viewSource.match(/\$t\('validarIdentidad'\)/g) || [];
         expect(titleUsages).toHaveLength(1);
         expect(viewSource).not.toMatch(
             /identity-validation-title[\s\S]{0,80}\$t\('validarIdentidad'\)/
         );
+        expect(viewSource).not.toContain("$t('identidadModalTitle')");
     });
 });
 
@@ -138,14 +150,14 @@ describe('IdentityValidation rejection warnings', () => {
 describe('IdentityValidation Mercado Pago ownership warning', () => {
     it('lists that MP integration can be removed after verifying', () => {
         expect(viewSource).toContain("$t('identidadModalAutoPuedeEliminarMp')");
-        const autoInmediata = viewSource.indexOf(
-            "$t('identidadModalAutoInmediata')"
+        const autoInstantBadge = viewSource.indexOf(
+            "$t('identityValidationAutoBadgeInstant')"
         );
         const puedeEliminar = viewSource.indexOf(
             "$t('identidadModalAutoPuedeEliminarMp')"
         );
-        expect(autoInmediata).toBeGreaterThan(-1);
-        expect(puedeEliminar).toBeGreaterThan(autoInmediata);
+        expect(autoInstantBadge).toBeGreaterThan(-1);
+        expect(puedeEliminar).toBeGreaterThan(autoInstantBadge);
     });
 
     it('shows MP apps disconnect hint with link on MP verification success', () => {
@@ -196,7 +208,7 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(manualInstructionsIndex).toBeLessThan(templateEnd);
     });
 
-    it('shows ownership warning with profile edit link on MP verification card', () => {
+    it('shows ownership warning with profile edit link on pending manual switch', () => {
         expect(viewSource).toContain('identity-validation-mp-warning');
         expect(viewSource).toContain(
             "$t('identityValidationMercadoPagoOwnershipWarningPrefix')"
@@ -216,55 +228,92 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
                 /identityValidationMercadoPagoOwnershipWarningPrefix/g
             ) || []
         ).length;
-        expect(prefixOccurrences).toBe(3);
+        expect(prefixOccurrences).toBe(1);
     });
 });
 
-describe('IdentityValidation learn more link', () => {
-    it('shows learn-more copy with link to verificacion cuenta page below once-only note', () => {
-        const onceIndex = viewSource.indexOf(
-            'class="identity-validation-once"'
-        );
-        const learnMoreIndex = viewSource.indexOf(
-            'identity-validation-learn-more'
-        );
-
-        expect(onceIndex).toBeGreaterThan(-1);
-        expect(learnMoreIndex).toBeGreaterThan(onceIndex);
-        expect(viewSource).toContain(
-            "$t('identityValidationLearnMorePrefix')"
-        );
-        expect(viewSource).toContain(
-            "$t('identityValidationLearnMoreLink')"
-        );
-        expect(viewSource).toContain(
-            "$t('identityValidationLearnMoreSuffix')"
-        );
-        expect(viewSource).toContain("name: 'verificacion_cuenta'");
+describe('IdentityValidation choice cards', () => {
+    it('uses shared choice cards on the main and rejected verification flows', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('IdentityValidationChoiceCards');
+        expect(parentSource.match(/<IdentityValidationChoiceCards/g)).toHaveLength(2);
+    });
+    it('renders option cards with icon, title, and compact badges instead of bullet lists', () => {
+        expect(viewSource).toContain('identity-validation-card-header');
+        expect(viewSource).toContain('identity-validation-card-badge');
+        expect(viewSource).toContain('fa-shield');
+        expect(viewSource).toContain('fa-file-text-o');
+        expect(viewSource).toContain("$t('identityValidationAutoBadgeFree')");
+        expect(viewSource).toContain("$t('identityValidationAutoBadgeInstant')");
+        expect(viewSource).toContain('formattedManualCost');
+        expect(viewSource).toContain("$t('identityValidationManualBadgeTime')");
+        expect(viewSource).not.toContain('identity-validation-card-bullets');
+        expect(viewSource).not.toContain("$t('identityValidationCostLine'");
+        expect(viewSource).not.toContain("$t('identityValidationTimeLine')");
+        expect(viewSource).not.toContain("$t('identidadModalAutoGratis')");
+        expect(viewSource).not.toContain("$t('identidadModalAutoInmediata')");
     });
 
-    it('shows two verification options after the learn-more line with highlighted phrases', () => {
-        const learnMoreIndex = viewSource.indexOf(
-            'identity-validation-learn-more'
+    it('keeps two columns of option cards on desktop and stacks them on mobile', () => {
+        expect(viewSource).toMatch(
+            /\.identity-validation-cards \{[\s\S]*flex-direction:\s*column/
         );
-        const twoOptionsIndex = viewSource.indexOf(
-            'identity-validation-two-options'
+        expect(viewSource).toMatch(
+            /@media \(min-width: 768px\) \{[\s\S]*\.identity-validation-cards \{[\s\S]*flex-direction:\s*row/
         );
+    });
 
-        expect(learnMoreIndex).toBeGreaterThan(-1);
-        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
+    it('uses primary choice buttons without uppercase transform', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8');
+        expect(cardsSource).toMatch(
+            /variant="primary"[\s\S]*\$t\('validarConMercadoPago'\)/
+        );
+        expect(cardsSource).toMatch(
+            /variant="primary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
+        );
+        expect(cardsSource).not.toMatch(
+            /variant="secondary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
+        );
+        expect(cardsSource).not.toMatch(
+            /\.identity-validation-choice-cta \{[\s\S]*text-transform:\s*uppercase/
+        );
+    });
+});
+
+describe('IdentityValidation compact intro', () => {
+    it('shows option B intro, details link, and two-options line without the old bullets', () => {
+        expect(viewSource).toContain("$t('identityValidationPageIntro')");
+        expect(viewSource).toContain("$t('identityValidationPageSummary')");
         expect(viewSource).toContain(
+            "$t('identityValidationPageLearnMoreLink')"
+        );
+        expect(viewSource).toContain("$t('identityValidationPageTwoOptions')");
+        expect(viewSource).toContain("name: 'verificacion_cuenta'");
+        expect(viewSource).not.toContain(
+            "$t('identityValidationPageIntroEstoPermite')"
+        );
+        expect(viewSource).not.toContain('identity-validation-bullets');
+        expect(viewSource).not.toContain("$t('identityValidationPageBullet1')");
+        expect(viewSource).not.toContain('identity-validation-once');
+        expect(viewSource).not.toContain(
             'keypath="identityValidationTwoOptions"'
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>"
+    });
+
+    it('places the details link after the summary and the two-options line after the link', () => {
+        const summaryIndex = viewSource.indexOf(
+            "$t('identityValidationPageSummary')"
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>"
+        const learnMoreIndex = viewSource.indexOf(
+            "$t('identityValidationPageLearnMoreLink')"
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>"
+        const twoOptionsIndex = viewSource.indexOf(
+            "$t('identityValidationPageTwoOptions')"
         );
+
+        expect(summaryIndex).toBeGreaterThan(-1);
+        expect(learnMoreIndex).toBeGreaterThan(summaryIndex);
+        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
     });
 });
 
@@ -335,5 +384,44 @@ describe('IdentityValidation manual admin review note', () => {
 describe('IdentityValidation closed manual after MercadoPago', () => {
     it('treats closed review status as terminal so pending notices are not shown', () => {
         expect(viewSource).toContain('isManualIdentityValidationTerminalStatus');
+    });
+});
+
+describe('IdentityValidation Mercado Pago confirm modal', () => {
+    it('opens a confirmation modal instead of starting OAuth from the choice card', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('showMercadoPagoConfirmModal');
+        expect(parentSource).toContain('openMercadoPagoConfirmModal');
+        expect(parentSource).toContain('@choose-mp="openMercadoPagoConfirmModal"');
+        expect(parentSource).not.toContain('@choose-mp="startMercadoPagoOAuth"');
+    });
+
+    it('shows ownership copy with continue, edit profile, and back actions', () => {
+        expect(viewSource).toContain("$t('identityValidationMpConfirmLead')");
+        expect(viewSource).toContain("$t('identityValidationMpConfirmName')");
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmContinue')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmEditProfile')"
+        );
+        expect(viewSource).toContain("$t('volver')");
+    });
+
+    it('continues verification from the modal and can close it', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('confirmMercadoPagoOAuth');
+        expect(parentSource).toMatch(
+            /confirmMercadoPagoOAuth\(\)\s*\{[\s\S]*showMercadoPagoConfirmModal\s*=\s*false[\s\S]*startMercadoPagoOAuth/
+        );
+        expect(parentSource).toContain('closeMercadoPagoConfirmModal');
+    });
+
+    it('does not keep the inline Mercado Pago ownership warning on choice cards', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8');
+        expect(cardsSource).not.toContain('identity-validation-mp-warning');
+        expect(cardsSource).not.toContain(
+            'identityValidationMercadoPagoOwnershipWarningPrefix'
+        );
     });
 });
