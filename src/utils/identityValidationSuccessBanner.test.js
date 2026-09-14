@@ -93,4 +93,17 @@ describe('shouldShowIdentityVerificationSuccessBanner', () => {
             })
         ).toBe(true);
     });
+
+    it.each(['both_mismatch', 'name_mismatch', 'dni_mismatch'])(
+        'returns false when oauth callback reports %s even if user still looks verified',
+        (resultMessage) => {
+            expect(
+                shouldShowIdentityVerificationSuccessBanner({
+                    user: verifiedUser,
+                    manualStatus: null,
+                    resultMessage
+                })
+            ).toBe(false);
+        }
+    );
 });
