@@ -38,4 +38,18 @@ describe('MyAccountNav desktop sidebar', () => {
             /my-account-nav__logout[\s\S]*icon-left="fa fa-sign-out"/
         );
     });
+
+    it('shows the splash version centered below delete account in grey', () => {
+        expect(navSource).toMatch(
+            /my-account-nav__delete[\s\S]*my-account-nav__version/
+        );
+        expect(navSource).toContain('my-account-nav__version');
+        expect(navSource).toContain("from '../../utils/customSplash'");
+        expect(navSource).toContain('formatSplashVersionText');
+        expect(navSource).toContain('resolveSplashVersion');
+        expect(navSource).toMatch(
+            /\.my-account-nav__version[\s\S]*text-align:\s*center/
+        );
+        expect(navSource).toMatch(/\.my-account-nav__version[\s\S]*color:\s*#999/);
+    });
 });

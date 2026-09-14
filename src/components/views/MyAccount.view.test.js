@@ -55,6 +55,18 @@ describe('MyAccount view', () => {
         expect(viewSource).toContain("$t('eliminarCuenta')");
     });
 
+    it('shows the splash version centered below delete account in grey', () => {
+        expect(viewSource).toMatch(
+            /my-account__delete[\s\S]*my-account__version/
+        );
+        expect(viewSource).toContain('my-account__version');
+        expect(viewSource).toContain("from '../../utils/customSplash'");
+        expect(viewSource).toContain('formatSplashVersionText');
+        expect(viewSource).toContain('resolveSplashVersion');
+        expect(viewSource).toMatch(/\.my-account__version[\s\S]*text-align:\s*center/);
+        expect(viewSource).toMatch(/\.my-account__version[\s\S]*color:\s*#999/);
+    });
+
     it('renders the previous Español/English locale switcher for Idioma', () => {
         expect(viewSource).toContain('my-account__locale');
         expect(viewSource).toContain("setLocale('arg')");
