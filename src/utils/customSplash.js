@@ -1,5 +1,5 @@
 export const CUSTOM_SPLASH_DISMISS_MS = 3000;
-export const SPLASH_WEB_BUILD_NUMBER = 155;
+export const SPLASH_WEB_BUILD_NUMBER = 157;
 
 export function formatSplashVersionText({
     version,
