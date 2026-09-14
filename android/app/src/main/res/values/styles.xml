@@ -13,9 +13,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <!-- Opt out of edge-to-edge on Android 15. Ignored on Android 16 (API 36) devices
-             when targeting SDK 36; the web UI already uses env(safe-area-inset-*). -->
-        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
 
 
