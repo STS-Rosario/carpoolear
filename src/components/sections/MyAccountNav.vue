@@ -105,11 +105,7 @@ import { Capacitor } from '@capacitor/core';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
 import { useRootStore } from '../../stores/root';
-import {
-    formatSplashVersionText,
-    resolveSplashVersion,
-    SPLASH_WEB_BUILD_NUMBER
-} from '../../utils/customSplash';
+import { resolveAppVersionDisplayText } from '../../utils/customSplash';
 import {
     DESKTOP_DELETE_ACCOUNT_ROUTE,
     getMyAccountDesktopExpandedSection,
@@ -153,14 +149,11 @@ export default {
             return DESKTOP_DELETE_ACCOUNT_ROUTE;
         },
         appVersionText() {
-            return formatSplashVersionText({
-                version: resolveSplashVersion({
-                    appVersionInfo: useRootStore().appVersionInfo,
-                    windowAppVersion:
-                        typeof window !== 'undefined' ? window.appVersion : null
-                }),
-                isNativePlatform: Capacitor.isNativePlatform(),
-                webBuildNumber: SPLASH_WEB_BUILD_NUMBER
+            return resolveAppVersionDisplayText({
+                appVersionInfo: useRootStore().appVersionInfo,
+                windowAppVersion:
+                    typeof window !== 'undefined' ? window.appVersion : null,
+                isNativePlatform: Capacitor.isNativePlatform()
             });
         }
     },

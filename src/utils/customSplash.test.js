@@ -4,6 +4,7 @@ import {
     formatSplashVersionText,
     isAdminAppUrl,
     isCustomSplashVisible,
+    resolveAppVersionDisplayText,
     resolveSplashVersion,
     SPLASH_WEB_BUILD_NUMBER
 } from './customSplash.js';
@@ -12,19 +13,31 @@ describe('formatSplashVersionText', () => {
     it('shows version and build number on web', () => {
         expect(
             formatSplashVersionText({ version: '3.2.5', isNativePlatform: false })
-        ).toBe('Version 3.2.5 - build 124');
+        ).toBe(`Version 3.2.5 - build ${SPLASH_WEB_BUILD_NUMBER}`);
     });
 
     it('shows version and build number on native platforms', () => {
         expect(
             formatSplashVersionText({ version: '123', isNativePlatform: true })
-        ).toBe('Version 123 - build 124');
+        ).toBe(`Version 123 - build ${SPLASH_WEB_BUILD_NUMBER}`);
     });
 
     it('falls back to zero when version is missing', () => {
         expect(
             formatSplashVersionText({ version: null, isNativePlatform: false })
-        ).toBe('Version 0 - build 124');
+        ).toBe(`Version 0 - build ${SPLASH_WEB_BUILD_NUMBER}`);
+    });
+});
+
+describe('resolveAppVersionDisplayText', () => {
+    it('formats the same splash version string from store and window fallback', () => {
+        expect(
+            resolveAppVersionDisplayText({
+                appVersionInfo: { version: '3.2.5' },
+                windowAppVersion: '1.0.0',
+                isNativePlatform: false
+            })
+        ).toBe(`Version 3.2.5 - build ${SPLASH_WEB_BUILD_NUMBER}`);
     });
 });
 
@@ -117,6 +130,6 @@ describe('CUSTOM_SPLASH_DISMISS_MS', () => {
     });
 
     it('exposes the web build number used on the splash screen', () => {
-        expect(SPLASH_WEB_BUILD_NUMBER).toBe(124);
+        expect(SPLASH_WEB_BUILD_NUMBER).toBe(153);
     });
 });

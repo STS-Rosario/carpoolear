@@ -45,8 +45,7 @@ describe('MyAccountNav desktop sidebar', () => {
         );
         expect(navSource).toContain('my-account-nav__version');
         expect(navSource).toContain("from '../../utils/customSplash'");
-        expect(navSource).toContain('formatSplashVersionText');
-        expect(navSource).toContain('resolveSplashVersion');
+        expect(navSource).toContain('resolveAppVersionDisplayText');
         expect(navSource).toMatch(
             /\.my-account-nav__version[\s\S]*text-align:\s*center/
         );

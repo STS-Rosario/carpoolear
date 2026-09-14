@@ -61,8 +61,7 @@ describe('MyAccount view', () => {
         );
         expect(viewSource).toContain('my-account__version');
         expect(viewSource).toContain("from '../../utils/customSplash'");
-        expect(viewSource).toContain('formatSplashVersionText');
-        expect(viewSource).toContain('resolveSplashVersion');
+        expect(viewSource).toContain('resolveAppVersionDisplayText');
         expect(viewSource).toMatch(/\.my-account__version[\s\S]*text-align:\s*center/);
         expect(viewSource).toMatch(/\.my-account__version[\s\S]*color:\s*#999/);
     });
