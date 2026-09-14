@@ -77,7 +77,7 @@ describe('Trip card redesign shell', () => {
     it('composes TripCardShell for the list card layout', () => {
         expect(source).toContain('TripCardShell');
         expect(source).toContain("from '../elements/TripCardShell.vue'");
-        expect(source).toContain('getTripLocationLabels');
+        expect(source).toContain('getTripCardLocationLabels');
         expect(source).toContain('formatTripCardDate');
         expect(source).toContain('formatTripCardTime');
         expect(source).toContain('normalizeTripsCount');
@@ -122,6 +122,14 @@ describe('Trip card redesign shell', () => {
         expect(source).toContain(':to-point="locationLabels.toPoint"');
         expect(source).toContain(':date-label="cardDateLabel"');
         expect(source).toContain(':time-label="cardTimeLabel"');
+    });
+
+    it('builds locationLabels with guest-aware punto filtering for /trips cards', () => {
+        expect(source).toContain("from '../../utils/tripCardLocationLabels.js'");
+        expect(source).toContain('getTripCardLocationLabels');
+        expect(source).toMatch(
+            /locationLabels\(\)\s*\{[\s\S]*getTripCardLocationLabels\(this\.trip,\s*this\.user\)/
+        );
     });
 
     it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
