@@ -326,13 +326,13 @@
                         v-if="identityValidationMpEnabled"
                         class="identity-validation-card"
                     >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                        <div class="identity-validation-card-header">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                            <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
+                        </div>
                         <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>{{ $t('identidadModalAutoGratis') }}</li>
-                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
-                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
-                        </ul>
                         <AppButton
                             variant="primary"
                             size="lg"
@@ -345,6 +345,7 @@
                         >
                             {{ $t('validarConMercadoPago') }}
                         </AppButton>
+                        <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -356,16 +357,15 @@
                         v-if="identityValidationManualEnabled"
                         class="identity-validation-card"
                     >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                        <div class="identity-validation-card-header">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                            <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
+                        </div>
                         <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>
-                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
-                            </li>
-                            <li>{{ $t('identityValidationTimeLine') }}</li>
-                        </ul>
                         <AppButton
-                            variant="secondary"
+                            variant="primary"
                             size="lg"
                             block
                             class="identity-validation-choice-cta"
@@ -401,13 +401,13 @@
                         v-if="identityValidationMpEnabled"
                         class="identity-validation-card"
                     >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                        <div class="identity-validation-card-header">
+                            <i class="fa fa-shield" aria-hidden="true"></i>
+                            <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
+                        </div>
                         <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>{{ $t('identidadModalAutoGratis') }}</li>
-                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
-                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
-                        </ul>
                         <AppButton
                             variant="primary"
                             size="lg"
@@ -420,6 +420,7 @@
                         >
                             {{ $t('validarConMercadoPago') }}
                         </AppButton>
+                        <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
                         <p class="identity-validation-mp-warning">
                             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                             {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
@@ -431,16 +432,15 @@
                         v-if="identityValidationManualEnabled"
                         class="identity-validation-card"
                     >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                        <div class="identity-validation-card-header">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                            <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
+                            <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
+                        </div>
                         <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>
-                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
-                            </li>
-                            <li>{{ $t('identityValidationTimeLine') }}</li>
-                        </ul>
                         <AppButton
-                            variant="secondary"
+                            variant="primary"
                             size="lg"
                             block
                             class="identity-validation-choice-cta"
@@ -1252,20 +1252,6 @@ export default {
     font-weight: 700;
 }
 
-.identity-validation-component .identity-validation-card-bullets {
-    list-style-type: disc;
-    list-style-position: outside;
-    padding-left: 1.5rem;
-    margin-left: 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #333;
-}
-
-.identity-validation-component .identity-validation-card-bullets li {
-    display: list-item;
-}
-
 .identity-validation-two-options {
     margin: 0 0 1.75rem;
     font-size: 0.95rem;
@@ -1292,8 +1278,8 @@ export default {
 }
 
 .identity-validation-card {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid var(--ds-action-border, #1e5f9e);
+    border-radius: 10px;
     padding: 1.25rem 1.25rem 1.5rem;
     background: #fff;
 }
@@ -1315,12 +1301,40 @@ export default {
     }
 }
 
-.identity-validation-card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+.identity-validation-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
     margin: 0 0 0.75rem;
+}
+
+.identity-validation-card-header .fa {
+    color: var(--ds-action, #1e5f9e);
+    font-size: 1.15rem;
+}
+
+.identity-validation-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
     line-height: 1.3;
     color: #333;
+    flex: 1 1 auto;
+}
+
+.identity-validation-card-badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #c5d4e0;
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #4a6578;
+    background: #fff;
+    white-space: nowrap;
 }
 
 .identity-validation-card-desc {
@@ -1330,17 +1344,15 @@ export default {
     font-size: 0.95rem;
 }
 
-.identity-validation-component .identity-validation-card-bullets {
-    margin: 0 0 1.25rem;
-}
-
-.identity-validation-component .identity-validation-card-bullets li {
-    margin-bottom: 0.25rem;
+.identity-validation-card-hint {
+    margin: 0.65rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #666;
 }
 
 .identity-validation-choice-cta {
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
 }
 
 .identity-validation-hint {

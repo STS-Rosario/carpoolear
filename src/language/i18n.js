@@ -835,7 +835,10 @@ const messages = {
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -2641,7 +2644,10 @@ const messages = {
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -4322,7 +4328,10 @@ const messages = {
         identityValidationAutoCardDesc:
             'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
-            "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
+            "Don't have Mercado Pago? Upload your documents and we'll review them.",
+        identityValidationAutoBadgeFree: 'Free',
+        identityValidationAutoBadgeInstant: 'Instant',
+        identityValidationManualBadgeTime: 'Up to 48hrs.',
         identityValidationCostLine: 'Cost: {cost}',
         identityValidationTimeLine:
             'Verification time: up to 48 business hours',
