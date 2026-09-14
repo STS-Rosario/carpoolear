@@ -259,16 +259,17 @@ describe('IdentityValidation choice cards', () => {
     });
 
     it('uses primary choice buttons without uppercase transform', () => {
-        expect(viewSource).toMatch(
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8');
+        expect(cardsSource).toMatch(
             /variant="primary"[\s\S]*\$t\('validarConMercadoPago'\)/
         );
-        expect(viewSource).toMatch(
+        expect(cardsSource).toMatch(
             /variant="primary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
         );
-        expect(viewSource).not.toMatch(
+        expect(cardsSource).not.toMatch(
             /variant="secondary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
         );
-        expect(viewSource).not.toMatch(
+        expect(cardsSource).not.toMatch(
             /\.identity-validation-choice-cta \{[\s\S]*text-transform:\s*uppercase/
         );
     });

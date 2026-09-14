@@ -832,6 +832,12 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -2641,6 +2647,12 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
@@ -4599,6 +4611,12 @@ const messages = {
             'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder. Your full name must match in Carpoolear and MP, you can ',
         identityValidationMercadoPagoOwnershipWarningProfileLink: 'edit it here',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder.',
+        identityValidationMpConfirmName:
+            'Your full name must match in Carpoolear and Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continue with verification',
+        identityValidationMpConfirmEditProfile: 'Edit my Carpoolear details',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',

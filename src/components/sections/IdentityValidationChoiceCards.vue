@@ -24,11 +24,6 @@
                 {{ $t('validarConMercadoPago') }}
             </AppButton>
             <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
-            <p class="identity-validation-mp-warning">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
-                <a href="#" @click.prevent="$emit('edit-profile')">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
-            </p>
         </div>
 
         <div
@@ -175,31 +170,5 @@ export default {
 
 .identity-validation-choice-cta {
     letter-spacing: 0.01em;
-}
-
-.identity-validation-mp-warning {
-    margin: 0.75rem 0 0;
-    padding: 0.75rem 0.9rem;
-    border-radius: 4px;
-    border: 1px solid #faebcc;
-    background: #fcf8e3;
-    color: #8a6d3b;
-    line-height: 1.4;
-    font-size: 0.92rem;
-}
-
-.identity-validation-mp-warning .fa {
-    margin-right: 0.5rem;
-}
-
-.identity-validation-mp-warning a {
-    color: #7f4f00;
-    font-weight: 700;
-    text-decoration: underline;
-}
-
-.identity-validation-mp-warning a:hover,
-.identity-validation-mp-warning a:focus {
-    color: #5f3a00;
 }
 </style>
