@@ -77,7 +77,7 @@ describe('Trip card redesign shell', () => {
     it('composes TripCardShell for the list card layout', () => {
         expect(source).toContain('TripCardShell');
         expect(source).toContain("from '../elements/TripCardShell.vue'");
-        expect(source).toContain('getTripLocationLabels');
+        expect(source).toContain('getTripCardLocationLabels');
         expect(source).toContain('formatTripCardDate');
         expect(source).toContain('formatTripCardTime');
         expect(source).toContain('normalizeTripsCount');
