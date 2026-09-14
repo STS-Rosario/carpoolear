@@ -203,7 +203,7 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
         expect(manualInstructionsIndex).toBeLessThan(templateEnd);
     });
 
-    it('shows ownership warning with profile edit link on MP verification card', () => {
+    it('shows ownership warning with profile edit link on pending manual switch', () => {
         expect(viewSource).toContain('identity-validation-mp-warning');
         expect(viewSource).toContain(
             "$t('identityValidationMercadoPagoOwnershipWarningPrefix')"
@@ -223,7 +223,7 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
                 /identityValidationMercadoPagoOwnershipWarningPrefix/g
             ) || []
         ).length;
-        expect(prefixOccurrences).toBe(2);
+        expect(prefixOccurrences).toBe(1);
     });
 });
 
@@ -378,5 +378,44 @@ describe('IdentityValidation manual admin review note', () => {
 describe('IdentityValidation closed manual after MercadoPago', () => {
     it('treats closed review status as terminal so pending notices are not shown', () => {
         expect(viewSource).toContain('isManualIdentityValidationTerminalStatus');
+    });
+});
+
+describe('IdentityValidation Mercado Pago confirm modal', () => {
+    it('opens a confirmation modal instead of starting OAuth from the choice card', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('showMercadoPagoConfirmModal');
+        expect(parentSource).toContain('openMercadoPagoConfirmModal');
+        expect(parentSource).toContain('@choose-mp="openMercadoPagoConfirmModal"');
+        expect(parentSource).not.toContain('@choose-mp="startMercadoPagoOAuth"');
+    });
+
+    it('shows ownership copy with continue, edit profile, and back actions', () => {
+        expect(viewSource).toContain("$t('identityValidationMpConfirmLead')");
+        expect(viewSource).toContain("$t('identityValidationMpConfirmName')");
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmContinue')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmEditProfile')"
+        );
+        expect(viewSource).toContain("$t('volver')");
+    });
+
+    it('continues verification from the modal and can close it', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('confirmMercadoPagoOAuth');
+        expect(parentSource).toMatch(
+            /confirmMercadoPagoOAuth\(\)\s*\{[\s\S]*showMercadoPagoConfirmModal\s*=\s*false[\s\S]*startMercadoPagoOAuth/
+        );
+        expect(parentSource).toContain('closeMercadoPagoConfirmModal');
+    });
+
+    it('does not keep the inline Mercado Pago ownership warning on choice cards', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8');
+        expect(cardsSource).not.toContain('identity-validation-mp-warning');
+        expect(cardsSource).not.toContain(
+            'identityValidationMercadoPagoOwnershipWarningPrefix'
+        );
     });
 });
