@@ -13,6 +13,19 @@ export function formatSplashVersionText({
     return `${base} - build ${webBuildNumber}`;
 }
 
+export function resolveAppVersionDisplayText({
+    appVersionInfo,
+    windowAppVersion,
+    isNativePlatform = false,
+    webBuildNumber = SPLASH_WEB_BUILD_NUMBER
+}) {
+    return formatSplashVersionText({
+        version: resolveSplashVersion({ appVersionInfo, windowAppVersion }),
+        isNativePlatform,
+        webBuildNumber
+    });
+}
+
 export function resolveSplashVersion({ appVersionInfo, windowAppVersion }) {
     if (appVersionInfo && appVersionInfo.version) {
         return String(appVersionInfo.version);
