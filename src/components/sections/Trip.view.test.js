@@ -124,6 +124,14 @@ describe('Trip card redesign shell', () => {
         expect(source).toContain(':time-label="cardTimeLabel"');
     });
 
+    it('builds locationLabels with guest-aware punto filtering for /trips cards', () => {
+        expect(source).toContain("from '../../utils/tripCardLocationLabels.js'");
+        expect(source).toContain('getTripCardLocationLabels');
+        expect(source).toMatch(
+            /locationLabels\(\)\s*\{[\s\S]*getTripCardLocationLabels\(this\.trip,\s*this\.user\)/
+        );
+    });
+
     it('builds driverTripsLabel from user.trips_count via perfilViajesParticipados', () => {
         expect(source).toMatch(
             /driverTripsLabel\(\)\s*\{[\s\S]*trips_count\s*==\s*null[\s\S]*perfilViajesParticipados[\s\S]*normalizeTripsCount\(this\.trip\.user\.trips_count\)/
