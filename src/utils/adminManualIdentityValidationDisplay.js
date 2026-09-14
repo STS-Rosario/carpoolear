@@ -31,16 +31,10 @@ export function getManualIdentityValidationStatusBadgeClass(item) {
     return 'label label-warning';
 }
 
-export function getManualIdentityValidationReviewActionAdminLabelKey(reviewStatus) {
-    if (reviewStatus === 'approved' || reviewStatus === 'approve') return 'aprobadoPor';
-    if (reviewStatus === 'rejected' || reviewStatus === 'reject') return 'rechazadoPor';
-    if (reviewStatus === 'pending') return 'marcadoPendientePor';
-    return 'revisadoPor';
-}
-
-export function shouldShowManualIdentityValidationReviewAdminAction(item) {
-    return Boolean(item && item.reviewed_at);
-}
+export {
+    getReviewActionAdminLabelKey as getManualIdentityValidationReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction as shouldShowManualIdentityValidationReviewAdminAction
+} from './adminReviewActionDisplay.js';
 
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
     const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;

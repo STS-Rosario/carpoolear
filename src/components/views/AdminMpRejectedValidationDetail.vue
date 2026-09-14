@@ -33,8 +33,9 @@
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
                             <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
                         </p>
-                        <p v-if="item.reviewed_at">
-                            <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
+                        <p v-if="shouldShowReviewAdminAction(item)">
+                            <strong>{{ $t(getReviewActionAdminLabelKey(item.review_status)) }}:</strong>
+                            {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p><strong>{{ $t('usuario') }} ID:</strong> {{ item.user_id }}</p>
                         <AdminReviewSubjectUserLine
@@ -144,6 +145,10 @@ import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
+import {
+    getReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction
+} from '../../utils/adminReviewActionDisplay.js';
 
 export default {
     name: 'AdminMpRejectedValidationDetail',
@@ -181,6 +186,8 @@ export default {
         }
     },
     methods: {
+        shouldShowReviewAdminAction,
+        getReviewActionAdminLabelKey,
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,

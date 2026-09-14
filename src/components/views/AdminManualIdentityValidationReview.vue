@@ -112,8 +112,8 @@
                         >
                             {{ $t('crearTicketSoporte') }}
                         </AppButton>
-                        <p v-if="shouldShowManualIdentityValidationReviewAdminAction(item)">
-                            <strong>{{ $t(getManualIdentityValidationReviewActionAdminLabelKey(item.review_status)) }}:</strong>
+                        <p v-if="shouldShowReviewAdminAction(item)">
+                            <strong>{{ $t(getReviewActionAdminLabelKey(item.review_status)) }}:</strong>
                             {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
@@ -265,9 +265,9 @@ import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
 import {
-    getManualIdentityValidationReviewActionAdminLabelKey,
-    shouldShowManualIdentityValidationReviewAdminAction
-} from '../../utils/adminManualIdentityValidationDisplay.js';
+    getReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction
+} from '../../utils/adminReviewActionDisplay.js';
 import {
     MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
     buildManualIdentityValidationStatePayload,
@@ -323,8 +323,8 @@ export default {
     },
     methods: {
         shouldShowPurgedPhotosMessage,
-        shouldShowManualIdentityValidationReviewAdminAction,
-        getManualIdentityValidationReviewActionAdminLabelKey,
+        shouldShowReviewAdminAction,
+        getReviewActionAdminLabelKey,
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,
