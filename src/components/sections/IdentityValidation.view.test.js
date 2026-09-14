@@ -139,14 +139,14 @@ describe('IdentityValidation rejection warnings', () => {
 describe('IdentityValidation Mercado Pago ownership warning', () => {
     it('lists that MP integration can be removed after verifying', () => {
         expect(viewSource).toContain("$t('identidadModalAutoPuedeEliminarMp')");
-        const autoInmediata = viewSource.indexOf(
-            "$t('identidadModalAutoInmediata')"
+        const autoInstantBadge = viewSource.indexOf(
+            "$t('identityValidationAutoBadgeInstant')"
         );
         const puedeEliminar = viewSource.indexOf(
             "$t('identidadModalAutoPuedeEliminarMp')"
         );
-        expect(autoInmediata).toBeGreaterThan(-1);
-        expect(puedeEliminar).toBeGreaterThan(autoInmediata);
+        expect(autoInstantBadge).toBeGreaterThan(-1);
+        expect(puedeEliminar).toBeGreaterThan(autoInstantBadge);
     });
 
     it('shows MP apps disconnect hint with link on MP verification success', () => {
@@ -218,6 +218,48 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
             ) || []
         ).length;
         expect(prefixOccurrences).toBe(3);
+    });
+});
+
+describe('IdentityValidation choice cards', () => {
+    it('renders option cards with icon, title, and compact badges instead of bullet lists', () => {
+        expect(viewSource).toContain('identity-validation-card-header');
+        expect(viewSource).toContain('identity-validation-card-badge');
+        expect(viewSource).toContain('fa-shield');
+        expect(viewSource).toContain('fa-file-text-o');
+        expect(viewSource).toContain("$t('identityValidationAutoBadgeFree')");
+        expect(viewSource).toContain("$t('identityValidationAutoBadgeInstant')");
+        expect(viewSource).toContain('formattedManualCost');
+        expect(viewSource).toContain("$t('identityValidationManualBadgeTime')");
+        expect(viewSource).not.toContain('identity-validation-card-bullets');
+        expect(viewSource).not.toContain("$t('identityValidationCostLine'");
+        expect(viewSource).not.toContain("$t('identityValidationTimeLine')");
+        expect(viewSource).not.toContain("$t('identidadModalAutoGratis')");
+        expect(viewSource).not.toContain("$t('identidadModalAutoInmediata')");
+    });
+
+    it('keeps two columns of option cards on desktop and stacks them on mobile', () => {
+        expect(viewSource).toMatch(
+            /\.identity-validation-cards \{[\s\S]*flex-direction:\s*column/
+        );
+        expect(viewSource).toMatch(
+            /@media \(min-width: 768px\) \{[\s\S]*\.identity-validation-cards \{[\s\S]*flex-direction:\s*row/
+        );
+    });
+
+    it('uses primary choice buttons without uppercase transform', () => {
+        expect(viewSource).toMatch(
+            /variant="primary"[\s\S]*\$t\('validarConMercadoPago'\)/
+        );
+        expect(viewSource).toMatch(
+            /variant="primary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
+        );
+        expect(viewSource).not.toMatch(
+            /variant="secondary"[\s\S]*\$t\('solicitarVerificacionManual'\)/
+        );
+        expect(viewSource).not.toMatch(
+            /\.identity-validation-choice-cta \{[\s\S]*text-transform:\s*uppercase/
+        );
     });
 });
 
