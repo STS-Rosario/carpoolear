@@ -86,7 +86,7 @@ export default {
             default: () => ({})
         }
     },
-    emits: ['choose-mp', 'choose-manual', 'edit-profile']
+    emits: ['choose-mp', 'choose-manual']
 };
 </script>
 

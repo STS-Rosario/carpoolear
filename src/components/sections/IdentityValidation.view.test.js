@@ -7,9 +7,14 @@ const choiceCardsPath = path.resolve(
     __dirname,
     'IdentityValidationChoiceCards.vue'
 );
+const mpConfirmModalPath = path.resolve(
+    __dirname,
+    '../IdentityValidationMercadoPagoConfirmModal.vue'
+);
 const viewSource =
     fs.readFileSync(viewPath, 'utf8') +
-    fs.readFileSync(choiceCardsPath, 'utf8');
+    fs.readFileSync(choiceCardsPath, 'utf8') +
+    fs.readFileSync(mpConfirmModalPath, 'utf8');
 
 describe('IdentityValidation paid awaiting photos', () => {
     it('shows esperando fotos status before documents are uploaded', () => {
