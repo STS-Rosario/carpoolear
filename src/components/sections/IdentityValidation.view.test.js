@@ -13,20 +13,21 @@ describe('IdentityValidation paid awaiting photos', () => {
 });
 
 describe('IdentityValidation page card', () => {
-    it('wraps content in a white card with the page title inside', () => {
+    it('wraps content in a white card with a desktop-only page title inside', () => {
         expect(viewSource).toContain('identity-validation-page__card');
         expect(viewSource).toContain('identity-validation-page__heading');
         expect(viewSource).toMatch(
-            /identity-validation-page__card[\s\S]*identity-validation-page__heading[\s\S]*\$t\('validarIdentidad'\)/
+            /identity-validation-page__heading[^>]*hidden-xs[\s\S]*\$t\('validarIdentidad'\)/
         );
     });
 
-    it('renders the account verification title once so it is not duplicated', () => {
+    it('renders the in-card account verification title once and hides it on mobile', () => {
         const titleUsages = viewSource.match(/\$t\('validarIdentidad'\)/g) || [];
         expect(titleUsages).toHaveLength(1);
         expect(viewSource).not.toMatch(
             /identity-validation-title[\s\S]{0,80}\$t\('validarIdentidad'\)/
         );
+        expect(viewSource).not.toContain("$t('identidadModalTitle')");
     });
 });
 
@@ -220,51 +221,40 @@ describe('IdentityValidation Mercado Pago ownership warning', () => {
     });
 });
 
-describe('IdentityValidation learn more link', () => {
-    it('shows learn-more copy with link to verificacion cuenta page below once-only note', () => {
-        const onceIndex = viewSource.indexOf(
-            'class="identity-validation-once"'
-        );
-        const learnMoreIndex = viewSource.indexOf(
-            'identity-validation-learn-more'
-        );
-
-        expect(onceIndex).toBeGreaterThan(-1);
-        expect(learnMoreIndex).toBeGreaterThan(onceIndex);
+describe('IdentityValidation compact intro', () => {
+    it('shows option B intro, details link, and two-options line without the old bullets', () => {
+        expect(viewSource).toContain("$t('identityValidationPageIntro')");
+        expect(viewSource).toContain("$t('identityValidationPageSummary')");
         expect(viewSource).toContain(
-            "$t('identityValidationLearnMorePrefix')"
+            "$t('identityValidationPageLearnMoreLink')"
         );
-        expect(viewSource).toContain(
-            "$t('identityValidationLearnMoreLink')"
-        );
-        expect(viewSource).toContain(
-            "$t('identityValidationLearnMoreSuffix')"
-        );
+        expect(viewSource).toContain("$t('identityValidationPageTwoOptions')");
         expect(viewSource).toContain("name: 'verificacion_cuenta'");
-    });
-
-    it('shows two verification options after the learn-more line with highlighted phrases', () => {
-        const learnMoreIndex = viewSource.indexOf(
-            'identity-validation-learn-more'
+        expect(viewSource).not.toContain(
+            "$t('identityValidationPageIntroEstoPermite')"
         );
-        const twoOptionsIndex = viewSource.indexOf(
-            'identity-validation-two-options'
-        );
-
-        expect(learnMoreIndex).toBeGreaterThan(-1);
-        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
-        expect(viewSource).toContain(
+        expect(viewSource).not.toContain('identity-validation-bullets');
+        expect(viewSource).not.toContain("$t('identityValidationPageBullet1')");
+        expect(viewSource).not.toContain('identity-validation-once');
+        expect(viewSource).not.toContain(
             'keypath="identityValidationTwoOptions"'
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsCount') }}</strong>"
+    });
+
+    it('places the details link after the summary and the two-options line after the link', () => {
+        const summaryIndex = viewSource.indexOf(
+            "$t('identityValidationPageSummary')"
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsAutomatic') }}</strong>"
+        const learnMoreIndex = viewSource.indexOf(
+            "$t('identityValidationPageLearnMoreLink')"
         );
-        expect(viewSource).toContain(
-            "<strong>{{ $t('identityValidationTwoOptionsManual') }}</strong>"
+        const twoOptionsIndex = viewSource.indexOf(
+            "$t('identityValidationPageTwoOptions')"
         );
+
+        expect(summaryIndex).toBeGreaterThan(-1);
+        expect(learnMoreIndex).toBeGreaterThan(summaryIndex);
+        expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
     });
 });
 
