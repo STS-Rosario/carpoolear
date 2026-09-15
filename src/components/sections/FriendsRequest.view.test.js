@@ -34,6 +34,17 @@ describe('FriendsRequest.vue friend search UI', () => {
         expect(viewSource).toContain('btn-friend-request-sent');
         expect(viewSource).toContain('#e67e22');
     });
+
+    it('lets the user cancel a pending friend request from the same button', () => {
+        expect(viewSource).toContain('@click="onButtonClick(user)"');
+        expect(viewSource).toContain('btn-friend-request-cancel');
+        expect(viewSource).toContain('cancelRequest');
+        expect(viewSource).toContain('idCanceling[user.id]');
+        expect(viewSource).toContain("$t('cancelar')");
+        expect(viewSource).toMatch(
+            /user\.state === 'request'[\s\S]*btn-friend-request-cancel/
+        );
+    });
 });
 
 describe('debounceInput directive', () => {
