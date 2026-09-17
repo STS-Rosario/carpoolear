@@ -100,6 +100,7 @@ export function applyTripCreationFormReset(form, options = {}) {
     form.recommended_trip_price_cents = 0;
     form.maximum_seat_price_cents = 0;
     form.recommended_seat_price_cents = 0;
+    form.pricing_breakdown = null;
     form.maximum_return_trip_price_cents = 0;
     form.recommended_return_trip_price_cents = 0;
     form.maximum_return_seat_price_cents = 0;

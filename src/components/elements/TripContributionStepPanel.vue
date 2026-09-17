@@ -29,36 +29,44 @@
         </div>
         <span class="error" v-if="priceError">{{ priceError }}</span>
 
-        <button
-            type="button"
+        <div
             class="trip-contribution-step__suggested"
             :class="{
                 'trip-contribution-step__suggested--expanded': suggestedExpanded
             }"
-            @click="toggleSuggested"
         >
-            <span class="trip-contribution-step__suggested-main">
-                {{
-                    $t('tripContributionSuggested', {
-                        amount: suggestedAmountLabel
-                    })
-                }}
-            </span>
-            <i
-                class="fa"
-                :class="
-                    suggestedExpanded ? 'fa-chevron-down' : 'fa-chevron-left'
-                "
-                aria-hidden="true"
-            ></i>
+            <button
+                type="button"
+                class="trip-contribution-step__suggested-toggle"
+                @click="toggleSuggested"
+            >
+                <span class="trip-contribution-step__suggested-main">
+                    {{
+                        $t('tripContributionSuggested', {
+                            amount: suggestedAmountLabel
+                        })
+                    }}
+                </span>
+                <i
+                    class="fa"
+                    :class="
+                        suggestedExpanded ? 'fa-chevron-down' : 'fa-chevron-left'
+                    "
+                    aria-hidden="true"
+                ></i>
+            </button>
             <div
                 v-if="suggestedExpanded"
                 class="trip-contribution-step__suggested-body"
             >
                 <strong>{{ $t('tripContributionHowCalculated') }}</strong>
-                <p>{{ suggestedDescription }}</p>
+                <TripContributionBreakdown
+                    v-if="showContributionBreakdown && pricingBreakdown"
+                    :breakdown="pricingBreakdown"
+                />
+                <p v-else>{{ suggestedDescription }}</p>
             </div>
-        </button>
+        </div>
 
         <div class="trip-contribution-step__important">
             <div class="trip-contribution-step__important-title">
@@ -78,9 +86,15 @@
 
 <script>
 import { formatContributionDisplayAmount } from '../../utils/tripContributionDisplay.js';
+import { shouldShowContributionBreakdown } from '../../utils/tripContributionBreakdown.js';
+import TripContributionBreakdown from './TripContributionBreakdown.vue';
 
 export default {
     name: 'trip-contribution-step-panel',
+
+    components: {
+        TripContributionBreakdown
+    },
 
     props: {
         price: {
@@ -94,6 +108,14 @@ export default {
         suggestedDescription: {
             type: String,
             default: ''
+        },
+        pricingBreakdown: {
+            type: Object,
+            default: null
+        },
+        config: {
+            type: Object,
+            default: null
         },
         priceError: {
             type: String,
@@ -114,6 +136,9 @@ export default {
             return formatContributionDisplayAmount(
                 this.recommendedSeatPriceCents
             );
+        },
+        showContributionBreakdown() {
+            return shouldShowContributionBreakdown(this.config);
         }
     },
 
@@ -168,7 +193,6 @@ export default {
 }
 
 .trip-contribution-step__suggested {
-    display: block;
     width: 100%;
     margin: 1rem 0;
     padding: 0.9rem 1rem;
@@ -176,10 +200,19 @@ export default {
     border-radius: 0.75rem;
     background: #eef5fb;
     color: var(--ds-action, #1e5f9e);
+    position: relative;
+}
+
+.trip-contribution-step__suggested-toggle {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
     font: inherit;
     text-align: left;
     cursor: pointer;
-    position: relative;
 }
 
 .trip-contribution-step__suggested-main {
