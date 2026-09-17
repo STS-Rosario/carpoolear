@@ -72,12 +72,12 @@ describe('SearchTrip advanced filters', () => {
         const mobile = source.slice(
             source.indexOf('search-advanced-filters-mobile')
         );
-        for (const block of [desktop, mobile]) {
-            const dateAt = block.indexOf('date-range-search-select_wrapper');
-            const hideAt = block.indexOf('hide-carpooleado-select_wrapper');
+        [desktop, mobile].forEach((markup) => {
+            const dateAt = markup.indexOf('date-range-search-select_wrapper');
+            const hideAt = markup.indexOf('hide-carpooleado-select_wrapper');
             expect(dateAt).toBeGreaterThan(-1);
             expect(hideAt).toBeGreaterThan(dateAt);
-        }
+        });
         expect(cssSource).toMatch(
             /\.trips-search__advanced-checkboxes\s*\{[^}]*flex-direction:\s*column/
         );
