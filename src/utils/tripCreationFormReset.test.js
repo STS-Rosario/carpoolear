@@ -62,6 +62,7 @@ describe('tripCreationFormReset', () => {
             duration: 3600,
             route_needs_payment: true,
             tripInfoStatus: TRIP_INFO_STATUS.READY,
+            pricing_breakdown: { total_cents: 11050 },
             parentTripId: 12,
             showWizardSuccess: true,
             createdTrip: { id: 99 },
@@ -99,6 +100,7 @@ describe('tripCreationFormReset', () => {
         expect(form.duration).toBe(0);
         expect(form.route_needs_payment).toBe(false);
         expect(form.tripInfoStatus).toBe(TRIP_INFO_STATUS.IDLE);
+        expect(form.pricing_breakdown).toBeNull();
         expect(form.parentTripId).toBeNull();
         expect(form.showWizardSuccess).toBe(false);
         expect(form.createdTrip).toBeNull();

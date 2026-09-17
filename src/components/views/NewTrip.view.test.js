@@ -340,3 +340,16 @@ describe('NewTrip.vue incomplete car completion', () => {
         );
     });
 });
+
+describe('NewTrip.vue contribution pricing breakdown', () => {
+    it('stores trip-info pricing breakdown and passes occupants into the contribution step', () => {
+        expect(viewSource).toContain('pricing_breakdown');
+        expect(viewSource).toMatch(
+            /this\.pricing_breakdown = result\.data\.pricing_breakdown/
+        );
+        expect(viewSource).toContain('withOccupants');
+        expect(viewSource).toContain('contributionPricingBreakdown');
+        expect(wizardSource).toContain(':pricing-breakdown=');
+        expect(wizardSource).toContain('form.contributionPricingBreakdown');
+    });
+});
