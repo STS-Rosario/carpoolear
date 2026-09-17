@@ -11,7 +11,12 @@ describe('SupportFeedbackModal view', () => {
         expect(source).toContain("$t('feedbackTabTitulo')");
         expect(source).toContain("$t('feedbackTabSubtitulo')");
         expect(source).toContain("$t('categoriaTicket')");
-        expect(source).toContain("$t('asuntoTicket')");
+        expect(source).toContain("$t('feedbackTabAsunto')");
+        expect(source).toContain("$t('feedbackTabAsuntoPlaceholder')");
+        expect(source).toContain("$t('feedbackTabEnviar')");
+        expect(source).not.toContain("$t('asuntoTicket')");
+        expect(source).not.toContain("$t('asuntoTicketPlaceholder')");
+        expect(source).not.toContain("$t('crearTicket')");
         expect(source).toContain("$t('mensajeTicket')");
         expect(source).toContain("$t('adjuntosTicket')");
         expect(source).toContain('AppTextarea');
