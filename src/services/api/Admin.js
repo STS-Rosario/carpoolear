@@ -203,6 +203,10 @@ class AdminApi extends TaggedApi {
     impersonateUser(userId) {
         return this.post('/api/admin/users/' + userId + '/impersonate', {});
     }
+
+    getActionLogs(params = {}) {
+        return this.get('/api/admin/action-logs', params);
+    }
 }
 
 export { AdminApi as default };

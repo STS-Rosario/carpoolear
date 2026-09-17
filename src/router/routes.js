@@ -67,6 +67,7 @@ const AdminChangelogForm = () => import('../components/views/AdminChangelogForm.
 const AdminCarBrands = () => import('../components/views/AdminCarBrands.vue');
 const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
+const AdminActionLogs = () => import('../components/views/AdminActionLogs.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const ChangePassword = () => import('../components/sections/ChangePassword.vue');
@@ -1135,6 +1136,25 @@ export default [
                 header: {
                     titleKey: 'soporte',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/action-logs',
+        name: 'admin-action-logs',
+        component: AdminActionLogs,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.AuditView,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavActionLogs',
+                    buttons: ['back']
                 }
             }
         }

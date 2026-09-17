@@ -47,6 +47,7 @@ export const ADMIN_NAV_ITEMS = [
     { name: 'admin-manual-identity-validations', labelKey: 'validacionesManuales', permission: ADMIN_PERMISSIONS.IdentityManualReview },
     { name: 'admin-mp-rejected-validations', labelKey: 'rechazosMercadoPago', permission: ADMIN_PERMISSIONS.IdentityMpReview },
     { name: 'admin-support-tickets', labelKey: 'soporte', permission: ADMIN_PERMISSIONS.SupportTickets },
+    { name: 'admin-action-logs', labelKey: 'adminNavActionLogs', permission: ADMIN_PERMISSIONS.AuditView },
     { name: 'admin-changelogs', labelKey: 'adminNavChangelog', permission: ADMIN_PERMISSIONS.ChangelogsManage },
     { name: 'admin-car-brands', labelKey: 'adminNavCarCatalog', permission: ADMIN_PERMISSIONS.CarCatalog },
     { name: 'admin-car-colors', labelKey: 'adminCarColors', permission: ADMIN_PERMISSIONS.CarCatalog }
