@@ -17,6 +17,8 @@ describe('AdminUserRatings view', () => {
         expect(viewSource).toContain("$t('adminUsuariosCalificacionesOtorgadas')");
         expect(viewSource).toContain('AdminRatingCard');
         expect(viewSource).toContain('updateRating');
+        expect(viewSource).toContain('ADMIN_PERMISSIONS.RatingsEdit');
+        expect(viewSource).toContain(':can-edit=');
     });
 });
 

@@ -13,6 +13,8 @@ describe('AdminUserRecommendations view', () => {
         expect(viewSource).toContain('references_data');
         expect(viewSource).toContain('updateReference');
         expect(viewSource).toContain('AdminReferenceCard');
+        expect(viewSource).toContain('ADMIN_PERMISSIONS.ReferencesEdit');
+        expect(viewSource).toContain(':can-edit=');
     });
 });
 

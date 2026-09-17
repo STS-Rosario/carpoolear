@@ -84,4 +84,9 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('!user.is_admin');
         expect(source).toContain('impersonateUser');
     });
+
+    it('requires unverify permission to show the clear identity button', () => {
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersUnverify');
+        expect(source).toContain('can(this.authUser');
+    });
 });

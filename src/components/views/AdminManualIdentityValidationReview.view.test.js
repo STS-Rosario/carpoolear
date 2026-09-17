@@ -77,6 +77,8 @@ describe('AdminManualIdentityValidationReview view', () => {
     it('confirms purge before deleting photos', () => {
         expect(viewSource).toContain('confirmPurge');
         expect(viewSource).toContain('@click="confirmPurge"');
+        expect(viewSource).toContain('ADMIN_PERMISSIONS.IdentityManualPurge');
+        expect(viewSource).toContain('can(this.user');
     });
 
     it('shows which admin took the review action with action-specific label', () => {
