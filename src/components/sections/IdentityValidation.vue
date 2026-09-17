@@ -54,6 +54,9 @@
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
         </div>
+        <div class="alert alert-danger" v-if="resultMessage === 'missing_identification'">
+            {{ $t('resultMissingIdentification') }}
+        </div>
         <div class="alert alert-warning" v-if="mismatchDetails">
             <p>{{ $t(mismatchDetails.reasonKey) }}</p>
             <p v-if="mismatchDetails.showDni">

@@ -892,6 +892,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
+        resultMissingIdentification:
+            'Mercado Pago no nos provee la información de tu documento por lo que no podemos verificar tu identidad',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
@@ -2707,6 +2709,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
+        resultMissingIdentification:
+            'Mercado Pago no nos provee la información de tu documento por lo que no podemos verificar tu identidad',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
@@ -4388,6 +4392,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             "If the link doesn't work, you can do it manually from the Mercado Pago app by going to Menu -> Settings -> Account -> Security -> Connected apps -> Carpoolear-SelladoVIaje -> Remove permissions",
         resultError: 'An error occurred. Please try again.',
+        resultMissingIdentification:
+            'Mercado Pago does not provide your document information, so we cannot verify your identity.',
         resultDniMismatch:
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",
         resultNameMismatch:
