@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     formatBreakdownLines,
     litersPer100KmFromKmPerLiter,
+    shouldShowContributionBreakdown,
     withOccupants
 } from './tripContributionBreakdown.js';
 
@@ -90,5 +91,34 @@ describe('tripContributionBreakdown', () => {
     it('derives liters per 100km from kilometers per liter', () => {
         expect(litersPer100KmFromKmPerLiter(10)).toBe(10);
         expect(litersPer100KmFromKmPerLiter(12.5)).toBe(8);
+    });
+
+    it('shows breakdown by default when the config flag is unset', () => {
+        expect(shouldShowContributionBreakdown()).toBe(true);
+        expect(shouldShowContributionBreakdown(null)).toBe(true);
+        expect(shouldShowContributionBreakdown({})).toBe(true);
+        expect(
+            shouldShowContributionBreakdown({
+                module_max_price_show_breakdown: undefined
+            })
+        ).toBe(true);
+        expect(
+            shouldShowContributionBreakdown({
+                module_max_price_show_breakdown: true
+            })
+        ).toBe(true);
+    });
+
+    it('hides breakdown when the config flag is false', () => {
+        expect(
+            shouldShowContributionBreakdown({
+                module_max_price_show_breakdown: false
+            })
+        ).toBe(false);
+        expect(
+            shouldShowContributionBreakdown({
+                module_max_price_show_breakdown: 'false'
+            })
+        ).toBe(false);
     });
 });
