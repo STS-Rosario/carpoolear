@@ -32,4 +32,10 @@ describe('TripContributionBreakdown.vue', () => {
         );
         expect(componentSource).toContain('@click.stop');
     });
+
+    it('uses dark text so the list is readable on light backgrounds', () => {
+        expect(componentSource).toMatch(
+            /\.trip-contribution-breakdown\s*\{[^}]*color:\s*var\(--ds-text-primary/s
+        );
+    });
 });
