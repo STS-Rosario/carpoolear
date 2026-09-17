@@ -86,4 +86,39 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('$t(\'el\')');
         expect(viewSource).toContain('formatDate(item.reviewed_at)');
     });
+
+    it('requires a coded reject reason before rejecting', () => {
+        expect(viewSource).toContain('MANUAL_IDENTITY_REJECT_REASONS');
+        expect(viewSource).toContain('reviewRejectReason');
+        expect(viewSource).toContain('isManualRejectReasonRequired');
+        expect(viewSource).toContain('rejectReasonDocsIllegible');
+        expect(viewSource).toContain('motivoRechazo');
+        expect(viewSource).toContain('reviewManualIdentityValidation(this.id, action, note');
+    });
+});
+
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+
+describe('AdminManualIdentityValidationReview i18n', () => {
+    it('defines coded reject reasons in all locales', () => {
+        expect(i18nSource).toContain("motivoRechazo: 'Motivo de rechazo'");
+        expect(i18nSource).toContain("motivoRechazo: 'Rejection reason'");
+        expect(i18nSource).toContain("rejectReasonDocsIllegible: 'Documentación ilegible'");
+        expect(i18nSource).toContain("rejectReasonDocsIllegible: 'Illegible documents'");
+        expect(i18nSource).toContain("rejectReasonSelfieMismatch: 'Selfie no coincide'");
+        expect(i18nSource).toContain("rejectReasonSelfieMismatch: 'Selfie does not match'");
+        expect(i18nSource).toContain("rejectReasonDocumentMismatch: 'Documento no coincide con el perfil'");
+        expect(i18nSource).toContain("rejectReasonDocumentMismatch: 'Document does not match the profile'");
+        expect(i18nSource).toContain("rejectReasonExpiredDocument: 'Documento vencido o inválido'");
+        expect(i18nSource).toContain("rejectReasonExpiredDocument: 'Expired or invalid document'");
+        expect(i18nSource).toContain("rejectReasonSuspectedFraud: 'Sospecha de fraude'");
+        expect(i18nSource).toContain("rejectReasonSuspectedFraud: 'Suspected fraud'");
+        expect(i18nSource).toContain("rejectReasonOther: 'Otro'");
+        expect(i18nSource).toContain("rejectReasonOther: 'Other'");
+        expect(i18nSource).toContain("seleccionarMotivoRechazo: 'Seleccioná un motivo'");
+        expect(i18nSource).toContain("seleccionarMotivoRechazo: 'Select a reason'");
+        expect(i18nSource).toContain("motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo'");
+        expect(i18nSource).toContain("motivoRechazoRequerido: 'You must select a rejection reason'");
+    });
 });

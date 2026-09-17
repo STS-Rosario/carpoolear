@@ -434,3 +434,27 @@ describe('IdentityValidation Mercado Pago confirm modal', () => {
         );
     });
 });
+
+describe('IdentityValidation verification funnel tracking', () => {
+    it('passes surface, platform, and app version when starting Mercado Pago OAuth', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('getIdentityVerificationClientContext');
+        expect(parentSource).toContain('getMercadoPagoOAuthUrl(');
+        expect(parentSource).toContain('startMercadoPagoOAuth(surface');
+        expect(parentSource).toContain("startMercadoPagoOAuth('choice_cards')");
+        expect(parentSource).toContain("startMercadoPagoOAuth('pending_switch')");
+    });
+
+    it('records confirm modal shown and cancelled client events', () => {
+        const parentSource = fs.readFileSync(viewPath, 'utf8');
+        expect(parentSource).toContain('recordIdentityVerificationEvent');
+        expect(parentSource).toContain('IDENTITY_VERIFICATION_CLIENT_EVENTS');
+        expect(parentSource).toContain('confirmModalShown');
+        expect(parentSource).toContain('confirmModalCancelled');
+        expect(parentSource).toContain('openMercadoPagoConfirmModal');
+        expect(parentSource).toContain('closeMercadoPagoConfirmModal');
+        expect(parentSource).toMatch(
+            /confirmMercadoPagoOAuth\(\)\s*\{[\s\S]*showMercadoPagoConfirmModal\s*=\s*false[\s\S]*startMercadoPagoOAuth\('choice_cards'\)/
+        );
+    });
+});
