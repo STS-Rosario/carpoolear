@@ -23,6 +23,15 @@ describe('IdentityValidation paid awaiting photos', () => {
     });
 });
 
+describe('IdentityValidation missing Mercado Pago identification', () => {
+    it('shows a dedicated alert when Mercado Pago does not provide a document', () => {
+        expect(viewSource).toContain(
+            "resultMessage === 'missing_identification'"
+        );
+        expect(viewSource).toContain("$t('resultMissingIdentification')");
+    });
+});
+
 describe('IdentityValidation page card', () => {
     it('wraps content in a white card with a desktop-only page title inside', () => {
         expect(viewSource).toContain('identity-validation-page__card');
