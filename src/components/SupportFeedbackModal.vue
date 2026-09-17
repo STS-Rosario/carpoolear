@@ -37,8 +37,8 @@
 
                 <AppInput
                     v-model="form.subject"
-                    :label="$t('asuntoTicket')"
-                    :placeholder="$t('asuntoTicketPlaceholder')"
+                    :label="$t('feedbackTabAsunto')"
+                    :placeholder="$t('feedbackTabAsuntoPlaceholder')"
                 />
 
                 <AppTextarea
@@ -70,7 +70,7 @@
                 :disabled="isSubmitting"
                 @click="submitTicket"
             >
-                {{ $t('crearTicket') }}
+                {{ $t('feedbackTabEnviar') }}
             </AppButton>
         </template>
     </modal>
