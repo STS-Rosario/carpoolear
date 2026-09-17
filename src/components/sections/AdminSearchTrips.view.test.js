@@ -18,6 +18,13 @@ describe('AdminSearchTrips user search', () => {
         expect(source).toContain('params.user_id');
     });
 
+    it('labels the role toggle with Busco conductores / Busco pasajeros', () => {
+        expect(source).toContain("this.$t('buscoConductor')");
+        expect(source).toContain("this.$t('buscoPasajeros')");
+        expect(source).not.toContain("this.$t('comoConductor')");
+        expect(source).not.toContain("this.$t('comoPasajero')");
+    });
+
     it('watches params so browser back updates filters and re-emits search', () => {
         expect(source).toContain('paramsSignature');
         expect(source).toMatch(/watch:\s*\{[\s\S]*paramsSignature/);
