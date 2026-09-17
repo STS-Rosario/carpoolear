@@ -858,6 +858,9 @@ const messages = {
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
         esperandoPagoValidacionManual:
             'Esperando pago de la verificación manual',
+        errorPagoValidacionManual: 'El pago no se completó',
+        pagoValidacionManualFallido:
+            'El pago de la verificación manual no se completó. Podés intentar de nuevo.',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -1039,7 +1042,7 @@ const messages = {
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
-        motivoRechazo: 'Motivo rechazo',
+        motivoRechazo: 'Motivo de rechazo',
         rechazoDniMismatch: 'DNI no coincide',
         rechazoNameMismatch: 'Nombre no coincide',
         both_mismatch: 'Ni el DNI ni el nombre coinciden',
@@ -1076,6 +1079,14 @@ const messages = {
         comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
+        seleccionarMotivoRechazo: 'Seleccioná un motivo',
+        motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo',
+        rejectReasonDocsIllegible: 'Documentación ilegible',
+        rejectReasonSelfieMismatch: 'Selfie no coincide',
+        rejectReasonDocumentMismatch: 'Documento no coincide con el perfil',
+        rejectReasonExpiredDocument: 'Documento vencido o inválido',
+        rejectReasonSuspectedFraud: 'Sospecha de fraude',
+        rejectReasonOther: 'Otro',
         comentarioRevision: 'Comentario de revisión',
         revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
@@ -2675,6 +2686,9 @@ const messages = {
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
         esperandoPagoValidacionManual:
             'Esperando pago de la verificación manual',
+        errorPagoValidacionManual: 'El pago no se completó',
+        pagoValidacionManualFallido:
+            'El pago de la verificación manual no se completó. Podés intentar de nuevo.',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -2856,7 +2870,7 @@ const messages = {
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
-        motivoRechazo: 'Motivo rechazo',
+        motivoRechazo: 'Motivo de rechazo',
         rechazoDniMismatch: 'DNI no coincide',
         rechazoNameMismatch: 'Nombre no coincide',
         both_mismatch: 'Ni el DNI ni el nombre coinciden',
@@ -2886,6 +2900,14 @@ const messages = {
         comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
+        seleccionarMotivoRechazo: 'Seleccioná un motivo',
+        motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo',
+        rejectReasonDocsIllegible: 'Documentación ilegible',
+        rejectReasonSelfieMismatch: 'Selfie no coincide',
+        rejectReasonDocumentMismatch: 'Documento no coincide con el perfil',
+        rejectReasonExpiredDocument: 'Documento vencido o inválido',
+        rejectReasonSuspectedFraud: 'Sospecha de fraude',
+        rejectReasonOther: 'Otro',
         comentarioRevision: 'Comentario de revisión',
         revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
@@ -4357,6 +4379,9 @@ const messages = {
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",
         esperandoPagoValidacionManual:
             'Waiting for manual verification payment',
+        errorPagoValidacionManual: 'Payment did not complete',
+        pagoValidacionManualFallido:
+            'The manual verification payment did not complete. You can try again.',
         debesPagarParaContinuar:
             "You started a manual verification but didn't complete the payment. Pay to continue.",
         pagadoEsperandoRevision: 'Paid, waiting for review',
@@ -4648,6 +4673,14 @@ const messages = {
         fechaMarcadoPendiente: 'Marked pending date',
         comentarioRequeridoParaAccion:
             'You must write a comment to take this action.',
+        seleccionarMotivoRechazo: 'Select a reason',
+        motivoRechazoRequerido: 'You must select a rejection reason',
+        rejectReasonDocsIllegible: 'Illegible documents',
+        rejectReasonSelfieMismatch: 'Selfie does not match',
+        rejectReasonDocumentMismatch: 'Document does not match the profile',
+        rejectReasonExpiredDocument: 'Expired or invalid document',
+        rejectReasonSuspectedFraud: 'Suspected fraud',
+        rejectReasonOther: 'Other',
         aprobar: 'Approve',
         marcarPendiente: 'Mark as pending',
         confirmMarcarPendienteYaPendiente:

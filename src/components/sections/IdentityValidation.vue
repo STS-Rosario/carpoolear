@@ -377,9 +377,15 @@
 </template>
 
 <script>
+import { Capacitor } from '@capacitor/core';
 import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
+import { useRootStore } from '../../stores/root';
 import { UserApi } from '../../services/api';
+import {
+    getIdentityVerificationClientContext,
+    IDENTITY_VERIFICATION_CLIENT_EVENTS
+} from '../../utils/identityVerificationClientContext';
 import QRCode from 'qrcode';
 import {
     isIdentityValidationActionBlockedByMissingDni,
@@ -716,11 +722,36 @@ export default {
                 this.pollIntervalId = null;
             }
         },
-        startMercadoPagoOAuth() {
+        identityVerificationClientContext(surface) {
+            return {
+                surface,
+                ...getIdentityVerificationClientContext({
+                    getPlatform: () => Capacitor.getPlatform(),
+                    getAppVersion: () => {
+                        const info = useRootStore().appVersionInfo;
+                        if (info && info.version) {
+                            return info.version;
+                        }
+                        if (typeof window !== 'undefined' && window.appVersion) {
+                            return window.appVersion;
+                        }
+                        return null;
+                    }
+                })
+            };
+        },
+        recordIdentityVerificationClientEvent(name, surface) {
+            const userApi = new UserApi();
+            userApi.recordIdentityVerificationEvent({
+                name,
+                ...this.identityVerificationClientContext(surface)
+            }).catch(() => {});
+        },
+        startMercadoPagoOAuth(surface = 'choice_cards') {
             if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
             this.loadingOAuth = true;
             const userApi = new UserApi();
-            userApi.getMercadoPagoOAuthUrl()
+            userApi.getMercadoPagoOAuthUrl(this.identityVerificationClientContext(surface))
                 .then((res) => {
                     const url = (res.data && res.data.authorization_url) || res.authorization_url;
                     if (url) {
@@ -736,13 +767,23 @@ export default {
         openMercadoPagoConfirmModal() {
             if (this.isIdentityValidationBlockedByMissingDni) return;
             this.showMercadoPagoConfirmModal = true;
+            this.recordIdentityVerificationClientEvent(
+                IDENTITY_VERIFICATION_CLIENT_EVENTS.confirmModalShown,
+                'choice_cards'
+            );
         },
         closeMercadoPagoConfirmModal() {
+            if (this.showMercadoPagoConfirmModal) {
+                this.recordIdentityVerificationClientEvent(
+                    IDENTITY_VERIFICATION_CLIENT_EVENTS.confirmModalCancelled,
+                    'choice_cards'
+                );
+            }
             this.showMercadoPagoConfirmModal = false;
         },
         confirmMercadoPagoOAuth() {
             this.showMercadoPagoConfirmModal = false;
-            this.startMercadoPagoOAuth();
+            this.startMercadoPagoOAuth('choice_cards');
         },
         goToProfileEdit() {
             this.$router.push(PROFILE_EDIT_ROUTE);
@@ -757,7 +798,7 @@ export default {
         },
         onPendingManualSwitchClick() {
             if (getIdentityValidationPendingSwitchBehavior() === IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH) {
-                this.startMercadoPagoOAuth();
+                this.startMercadoPagoOAuth('pending_switch');
             }
         }
     },

@@ -197,6 +197,26 @@
                                     :rows="3"
                                 />
                             </div>
+                            <AppField
+                                :label="$t('motivoRechazo')"
+                                label-for="manual-identity-reject-reason"
+                            >
+                                <select
+                                    id="manual-identity-reject-reason"
+                                    v-model="reviewRejectReason"
+                                    class="admin-page__select"
+                                >
+                                    <option value="">{{ $t('seleccionarMotivoRechazo') }}</option>
+                                    <!-- rejectReasonDocsIllegible and other coded causes -->
+                                    <option
+                                        v-for="reason in rejectReasons"
+                                        :key="reason.value"
+                                        :value="reason.value"
+                                    >
+                                        {{ $t(reason.labelKey) }}
+                                    </option>
+                                </select>
+                            </AppField>
                             <div class="review-actions-buttons">
                                 <AppButton
                                     variant="success"
@@ -216,8 +236,8 @@
                                 </AppButton>
                                 <AppButton
                                     variant="danger"
-                                    :disabled="!hasComment || submitting"
-                                    :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
+                                    :disabled="!hasComment || !reviewRejectReason || submitting"
+                                    :title="rejectDisabledTitle"
                                     @click="confirmReview('reject')"
                                 >
                                     {{ $t('rechazar') }}
@@ -281,6 +301,10 @@ import {
     shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
 } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import {
+    MANUAL_IDENTITY_REJECT_REASONS,
+    isManualRejectReasonRequired
+} from '../../utils/manualIdentityValidationRejectReasons.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -306,6 +330,7 @@ export default {
             stateSaveError: null,
             submitting: false,
             reviewError: null,
+            reviewRejectReason: '',
             purging: false
         };
     },
@@ -315,6 +340,14 @@ export default {
         }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
+        },
+        rejectReasons() {
+            return MANUAL_IDENTITY_REJECT_REASONS;
+        },
+        rejectDisabledTitle() {
+            if (!this.hasComment) return this.$t('comentarioRequeridoParaAccion');
+            if (!this.reviewRejectReason) return this.$t('motivoRechazoRequerido');
+            return '';
         },
         reviewStatusOptions() {
             return MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS;
@@ -482,11 +515,12 @@ export default {
         },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
+            if (isManualRejectReasonRequired(action) && !this.reviewRejectReason) return;
             this.submitting = true;
             this.reviewError = null;
             const api = new AdminApi();
             const note = (this.reviewNote && this.reviewNote.trim()) || '';
-            api.reviewManualIdentityValidation(this.id, action, note)
+            api.reviewManualIdentityValidation(this.id, action, note, isManualRejectReasonRequired(action) ? this.reviewRejectReason : undefined)
                 .then(() => {
                     const messageKey = action === 'approve' ? 'estadoAprobado' : action === 'reject' ? 'estadoRechazado' : 'accionMarcadoPendiente';
                     const estado = action === 'approve' ? 'success' : action === 'reject' ? 'error' : 'warning';

@@ -71,13 +71,17 @@ class AdminApi extends TaggedApi {
         return this.get('/api/admin/manual-identity-validations/' + id, {});
     }
 
-    reviewManualIdentityValidation(id, action, note) {
+    reviewManualIdentityValidation(id, action, note, rejectReason) {
+        const body = {
+            action,
+            note
+        };
+        if (rejectReason) {
+            body.reject_reason = rejectReason;
+        }
         return this.post(
             '/api/admin/manual-identity-validations/' + id + '/review',
-            {
-                action,
-                note
-            }
+            body
         );
     }
 
