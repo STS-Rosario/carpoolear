@@ -99,6 +99,13 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('hydrateDateRangeSearch');
         expect(source).toContain('date_changed');
     });
+
+    it('labels the role toggle with Busco conductores / Busco pasajeros', () => {
+        expect(source).toContain("this.$t('buscoConductor')");
+        expect(source).toContain("this.$t('buscoPasajeros')");
+        expect(source).not.toContain("this.$t('comoConductor')");
+        expect(source).not.toContain("this.$t('comoPasajero')");
+    });
 });
 
 describe('SearchTrip mobile submit', () => {

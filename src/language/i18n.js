@@ -1111,7 +1111,7 @@ const messages = {
         accion: 'Acción',
         usuario: 'Usuario',
         administracion: 'Administración',
-        buscoConductor: 'Busco Conductor',
+        buscoConductor: 'Busco conductores',
         buscoPasajero: 'Busco Pasajero',
         encontraTuProximoViaje: 'Encontrá tu próximo viaje',
         compartiAutoTagline:
@@ -2347,7 +2347,7 @@ const messages = {
             'Estamos teniendo problemas para conectar con el servidor. Por favor esperá un momento e intentá de nuevo.',
         serverDownRetrying: 'Reintentando conexión…',
         serverDownRetryButton: 'Reintentar ahora',
-        buscoConductor: 'Conductor',
+        buscoConductor: 'Busco conductores',
         buscoPasajero: 'Pasajero',
         iniciarSesion: 'Comparte auto para llegar al lugar donde quierés ir',
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
@@ -4673,7 +4673,7 @@ const messages = {
         accion: 'Action',
         usuario: 'User',
         administracion: 'Administration',
-        buscoConductor: 'Looking for <strong>Driver</strong>',
+        buscoConductor: 'Looking for drivers',
         buscoPasajero: 'Looking for Passengers',
         encontraTuProximoViaje: 'Find your next trip',
         compartiAutoTagline:
