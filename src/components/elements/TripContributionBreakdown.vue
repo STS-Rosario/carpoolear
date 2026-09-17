@@ -134,6 +134,7 @@ export default {
     padding: 0;
     list-style: none;
     line-height: 1.55;
+    color: var(--ds-text-primary, #22211f);
 }
 
 .trip-contribution-breakdown li + li {
