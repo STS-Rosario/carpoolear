@@ -639,6 +639,27 @@ const messages = {
         tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
             '¿Cómo se calcula la contribución promedio?',
+        tripContributionBreakdownFuelLiter:
+            'Costo de 1L de nafta: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Litros de nafta de trayecto: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'Usamos un consumo promedio de {kmPerLiter} km/L ({litersPer100km} L/100km) para el cálculo.',
+        tripContributionBreakdownFuelCost:
+            'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimación de peajes: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Bonificado',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Asientos considerados: {count} asientos',
+        tripContributionBreakdownPerPerson:
+            'Costo por persona: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
@@ -2513,6 +2534,27 @@ const messages = {
         tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
             '¿Cómo se calcula la contribución promedio?',
+        tripContributionBreakdownFuelLiter:
+            'Costo de 1L de nafta: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Litros de nafta de trayecto: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'Usamos un consumo promedio de {kmPerLiter} km/L ({litersPer100km} L/100km) para el cálculo.',
+        tripContributionBreakdownFuelCost:
+            'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimación de peajes: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Bonificado',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Asientos considerados: {count} asientos',
+        tripContributionBreakdownPerPerson:
+            'Costo por persona: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
@@ -4277,6 +4319,26 @@ const messages = {
         tripContributionSuggested: 'Average contribution: $ {amount}',
         tripContributionHowCalculated:
             'How is the average contribution calculated?',
+        tripContributionBreakdownFuelLiter: 'Cost of 1L of fuel: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Fuel for the route: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'We use an average consumption of {kmPerLiter} km/L ({litersPer100km} L/100km) for the calculation.',
+        tripContributionBreakdownFuelCost:
+            'Fuel cost for the route: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimated tolls: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Trip seal: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Waived',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Seats considered: {count} seats',
+        tripContributionBreakdownPerPerson:
+            'Cost per person: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
             "<p>The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.</p><p>By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :D</p><p><strong>Requesting a contribution above the maximum goes against Carpoolear rules and will result in account suspension.</strong></p>",

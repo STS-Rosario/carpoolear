@@ -45,7 +45,13 @@
                         {{ $t('contribucionRecomendada') }}
                     </div>
                     <div class="trip-reference-collapse__description">
-                        {{ calculadoEnBaseNaftaDescription }}
+                        <TripContributionBreakdown
+                            v-if="pricingBreakdown"
+                            :breakdown="pricingBreakdown"
+                        />
+                        <template v-else>
+                            {{ calculadoEnBaseNaftaDescription }}
+                        </template>
                     </div>
                     <div class="trip_seat-price_value trip_seat-price_recommended_value trip-reference-collapse__amount">
                         {{ $n(recommendedPricePerSeat, 'currency') }}
@@ -78,7 +84,9 @@ import {
     shouldShowTripSeatPriceSection
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
+import { withOccupants } from '../../utils/tripContributionBreakdown.js';
 import SvgItem from '../SvgItem';
+import TripContributionBreakdown from './TripContributionBreakdown.vue';
 export default {
     name: 'TripSeats',
     data() {
@@ -117,6 +125,15 @@ export default {
             }
             return base;
         },
+        pricingBreakdown() {
+            if (!this.trip || !this.trip.pricing_breakdown) {
+                return null;
+            }
+            return withOccupants(
+                this.trip.pricing_breakdown,
+                this.trip.rear_max_two_passengers
+            );
+        },
         recommendedPricePerSeat() {
             const toDisplayAmount = (value) => Math.round(value * 100) / 100;
 
@@ -146,7 +163,8 @@ export default {
         }
     },
     components: {
-        SvgItem
+        SvgItem,
+        TripContributionBreakdown
     }
 };
 </script>
@@ -202,6 +220,7 @@ export default {
     font-size: 0.9em;
     color: #666;
     margin-top: 0.25em;
+    text-align: left;
 }
 .trip-reference-collapse__amount {
     font-size: 1.5em;
