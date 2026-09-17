@@ -26,6 +26,10 @@
             <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
             <ImpersonationBanner v-if="isImpersonating" />
             <headerApp></headerApp>
+            <SupportFeedbackTab
+                :onboarding-visible="onBoardingVisibility"
+                :custom-splash-visible="customSplashVisible"
+            />
             <main id="main">
                 <div
                     class="view-container clearfix"
@@ -66,6 +70,7 @@ import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
 import ChangelogModal from './components/ChangelogModal.vue';
+import SupportFeedbackTab from './components/SupportFeedbackTab.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 import ImpersonationBanner from './components/ImpersonationBanner.vue';
@@ -335,6 +340,7 @@ export default {
         ForceUpgradeModal,
         IdentityValidationPromptModal,
         ChangelogModal,
+        SupportFeedbackTab,
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
         ImpersonationBanner,

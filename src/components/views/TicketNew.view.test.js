@@ -40,6 +40,12 @@ describe('TicketNew view', () => {
         expect(source).toContain('@load="onCreateEditorLoad"');
         expect(source).toContain('focusPrefilledTicketEditorAtStart');
     });
+
+    it('tags created tickets as coming from the help desk form', () => {
+        expect(source).toContain("from '../../utils/supportTicketSources'");
+        expect(source).toContain('TICKET_SOURCE_WEB_FORM');
+        expect(source).toMatch(/source:\s*TICKET_SOURCE_WEB_FORM/);
+    });
 });
 
 describe('TicketNew page card', () => {

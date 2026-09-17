@@ -95,6 +95,7 @@ import {
     focusPrefilledTicketEditorAtStart
 } from '../../utils/ticketMessagePrefill.js';
 import { handleGenericApiError } from '../../utils/genericApiErrorHandling.js';
+import { TICKET_SOURCE_WEB_FORM } from '../../utils/supportTicketSources';
 import { isEnabledAsync } from '../../services/debug';
 
 export default {
@@ -172,7 +173,8 @@ export default {
                 type: this.form.type,
                 subject: this.form.subject,
                 message_markdown: messageMarkdown,
-                attachments
+                attachments,
+                source: TICKET_SOURCE_WEB_FORM
             }).then((ticket) => {
                 this.$router.push({ name: 'ticket-detail', params: { id: ticket.id } });
             }).catch(async (error) => {

@@ -94,6 +94,12 @@
                                 <span v-else>{{ ticketOwnerDisplayName(ticket) }}</span>
                             </span>
                             <span
+                                v-if="ticket.source === TICKET_SOURCE_FEEDBACK_TAB"
+                                class="support-tickets-table__source-badge"
+                            >
+                                {{ $t('ticketOrigenPestana') }}
+                            </span>
+                            <span
                                 v-if="hasUserLastReply(ticket)"
                                 class="last-reply-icon text-warning"
                                 title="Ultima respuesta del usuario"
@@ -142,6 +148,7 @@ import {
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
 import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
+import { TICKET_SOURCE_FEEDBACK_TAB } from '../../utils/supportTicketSources';
 import {
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
@@ -165,6 +172,7 @@ export default {
             filterCreatedByAdmin: false,
             filterUserId: null,
             listPage: 1,
+            TICKET_SOURCE_FEEDBACK_TAB,
             listPerPage: DEFAULT_ADMIN_PER_PAGE,
             ticketTypeOptions,
             listPollTimer: null
