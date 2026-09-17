@@ -46,7 +46,7 @@
                     </div>
                     <div class="trip-reference-collapse__description">
                         <TripContributionBreakdown
-                            v-if="pricingBreakdown"
+                            v-if="showContributionBreakdown && pricingBreakdown"
                             :breakdown="pricingBreakdown"
                         />
                         <template v-else>
@@ -84,7 +84,10 @@ import {
     shouldShowTripSeatPriceSection
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
-import { withOccupants } from '../../utils/tripContributionBreakdown.js';
+import {
+    shouldShowContributionBreakdown,
+    withOccupants
+} from '../../utils/tripContributionBreakdown.js';
 import SvgItem from '../SvgItem';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
 export default {
@@ -124,6 +127,9 @@ export default {
                 return base + this.$t('calculadoEnBaseNaftaSelladoSuffix');
             }
             return base;
+        },
+        showContributionBreakdown() {
+            return shouldShowContributionBreakdown(this.config);
         },
         pricingBreakdown() {
             if (!this.trip || !this.trip.pricing_breakdown) {

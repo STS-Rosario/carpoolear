@@ -392,6 +392,7 @@
                         form.contribucionRecomendadaCardDescripcionText
                     "
                     :pricing-breakdown="form.contributionPricingBreakdown"
+                    :config="form.config"
                     :price-error="
                         form.priceError.state ? form.priceError.message : ''
                     "

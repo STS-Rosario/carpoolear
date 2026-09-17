@@ -61,7 +61,7 @@
             >
                 <strong>{{ $t('tripContributionHowCalculated') }}</strong>
                 <TripContributionBreakdown
-                    v-if="pricingBreakdown"
+                    v-if="showContributionBreakdown && pricingBreakdown"
                     :breakdown="pricingBreakdown"
                 />
                 <p v-else>{{ suggestedDescription }}</p>
@@ -86,6 +86,7 @@
 
 <script>
 import { formatContributionDisplayAmount } from '../../utils/tripContributionDisplay.js';
+import { shouldShowContributionBreakdown } from '../../utils/tripContributionBreakdown.js';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
 
 export default {
@@ -112,6 +113,10 @@ export default {
             type: Object,
             default: null
         },
+        config: {
+            type: Object,
+            default: null
+        },
         priceError: {
             type: String,
             default: ''
@@ -131,6 +136,9 @@ export default {
             return formatContributionDisplayAmount(
                 this.recommendedSeatPriceCents
             );
+        },
+        showContributionBreakdown() {
+            return shouldShowContributionBreakdown(this.config);
         }
     },
 
