@@ -8,17 +8,7 @@
                 {{ $t('feedbackTabSubtitulo') }}
             </p>
 
-            <div v-if="createdTicketId" class="support-feedback-modal__success">
-                <p>{{ $t('feedbackTabExito') }}</p>
-                <router-link
-                    :to="{ name: 'ticket-detail', params: { id: createdTicketId } }"
-                    @click="onClose"
-                >
-                    {{ $t('verTicket') }}
-                </router-link>
-            </div>
-
-            <form v-else class="support-feedback-modal__form" @submit.prevent="submitTicket">
+            <form class="support-feedback-modal__form" @submit.prevent="submitTicket">
                 <AppField :label="$t('categoriaTicket')" label-for="support-feedback-type">
                     <select
                         id="support-feedback-type"
@@ -64,7 +54,6 @@
         </template>
         <template #footer>
             <AppButton
-                v-if="!createdTicketId"
                 variant="primary"
                 :loading="isSubmitting"
                 :disabled="isSubmitting"
@@ -131,9 +120,7 @@ export default {
             attachments: [],
             imageUploadAccept: IMAGE_UPLOAD_ACCEPT,
             ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
-            isSubmitting: false,
-            createdTicketId: null,
-            closeTimer: null
+            isSubmitting: false
         };
     },
     watch: {
@@ -142,9 +129,6 @@ export default {
                 this.resetForm();
             }
         }
-    },
-    beforeUnmount() {
-        this.clearCloseTimer();
     },
     methods: {
         ...mapActions(useTicketsStore, {
@@ -158,14 +142,6 @@ export default {
             };
             this.attachments = [];
             this.isSubmitting = false;
-            this.createdTicketId = null;
-            this.clearCloseTimer();
-        },
-        clearCloseTimer() {
-            if (this.closeTimer) {
-                clearTimeout(this.closeTimer);
-                this.closeTimer = null;
-            }
         },
         onClose() {
             this.resetForm();
@@ -186,7 +162,7 @@ export default {
             }
         },
         async submitTicket() {
-            if (this.isSubmitting || this.createdTicketId) {
+            if (this.isSubmitting) {
                 return;
             }
 
@@ -213,7 +189,7 @@ export default {
                     return;
                 }
 
-                const ticket = await this.createTicket({
+                await this.createTicket({
                     type: this.form.type,
                     subject: this.form.subject.trim(),
                     message_markdown: messageMarkdown,
@@ -221,10 +197,8 @@ export default {
                     source: TICKET_SOURCE_FEEDBACK_TAB
                 });
 
-                this.createdTicketId = ticket.id;
-                this.closeTimer = setTimeout(() => {
-                    this.onClose();
-                }, 2000);
+                dialogs.message(this.$t('feedbackTabExito'), { estado: 'success' });
+                this.onClose();
             } catch (error) {
                 await handleGenericApiError(error, {
                     source: 'support_feedback_tab_create',
@@ -260,17 +234,5 @@ export default {
 
 .support-feedback-modal__file {
     width: 100%;
-}
-
-.support-feedback-modal__success {
-    padding: 0.875rem 1rem;
-    border-radius: 10px;
-    background: #14532d;
-    color: #f0fdf4;
-}
-
-.support-feedback-modal__success a {
-    color: #f0fdf4;
-    text-decoration: underline;
 }
 </style>
