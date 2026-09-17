@@ -69,3 +69,10 @@ describe('AdminApi impersonation', () => {
         expect(apiSource).toContain('/impersonate');
     });
 });
+
+describe('AdminApi action logs', () => {
+    it('lists admin action logs with filters', () => {
+        expect(apiSource).toContain('getActionLogs');
+        expect(apiSource).toContain('/api/admin/action-logs');
+    });
+});

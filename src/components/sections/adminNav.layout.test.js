@@ -12,4 +12,11 @@ describe('adminNav layout spacing', () => {
         expect(navSource).not.toMatch(/margin-top:\s*72px/);
         expect(navSource).not.toMatch(/margin-top:\s*92px/);
     });
+
+    it('filters sidebar links with visibleAdminNavItems', () => {
+        expect(navSource).toContain('visibleAdminNavItems');
+        expect(navSource).toContain('v-for="item in navItems"');
+        expect(navSource).toContain('item.name');
+        expect(navSource).toContain('item.labelKey');
+    });
 });

@@ -218,6 +218,7 @@ import {
 import router from '../../router';
 import { AdminApi, UserApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-user-detail',
@@ -232,7 +233,8 @@ export default {
     },
     computed: {
         ...mapState(useAuthStore, {
-            config: 'appConfig'
+            config: 'appConfig',
+            authUser: 'user'
         }),
         bannedBanner() {
             return getAdminUserBannedBanner(this.user, this.$t.bind(this));
@@ -253,7 +255,10 @@ export default {
             });
         },
         canClearIdentityVerification() {
-            return canClearAdminUserIdentityVerification(this.user);
+            return (
+                can(this.authUser, ADMIN_PERMISSIONS.UsersUnverify) &&
+                canClearAdminUserIdentityVerification(this.user)
+            );
         }
     },
     methods: {

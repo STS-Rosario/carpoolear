@@ -2,6 +2,7 @@
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
+import { ADMIN_PERMISSIONS } from '../utils/adminPermissions';
 
 function getAuthStore () {
     return useAuthStore();
@@ -66,6 +67,7 @@ const AdminChangelogForm = () => import('../components/views/AdminChangelogForm.
 const AdminCarBrands = () => import('../components/views/AdminCarBrands.vue');
 const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
+const AdminActionLogs = () => import('../components/views/AdminActionLogs.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const ChangePassword = () => import('../components/sections/ChangePassword.vue');
@@ -832,6 +834,7 @@ export default [
         component: AdminMaintenance,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.MaintenanceManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1012,6 +1015,7 @@ export default [
         component: AdminExcesoContribucion,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1031,6 +1035,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1067,6 +1072,7 @@ export default [
         component: BannedUsersList,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.UsersBannedList,
             actionbar: {
                 footer: {
                     show: true,
@@ -1130,6 +1136,25 @@ export default [
                 header: {
                     titleKey: 'soporte',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/action-logs',
+        name: 'admin-action-logs',
+        component: AdminActionLogs,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.AuditView,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavActionLogs',
+                    buttons: ['back']
                 }
             }
         }
@@ -1232,6 +1257,7 @@ export default [
         component: AdminChangelogs,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1250,6 +1276,7 @@ export default [
         component: AdminChangelogForm,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1269,6 +1296,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1288,6 +1316,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1306,6 +1335,7 @@ export default [
         component: AdminCarBrands,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarBrands', buttons: ['back'] }
@@ -1319,6 +1349,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarModels', buttons: ['back'] }
@@ -1331,6 +1362,7 @@ export default [
         component: AdminCarColors,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarColors', buttons: ['back'] }

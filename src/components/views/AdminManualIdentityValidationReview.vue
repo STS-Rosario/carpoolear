@@ -247,7 +247,7 @@
                         </div>
                         <div v-else class="alert alert-warning">{{ $t('noPagadoNoRevisar') }}</div>
 
-                        <div class="purge-section mt-3">
+                        <div v-if="can(this.user, ADMIN_PERMISSIONS.IdentityManualPurge)" class="purge-section mt-3">
                             <p class="text-muted purge-warning">{{ $t('purgarFotosAdvertencia') }}</p>
                             <AppButton
                                 variant="secondary"
@@ -284,6 +284,7 @@ import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 import {
     getReviewActionAdminLabelKey,
     shouldShowReviewAdminAction
@@ -331,12 +332,14 @@ export default {
             submitting: false,
             reviewError: null,
             reviewRejectReason: '',
-            purging: false
+            purging: false,
+            ADMIN_PERMISSIONS
         };
     },
     computed: {
         ...mapState(useAuthStore, {
-            config: 'appConfig'
+            config: 'appConfig',
+            user: 'user'
         }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
@@ -361,6 +364,7 @@ export default {
         }
     },
     methods: {
+        can,
         shouldShowPurgedPhotosMessage,
         shouldShowReviewAdminAction,
         getReviewActionAdminLabelKey,

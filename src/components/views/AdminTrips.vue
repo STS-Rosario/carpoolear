@@ -50,7 +50,7 @@
                                             : $t('activo')
                                 }}
                                 <AppButton
-                                    v-if="!viaje.deleted"
+                                    v-if="!viaje.deleted && canHideTrips"
                                     variant="primary"
                                     @click.stop="onChangeVisibility(viaje.id)"
                                 >
@@ -84,9 +84,11 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import adminSearchTrip from '../sections/AdminSearchTrips';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
+import { useAuthStore } from '../../stores/auth';
 import tripDisplay from '../sections/TripDisplay';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 const TRIP_ID_QUERY_KEY = 'trip_id';
 
@@ -102,10 +104,16 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            authUser: 'user'
+        }),
         routeSearchParams() {
             const q = { ...(this.$route.query || {}) };
             delete q[TRIP_ID_QUERY_KEY];
             return q;
+        },
+        canHideTrips() {
+            return can(this.authUser, ADMIN_PERMISSIONS.TripsHide);
         }
     },
     watch: {
