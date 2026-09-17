@@ -77,6 +77,7 @@ describe('visibleAdminNavItems', () => {
         expect(names).toContain('admin-manual-identity-validations');
         expect(names).toContain('admin-mp-rejected-validations');
         expect(names).toContain('admin-support-tickets');
+        expect(names).toContain('admin-action-logs');
         expect(names).not.toContain('admin-maintenance');
         expect(names).not.toContain('admin-exceso-contribucion');
         expect(names).not.toContain('admin-banned-users');
