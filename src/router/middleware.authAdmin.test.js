@@ -15,8 +15,10 @@ vi.mock('../stores/auth', () => ({
 }));
 
 describe('authAdmin middleware', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         replace.mockClear();
+        const router = (await import('../router')).default;
+        router.rememberRoute = null;
     });
 
     it('sends non-admins to login', async () => {

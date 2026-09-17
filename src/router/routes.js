@@ -2,6 +2,7 @@
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
+import { ADMIN_PERMISSIONS } from '../utils/adminPermissions';
 
 function getAuthStore () {
     return useAuthStore();
@@ -832,6 +833,7 @@ export default [
         component: AdminMaintenance,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.MaintenanceManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1012,6 +1014,7 @@ export default [
         component: AdminExcesoContribucion,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1031,6 +1034,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1067,6 +1071,7 @@ export default [
         component: BannedUsersList,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.UsersBannedList,
             actionbar: {
                 footer: {
                     show: true,
@@ -1232,6 +1237,7 @@ export default [
         component: AdminChangelogs,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1250,6 +1256,7 @@ export default [
         component: AdminChangelogForm,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1269,6 +1276,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1288,6 +1296,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1306,6 +1315,7 @@ export default [
         component: AdminCarBrands,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarBrands', buttons: ['back'] }
@@ -1319,6 +1329,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarModels', buttons: ['back'] }
@@ -1331,6 +1342,7 @@ export default [
         component: AdminCarColors,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarColors', buttons: ['back'] }

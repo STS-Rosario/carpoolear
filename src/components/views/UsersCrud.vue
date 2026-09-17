@@ -136,7 +136,7 @@
                             </AppInput>
 
                             <div
-                                v-if="newInfo.identity_validated_at"
+                                v-if="newInfo.identity_validated_at && canUnverifyUser"
                                 class="form-group"
                             >
                                 <label>{{ $t('identidadValidada') }}</label>
@@ -285,7 +285,7 @@
                             </AppInput>
                             <div
                                 class="checkbox"
-                                v-if="settings.module_validated_drivers"
+                                v-if="settings.module_validated_drivers && canSetDriverVerified"
                             >
                                 <label>
                                     <input
@@ -296,7 +296,7 @@
                                 </label>
                             </div>
                             <hr />
-                            <div class="checkbox">
+                            <div class="checkbox" v-if="canSetActive">
                                 <label>
                                     <input
                                         type="checkbox"
@@ -307,7 +307,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="checkbox col-md-19">
+                                <div class="checkbox col-md-19" v-if="canSuspend">
                                     <label>
                                         <input
                                                 type="checkbox"
@@ -330,6 +330,7 @@
                             <div class="row" style="margin-top: 1em;">
                                 <div class="col-md-24 users-crud__danger-actions">
                                     <AppButton
+                                        v-if="canDeleteUser"
                                         type="button"
                                         variant="danger"
                                         size="sm"
@@ -338,6 +339,7 @@
                                         {{ $t('eliminarUsuario') }}
                                     </AppButton>
                                     <AppButton
+                                        v-if="canAnonymizeUser"
                                         type="button"
                                         variant="warning"
                                         size="sm"
@@ -346,6 +348,7 @@
                                         {{ $t('anonimizarUsuario') }}
                                     </AppButton>
                                     <AppButton
+                                        v-if="canBanAndAnonymizeUser"
                                         type="button"
                                         variant="warning"
                                         size="sm"
@@ -427,6 +430,7 @@ import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
 import { AdminApi, UserApi } from '../../services/api';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 export default {
     // TODO fix css names
@@ -483,7 +487,8 @@ export default {
             isMobile: 'isMobile'
         }),
         ...mapState(useAuthStore, {
-            settings: 'appConfig'
+            settings: 'appConfig',
+            authUser: 'user'
         }),
         documentIdMaxLength() {
             return getMaxDocumentIdInputLengthFromConfig(this.settings);
@@ -502,6 +507,27 @@ export default {
             if (this.pendingAction === 'anonymize') return this.$t('confirmarAnonimizarUsuarioMensaje');
             if (this.pendingAction === 'banAndAnonymize') return this.$t('confirmarAnonimizarYBloquearUsuarioMensaje');
             return '';
+        },
+        canSuspend() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersSuspend);
+        },
+        canSetActive() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersSetActive);
+        },
+        canSetDriverVerified() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersDriverVerified);
+        },
+        canDeleteUser() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersDelete);
+        },
+        canAnonymizeUser() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersAnonymize);
+        },
+        canBanAndAnonymizeUser() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersBanAndAnonymize);
+        },
+        canUnverifyUser() {
+            return can(this.authUser, ADMIN_PERMISSIONS.UsersUnverify);
         }
     },
 

@@ -39,6 +39,7 @@
                     :editing="editingId === rate.id"
                     :edit-form="editForm"
                     :saving="saving"
+                    :can-edit="canEditRatings"
                     @edit="startEdit(rate)"
                     @save="saveRating(rate, 'received')"
                     @cancel="cancelEdit"
@@ -57,6 +58,7 @@
                     :editing="editingId === rate.id"
                     :edit-form="editForm"
                     :saving="saving"
+                    :can-edit="canEditRatings"
                     @edit="startEdit(rate)"
                     @save="saveRating(rate, 'given')"
                     @cancel="cancelEdit"
@@ -73,6 +75,9 @@ import AdminRatingCard from '../elements/AdminRatingCard.vue';
 import AppButton from '../ui/AppButton.vue';
 import { UserApi, AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-user-ratings',
@@ -99,11 +104,17 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            authUser: 'user'
+        }),
         hubRoute() {
             return {
                 name: 'admin-users-user',
                 params: { userId: this.$route.params.userId }
             };
+        },
+        canEditRatings() {
+            return can(this.authUser, ADMIN_PERMISSIONS.RatingsEdit);
         }
     },
     methods: {
