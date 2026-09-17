@@ -22,4 +22,10 @@ describe('TripPrice.vue voluntary contribution display', () => {
             /recommendedPricePerSeat\(\)[\s\S]*?this\.trip\.total_seats \+ 1/s
         );
     });
+
+    it('renders pricing breakdown in the reference collapse when payload is present', () => {
+        expect(viewSource).toContain('TripContributionBreakdown');
+        expect(viewSource).toContain('trip.pricing_breakdown');
+        expect(viewSource).toContain('calculadoEnBaseNaftaDescription');
+    });
 });

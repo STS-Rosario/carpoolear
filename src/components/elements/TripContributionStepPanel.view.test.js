@@ -14,6 +14,8 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain('toggleSuggested');
         expect(componentSource).not.toContain('applySuggested');
         expect(componentSource).toContain("$t('tripContributionHowCalculated')");
+        expect(componentSource).toContain('TripContributionBreakdown');
+        expect(componentSource).toContain('pricingBreakdown');
         expect(componentSource).toContain("$t('tripContributionImportantTitle')");
         expect(componentSource).toContain('tripContributionImportantBody');
     });
@@ -52,5 +54,20 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toMatch(
             /toggleSuggested\(\)\s*\{\s*this\.suggestedExpanded\s*=\s*!this\.suggestedExpanded;\s*\}/
         );
+    });
+
+    it('keeps expanded calculation body outside the accordion toggle button', () => {
+        const toggleClose = componentSource.indexOf(
+            'toggleSuggested'
+        );
+        const firstButtonClose = componentSource.indexOf(
+            '</button>',
+            toggleClose
+        );
+        const bodyIndex = componentSource.indexOf(
+            'trip-contribution-step__suggested-body'
+        );
+        expect(bodyIndex).toBeGreaterThan(firstButtonClose);
+        expect(componentSource).toContain('TripContributionBreakdown');
     });
 });
