@@ -86,6 +86,7 @@ import {
     seatPriceCentsForApi
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
+import { withOccupants } from '../../utils/tripContributionBreakdown.js';
 import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
@@ -216,6 +217,7 @@ export default {
             recommended_trip_price_cents: 0,
             maximum_seat_price_cents: 0,
             recommended_seat_price_cents: 0,
+            pricing_breakdown: null,
             maximum_return_trip_price_cents: 0,
             recommended_return_trip_price_cents: 0,
             maximum_return_seat_price_cents: 0,
@@ -503,6 +505,12 @@ export default {
                 return this.$t('contribucionRecomendadaCardDescripcionConSellado');
             }
             return this.$t('contribucionRecomendadaCardDescripcionSinSellado');
+        },
+        contributionPricingBreakdown() {
+            return withOccupants(
+                this.pricing_breakdown,
+                this.trip.rear_max_two_passengers
+            );
         },
         activeFormValidationMessages() {
             return collectActiveValidationMessages(
@@ -1688,6 +1696,7 @@ export default {
                     if (type === 'trip') {
                         this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
                         this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
+                        this.pricing_breakdown = result.data.pricing_breakdown || null;
                         this.recalculateRecommendedPrice();
                     } else {
                         this.maximum_return_trip_price_cents = result.data.maximum_trip_price_cents;

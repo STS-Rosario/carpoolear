@@ -391,6 +391,7 @@
                     :suggested-description="
                         form.contribucionRecomendadaCardDescripcionText
                     "
+                    :pricing-breakdown="form.contributionPricingBreakdown"
                     :price-error="
                         form.priceError.state ? form.priceError.message : ''
                     "
