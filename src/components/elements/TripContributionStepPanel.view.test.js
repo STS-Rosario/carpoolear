@@ -70,4 +70,13 @@ describe('TripContributionStepPanel.vue', () => {
         expect(bodyIndex).toBeGreaterThan(firstButtonClose);
         expect(componentSource).toContain('TripContributionBreakdown');
     });
+
+    it('gates pricing breakdown on the show-breakdown config flag', () => {
+        expect(componentSource).toContain('shouldShowContributionBreakdown');
+        expect(componentSource).toContain('showContributionBreakdown');
+        expect(componentSource).toContain('config:');
+        expect(componentSource).toMatch(
+            /v-if="showContributionBreakdown && pricingBreakdown"/
+        );
+    });
 });

@@ -28,4 +28,12 @@ describe('TripPrice.vue voluntary contribution display', () => {
         expect(viewSource).toContain('trip.pricing_breakdown');
         expect(viewSource).toContain('calculadoEnBaseNaftaDescription');
     });
+
+    it('gates pricing breakdown on the show-breakdown config flag', () => {
+        expect(viewSource).toContain('shouldShowContributionBreakdown');
+        expect(viewSource).toContain('showContributionBreakdown');
+        expect(viewSource).toMatch(
+            /v-if="showContributionBreakdown && pricingBreakdown"/
+        );
+    });
 });
