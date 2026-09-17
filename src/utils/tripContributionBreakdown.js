@@ -12,6 +12,17 @@ export function litersPer100KmFromKmPerLiter(kilometersPerLiter) {
     return 100 / kmPerLiter;
 }
 
+export function shouldShowContributionBreakdown(config) {
+    const value = config && config.module_max_price_show_breakdown;
+    if (value === undefined || value === null) {
+        return true;
+    }
+    if (value === false || value === 0 || value === '0' || value === 'false') {
+        return false;
+    }
+    return true;
+}
+
 export function withOccupants(breakdown, rearMaxTwoPassengers) {
     if (!breakdown) {
         return null;
