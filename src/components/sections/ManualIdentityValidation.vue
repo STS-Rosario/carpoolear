@@ -35,9 +35,9 @@
 
             <div v-else-if="!canUpload" class="manual-validation-pay">
                 <div class="manual-validation-main">
-                    <div v-if="unpaidPending" class="alert alert-warning manual-validation-unpaid-alert">
-                        <strong>{{ $t('esperandoPagoValidacionManual') }}</strong>
-                        <p>{{ $t('debesPagarParaContinuar') }}</p>
+                    <div v-if="unpaidPending || paymentFailed" class="alert alert-warning manual-validation-unpaid-alert">
+                        <strong>{{ paymentFailed ? $t('errorPagoValidacionManual') : $t('esperandoPagoValidacionManual') }}</strong>
+                        <p>{{ paymentFailed ? $t('pagoValidacionManualFallido') : $t('debesPagarParaContinuar') }}</p>
                     </div>
 
                     <ManualIdentityValidationPayOptions
@@ -195,6 +195,7 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
+import { isManualValidationPaymentFailed } from '../../utils/manualIdentityValidationPaymentQuery';
 import {
     shouldShowManualValidationAlreadySubmitted,
     shouldShowManualValidationPayAgain
@@ -248,6 +249,9 @@ export default {
         },
         identityValidationManualQrEnabled() {
             return this.config && this.config.identity_validation_manual_qr_enabled === true;
+        },
+        paymentFailed() {
+            return isManualValidationPaymentFailed(this.$route.query);
         },
         showSwitchToMercadoPagoLink() {
             return shouldShowSwitchToMercadoPago(this.config);

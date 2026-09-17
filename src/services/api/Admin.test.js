@@ -48,6 +48,13 @@ describe('AdminApi manual identity validations state', () => {
     });
 });
 
+describe('AdminApi manual identity validations review', () => {
+    it('posts coded reject_reason when reviewing', () => {
+        expect(apiSource).toContain('reviewManualIdentityValidation(id, action, note, rejectReason)');
+        expect(apiSource).toContain('reject_reason');
+    });
+});
+
 describe('AdminApi dashboard', () => {
     it('fetches admin dashboard summary from dashboard endpoint', () => {
         expect(apiSource).toContain('getDashboard');
