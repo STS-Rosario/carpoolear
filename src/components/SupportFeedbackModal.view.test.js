@@ -47,9 +47,12 @@ describe('SupportFeedbackModal view', () => {
         expect(source).toContain("$t('maximo3Imagenes')");
     });
 
-    it('shows success copy and a link to the created ticket', () => {
-        expect(source).toContain("$t('feedbackTabExito')");
-        expect(source).toContain("$t('verTicket')");
-        expect(source).toContain("name: 'ticket-detail'");
+    it('shows a success snackbar and closes the modal when a ticket is created', () => {
+        expect(source).toContain("dialogs.message(this.$t('feedbackTabExito')");
+        expect(source).toContain("estado: 'success'");
+        expect(source).toContain('this.onClose()');
+        expect(source).not.toContain('support-feedback-modal__success');
+        expect(source).not.toContain("$t('verTicket')");
+        expect(source).not.toContain("name: 'ticket-detail'");
     });
 });
