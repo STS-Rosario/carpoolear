@@ -3,9 +3,12 @@ import messages from './i18n';
 
 const SUPPORT_FEEDBACK_TAB_LABELS = {
     arg: {
-        pestanaFeedback: 'Ayuda',
-        feedbackTabTitulo: 'Enviar un ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Enviar feedback',
         feedbackTabSubtitulo: 'Contanos qué pasó o qué se podría mejorar.',
+        feedbackTabAsunto: 'Asunto',
+        feedbackTabAsuntoPlaceholder: 'Resumen breve',
+        feedbackTabEnviar: 'Enviar',
         feedbackTabExito: 'Ticket creado. Gracias por escribirnos.',
         feedbackTabError: 'No se pudo enviar el ticket. Intente de nuevo',
         verTicket: 'Ver ticket',
@@ -14,9 +17,12 @@ const SUPPORT_FEEDBACK_TAB_LABELS = {
         ticketOrigenPestana: 'Pestaña de ayuda'
     },
     chl: {
-        pestanaFeedback: 'Ayuda',
-        feedbackTabTitulo: 'Enviar un ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Enviar feedback',
         feedbackTabSubtitulo: 'Contanos qué pasó o qué se podría mejorar.',
+        feedbackTabAsunto: 'Asunto',
+        feedbackTabAsuntoPlaceholder: 'Resumen breve',
+        feedbackTabEnviar: 'Enviar',
         feedbackTabExito: 'Ticket creado. Gracias por escribirnos.',
         feedbackTabError: 'No se pudo enviar el ticket. Intente de nuevo',
         verTicket: 'Ver ticket',
@@ -25,9 +31,12 @@ const SUPPORT_FEEDBACK_TAB_LABELS = {
         ticketOrigenPestana: 'Pestaña de ayuda'
     },
     en: {
-        pestanaFeedback: 'Help',
-        feedbackTabTitulo: 'Send a ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Send feedback',
         feedbackTabSubtitulo: 'Tell us what happened or what we could improve.',
+        feedbackTabAsunto: 'Subject',
+        feedbackTabAsuntoPlaceholder: 'Short summary',
+        feedbackTabEnviar: 'Send',
         feedbackTabExito: 'Ticket created. Thanks for writing in.',
         feedbackTabError: 'Could not send the ticket. Please try again',
         verTicket: 'View ticket',
