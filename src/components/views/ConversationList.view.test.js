@@ -39,6 +39,16 @@ describe('ConversationList.vue mobile chat layout', () => {
             /\.conversation-list-page--mobile-chat--tall-header\s*\{[^}]*64px/s
         );
     });
+
+    it('shrinks mobile chat by the overlay keyboard inset so the composer stays visible', () => {
+        const mobileStyles = getMobileStylesBlock();
+        expect(mobileStyles).toMatch(
+            /height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
+        );
+        expect(mobileStyles).toMatch(
+            /max-height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
+        );
+    });
 });
 
 describe('ConversationList.vue messages redesign', () => {
