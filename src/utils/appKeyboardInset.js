@@ -36,3 +36,34 @@ export function clearAppKeyboardInset(root = document.documentElement) {
     }
     root.style.removeProperty(APP_KEYBOARD_INSET_CSS_VAR);
 }
+
+export function installAppKeyboardInsetObserver(options = {}) {
+    const win = options.window ?? window;
+    const root = options.root ?? win.document?.documentElement;
+    const measure = () => {
+        applyAppKeyboardInset(readKeyboardInset(win), root);
+    };
+    const visualViewport = win.visualViewport;
+
+    if (!visualViewport || typeof visualViewport.addEventListener !== 'function') {
+        measure();
+        return () => clearAppKeyboardInset(root);
+    }
+
+    visualViewport.addEventListener('resize', measure);
+    visualViewport.addEventListener('scroll', measure);
+    if (typeof win.addEventListener === 'function') {
+        win.addEventListener('resize', measure);
+    }
+
+    measure();
+
+    return () => {
+        visualViewport.removeEventListener('resize', measure);
+        visualViewport.removeEventListener('scroll', measure);
+        if (typeof win.removeEventListener === 'function') {
+            win.removeEventListener('resize', measure);
+        }
+        clearAppKeyboardInset(root);
+    };
+}
