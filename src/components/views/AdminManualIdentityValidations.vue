@@ -38,6 +38,7 @@
                                 <td>{{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</td>
                                 <td>{{ formatWaitingTime(item) }}</td>
                                 <td>{{ item.paid ? $t('si') : $t('no') }}</td>
+                                <td>{{ getVerifiedLabel(item) }}</td>
                                 <td>
                                     <span :class="getStatusBadgeClass(item)">
                                         {{ getStatusLabel(item) }}
@@ -131,7 +132,8 @@ import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationStatusBadgeClass,
-    getManualIdentityValidationStatusLabel
+    getManualIdentityValidationStatusLabel,
+    getManualIdentityValidationVerifiedLabel
 } from '../../utils/adminManualIdentityValidationDisplay';
 
 export default {
@@ -184,10 +186,8 @@ export default {
         getStatusBadgeClass(item) {
             return getManualIdentityValidationStatusBadgeClass(item);
         },
-        isApprovedWithImagesPending(item) {
-            const status = item.review_status;
-            const approved = status === 'approved' || status === 'approve';
-            return approved && item.has_images === true;
+getVerifiedLabel(item) {
+            return getManualIdentityValidationVerifiedLabel(item, (key) => this.$t(key));
         },
         initFromRouteQuery() {
             const parsed = parseManualIdentityValidationListFromRoute(this.$route.query || {});

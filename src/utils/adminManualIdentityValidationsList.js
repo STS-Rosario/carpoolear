@@ -10,6 +10,7 @@ export const MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS = [
     { key: 'submitted_at', labelKey: 'fechaEnvio' },
     { key: 'waiting_time', labelKey: 'tiempoDeEspera' },
     { key: 'paid', labelKey: 'pagado' },
+    { key: 'identity_validated', labelKey: 'verificado' },
     { key: 'review_status', labelKey: 'estado' },
     {
         key: 'open_account_verification_tickets_count',
@@ -189,6 +190,11 @@ const SORT_COMPARATORS = {
         (left, right) => compareNumbers(left, right, 1)
     ),
     paid: (a, b, direction) => compareNumbers(Number(Boolean(a.paid)), Number(Boolean(b.paid)), direction),
+    identity_validated: (a, b, direction) => compareNumbers(
+        Number(Boolean(a.identity_validated)),
+        Number(Boolean(b.identity_validated)),
+        direction
+    ),
     review_status: (a, b, direction) => compareNumbers(
         getReviewStatusSortRank(a),
         getReviewStatusSortRank(b),

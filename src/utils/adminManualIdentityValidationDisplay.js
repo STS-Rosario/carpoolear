@@ -1,3 +1,21 @@
+import { getIdentityValidationMethodLabelKey } from './adminUserIdentityVerification.js';
+
+export function getManualIdentityValidationVerifiedLabel(item, t) {
+    if (!item || !item.identity_validated) {
+        return t('no');
+    }
+
+    const methodLabelKey = getIdentityValidationMethodLabelKey(
+        item.identity_validation_type
+    );
+
+    if (!methodLabelKey) {
+        return t('si');
+    }
+
+    return `${t('si')} (${t(methodLabelKey)})`;
+}
+
 export function isManualIdentityValidationAwaitingPhotos(item) {
     if (!item?.paid) {
         return false;

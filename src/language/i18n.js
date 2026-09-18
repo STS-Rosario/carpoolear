@@ -1067,6 +1067,7 @@ const messages = {
         tiempoEsperaHoras: 'hs',
         tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
+        verificado: 'Verificado',
         si: 'Sí',
         no: 'No',
         acciones: 'Acciones',
@@ -1140,6 +1141,10 @@ const messages = {
             '¿Confirmás guardar la nota privada de administración?',
         confirmarGuardarEstadoManualIdentity:
             '¿Confirmás guardar los cambios de estado de esta solicitud?',
+        confirmarCerrarManualIdentity:
+            '¿Confirmás cerrar esta solicitud de verificación manual? No se modificará la verificación de la cuenta.',
+        adminManualIdentityCloseHint:
+            'Cierra la solicitud sin modificar la verificación de identidad del usuario.',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -2937,6 +2942,7 @@ const messages = {
         tiempoEsperaHoras: 'hs',
         tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
+        verificado: 'Verificado',
         si: 'Sí',
         no: 'No',
         acciones: 'Acciones',
@@ -3003,6 +3009,10 @@ const messages = {
             '¿Confirmás guardar la nota privada de administración?',
         confirmarGuardarEstadoManualIdentity:
             '¿Confirmás guardar los cambios de estado de esta solicitud?',
+        confirmarCerrarManualIdentity:
+            '¿Confirmás cerrar esta solicitud de verificación manual? No se modificará la verificación de la cuenta.',
+        adminManualIdentityCloseHint:
+            'Cierra la solicitud sin modificar la verificación de identidad del usuario.',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -4668,6 +4678,7 @@ const messages = {
         tiempoEsperaHoras: 'h',
         tiempoEsperaMinutos: 'min',
         pagado: 'Paid',
+        verificado: 'Verified',
         si: 'Yes',
         no: 'No',
         acciones: 'Actions',
@@ -4811,6 +4822,10 @@ const messages = {
             'Confirm saving the private admin note?',
         confirmarGuardarEstadoManualIdentity:
             'Confirm saving the state changes for this request?',
+        confirmarCerrarManualIdentity:
+            'Confirm closing this manual verification request? The account verification status will not be changed.',
+        adminManualIdentityCloseHint:
+            'Closes the request without modifying the user identity verification status.',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',
