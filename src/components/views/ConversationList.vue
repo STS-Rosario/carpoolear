@@ -594,7 +594,8 @@ export default {
      *
      * Height uses measured --app-header-offset (includes identity / ratings banners)
      * because .view-container already pads by that amount. Conversation-chat hides the
-     * mobile footer, so do not subtract a footer bar height here.
+     * mobile footer, so do not subtract a footer bar height here. Overlay keyboards
+     * (Android 15+) shrink this column via --app-keyboard-inset so the composer stays visible.
      */
     .conversation-list-page--mobile-chat {
         display: flex;
@@ -602,16 +603,20 @@ export default {
         min-height: 0;
         box-sizing: border-box;
         height: calc(
-            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
+            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
         height: calc(
-            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
+            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
         max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
+            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
         max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
+            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
         overflow: hidden;
         background-color: #fff;
