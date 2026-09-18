@@ -9,10 +9,11 @@ export function readKeyboardInset(win = window) {
     if (!visualViewport) {
         return 0;
     }
-    const inset = Math.round(
-        win.innerHeight - visualViewport.height - (visualViewport.offsetTop || 0)
-    );
-    return inset > 0 ? inset : 0;
+    const overlay =
+        win.innerHeight -
+        visualViewport.height -
+        (visualViewport.offsetTop || 0);
+    return Math.max(0, Math.round(overlay));
 }
 
 export function applyAppKeyboardInset(insetPx, root = document.documentElement) {
