@@ -38,6 +38,7 @@
                                 <td>{{ item.submitted_at ? formatDate(item.submitted_at) : '-' }}</td>
                                 <td>{{ formatWaitingTime(item) }}</td>
                                 <td>{{ item.paid ? $t('si') : $t('no') }}</td>
+                                <td>{{ getVerifiedLabel(item) }}</td>
                                 <td>
                                     <span :class="getStatusBadgeClass(item)">
                                         {{ getStatusLabel(item) }}
@@ -84,6 +85,15 @@
                                     >
                                         {{ $t('revisarSolicitud') }}
                                     </AppPrimaryLink>
+                                    <AppButton
+                                        v-if="!isResolved(item)"
+                                        class="admin-manual-close-button"
+                                        variant="secondary"
+                                        size="sm"
+                                        @click="confirmClose(item)"
+                                    >
+                                        {{ $t('cerrar') }}
+                                    </AppButton>
                                 </td>
                             </tr>
                         </tbody>
@@ -115,14 +125,17 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
 import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
+import dialogs from '../../services/dialogs.js';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import {
     buildManualIdentityValidationListParams,
     getNextManualIdentityValidationSortState,
     getShowResolvedManualIdentityValidations,
+    isManualIdentityValidationResolved,
     MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS,
     parseManualIdentityValidationListFromRoute,
     saveShowResolvedManualIdentityValidations
@@ -131,7 +144,8 @@ import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationStatusBadgeClass,
-    getManualIdentityValidationStatusLabel
+    getManualIdentityValidationStatusLabel,
+    getManualIdentityValidationVerifiedLabel
 } from '../../utils/adminManualIdentityValidationDisplay';
 
 export default {
@@ -183,6 +197,36 @@ export default {
         },
         getStatusBadgeClass(item) {
             return getManualIdentityValidationStatusBadgeClass(item);
+        },
+        getVerifiedLabel(item) {
+            return getManualIdentityValidationVerifiedLabel(item, (key) => this.$t(key));
+        },
+        isResolved(item) {
+            return isManualIdentityValidationResolved(item);
+        },
+        confirmClose(item) {
+            if (!confirm(this.$t('confirmarCerrarManualIdentity'))) {
+                return;
+            }
+
+            this.closeManualIdentityValidation(item);
+        },
+        closeManualIdentityValidation(item) {
+            const api = new AdminApi();
+
+            api.updateManualIdentityValidationState(item.id, { review_status: 'closed' })
+                .then(() => {
+                    dialogs.message(this.$t('estadoCerrado'), {
+                        duration: 2,
+                        estado: 'success'
+                    });
+                    this.fetchList();
+                }, () => {
+                    dialogs.message(this.$t('resultError'), {
+                        duration: 3,
+                        estado: 'error'
+                    });
+                });
         },
         isApprovedWithImagesPending(item) {
             const status = item.review_status;
@@ -276,6 +320,7 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         Loading,
+        AppButton,
         AppPrimaryLink
     }
 };
@@ -286,6 +331,10 @@ export default {
 }
 
 .pending-images-pill {
+    margin-left: 6px;
+}
+
+.admin-manual-close-button {
     margin-left: 6px;
 }
 
