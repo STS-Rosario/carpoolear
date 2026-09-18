@@ -247,6 +247,19 @@
                         </div>
                         <div v-else class="alert alert-warning">{{ $t('noPagadoNoRevisar') }}</div>
 
+                        <div v-if="!isResolved(item)" class="admin-manual-identity-close form-group">
+                            <p class="text-muted">{{ $t('adminManualIdentityCloseHint') }}</p>
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
+                                :disabled="closing"
+                                :loading="closing"
+                                @click="confirmClose"
+                            >
+                                {{ $t('cerrar') }}
+                            </AppButton>
+                        </div>
+
                         <div v-if="can(this.user, ADMIN_PERMISSIONS.IdentityManualPurge)" class="purge-section mt-3">
                             <p class="text-muted purge-warning">{{ $t('purgarFotosAdvertencia') }}</p>
                             <AppButton
@@ -302,6 +315,7 @@ import {
     shouldProceedWithConfirmedAction,
     shouldProceedWithReviewAction
 } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import { isManualIdentityValidationResolved } from '../../utils/adminManualIdentityValidationsList.js';
 import {
     MANUAL_IDENTITY_REJECT_REASONS,
     isManualRejectReasonRequired
@@ -333,6 +347,7 @@ export default {
             reviewError: null,
             reviewRejectReason: '',
             purging: false,
+            closing: false,
             ADMIN_PERMISSIONS
         };
     },
@@ -554,6 +569,32 @@ export default {
             }
             this.review(action);
         },
+        isResolved(item) {
+            return isManualIdentityValidationResolved(item);
+        },
+        confirmClose() {
+            if (!confirm(this.$t('confirmarCerrarManualIdentity'))) {
+                return;
+            }
+
+            this.closeManualIdentityValidation();
+        },
+        closeManualIdentityValidation() {
+            if (!this.item) return;
+
+            this.closing = true;
+            const api = new AdminApi();
+            api.updateManualIdentityValidationState(this.item.id, { review_status: 'closed' })
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('estadoCerrado'), { duration: 2, estado: 'success' });
+                }, () => {
+                    dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
+                })
+                .finally(() => {
+                    this.closing = false;
+                });
+        },
         confirmPurge() {
             if (!confirm(this.$t('confirmarPurgarFotos'))) return;
             this.doPurge();
@@ -652,6 +693,9 @@ export default {
 .admin-manual-identity-state-edit-error {
     margin-top: 0.5rem;
     margin-bottom: 0;
+}
+.admin-manual-identity-close {
+    margin-top: 1rem;
 }
 .identity-validation-review-comment-user-visible {
     display: block;
