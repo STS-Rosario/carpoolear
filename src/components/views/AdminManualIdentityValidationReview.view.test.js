@@ -81,6 +81,18 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('can(this.user');
     });
 
+    it('offers closing the request with confirmation wired to updateState', () => {
+        expect(viewSource).toContain('isManualIdentityValidationResolved');
+        expect(viewSource).toContain('adminManualIdentityCloseHint');
+        expect(viewSource).toContain('confirmClose');
+        expect(viewSource).toContain('@click="confirmClose"');
+        expect(viewSource).toContain("$t('cerrar')");
+        expect(viewSource).toContain("review_status: 'closed'");
+        expect(viewSource).toContain('updateManualIdentityValidationState');
+        expect(viewSource).toContain('confirmarCerrarManualIdentity');
+        expect(viewSource).toContain('closeManualIdentityValidation');
+    });
+
     it('shows which admin took the review action with action-specific label', () => {
         expect(viewSource).toContain('shouldShowReviewAdminAction');
         expect(viewSource).toContain('getReviewActionAdminLabelKey');
@@ -122,5 +134,8 @@ describe('AdminManualIdentityValidationReview i18n', () => {
         expect(i18nSource).toContain("seleccionarMotivoRechazo: 'Select a reason'");
         expect(i18nSource).toContain("motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo'");
         expect(i18nSource).toContain("motivoRechazoRequerido: 'You must select a rejection reason'");
+        expect(i18nSource).toContain('adminManualIdentityCloseHint');
+        expect(i18nSource).toContain("'Cierra la solicitud sin modificar la verificación de identidad del usuario.'");
+        expect(i18nSource).toContain("'Closes the request without modifying the user identity verification status.'");
     });
 });

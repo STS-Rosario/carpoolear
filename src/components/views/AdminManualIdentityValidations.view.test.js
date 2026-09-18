@@ -51,16 +51,15 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('createdByAdmin: true');
     });
 
-    it('renders the verified column with method and a close action for open rows', () => {
+    it('renders the verified column with method but no close action in the list', () => {
         expect(viewSource).toContain('getManualIdentityValidationVerifiedLabel');
         expect(viewSource).toContain('getVerifiedLabel(item)');
-        expect(viewSource).toContain('AppButton');
-        expect(viewSource).toContain('confirmClose(item)');
-        expect(viewSource).toContain('isManualIdentityValidationResolved');
-        expect(viewSource).toContain('updateManualIdentityValidationState');
-        expect(viewSource).toContain("review_status: 'closed'");
-        expect(viewSource).toContain('confirmarCerrarManualIdentity');
-        expect(viewSource).toContain("$t('cerrar')");
+        expect(viewSource).not.toContain("$t('cerrar')");
+        expect(viewSource).not.toContain('confirmClose(item)');
+        expect(viewSource).not.toContain('closeManualIdentityValidation');
+        expect(viewSource).not.toContain('confirmarCerrarManualIdentity');
+        expect(viewSource).not.toContain('isManualIdentityValidationResolved');
+        expect(viewSource).not.toContain('updateManualIdentityValidationState');
     });
 
     it('sends sort and pagination params to the API instead of sorting locally', () => {
