@@ -4,6 +4,7 @@ import {
     applyAppKeyboardInset,
     clearAppKeyboardInset,
     formatKeyboardInsetPx,
+    installAppKeyboardInsetObserver,
     readKeyboardInset
 } from './appKeyboardInset.js';
 
@@ -72,6 +73,74 @@ describe('appKeyboardInset', () => {
 
         applyAppKeyboardInset(180, root);
         clearAppKeyboardInset(root);
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe('');
+    });
+
+    it('updates the CSS variable when the visual viewport resizes or scrolls', () => {
+        const viewportListeners = {};
+        const windowListeners = {};
+        const win = {
+            innerHeight: 800,
+            visualViewport: {
+                height: 800,
+                offsetTop: 0,
+                addEventListener(type, handler) {
+                    viewportListeners[type] = handler;
+                },
+                removeEventListener(type) {
+                    delete viewportListeners[type];
+                }
+            },
+            addEventListener(type, handler) {
+                windowListeners[type] = handler;
+            },
+            removeEventListener(type) {
+                delete windowListeners[type];
+            },
+            document: { documentElement: root }
+        };
+
+        const stop = installAppKeyboardInsetObserver({ window: win, root });
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe('');
+
+        win.visualViewport.height = 480;
+        viewportListeners.resize();
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe(
+            '320px'
+        );
+
+        win.visualViewport.height = 500;
+        win.visualViewport.offsetTop = 40;
+        viewportListeners.scroll();
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe(
+            '260px'
+        );
+
+        win.innerHeight = 700;
+        win.visualViewport.height = 700;
+        win.visualViewport.offsetTop = 0;
+        windowListeners.resize();
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe('');
+
+        stop();
+        expect(viewportListeners.resize).toBeUndefined();
+        expect(viewportListeners.scroll).toBeUndefined();
+        expect(windowListeners.resize).toBeUndefined();
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe('');
+    });
+
+    it('measures once when visualViewport events are unavailable', () => {
+        const win = {
+            innerHeight: 800,
+            visualViewport: { height: 500, offsetTop: 0 },
+            document: { documentElement: root }
+        };
+
+        const stop = installAppKeyboardInsetObserver({ window: win, root });
+        expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe(
+            '300px'
+        );
+        stop();
         expect(root.style.getPropertyValue(APP_KEYBOARD_INSET_CSS_VAR)).toBe('');
     });
 });
