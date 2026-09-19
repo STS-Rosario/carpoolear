@@ -25,13 +25,14 @@ export default {
 <style scoped>
 .admin-layout {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 16px;
     margin-top: 16px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     padding: 0 12px 24px;
+    min-height: calc(100vh - var(--app-header-offset, 51px) - 40px);
 }
 
 .admin-layout__sidebar {
@@ -39,19 +40,20 @@ export default {
     width: 240px;
     max-width: 240px;
     min-width: 0;
-    max-height: calc(100vh - var(--app-header-offset, 51px) - 40px);
-    overflow-y: auto;
 }
 
 .admin-layout-content {
     flex: 1;
     min-width: 0;
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
 .admin-layout-card {
+    flex: 1;
     background: var(--ds-card-bg);
     border-radius: var(--ds-card-radius);
     box-shadow: var(--ds-card-shadow);
@@ -109,8 +111,6 @@ export default {
         flex: none;
         width: 100%;
         max-width: none;
-        max-height: none;
-        overflow: visible;
     }
 
     .admin-layout-card {
