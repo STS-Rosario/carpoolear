@@ -43,10 +43,13 @@ describe('ConversationList.vue mobile chat layout', () => {
     it('shrinks mobile chat by the overlay keyboard inset so the composer stays visible', () => {
         const mobileStyles = getMobileStylesBlock();
         expect(mobileStyles).toMatch(
-            /height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
+            /--conversation-mobile-chat-height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
         );
         expect(mobileStyles).toMatch(
-            /max-height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
+            /height:\s*var\(--conversation-mobile-chat-height\)/
+        );
+        expect(mobileStyles).toMatch(
+            /max-height:\s*var\(--conversation-mobile-chat-height\)/
         );
     });
 });

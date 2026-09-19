@@ -602,22 +602,16 @@ export default {
         flex-direction: column;
         min-height: 0;
         box-sizing: border-box;
-        height: calc(
+        --conversation-mobile-chat-height: calc(
             100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px) -
                 var(--app-keyboard-inset, 0px)
         );
-        height: calc(
+        --conversation-mobile-chat-height: calc(
             100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px) -
                 var(--app-keyboard-inset, 0px)
         );
-        max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px) -
-                var(--app-keyboard-inset, 0px)
-        );
-        max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px) -
-                var(--app-keyboard-inset, 0px)
-        );
+        height: var(--conversation-mobile-chat-height);
+        max-height: var(--conversation-mobile-chat-height);
         overflow: hidden;
         background-color: #fff;
     }
