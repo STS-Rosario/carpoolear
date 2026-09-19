@@ -11,15 +11,15 @@ import {
 
 describe('adminPagination', () => {
     it('exposes default per page and allowed options', () => {
-        expect(DEFAULT_ADMIN_PER_PAGE).toBe(20);
+        expect(DEFAULT_ADMIN_PER_PAGE).toBe(100);
         expect(ADMIN_PER_PAGE_OPTIONS).toEqual([10, 20, 30, 50, 100]);
     });
 
     it('resolveAdminPerPage accepts allowed values and falls back to default', () => {
         expect(resolveAdminPerPage(10)).toBe(10);
         expect(resolveAdminPerPage('30')).toBe(30);
-        expect(resolveAdminPerPage(15)).toBe(20);
-        expect(resolveAdminPerPage(undefined)).toBe(20);
+        expect(resolveAdminPerPage(15)).toBe(100);
+        expect(resolveAdminPerPage(undefined)).toBe(100);
     });
 
     it('resolveAdminPage defaults to one and clamps invalid values', () => {
