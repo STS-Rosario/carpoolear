@@ -7,11 +7,11 @@ import {
 } from './userMigrationFields.js';
 
 describe('userMigrationFields', () => {
-    it('defaults email dni and created_at to removed and password and phone to kept', () => {
-        expect(DEFAULT_FIELD_SOURCES.email).toBe('removed');
+    it('defaults email and password to kept and dni phone and created_at to removed', () => {
+        expect(DEFAULT_FIELD_SOURCES.email).toBe('kept');
         expect(DEFAULT_FIELD_SOURCES.password).toBe('kept');
         expect(DEFAULT_FIELD_SOURCES.nro_doc).toBe('removed');
-        expect(DEFAULT_FIELD_SOURCES.mobile_phone).toBe('kept');
+        expect(DEFAULT_FIELD_SOURCES.mobile_phone).toBe('removed');
         expect(DEFAULT_FIELD_SOURCES.created_at).toBe('removed');
     });
 
@@ -27,8 +27,8 @@ describe('userMigrationFields', () => {
 
     it('returns a fresh copy of default field sources', () => {
         const first = createDefaultFieldSources();
-        first.email = 'kept';
-        expect(createDefaultFieldSources().email).toBe('removed');
+        first.email = 'removed';
+        expect(createDefaultFieldSources().email).toBe('kept');
     });
 });
 
