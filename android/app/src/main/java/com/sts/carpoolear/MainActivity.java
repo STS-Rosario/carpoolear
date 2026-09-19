@@ -28,13 +28,13 @@ public class MainActivity extends BridgeActivity {
     }
 
     private void applyImeAwareWebViewInsets() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            return;
-        }
-        if (getBridge() == null || getBridge().getWebView() == null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM || getBridge() == null) {
             return;
         }
         View webView = getBridge().getWebView();
+        if (webView == null) {
+            return;
+        }
         ViewCompat.setOnApplyWindowInsetsListener(webView, (v, windowInsets) -> {
             Insets bars = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
