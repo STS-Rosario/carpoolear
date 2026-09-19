@@ -1796,7 +1796,7 @@ const messages = {
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
-            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
+            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email y contraseña de la cuenta a mantener; DNI, teléfono y fecha de creación de la cuenta a borrar.',
         migracionCampo: 'Campo',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Contraseña',
@@ -3551,7 +3551,7 @@ const messages = {
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
-            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
+            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email y contraseña de la cuenta a mantener; DNI, teléfono y fecha de creación de la cuenta a borrar.',
         migracionCampo: 'Campo',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Contraseña',
@@ -5464,7 +5464,7 @@ const messages = {
             'The account of {name} (ID: {id}) is suspended so the migration cannot be performed',
         migracionElegirDatos: 'Choose which data to keep',
         migracionElegirDatosAyuda:
-            'Click the value you want on the final account. Defaults: email, ID, and creation date from the account to remove; password and phone from the account to keep.',
+            'Click the value you want on the final account. Defaults: email and password from the account to keep; ID, phone, and creation date from the account to remove.',
         migracionCampo: 'Field',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Password',
