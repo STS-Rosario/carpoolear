@@ -3,10 +3,10 @@ import { displayDniOrDash } from './formatDisplayDni';
 const EMPTY_VALUE = '—';
 
 export const DEFAULT_FIELD_SOURCES = {
-    email: 'removed',
+    email: 'kept',
     password: 'kept',
     nro_doc: 'removed',
-    mobile_phone: 'kept',
+    mobile_phone: 'removed',
     created_at: 'removed'
 };
 

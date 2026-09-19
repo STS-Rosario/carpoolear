@@ -166,7 +166,7 @@ describe('adminTripExcessContributionList', () => {
                 direction: 'desc'
             })).toEqual({
                 page: 3,
-                perPage: 20,
+                perPage: 100,
                 requiresActionOnly: true,
                 sortKey: 'id',
                 sortDir: 'desc'
