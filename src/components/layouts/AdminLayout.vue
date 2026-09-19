@@ -39,6 +39,8 @@ export default {
     width: 240px;
     max-width: 240px;
     min-width: 0;
+    max-height: calc(100vh - var(--app-header-offset, 51px) - 40px);
+    overflow-y: auto;
 }
 
 .admin-layout-content {
@@ -107,6 +109,8 @@ export default {
         flex: none;
         width: 100%;
         max-width: none;
+        max-height: none;
+        overflow: visible;
     }
 
     .admin-layout-card {
