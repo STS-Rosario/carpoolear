@@ -1181,6 +1181,7 @@ const messages = {
         entendido: 'ENTENDIDO!',
         alIngresarFacebook: 'Al ingresar con Facebook estas aceptando nuestros',
         ingresaEmail: 'Email',
+        creandoUnaCuenta: 'O creá una cuenta',
         ingresaConCuenta: 'Ingresá con Email',
         debeActivarCuenta:
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
@@ -4862,6 +4863,7 @@ const messages = {
         entendido: 'GOT IT!',
         alIngresarFacebook: 'By logging in with Facebook you are accepting our',
         ingresaEmail: 'Email',
+        creandoUnaCuenta: 'Or create a new account',
         ingresaConCuenta: 'Log in with Email',
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
