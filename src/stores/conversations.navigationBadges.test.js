@@ -7,7 +7,8 @@ const getMessagesMock = vi.fn(() => Promise.resolve({ data: [] }));
 vi.mock('../services/api', () => ({
     ConversationApi: class ConversationApiMock {
         getMessages = getMessagesMock;
-    }
+    },
+    DebugApi: class DebugApiMock {}
 }));
 
 vi.mock('../services/dialogs.js', () => ({

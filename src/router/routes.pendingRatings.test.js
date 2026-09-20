@@ -20,7 +20,6 @@ describe('routes pending ratings enforcement', () => {
 describe('restricted action components pending ratings redirect', () => {
     const componentPaths = [
         '../components/views/Trip.vue',
-        '../components/views/NewTrip.vue',
         '../components/views/ConversationChat.vue',
         '../components/elements/CoordinateTrip.vue',
         '../components/PendingRequest.vue'

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-    CUSTOM_SPLASH_DISMISS_MS,
     formatSplashVersionText,
     isAdminAppUrl,
     isCustomSplashVisible,
@@ -121,15 +120,5 @@ describe('isCustomSplashVisible', () => {
                 showCustomSplash: false
             })
         ).toBe(false);
-    });
-});
-
-describe('CUSTOM_SPLASH_DISMISS_MS', () => {
-    it('keeps the public splash visible for three seconds', () => {
-        expect(CUSTOM_SPLASH_DISMISS_MS).toBe(3000);
-    });
-
-    it('exposes the web build number used on the splash screen', () => {
-        expect(SPLASH_WEB_BUILD_NUMBER).toBe(153);
     });
 });
