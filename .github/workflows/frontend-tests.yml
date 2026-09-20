@@ -38,6 +38,9 @@ jobs:
             sleep 2
           done
 
+      - name: Run unit tests
+        run: npm run test:unit -- --run
+
       - name: Run frontend tests
         run: npm run test:frontend
 
