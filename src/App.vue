@@ -77,6 +77,7 @@ import ImpersonationBanner from './components/ImpersonationBanner.vue';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
 import ServerDownFullscreen from './components/ServerDownFullscreen.vue';
 import { useServerStatusStore } from './stores/serverStatus';
+import { installAppKeyboardInsetObserver } from './utils/appKeyboardInset.js';
 
 export default {
     name: 'app',
@@ -164,11 +165,15 @@ export default {
         this.getConfig();
     },
     beforeUnmount() {
+        if (typeof this.stopKeyboardInsetObserver === 'function') {
+            this.stopKeyboardInsetObserver();
+        }
         if (typeof document !== 'undefined') {
             document.body.classList.remove('has-mobile-tab-bar');
         }
     },
     mounted() {
+        this.stopKeyboardInsetObserver = installAppKeyboardInsetObserver();
         if (this.isFacebookApp) {
             if (!this.logged) {
                 this.fbLogin();
@@ -330,7 +335,8 @@ export default {
             actualRouteName: '',
             showCustomSplash: true,
             showForceUpgrade: false,
-            versionCheckDone: false
+            versionCheckDone: false,
+            stopKeyboardInsetObserver: null
         };
     },
     components: {
