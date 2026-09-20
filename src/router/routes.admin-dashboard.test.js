@@ -5,8 +5,8 @@ import path from 'node:path';
 const routesPath = path.resolve(__dirname, 'routes.js');
 const routesSource = fs.readFileSync(routesPath, 'utf8');
 
-const navPath = path.resolve(__dirname, '../components/sections/adminNav.vue');
-const navSource = fs.readFileSync(navPath, 'utf8');
+const permissionsPath = path.resolve(__dirname, '../utils/adminPermissions.js');
+const permissionsSource = fs.readFileSync(permissionsPath, 'utf8');
 
 describe('admin dashboard routes', () => {
     it('uses AdminDashboard as default admin home at /admin', () => {
@@ -24,7 +24,10 @@ describe('admin dashboard routes', () => {
 
 describe('admin dashboard navigation', () => {
     it('lists Tablero first and links to admin dashboard', () => {
-        expect(navSource.indexOf('adminNavTablero')).toBeLessThan(navSource.indexOf('adminNavGraficos'));
-        expect(navSource).toContain("name: 'admin-dashboard'");
+        const dashboardIndex = permissionsSource.indexOf("name: 'admin-dashboard'");
+        const graphsIndex = permissionsSource.indexOf("name: 'admin-page'");
+        expect(dashboardIndex).toBeGreaterThan(-1);
+        expect(graphsIndex).toBeGreaterThan(-1);
+        expect(dashboardIndex).toBeLessThan(graphsIndex);
     });
 });

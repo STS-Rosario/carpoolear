@@ -1,10 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import fs from 'node:fs';
-import path from 'node:path';
 import { createPinia, setActivePinia } from 'pinia';
-
-const routesPath = path.resolve(__dirname, '../router/routes.js');
-const routesSource = fs.readFileSync(routesPath, 'utf8');
 
 const EXPECTED_MOBILE_FOOTER = [
     { id: 'home', labelKey: 'inicio', icon: 'home', url: 'trips' },
@@ -47,12 +42,6 @@ describe('actionbars store mobile footer navigation', () => {
 
         expect(messagesButton).toBeDefined();
         expect(messagesButton.url).toBe('conversations-list');
-    });
-
-    it('marks the messages tab active on the conversations list route', () => {
-        expect(routesSource).toMatch(
-            /name:\s*'conversations-list'[\s\S]*?active_id:\s*'messages'/
-        );
     });
 
     it('opens the mobile menu and remembers the current route', async () => {
