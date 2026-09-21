@@ -119,6 +119,7 @@ import Loading from '../Loading';
 import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
+import { isApprovedWithImagesPending } from '../../utils/adminManualIdentityValidationImages';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
 import {
     buildManualIdentityValidationListParams,
@@ -166,6 +167,7 @@ export default {
     },
     methods: {
         getAdminUserProfileRoute,
+        isApprovedWithImagesPending,
         accountVerificationTicketsRoute(userId) {
             return adminUserSupportTicketsRoute(userId, {
                 type: 'account_verification',
