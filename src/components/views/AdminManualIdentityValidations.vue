@@ -119,8 +119,8 @@ import Loading from '../Loading';
 import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
-import { isApprovedWithImagesPending } from '../../utils/adminManualIdentityValidationImages';
 import { adminUserSupportTicketsRoute } from '../../utils/adminUserSupportTicketsLink';
+import { isApprovedWithImagesPending } from '../../utils/adminManualIdentityValidationImages';
 import {
     buildManualIdentityValidationListParams,
     getNextManualIdentityValidationSortState,
@@ -167,7 +167,6 @@ export default {
     },
     methods: {
         getAdminUserProfileRoute,
-        isApprovedWithImagesPending,
         accountVerificationTicketsRoute(userId) {
             return adminUserSupportTicketsRoute(userId, {
                 type: 'account_verification',
@@ -188,9 +187,10 @@ export default {
         getStatusBadgeClass(item) {
             return getManualIdentityValidationStatusBadgeClass(item);
         },
-getVerifiedLabel(item) {
+        getVerifiedLabel(item) {
             return getManualIdentityValidationVerifiedLabel(item, (key) => this.$t(key));
         },
+        isApprovedWithImagesPending,
         initFromRouteQuery() {
             const parsed = parseManualIdentityValidationListFromRoute(this.$route.query || {});
             this.listPage = parsed.page;
