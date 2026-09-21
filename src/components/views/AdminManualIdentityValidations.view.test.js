@@ -62,6 +62,16 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).not.toContain('updateManualIdentityValidationState');
     });
 
+    it('binds isApprovedWithImagesPending so approved rows with leftover images can render', () => {
+        const methodsAt = viewSource.indexOf('methods: {');
+        const componentsAt = viewSource.indexOf('components: {', methodsAt);
+        const methodsBlock = viewSource.slice(methodsAt, componentsAt);
+
+        expect(viewSource).toContain('v-if="isApprovedWithImagesPending(item)"');
+        expect(viewSource).toContain("from '../../utils/adminManualIdentityValidationImages'");
+        expect(methodsBlock).toContain('isApprovedWithImagesPending');
+    });
+
     it('sends sort and pagination params to the API instead of sorting locally', () => {
         expect(viewSource).not.toContain('sortManualIdentityValidationsList');
         expect(viewSource).toContain('syncRouteQuery');
