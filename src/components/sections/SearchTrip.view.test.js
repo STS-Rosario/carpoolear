@@ -146,8 +146,17 @@ describe('SearchTrip origin destination swap', () => {
         expect(desktopBlock).toMatch(
             /\.trips-search__swap\s*\{[^}]*align-self:\s*flex-end/
         );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*margin:\s*0\s+-0\.375rem\s+0\.5rem/
+        );
         expect(desktopBlock).not.toMatch(
             /\.trips-search__swap\s*\{[^}]*position:\s*absolute/
+        );
+    });
+
+    it('centers the swap control horizontally on mobile', () => {
+        expect(cssSource).toMatch(
+            /\.trips-search__swap\s*\{[^}]*margin:\s*-0\.25rem\s+auto\s+0\.5rem/
         );
     });
 
@@ -160,7 +169,7 @@ describe('SearchTrip origin destination swap', () => {
             /\.trips-search__field--date\s*\{[^}]*max-width:\s*9\.5rem/
         );
         expect(desktopBlock).toMatch(
-            /\.trips-search__fields-row\s*\{[^}]*gap:\s*1\.25rem/
+            /\.trips-search__fields-row\s*\{[^}]*gap:\s*0\.75rem/
         );
     });
 
