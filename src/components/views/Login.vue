@@ -356,36 +356,38 @@ export default {
                         // router.rememberBack();
                     },
                     (error) => {
-                        if (isOfflineApiError(error)) {
+                        try {
+                            if (isOfflineApiError(error)) {
+                                return;
+                            }
+                            const userNotActive =
+                                error && error.message === 'user_not_active';
+                            const userBanned =
+                                error && error.message === 'user_banned';
+                            const adminEmail = this.config?.admin_email || '';
+                            const message = userNotActive
+                                ? getLoginInactiveAccountMessage(
+                                      this.$t.bind(this),
+                                      adminEmail
+                                  )
+                                : userBanned
+                                ? getLoginBannedMessage(
+                                      this.$t.bind(this),
+                                      adminEmail
+                                  )
+                                : this.$t('emailOContra');
+                            this.showUserNotActiveInfo = userNotActive;
+                            this.showUserBannedInfo = userBanned;
+                            dialogs.message(message, {
+                                duration: 10,
+                                estado: 'error'
+                            });
+                            if (error) {
+                                this.error = error.error;
+                            }
+                        } finally {
                             this.loading = false;
-                            return;
                         }
-                        const userNotActive =
-                            error && error.message === 'user_not_active';
-                        const userBanned =
-                            error && error.message === 'user_banned';
-                        const adminEmail = this.config?.admin_email || '';
-                        const message = userNotActive
-                            ? getLoginInactiveAccountMessage(
-                                  this.$t.bind(this),
-                                  adminEmail
-                              )
-                            : userBanned
-                            ? getLoginBannedMessage(
-                                  this.$t.bind(this),
-                                  adminEmail
-                              )
-                            : this.$t('emailOContra');
-                        this.showUserNotActiveInfo = userNotActive;
-                        this.showUserBannedInfo = userBanned;
-                        dialogs.message(message, {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                        if (error) {
-                            this.error = error.error;
-                        }
-                        this.loading = false;
                     }
                 );
             } else {

@@ -108,5 +108,9 @@ test.describe('Login', () => {
     await expect(page.getByRole('alert')).toContainText(/desactivada/i, {
       timeout: 10000,
     });
+    await expect(page.getByRole('alert')).toContainText(
+      'admin@carpoolear.com.ar',
+      { timeout: 10000 }
+    );
   });
 });
