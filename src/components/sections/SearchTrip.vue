@@ -77,6 +77,8 @@
                     <button
                         type="button"
                         class="trips-search__swap"
+                        data-testid="trips-search-swap"
+                        :aria-label="$t('invertirOrigenDestino')"
                         @click="swapCities"
                     >
                         <img
@@ -361,6 +363,7 @@ import {
     hydrateDateRangeSearch,
     hasAdvancedSearchFilters
 } from '../../utils/searchAdvancedFilters.js';
+import { swapSearchLocations } from '../../utils/swapSearchLocations.js';
 
 export default {
     name: 'search-trip',
@@ -617,10 +620,9 @@ export default {
             };
         },
         swapCities() {
-            let temp;
-            temp = this['to_town'];
-            this['to_town'] = Object.assign({}, this['from_town']);
-            this['from_town'] = Object.assign({}, temp);
+            const swapped = swapSearchLocations(this.from_town, this.to_town);
+            this.from_town = swapped.origin;
+            this.to_town = swapped.destination;
 
             if (!this.isMobile && this.autoSearch) {
                 this.emit();
@@ -758,17 +760,4 @@ export default {
     outline: none;
 }
 
-.swap-horizontal {
-    display: none;
-}
-
-@media only screen and (min-width: 992px) {
-    .swap-horizontal {
-        display: block;
-    }
-
-    .swap-vertical {
-        display: none;
-    }
-}
 </style>

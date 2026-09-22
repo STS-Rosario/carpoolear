@@ -1165,6 +1165,7 @@ const messages = {
         buscoConductor: 'Busco conductores',
         buscoPasajero: 'Busco Pasajero',
         encontraTuProximoViaje: 'Encontrá tu próximo viaje',
+        invertirOrigenDestino: 'Invertir origen y destino',
         compartiAutoTagline:
             'Compartí tu viaje, ahorrá dinero y cuidá el planeta',
         viajesPublicados: 'Viajes publicados',
@@ -4845,6 +4846,7 @@ const messages = {
         buscoConductor: 'Looking for drivers',
         buscoPasajero: 'Looking for Passengers',
         encontraTuProximoViaje: 'Find your next trip',
+        invertirOrigenDestino: 'Swap origin and destination',
         compartiAutoTagline:
             'Share the ride, save money, and care for the planet',
         viajesPublicados: 'Published trips',
