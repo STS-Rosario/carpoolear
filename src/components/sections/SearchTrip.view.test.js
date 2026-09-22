@@ -141,6 +141,19 @@ describe('SearchTrip origin destination swap', () => {
         );
     });
 
+    it('uses a narrower date field on desktop to leave room for the swap icon', () => {
+        const desktopBlock = cssSource.slice(cssSource.indexOf('@media (min-width: 992px)'));
+        expect(desktopBlock).toMatch(
+            /\.trips-search__field--date\s*\{[^}]*flex:\s*0\s+0\s+9\.5rem/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__field--date\s*\{[^}]*max-width:\s*9\.5rem/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__fields-row\s*\{[^}]*gap:\s*1\.25rem/
+        );
+    });
+
     it('shows vertical swap icon on mobile and horizontal icon on desktop', () => {
         expect(source).not.toMatch(/\.swap-horizontal\s*\{/);
         expect(cssSource).toMatch(
