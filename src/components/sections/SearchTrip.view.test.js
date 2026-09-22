@@ -116,15 +116,21 @@ describe('SearchTrip origin destination swap', () => {
         expect(source).toContain("$t('invertirOrigenDestino')");
     });
 
-    it('anchors the swap button inside the origin field wrapper for desktop positioning', () => {
-        const originBlock = source.slice(
-            source.indexOf('trips-search__field--origin'),
-            source.indexOf('trips-search__field--destiny')
+    it('places the swap button between the origin and destination fields', () => {
+        const fieldsRow = source.slice(
+            source.indexOf('trips-search__fields-row'),
+            source.indexOf('trips-search__filters')
         );
 
-        expect(originBlock).toContain('data-testid="trips-search-swap"');
-        expect(originBlock).toContain('swap-horizontal');
-        expect(originBlock).toContain('swap-vertical');
+        const originAt = fieldsRow.indexOf('trips-search__field--origin');
+        const swapAt = fieldsRow.indexOf('data-testid="trips-search-swap"');
+        const destinyAt = fieldsRow.indexOf('trips-search__field--destiny');
+
+        expect(originAt).toBeGreaterThan(-1);
+        expect(swapAt).toBeGreaterThan(originAt);
+        expect(destinyAt).toBeGreaterThan(swapAt);
+        expect(fieldsRow).toContain('swap-horizontal');
+        expect(fieldsRow).toContain('swap-vertical');
     });
 
     it('uses swapSearchLocations when swapping cities', () => {
@@ -132,11 +138,15 @@ describe('SearchTrip origin destination swap', () => {
         expect(source).toContain('swapSearchLocations(this.from_town, this.to_town)');
     });
 
-    it('positions the swap control relative to the origin field on desktop', () => {
-        expect(cssSource).toMatch(
-            /\.trips-search__field--origin\s*\{[^}]*position:\s*relative/
+    it('lays out the swap control as a flex item between fields on desktop', () => {
+        const desktopBlock = cssSource.slice(cssSource.indexOf('@media (min-width: 992px)'));
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*flex:\s*0\s+0\s+2rem/
         );
-        expect(cssSource).toMatch(
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*align-self:\s*flex-end/
+        );
+        expect(desktopBlock).not.toMatch(
             /\.trips-search__swap\s*\{[^}]*position:\s*absolute/
         );
     });

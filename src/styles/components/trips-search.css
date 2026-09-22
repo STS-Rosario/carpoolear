@@ -90,10 +90,6 @@
     gap: 0;
 }
 
-.trips-search__field--origin {
-    position: relative;
-}
-
 .trips-search__swap {
     display: flex;
     align-items: center;
@@ -105,6 +101,7 @@
     border: 0;
     background: transparent;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .trips-search__swap img {
@@ -416,16 +413,10 @@
         max-width: 9.5rem;
     }
 
-    .trips-search__field--origin {
-        position: relative;
-    }
-
     .trips-search__swap {
-        position: absolute;
-        top: 2.35rem;
-        right: -0.25rem;
-        margin: 0;
-        z-index: 1;
+        align-self: flex-end;
+        flex: 0 0 2rem;
+        margin: 0 0 calc(var(--ds-input-padding-y, 0.75rem) + 1px);
     }
 
     .trips-search__swap .swap-horizontal {

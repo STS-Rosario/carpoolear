@@ -48,51 +48,50 @@
 
             <div class="trips-search__fields">
                 <div class="trips-search__fields-row">
-                    <div class="trips-search__field trips-search__field--origin">
-                        <AppField
-                            :label="$t('origen')"
-                            optional
-                            icon-left="fa fa-map-marker"
-                        >
-                            <autocomplete
-                                :placeholder="$t('origen')"
-                                name="from_town"
-                                ref="from_town"
-                                :model-value="from_town.name"
-                                v-on:place_changed="(data) => getPlace(0, data)"
-                                :classes="'trips-search__autocomplete-input'"
-                                :country="allowForeignPoints ? null : 'AR'"
-                            ></autocomplete>
-                            <template #actionRight>
-                                <button
-                                    type="button"
-                                    class="trips-search__clear"
-                                    @click="resetInput('from_town')"
-                                >
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </button>
-                            </template>
-                        </AppField>
+                    <AppField
+                        class="trips-search__field trips-search__field--origin"
+                        :label="$t('origen')"
+                        optional
+                        icon-left="fa fa-map-marker"
+                    >
+                        <autocomplete
+                            :placeholder="$t('origen')"
+                            name="from_town"
+                            ref="from_town"
+                            :model-value="from_town.name"
+                            v-on:place_changed="(data) => getPlace(0, data)"
+                            :classes="'trips-search__autocomplete-input'"
+                            :country="allowForeignPoints ? null : 'AR'"
+                        ></autocomplete>
+                        <template #actionRight>
+                            <button
+                                type="button"
+                                class="trips-search__clear"
+                                @click="resetInput('from_town')"
+                            >
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </template>
+                    </AppField>
 
-                        <button
-                            type="button"
-                            class="trips-search__swap"
-                            data-testid="trips-search-swap"
-                            :aria-label="$t('invertirOrigenDestino')"
-                            @click="swapCities"
-                        >
-                            <img
-                                alt=""
-                                class="swap-horizontal"
-                                :src="swap_horizontal"
-                            />
-                            <img
-                                alt=""
-                                class="swap-vertical"
-                                :src="swap_vertical"
-                            />
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        class="trips-search__swap"
+                        data-testid="trips-search-swap"
+                        :aria-label="$t('invertirOrigenDestino')"
+                        @click="swapCities"
+                    >
+                        <img
+                            alt=""
+                            class="swap-horizontal"
+                            :src="swap_horizontal"
+                        />
+                        <img
+                            alt=""
+                            class="swap-vertical"
+                            :src="swap_vertical"
+                        />
+                    </button>
 
                     <AppField
                         class="trips-search__field trips-search__field--destiny"
