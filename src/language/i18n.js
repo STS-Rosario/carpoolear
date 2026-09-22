@@ -1175,7 +1175,6 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con Facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a',
-        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'o a nuestro Facebook así te ayudamos :)',
         noMostrar: 'No volver a mostrar',
         entendido: 'ENTENDIDO!',
@@ -1204,9 +1203,9 @@ const messages = {
         alIngresarApple: 'Al ingresar con Apple estas aceptando nuestros',
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
-            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a contacto@@carpoolear.com para solucionar el inconveniente.',
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a {adminEmail} para solucionar el inconveniente.',
         paraIngresarCuenta:
-            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a contacto@@carpoolear.com',
+            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a {adminEmail}',
         emailOContra: 'Email o password incorrecto.',
         solicitudEnviada:
             'Su solicitud ya fue enviada, aguarde un momento por favor.',
@@ -4856,7 +4855,6 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'If you were carpooling before 8/5/17, you need to enter the system using the "log in with Facebook" button to continue using the same user and recover your ratings. If you cannot log in, write to us at',
-        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'or to our Facebook so we can help you :)',
         noMostrar: 'Do not show again',
         entendido: 'GOT IT!',
@@ -4884,9 +4882,9 @@ const messages = {
         alIngresarApple: 'By logging in with Apple you are accepting our',
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
-            'Your account has been deactivated by the Carpoolear team. Contact us at contacto@@carpoolear.com to resolve the issue.',
+            'Your account has been deactivated by the Carpoolear team. Contact us at {adminEmail} to resolve the issue.',
         paraIngresarCuenta:
-            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at contacto@@carpoolear.com',
+            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at {adminEmail}',
         emailOContra: 'Incorrect email or password.',
         solicitudEnviada:
             'Your request has already been sent, please wait a moment.',
