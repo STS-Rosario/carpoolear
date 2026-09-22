@@ -108,6 +108,40 @@ describe('SearchTrip advanced filters', () => {
     });
 });
 
+describe('SearchTrip origin destination swap', () => {
+    it('renders a swap button between origin and destination with a stable test id', () => {
+        expect(source).toContain('data-testid="trips-search-swap"');
+        expect(source).toContain('class="trips-search__swap"');
+        expect(source).toContain('@click="swapCities"');
+        expect(source).toContain("$t('invertirOrigenDestino')");
+    });
+
+    it('anchors the swap button inside the origin field wrapper for desktop positioning', () => {
+        const originBlock = source.slice(
+            source.indexOf('trips-search__field--origin'),
+            source.indexOf('trips-search__field--destiny')
+        );
+
+        expect(originBlock).toContain('data-testid="trips-search-swap"');
+        expect(originBlock).toContain('swap-horizontal');
+        expect(originBlock).toContain('swap-vertical');
+    });
+
+    it('uses swapSearchLocations when swapping cities', () => {
+        expect(source).toContain("from '../../utils/swapSearchLocations.js'");
+        expect(source).toContain('swapSearchLocations(this.from_town, this.to_town)');
+    });
+
+    it('positions the swap control relative to the origin field on desktop', () => {
+        expect(cssSource).toMatch(
+            /\.trips-search__field--origin\s*\{[^}]*position:\s*relative/
+        );
+        expect(cssSource).toMatch(
+            /\.trips-search__swap\s*\{[^}]*position:\s*absolute/
+        );
+    });
+});
+
 describe('SearchTrip mobile submit', () => {
     it('shows a primary Buscar button on mobile with a stable test id', () => {
         expect(source).toContain('data-testid="trips-search-submit"');
