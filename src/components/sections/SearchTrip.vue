@@ -761,17 +761,4 @@ export default {
     outline: none;
 }
 
-.swap-horizontal {
-    display: none;
-}
-
-@media only screen and (min-width: 992px) {
-    .swap-horizontal {
-        display: block;
-    }
-
-    .swap-vertical {
-        display: none;
-    }
-}
 </style>

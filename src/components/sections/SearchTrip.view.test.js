@@ -140,6 +140,19 @@ describe('SearchTrip origin destination swap', () => {
             /\.trips-search__swap\s*\{[^}]*position:\s*absolute/
         );
     });
+
+    it('shows vertical swap icon on mobile and horizontal icon on desktop', () => {
+        expect(source).not.toMatch(/\.swap-horizontal\s*\{/);
+        expect(cssSource).toMatch(
+            /\.trips-search__swap\s+\.swap-horizontal\s*\{[^}]*display:\s*none/
+        );
+        expect(cssSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*\.trips-search__swap\s+\.swap-horizontal\s*\{[^}]*display:\s*block/
+        );
+        expect(cssSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*\.trips-search__swap\s+\.swap-vertical\s*\{[^}]*display:\s*none/
+        );
+    });
 });
 
 describe('SearchTrip mobile submit', () => {

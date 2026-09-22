@@ -114,6 +114,10 @@
         hue-rotate(176deg) brightness(92%) contrast(92%);
 }
 
+.trips-search__swap .swap-horizontal {
+    display: none;
+}
+
 .trips-search__clear {
     display: inline-flex;
     align-items: center;
@@ -417,6 +421,14 @@
         right: -1rem;
         margin: 0;
         z-index: 1;
+    }
+
+    .trips-search__swap .swap-horizontal {
+        display: block;
+    }
+
+    .trips-search__swap .swap-vertical {
+        display: none;
     }
 
     .trips-search__filters {
