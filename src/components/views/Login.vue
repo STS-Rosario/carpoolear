@@ -16,7 +16,7 @@
             <div class="alert alert-warning" role="alert" v-if="!isUnderstood">
                 {{ $t('recuperarDeFacebook') }}
                 <a :href="'mailto:' + config.admin_email">{{
-                    $t('carpoolearMail')
+                    config.admin_email
                 }}</a>
                 {{ $t('recuperarDeFacebook2') }}
                 <div class="row form-inline form-warning-login">
@@ -91,7 +91,7 @@
                             role="alert"
                             v-if="showUserBannedInfo"
                         >
-                            {{ $t('usuarioBanneado') }}
+                            {{ loginBannedMessage }}
                         </div>
                         <AppButton
                             v-jump
@@ -225,6 +225,10 @@ import AppAuthPage from '../ui/AppAuthPage.vue';
 import cache from '../../services/cache';
 import { isOfflineApiError } from '../../utils/apiErrors.js';
 import {
+    getLoginBannedMessage,
+    getLoginInactiveAccountMessage
+} from '../../utils/loginContactMessages.js';
+import {
     CARPOOLEAR_FACEBOOK_URL,
     CARPOOLEAR_INSTAGRAM_URL
 } from '../../utils/carpoolearSocialUrls.js';
@@ -291,6 +295,12 @@ export default {
             } else {
                 return 'col-sm-12 col-md-12';
             }
+        },
+        loginBannedMessage() {
+            return getLoginBannedMessage(
+                this.$t.bind(this),
+                this.config?.admin_email || ''
+            );
         }
     },
     methods: {
@@ -346,29 +356,38 @@ export default {
                         // router.rememberBack();
                     },
                     (error) => {
-                        if (isOfflineApiError(error)) {
+                        try {
+                            if (isOfflineApiError(error)) {
+                                return;
+                            }
+                            const userNotActive =
+                                error && error.message === 'user_not_active';
+                            const userBanned =
+                                error && error.message === 'user_banned';
+                            const adminEmail = this.config?.admin_email || '';
+                            const message = userNotActive
+                                ? getLoginInactiveAccountMessage(
+                                      this.$t.bind(this),
+                                      adminEmail
+                                  )
+                                : userBanned
+                                ? getLoginBannedMessage(
+                                      this.$t.bind(this),
+                                      adminEmail
+                                  )
+                                : this.$t('emailOContra');
+                            this.showUserNotActiveInfo = userNotActive;
+                            this.showUserBannedInfo = userBanned;
+                            dialogs.message(message, {
+                                duration: 10,
+                                estado: 'error'
+                            });
+                            if (error) {
+                                this.error = error.error;
+                            }
+                        } finally {
                             this.loading = false;
-                            return;
                         }
-                        const userNotActive =
-                            error && error.message === 'user_not_active';
-                        const userBanned =
-                            error && error.message === 'user_banned';
-                        const message = userNotActive
-                            ? this.$t('paraIngresarCuenta')
-                            : userBanned
-                            ? this.$t('usuarioBanneado')
-                            : this.$t('emailOContra');
-                        this.showUserNotActiveInfo = userNotActive;
-                        this.showUserBannedInfo = userBanned;
-                        dialogs.message(message, {
-                            duration: 10,
-                            estado: 'error'
-                        });
-                        if (error) {
-                            this.error = error.error;
-                        }
-                        this.loading = false;
                     }
                 );
             } else {

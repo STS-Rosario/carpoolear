@@ -29,3 +29,24 @@ describe('Login password visibility toggle', () => {
         expect(messages[locale].ocultarContrasena).toBeTruthy();
     });
 });
+
+describe('Login contact messages', () => {
+    it('uses config admin_email for banned and inactive account copy', () => {
+        expect(loginSource).toContain('loginContactMessages.js');
+        expect(loginSource).toContain('getLoginBannedMessage');
+        expect(loginSource).toContain('getLoginInactiveAccountMessage');
+        expect(loginSource).toContain('this.config?.admin_email');
+        expect(loginSource).toContain('config.admin_email');
+        expect(loginSource).not.toContain("$t('carpoolearMail')");
+    });
+
+    it.each(['arg', 'en'])(
+        'keeps login contact i18n keys parameterized in %s locale',
+        (locale) => {
+            expect(messages[locale].usuarioBanneado).toContain('{adminEmail}');
+            expect(messages[locale].paraIngresarCuenta).toContain('{adminEmail}');
+            expect(messages[locale].usuarioBanneado).not.toContain('@@');
+            expect(messages[locale].paraIngresarCuenta).not.toContain('@@');
+        }
+    );
+});
