@@ -1,12 +1,14 @@
 import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 
-/** Apple App Store ID (from https://apps.apple.com/app/carpoolear/id1045211385). */
-export const IOS_APP_STORE_APP_ID = '1045211385';
+export function resolveIosAppStoreAppId() {
+    const appId = import.meta.env.VITE_IOS_APP_STORE_APP_ID;
+    return appId ? String(appId).trim() : '';
+}
 
 export function getOpenAppStoreOptions() {
     if (Capacitor.getPlatform() === 'ios') {
-        return { appId: IOS_APP_STORE_APP_ID };
+        return { appId: resolveIosAppStoreAppId() };
     }
 
     return {};
