@@ -55,12 +55,16 @@ export function reportFiltersFromQuery(query = {}, today = new Date()) {
     };
 }
 
+/**
+ * Maps UI filters to the snake_case params used both in the page URL and in the API request.
+ * group_by/method fall back to the API defaults; blank optional filters are dropped.
+ */
 export function reportFiltersToQuery(filters) {
     const query = {
         from: filters.from,
         to: filters.to,
-        group_by: filters.groupBy,
-        method: filters.method
+        group_by: filters.groupBy || 'month',
+        method: filters.method || 'all'
     };
     const optional = {
         surface: filters.surface,

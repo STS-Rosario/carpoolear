@@ -1,4 +1,5 @@
 import TaggedApi from '../../classes/TaggedApi';
+import { reportFiltersToQuery } from '../../utils/identityVerificationReportFilters';
 
 class AdminApi extends TaggedApi {
     // modify user data.user with data
@@ -111,24 +112,10 @@ class AdminApi extends TaggedApi {
      * Filters: from, to (YYYY-MM-DD, required), groupBy, method, surface, platform, appVersion.
      */
     getIdentityVerificationReport(filters = {}) {
-        const params = {
-            from: filters.from,
-            to: filters.to,
-            group_by: filters.groupBy || 'month',
-            method: filters.method || 'all'
-        };
-        const optional = {
-            surface: filters.surface,
-            platform: filters.platform,
-            app_version: filters.appVersion
-        };
-        Object.keys(optional).forEach((key) => {
-            const value = optional[key] == null ? '' : String(optional[key]).trim();
-            if (value) {
-                params[key] = value;
-            }
-        });
-        return this.get('/api/admin/identity-verification-report', params);
+        return this.get(
+            '/api/admin/identity-verification-report',
+            reportFiltersToQuery(filters)
+        );
     }
 
     getMercadoPagoRejectedValidations(params = {}) {
