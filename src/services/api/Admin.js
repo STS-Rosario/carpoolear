@@ -106,6 +106,31 @@ class AdminApi extends TaggedApi {
         );
     }
 
+    /**
+     * Identity verification report (admin.identity.stats). Response is not wrapped in `data`.
+     * Filters: from, to (YYYY-MM-DD, required), groupBy, method, surface, platform, appVersion.
+     */
+    getIdentityVerificationReport(filters = {}) {
+        const params = {
+            from: filters.from,
+            to: filters.to,
+            group_by: filters.groupBy || 'month',
+            method: filters.method || 'all'
+        };
+        const optional = {
+            surface: filters.surface,
+            platform: filters.platform,
+            app_version: filters.appVersion
+        };
+        Object.keys(optional).forEach((key) => {
+            const value = optional[key] == null ? '' : String(optional[key]).trim();
+            if (value) {
+                params[key] = value;
+            }
+        });
+        return this.get('/api/admin/identity-verification-report', params);
+    }
+
     getMercadoPagoRejectedValidations(params = {}) {
         return this.get('/api/admin/mercado-pago-rejected-validations', params);
     }
