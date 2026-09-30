@@ -80,6 +80,14 @@ async function mountReport(url = ROUTE_PATH) {
     return { wrapper, router };
 }
 
+/** Types into a text/date input and commits it (change fires on blur/enter or when a date is picked). */
+async function commitInput(wrapper, selector, value) {
+    const input = wrapper.find(selector);
+    await input.setValue(value);
+    await input.trigger('change');
+    await flushPromises();
+}
+
 function rowText(wrapper, tableTestId, outcome) {
     return wrapper.find(`[data-testid="${tableTestId}"] [data-outcome="${outcome}"]`).text();
 }
@@ -218,5 +226,155 @@ describe('AdminIdentityVerificationReport states', () => {
         expect(apiMock.getIdentityVerificationReport).toHaveBeenCalledTimes(2);
         expect(wrapper.find('[data-testid="ivr-error"]').exists()).toBe(false);
         expect(wrapper.find('[data-testid="ivr-total-attempts"]').text()).toContain('150');
+    });
+});
+
+describe('AdminIdentityVerificationReport filters', () => {
+    it('reads the filters from the URL query, sends them and shows them in the form', async () => {
+        const { wrapper } = await mountReport(
+            `${ROUTE_PATH}?from=2026-09-17&to=2026-09-30&group_by=day&method=manual&surface=choice_cards&platform=ios&app_version=4.0.19`
+        );
+
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenCalledWith({
+            from: '2026-09-17',
+            to: '2026-09-30',
+            groupBy: 'day',
+            method: 'manual',
+            surface: 'choice_cards',
+            platform: 'ios',
+            appVersion: '4.0.19'
+        });
+        expect(wrapper.find('#ivr-filter-from').element.value).toBe('2026-09-17');
+        expect(wrapper.find('#ivr-filter-to').element.value).toBe('2026-09-30');
+        expect(wrapper.find('#ivr-filter-group-by').element.value).toBe('day');
+        expect(wrapper.find('#ivr-filter-method').element.value).toBe('manual');
+        expect(wrapper.find('#ivr-filter-surface').element.value).toBe('choice_cards');
+        expect(wrapper.find('#ivr-filter-platform').element.value).toBe('ios');
+        expect(wrapper.find('#ivr-filter-app-version').element.value).toBe('4.0.19');
+    });
+
+    it('offers month, week and day grouping and all, manual and Mercado Pago methods', async () => {
+        const { wrapper } = await mountReport();
+
+        const optionValues = (selector) =>
+            wrapper.findAll(`${selector} option`).map((option) => option.element.value);
+        expect(optionValues('#ivr-filter-group-by')).toEqual(['month', 'week', 'day']);
+        expect(optionValues('#ivr-filter-method')).toEqual(['all', 'manual', 'mercado_pago']);
+        expect(optionValues('#ivr-filter-platform')).toEqual(['', 'android', 'ios', 'web']);
+        expect(wrapper.find('#ivr-filter-method').text()).toContain('Mercado Pago');
+    });
+
+    it('changing the method updates the URL and refetches', async () => {
+        const { wrapper, router } = await mountReport();
+
+        await wrapper.find('#ivr-filter-method').setValue('mercado_pago');
+        await flushPromises();
+
+        expect(router.currentRoute.value.query).toMatchObject({ method: 'mercado_pago', group_by: 'month' });
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenCalledTimes(2);
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenLastCalledWith(
+            expect.objectContaining({ method: 'mercado_pago', from: '2026-05-01', to: '2026-10-15' })
+        );
+    });
+
+    it('changing the grouping refetches and renames the period column', async () => {
+        const { wrapper, router } = await mountReport();
+
+        await wrapper.find('#ivr-filter-group-by').setValue('week');
+        await flushPromises();
+
+        expect(router.currentRoute.value.query.group_by).toBe('week');
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenLastCalledWith(
+            expect.objectContaining({ groupBy: 'week' })
+        );
+        expect(wrapper.find('[data-testid="ivr-series-table"] thead').text()).toContain('Semana (lunes)');
+    });
+
+    it('changing a date refetches with the new range', async () => {
+        const { wrapper, router } = await mountReport();
+
+        await commitInput(wrapper, '#ivr-filter-from', '2026-09-17');
+
+        expect(router.currentRoute.value.query.from).toBe('2026-09-17');
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenLastCalledWith(
+            expect.objectContaining({ from: '2026-09-17', to: '2026-10-15' })
+        );
+    });
+
+    it('sends optional platform, surface and app version filters, trimmed', async () => {
+        const { wrapper, router } = await mountReport();
+
+        await wrapper.find('#ivr-filter-platform').setValue('android');
+        await flushPromises();
+        await commitInput(wrapper, '#ivr-filter-app-version', ' 4.0.19 ');
+        await commitInput(wrapper, '#ivr-filter-surface', 'pending_switch');
+
+        expect(router.currentRoute.value.query).toMatchObject({
+            platform: 'android',
+            app_version: '4.0.19',
+            surface: 'pending_switch'
+        });
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenLastCalledWith(
+            expect.objectContaining({ platform: 'android', appVersion: '4.0.19', surface: 'pending_switch' })
+        );
+    });
+
+    it('warns that manual attempts are not tracked by client-context filters', async () => {
+        const { wrapper } = await mountReport(`${ROUTE_PATH}?platform=android`);
+
+        expect(wrapper.find('[data-testid="ivr-client-filters-note"]').exists()).toBe(true);
+    });
+
+    it('does not refetch and explains the problem when the range is inverted', async () => {
+        const { wrapper, router } = await mountReport();
+
+        await commitInput(wrapper, '#ivr-filter-from', '2026-11-01');
+
+        expect(wrapper.find('[data-testid="ivr-filters-error"]').text()).toContain('igual o posterior');
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenCalledTimes(1);
+        expect(router.currentRoute.value.query.from).toBeUndefined();
+    });
+
+    it('refetches when the URL query changes (back/forward navigation)', async () => {
+        const { router } = await mountReport();
+
+        await router.push(`${ROUTE_PATH}?from=2026-09-01&to=2026-09-30&group_by=day&method=all`);
+        await flushPromises();
+
+        expect(apiMock.getIdentityVerificationReport).toHaveBeenLastCalledWith(
+            expect.objectContaining({ from: '2026-09-01', to: '2026-09-30', groupBy: 'day' })
+        );
+    });
+
+    it('ignores a slow response that arrives after a newer one', async () => {
+        const slow = deferred();
+        apiMock.getIdentityVerificationReport.mockReturnValueOnce(slow.promise);
+        const newer = makeIdentityVerificationReport();
+        newer.totals.attempts = 999;
+        apiMock.getIdentityVerificationReport.mockResolvedValueOnce(newer);
+
+        const { wrapper } = await mountReport();
+        await wrapper.find('#ivr-filter-method').setValue('manual');
+        await flushPromises();
+        slow.resolve(makeIdentityVerificationReport());
+        await flushPromises();
+
+        expect(wrapper.find('[data-testid="ivr-total-attempts"]').text()).toContain('999');
+    });
+
+    it('shows only the manual section when filtering by manual', async () => {
+        const { wrapper } = await mountReport(`${ROUTE_PATH}?method=manual`);
+
+        expect(wrapper.find('[data-testid="ivr-manual-table"]').exists()).toBe(true);
+        expect(wrapper.find('[data-testid="ivr-automatic-table"]').exists()).toBe(false);
+        expect(wrapper.find('[data-testid="ivr-funnel"]').exists()).toBe(false);
+    });
+
+    it('shows only Mercado Pago sections when filtering by Mercado Pago', async () => {
+        const { wrapper } = await mountReport(`${ROUTE_PATH}?method=mercado_pago`);
+
+        expect(wrapper.find('[data-testid="ivr-manual-table"]').exists()).toBe(false);
+        expect(wrapper.find('[data-testid="ivr-automatic-table"]').exists()).toBe(true);
+        expect(wrapper.find('[data-testid="ivr-funnel"]').exists()).toBe(true);
     });
 });
