@@ -5,6 +5,7 @@ import messages from './i18n';
 
 const SOURCES = [
     '../components/views/AdminIdentityVerificationReport.vue',
+    '../components/elements/IdentityVerificationOutcomeTable.vue',
     '../utils/identityVerificationReportData.js',
     '../utils/identityVerificationReportFilters.js'
 ];

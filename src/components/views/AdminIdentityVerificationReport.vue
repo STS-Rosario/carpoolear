@@ -15,7 +15,6 @@
                             <input
                                 id="ivr-filter-from"
                                 type="date"
-                                class="form-control"
                                 :value="filters.from"
                                 @change="onFilterChange('from', $event.target.value)"
                             />
@@ -24,7 +23,6 @@
                             <input
                                 id="ivr-filter-to"
                                 type="date"
-                                class="form-control"
                                 :value="filters.to"
                                 @change="onFilterChange('to', $event.target.value)"
                             />
@@ -32,7 +30,6 @@
                         <AppField label-for="ivr-filter-group-by" :label="$t('adminIvrAgruparPor')">
                             <select
                                 id="ivr-filter-group-by"
-                                class="form-control"
                                 :value="filters.groupBy"
                                 @change="onFilterChange('groupBy', $event.target.value)"
                             >
@@ -44,7 +41,6 @@
                         <AppField label-for="ivr-filter-method" :label="$t('adminIvrMetodo')">
                             <select
                                 id="ivr-filter-method"
-                                class="form-control"
                                 :value="filters.method"
                                 @change="onFilterChange('method', $event.target.value)"
                             >
@@ -56,7 +52,6 @@
                         <AppField label-for="ivr-filter-platform" :label="$t('adminIvrPlataforma')" optional>
                             <select
                                 id="ivr-filter-platform"
-                                class="form-control"
                                 :value="filters.platform"
                                 @change="onFilterChange('platform', $event.target.value)"
                             >
@@ -70,7 +65,6 @@
                             <input
                                 id="ivr-filter-surface"
                                 type="text"
-                                class="form-control"
                                 list="ivr-surface-suggestions"
                                 maxlength="64"
                                 :value="filters.surface"
@@ -85,7 +79,6 @@
                             <input
                                 id="ivr-filter-app-version"
                                 type="text"
-                                class="form-control"
                                 maxlength="64"
                                 :value="filters.appVersion"
                                 @change="onFilterChange('appVersion', $event.target.value)"
@@ -132,22 +125,7 @@
                             <section v-if="showManual" class="ivr-section">
                                 <h3>{{ $t('adminIvrSeccionManual') }}</h3>
                                 <p class="ivr-help">{{ $t('adminIvrSeccionManualAyuda') }}</p>
-                                <table class="table table-bordered ivr-outcomes-table" data-testid="ivr-manual-table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">{{ $t('adminIvrResultado') }}</th>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrCantidad') }}</th>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrPorcentaje') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="row in manualRows" :key="row.key" :data-outcome="row.key">
-                                            <th scope="row">{{ $t(row.labelKey) }}</th>
-                                            <td class="ivr-num">{{ row.count }}</td>
-                                            <td class="ivr-num">{{ formatPct(row.pct) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <IdentityVerificationOutcomeTable :rows="manualRows" data-testid="ivr-manual-table" />
                                 <p class="ivr-help">{{ $t('adminIvrInconclusasAyuda') }}</p>
                                 <IdentityVerificationOutcomesChart
                                     :chart-data="manualChartData"
@@ -158,22 +136,7 @@
                             <section v-if="showAutomatic" class="ivr-section">
                                 <h3>{{ $t('adminIvrSeccionAutomatica') }}</h3>
                                 <p class="ivr-help">{{ $t('adminIvrSeccionAutomaticaAyuda') }}</p>
-                                <table class="table table-bordered ivr-outcomes-table" data-testid="ivr-automatic-table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">{{ $t('adminIvrResultado') }}</th>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrCantidad') }}</th>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrPorcentaje') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="row in automaticRows" :key="row.key" :data-outcome="row.key">
-                                            <th scope="row">{{ $t(row.labelKey) }}</th>
-                                            <td class="ivr-num">{{ row.count }}</td>
-                                            <td class="ivr-num">{{ formatPct(row.pct) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <IdentityVerificationOutcomeTable :rows="automaticRows" data-testid="ivr-automatic-table" />
                                 <IdentityVerificationOutcomesChart
                                     :chart-data="automaticChartData"
                                     :title="$t('adminIvrGraficoAutomatica')"
@@ -253,24 +216,24 @@
                                 </div>
                             </div>
                             <div class="ivr-sections">
-                            <table class="table table-bordered ivr-outcomes-table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">{{ $t('adminIvrFunnelResolucion') }}</th>
-                                        <th scope="col" class="ivr-num">{{ $t('adminIvrCantidad') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="row in funnelTableRows" :key="row.key" :data-funnel-row="row.key">
-                                        <th scope="row">{{ $t(row.labelKey) }}</th>
-                                        <td class="ivr-num">{{ row.count }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <IdentityVerificationFunnelChart
-                                :chart-data="funnelChartData"
-                                :title="$t('adminIvrGraficoFunnel')"
-                            />
+                                <table class="table table-bordered ivr-outcomes-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">{{ $t('adminIvrFunnelResolucion') }}</th>
+                                            <th scope="col" class="ivr-num">{{ $t('adminIvrCantidad') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="row in funnelTableRows" :key="row.key" :data-funnel-row="row.key">
+                                            <th scope="row">{{ $t(row.labelKey) }}</th>
+                                            <td class="ivr-num">{{ row.count }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <IdentityVerificationFunnelChart
+                                    :chart-data="funnelChartData"
+                                    :title="$t('adminIvrGraficoFunnel')"
+                                />
                             </div>
                         </section>
                     </template>
@@ -285,6 +248,7 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import IdentityVerificationFunnelChart from '../elements/IdentityVerificationFunnelChart.vue';
+import IdentityVerificationOutcomeTable from '../elements/IdentityVerificationOutcomeTable.vue';
 import IdentityVerificationOutcomesChart from '../elements/IdentityVerificationOutcomesChart.vue';
 import { AdminApi } from '../../services/api';
 import dayjs from '../../dayjs';
@@ -317,6 +281,7 @@ export default {
         AppButton,
         AppField,
         IdentityVerificationFunnelChart,
+        IdentityVerificationOutcomeTable,
         IdentityVerificationOutcomesChart
     },
     data() {
@@ -464,10 +429,31 @@ export default {
     margin-bottom: 16px;
 }
 
-.ivr-filters > * {
-    flex: 1 1 150px;
-    min-width: 140px;
-    max-width: 220px;
+.ivr-filters :deep(.app-field) {
+    flex: 1 1 140px;
+    max-width: 200px;
+    margin-bottom: 0;
+}
+
+/* Native controls inside AppField: the field wrapper draws the border. */
+.ivr-filters input,
+.ivr-filters select {
+    width: 100%;
+    border: 0;
+    border-radius: var(--ds-radius-input);
+    background: transparent;
+    box-shadow: none;
+    padding: var(--ds-input-padding-y) var(--ds-input-padding-x);
+    color: var(--ds-input-text);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.ivr-filters input:focus,
+.ivr-filters select:focus {
+    outline: none;
 }
 
 .ivr-error {
