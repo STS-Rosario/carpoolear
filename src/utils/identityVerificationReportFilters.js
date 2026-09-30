@@ -3,6 +3,8 @@ import dayjs from '../dayjs';
 export const REPORT_GROUP_BY_OPTIONS = ['month', 'week', 'day'];
 export const REPORT_METHOD_OPTIONS = ['all', 'manual', 'mercado_pago'];
 export const REPORT_PLATFORM_OPTIONS = ['android', 'ios', 'web'];
+/** Surfaces the app currently sends with identity verification events (free text in the API). */
+export const REPORT_SURFACE_SUGGESTIONS = ['choice_cards', 'pending_switch'];
 
 /** Identity verification events are recorded from this day on (no backfill). */
 export const REPORT_DATA_AVAILABLE_FROM = '2026-09-17';

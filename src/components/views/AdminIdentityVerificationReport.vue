@@ -10,6 +10,96 @@
                         {{ $t('adminIvrNotaDatosDesde', { date: dataAvailableFromLabel }) }}
                     </p>
 
+                    <form class="ivr-filters" :aria-label="$t('adminIvrFiltros')" @submit.prevent>
+                        <AppField label-for="ivr-filter-from" :label="$t('adminIvrDesde')">
+                            <input
+                                id="ivr-filter-from"
+                                type="date"
+                                class="form-control"
+                                :value="filters.from"
+                                @change="onFilterChange('from', $event.target.value)"
+                            />
+                        </AppField>
+                        <AppField label-for="ivr-filter-to" :label="$t('adminIvrHasta')">
+                            <input
+                                id="ivr-filter-to"
+                                type="date"
+                                class="form-control"
+                                :value="filters.to"
+                                @change="onFilterChange('to', $event.target.value)"
+                            />
+                        </AppField>
+                        <AppField label-for="ivr-filter-group-by" :label="$t('adminIvrAgruparPor')">
+                            <select
+                                id="ivr-filter-group-by"
+                                class="form-control"
+                                :value="filters.groupBy"
+                                @change="onFilterChange('groupBy', $event.target.value)"
+                            >
+                                <option v-for="option in groupByOptions" :key="option.value" :value="option.value">
+                                    {{ $t(option.labelKey) }}
+                                </option>
+                            </select>
+                        </AppField>
+                        <AppField label-for="ivr-filter-method" :label="$t('adminIvrMetodo')">
+                            <select
+                                id="ivr-filter-method"
+                                class="form-control"
+                                :value="filters.method"
+                                @change="onFilterChange('method', $event.target.value)"
+                            >
+                                <option v-for="option in methodOptions" :key="option.value" :value="option.value">
+                                    {{ $t(option.labelKey) }}
+                                </option>
+                            </select>
+                        </AppField>
+                        <AppField label-for="ivr-filter-platform" :label="$t('adminIvrPlataforma')" optional>
+                            <select
+                                id="ivr-filter-platform"
+                                class="form-control"
+                                :value="filters.platform"
+                                @change="onFilterChange('platform', $event.target.value)"
+                            >
+                                <option value="">{{ $t('adminIvrPlataformaTodas') }}</option>
+                                <option v-for="platform in platformOptions" :key="platform" :value="platform">
+                                    {{ platform }}
+                                </option>
+                            </select>
+                        </AppField>
+                        <AppField label-for="ivr-filter-surface" :label="$t('adminIvrSuperficie')" optional>
+                            <input
+                                id="ivr-filter-surface"
+                                type="text"
+                                class="form-control"
+                                list="ivr-surface-suggestions"
+                                maxlength="64"
+                                :value="filters.surface"
+                                @change="onFilterChange('surface', $event.target.value)"
+                                @keydown.enter="onFilterChange('surface', $event.target.value)"
+                            />
+                            <datalist id="ivr-surface-suggestions">
+                                <option v-for="surface in surfaceSuggestions" :key="surface" :value="surface"></option>
+                            </datalist>
+                        </AppField>
+                        <AppField label-for="ivr-filter-app-version" :label="$t('adminIvrVersionApp')" optional>
+                            <input
+                                id="ivr-filter-app-version"
+                                type="text"
+                                class="form-control"
+                                maxlength="64"
+                                :value="filters.appVersion"
+                                @change="onFilterChange('appVersion', $event.target.value)"
+                                @keydown.enter="onFilterChange('appVersion', $event.target.value)"
+                            />
+                        </AppField>
+                    </form>
+                    <p v-if="filtersError" class="alert alert-warning" data-testid="ivr-filters-error">
+                        {{ $t(filtersError) }}
+                    </p>
+                    <p v-if="hasClientContextFilter && showManual" class="ivr-help" data-testid="ivr-client-filters-note">
+                        {{ $t('adminIvrNotaFiltrosCliente') }}
+                    </p>
+
                     <div v-if="loading" class="alert alert-info" data-testid="ivr-loading">
                         {{ $t('adminIvrCargando') }}
                     </div>
@@ -28,18 +118,18 @@
                                 <span class="ivr-card__label">{{ $t('adminIvrIntentosTotales') }}</span>
                                 <span class="ivr-card__value">{{ report.totals.attempts }}</span>
                             </div>
-                            <div class="ivr-card" data-testid="ivr-manual-attempts">
+                            <div v-if="showManual" class="ivr-card" data-testid="ivr-manual-attempts">
                                 <span class="ivr-card__label">{{ $t('adminIvrIntentosManuales') }}</span>
                                 <span class="ivr-card__value">{{ report.totals.manual.attempts }}</span>
                             </div>
-                            <div class="ivr-card" data-testid="ivr-automatic-attempts">
+                            <div v-if="showAutomatic" class="ivr-card" data-testid="ivr-automatic-attempts">
                                 <span class="ivr-card__label">{{ $t('adminIvrIntentosMercadoPago') }}</span>
                                 <span class="ivr-card__value">{{ report.totals.automatic.attempts }}</span>
                             </div>
                         </div>
 
                         <div class="ivr-sections">
-                            <section class="ivr-section">
+                            <section v-if="showManual" class="ivr-section">
                                 <h3>{{ $t('adminIvrSeccionManual') }}</h3>
                                 <p class="ivr-help">{{ $t('adminIvrSeccionManualAyuda') }}</p>
                                 <table class="table table-bordered ivr-outcomes-table" data-testid="ivr-manual-table">
@@ -61,7 +151,7 @@
                                 <p class="ivr-help">{{ $t('adminIvrInconclusasAyuda') }}</p>
                             </section>
 
-                            <section class="ivr-section">
+                            <section v-if="showAutomatic" class="ivr-section">
                                 <h3>{{ $t('adminIvrSeccionAutomatica') }}</h3>
                                 <p class="ivr-help">{{ $t('adminIvrSeccionAutomaticaAyuda') }}</p>
                                 <table class="table table-bordered ivr-outcomes-table" data-testid="ivr-automatic-table">
@@ -91,35 +181,47 @@
                                         <tr>
                                             <th scope="col" rowspan="2">{{ $t(periodHeader) }}</th>
                                             <th scope="col" rowspan="2" class="ivr-num">{{ $t('adminIvrIntentosTotales') }}</th>
-                                            <th scope="colgroup" :colspan="manualOutcomes.length + 1">{{ $t('adminIvrMetodoManual') }}</th>
-                                            <th scope="colgroup" :colspan="automaticOutcomes.length + 1">{{ $t('adminIvrMetodoMercadoPago') }}</th>
+                                            <th v-if="showManual" scope="colgroup" :colspan="manualOutcomes.length + 1">
+                                                {{ $t('adminIvrMetodoManual') }}
+                                            </th>
+                                            <th v-if="showAutomatic" scope="colgroup" :colspan="automaticOutcomes.length + 1">
+                                                {{ $t('adminIvrMetodoMercadoPago') }}
+                                            </th>
                                         </tr>
                                         <tr>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrIntentos') }}</th>
-                                            <th v-for="row in manualRows" :key="`m-${row.key}`" scope="col" class="ivr-num">
-                                                {{ $t(row.labelKey) }}
-                                            </th>
-                                            <th scope="col" class="ivr-num">{{ $t('adminIvrIntentos') }}</th>
-                                            <th v-for="row in automaticRows" :key="`a-${row.key}`" scope="col" class="ivr-num">
-                                                {{ $t(row.labelKey) }}
-                                            </th>
+                                            <template v-if="showManual">
+                                                <th scope="col" class="ivr-num">{{ $t('adminIvrIntentos') }}</th>
+                                                <th v-for="row in manualRows" :key="`m-${row.key}`" scope="col" class="ivr-num">
+                                                    {{ $t(row.labelKey) }}
+                                                </th>
+                                            </template>
+                                            <template v-if="showAutomatic">
+                                                <th scope="col" class="ivr-num">{{ $t('adminIvrIntentos') }}</th>
+                                                <th v-for="row in automaticRows" :key="`a-${row.key}`" scope="col" class="ivr-num">
+                                                    {{ $t(row.labelKey) }}
+                                                </th>
+                                            </template>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="row in seriesRows" :key="row.period">
                                             <th scope="row">{{ row.period }}</th>
                                             <td class="ivr-num">{{ row.attempts }}</td>
-                                            <td class="ivr-num">{{ row.manual.attempts }}</td>
-                                            <td v-for="key in manualOutcomes" :key="`m-${key}`" class="ivr-num">{{ row.manual[key] }}</td>
-                                            <td class="ivr-num">{{ row.automatic.attempts }}</td>
-                                            <td v-for="key in automaticOutcomes" :key="`a-${key}`" class="ivr-num">{{ row.automatic[key] }}</td>
+                                            <template v-if="showManual">
+                                                <td class="ivr-num">{{ row.manual.attempts }}</td>
+                                                <td v-for="key in manualOutcomes" :key="`m-${key}`" class="ivr-num">{{ row.manual[key] }}</td>
+                                            </template>
+                                            <template v-if="showAutomatic">
+                                                <td class="ivr-num">{{ row.automatic.attempts }}</td>
+                                                <td v-for="key in automaticOutcomes" :key="`a-${key}`" class="ivr-num">{{ row.automatic[key] }}</td>
+                                            </template>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </section>
 
-                        <section class="ivr-section" data-testid="ivr-funnel">
+                        <section v-if="showAutomatic" class="ivr-section" data-testid="ivr-funnel">
                             <h3>{{ $t('adminIvrSeccionFunnel') }}</h3>
                             <p class="ivr-help">{{ $t('adminIvrFunnelAyuda') }}</p>
                             <div class="ivr-cards">
@@ -167,11 +269,16 @@
 <script>
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
 import { AdminApi } from '../../services/api';
 import dayjs from '../../dayjs';
 import {
     REPORT_DATA_AVAILABLE_FROM,
-    reportFiltersFromQuery
+    REPORT_PLATFORM_OPTIONS,
+    REPORT_SURFACE_SUGGESTIONS,
+    reportFiltersFromQuery,
+    reportFiltersToQuery,
+    validateReportFilters
 } from '../../utils/identityVerificationReportFilters';
 import {
     AUTOMATIC_OUTCOMES,
@@ -189,7 +296,8 @@ export default {
     name: 'admin-identity-verification-report',
     components: {
         AdminLayout,
-        AppButton
+        AppButton,
+        AppField
     },
     data() {
         return {
@@ -197,6 +305,19 @@ export default {
             report: null,
             loading: false,
             loadError: false,
+            filtersError: null,
+            groupByOptions: [
+                { value: 'month', labelKey: 'adminIvrAgruparMes' },
+                { value: 'week', labelKey: 'adminIvrAgruparSemana' },
+                { value: 'day', labelKey: 'adminIvrAgruparDia' }
+            ],
+            methodOptions: [
+                { value: 'all', labelKey: 'adminIvrMetodoTodos' },
+                { value: 'manual', labelKey: 'adminIvrMetodoManual' },
+                { value: 'mercado_pago', labelKey: 'adminIvrMetodoMercadoPago' }
+            ],
+            platformOptions: REPORT_PLATFORM_OPTIONS,
+            surfaceSuggestions: REPORT_SURFACE_SUGGESTIONS,
             manualOutcomes: MANUAL_OUTCOMES,
             automaticOutcomes: AUTOMATIC_OUTCOMES
         };
@@ -222,22 +343,65 @@ export default {
         },
         periodHeader() {
             return periodHeaderKey(this.filters.groupBy);
+        },
+        showManual() {
+            return this.filters.method !== 'mercado_pago';
+        },
+        showAutomatic() {
+            return this.filters.method !== 'manual';
+        },
+        hasClientContextFilter() {
+            return Boolean(this.filters.surface || this.filters.platform || this.filters.appVersion);
+        }
+    },
+    watch: {
+        '$route.query'(query) {
+            // Ignore the query change of the navigation that leaves this page.
+            if (this.$route.path !== this.routePath) {
+                return;
+            }
+            this.filters = reportFiltersFromQuery(query);
+            this.filtersError = null;
+            this.fetchReport();
         }
     },
     methods: {
         formatPct,
+        onFilterChange(key, rawValue) {
+            const value = typeof rawValue === 'string' ? rawValue.trim() : rawValue;
+            const next = { ...this.filters, [key]: value };
+            this.filters = next;
+            this.filtersError = validateReportFilters(next);
+            if (this.filtersError) {
+                return;
+            }
+            // The $route.query watcher refetches; an unchanged query is a no-op.
+            this.$router.replace({ query: reportFiltersToQuery(next) });
+        },
         async fetchReport() {
+            const requestId = ++this.requestSeq;
             this.loading = true;
             this.loadError = false;
             try {
-                this.report = await this.adminApi.getIdentityVerificationReport({ ...this.filters });
+                const report = await this.adminApi.getIdentityVerificationReport({ ...this.filters });
+                if (requestId === this.requestSeq) {
+                    this.report = report;
+                }
             } catch (e) {
-                this.report = null;
-                this.loadError = true;
+                if (requestId === this.requestSeq) {
+                    this.report = null;
+                    this.loadError = true;
+                }
             } finally {
-                this.loading = false;
+                if (requestId === this.requestSeq) {
+                    this.loading = false;
+                }
             }
         }
+    },
+    created() {
+        this.requestSeq = 0;
+        this.routePath = this.$route.path;
     },
     mounted() {
         this.adminApi = new AdminApi();
@@ -261,6 +425,20 @@ export default {
     padding: 6px 10px;
     display: inline-block;
     margin-bottom: 16px;
+}
+
+.ivr-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+}
+
+.ivr-filters > * {
+    flex: 1 1 150px;
+    min-width: 140px;
+    max-width: 220px;
 }
 
 .ivr-error {
