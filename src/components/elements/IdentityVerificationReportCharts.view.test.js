@@ -9,7 +9,7 @@ vi.mock('vue-chartjs', async () => {
     const { h } = await import('vue');
     const stub = (type) => ({
         name: `${type}ChartStub`,
-        props: ['chartData', 'chartOptions', 'height'],
+        props: ['chartData', 'chartOptions', 'styles'],
         render() {
             return h('div', { class: 'chart-stub', 'data-chart-type': type });
         }
@@ -47,6 +47,17 @@ describe('IdentityVerificationOutcomesChart', () => {
         expect(options.plugins.title).toMatchObject({ display: true, text: 'Resultados por período' });
         expect(options.maintainAspectRatio).toBe(false);
     });
+
+    it('fills the height of its container instead of the default 400px canvas', () => {
+        const wrapper = mount(IdentityVerificationOutcomesChart, {
+            props: { chartData: outcomesData }
+        });
+
+        expect(wrapper.findComponent({ name: 'barChartStub' }).props('styles')).toEqual({
+            position: 'relative',
+            height: '100%'
+        });
+    });
 });
 
 describe('IdentityVerificationFunnelChart', () => {
@@ -62,6 +73,17 @@ describe('IdentityVerificationFunnelChart', () => {
             display: true,
             text: 'Resolución de los fallos'
         });
-        expect(doughnut.props('chartOptions').plugins.legend.position).toBe('right');
+        expect(doughnut.props('chartOptions').plugins.legend.position).toBe('bottom');
+    });
+
+    it('fills the height of its container instead of the default 400px canvas', () => {
+        const wrapper = mount(IdentityVerificationFunnelChart, {
+            props: { chartData: funnelData }
+        });
+
+        expect(wrapper.findComponent({ name: 'doughnutChartStub' }).props('styles')).toEqual({
+            position: 'relative',
+            height: '100%'
+        });
     });
 });
