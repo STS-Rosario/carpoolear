@@ -97,3 +97,29 @@ describe('visibleAdminNavItems', () => {
         );
     });
 });
+
+describe('identity verification report nav item', () => {
+    it('is visible to admins with the identity stats permission, right after MP rejections', () => {
+        const names = visibleAdminNavItems({
+            is_admin: true,
+            admin_permissions: [ADMIN_PERMISSIONS.IdentityMpReview, ADMIN_PERMISSIONS.IdentityStats]
+        }).map((item) => item.name);
+
+        expect(names).toEqual(['admin-mp-rejected-validations', 'admin-identity-verification-report']);
+    });
+
+    it('is hidden without the identity stats permission', () => {
+        const names = visibleAdminNavItems({
+            is_admin: true,
+            admin_permissions: [ADMIN_PERMISSIONS.IdentityManualReview, ADMIN_PERMISSIONS.IdentityMpReview]
+        }).map((item) => item.name);
+
+        expect(names).not.toContain('admin-identity-verification-report');
+    });
+
+    it('uses the report nav label', () => {
+        const item = ADMIN_NAV_ITEMS.find((navItem) => navItem.name === 'admin-identity-verification-report');
+
+        expect(item.labelKey).toBe('adminNavReporteVerificaciones');
+    });
+});
