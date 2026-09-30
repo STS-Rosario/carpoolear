@@ -149,6 +149,10 @@
                                     </tbody>
                                 </table>
                                 <p class="ivr-help">{{ $t('adminIvrInconclusasAyuda') }}</p>
+                                <IdentityVerificationOutcomesChart
+                                    :chart-data="manualChartData"
+                                    :title="$t('adminIvrGraficoManual')"
+                                />
                             </section>
 
                             <section v-if="showAutomatic" class="ivr-section">
@@ -170,6 +174,10 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <IdentityVerificationOutcomesChart
+                                    :chart-data="automaticChartData"
+                                    :title="$t('adminIvrGraficoAutomatica')"
+                                />
                             </section>
                         </div>
 
@@ -244,6 +252,7 @@
                                     <span class="ivr-card__value">{{ report.funnel.unlinked_failures }}</span>
                                 </div>
                             </div>
+                            <div class="ivr-sections">
                             <table class="table table-bordered ivr-outcomes-table">
                                 <thead>
                                     <tr>
@@ -258,6 +267,11 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <IdentityVerificationFunnelChart
+                                :chart-data="funnelChartData"
+                                :title="$t('adminIvrGraficoFunnel')"
+                            />
+                            </div>
                         </section>
                     </template>
                 </div>
@@ -270,6 +284,8 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
+import IdentityVerificationFunnelChart from '../elements/IdentityVerificationFunnelChart.vue';
+import IdentityVerificationOutcomesChart from '../elements/IdentityVerificationOutcomesChart.vue';
 import { AdminApi } from '../../services/api';
 import dayjs from '../../dayjs';
 import {
@@ -285,9 +301,11 @@ import {
     MANUAL_OUTCOMES,
     automaticOutcomeRows,
     formatPct,
+    funnelChartData,
     funnelRows,
     isReportEmpty,
     manualOutcomeRows,
+    outcomeChartData,
     periodHeaderKey,
     seriesTableRows
 } from '../../utils/identityVerificationReportData';
@@ -297,7 +315,9 @@ export default {
     components: {
         AdminLayout,
         AppButton,
-        AppField
+        AppField,
+        IdentityVerificationFunnelChart,
+        IdentityVerificationOutcomesChart
     },
     data() {
         return {
@@ -337,6 +357,15 @@ export default {
         },
         seriesRows() {
             return seriesTableRows(this.report && this.report.series);
+        },
+        manualChartData() {
+            return outcomeChartData(this.report && this.report.series, 'manual', (key) => this.$t(key));
+        },
+        automaticChartData() {
+            return outcomeChartData(this.report && this.report.series, 'automatic', (key) => this.$t(key));
+        },
+        funnelChartData() {
+            return funnelChartData(this.report && this.report.funnel, (key) => this.$t(key));
         },
         funnelTableRows() {
             return funnelRows(this.report && this.report.funnel);
