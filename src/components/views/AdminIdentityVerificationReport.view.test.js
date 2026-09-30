@@ -378,3 +378,54 @@ describe('AdminIdentityVerificationReport filters', () => {
         expect(wrapper.find('[data-testid="ivr-funnel"]').exists()).toBe(true);
     });
 });
+
+describe('AdminIdentityVerificationReport charts', () => {
+    function chartsOf(wrapper, type) {
+        return wrapper
+            .findAll(`.chart-stub[data-chart-type="${type}"]`)
+            .map((chart) => JSON.parse(chart.attributes('data-chart-data')));
+    }
+
+    it('draws stacked outcome charts per period for manual and Mercado Pago', async () => {
+        const { wrapper } = await mountReport();
+
+        const [manual, automatic] = chartsOf(wrapper, 'bar');
+        expect(manual.labels).toEqual(['2026-09', '2026-10']);
+        expect(manual.datasets.map((dataset) => dataset.label)).toEqual([
+            'Aprobadas',
+            'Rechazadas',
+            'Inconclusas',
+            'Pendientes de revisión'
+        ]);
+        expect(manual.datasets[0].data).toEqual([9, 4]);
+        expect(automatic.datasets.map((dataset) => dataset.label)).toEqual([
+            'Aprobadas',
+            'Rechazadas',
+            'Error',
+            'Canceladas',
+            'Abandonadas'
+        ]);
+        expect(automatic.datasets[4].data).toEqual([6, 4]);
+    });
+
+    it('draws the funnel as resolved-by-method vs unresolved', async () => {
+        const { wrapper } = await mountReport();
+
+        const [funnel] = chartsOf(wrapper, 'doughnut');
+        expect(funnel.labels).toEqual([
+            'Reintento con Mercado Pago',
+            'Validación manual',
+            'Un admin aprobó el rechazo de Mercado Pago',
+            'Edición del perfil por un admin',
+            'Sin verificar'
+        ]);
+        expect(funnel.datasets[0].data).toEqual([7, 3, 1, 1, 9]);
+    });
+
+    it('only draws the manual chart when filtering by manual', async () => {
+        const { wrapper } = await mountReport(`${ROUTE_PATH}?method=manual`);
+
+        expect(chartsOf(wrapper, 'bar')).toHaveLength(1);
+        expect(chartsOf(wrapper, 'doughnut')).toHaveLength(0);
+    });
+});
