@@ -1,6 +1,6 @@
 <template>
     <div class="ivr-chart">
-        <Doughnut :chart-data="chartData" :chart-options="chartOptions" />
+        <Doughnut :chart-data="chartData" :chart-options="chartOptions" :styles="chartStyles" />
     </div>
 </template>
 
@@ -23,6 +23,12 @@ export default {
             default: ''
         }
     },
+    data() {
+        return {
+            // vue-chartjs wraps the canvas in a div; let it take the height of .ivr-chart.
+            chartStyles: { position: 'relative', height: '100%' }
+        };
+    },
     computed: {
         chartOptions() {
             return {
@@ -30,7 +36,7 @@ export default {
                 maintainAspectRatio: false,
                 plugins: {
                     title: { display: Boolean(this.title), text: this.title },
-                    legend: { position: 'right' }
+                    legend: { position: 'bottom' }
                 }
             };
         }
@@ -41,6 +47,6 @@ export default {
 <style scoped>
 .ivr-chart {
     position: relative;
-    height: 280px;
+    height: 320px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="ivr-chart">
-        <Bar :chart-data="chartData" :chart-options="chartOptions" />
+        <Bar :chart-data="chartData" :chart-options="chartOptions" :styles="chartStyles" />
     </div>
 </template>
 
@@ -30,6 +30,12 @@ export default {
             type: String,
             default: ''
         }
+    },
+    data() {
+        return {
+            // vue-chartjs wraps the canvas in a div; let it take the height of .ivr-chart.
+            chartStyles: { position: 'relative', height: '100%' }
+        };
     },
     computed: {
         chartOptions() {
