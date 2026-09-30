@@ -49,17 +49,18 @@ const METHOD_OUTCOMES = {
     automatic: AUTOMATIC_OUTCOMES
 };
 
+function outcomeValue(section, key, field) {
+    const value = section && section[key];
+    return (value && value[field]) || 0;
+}
+
 function outcomeRows(section, outcomes) {
-    const safe = section || {};
-    return outcomes.map((key) => {
-        const value = safe[key] || {};
-        return {
-            key,
-            labelKey: OUTCOME_LABEL_KEYS[key],
-            count: value.count || 0,
-            pct: value.pct || 0
-        };
-    });
+    return outcomes.map((key) => ({
+        key,
+        labelKey: OUTCOME_LABEL_KEYS[key],
+        count: outcomeValue(section, key, 'count'),
+        pct: outcomeValue(section, key, 'pct')
+    }));
 }
 
 export function manualOutcomeRows(section) {
@@ -71,13 +72,12 @@ export function automaticOutcomeRows(section) {
 }
 
 function sectionCounts(section, outcomes) {
-    const safe = section || {};
     return outcomes.reduce(
         (acc, key) => {
-            acc[key] = (safe[key] && safe[key].count) || 0;
+            acc[key] = outcomeValue(section, key, 'count');
             return acc;
         },
-        { attempts: safe.attempts || 0 }
+        { attempts: (section && section.attempts) || 0 }
     );
 }
 
@@ -97,10 +97,7 @@ export function outcomeChartData(series, method, t) {
         labels: buckets.map((bucket) => bucket.period),
         datasets: METHOD_OUTCOMES[method].map((key) => ({
             label: t(OUTCOME_LABEL_KEYS[key]),
-            data: buckets.map((bucket) => {
-                const section = bucket[method] || {};
-                return (section[key] && section[key].count) || 0;
-            }),
+            data: buckets.map((bucket) => outcomeValue(bucket[method], key, 'count')),
             backgroundColor: OUTCOME_COLORS[key],
             stack: method
         }))
