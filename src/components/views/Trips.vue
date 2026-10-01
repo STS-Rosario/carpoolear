@@ -574,6 +574,7 @@ import {
     resolveAppBannerAsset
 } from '../../utils/appBanner.js';
 import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 import {
     isNativePlatform,
     isPWA,
@@ -978,9 +979,7 @@ export default {
             this.showModal = true;
         },
         async openExternalBrowser(url) {
-            // @capacitor/app has no openUrl; on iOS window.open already goes to Safari,
-            // which is required for donations.
-            window.open(url, '_blank');
+            openExternalUrl(url);
         },
         onOpenLink(link) {
             this.openExternalBrowser(link);
