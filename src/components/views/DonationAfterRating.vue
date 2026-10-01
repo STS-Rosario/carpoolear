@@ -102,7 +102,7 @@
                                 >{{ $t('donationAfterRatingFacebookLink') }}</a>
                             </template>
                         </i18n-t>
-                        <p class="donation-after-rating__alt-copy">
+                        <p v-if="tripId" class="donation-after-rating__alt-copy">
                             <a
                                 href="/trips"
                                 class="donation-after-rating__skip-link"
@@ -147,9 +147,10 @@ export default {
         AppButton
     },
     props: {
+        /** Set on the after-rating flow; absent on the trip-independent /donate page. */
         tripId: {
             type: [String, Number],
-            required: true
+            default: null
         },
         preview: {
             type: Boolean,
@@ -169,7 +170,10 @@ export default {
         ...mapState(useAuthStore, {
             user: 'user',
             appConfig: 'appConfig'
-        })
+        }),
+        checkoutSource() {
+            return this.tripId ? 'after_rating' : 'donate_page';
+        }
     },
     methods: {
         ...mapActions(useProfileStore, {
@@ -197,7 +201,7 @@ export default {
                     const url = await startDonationCheckout({
                         type: 'once',
                         amount: this.donateValue,
-                        source: 'after_rating',
+                        source: this.checkoutSource,
                         tripId: this.tripId,
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig
@@ -229,7 +233,7 @@ export default {
                     const url = await startDonationCheckout({
                         type: 'monthly',
                         amount: this.donateValue,
-                        source: 'after_rating',
+                        source: this.checkoutSource,
                         tripId: this.tripId,
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig

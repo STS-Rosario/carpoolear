@@ -222,7 +222,7 @@
                                 href="/aportar"
                                 target="_blank"
                                 v-on:click.prevent="
-                                    onOpenLink(
+                                    onWhyDonate(
                                         'https://carpoolear.com.ar/aportar?u=' +
                                             user.id
                                     )
@@ -373,7 +373,7 @@
                                         href="/aportar"
                                         target="_blank"
                                         v-on:click.prevent="
-                                            onOpenLink(
+                                            onWhyDonate(
                                                 'https://carpoolear.com.ar/aportar'
                                             )
                                         "
@@ -937,10 +937,21 @@ export default {
                 );
                 return;
             }
+            if (this.user) {
+                this.$router.push({ name: 'donate' });
+                return;
+            }
             this.showModal = true;
         },
         onOpenLink(link) {
             openExternalUrl(link);
+        },
+        onWhyDonate(websiteUrl) {
+            if (this.user && !isIOSCapacitor()) {
+                this.$router.push({ name: 'donate' });
+                return;
+            }
+            openExternalUrl(websiteUrl);
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {

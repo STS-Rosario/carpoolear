@@ -57,7 +57,7 @@
                         class="mobile-header-bar__donate"
                         variant="header-donate"
                         size="sm"
-                        :href="donationHref"
+                        v-bind="donationLinkProps"
                     >
                         {{ $t('donar') }}
                         <template #iconRight>
@@ -213,7 +213,7 @@
                     class="header_donate-btn"
                     variant="header-donate"
                     size="sm"
-                    :href="donationHref"
+                    v-bind="donationLinkProps"
                 >
                     {{ $t('donar') }}
                     <template #iconRight>
@@ -340,7 +340,10 @@ import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import DonationAfterRatingHeader from './DonationAfterRatingHeader.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
-import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import {
+    isIOSCapacitor,
+    shouldHideDonationOnIOSCapacitor
+} from '../../services/capacitor.js';
 import { resolveExternalUrl } from '../../utils/externalLink.js';
 import { UserApi } from '../../services/api';
 import {
@@ -448,9 +451,13 @@ export default {
                 ? 'mobile-header-bar__title--settings-wide'
                 : '';
         },
-        donationHref() {
-            // /aportar is served by the website, not the SPA (see resolveExternalUrl).
-            return resolveExternalUrl('/aportar');
+        donationLinkProps() {
+            // Logged-in users get the in-app donation page (router navigation, no reload).
+            // iOS native and visitors keep the website /aportar page (see resolveExternalUrl).
+            if (this.logged && !isIOSCapacitor()) {
+                return { to: { name: 'donate' } };
+            }
+            return { href: resolveExternalUrl('/aportar') };
         },
         mobileUtilityHeaderButtons() {
             if (!this.isMobile) {

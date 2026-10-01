@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 // @vitest-environment-options { "url": "https://carpoolear.com.ar/" }
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import i18n from '../../i18n';
@@ -45,6 +45,8 @@ const stubs = {
     dropdown: true
 };
 
+let currentRouter;
+
 function setPlatform(platform) {
     capacitorMock.isNativePlatform.mockReturnValue(platform !== 'web');
     capacitorMock.getPlatform.mockReturnValue(platform);
@@ -69,6 +71,7 @@ async function mountLoggedInMobileHeader({ user = { id: 42, name: 'Ana' } } = {}
     });
     router.push('/');
     await router.isReady();
+    currentRouter = router;
 
     const { default: HeaderApp } = await import('./HeaderApp.vue');
     return mount(HeaderApp, {
@@ -104,7 +107,19 @@ describe('HeaderApp Aportar button', () => {
             setPlatform(platform);
             const wrapper = await mountLoggedInMobileHeader();
 
-            expectDonateButtonsToLinkTo(wrapper, '/donate');
+            const donateLinks = wrapper
+                .findAllComponents({ name: 'RouterLink' })
+                .filter((link) => link.classes('app-button--header-donate'));
+            expect(donateLinks).toHaveLength(2);
+            donateLinks.forEach((link) => {
+                expect(link.props('to')).toEqual({ name: 'donate' });
+            });
+            expect(wrapper.find('a[href*="aportar"]').exists()).toBe(false);
+
+            await donateLinks[0].trigger('click');
+            await flushPromises();
+
+            expect(currentRouter.currentRoute.value.name).toBe('donate');
         }
     );
 

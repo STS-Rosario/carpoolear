@@ -224,6 +224,24 @@ export default [
         }
     },
     {
+        path: '/donate',
+        name: 'donate',
+        component: DonationAfterRating,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    titleKey: 'donar',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
         path: '/donate-after-rating/:tripId',
         name: 'donate-after-rating',
         component: DonationAfterRating,
