@@ -52,7 +52,7 @@
                         </li>
                         <li>
                             <a
-                                href="https://carpoolear.com.ar/acerca-de-equipo"
+                                :href="externalHref('https://carpoolear.com.ar/acerca-de-equipo')"
                                 target="_blank"
                             >
                                 {{ $t('footerEquipo') }}
@@ -78,7 +78,7 @@
                         </li>
                         <li>
                             <a
-                                href="https://carpoolear.com.ar/plataforma-recomendaciones"
+                                :href="externalHref('https://carpoolear.com.ar/plataforma-recomendaciones')"
                                 target="_blank"
                             >
                                 {{ $t('footerRecomendaciones') }}
@@ -152,6 +152,7 @@ import { useActionbarsStore } from '../../stores/actionbars';
 import { useNotificationsStore } from '../../stores/notifications';
 import { useAuthStore } from '../../stores/auth';
 import svgItem from '../SvgItem';
+import { resolveExternalUrl } from '../../utils/externalLink.js';
 
 export default {
     name: 'footerApp',
@@ -174,7 +175,8 @@ export default {
     methods: {
         ...mapActions(useActionbarsStore, {
             onClick: 'footerButtonClick'
-        })
+        }),
+        externalHref: resolveExternalUrl
     },
     components: {
         svgItem
