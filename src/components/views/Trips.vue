@@ -43,6 +43,7 @@
             :name="'modal'"
             v-if="showAppStorePrompt && appStorePrompt"
             @close="closeAppStorePrompt()"
+            :hide-footer="true"
         >
             <template #header><h3>
                 <span>{{ $t('descargaLaApp') }}</span>
@@ -1405,8 +1406,8 @@ export default {
 
 .app-store-prompt__badges {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
     margin: 15px 0;
 }
