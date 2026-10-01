@@ -163,30 +163,49 @@ test.describe('trip creation wizard', () => {
         await expect(modal).toHaveCount(0);
     });
 
-    test('keeps the contribution excess modal title close to its body', async ({ page }) => {
+    test('spaces the contribution excess modal title, paragraphs and button', async ({ page }) => {
         await resumeDescriptionDraftWithMaximum(
             page,
             'La contribución es de $24000 por persona'
         );
         await waitForPageReady(page);
         await page.getByTestId('trip-creation-next').click();
-        await expect(page.getByTestId('trip-contribution-excess-modal')).toBeVisible();
+        const modal = page.getByTestId('trip-contribution-excess-modal');
+        await expect(modal).toBeVisible();
 
+        const bottomOf = (box) => box.y + box.height;
         const titleBox = await page
             .getByRole('heading', { name: 'Posible exceso de contribución' })
             .boundingBox();
-        const firstParagraphBox = await page
-            .getByTestId('trip-contribution-excess-modal')
-            .locator('p')
-            .first()
+        const paragraphs = modal.locator('p');
+        const paragraphBoxes = [
+            await paragraphs.nth(0).boundingBox(),
+            await paragraphs.nth(1).boundingBox(),
+            await paragraphs.nth(2).boundingBox()
+        ];
+        const buttonBox = await page
+            .getByTestId('trip-contribution-excess-confirm')
             .boundingBox();
-        const gap = firstParagraphBox.y - (titleBox.y + titleBox.height);
 
-        expect(gap).toBeGreaterThanOrEqual(0);
-        expect(gap).toBeLessThanOrEqual(12);
+        // Title: a little room below it (was ~84px before, then 8px).
+        const titleGap = paragraphBoxes[0].y - bottomOf(titleBox);
+        expect(titleGap).toBeGreaterThanOrEqual(16);
+        expect(titleGap).toBeLessThanOrEqual(22);
+
+        // About 16px between paragraphs.
+        for (const index of [1, 2]) {
+            const paragraphGap = paragraphBoxes[index].y - bottomOf(paragraphBoxes[index - 1]);
+            expect(paragraphGap).toBeGreaterThanOrEqual(15);
+            expect(paragraphGap).toBeLessThanOrEqual(17);
+        }
+
+        // About 24px before the Entendido button.
+        const buttonGap = buttonBox.y - bottomOf(paragraphBoxes[2]);
+        expect(buttonGap).toBeGreaterThanOrEqual(23);
+        expect(buttonGap).toBeLessThanOrEqual(25);
     });
 
-        test('does not warn when the description asks more than the chosen contribution but within the maximum', async ({
+    test('does not warn when the description asks more than the chosen contribution but within the maximum', async ({
         page
     }) => {
         await resumeDescriptionDraftWithMaximum(page, 'Contribución $18000 por persona');
