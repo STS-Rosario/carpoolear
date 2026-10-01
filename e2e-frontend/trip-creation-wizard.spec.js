@@ -163,7 +163,30 @@ test.describe('trip creation wizard', () => {
         await expect(modal).toHaveCount(0);
     });
 
-    test('does not warn when the description asks more than the chosen contribution but within the maximum', async ({
+    test('keeps the contribution excess modal title close to its body', async ({ page }) => {
+        await resumeDescriptionDraftWithMaximum(
+            page,
+            'La contribución es de $24000 por persona'
+        );
+        await waitForPageReady(page);
+        await page.getByTestId('trip-creation-next').click();
+        await expect(page.getByTestId('trip-contribution-excess-modal')).toBeVisible();
+
+        const titleBox = await page
+            .getByRole('heading', { name: 'Posible exceso de contribución' })
+            .boundingBox();
+        const firstParagraphBox = await page
+            .getByTestId('trip-contribution-excess-modal')
+            .locator('p')
+            .first()
+            .boundingBox();
+        const gap = firstParagraphBox.y - (titleBox.y + titleBox.height);
+
+        expect(gap).toBeGreaterThanOrEqual(0);
+        expect(gap).toBeLessThanOrEqual(12);
+    });
+
+        test('does not warn when the description asks more than the chosen contribution but within the maximum', async ({
         page
     }) => {
         await resumeDescriptionDraftWithMaximum(page, 'Contribución $18000 por persona');
