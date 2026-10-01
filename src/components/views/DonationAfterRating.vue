@@ -75,6 +75,7 @@ import {
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from '../../utils/donationOptions.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 
 export default {
     name: 'donation-after-rating',
@@ -103,8 +104,7 @@ export default {
             registerDonation: 'registerDonation'
         }),
         async openExternalBrowser(url) {
-            // @capacitor/app has no openUrl; on iOS window.open already goes to Safari.
-            window.open(url, '_blank');
+            openExternalUrl(url);
         },
         async openDonationLink() {
             let url = 'https://carpoolear.com.ar/aportar';
