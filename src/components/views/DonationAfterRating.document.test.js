@@ -105,6 +105,30 @@ async function mountPage(props) {
     return wrapper;
 }
 
+/** Bold texts: benefit titles, the volunteer/Instagram/Facebook links and the team name. */
+const BOLD = {
+    arg: [
+        'Soporte prioritario:',
+        'Acceso anticipado:',
+        'Informe semestral:',
+        'Pin:',
+        'sumándote al voluntariado',
+        'Instagram',
+        'Facebook',
+        'Equipo Carpoolear'
+    ],
+    en: [
+        'Priority support:',
+        'Early access:',
+        'Semiannual report:',
+        'Pin:',
+        'by joining our volunteers',
+        'Instagram',
+        'Facebook',
+        'The Carpoolear Team'
+    ]
+};
+
 const squash = (text) => text.replace(/\s+/g, '');
 
 describe('DonationAfterRating page matches the copy document', () => {
@@ -133,11 +157,41 @@ describe('DonationAfterRating page matches the copy document', () => {
             }
         );
 
-        it('does not bold any text', async () => {
+        it.each(['arg', 'en'])(
+            'bolds only the benefit titles, the links and the team name in %s',
+            async (locale) => {
+                vi.spyOn(console, 'warn').mockImplementation(() => {});
+                setLocale(locale);
+                const wrapper = await mountPage(props);
+
+                expect(wrapper.findAll('strong').map((bold) => bold.text())).toEqual(
+                    BOLD[locale]
+                );
+                wrapper
+                    .findAll('.donation-after-rating__benefits-item')
+                    .forEach((item, index) => {
+                        expect(item.find('strong').text()).toBe(BOLD[locale][index]);
+                        expect(item.text().startsWith(BOLD[locale][index])).toBe(true);
+                    });
+            }
+        );
+
+        it('links the volunteer, Instagram and Facebook texts in bold', async () => {
             vi.spyOn(console, 'warn').mockImplementation(() => {});
             const wrapper = await mountPage(props);
 
-            expect(wrapper.findAll('strong')).toHaveLength(0);
+            const boldLinks = wrapper
+                .findAll('strong > a')
+                .map((link) => [link.text(), link.attributes('href'), link.attributes('target')]);
+            expect(boldLinks).toEqual([
+                [
+                    'sumándote al voluntariado',
+                    'https://carpoolear.com.ar/colabora-como-colaborar',
+                    '_blank'
+                ],
+                ['Instagram', 'https://instagram.com/carpoolear', '_blank'],
+                ['Facebook', 'https://facebook.com/carpoolear', '_blank']
+            ]);
         });
 
         it('lists the word-of-mouth bullets after their intro', async () => {

@@ -83,13 +83,15 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
-    it('does not bold any copy (the copy document bolds nothing)', () => {
+    it('bolds through markup only, never through link CSS or v-html', () => {
         const linkRule = viewSource.match(
             /\.donation-after-rating__alt-copy :deep\(a\)\s*\{[^}]*\}/
         );
         expect(linkRule).not.toBeNull();
         expect(linkRule[0]).not.toMatch(/font-weight:\s*var\(--ds-font-weight-bold/);
         expect(viewSource).not.toContain(':deep(strong)');
+        expect(viewSource).not.toContain('v-html="$t(benefitKey)"');
+        expect(viewSource).toContain('keypath="donationAfterRatingSignOffTeam"');
     });
 
     it('returns to the trips list after starting a checkout', () => {
@@ -117,7 +119,7 @@ describe('DonationAfterRating page content', () => {
             expect(
                 messages[locale].donationAfterRatingVolunteerParagraph
             ).toContain('{link}');
-            expect(messages[locale].donationAfterRatingBenefitBadge).toBeTruthy();
+            expect(messages[locale].donationAfterRatingBenefitBadgeTitle).toBeTruthy();
             expect(
                 messages[locale].donationAfterRatingBenefitVisibility
             ).toBeUndefined();

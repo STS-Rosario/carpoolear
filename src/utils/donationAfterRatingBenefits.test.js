@@ -3,7 +3,7 @@ import { DONATION_AFTER_RATING_BENEFIT_KEYS } from './donationAfterRatingBenefit
 import messages from '../language/i18n';
 
 describe('donationAfterRatingBenefits', () => {
-    it('lists all monthly benefit translation keys', () => {
+    it('lists the document benefits as base keys for a title and a text', () => {
         expect(DONATION_AFTER_RATING_BENEFIT_KEYS).toEqual([
             'donationAfterRatingBenefitPrioritySupport',
             'donationAfterRatingBenefitEarlyAccess',
@@ -13,10 +13,12 @@ describe('donationAfterRatingBenefits', () => {
     });
 
     it.each(['arg', 'en'])(
-        'defines monthly benefit copy in %s locale as plain "Label: text"',
+        'defines a "Title:" and a plain text for each benefit in %s',
         (locale) => {
             DONATION_AFTER_RATING_BENEFIT_KEYS.forEach((benefitKey) => {
-                expect(messages[locale][benefitKey]).toMatch(/^[^<:]+: [^<]+$/);
+                expect(messages[locale][`${benefitKey}Title`]).toMatch(/^[^<:]+:$/);
+                expect(messages[locale][`${benefitKey}Text`]).toMatch(/^[^<]+$/);
+                expect(messages[locale][benefitKey]).toBeUndefined();
             });
         }
     );
