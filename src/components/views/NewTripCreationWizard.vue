@@ -1256,6 +1256,11 @@ export default {
                 step: this.currentStep,
                 description: this.form.trip.description,
                 price: this.form.price,
+                maxPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_max_price_enabled
+                ),
+                maximumSeatPriceCents: this.form.maximum_seat_price_cents,
+                maximumTripPriceCents: this.form.maximum_trip_price_cents,
                 alreadyShown: this.hasShownContributionExcessModal,
                 isEdit: this.isEditTripFlow
             });
