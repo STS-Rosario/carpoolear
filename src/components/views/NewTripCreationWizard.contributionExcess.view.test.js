@@ -172,7 +172,7 @@ describe('NewTripCreationWizard contribution excess modal', () => {
         ]);
     });
 
-        it('offers a single Entendido button, no footer, and closes on click', async () => {
+    it('offers a single Entendido button, no footer, and closes on click', async () => {
         const { wrapper, form } = await mountWizard();
         await goToStep(wrapper, STEP.DESCRIPTION);
         form.trip.description = EXCESSIVE_DESCRIPTION;

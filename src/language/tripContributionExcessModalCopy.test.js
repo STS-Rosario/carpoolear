@@ -23,15 +23,11 @@ const ENGLISH = {
 
 describe('trip creation contribution excess modal copy', () => {
     it.each(['arg', 'chl'])('uses the agreed Spanish copy, one key per paragraph, in %s', (locale) => {
-        for (const [key, text] of Object.entries(SPANISH)) {
-            expect(messages[locale][key], key).toBe(text);
-        }
+        expect(messages[locale]).toMatchObject(SPANISH);
     });
 
     it('uses the English copy, one key per paragraph, in en', () => {
-        for (const [key, text] of Object.entries(ENGLISH)) {
-            expect(messages.en[key], key).toBe(text);
-        }
+        expect(messages.en).toMatchObject(ENGLISH);
     });
 
     it.each(['arg', 'chl', 'en'])('drops the single-paragraph body key in %s', (locale) => {
