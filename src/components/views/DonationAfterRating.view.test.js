@@ -95,6 +95,19 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('keypath="donationAfterRatingSignOffTeam"');
     });
 
+    it('styles the skip button like the one-time button, outlined in dark grey and centered', () => {
+        const skipRule = viewSource.match(
+            /\.donation-after-rating__btn-skip\.app-button--secondary\s*\{[^}]*\}/
+        );
+        expect(skipRule).not.toBeNull();
+        expect(skipRule[0]).toMatch(/background:\s*transparent/);
+        expect(skipRule[0]).toMatch(/border:\s*2px solid var\(--ds-text-secondary/);
+        const layoutRule = viewSource.match(/\.donation-after-rating__btn-skip\s*\{[^}]*\}/);
+        expect(layoutRule).not.toBeNull();
+        expect(layoutRule[0]).toMatch(/align-self:\s*center/);
+        expect(layoutRule[0]).toMatch(/width:\s*fit-content/);
+    });
+
     it('returns to the trips list after starting a checkout', () => {
         expect(viewSource).toMatch(/name:\s*'trips'/);
     });

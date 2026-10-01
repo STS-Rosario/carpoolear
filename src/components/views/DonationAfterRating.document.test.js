@@ -78,21 +78,16 @@ const DOCUMENT = {
     ]
 };
 
-/** After-rating only: the "No puedo aportar" skip sentence, right after the one-time button. */
+/** After-rating only: the "No puedo aportar" skip button, right before "Buen viaje!". */
 const SKIP = {
     arg: 'No puedo aportar ni siquiera difusión ahora :(',
     en: 'I can\'t contribute or even help spread the word right now :('
 };
 
-const ONCE_CTA = {
-    arg: 'Quiero aportar por única vez',
-    en: 'I want to contribute just once'
-};
-
 function expectedTexts(locale, showsSkip) {
     const texts = [...DOCUMENT[locale]];
     if (showsSkip) {
-        texts.splice(texts.indexOf(ONCE_CTA[locale]) + 1, 0, SKIP[locale]);
+        texts.splice(texts.length - 2, 0, SKIP[locale]);
     }
     return texts;
 }
@@ -165,7 +160,7 @@ describe('DonationAfterRating page matches the copy document', () => {
         ['/donate page', {}, false]
     ])('%s', (_label, props, showsSkip) => {
         it.each(['arg', 'en'])(
-            'shows exactly the document texts (plus the skip link only after rating), in order, in %s',
+            'shows exactly the document texts (plus the skip button only after rating), in order, in %s',
             async (locale) => {
                 vi.spyOn(console, 'warn').mockImplementation(() => {});
                 setLocale(locale);
@@ -224,22 +219,28 @@ describe('DonationAfterRating page matches the copy document', () => {
                 squash(DOCUMENT.arg[DOCUMENT.arg.length - 4]),
                 squash(DOCUMENT.arg[DOCUMENT.arg.length - 3])
             ]);
-            expect(wrapper.find('.donation-after-rating__skip-link').exists()).toBe(
+            expect(wrapper.find('.donation-after-rating__btn-skip').exists()).toBe(
                 showsSkip
             );
         });
 
-        it('places the skip link at the end of the one-time section, before the volunteer paragraph', async () => {
+        it('places the skip button after the word-of-mouth bullets, right before "Buen viaje!"', async () => {
             vi.spyOn(console, 'warn').mockImplementation(() => {});
             const wrapper = await mountPage(props);
 
-            const skip = wrapper.find('.donation-after-rating__once .donation-after-rating__skip-link');
+            const skip = wrapper.find(
+                '.donation-after-rating__alternatives > .donation-after-rating__btn-skip'
+            );
             expect(skip.exists()).toBe(showsSkip);
             if (showsSkip) {
-                const skipParagraph = skip.element.parentElement;
-                const button = wrapper.find('.donation-after-rating__btn-once').element;
-                expect(skipParagraph.previousElementSibling).toBe(button);
-                expect(skipParagraph.nextElementSibling).toBeNull();
+                expect(skip.element.tagName).toBe('BUTTON');
+                expect(skip.classes()).toContain('app-button--secondary');
+                expect(skip.element.previousElementSibling.className).toBe(
+                    'donation-after-rating__word-of-mouth-block'
+                );
+                expect(skip.element.nextElementSibling.className).toBe(
+                    'donation-after-rating__sign-off'
+                );
                 expect(skip.element.closest('strong')).toBeNull();
             }
         });
