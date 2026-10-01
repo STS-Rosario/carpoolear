@@ -181,8 +181,8 @@ describe('DonationAfterRating social and volunteer links', () => {
             expect(link.attributes('target')).toBe('_blank');
             expect(link.attributes('rel')).toBe('noopener noreferrer');
         });
-        expect(instagram.element.parentElement).toBe(facebook.element.parentElement);
-        expect(instagram.element.parentElement.textContent.trim()).toBe(
+        expect(instagram.element.closest('li')).toBe(facebook.element.closest('li'));
+        expect(instagram.element.closest('li').textContent.trim()).toBe(
             'Si usas las redes sociales virtuales Instagram, Facebook y compartí nuestras publicaciones/historias.'
         );
         expect(externalLinkSpies.resolveExternalUrl).toHaveBeenCalledWith(

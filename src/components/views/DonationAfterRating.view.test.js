@@ -70,7 +70,7 @@ describe('DonationAfterRating page content', () => {
             "$t('donationAfterRatingWordOfMouthFaceToFace')"
         );
         expect(viewSource).toContain("$t('donationAfterRatingSignOffGreeting')");
-        expect(viewSource).toContain("$t('donationAfterRatingSignOffTeam')");
+        expect(viewSource).toContain("$t('donationAfterRatingSignOffTeamName')");
         expect(viewSource).not.toContain('donationAfterRatingCannotContribute');
         expect(viewSource).toContain('startDonationCheckout');
         expect(viewSource).toContain("type: 'once'");

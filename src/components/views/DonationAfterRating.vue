@@ -18,8 +18,10 @@
                     v-for="benefitKey in benefitKeys"
                     :key="benefitKey"
                     class="donation-after-rating__benefits-item"
-                    v-html="$t(benefitKey)"
-                ></li>
+                >
+                    <strong>{{ $t(`${benefitKey}Title`) }}</strong>
+                    {{ $t(`${benefitKey}Text`) }}
+                </li>
             </ul>
         </section>
         <div class="donation-after-rating__content container">
@@ -72,12 +74,12 @@
                             class="donation-after-rating__alt-copy"
                         >
                             <template #link>
-                                <a
+                                <strong><a
                                     :href="externalHref(collaborateUrl)"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     @click.prevent="openExternalLink(collaborateUrl)"
-                                >{{ $t('donationAfterRatingVolunteerLink') }}</a>
+                                >{{ $t('donationAfterRatingVolunteerLink') }}</a></strong>
                             </template>
                         </i18n-t>
                         <div class="donation-after-rating__word-of-mouth-block">
@@ -91,20 +93,20 @@
                             class="donation-after-rating__alt-copy"
                         >
                             <template #instagram>
-                                <a
+                                <strong><a
                                     :href="externalHref(instagramUrl)"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     @click.prevent="openExternalLink(instagramUrl)"
-                                >{{ $t('donationAfterRatingInstagramLink') }}</a>
+                                >{{ $t('donationAfterRatingInstagramLink') }}</a></strong>
                             </template>
                             <template #facebook>
-                                <a
+                                <strong><a
                                     :href="externalHref(facebookUrl)"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     @click.prevent="openExternalLink(facebookUrl)"
-                                >{{ $t('donationAfterRatingFacebookLink') }}</a>
+                                >{{ $t('donationAfterRatingFacebookLink') }}</a></strong>
                             </template>
                         </i18n-t>
                                 <li class="donation-after-rating__alt-copy">
@@ -116,9 +118,17 @@
                             <p class="donation-after-rating__alt-copy">
                                 {{ $t('donationAfterRatingSignOffGreeting') }}
                             </p>
-                            <p class="donation-after-rating__alt-copy">
-                                {{ $t('donationAfterRatingSignOffTeam') }}
-                            </p>
+                            <i18n-t
+                                keypath="donationAfterRatingSignOffTeam"
+                                tag="p"
+                                class="donation-after-rating__alt-copy"
+                            >
+                                <template #team>
+                                    <strong>{{
+                                        $t('donationAfterRatingSignOffTeamName')
+                                    }}</strong>
+                                </template>
+                            </i18n-t>
                         </div>
                     </section>
                 </div>

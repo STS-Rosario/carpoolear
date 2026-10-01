@@ -1320,14 +1320,18 @@ const messages = {
         donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
             'Con tu aporte mensual podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
-        donationAfterRatingBenefitPrioritySupport:
-            'Soporte prioritario: tus tickets de Mesa de Ayuda tendrán prioridad.',
-        donationAfterRatingBenefitEarlyAccess:
-            'Acceso anticipado: vas a poder probar funcionalidades nuevas antes que salgan.',
-        donationAfterRatingBenefitSemiannualReport:
-            'Informe semestral: cada 6 meses te vamos a mandar un mail contándote lo que logramos gracias a tu aporte.',
-        donationAfterRatingBenefitBadge:
-            'Pin: tu perfil tendrá una insignia y vas a aparecer en una lista de personas que forman parte del Club Carpoolear (si así lo querés).',
+        donationAfterRatingBenefitPrioritySupportTitle: 'Soporte prioritario:',
+        donationAfterRatingBenefitPrioritySupportText:
+            'tus tickets de Mesa de Ayuda tendrán prioridad.',
+        donationAfterRatingBenefitEarlyAccessTitle: 'Acceso anticipado:',
+        donationAfterRatingBenefitEarlyAccessText:
+            'vas a poder probar funcionalidades nuevas antes que salgan.',
+        donationAfterRatingBenefitSemiannualReportTitle: 'Informe semestral:',
+        donationAfterRatingBenefitSemiannualReportText:
+            'cada 6 meses te vamos a mandar un mail contándote lo que logramos gracias a tu aporte.',
+        donationAfterRatingBenefitBadgeTitle: 'Pin:',
+        donationAfterRatingBenefitBadgeText:
+            'tu perfil tendrá una insignia y vas a aparecer en una lista de personas que forman parte del Club Carpoolear (si así lo querés).',
         donationAfterRatingMonthlyAmountIntro:
             'Puedo aportar cada mes con el equivalente a...',
         donationAfterRatingJoinCommunityMonthly:
@@ -1349,7 +1353,8 @@ const messages = {
             'Mejor aún, la red social del cara a cara… contale a tus amistades y familia sobre Carpoolear, contales de ese viaje que compartiste, de la gente que conociste, contales que compartir no es una locura.',
         donationAfterRatingSignOffGreeting: 'Buen viaje!',
         donationAfterRatingSignOffTeam:
-            'Equipo Carpoolear (también conocido como “La gente de Carpu”)',
+            '{team} (también conocido como “La gente de Carpu”)',
+        donationAfterRatingSignOffTeamName: 'Equipo Carpoolear',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -5208,14 +5213,18 @@ const messages = {
         donationAfterRatingJoinAccent: 'Carpoolear Club',
         donationAfterRatingMonthlyBenefitsIntro:
             'With your monthly contribution we can keep going and keep improving, and in return you get the following benefits for being part of it:',
-        donationAfterRatingBenefitPrioritySupport:
-            'Priority support: your Help Desk tickets will have priority.',
-        donationAfterRatingBenefitEarlyAccess:
-            'Early access: you\'ll be able to try new features before they come out.',
-        donationAfterRatingBenefitSemiannualReport:
-            'Semiannual report: every 6 months we\'ll send you an email telling you what we achieved thanks to your contribution.',
-        donationAfterRatingBenefitBadge:
-            'Pin: your profile will have a badge and you\'ll appear on a list of people who are part of the Carpoolear Club (if you want).',
+        donationAfterRatingBenefitPrioritySupportTitle: 'Priority support:',
+        donationAfterRatingBenefitPrioritySupportText:
+            'your Help Desk tickets will have priority.',
+        donationAfterRatingBenefitEarlyAccessTitle: 'Early access:',
+        donationAfterRatingBenefitEarlyAccessText:
+            'you\'ll be able to try new features before they come out.',
+        donationAfterRatingBenefitSemiannualReportTitle: 'Semiannual report:',
+        donationAfterRatingBenefitSemiannualReportText:
+            'every 6 months we\'ll send you an email telling you what we achieved thanks to your contribution.',
+        donationAfterRatingBenefitBadgeTitle: 'Pin:',
+        donationAfterRatingBenefitBadgeText:
+            'your profile will have a badge and you\'ll appear on a list of people who are part of the Carpoolear Club (if you want).',
         donationAfterRatingMonthlyAmountIntro:
             'I can contribute each month the equivalent of...',
         donationAfterRatingJoinCommunityMonthly:
@@ -5237,7 +5246,8 @@ const messages = {
             'Even better, the face-to-face social network… tell your friends and family about Carpoolear, tell them about that trip you shared, about the people you met, tell them that sharing is not crazy.',
         donationAfterRatingSignOffGreeting: 'Have a good trip!',
         donationAfterRatingSignOffTeam:
-            'The Carpoolear Team (also known as “La gente de Carpu”)',
+            '{team} (also known as “La gente de Carpu”)',
+        donationAfterRatingSignOffTeamName: 'The Carpoolear Team',
         calificacionesPendientes: 'Pending ratings',
         noHayCalificacionesPendientes: 'No pending ratings',
         cargandoCalificaciones: 'Loading ratings',
