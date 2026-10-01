@@ -75,8 +75,6 @@ import {
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from '../../utils/donationOptions.js';
-import { App } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
 
 export default {
     name: 'donation-after-rating',
@@ -105,16 +103,8 @@ export default {
             registerDonation: 'registerDonation'
         }),
         async openExternalBrowser(url) {
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    window.open(url, '_blank');
-                }
-            } else {
-                window.open(url, '_blank');
-            }
+            // @capacitor/app has no openUrl; on iOS window.open already goes to Safari.
+            window.open(url, '_blank');
         },
         async openDonationLink() {
             let url = 'https://carpoolear.com.ar/aportar';
