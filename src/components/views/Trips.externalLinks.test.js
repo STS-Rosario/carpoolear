@@ -163,4 +163,36 @@ describe('Trips external links', () => {
             '_blank'
         );
     });
+
+    it.each([
+        ['web', 'https://carpoolear.com.ar/aportar?u=42'],
+        ['android', 'https://www.carpoolear.com.ar/aportar?u=42']
+    ])(
+        'on %s "por qué aportar" (logged in) opens the remote site, not the bundled app host',
+        async (platform, expectedUrl) => {
+            setPlatform(platform);
+            const { wrapper } = await mountTrips();
+
+            await linkWithText(wrapper, 'porQueDonar').trigger('click');
+            await flushPromises();
+
+            expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+        }
+    );
+
+    it.each([
+        ['web', 'https://carpoolear.com.ar/aportar'],
+        ['android', 'https://www.carpoolear.com.ar/aportar']
+    ])(
+        'on %s "por qué aportar" (guest, between trips) opens the remote site, not the bundled app host',
+        async (platform, expectedUrl) => {
+            setPlatform(platform);
+            const { wrapper } = await mountTrips({ user: null });
+
+            await linkWithText(wrapper, 'porQueDonar').trigger('click');
+            await flushPromises();
+
+            expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+        }
+    );
 });
