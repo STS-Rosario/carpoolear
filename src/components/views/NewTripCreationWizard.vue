@@ -502,6 +502,7 @@
         <modal
             v-if="showContributionExcessModal"
             name="trip-creation-contribution-excess"
+            class="new-trip-wizard__contribution-excess-modal"
             :hide-footer="true"
             @close="closeContributionExcessModal"
         >
@@ -1543,8 +1544,27 @@ export default {
     color: #333;
 }
 
+/*
+ * Modal stacks several default gaps between the slotted title and body
+ * (h3 bottom margin, header bottom padding, body top margin and padding, and
+ * the paragraph top margin): ~84px. Tighten them for this modal only.
+ */
+.new-trip-wizard__contribution-excess-modal :deep(.modal-header) {
+    padding-bottom: 0;
+}
+
+.new-trip-wizard__contribution-excess-modal :deep(.modal-header h3) {
+    margin: 0;
+}
+
+.new-trip-wizard__contribution-excess-modal :deep(.modal-body) {
+    margin-top: 0;
+    padding-top: 0.5rem;
+}
+
 .new-trip-wizard__contribution-excess p {
     line-height: 1.45;
+    margin: 0 0 0.75rem;
 }
 
 .new-trip-wizard__contribution-excess-actions {
