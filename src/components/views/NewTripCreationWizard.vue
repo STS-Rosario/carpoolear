@@ -513,7 +513,9 @@
                     class="new-trip-wizard__contribution-excess text-left color-black"
                     data-testid="trip-contribution-excess-modal"
                 >
-                    <p>{{ $t('tripContributionExcessModalBody') }}</p>
+                    <p>{{ $t('tripContributionExcessModalBodyWarning') }}</p>
+                    <p>{{ $t('tripContributionExcessModalBodyApology') }}</p>
+                    <p>{{ $t('tripContributionExcessModalBodyThanks') }}</p>
                     <div class="new-trip-wizard__contribution-excess-actions">
                         <AppButton
                             variant="primary"
