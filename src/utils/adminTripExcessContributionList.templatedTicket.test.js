@@ -11,7 +11,8 @@ describe('buildExcessContributionTemplatedTicketPayload', () => {
             user_id: 15,
             type: 'excess_contribution',
             subject: 't:ticketTypeExcessContribution',
-            message_markdown: 't:excessContributionTemplatedTicketMessage'
+            message_markdown: 't:excessContributionTemplatedTicketMessage',
+            trip_id: 99
         });
     });
 });

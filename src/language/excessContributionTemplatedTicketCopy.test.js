@@ -10,6 +10,8 @@ describe('excess contribution templated ticket copy', () => {
         expect(messages[locale].excessContributionTemplatedTicketConfirm).toContain('{name}');
         expect(messages[locale].excessContributionTemplatedTicketCreated).toBeTruthy();
         expect(messages[locale].excessContributionTemplatedTicketError).toBeTruthy();
+        expect(messages[locale].excessContributionTicketAlreadyExists).toBeTruthy();
+        expect(messages[locale].excessContributionTicketView).toBeTruthy();
     });
 
     it('uses the agreed button and snackbar texts', () => {

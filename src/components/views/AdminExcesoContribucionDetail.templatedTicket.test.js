@@ -59,7 +59,10 @@ async function mountDetail({ permissions = [EXCESS, SUPPORT_TICKETS], detail = i
             mocks: { $publicImg: () => '' },
             stubs: {
                 AdminLayout: { template: '<div><slot /></div>' },
-                RouterLink: { template: '<a><slot /></a>' }
+                RouterLink: {
+                    props: ['to'],
+                    template: '<a :data-to="JSON.stringify(to)"><slot /></a>'
+                }
             }
         }
     });
@@ -75,6 +78,31 @@ function ticketCountText(wrapper) {
 
 function templatedButton(wrapper) {
     return wrapper.find('.admin-exceso-templated-ticket');
+}
+
+function supportTicketButton(wrapper) {
+    return wrapper.find('.admin-exceso-support-ticket');
+}
+
+function existingTicketLink(wrapper) {
+    return wrapper.find('.admin-exceso-existing-ticket');
+}
+
+function linkTarget(link) {
+    return JSON.parse(link.attributes('data-to'));
+}
+
+function expectExistingTicketLink(wrapper, ticketId) {
+    expect(templatedButton(wrapper).exists()).toBe(false);
+    expect(supportTicketButton(wrapper).exists()).toBe(false);
+    const link = existingTicketLink(wrapper);
+    expect(link.exists()).toBe(true);
+    expect(linkTarget(link)).toEqual({
+        name: 'admin-support-ticket-detail',
+        params: { id: ticketId }
+    });
+    expect(link.text()).toContain(i18n.global.t('excessContributionTicketView'));
+    expect(link.text()).toContain(`#${ticketId}`);
 }
 
 describe('AdminExcesoContribucionDetail templated support ticket', () => {
@@ -105,12 +133,32 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
         expect(button.element.tagName).toBe('BUTTON');
         expect(button.text()).toBe(i18n.global.t('excessContributionTemplatedTicketButton'));
         expect(actions.text()).toContain(i18n.global.t('crearTicketSoporte'));
+        expect(existingTicketLink(wrapper).exists()).toBe(false);
     });
 
-    it('hides the button for admins without the support tickets permission', async () => {
+    it('prefills the manual support ticket form with the trip', async () => {
+        const wrapper = await mountDetail();
+
+        expect(linkTarget(supportTicketButton(wrapper))).toMatchObject({
+            name: 'admin-support-ticket-new',
+            query: { userId: 15, type: 'excess_contribution', tripId: 321 }
+        });
+    });
+
+    it('hides both ticket buttons for admins without the support tickets permission', async () => {
         const wrapper = await mountDetail({ permissions: [EXCESS] });
 
         expect(templatedButton(wrapper).exists()).toBe(false);
+        expect(supportTicketButton(wrapper).exists()).toBe(false);
+        expect(wrapper.text()).not.toContain(i18n.global.t('crearTicketSoporte'));
+    });
+
+    it('links to the existing excess ticket instead of offering new ones', async () => {
+        const wrapper = await mountDetail({
+            detail: item({ excess_contribution_ticket_id: 55 })
+        });
+
+        expectExistingTicketLink(wrapper, 55);
     });
 
     it('hides the button when the item has no user', async () => {
@@ -145,14 +193,35 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
             user_id: 15,
             type: 'excess_contribution',
             subject: i18n.global.t('ticketTypeExcessContribution'),
-            message_markdown: TEMPLATE
+            message_markdown: TEMPLATE,
+            trip_id: 321
         });
         expect(dialogs.message).toHaveBeenCalledWith(
             i18n.global.t('excessContributionTemplatedTicketCreated'),
             { estado: 'success' }
         );
         expect(ticketCountText(wrapper)).toBe(`${i18n.global.t('ticketSoporte')}:1`.replace(/\s+/g, ''));
-        expect(templatedButton(wrapper).attributes('disabled')).toBeUndefined();
+        expectExistingTicketLink(wrapper, 77);
+    });
+
+    it('shows the already-exists snackbar and links the existing ticket when the backend rejects a second one', async () => {
+        ticketsApi.adminCreate.mockRejectedValue({
+            status: 409,
+            data: {
+                error: 'This trip already has an excess contribution ticket.',
+                existing_ticket_id: 55
+            }
+        });
+        const wrapper = await mountDetail();
+
+        await templatedButton(wrapper).trigger('click');
+        await flushPromises();
+
+        expect(dialogs.message).toHaveBeenCalledWith(
+            i18n.global.t('excessContributionTicketAlreadyExists'),
+            { estado: 'error' }
+        );
+        expectExistingTicketLink(wrapper, 55);
     });
 
     it('shows an error snackbar and re-enables the button when the API fails', async () => {
@@ -190,6 +259,6 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
 
         resolveCreate({ data: { id: 77 } });
         await flushPromises();
-        expect(templatedButton(wrapper).attributes('disabled')).toBeUndefined();
+        expectExistingTicketLink(wrapper, 77);
     });
 });
