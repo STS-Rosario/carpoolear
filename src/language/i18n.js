@@ -1642,7 +1642,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -1674,12 +1673,6 @@ const messages = {
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -3443,7 +3436,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -3492,12 +3484,6 @@ const messages = {
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -5437,7 +5423,6 @@ const messages = {
         noCoincideCampos: 'Fields do not match',
         emailEnviadoConIndicaciones:
             'An email has been sent to your inbox with instructions to reset your password.',
-        instalarAppIos: 'Install App on iOS',
         selladoViaje: 'Trip seal',
         faltaPagarSellado: 'Seal payment pending',
         horaPlaceholder: 'Time (12:00)',
@@ -5469,11 +5454,6 @@ const messages = {
         esperaUsuarioResponda: 'Waiting for the user to respond to the message',
         notificacionesPermitidas: 'Notifications allowed',
         notificacionesDenegadas: 'Notifications denied',
-        previeneMiniBarraInformacion:
-            'Prevents the mini information bar from appearing on smartphones',
-        guardaEventoDispareMasTarde: 'Saves the event to trigger later',
-        actualizarIUNotificarUsuario:
-            'Update the UI to notify the user that they can install your PWA',
         pendienteNoSeLimpiaBuscador:
             'Pending, the search is not cleared if the search params are empty',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:

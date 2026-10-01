@@ -25,17 +25,20 @@ describe('app store prompt copy', () => {
         expect(messages.en.descargarEnAppStore).toBe('Download on the App Store');
     });
 
-    it('drops the old PWA install copy', () => {
-        for (const locale of ['arg', 'chl', 'en']) {
-            for (const key of [
-                'instalar',
-                'instalarApp',
-                'instalarWebAppPWA',
-                'instalarAppEnIos',
-                'instalarAppEnIosInstrucciones'
-            ]) {
-                expect(messages[locale][key], `${locale}.${key}`).toBeUndefined();
-            }
-        }
+    const OLD_PWA_KEYS = [
+        'instalar',
+        'instalarApp',
+        'instalarAppIos',
+        'instalarWebAppPWA',
+        'instalarAppEnIos',
+        'instalarAppEnIosInstrucciones',
+        'previeneMiniBarraInformacion',
+        'guardaEventoDispareMasTarde',
+        'actualizarIUNotificarUsuario'
+    ];
+
+    it.each(['arg', 'chl', 'en'])('drops the old PWA install copy in %s', (locale) => {
+        const leftover = OLD_PWA_KEYS.filter((key) => key in messages[locale]);
+        expect(leftover).toEqual([]);
     });
 });
