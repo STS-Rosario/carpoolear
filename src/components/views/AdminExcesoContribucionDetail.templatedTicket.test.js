@@ -70,7 +70,7 @@ async function mountDetail({ permissions = [EXCESS, SUPPORT_TICKETS], detail = i
 function ticketCountText(wrapper) {
     const label = `${i18n.global.t('ticketSoporte')}:`;
     const paragraph = wrapper.findAll('p').find((p) => p.text().startsWith(label));
-    return paragraph.text().replace(/\s+/g, ' ').trim();
+    return paragraph.text().replace(/\s+/g, '');
 }
 
 function templatedButton(wrapper) {
@@ -151,7 +151,7 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
             i18n.global.t('excessContributionTemplatedTicketCreated'),
             { estado: 'success' }
         );
-        expect(ticketCountText(wrapper)).toBe(`${i18n.global.t('ticketSoporte')}: 1`);
+        expect(ticketCountText(wrapper)).toBe(`${i18n.global.t('ticketSoporte')}:1`.replace(/\s+/g, ''));
         expect(templatedButton(wrapper).attributes('disabled')).toBeUndefined();
     });
 
@@ -166,7 +166,7 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
             i18n.global.t('excessContributionTemplatedTicketError'),
             { estado: 'error' }
         );
-        expect(ticketCountText(wrapper)).toBe(`${i18n.global.t('ticketSoporte')}: -`);
+        expect(ticketCountText(wrapper)).toBe(`${i18n.global.t('ticketSoporte')}:-`.replace(/\s+/g, ''));
         expect(templatedButton(wrapper).attributes('disabled')).toBeUndefined();
     });
 

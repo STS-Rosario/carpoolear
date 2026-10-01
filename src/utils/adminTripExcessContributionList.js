@@ -264,3 +264,16 @@ export function excessContributionStatusButtonVariant(status) {
     }
     return 'secondary';
 }
+
+/**
+ * Payload for POST /api/admin/support/tickets: an excess-contribution ticket for the
+ * item's user, with the i18n subject and the editable template message.
+ */
+export function buildExcessContributionTemplatedTicketPayload(item, t) {
+    return {
+        user_id: item.user_id,
+        type: 'excess_contribution',
+        subject: t('ticketTypeExcessContribution'),
+        message_markdown: t('excessContributionTemplatedTicketMessage')
+    };
+}

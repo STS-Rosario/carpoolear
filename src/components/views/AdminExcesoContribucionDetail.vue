@@ -102,6 +102,17 @@
                             >
                                 {{ $t('crearTicketSoporte') }}
                             </AppButton>
+                            <AppButton
+                                v-if="canCreateTemplatedTicket"
+                                variant="secondary"
+                                size="sm"
+                                class="admin-exceso-templated-ticket"
+                                :disabled="creatingTemplatedTicket"
+                                :loading="creatingTemplatedTicket"
+                                @click="createTemplatedTicket"
+                            >
+                                {{ $t('excessContributionTemplatedTicketButton') }}
+                            </AppButton>
                         </div>
 
                         <div class="admin-exceso-status-actions mt-3">
@@ -128,12 +139,18 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
+import dialogs from '../../services/dialogs';
+import { useAuthStore } from '../../stores/auth';
+import { useTicketsStore } from '../../stores/tickets';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     adminTripSearchRoute,
+    buildExcessContributionTemplatedTicketPayload,
     excessContributionStatusActionLabel,
     excessContributionStatusButtonVariant,
     excessContributionStatusActions,
@@ -159,10 +176,20 @@ export default {
             item: null,
             loading: true,
             updatingStatus: false,
-            pendingStatus: null
+            pendingStatus: null,
+            creatingTemplatedTicket: false
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            authUser: 'user'
+        }),
+        canCreateTemplatedTicket() {
+            return (
+                Boolean(this.item && this.item.user_id) &&
+                can(this.authUser, ADMIN_PERMISSIONS.SupportTickets)
+            );
+        },
         statusActions() {
             if (!this.item) {
                 return [];
@@ -171,6 +198,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions(useTicketsStore, {
+            adminCreateTicket: 'adminCreateTicket'
+        }),
         formatTripContributionPesosLabel,
         formatAdminTripContributionLabel,
         formatAdminExcessContributionPercentageLabel,
@@ -219,6 +249,35 @@ export default {
                     this.updatingStatus = false;
                     this.pendingStatus = null;
                 });
+        },
+        createTemplatedTicket() {
+            if (!this.item || this.creatingTemplatedTicket) {
+                return;
+            }
+            const name = this.item.user_name || `#${this.item.user_id}`;
+            if (!window.confirm(this.$t('excessContributionTemplatedTicketConfirm', { name }))) {
+                return;
+            }
+            this.creatingTemplatedTicket = true;
+            const payload = buildExcessContributionTemplatedTicketPayload(this.item, (key) =>
+                this.$t(key)
+            );
+            return this.adminCreateTicket(payload)
+                .then(() => {
+                    this.item.excess_contribution_support_tickets_count =
+                        Number(this.item.excess_contribution_support_tickets_count || 0) + 1;
+                    dialogs.message(this.$t('excessContributionTemplatedTicketCreated'), {
+                        estado: 'success'
+                    });
+                })
+                .catch(() => {
+                    dialogs.message(this.$t('excessContributionTemplatedTicketError'), {
+                        estado: 'error'
+                    });
+                })
+                .finally(() => {
+                    this.creatingTemplatedTicket = false;
+                });
         }
     },
     mounted() {
@@ -234,6 +293,10 @@ export default {
 <style scoped>
 .admin-exceso-back {
     margin-bottom: 16px;
+}
+
+.admin-exceso-templated-ticket {
+    margin-left: 8px;
 }
 
 .admin-exceso-status-action + .admin-exceso-status-action {

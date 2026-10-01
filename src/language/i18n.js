@@ -107,6 +107,14 @@ const messages = {
         ticketTypeAccountRecovery: 'Recuperación de cuenta/Cuenta duplicada',
         ticketTypeExcessContribution: 'Exceso de contribución',
         crearTicketSoporte: 'Crear ticket de mesa de ayuda',
+        excessContributionTemplatedTicketButton: 'Crear ticket con plantilla',
+        excessContributionTemplatedTicketConfirm:
+            '¿Crear un ticket de mesa de ayuda para {name} con el mensaje de plantilla? Se le enviará al usuario.',
+        excessContributionTemplatedTicketCreated: 'Ticket de mesa de ayuda creado',
+        excessContributionTemplatedTicketError: 'No se pudo crear el ticket de mesa de ayuda',
+        /** Placeholder template for the excess contribution ticket; edit freely. */
+        excessContributionTemplatedTicketMessage:
+            'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -4019,6 +4027,14 @@ const messages = {
         ticketTypeAccountRecovery: 'Account recovery/Duplicate account',
         ticketTypeExcessContribution: 'Excess contribution',
         crearTicketSoporte: 'Create help desk ticket',
+        excessContributionTemplatedTicketButton: 'Create templated ticket',
+        excessContributionTemplatedTicketConfirm:
+            'Create a help desk ticket for {name} with the template message? It will be sent to the user.',
+        excessContributionTemplatedTicketCreated: 'Help desk ticket created',
+        excessContributionTemplatedTicketError: 'Couldn\'t create the help desk ticket',
+        /** Placeholder template for the excess contribution ticket; edit freely. */
+        excessContributionTemplatedTicketMessage:
+            'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',
         adminUsuarioTieneTicketsSoporte: 'This user has {count} associated support ticket(s).',
         adminUsuarioVerTicketsSoporte: 'View support tickets ({count})',
         crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
