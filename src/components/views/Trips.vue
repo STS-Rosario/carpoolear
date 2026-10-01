@@ -39,6 +39,46 @@
                 </button>
             </div>
         </div>
+        <modal
+            :name="'modal'"
+            v-if="showAppStorePrompt && appStorePrompt"
+            @close="closeAppStorePrompt()"
+        >
+            <template #header><h3>
+                <span>{{ $t('descargaLaApp') }}</span>
+            </h3></template>
+            <template #body><div class="app-store-prompt">
+                <p>{{ $t('descargaLaAppTexto') }}</p>
+                <div class="app-store-prompt__badges">
+                    <a
+                        v-for="badge in appStorePrompt.badges"
+                        :key="badge.store"
+                        :href="badge.url"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <img
+                            :src="storeBadges[badge.store].src"
+                            :alt="$t(storeBadges[badge.store].alt)"
+                        />
+                    </a>
+                </div>
+                <div class="install-modal-actions">
+                    <AppButton
+                        variant="secondary"
+                        @click="closeAppStorePrompt()"
+                    >
+                        {{ $t('ahoraNo') }}
+                    </AppButton>
+                    <AppButton
+                        variant="tertiary"
+                        @click="dontShowAppStorePromptAgain()"
+                    >
+                        {{ $t('noMostrarDeNuevo') }}
+                    </AppButton>
+                </div>
+            </div></template>
+        </modal>
         <div v-if="isMobile && !lookSearch" class="trips-mobile-home">
             <div class="trips-mobile-home__role-grid">
                 <button
@@ -133,46 +173,6 @@
                                 @click="onDonateOnceTime"
                             >
                                 {{ $t('unicaVez') }}
-                            </AppButton>
-                        </div>
-                    </div></template>
-                </modal>
-                <modal
-                    :name="'modal'"
-                    v-if="showAppStorePrompt && appStorePrompt"
-                    @close="closeAppStorePrompt()"
-                >
-                    <template #header><h3>
-                        <span>{{ $t('descargaLaApp') }}</span>
-                    </h3></template>
-                    <template #body><div class="app-store-prompt">
-                        <p>{{ $t('descargaLaAppTexto') }}</p>
-                        <div class="app-store-prompt__badges">
-                            <a
-                                v-for="badge in appStorePrompt.badges"
-                                :key="badge.store"
-                                :href="badge.url"
-                                target="_blank"
-                                rel="noopener"
-                            >
-                                <img
-                                    :src="storeBadges[badge.store].src"
-                                    :alt="$t(storeBadges[badge.store].alt)"
-                                />
-                            </a>
-                        </div>
-                        <div class="install-modal-actions">
-                            <AppButton
-                                variant="secondary"
-                                @click="closeAppStorePrompt()"
-                            >
-                                {{ $t('ahoraNo') }}
-                            </AppButton>
-                            <AppButton
-                                variant="tertiary"
-                                @click="dontShowAppStorePromptAgain()"
-                            >
-                                {{ $t('noMostrarDeNuevo') }}
                             </AppButton>
                         </div>
                     </div></template>
