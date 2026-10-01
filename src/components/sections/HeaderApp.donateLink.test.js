@@ -32,7 +32,8 @@ const HEADER_ROUTE_NAMES = [
     'new-trip',
     'login',
     'register',
-    'notifications'
+    'notifications',
+    'donate'
 ];
 
 const stubs = {
@@ -49,13 +50,13 @@ function setPlatform(platform) {
     capacitorMock.getPlatform.mockReturnValue(platform);
 }
 
-async function mountLoggedInMobileHeader() {
+async function mountLoggedInMobileHeader({ user = { id: 42, name: 'Ana' } } = {}) {
     const pinia = createPinia();
     setActivePinia(pinia);
 
     const { useAuthStore } = await import('../../stores/auth');
     const { useDeviceStore } = await import('../../stores/device');
-    useAuthStore().$patch({ auth: true, user: { id: 42, name: 'Ana' } });
+    useAuthStore().$patch({ auth: !!user, user });
     useDeviceStore().$patch({ resolution: { width: 375, height: 800 } });
 
     const router = createRouter({
@@ -97,23 +98,33 @@ describe('HeaderApp Aportar button', () => {
         setPlatform('web');
     });
 
-    it('keeps the relative /aportar link on web', async () => {
-        setPlatform('web');
-        const wrapper = await mountLoggedInMobileHeader();
-
-        expectDonateButtonsToLinkTo(wrapper, '/aportar');
-    });
-
-    it.each(['android', 'ios'])(
-        'on %s points to the remote site instead of the bundled WebView host (which reloads the app)',
+    it.each(['web', 'android'])(
+        'on %s opens the in-app donation page with the router (no reload)',
         async (platform) => {
             setPlatform(platform);
             const wrapper = await mountLoggedInMobileHeader();
 
-            expectDonateButtonsToLinkTo(
-                wrapper,
-                'https://www.carpoolear.com.ar/aportar'
-            );
+            expectDonateButtonsToLinkTo(wrapper, '/donate');
         }
     );
+
+    it('on ios keeps pointing to the remote /aportar site', async () => {
+        setPlatform('ios');
+        const wrapper = await mountLoggedInMobileHeader();
+
+        expectDonateButtonsToLinkTo(
+            wrapper,
+            'https://www.carpoolear.com.ar/aportar'
+        );
+    });
+
+    it('keeps the website /aportar link for logged-out visitors on web', async () => {
+        setPlatform('web');
+        const wrapper = await mountLoggedInMobileHeader({ user: null });
+
+        const hrefs = wrapper
+            .findAll('a.app-button--header-donate')
+            .map((link) => link.attributes('href'));
+        expect(hrefs).toEqual(['/aportar']);
+    });
 });
