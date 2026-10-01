@@ -120,8 +120,7 @@
                             variant="secondary"
                             @click="onContinueWithoutDonating"
                         >
-                            {{ $t('donationAfterRatingCannotContributeLink')
-                            }}{{ $t('donationAfterRatingCannotContributeSuffix') }}
+                            {{ $t('donationAfterRatingContinueWithoutContributing') }}
                         </AppButton>
                         <div class="donation-after-rating__sign-off">
                             <p class="donation-after-rating__alt-copy">
