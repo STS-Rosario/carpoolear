@@ -275,8 +275,8 @@ export default {
                 return;
             }
             this.creatingTemplatedTicket = true;
-            const payload = buildExcessContributionTemplatedTicketPayload(this.item, (key) =>
-                this.$t(key)
+            const payload = buildExcessContributionTemplatedTicketPayload(this.item, (key, params) =>
+                this.$t(key, params)
             );
             return this.adminCreateTicket(payload)
                 .then((ticket) => {

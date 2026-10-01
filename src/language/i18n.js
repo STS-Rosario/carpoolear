@@ -115,9 +115,13 @@ const messages = {
         excessContributionTicketAlreadyExists:
             'Este viaje ya tiene un ticket de exceso de contribución',
         excessContributionTicketView: 'Ver ticket de exceso de contribución',
-        /** Placeholder template for the excess contribution ticket; edit freely. */
+        /** Excess contribution ticket template; params: tripLink, maxAmount, bannedUntil, termsLink. */
         excessContributionTemplatedTicketMessage:
-            'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',
+            'Hola, cómo estás? Detectamos un exceso en el monto de contribución por persona en tu viaje {tripLink}.\n\n' +
+            'El monto máximo según la Calculadora Carpoolear es {maxAmount} y pediste más. Esto va contra las reglas como es explicado en la plataforma y al crear el viaje, por lo que esta es una notificación de la sanción.\n\n' +
+            'La sanción es hasta el día {bannedUntil} y al finalizar, para poder volver a utilizar tu cuenta, deberás abonar el costo de reactivación de la cuenta. Este costo sirve para pagar el tiempo que le toma al equipo de Carpoolear en investigar y procesar tu sanción.\n\n' +
+            'Te recomendamos leer los términos y condiciones para evitar futuras sanciones: {termsLink}.\n\n' +
+            'Equipo Carpoolear',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -4038,9 +4042,13 @@ const messages = {
         excessContributionTicketAlreadyExists:
             'This trip already has an excess contribution ticket',
         excessContributionTicketView: 'View excess contribution ticket',
-        /** Placeholder template for the excess contribution ticket; edit freely. */
+        /** Excess contribution ticket template; params: tripLink, maxAmount, bannedUntil, termsLink. */
         excessContributionTemplatedTicketMessage:
-            'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',
+            'Hi, how are you? We detected an excess in the per-person contribution amount on your trip {tripLink}.\n\n' +
+            'The maximum amount according to the Carpoolear Calculator is {maxAmount} and you asked for more. This goes against the rules, as explained on the platform and when creating the trip, so this is a notice of the sanction.\n\n' +
+            'The sanction lasts until {bannedUntil} and, once it ends, to be able to use your account again you will have to pay the account reactivation fee. This fee pays for the time it takes the Carpoolear team to investigate and process your sanction.\n\n' +
+            'We recommend reading the terms and conditions to avoid future sanctions: {termsLink}.\n\n' +
+            'The Carpoolear Team',
         adminUsuarioTieneTicketsSoporte: 'This user has {count} associated support ticket(s).',
         adminUsuarioVerTicketsSoporte: 'View support tickets ({count})',
         crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
