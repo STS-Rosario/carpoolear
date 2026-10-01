@@ -35,6 +35,16 @@ describe('shouldPromptDonationAfterRating', () => {
         ).toBe(false);
     });
 
+    it('returns false for active Club Carpoolear members', () => {
+        expect(
+            shouldPromptDonationAfterRating({
+                user: { club_carpoolear_active: 1, donations: [] },
+                tripId: 42,
+                tripsRated: 2
+            })
+        ).toBe(false);
+    });
+
     it('returns false once the monthly trip limit is reached', () => {
         expect(
             shouldPromptDonationAfterRating({

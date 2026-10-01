@@ -1,5 +1,7 @@
+import { isActiveClubCarpoolearMember } from './clubCarpoolearMember.js';
+
 export function shouldPromptDonationAfterRating({ user, tripId, tripsRated }) {
-    if (!user || user.monthly_donate) {
+    if (!user || isActiveClubCarpoolearMember(user)) {
         return false;
     }
 

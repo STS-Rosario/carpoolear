@@ -99,6 +99,17 @@ describe('UpdateProfile public data checkbox', () => {
     });
 });
 
+describe('UpdateProfile Club Carpoolear visibility', () => {
+    it('shows membership visibility checkbox with join link for non-members', () => {
+        expect(viewSource).toContain('update-profile-club-carpoolear');
+        expect(viewSource).toContain('show_club_carpoolear_membership');
+        expect(viewSource).toContain('isActiveClubCarpoolearMember');
+        expect(viewSource).toContain("$t('mostrarMiembroClubCarpoolear')");
+        expect(viewSource).toContain("name: 'donate'");
+        expect(viewSource).toContain("$t('quieroSumarmeClubCarpoolear')");
+    });
+});
+
 describe('UpdateProfile document field description', () => {
     it('prepends DNI or passport hint before the document verification copy', () => {
         expect(viewSource).toMatch(
