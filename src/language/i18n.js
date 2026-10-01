@@ -1310,39 +1310,39 @@ const messages = {
         elegiPropiaAventura: 'Elegí tu propia aventura',
         conoceMasDonar: 'Conocé más sobre aportes',
         continuarSinDonar: 'Continuar sin aportar',
-        donationAfterRatingHeroTitlePrimary: 'Necesitamos',
-        donationAfterRatingHeroTitleAccent: 'Tu aporte',
+        donationAfterRatingHeroTitlePrimary: 'Tu aporte',
+        donationAfterRatingHeroTitleAccent: 'es fundamental',
         donationAfterRatingMissionLead:
-            ' Queremos ser la mejor comunidad de carpooling de Argentina.',
+            ' Queremos seguir siendo la mejor comunidad de carpooling de Argentina.',
         donationAfterRatingMissionOrg:
-            'Somos un proyecto de la <strong>ONG STS Rosario</strong>.',
+            'Carpoolear es un proyecto colaborativo sin fines de lucro de la <strong>ONG STS Rosario</strong>.',
         donationAfterRatingMissionBody:
-            'Con más de <strong>500.000 usuarios</strong> tenemos gastos de <strong>servidores</strong>, gastos de <strong>programación</strong> y muchas horas semanales de consultas de <strong>Mesa de ayuda</strong> que <strong>queremos poder pagarlas</strong> (hoy es trabajo voluntario)',
-        donationAfterRatingJoinPrefix: 'Sumate a la',
-        donationAfterRatingJoinAccent: 'Comunidad Carpoolear',
+            'En ruta desde el 2013, hoy día es la comunidad de Carpooling más grande de Argentina, integrada por más de 450.000 personas y más de 1500 viajes mensuales. Se requiere mucho trabajo, ya no es suficiente sólo con voluntariado. Por eso, es importante tu aporte para poder mantener y mejorar Carpoolear tal como lo venimos haciendo desde que salimos de “Zona de derrumbe” en 2025.',
+        donationAfterRatingJoinPrefix: 'Sumate al',
+        donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu <strong>aporte mensual</strong> podemos mejorar la plataforma para todos, y obtenés beneficios:',
+            'Con tu <strong>aporte mensual</strong> podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitVisibility:
             '<strong>Mayor visibilidad:</strong> tus viajes se van a mostrar primero en el listado, ayudándote a compartirlos más fácilmente.',
         donationAfterRatingBenefitPrioritySupport:
-            '<strong>Soporte prioritario:</strong> tus tickets de Mesa de Ayuda tendrán prioridad sobre el resto.',
+            '<strong>Soporte prioritario:</strong> tus tickets de Mesa de Ayuda tendrán prioridad.',
         donationAfterRatingBenefitEarlyAccess:
-            '<strong>Acceso anticipado:</strong> vas a poder probar algunas funcionalidades nuevas antes que el resto.',
+            '<strong>Acceso anticipado:</strong> vas a poder probar funcionalidades nuevas antes que salgan.',
         donationAfterRatingBenefitSemiannualReport:
-            '<strong>Informe semestral:</strong> cada 6 meses te vamos a mandar un mail contándote todas las cosas que pudimos hacer gracias a tu aporte.',
+            '<strong>Informe semestral:</strong> cada 6 meses te vamos a mandar un mail contándote lo que logramos gracias a tu aporte.',
         donationAfterRatingBenefitBadge:
-            '<strong>Chapa:</strong> tu perfil tendrá una insignia mostrando cómo ayudas a mantener a Carpoolear vivo, y vas a aparecer en una lista de personas que forman parte de la Comunidad Carpoolear (si así lo querés).',
+            '<strong>Pin:</strong> tu perfil tendrá una insignia y vas a aparecer en una lista de personas que forman parte del Club Carpoolear (si así lo querés).',
         donationAfterRatingMonthlyAmountIntro:
             'Puedo <strong>aportar cada mes</strong> con el equivalente a...',
         donationAfterRatingJoinCommunityMonthly:
-            'Quiero formar parte de la Comunidad Carpoolear',
+            'Quiero formar parte del Club Carpoolear',
         donationAfterRatingJoinCommunityMonthlyHint: 'cancelá cuando quieras',
         donationAfterRatingOnceIntro:
-            '¿No podés comprometerte a aportar un poquito cada mes? Podés hacerlo por única vez:',
+            '¿No podés comprometerte a aportar cada mes? Podés hacerlo por única vez:',
         donationAfterRatingOnceCta: 'Quiero aportar por única vez',
         donationAfterRatingVolunteerParagraph:
-            '¿No estás en condiciones de aportar económicamente? Podés aportar tu tiempo {link}, siempre necesitamos una mano.',
-        donationAfterRatingVolunteerLink: 'sumándote como voluntario',
+            '¿No estás en condiciones de aportar económicamente? ¿Simplemente te gusta meter las manos en el barro? Podés aportar tu tiempo {link}, siempre necesitamos una mano en las distintas áreas del proyecto.',
+        donationAfterRatingVolunteerLink: 'sumándote al voluntariado',
         donationAfterRatingInstagramParagraph:
             '¿No tenés mucho tiempo? Podés seguirnos en {link} y ayudarnos a difundir la comunidad contándole a la gente que conozcas sobre Carpoolear.',
         donationAfterRatingInstagramLink: 'Instagram',
@@ -2551,39 +2551,39 @@ const messages = {
         elegiPropiaAventura: 'Elegí tu propia aventura',
         conoceMasDonar: 'Conocé más sobre aportes',
         continuarSinDonar: 'Continuar sin aportar',
-        donationAfterRatingHeroTitlePrimary: 'Necesitamos',
-        donationAfterRatingHeroTitleAccent: 'Tu aporte',
+        donationAfterRatingHeroTitlePrimary: 'Tu aporte',
+        donationAfterRatingHeroTitleAccent: 'es fundamental',
         donationAfterRatingMissionLead:
-            ' Queremos ser la mejor comunidad de carpooling de Argentina.',
+            ' Queremos seguir siendo la mejor comunidad de carpooling de Argentina.',
         donationAfterRatingMissionOrg:
-            'Somos un proyecto de la <strong>ONG STS Rosario</strong>.',
+            'Carpoolear es un proyecto colaborativo sin fines de lucro de la <strong>ONG STS Rosario</strong>.',
         donationAfterRatingMissionBody:
-            'Con más de <strong>500.000 usuarios</strong> tenemos gastos de <strong>servidores</strong>, gastos de <strong>programación</strong> y muchas horas semanales de consultas de <strong>Mesa de ayuda</strong> que <strong>queremos poder pagarlas</strong> (hoy es trabajo voluntario)',
-        donationAfterRatingJoinPrefix: 'Sumate a la',
-        donationAfterRatingJoinAccent: 'Comunidad Carpoolear',
+            'En ruta desde el 2013, hoy día es la comunidad de Carpooling más grande de Argentina, integrada por más de 450.000 personas y más de 1500 viajes mensuales. Se requiere mucho trabajo, ya no es suficiente sólo con voluntariado. Por eso, es importante tu aporte para poder mantener y mejorar Carpoolear tal como lo venimos haciendo desde que salimos de “Zona de derrumbe” en 2025.',
+        donationAfterRatingJoinPrefix: 'Sumate al',
+        donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu <strong>aporte mensual</strong> podemos mejorar la plataforma para todos, y obtenés beneficios:',
+            'Con tu <strong>aporte mensual</strong> podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitVisibility:
             '<strong>Mayor visibilidad:</strong> tus viajes se van a mostrar primero en el listado, ayudándote a compartirlos más fácilmente.',
         donationAfterRatingBenefitPrioritySupport:
-            '<strong>Soporte prioritario:</strong> tus tickets de Mesa de Ayuda tendrán prioridad sobre el resto.',
+            '<strong>Soporte prioritario:</strong> tus tickets de Mesa de Ayuda tendrán prioridad.',
         donationAfterRatingBenefitEarlyAccess:
-            '<strong>Acceso anticipado:</strong> vas a poder probar algunas funcionalidades nuevas antes que el resto.',
+            '<strong>Acceso anticipado:</strong> vas a poder probar funcionalidades nuevas antes que salgan.',
         donationAfterRatingBenefitSemiannualReport:
-            '<strong>Informe semestral:</strong> cada 6 meses te vamos a mandar un mail contándote todas las cosas que pudimos hacer gracias a tu aporte.',
+            '<strong>Informe semestral:</strong> cada 6 meses te vamos a mandar un mail contándote lo que logramos gracias a tu aporte.',
         donationAfterRatingBenefitBadge:
-            '<strong>Chapa:</strong> tu perfil tendrá una insignia mostrando cómo ayudas a mantener a Carpoolear vivo, y vas a aparecer en una lista de personas que forman parte de la Comunidad Carpoolear (si así lo querés).',
+            '<strong>Pin:</strong> tu perfil tendrá una insignia y vas a aparecer en una lista de personas que forman parte del Club Carpoolear (si así lo querés).',
         donationAfterRatingMonthlyAmountIntro:
             'Puedo <strong>aportar cada mes</strong> con el equivalente a...',
         donationAfterRatingJoinCommunityMonthly:
-            'Quiero formar parte de la Comunidad Carpoolear',
+            'Quiero formar parte del Club Carpoolear',
         donationAfterRatingJoinCommunityMonthlyHint: 'cancelá cuando quieras',
         donationAfterRatingOnceIntro:
-            '¿No podés comprometerte a aportar un poquito cada mes? Podés hacerlo por única vez:',
+            '¿No podés comprometerte a aportar cada mes? Podés hacerlo por única vez:',
         donationAfterRatingOnceCta: 'Quiero aportar por única vez',
         donationAfterRatingVolunteerParagraph:
-            '¿No estás en condiciones de aportar económicamente? Podés aportar tu tiempo {link}, siempre necesitamos una mano.',
-        donationAfterRatingVolunteerLink: 'sumándote como voluntario',
+            '¿No estás en condiciones de aportar económicamente? ¿Simplemente te gusta meter las manos en el barro? Podés aportar tu tiempo {link}, siempre necesitamos una mano en las distintas áreas del proyecto.',
+        donationAfterRatingVolunteerLink: 'sumándote al voluntariado',
         donationAfterRatingInstagramParagraph:
             '¿No tenés mucho tiempo? Podés seguirnos en {link} y ayudarnos a difundir la comunidad contándole a la gente que conozcas sobre Carpoolear.',
         donationAfterRatingInstagramLink: 'Instagram',
@@ -5196,39 +5196,39 @@ const messages = {
         elegiPropiaAventura: 'Choose your own adventure',
         conoceMasDonar: 'Learn more about contributions',
         continuarSinDonar: 'Continue without contributing',
-        donationAfterRatingHeroTitlePrimary: 'We need',
-        donationAfterRatingHeroTitleAccent: 'Your contribution',
+        donationAfterRatingHeroTitlePrimary: 'Your contribution',
+        donationAfterRatingHeroTitleAccent: 'is essential',
         donationAfterRatingMissionLead:
-            ' We want to be Argentina\'s best carpooling community.',
+            ' We want to keep being Argentina\'s best carpooling community.',
         donationAfterRatingMissionOrg:
-            'We are a project of the <strong>NGO STS Rosario</strong>.',
+            'Carpoolear is a collaborative non-profit project of the <strong>NGO STS Rosario</strong>.',
         donationAfterRatingMissionBody:
-            'With more than <strong>500,000 users</strong> we have <strong>server</strong> costs, <strong>development</strong> costs, and many weekly hours of <strong>help desk</strong> inquiries that we <strong>want to be able to pay for</strong> (today it is volunteer work).',
+            'On the road since 2013, today it is the largest carpooling community in Argentina, with more than 450,000 people and more than 1,500 trips a month. It takes a lot of work, and volunteering alone is no longer enough. That\'s why your contribution matters: it lets us keep maintaining and improving Carpoolear the way we have been doing since we left the “Zona de derrumbe” in 2025.',
         donationAfterRatingJoinPrefix: 'Join the',
-        donationAfterRatingJoinAccent: 'Carpoolear Community',
+        donationAfterRatingJoinAccent: 'Carpoolear Club',
         donationAfterRatingMonthlyBenefitsIntro:
-            'With your <strong>monthly contribution</strong> we can improve the platform for everyone, and you get benefits:',
+            'With your <strong>monthly contribution</strong> we can keep going and keep improving, and in return you get the following benefits for being part of it:',
         donationAfterRatingBenefitVisibility:
             '<strong>Greater visibility:</strong> your trips will be shown first in the listing, helping you share them more easily.',
         donationAfterRatingBenefitPrioritySupport:
-            '<strong>Priority support:</strong> your Help Desk tickets will take priority over others.',
+            '<strong>Priority support:</strong> your Help Desk tickets will get priority.',
         donationAfterRatingBenefitEarlyAccess:
-            '<strong>Early access:</strong> you\'ll be able to try some new features before everyone else.',
+            '<strong>Early access:</strong> you\'ll be able to try new features before they are released.',
         donationAfterRatingBenefitSemiannualReport:
-            '<strong>Semiannual report:</strong> every 6 months we\'ll send you an email about everything we were able to do thanks to your contribution.',
+            '<strong>Semiannual report:</strong> every 6 months we\'ll email you about what we achieved thanks to your contribution.',
         donationAfterRatingBenefitBadge:
-            '<strong>Badge:</strong> your profile will have a badge showing how you help keep Carpoolear alive, and you\'ll appear on a list of people who are part of the Carpoolear Community (if you want).',
+            '<strong>Pin:</strong> your profile will have a badge and you\'ll appear on a list of people who are part of the Carpoolear Club (if you want).',
         donationAfterRatingMonthlyAmountIntro:
             'I can <strong>contribute each month</strong> with the equivalent of...',
         donationAfterRatingJoinCommunityMonthly:
-            'I want to be part of the Carpoolear Community',
+            'I want to be part of the Carpoolear Club',
         donationAfterRatingJoinCommunityMonthlyHint: 'cancel anytime',
         donationAfterRatingOnceIntro:
-            'Can\'t commit to contributing a little each month? You can do it once:',
+            'Can\'t commit to contributing every month? You can do it once:',
         donationAfterRatingOnceCta: 'I want to contribute once',
         donationAfterRatingVolunteerParagraph:
-            'Not in a position to contribute financially? You can contribute your time by {link}; we always need a hand.',
-        donationAfterRatingVolunteerLink: 'joining as a volunteer',
+            'Not in a position to contribute financially? Do you simply like getting your hands dirty? You can contribute your time by {link}; we always need a hand in the different areas of the project.',
+        donationAfterRatingVolunteerLink: 'joining our volunteers',
         donationAfterRatingInstagramParagraph:
             'Don\'t have much time? Follow us on {link} and help spread the word about Carpoolear to people you know.',
         donationAfterRatingInstagramLink: 'Instagram',
