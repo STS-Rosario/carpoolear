@@ -14,6 +14,8 @@ export const TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS = [
     { key: 'potential_seat_price_cents', labelKey: 'contribucionPotencial' },
     { key: 'average_contribution_cents', labelKey: 'contribucionPromedio' },
     { key: 'excess_contribution_percentage', labelKey: 'porcentajeExceso' },
+    { key: 'suspected_contribution', labelKey: 'contribucionSospechada' },
+    { key: 'phone_in_description', labelKey: 'telefonoEnDescripcion' },
     { key: 'has_private_note', labelKey: 'tieneNotas' },
     { key: 'excess_contribution_support_tickets_count', labelKey: 'ticketSoporte' },
     { key: 'exceso_contribucion_status', labelKey: 'estado' }
@@ -167,6 +169,24 @@ export function formatAdminTripContributionLabel(cents) {
     }
 
     return `$${units}`;
+}
+
+/**
+ * Formats the LLM suspected contribution (currency units, may arrive as a
+ * decimal string from the API) using the same peso label as cents amounts.
+ */
+export function formatAdminSuspectedContributionLabel(amount) {
+    if (amount == null || amount === '') {
+        return null;
+    }
+
+    const numeric = Number(amount);
+
+    if (!Number.isFinite(numeric)) {
+        return null;
+    }
+
+    return formatAdminTripContributionLabel(Math.round(numeric * 100));
 }
 
 export function formatAdminExcessContributionPercentageLabel(percentage) {
