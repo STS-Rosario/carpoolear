@@ -96,4 +96,27 @@ describe('donation after rating copy document', () => {
             expect(messages.en[key], key).toBe(EN_COPY[key]);
         });
     });
+
+    it.each(['arg', 'chl'])(
+        'uses the copy document social bullet with Instagram and Facebook links in %s',
+        (locale) => {
+            expect(messages[locale].donationAfterRatingInstagramParagraph).toBe(
+                'Si usas las redes sociales virtuales {instagram}, {facebook} y compartí nuestras publicaciones/historias.'
+            );
+            expect(messages[locale].donationAfterRatingInstagramLink).toBe(
+                'Instagram'
+            );
+            expect(messages[locale].donationAfterRatingFacebookLink).toBe(
+                'Facebook'
+            );
+        }
+    );
+
+    it('translates the social bullet with Instagram and Facebook links in en', () => {
+        expect(messages.en.donationAfterRatingInstagramParagraph).toBe(
+            'If you use social media ({instagram}, {facebook}), share our posts/stories.'
+        );
+        expect(messages.en.donationAfterRatingInstagramLink).toBe('Instagram');
+        expect(messages.en.donationAfterRatingFacebookLink).toBe('Facebook');
+    });
 });
