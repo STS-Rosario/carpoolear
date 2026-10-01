@@ -36,6 +36,7 @@
 import dayjs from '../dayjs';
 import UserNameWithBadge from './elements/UserNameWithBadge.vue';
 import { markdownToHtml } from '../services/markdown';
+import { resolveExternalLinksInHtml } from '../utils/externalLink.js';
 
 export default {
     components: {
@@ -46,7 +47,9 @@ export default {
     },
     computed: {
         messageTextHtml() {
-            return markdownToHtml(this.message.text || '');
+            return resolveExternalLinksInHtml(
+                markdownToHtml(this.message.text || '')
+            );
         },
         author() {
             let user = this.users.find(

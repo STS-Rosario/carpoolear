@@ -37,3 +37,19 @@ export function openExternalUrl(url) {
 export function inAppLinkTarget() {
     return Capacitor.isNativePlatform() ? undefined : '_blank';
 }
+
+/**
+ * Rewrite the links in rendered HTML (e.g. chat markdown) with resolveExternalUrl so
+ * app-host links leave the app on native. Web HTML is returned untouched.
+ */
+export function resolveExternalLinksInHtml(html) {
+    if (!html || !Capacitor.isNativePlatform()) {
+        return html;
+    }
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    template.content.querySelectorAll('a[href]').forEach((anchor) => {
+        anchor.setAttribute('href', resolveExternalUrl(anchor.getAttribute('href')));
+    });
+    return template.innerHTML;
+}
