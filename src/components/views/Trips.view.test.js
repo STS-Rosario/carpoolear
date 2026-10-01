@@ -304,6 +304,18 @@ describe('Trips.vue app store install prompt', () => {
         expect(badgesCss).toContain('align-items: center');
     });
 
+    it('adds 20-24px of vertical spacing above and below the store badges', () => {
+        const badgesCss = viewSource.match(/\.app-store-prompt__badges \{[^}]*\}/)?.[0];
+        expect(badgesCss).toMatch(/margin: 2[0-4]px 0;/);
+    });
+
+    it('centers the side-by-side action buttons', () => {
+        const actionsCss = viewSource.match(/\.install-modal-actions \{[^}]*\}/)?.[0];
+        expect(actionsCss).toBeTruthy();
+        expect(actionsCss).toContain('justify-content: center');
+        expect(actionsCss).not.toContain('flex-direction: column');
+    });
+
     it('renders the download title and text', () => {
         const modal = promptModal();
         expect(modal).toContain("$t('descargaLaApp')");
