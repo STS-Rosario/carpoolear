@@ -1252,15 +1252,21 @@ export default {
             }
         },
         maybeShowContributionExcessModal() {
+            // Same description, price and maximum cap the contribution step validates against.
+            const {
+                description,
+                price,
+                maxPriceEnabled,
+                maximumSeatPriceCents,
+                maximumTripPriceCents
+            } = this.buildValidationContext();
             const shouldShow = shouldShowContributionExcessWarning({
                 step: this.currentStep,
-                description: this.form.trip.description,
-                price: this.form.price,
-                maxPriceEnabled: Boolean(
-                    this.form.config && this.form.config.module_max_price_enabled
-                ),
-                maximumSeatPriceCents: this.form.maximum_seat_price_cents,
-                maximumTripPriceCents: this.form.maximum_trip_price_cents,
+                description,
+                price,
+                maxPriceEnabled,
+                maximumSeatPriceCents,
+                maximumTripPriceCents,
                 alreadyShown: this.hasShownContributionExcessModal,
                 isEdit: this.isEditTripFlow
             });
