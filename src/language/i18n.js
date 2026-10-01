@@ -1344,8 +1344,9 @@ const messages = {
             '¿No estás en condiciones de aportar económicamente? ¿Simplemente te gusta meter las manos en el barro? Podés aportar tu tiempo {link}, siempre necesitamos una mano en las distintas áreas del proyecto.',
         donationAfterRatingVolunteerLink: 'sumándote al voluntariado',
         donationAfterRatingInstagramParagraph:
-            '¿No tenés mucho tiempo? Podés seguirnos en {link} y ayudarnos a difundir la comunidad contándole a la gente que conozcas sobre Carpoolear.',
+            'Si usas las redes sociales virtuales {instagram}, {facebook} y compartí nuestras publicaciones/historias.',
         donationAfterRatingInstagramLink: 'Instagram',
+        donationAfterRatingFacebookLink: 'Facebook',
         donationAfterRatingCannotContributeLink: 'No puedo aportar',
         donationAfterRatingCannotContributeSuffix:
             ' ni siquiera difusión ahora :(',
@@ -2585,8 +2586,9 @@ const messages = {
             '¿No estás en condiciones de aportar económicamente? ¿Simplemente te gusta meter las manos en el barro? Podés aportar tu tiempo {link}, siempre necesitamos una mano en las distintas áreas del proyecto.',
         donationAfterRatingVolunteerLink: 'sumándote al voluntariado',
         donationAfterRatingInstagramParagraph:
-            '¿No tenés mucho tiempo? Podés seguirnos en {link} y ayudarnos a difundir la comunidad contándole a la gente que conozcas sobre Carpoolear.',
+            'Si usas las redes sociales virtuales {instagram}, {facebook} y compartí nuestras publicaciones/historias.',
         donationAfterRatingInstagramLink: 'Instagram',
+        donationAfterRatingFacebookLink: 'Facebook',
         donationAfterRatingCannotContributeLink: 'No puedo aportar',
         donationAfterRatingCannotContributeSuffix:
             ' ni siquiera difusión ahora :(',
@@ -5230,8 +5232,9 @@ const messages = {
             'Not in a position to contribute financially? Do you simply like getting your hands dirty? You can contribute your time by {link}; we always need a hand in the different areas of the project.',
         donationAfterRatingVolunteerLink: 'joining our volunteers',
         donationAfterRatingInstagramParagraph:
-            'Don\'t have much time? Follow us on {link} and help spread the word about Carpoolear to people you know.',
+            'If you use social media ({instagram}, {facebook}), share our posts/stories.',
         donationAfterRatingInstagramLink: 'Instagram',
+        donationAfterRatingFacebookLink: 'Facebook',
         donationAfterRatingCannotContributeLink: 'I can\'t contribute',
         donationAfterRatingCannotContributeSuffix:
             ' or even help spread the word right now :(',

@@ -66,14 +66,42 @@
                     </section>
 
                     <section class="donation-after-rating__alternatives">
-                        <p
+                        <i18n-t
+                            keypath="donationAfterRatingVolunteerParagraph"
+                            tag="p"
                             class="donation-after-rating__alt-copy"
-                            v-html="volunteerParagraphHtml"
-                        ></p>
-                        <p
+                        >
+                            <template #link>
+                                <a
+                                    :href="externalHref(collaborateUrl)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    @click.prevent="openExternalLink(collaborateUrl)"
+                                >{{ $t('donationAfterRatingVolunteerLink') }}</a>
+                            </template>
+                        </i18n-t>
+                        <i18n-t
+                            keypath="donationAfterRatingInstagramParagraph"
+                            tag="p"
                             class="donation-after-rating__alt-copy"
-                            v-html="instagramParagraphHtml"
-                        ></p>
+                        >
+                            <template #instagram>
+                                <a
+                                    :href="externalHref(instagramUrl)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    @click.prevent="openExternalLink(instagramUrl)"
+                                >{{ $t('donationAfterRatingInstagramLink') }}</a>
+                            </template>
+                            <template #facebook>
+                                <a
+                                    :href="externalHref(facebookUrl)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    @click.prevent="openExternalLink(facebookUrl)"
+                                >{{ $t('donationAfterRatingFacebookLink') }}</a>
+                            </template>
+                        </i18n-t>
                         <p class="donation-after-rating__alt-copy">
                             <a
                                 href="/trips"
@@ -103,11 +131,12 @@ import { startDonationCheckout } from '../../utils/donationCheckout.js';
 import { DONATION_AFTER_RATING_BENEFIT_KEYS } from '../../utils/donationAfterRatingBenefits.js';
 import {
     CARPOOLEAR_COLLABORATE_URL,
-    CARPOOLEAR_INSTAGRAM_URL
+    CARPOOLEAR_FACEBOOK_PROFILE_URL,
+    CARPOOLEAR_INSTAGRAM_PROFILE_URL
 } from '../../utils/carpoolearSocialUrls.js';
 import {
     openExternalUrl,
-    resolveExternalLinksInHtml
+    resolveExternalUrl
 } from '../../utils/externalLink.js';
 
 export default {
@@ -130,31 +159,28 @@ export default {
     data() {
         return {
             donateValue: 0,
-            benefitKeys: DONATION_AFTER_RATING_BENEFIT_KEYS
+            benefitKeys: DONATION_AFTER_RATING_BENEFIT_KEYS,
+            collaborateUrl: CARPOOLEAR_COLLABORATE_URL,
+            instagramUrl: CARPOOLEAR_INSTAGRAM_PROFILE_URL,
+            facebookUrl: CARPOOLEAR_FACEBOOK_PROFILE_URL
         };
     },
     computed: {
         ...mapState(useAuthStore, {
             user: 'user',
             appConfig: 'appConfig'
-        }),
-        volunteerParagraphHtml() {
-            const link = `<a href="${CARPOOLEAR_COLLABORATE_URL}" target="_blank" rel="noopener noreferrer">${this.$t('donationAfterRatingVolunteerLink')}</a>`;
-            return resolveExternalLinksInHtml(
-                this.$t('donationAfterRatingVolunteerParagraph', { link })
-            );
-        },
-        instagramParagraphHtml() {
-            const link = `<a href="${CARPOOLEAR_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">${this.$t('donationAfterRatingInstagramLink')}</a>`;
-            return resolveExternalLinksInHtml(
-                this.$t('donationAfterRatingInstagramParagraph', { link })
-            );
-        }
+        })
     },
     methods: {
         ...mapActions(useProfileStore, {
             registerDonation: 'registerDonation'
         }),
+        externalHref(url) {
+            return resolveExternalUrl(url);
+        },
+        openExternalLink(url) {
+            openExternalUrl(url);
+        },
         notifyPreviewMode() {
             dialogs.message('Preview mode: donation actions are disabled.', {
                 duration: 4,

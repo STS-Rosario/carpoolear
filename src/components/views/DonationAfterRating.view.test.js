@@ -59,8 +59,12 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).not.toContain("$t('donationUsageNote')");
         expect(viewSource).not.toContain("$t('conoceMasDonar')");
         expect(viewSource).not.toContain("$t('continuarSinDonar')");
-        expect(viewSource).toContain('volunteerParagraphHtml');
-        expect(viewSource).toContain('instagramParagraphHtml');
+        expect(viewSource).toContain(
+            'keypath="donationAfterRatingVolunteerParagraph"'
+        );
+        expect(viewSource).toContain(
+            'keypath="donationAfterRatingInstagramParagraph"'
+        );
         expect(viewSource).toContain(
             "$t('donationAfterRatingCannotContributeLink')"
         );
@@ -73,7 +77,8 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('onDonateMonthly');
         expect(viewSource).toContain('onContinueWithoutDonating');
         expect(viewSource).toContain('CARPOOLEAR_COLLABORATE_URL');
-        expect(viewSource).toContain('CARPOOLEAR_INSTAGRAM_URL');
+        expect(viewSource).toContain('CARPOOLEAR_INSTAGRAM_PROFILE_URL');
+        expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
     it('offers a skip link that returns to the trips list', () => {
