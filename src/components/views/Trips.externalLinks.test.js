@@ -147,19 +147,32 @@ describe('Trips external links', () => {
         );
     });
 
-    it.each([
-        ['web', 'https://carpoolear.com.ar/aportar?u=42'],
-        ['android', 'https://www.carpoolear.com.ar/aportar?u=42']
-    ])(
-        'on %s "por qué aportar" (logged in) opens the remote site, not the bundled app host',
-        async (platform, expectedUrl) => {
+    it.each(['web', 'android'])(
+        'on %s "por qué aportar" (logged in) opens the in-app donation page',
+        async (platform) => {
             setPlatform(platform);
-            const { wrapper } = await mountTrips();
+            const { wrapper, routerPush } = await mountTrips();
 
             await linkWithText(wrapper, 'porQueDonar').trigger('click');
             await flushPromises();
 
-            expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+            expect(routerPush).toHaveBeenCalledWith({ name: 'donate' });
+            expect(open).not.toHaveBeenCalled();
+        }
+    );
+
+    it.each(['web', 'android'])(
+        'on %s the Donar button (logged in) opens the in-app donation page instead of the modal',
+        async (platform) => {
+            setPlatform(platform);
+            const { wrapper, routerPush } = await mountTrips();
+
+            await buttonWithText(wrapper, 'donar').trigger('click');
+            await flushPromises();
+
+            expect(routerPush).toHaveBeenCalledWith({ name: 'donate' });
+            expect(open).not.toHaveBeenCalled();
+            expect(wrapper.findComponent({ name: 'modal' }).exists()).toBe(false);
         }
     );
 

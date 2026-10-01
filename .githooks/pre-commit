@@ -9,5 +9,8 @@ if [[ ! -d node_modules ]]; then
   exit 1
 fi
 
+echo "pre-commit: eslint --fix..."
+npm run lint:fix
+
 echo "pre-commit: eslint..."
 npm run lint

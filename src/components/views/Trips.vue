@@ -222,7 +222,7 @@
                                 href="/aportar"
                                 target="_blank"
                                 v-on:click.prevent="
-                                    onOpenLink(
+                                    onWhyDonate(
                                         'https://carpoolear.com.ar/aportar?u=' +
                                             user.id
                                     )
@@ -373,7 +373,7 @@
                                         href="/aportar"
                                         target="_blank"
                                         v-on:click.prevent="
-                                            onOpenLink(
+                                            onWhyDonate(
                                                 'https://carpoolear.com.ar/aportar'
                                             )
                                         "
@@ -562,11 +562,8 @@ import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import modal from '../Modal';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
-import {
-    appendDonationTrackingUserId,
-    getDonationMonthlyUrl,
-    getDonationOnceUrl
-} from '../../utils/donationOptions.js';
+import { appendDonationTrackingUserId } from '../../utils/donationOptions.js';
+import { startDonationCheckout } from '../../utils/donationCheckout.js';
 import { Capacitor } from '@capacitor/core';
 import {
     isIOSCapacitor,
@@ -940,27 +937,39 @@ export default {
                 );
                 return;
             }
+            if (this.user) {
+                this.$router.push({ name: 'donate' });
+                return;
+            }
             this.showModal = true;
         },
-        onOpenLink(link) {
-            openExternalUrl(link);
+        onWhyDonate(websiteUrl) {
+            if (this.user && !isIOSCapacitor()) {
+                this.$router.push({ name: 'donate' });
+                return;
+            }
+            openExternalUrl(websiteUrl);
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
-                let url = getDonationOnceUrl(this.donateValue);
-                url = appendDonationTrackingUserId(
-                    url,
-                    this.user && this.user.id
-                );
-                // Open in external browser (required for iOS donations)
-                openExternalUrl(url);
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'once',
+                        amount: this.donateValue,
+                        source: 'trips',
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    openExternalUrl(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('valorDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.showModal = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue)
-                };
-                this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,
@@ -970,20 +979,24 @@ export default {
         },
         async onDonateMonthly() {
             if (this.donateValue >= 0) {
-                let url = getDonationMonthlyUrl(this.donateValue);
-                url = appendDonationTrackingUserId(
-                    url,
-                    this.user && this.user.id
-                );
-                // Open in external browser (required for iOS donations)
-                openExternalUrl(url);
+                try {
+                    const url = await startDonationCheckout({
+                        type: 'monthly',
+                        amount: this.donateValue,
+                        source: 'trips',
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    openExternalUrl(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('valorDonacion'), {
+                        duration: 10,
+                        estado: 'error'
+                    });
+                    return;
+                }
                 this.showModal = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue)
-                };
-                this.registerDonation(data);
             } else {
                 dialogs.message(this.$t('valorDonacion'), {
                     duration: 10,

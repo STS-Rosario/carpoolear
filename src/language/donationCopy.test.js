@@ -19,6 +19,13 @@ describe('donation copy wording', () => {
         expect(messages.arg.tienesQueSeleccionarDonacion).toBe(
             'Tienes que seleccionar un valor de aporte'
         );
+        expect(messages.arg.donationAfterRatingHeroTitlePrimary).toBe('Tu aporte');
+        expect(messages.arg.donationAfterRatingHeroTitleAccent).toBe(
+            'es fundamental'
+        );
+        expect(messages.arg.donationAfterRatingJoinAccent).toBe(
+            'Club Carpoolear'
+        );
     });
 
     it('uses aportar/aporte wording in chl', () => {
@@ -59,8 +66,7 @@ describe('donation copy wording', () => {
 describe('aportar page links', () => {
     it.each([
         'sections/HeaderApp.vue',
-        'views/Trips.vue',
-        'views/DonationAfterRating.vue'
+        'views/Trips.vue'
     ])('points %s at /aportar instead of /donar', (relativePath) => {
         const source = fs.readFileSync(
             path.resolve(__dirname, `../components/${relativePath}`),

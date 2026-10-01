@@ -14,5 +14,7 @@ describe('DonationAmountPicker.vue', () => {
         expect(source).toContain(':value="String(tier.amount)"');
         expect(source).toContain('donationTierCafe');
         expect(source).toContain('donationUsageNote');
+        expect(source).toContain('usageNoteKey');
+        expect(source).toContain('radioGroupName');
     });
 });

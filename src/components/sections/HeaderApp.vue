@@ -1,5 +1,7 @@
 <template>
     <header class="header header-component">
+        <DonationAfterRatingHeader v-if="usesDonationAfterRatingHeader" />
+        <template v-else>
         <IdentityValidationCountdownBanner />
         <PendingRatingsBanner />
         <div
@@ -55,7 +57,7 @@
                         class="mobile-header-bar__donate"
                         variant="header-donate"
                         size="sm"
-                        :href="donationHref"
+                        v-bind="donationLinkProps"
                     >
                         {{ $t('donar') }}
                         <template #iconRight>
@@ -211,7 +213,7 @@
                     class="header_donate-btn"
                     variant="header-donate"
                     size="sm"
-                    :href="donationHref"
+                    v-bind="donationLinkProps"
                 >
                     {{ $t('donar') }}
                     <template #iconRight>
@@ -316,6 +318,7 @@
                 <header-menu-dropdown v-if="logged" />
             </div>
         </div>
+        </template>
     </header>
 </template>
 
@@ -334,9 +337,13 @@ import IdentityValidationCountdownBanner from '../IdentityValidationCountdownBan
 import UserRatingsCounts from '../elements/UserRatingsCounts.vue';
 import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
+import DonationAfterRatingHeader from './DonationAfterRatingHeader.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
-import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import {
+    isIOSCapacitor,
+    shouldHideDonationOnIOSCapacitor
+} from '../../services/capacitor.js';
 import { resolveExternalUrl } from '../../utils/externalLink.js';
 import { UserApi } from '../../services/api';
 import {
@@ -344,6 +351,7 @@ import {
     syncLocaleToBackend,
 } from '../../utils/userLocale.js';
 import { installAppHeaderOffsetObserver } from '../../utils/appHeaderOffset.js';
+import { usesDonationAfterRatingHeader as isDonationAfterRatingHeaderRoute } from '../../utils/donationAfterRatingHeader.js';
 
 const userApi = new UserApi();
 
@@ -409,6 +417,9 @@ export default {
         showChangelogNav() {
             return this.logged && this.hasAnyChangelog;
         },
+        usesDonationAfterRatingHeader() {
+            return isDonationAfterRatingHeaderRoute(this.$route.name);
+        },
 
         showLogo() {
             for (let i = 0; i < this.leftHeaderButton.length; i++) {
@@ -440,9 +451,13 @@ export default {
                 ? 'mobile-header-bar__title--settings-wide'
                 : '';
         },
-        donationHref() {
-            // /aportar is served by the website, not the SPA (see resolveExternalUrl).
-            return resolveExternalUrl('/aportar');
+        donationLinkProps() {
+            // Logged-in users get the in-app donation page (router navigation, no reload).
+            // iOS native and visitors keep the website /aportar page (see resolveExternalUrl).
+            if (this.logged && !isIOSCapacitor()) {
+                return { to: { name: 'donate' } };
+            }
+            return { href: resolveExternalUrl('/aportar') };
         },
         mobileUtilityHeaderButtons() {
             if (!this.isMobile) {
@@ -512,6 +527,7 @@ export default {
         UserRatingsCounts,
         PendingRatingsBanner,
         HeaderMenuDropdown,
+        DonationAfterRatingHeader,
         svgItem,
         AppButton
     }
