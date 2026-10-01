@@ -118,9 +118,8 @@ export default {
     font-weight: var(--ds-font-weight-normal, 400);
 }
 
-.donation-after-rating-hero__mission-lead-emphasis,
-.donation-after-rating-hero__mission-lead :deep(strong) {
-    font-weight: var(--ds-font-weight-bold, 700);
+.donation-after-rating-hero__mission-lead-emphasis {
+    font-weight: var(--ds-font-weight-normal, 400);
 }
 
 .donation-after-rating-hero__mission-body {
@@ -128,10 +127,6 @@ export default {
     font-size: inherit;
     line-height: inherit;
     font-weight: var(--ds-font-weight-normal, 400);
-}
-
-.donation-after-rating-hero__mission-body :deep(strong) {
-    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .donation-after-rating-hero__media {

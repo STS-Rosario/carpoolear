@@ -306,10 +306,6 @@ export default {
     line-height: 1.45;
 }
 
-.donation-after-rating__cta-intro :deep(strong) {
-    font-weight: var(--ds-font-weight-bold, 700);
-}
-
 .donation-after-rating__benefits {
     margin: 1.25rem auto 0;
     padding: 0;
@@ -330,10 +326,6 @@ export default {
 
 .donation-after-rating__benefits-item:last-child {
     margin-bottom: 0;
-}
-
-.donation-after-rating__benefits-item :deep(strong) {
-    font-weight: var(--ds-font-weight-bold, 700);
 }
 
 @media (max-width: 767px) {
@@ -444,7 +436,7 @@ export default {
 
 .donation-after-rating__alt-copy :deep(a) {
     color: var(--ds-text-primary);
-    font-weight: var(--ds-font-weight-bold, 700);
+    font-weight: var(--ds-font-weight-normal, 400);
     text-decoration: underline;
 }
 
