@@ -55,7 +55,7 @@
                         class="mobile-header-bar__donate"
                         variant="header-donate"
                         size="sm"
-                        href="/aportar"
+                        :href="donationHref"
                     >
                         {{ $t('donar') }}
                         <template #iconRight>
@@ -211,7 +211,7 @@
                     class="header_donate-btn"
                     variant="header-donate"
                     size="sm"
-                    href="/aportar"
+                    :href="donationHref"
                 >
                     {{ $t('donar') }}
                     <template #iconRight>
@@ -336,7 +336,9 @@ import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
+import { Capacitor } from '@capacitor/core';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
 import { UserApi } from '../../services/api';
 import {
     persistLocaleChoice,
@@ -438,6 +440,14 @@ export default {
             return n === 'identity_validation' || n === 'identity_validation_manual'
                 ? 'mobile-header-bar__title--settings-wide'
                 : '';
+        },
+        donationHref() {
+            // On native the WebView is served from server.hostname (carpoolear.com.ar): a relative
+            // /aportar loads the bundled index.html (app reload). Use the remote site instead.
+            if (!Capacitor.isNativePlatform()) {
+                return '/aportar';
+            }
+            return resolveCapacitorBundledHostUrl('https://carpoolear.com.ar/aportar');
         },
         mobileUtilityHeaderButtons() {
             if (!this.isMobile) {
