@@ -118,4 +118,20 @@ describe('DonationAfterRating external links', () => {
             '_blank'
         );
     });
+
+    it.each([
+        ['web', 'https://carpoolear.com.ar/aportar?u=42'],
+        ['android', 'https://www.carpoolear.com.ar/aportar?u=42']
+    ])(
+        'on %s opens "conocé más" on the remote site (not the bundled app host)',
+        async (platform, expectedUrl) => {
+            setPlatform(platform);
+            const wrapper = await mountDonationAfterRating();
+
+            await learnMoreLink(wrapper).trigger('click');
+            await flushPromises();
+
+            expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+        }
+    );
 });
