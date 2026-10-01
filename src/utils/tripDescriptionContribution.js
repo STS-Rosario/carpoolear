@@ -45,17 +45,14 @@ function parseNumericAmountToCents(raw, multiplyByThousands) {
 
 export function extractContributionAmountsCents(description) {
     const text = typeof description === 'string' ? description : '';
-    const amounts = [];
+    const dollarAmounts = Array.from(text.matchAll(DOLLAR_AMOUNT_REGEX), (match) =>
+        parseNumericAmountToCents(match[1], Boolean(match[2]))
+    );
+    const lucasAmounts = Array.from(text.matchAll(LUCAS_AMOUNT_REGEX), (match) =>
+        parseNumericAmountToCents(match[1], true)
+    );
 
-    for (const match of text.matchAll(DOLLAR_AMOUNT_REGEX)) {
-        amounts.push(parseNumericAmountToCents(match[1], Boolean(match[2])));
-    }
-
-    for (const match of text.matchAll(LUCAS_AMOUNT_REGEX)) {
-        amounts.push(parseNumericAmountToCents(match[1], true));
-    }
-
-    return [...new Set(amounts)];
+    return [...new Set([...dollarAmounts, ...lucasAmounts])];
 }
 
 export function maxContributionAmountCents(description) {
