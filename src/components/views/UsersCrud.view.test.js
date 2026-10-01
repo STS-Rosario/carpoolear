@@ -24,4 +24,15 @@ describe('UsersCrud admin edit view', () => {
             /<AppInput[\s\S]*?id="input-phone"[\s\S]*?v-on:paste="isNumber"/
         );
     });
+
+    it('gates destructive account controls behind admin permissions', () => {
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersSuspend');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersSetActive');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersDriverVerified');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersDelete');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersAnonymize');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersBanAndAnonymize');
+        expect(source).toContain('ADMIN_PERMISSIONS.UsersUnverify');
+        expect(source).toContain('can(this.authUser');
+    });
 });

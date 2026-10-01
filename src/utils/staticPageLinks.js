@@ -1,9 +1,11 @@
+import { resolveExternalUrl } from './externalLink.js';
+
 const INTERNAL_STATIC_PAGE_ROUTES = {
     '/division-de-gastos': 'division_de_gastos',
     '/verificacion-cuenta': 'verificacion_cuenta'
 };
 
-export function bindInternalStaticPageLinks(container, router) {
+export function bindStaticPageLinks(container, router) {
     if (!container || !router) {
         return;
     }
@@ -12,6 +14,10 @@ export function bindInternalStaticPageLinks(container, router) {
         const href = anchor.getAttribute('href');
         const routeName = INTERNAL_STATIC_PAGE_ROUTES[href];
         if (!routeName) {
+            const externalHref = resolveExternalUrl(href);
+            if (externalHref !== href) {
+                anchor.setAttribute('href', externalHref);
+            }
             return;
         }
 

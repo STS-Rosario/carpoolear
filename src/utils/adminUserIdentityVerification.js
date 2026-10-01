@@ -29,11 +29,19 @@ const METHOD_LABEL_KEYS = {
     manual: 'adminIdentityValidationMethodManual'
 };
 
+export function getIdentityValidationMethodLabelKey(type) {
+    if (!type) {
+        return null;
+    }
+
+    return METHOD_LABEL_KEYS[type] || null;
+}
+
 function formatIdentityValidationMethod(type, translate) {
     if (!type) {
         return '—';
     }
-    const labelKey = METHOD_LABEL_KEYS[type];
+    const labelKey = getIdentityValidationMethodLabelKey(type);
     return labelKey ? translate(labelKey) : String(type);
 }
 

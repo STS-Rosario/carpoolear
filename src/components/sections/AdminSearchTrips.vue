@@ -247,12 +247,12 @@ export default {
             return [
                 {
                     value: false,
-                    label: this.$t('comoConductor'),
+                    label: this.$t('buscoConductor'),
                     icon: 'fa fa-car'
                 },
                 {
                     value: true,
-                    label: this.$t('comoPasajero'),
+                    label: this.$t('buscoPasajeros'),
                     icon: 'fa fa-user'
                 }
             ];

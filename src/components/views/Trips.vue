@@ -39,6 +39,47 @@
                 </button>
             </div>
         </div>
+        <modal
+            :name="'modal'"
+            v-if="showAppStorePrompt && appStorePrompt"
+            @close="closeAppStorePrompt()"
+            :hide-footer="true"
+        >
+            <template #header><h3>
+                <span>{{ $t('descargaLaApp') }}</span>
+            </h3></template>
+            <template #body><div class="app-store-prompt">
+                <p>{{ $t('descargaLaAppTexto') }}</p>
+                <div class="app-store-prompt__badges">
+                    <a
+                        v-for="badge in appStorePrompt.badges"
+                        :key="badge.store"
+                        :href="badge.url"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        <img
+                            :src="storeBadges[badge.store].src"
+                            :alt="$t(storeBadges[badge.store].alt)"
+                        />
+                    </a>
+                </div>
+                <div class="install-modal-actions">
+                    <AppButton
+                        variant="secondary"
+                        @click="closeAppStorePrompt()"
+                    >
+                        {{ $t('ahoraNo') }}
+                    </AppButton>
+                    <AppButton
+                        variant="tertiary"
+                        @click="dontShowAppStorePromptAgain()"
+                    >
+                        {{ $t('noMostrarDeNuevo') }}
+                    </AppButton>
+                </div>
+            </div></template>
+        </modal>
         <div v-if="isMobile && !lookSearch" class="trips-mobile-home">
             <div class="trips-mobile-home__role-grid">
                 <button
@@ -133,44 +174,6 @@
                                 @click="onDonateOnceTime"
                             >
                                 {{ $t('unicaVez') }}
-                            </AppButton>
-                        </div>
-                    </div></template>
-                </modal>
-                <modal
-                    :name="'modal'"
-                    v-if="showModalInstallApp && shouldShowInstallModal()"
-                    @close="closeInstallModal()"
-                    :title="'Test'"
-                    :body="'Body'"
-                >
-                    <template #header><h3>
-                        <span>{{ getInstallModalContent() && getInstallModalContent().title || $t('instalarApp') }}</span>
-                    </h3></template>
-                    <template #body><div class="">
-                        <p style="white-space: pre-line;" v-html="getInstallModalContent() && getInstallModalContent().message || $t('instalarWebAppPWA')">
-                        </p>
-                        <div class="install-modal-actions">
-                            <AppButton
-                                v-if="getInstallModalContent() && getInstallModalContent().showInstallButton"
-                                variant="primary"
-                                @click="installApp()"
-                            >
-                                {{ $t('instalar') }}
-                            </AppButton>
-                            <AppButton
-                                v-if="getInstallModalContent() && getInstallModalContent().showCloseButton"
-                                variant="secondary"
-                                @click="closeInstallModal()"
-                            >
-                                {{ $t('entendido') }}
-                            </AppButton>
-                            <AppButton
-                                v-if="getInstallModalContent() && getInstallModalContent().showDontShowAgainButton"
-                                variant="tertiary"
-                                @click="dontShowAgainInstallModal()"
-                            >
-                                {{ $t('noMostrarDeNuevo') }}
                             </AppButton>
                         </div>
                     </div></template>
@@ -559,8 +562,8 @@ import dialogs from '../../services/dialogs.js';
 import push from '../../cordova/push-capacitor.js';
 import modal from '../Modal';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
+import { appendDonationTrackingUserId } from '../../utils/donationOptions.js';
 import { startDonationCheckout } from '../../utils/donationCheckout.js';
-import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {
     isIOSCapacitor,
@@ -571,16 +574,24 @@ import {
     resolveAppBannerAsset
 } from '../../utils/appBanner.js';
 import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 import {
     isNativePlatform,
     isPWA,
     getNotificationPermissionStatus,
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
+import {
+    APP_STORE_PROMPT_DISMISSED_KEY,
+    getAppStorePrompt
+} from '../../utils/appStorePrompt.js';
+import googlePlayBadge from '../../assets/googleplay.png';
+import appStoreBadge from '../../assets/appstore.png';
 import { splitFriendTrips } from '../../utils/splitFriendTrips.js';
 import { splitTripsBySearchDate } from '../../utils/tripSearchDateSplit.js';
 import { shouldShowSplitDonationPanel } from '../../utils/tripsSplitDonationBanner.js';
 import { readAllowPreferenceParamsFromQuery } from '../../utils/searchAdvancedFilters.js';
+import { clearSearchBox } from '../../utils/searchBox.js';
 import AppButton from '../ui/AppButton.vue';
 import { useActionbarsStore } from '../../stores/actionbars';
 
@@ -596,8 +607,12 @@ export default {
             showNearbyTrips: false,
             pendingScrollRestore: null,
             showModal: false,
-            showModalInstallApp: false,
-            installAppEvent: null,
+            showAppStorePrompt: false,
+            appStorePrompt: null,
+            storeBadges: {
+                'google-play': { src: googlePlayBadge, alt: 'disponibleEnGooglePlay' },
+                'app-store': { src: appStoreBadge, alt: 'descargarEnAppStore' }
+            },
             donateValue: 0,
             hasNotificationPermission: false,
             showNotificationWarning: true,
@@ -650,14 +665,7 @@ export default {
                 this.$router.push(normalized);
                 return;
             }
-            window.open(normalized, '_blank');
-        },
-        isIOS() {
-            return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        },
-        isSafari() {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent) && /safari/.test(userAgent) && !/chrome/.test(userAgent);
+            openExternalUrl(normalized);
         },
         isNativePlatform,
         async checkNotificationPermission() {
@@ -701,32 +709,6 @@ export default {
             this.showNotificationWarning = false;
             localStorage.setItem('pwa_notification_dismiss', Date.now());
         },
-        shouldShowInstallModal() {
-            // Show modal if we have install event (Android) or if we're on iOS
-            return this.installAppEvent !== null || this.isIOS();
-        },
-        getInstallModalContent() {
-            if (this.installAppEvent !== null) {
-                // Android - show install button
-                return {
-                    title: $t('instalarApp'),
-                    message: $t('instalarWebAppPWA'),
-                    showInstallButton: true,
-                    showCloseButton: false,
-                    showDontShowAgainButton: true
-                };
-            } else if (this.isIOS()) {
-                // iOS - show installation instructions
-                return {
-                    title: $t('instalarAppEnIos'),
-                    message: $t('instalarAppEnIosInstrucciones'),
-                    showInstallButton: false,
-                    showCloseButton: true,
-                    showDontShowAgainButton: true
-                };
-            }
-            return null;
-        },
         isDonationTime() {
             if (this.appConfig) {
                 return (
@@ -740,23 +722,12 @@ export default {
         shouldHideDonationOnIOSCapacitor(user) {
             return shouldHideDonationOnIOSCapacitor(user);
         },
-        async installApp() {
-            this.showModalInstallApp = false;
-            if (this.installAppEvent !== null) {
-                this.installAppEvent.prompt();
-                // Espera a que el usuario responda al mensaje
-                const { outcome } = await this.installAppEvent.userChoice;
-                // {{ $t('esperaUsuarioResponda') }}
-            }
+        closeAppStorePrompt() {
+            this.showAppStorePrompt = false;
         },
-        closeInstallModal() {
-            this.showModalInstallApp = false;
-            // For iOS, this just closes temporarily - no localStorage flag
-        },
-        dontShowAgainInstallModal() {
-            this.showModalInstallApp = false;
-            // Mark that we've shown the install modal to this user permanently
-            localStorage.setItem('pwa_install_modal_dismissed', 'true');
+        dontShowAppStorePromptAgain() {
+            this.showAppStorePrompt = false;
+            localStorage.setItem(APP_STORE_PROMPT_DISMISSED_KEY, 'true');
         },
         research(params) {
             this.resultaOfSearch = true;
@@ -935,9 +906,7 @@ export default {
             this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
             this.search({ is_passenger: false });
-            if (this.$refs.searchBox) {
-                this.$refs.searchBox.clear();
-            }
+            clearSearchBox(this.$refs.searchBox);
         },
         onScrollBottom() {
             if (this.morePages && !this.lookSearch) {
@@ -957,36 +926,21 @@ export default {
             this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
         },
-        async onDonate() {
+        onDonate() {
             // if we're in Capacitor iOS, do not show the modal, just open the link in the browser
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                let url = 'https://carpoolear.com.ar/aportar';
-                if (this.user && this.user.id) {
-                    url = `${url}?u=${this.user.id}`;
-                }
-                await this.openExternalBrowser(url);
+            if (isIOSCapacitor()) {
+                openExternalUrl(
+                    appendDonationTrackingUserId(
+                        'https://carpoolear.com.ar/aportar',
+                        this.user && this.user.id
+                    )
+                );
                 return;
             }
             this.showModal = true;
         },
-        async openExternalBrowser(url) {
-            // On iOS Capacitor, use App.openUrl() to open in external browser (Safari)
-            // This makes the user leave the app, which is required for donations
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    // Fallback to window.open if App.openUrl fails
-                    window.open(url, '_blank');
-                }
-            } else {
-                // For web or Android, use window.open
-                window.open(url, '_blank');
-            }
-        },
         onOpenLink(link) {
-            this.openExternalBrowser(link);
+            openExternalUrl(link);
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
@@ -998,7 +952,7 @@ export default {
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig
                     });
-                    await this.openExternalBrowser(url);
+                    openExternalUrl(url);
                 } catch (error) {
                     console.error('Donation checkout failed:', error);
                     dialogs.message(this.$t('valorDonacion'), {
@@ -1025,7 +979,7 @@ export default {
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig
                     });
-                    await this.openExternalBrowser(url);
+                    openExternalUrl(url);
                 } catch (error) {
                     console.error('Donation checkout failed:', error);
                     dialogs.message(this.$t('valorDonacion'), {
@@ -1101,9 +1055,7 @@ export default {
             }
             this.search(this.searchParams.data);
         } else {
-            if (this.$refs.searchBox) {
-                this.$refs.searchBox.clear();
-            }
+            clearSearchBox(this.$refs.searchBox);
         }
 
         const queryParams = this.getSearchParamsFromQuery();
@@ -1124,34 +1076,19 @@ export default {
             this.checkNotificationPermission();
         }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // {{ $t('previeneMiniBarraInformacion') }}
-            e.preventDefault();
-            // {{ $t('guardaEventoDispareMasTarde') }}
-            this.installAppEvent = e;
-            
-            // Check if user has permanently dismissed the install modal
-            const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
-            if (!hasDismissedInstallModal) {
-                // {{ $t('actualizarIUNotificarUsuario') }}
-                this.showModalInstallApp = true;
-            }
-            // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
-            console.log(`'beforeinstallprompt' event was fired.`);
+        this.appStorePrompt = getAppStorePrompt({
+            userAgent: window.navigator.userAgent,
+            maxTouchPoints: window.navigator.maxTouchPoints,
+            isNativePlatform: isNativePlatform(),
+            dismissed: localStorage.getItem(APP_STORE_PROMPT_DISMISSED_KEY) === 'true'
         });
-
-        // Show install modal for iOS users (since beforeinstallprompt doesn't fire on iOS)
-        if (this.isIOS()) {
-            // Check if user hasn't permanently dismissed this before
-            const hasDismissedInstallModal = localStorage.getItem('pwa_install_modal_dismissed');
-            if (!hasDismissedInstallModal) {
-                // Show modal after a short delay to ensure the page is loaded
-                setTimeout(() => {
-                    this.showModalInstallApp = true;
-                }, 2000);
-            }
+        if (this.appStorePrompt) {
+            // Short delay so the prompt doesn't cover the page while it loads
+            setTimeout(() => {
+                this.showAppStorePrompt = true;
+            }, 2000);
         }
-        
+
         // bus.event
         bus.off('search-click', this.onSearchButton);
         bus.on('search-click', this.onSearchButton);
@@ -1203,7 +1140,7 @@ export default {
                     this.refreshTrips(false);
                     this.lookSearch = false;
                     this.resultaOfSearch = false;
-                    this.$refs.searchBox.clear();
+                    clearSearchBox(this.$refs.searchBox);
                 }
             }
         }
@@ -1472,9 +1409,24 @@ export default {
     margin: 0;
 }
 
+.app-store-prompt__badges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.app-store-prompt__badges img {
+    display: block;
+    width: 173px;
+    height: auto;
+}
+
 .install-modal-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
     margin-bottom: 10px;
     align-items: center;

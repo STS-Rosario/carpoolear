@@ -26,6 +26,10 @@ describe('adminManualIdentityValidationsList', () => {
             expect(isManualIdentityValidationResolved({ review_status: 'reject' })).toBe(true);
         });
 
+        it('treats closed as resolved', () => {
+            expect(isManualIdentityValidationResolved({ review_status: 'closed' })).toBe(true);
+        });
+
         it('treats pending and other statuses as unresolved', () => {
             expect(isManualIdentityValidationResolved(pending)).toBe(false);
             expect(isManualIdentityValidationResolved({ review_status: null })).toBe(false);
@@ -140,6 +144,22 @@ describe('adminManualIdentityValidationsList', () => {
                 .toEqual([2, 1, 3]);
         });
 
+        it('sorts by identity validated with unverified rows first when ascending', () => {
+            const list = [
+                { id: 1, identity_validated: true },
+                { id: 2, identity_validated: false },
+                { id: 3, identity_validated: null }
+            ];
+
+            expect(
+                sortManualIdentityValidationsList(list, 'identity_validated', 'asc').map((item) => item.id)
+            ).toEqual([2, 3, 1]);
+
+            expect(
+                sortManualIdentityValidationsList(list, 'identity_validated', 'desc').map((item) => item.id)
+            ).toEqual([1, 2, 3]);
+        });
+
         it('sorts by review status with unpaid first, then pending, approved and rejected', () => {
             const list = [
                 { id: 1, paid: true, review_status: 'approved' },
@@ -211,6 +231,7 @@ describe('adminManualIdentityValidationsList', () => {
                 'submitted_at',
                 'waiting_time',
                 'paid',
+                'identity_validated',
                 'review_status',
                 'open_account_verification_tickets_count'
             ]);

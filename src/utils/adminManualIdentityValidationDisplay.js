@@ -1,3 +1,21 @@
+import { getIdentityValidationMethodLabelKey } from './adminUserIdentityVerification.js';
+
+export function getManualIdentityValidationVerifiedLabel(item, t) {
+    if (!item || !item.identity_validated) {
+        return t('no');
+    }
+
+    const methodLabelKey = getIdentityValidationMethodLabelKey(
+        item.identity_validation_type
+    );
+
+    if (!methodLabelKey) {
+        return t('si');
+    }
+
+    return `${t('si')} (${t(methodLabelKey)})`;
+}
+
 export function isManualIdentityValidationAwaitingPhotos(item) {
     if (!item?.paid) {
         return false;
@@ -11,6 +29,7 @@ export function isManualIdentityValidationAwaitingPhotos(item) {
 }
 
 export function getManualIdentityValidationStatusLabel(item, t) {
+    if (item.review_status === 'closed') return t('estadoCerrado');
     if (!item.paid) return t('estadoPendientePago');
     if (isManualIdentityValidationAwaitingPhotos(item)) return t('estadoEsperandoFotos');
     const status = item.review_status;
@@ -25,9 +44,15 @@ export function getManualIdentityValidationStatusBadgeClass(item) {
     const status = item.review_status;
     if (status === 'approved' || status === 'approve') return 'label label-success';
     if (status === 'rejected' || status === 'reject') return 'label label-danger';
+    if (status === 'closed') return 'label label-default';
     if (!item.paid) return 'label label-default';
     return 'label label-warning';
 }
+
+export {
+    getReviewActionAdminLabelKey as getManualIdentityValidationReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction as shouldShowManualIdentityValidationReviewAdminAction
+} from './adminReviewActionDisplay.js';
 
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
     const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;

@@ -1,4 +1,4 @@
-export const DEFAULT_ADMIN_PER_PAGE = 20;
+export const DEFAULT_ADMIN_PER_PAGE = 100;
 
 export const ADMIN_PER_PAGE_OPTIONS = [10, 20, 30, 50, 100];
 

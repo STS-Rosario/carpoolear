@@ -24,6 +24,7 @@
 <script>
 import { Capacitor } from '@capacitor/core';
 import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
+import { openNativeAppStore } from '../utils/appUpdateStore';
 
 export default {
     name: 'ForceUpgradeModal',
@@ -51,7 +52,7 @@ export default {
 
             try {
                 if (Capacitor.getPlatform() === 'ios') {
-                    await AppUpdate.openAppStore();
+                    await openNativeAppStore();
                 } else {
                     const result = await AppUpdate.getAppUpdateInfo();
                     if (
@@ -65,13 +66,13 @@ export default {
                     ) {
                         await AppUpdate.startFlexibleUpdate();
                     } else {
-                        await AppUpdate.openAppStore();
+                        await openNativeAppStore();
                     }
                 }
             } catch (error) {
                 console.error('Force upgrade error:', error);
                 try {
-                    await AppUpdate.openAppStore();
+                    await openNativeAppStore();
                 } catch (openStoreError) {
                     console.error('Failed to open app store:', openStoreError);
                 }

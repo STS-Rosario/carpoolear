@@ -72,12 +72,12 @@ describe('SearchTrip advanced filters', () => {
         const mobile = source.slice(
             source.indexOf('search-advanced-filters-mobile')
         );
-        for (const block of [desktop, mobile]) {
-            const dateAt = block.indexOf('date-range-search-select_wrapper');
-            const hideAt = block.indexOf('hide-carpooleado-select_wrapper');
+        [desktop, mobile].forEach((markup) => {
+            const dateAt = markup.indexOf('date-range-search-select_wrapper');
+            const hideAt = markup.indexOf('hide-carpooleado-select_wrapper');
             expect(dateAt).toBeGreaterThan(-1);
             expect(hideAt).toBeGreaterThan(dateAt);
-        }
+        });
         expect(cssSource).toMatch(
             /\.trips-search__advanced-checkboxes\s*\{[^}]*flex-direction:\s*column/
         );
@@ -98,6 +98,92 @@ describe('SearchTrip advanced filters', () => {
         expect(source).toContain('appendDateSearchParams');
         expect(source).toContain('hydrateDateRangeSearch');
         expect(source).toContain('date_changed');
+    });
+
+    it('labels the role toggle with Busco conductores / Busco pasajeros', () => {
+        expect(source).toContain("this.$t('buscoConductor')");
+        expect(source).toContain("this.$t('buscoPasajeros')");
+        expect(source).not.toContain("this.$t('comoConductor')");
+        expect(source).not.toContain("this.$t('comoPasajero')");
+    });
+});
+
+describe('SearchTrip origin destination swap', () => {
+    it('renders a swap button between origin and destination with a stable test id', () => {
+        expect(source).toContain('data-testid="trips-search-swap"');
+        expect(source).toContain('class="trips-search__swap"');
+        expect(source).toContain('@click="swapCities"');
+        expect(source).toContain("$t('invertirOrigenDestino')");
+    });
+
+    it('places the swap button between the origin and destination fields', () => {
+        const fieldsRow = source.slice(
+            source.indexOf('trips-search__fields-row'),
+            source.indexOf('trips-search__filters')
+        );
+
+        const originAt = fieldsRow.indexOf('trips-search__field--origin');
+        const swapAt = fieldsRow.indexOf('data-testid="trips-search-swap"');
+        const destinyAt = fieldsRow.indexOf('trips-search__field--destiny');
+
+        expect(originAt).toBeGreaterThan(-1);
+        expect(swapAt).toBeGreaterThan(originAt);
+        expect(destinyAt).toBeGreaterThan(swapAt);
+        expect(fieldsRow).toContain('swap-horizontal');
+        expect(fieldsRow).toContain('swap-vertical');
+    });
+
+    it('uses swapSearchLocations when swapping cities', () => {
+        expect(source).toContain("from '../../utils/swapSearchLocations.js'");
+        expect(source).toContain('swapSearchLocations(this.from_town, this.to_town)');
+    });
+
+    it('lays out the swap control as a flex item between fields on desktop', () => {
+        const desktopBlock = cssSource.slice(cssSource.indexOf('@media (min-width: 992px)'));
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*flex:\s*0\s+0\s+2rem/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*align-self:\s*flex-end/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__swap\s*\{[^}]*margin:\s*0\s+-0\.375rem\s+0\.5rem/
+        );
+        expect(desktopBlock).not.toMatch(
+            /\.trips-search__swap\s*\{[^}]*position:\s*absolute/
+        );
+    });
+
+    it('centers the swap control horizontally on mobile', () => {
+        expect(cssSource).toMatch(
+            /\.trips-search__swap\s*\{[^}]*margin:\s*-0\.25rem\s+auto\s+0\.5rem/
+        );
+    });
+
+    it('uses a narrower date field on desktop to leave room for the swap icon', () => {
+        const desktopBlock = cssSource.slice(cssSource.indexOf('@media (min-width: 992px)'));
+        expect(desktopBlock).toMatch(
+            /\.trips-search__field--date\s*\{[^}]*flex:\s*0\s+0\s+9\.5rem/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__field--date\s*\{[^}]*max-width:\s*9\.5rem/
+        );
+        expect(desktopBlock).toMatch(
+            /\.trips-search__fields-row\s*\{[^}]*gap:\s*0\.75rem/
+        );
+    });
+
+    it('shows vertical swap icon on mobile and horizontal icon on desktop', () => {
+        expect(source).not.toMatch(/\.swap-horizontal\s*\{/);
+        expect(cssSource).toMatch(
+            /\.trips-search__swap\s+\.swap-horizontal\s*\{[^}]*display:\s*none/
+        );
+        expect(cssSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*\.trips-search__swap\s+\.swap-horizontal\s*\{[^}]*display:\s*block/
+        );
+        expect(cssSource).toMatch(
+            /@media \(min-width: 992px\)[\s\S]*\.trips-search__swap\s+\.swap-vertical\s*\{[^}]*display:\s*none/
+        );
     });
 });
 

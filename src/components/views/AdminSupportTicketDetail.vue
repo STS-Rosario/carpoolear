@@ -9,6 +9,12 @@
         <p class="ticket-meta-row">
             <span class="ticket-status-label" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
             <span class="ticket-priority-label" :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span>
+            <span
+                v-if="ticketSourceLabelKey(ticket.source)"
+                class="ticket-source-label"
+            >
+                {{ $t('ticketOrigen') }}: {{ $t(ticketSourceLabelKey(ticket.source)) }}
+            </span>
         </p>
 
         <div
@@ -246,6 +252,7 @@ import {
     TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS
 } from '../../utils/supportTicketStatusLabels';
 import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
+import { ticketSourceLabelKey } from '../../utils/supportTicketSources';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     SUPPORT_TICKET_REPLY_EDITOR_HEIGHT,
@@ -392,6 +399,7 @@ export default {
         isAssignTicketDisabled,
         openBlobImageInNewTab,
         markdownToHtml,
+        ticketSourceLabelKey,
         ...mapActions(useTicketsStore, {
             fetchAdminOne: 'fetchAdminOne',
             adminReply: 'adminReply',
@@ -765,6 +773,10 @@ export default {
 }
 
 .ticket-priority-label {
+    margin-left: 10px;
+}
+
+.ticket-source-label {
     margin-left: 10px;
 }
 

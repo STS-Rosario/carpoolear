@@ -149,3 +149,10 @@ export function getTripLocationLabels(trip) {
         toPoint
     };
 }
+
+export function getTripDestinationCity(trip) {
+    if (trip && trip.points && trip.points.length > 0) {
+        return getLocationName(trip.points[trip.points.length - 1]);
+    }
+    return getTripLocationLabels(trip).toCity;
+}

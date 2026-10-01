@@ -116,13 +116,17 @@
             <i class="fa fa-trash-o" aria-hidden="true"></i>
             {{ $t('eliminarCuenta') }}
         </router-link>
+        <p class="my-account__version">{{ appVersionText }}</p>
     </div>
 </template>
 
 <script>
 import { mapState } from 'pinia';
+import { Capacitor } from '@capacitor/core';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
+import { useRootStore } from '../../stores/root';
+import { resolveAppVersionDisplayText } from '../../utils/customSplash';
 import { userRatingsFromProfile } from '../../utils/tripRating';
 import { normalizeTripsCount } from '../../utils/profileMemberStats';
 import {
@@ -170,6 +174,14 @@ export default {
         },
         deleteAccountRoute() {
             return MOBILE_DELETE_ACCOUNT_ROUTE;
+        },
+        appVersionText() {
+            return resolveAppVersionDisplayText({
+                appVersionInfo: useRootStore().appVersionInfo,
+                windowAppVersion:
+                    typeof window !== 'undefined' ? window.appVersion : null,
+                isNativePlatform: Capacitor.isNativePlatform()
+            });
         }
     },
     methods: {
@@ -372,6 +384,12 @@ export default {
 .my-account__delete:hover,
 .my-account__delete:focus {
     text-decoration: underline;
+}
+.my-account__version {
+    margin: 0.75rem 0 0;
+    text-align: center;
+    color: #999;
+    font-size: 0.75rem;
 }
 @media only screen and (min-width: 768px) {
     .my-account {

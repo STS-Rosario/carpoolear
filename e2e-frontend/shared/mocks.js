@@ -286,8 +286,8 @@ const MOCK_BANNED_USERS = [
 ];
 
 const MOCK_MANUAL_VALIDATIONS = [
-  { id: 1, user_id: 70, user_name: 'Validation User', paid: true, paid_at: '2026-02-09T00:00:00.000Z', submitted_at: '2026-02-10T00:00:00.000Z', review_status: 'pending', created_at: '2026-02-10T00:00:00.000Z' },
-  { id: 2, user_id: 71, user_name: 'Approved User', paid: true, paid_at: '2026-02-07T00:00:00.000Z', submitted_at: '2026-02-08T00:00:00.000Z', review_status: 'approved', created_at: '2026-02-08T00:00:00.000Z' },
+  { id: 1, user_id: 70, user_name: 'Validation User', paid: true, paid_at: '2026-02-09T00:00:00.000Z', submitted_at: '2026-02-10T00:00:00.000Z', review_status: 'pending', identity_validated: false, identity_validation_type: null, created_at: '2026-02-10T00:00:00.000Z' },
+  { id: 2, user_id: 71, user_name: 'Approved User', paid: true, paid_at: '2026-02-07T00:00:00.000Z', submitted_at: '2026-02-08T00:00:00.000Z', review_status: 'approved', identity_validated: true, identity_validation_type: 'manual', created_at: '2026-02-08T00:00:00.000Z' },
 ];
 
 const MOCK_MANUAL_VALIDATION_DETAIL = {
@@ -331,6 +331,65 @@ const MOCK_MP_REJECTED_DETAIL = {
   review_status: 'pending',
   review_note: null,
   created_at: '2026-02-12T00:00:00.000Z',
+};
+
+const MOCK_IDENTITY_STATS_ADMIN_USER = {
+  ...MOCK_ADMIN_USER,
+  admin_permissions: ['admin.dashboard.view', 'admin.identity.stats'],
+};
+
+function outcome(count, pct) {
+  return { count, pct };
+}
+
+function makeIdentityVerificationReportBucket(manual, automatic) {
+  return {
+    attempts: manual.attempts + automatic.attempts,
+    manual,
+    automatic,
+  };
+}
+
+const MOCK_IDENTITY_VERIFICATION_REPORT = {
+  filters: {
+    from: '2026-05-01',
+    to: '2026-10-15',
+    group_by: 'month',
+    method: 'all',
+    surface: null,
+    platform: null,
+    app_version: null,
+  },
+  totals: makeIdentityVerificationReportBucket(
+    { attempts: 30, approved: outcome(13, 43.33), rejected: outcome(4, 13.33), inconclusive: outcome(8, 26.67), pending_review: outcome(5, 16.67) },
+    { attempts: 120, approved: outcome(78, 65), rejected: outcome(18, 15), error: outcome(6, 5), cancelled: outcome(8, 6.67), abandoned: outcome(10, 8.33) }
+  ),
+  series: [
+    {
+      period: '2026-09',
+      ...makeIdentityVerificationReportBucket(
+        { attempts: 20, approved: outcome(9, 45), rejected: outcome(3, 15), inconclusive: outcome(6, 30), pending_review: outcome(2, 10) },
+        { attempts: 80, approved: outcome(52, 65), rejected: outcome(12, 15), error: outcome(4, 5), cancelled: outcome(6, 7.5), abandoned: outcome(6, 7.5) }
+      ),
+    },
+    {
+      period: '2026-10',
+      ...makeIdentityVerificationReportBucket(
+        { attempts: 10, approved: outcome(4, 40), rejected: outcome(1, 10), inconclusive: outcome(2, 20), pending_review: outcome(3, 30) },
+        { attempts: 40, approved: outcome(26, 65), rejected: outcome(6, 15), error: outcome(2, 5), cancelled: outcome(2, 5), abandoned: outcome(4, 10) }
+      ),
+    },
+  ],
+  funnel: {
+    failed_users: 21,
+    resolved: {
+      count: 12,
+      pct: 57.14,
+      by_method: { mercado_pago: 7, manual: 3, mp_rejection_approved: 1, admin_edit: 1 },
+    },
+    unresolved: { count: 9, pct: 42.86 },
+    unlinked_failures: 2,
+  },
 };
 
 const MOCK_TRANSACTIONS = [
@@ -627,11 +686,26 @@ async function setupCommonMocks(page) {
   await page.route('**/api/debug**', (route) => {
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
+
+  await page.route('**/api/health', (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ status: 'ok' }),
+    });
+  });
 }
 
 /**
  * Auth-related mocks: sets localStorage token/user and mocks bootstrap APIs.
  */
+async function setupGuestState(page) {
+  await page.addInitScript(() => {
+    localStorage.removeItem('TOKEN');
+    localStorage.removeItem('USER');
+  });
+}
+
 async function setupAuthState(page, user = MOCK_USER) {
   const token = 'mock-jwt-token-for-testing';
 
@@ -776,6 +850,8 @@ module.exports = {
   MOCK_MANUAL_VALIDATION_DETAIL,
   MOCK_MP_REJECTED,
   MOCK_MP_REJECTED_DETAIL,
+  MOCK_IDENTITY_STATS_ADMIN_USER,
+  MOCK_IDENTITY_VERIFICATION_REPORT,
   MOCK_TRANSACTIONS,
   MOCK_CHART_TRIPS,
   MOCK_CHART_SEATS,
@@ -796,6 +872,7 @@ module.exports = {
   freezeClock,
   setupCatchAllMock,
   setupCommonMocks,
+  setupGuestState,
   setupAuthState,
   waitForPageReady,
 };

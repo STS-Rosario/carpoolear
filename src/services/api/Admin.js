@@ -1,4 +1,5 @@
 import TaggedApi from '../../classes/TaggedApi';
+import { reportFiltersToQuery } from '../../utils/identityVerificationReportFilters';
 
 class AdminApi extends TaggedApi {
     // modify user data.user with data
@@ -71,13 +72,17 @@ class AdminApi extends TaggedApi {
         return this.get('/api/admin/manual-identity-validations/' + id, {});
     }
 
-    reviewManualIdentityValidation(id, action, note) {
+    reviewManualIdentityValidation(id, action, note, rejectReason) {
+        const body = {
+            action,
+            note
+        };
+        if (rejectReason) {
+            body.reject_reason = rejectReason;
+        }
         return this.post(
             '/api/admin/manual-identity-validations/' + id + '/review',
-            {
-                action,
-                note
-            }
+            body
         );
     }
 
@@ -99,6 +104,17 @@ class AdminApi extends TaggedApi {
         return this.post(
             '/api/admin/manual-identity-validations/' + id + '/state',
             payload
+        );
+    }
+
+    /**
+     * Identity verification report (admin.identity.stats). Response is not wrapped in `data`.
+     * Filters: from, to (YYYY-MM-DD, required), groupBy, method, surface, platform, appVersion.
+     */
+    getIdentityVerificationReport(filters = {}) {
+        return this.get(
+            '/api/admin/identity-verification-report',
+            reportFiltersToQuery(filters)
         );
     }
 
@@ -198,6 +214,10 @@ class AdminApi extends TaggedApi {
 
     impersonateUser(userId) {
         return this.post('/api/admin/users/' + userId + '/impersonate', {});
+    }
+
+    getActionLogs(params = {}) {
+        return this.get('/api/admin/action-logs', params);
     }
 }
 

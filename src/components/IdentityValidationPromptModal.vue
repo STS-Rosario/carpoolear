@@ -45,38 +45,21 @@
                     {{ $t(optionsTitleKey) }}
                 </p>
 
-                <ol
+                <ul
                     v-if="showMpOption || showManualOption"
                     class="identity-validation-prompt-options-list"
                 >
-                    <li v-if="showMpOption" class="identity-validation-prompt-option-block">
+                    <li v-if="showMpOption">
                         <span class="identity-validation-prompt-option-name">{{
                             $t('identidadModalAutoTitulo')
-                        }}</span>
-                        <ul>
-                            <li>
-                                <strong>{{ $t('identidadModalAutoMp') }}</strong>
-                            </li>
-                            <li>{{ $t('identidadModalAutoGratis') }}</li>
-                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
-                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
-                        </ul>
+                        }}</span> ({{ $t('identidadModalAutoCostoEtiqueta') }})
                     </li>
-                    <li v-if="showManualOption" class="identity-validation-prompt-option-block">
+                    <li v-if="showManualOption">
                         <span class="identity-validation-prompt-option-name">{{
                             $t('identidadModalManualTitulo')
-                        }}</span>
-                        <ul>
-                            <li>
-                                <strong>{{ $t('identidadModalManualEquipo') }}</strong>
-                            </li>
-                            <li>
-                                {{ $t('identidadModalManualCosto') }}
-                            </li>
-                            <li>{{ $t('identidadModalManualPlazo') }}</li>
-                        </ul>
+                        }}</span> ({{ $t('identidadModalManualCostoEtiqueta') }})
                     </li>
-                </ol>
+                </ul>
 
                 <p class="identity-validation-prompt-footnote">
                     {{ $t('identidadModalUnaVez') }}
@@ -342,30 +325,9 @@ export default {
     color: #333;
 }
 
-.identity-validation-prompt-option-block {
-    margin-bottom: 12px;
-    color: #333;
-}
-
 .identity-validation-prompt-option-name {
-    display: block;
     font-weight: 700;
     color: #337ab7;
-    margin-bottom: 4px;
-}
-
-.identity-validation-prompt-option-block ul {
-    margin: 0;
-    padding-left: 1.1rem;
-    color: #333 !important;
-}
-
-.identity-validation-prompt-option-block ul li {
-    color: #333 !important;
-}
-
-.identity-validation-prompt-option-block ul li strong {
-    color: #333 !important;
 }
 
 .identity-validation-prompt-footnote {

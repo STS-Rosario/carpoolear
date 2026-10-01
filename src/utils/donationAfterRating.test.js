@@ -47,4 +47,17 @@ describe('shouldPromptDonationAfterRating', () => {
             })
         ).toBe(false);
     });
+
+    it('ignores empty donation entries without reading trip_id', () => {
+        expect(
+            shouldPromptDonationAfterRating({
+                user: {
+                    monthly_donate: false,
+                    donations: [undefined, null, { trip_id: 1 }]
+                },
+                tripId: 42,
+                tripsRated: 2
+            })
+        ).toBe(true);
+    });
 });

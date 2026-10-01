@@ -23,6 +23,7 @@
     --calification-star-size: 14;
 
     --app-mobile-footer-offset: calc(68px + env(safe-area-inset-bottom, 0px));
+    --app-keyboard-inset: 0px;
   }
   html {
       font-size: 16px;

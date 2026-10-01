@@ -2,6 +2,7 @@
 import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
+import { ADMIN_PERMISSIONS } from '../utils/adminPermissions';
 
 function getAuthStore () {
     return useAuthStore();
@@ -47,6 +48,7 @@ const AdminManualIdentityValidations = () => import('../components/views/AdminMa
 const AdminManualIdentityValidationReview = () => import('../components/views/AdminManualIdentityValidationReview.vue');
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
+const AdminIdentityVerificationReport = () => import('../components/views/AdminIdentityVerificationReport.vue');
 const AdminUserMigrationsList = () => import('../components/views/AdminUserMigrationsList.vue');
 const AdminUserMigrationNew = () => import('../components/views/AdminUserMigrationNew.vue');
 const Tickets = () => import('../components/views/Tickets.vue');
@@ -66,6 +68,7 @@ const AdminChangelogForm = () => import('../components/views/AdminChangelogForm.
 const AdminCarBrands = () => import('../components/views/AdminCarBrands.vue');
 const AdminCarModels = () => import('../components/views/AdminCarModels.vue');
 const AdminCarColors = () => import('../components/views/AdminCarColors.vue');
+const AdminActionLogs = () => import('../components/views/AdminActionLogs.vue');
 
 const UpdateProfile = () => import('../components/sections/UpdateProfile.vue');
 const ChangePassword = () => import('../components/sections/ChangePassword.vue');
@@ -831,6 +834,7 @@ export default [
         component: AdminMaintenance,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.MaintenanceManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1011,6 +1015,7 @@ export default [
         component: AdminExcesoContribucion,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1030,6 +1035,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.TripsExcessContribution,
             actionbar: {
                 footer: {
                     show: true,
@@ -1066,6 +1072,7 @@ export default [
         component: BannedUsersList,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.UsersBannedList,
             actionbar: {
                 footer: {
                     show: true,
@@ -1129,6 +1136,25 @@ export default [
                 header: {
                     titleKey: 'soporte',
                     buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/action-logs',
+        name: 'admin-action-logs',
+        component: AdminActionLogs,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.AuditView,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavActionLogs',
+                    buttons: ['back']
                 }
             }
         }
@@ -1231,6 +1257,7 @@ export default [
         component: AdminChangelogs,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1249,6 +1276,7 @@ export default [
         component: AdminChangelogForm,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1268,6 +1296,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1287,6 +1316,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.ChangelogsManage,
             actionbar: {
                 footer: {
                     show: true,
@@ -1305,6 +1335,7 @@ export default [
         component: AdminCarBrands,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarBrands', buttons: ['back'] }
@@ -1318,6 +1349,7 @@ export default [
         props: true,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarModels', buttons: ['back'] }
@@ -1330,6 +1362,7 @@ export default [
         component: AdminCarColors,
         beforeEnter: authAdmin,
         meta: {
+            adminPermission: ADMIN_PERMISSIONS.CarCatalog,
             actionbar: {
                 footer: { show: true, active_id: 'admin' },
                 header: { titleKey: 'adminCarColors', buttons: ['back'] }
@@ -1416,6 +1449,25 @@ export default [
             }
         ]
         : []),
+    {
+        path: '/admin/identity-verification-report',
+        name: 'admin-identity-verification-report',
+        component: AdminIdentityVerificationReport,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.IdentityStats,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavReporteVerificaciones',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
     {
         path: '/:pathMatch(.*)*',
         redirect: '/trips'

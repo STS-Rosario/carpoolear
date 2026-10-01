@@ -48,6 +48,12 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('support-tickets-table__owner');
     });
 
+    it('shows a compact help-tab origin badge on feedback_tab tickets', () => {
+        expect(viewSource).toContain('TICKET_SOURCE_FEEDBACK_TAB');
+        expect(viewSource).toContain("$t('ticketOrigenPestana')");
+        expect(viewSource).toContain('support-tickets-table__source-badge');
+    });
+
     it('links ticket owner display name to the admin user profile route when linkable', () => {
         expect(viewSource).toContain('canLinkTicketOwnerProfile(ticket)');
         expect(viewSource).toContain('ticketOwnerAdminProfileRoute(ticket)');

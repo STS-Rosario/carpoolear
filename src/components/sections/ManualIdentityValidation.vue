@@ -35,9 +35,9 @@
 
             <div v-else-if="!canUpload" class="manual-validation-pay">
                 <div class="manual-validation-main">
-                    <div v-if="unpaidPending" class="alert alert-warning manual-validation-unpaid-alert">
-                        <strong>{{ $t('esperandoPagoValidacionManual') }}</strong>
-                        <p>{{ $t('debesPagarParaContinuar') }}</p>
+                    <div v-if="unpaidPending || paymentFailed" class="alert alert-warning manual-validation-unpaid-alert">
+                        <strong>{{ paymentFailed ? $t('errorPagoValidacionManual') : $t('esperandoPagoValidacionManual') }}</strong>
+                        <p>{{ paymentFailed ? $t('pagoValidacionManualFallido') : $t('debesPagarParaContinuar') }}</p>
                     </div>
 
                     <ManualIdentityValidationPayOptions
@@ -47,10 +47,13 @@
                         :loading-qr="loadingQr"
                         :show-qr-panel="showQrPanel"
                         :qr-image-url="qrImageUrl"
+                        :show-mp-panel="showMpPanel"
+                        :mp-payment-url="mpPaymentUrl"
                         :cost-unavailable="costCents <= 0"
                         @pay-mp="createPreferenceAndRedirect"
                         @pay-qr="createQrOrderAndShow"
                         @close-qr="closeQrPanel"
+                        @close-mp="closeMpPanel"
                     >
                         <template v-if="showSwitchToMercadoPagoLink">
                             <hr class="manual-validation-switch-mode-separator" />
@@ -192,6 +195,7 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
+import { isManualValidationPaymentFailed } from '../../utils/manualIdentityValidationPaymentQuery';
 import {
     shouldShowManualValidationAlreadySubmitted,
     shouldShowManualValidationPayAgain
@@ -222,6 +226,8 @@ export default {
             submitting: false,
             submitError: null,
             showQrPanel: false,
+            showMpPanel: false,
+            mpPaymentUrl: null,
             qrImageUrl: null,
             qrData: null,
             pollIntervalId: null,
@@ -243,6 +249,9 @@ export default {
         },
         identityValidationManualQrEnabled() {
             return this.config && this.config.identity_validation_manual_qr_enabled === true;
+        },
+        paymentFailed() {
+            return isManualValidationPaymentFailed(this.$route.query);
         },
         showSwitchToMercadoPagoLink() {
             return shouldShowSwitchToMercadoPago(this.config);
@@ -366,10 +375,12 @@ export default {
                     const data = res.data || res;
                     const initPoint = data.init_point;
                     if (initPoint) {
-                        window.location.href = initPoint;
-                    } else {
-                        this.loadingPreference = false;
+                        this.closeQrPanel();
+                        this.mpPaymentUrl = initPoint;
+                        this.showMpPanel = true;
+                        this.startPollingStatus();
                     }
+                    this.loadingPreference = false;
                 })
                 .catch(() => {
                     this.loadingPreference = false;
@@ -387,6 +398,7 @@ export default {
                     if (qrData && requestId) {
                         this.requestId = requestId;
                         this.qrData = qrData;
+                        this.closeMpPanel();
                         this.showQrPanel = true;
                         this.qrImageUrl = null;
                         QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
@@ -406,12 +418,18 @@ export default {
             this.qrImageUrl = null;
             this.stopPollingStatus();
         },
+        closeMpPanel() {
+            this.showMpPanel = false;
+            this.mpPaymentUrl = null;
+            this.stopPollingStatus();
+        },
         startPollingStatus() {
             this.stopPollingStatus();
             this.pollIntervalId = setInterval(() => {
                 this.fetchStatus().then(() => {
                     if (this.paymentSuccess) {
                         this.closeQrPanel();
+                        this.closeMpPanel();
                     }
                 });
             }, 3000);

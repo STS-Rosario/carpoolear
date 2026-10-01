@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { UserApi, RateApi, ReferencesApi } from '../services/api';
 import { makePaginationState, makePaginationGetters, makePaginationActions } from './pagination';
+import dayjs from '../dayjs';
 
 const userApi = new UserApi();
 const rateApi = new RateApi();
@@ -159,6 +160,28 @@ export const useProfileStore = defineStore('profile', {
                 .catch((error) => {
                     console.error(error);
                     return Promise.reject(error);
+                });
+        },
+
+        replyReference(data) {
+            return referencesApi
+                .reply(data.user_id, { comment: data.comment })
+                .then(() => {
+                    const list = this.user && this.user.references_data;
+                    if (list) {
+                        const item = list.find(
+                            (ref) =>
+                                ref.from?.id === data.user_id ||
+                                ref.user_id_from === data.user_id
+                        );
+                        if (item) {
+                            item.reply_comment = data.comment;
+                            item.reply_comment_created_at = dayjs(
+                                new Date()
+                            ).format();
+                        }
+                    }
+                    return Promise.resolve();
                 });
         },
 

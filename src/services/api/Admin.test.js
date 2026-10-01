@@ -48,6 +48,13 @@ describe('AdminApi manual identity validations state', () => {
     });
 });
 
+describe('AdminApi manual identity validations review', () => {
+    it('posts coded reject_reason when reviewing', () => {
+        expect(apiSource).toContain('reviewManualIdentityValidation(id, action, note, rejectReason)');
+        expect(apiSource).toContain('reject_reason');
+    });
+});
+
 describe('AdminApi dashboard', () => {
     it('fetches admin dashboard summary from dashboard endpoint', () => {
         expect(apiSource).toContain('getDashboard');
@@ -60,5 +67,12 @@ describe('AdminApi impersonation', () => {
         expect(apiSource).toContain('impersonateUser');
         expect(apiSource).toContain('/api/admin/users/');
         expect(apiSource).toContain('/impersonate');
+    });
+});
+
+describe('AdminApi action logs', () => {
+    it('lists admin action logs with filters', () => {
+        expect(apiSource).toContain('getActionLogs');
+        expect(apiSource).toContain('/api/admin/action-logs');
     });
 });

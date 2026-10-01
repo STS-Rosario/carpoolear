@@ -7,4 +7,9 @@ describe('trips search hero copy', () => {
             'Compartí tu viaje, ahorrá dinero y cuidá el planeta'
         );
     });
+
+    it('renders the role toggle copy as Busco conductores in arg and en', () => {
+        expect(messages.arg.buscoConductor).toBe('Busco conductores');
+        expect(messages.en.buscoConductor).toBe('Looking for drivers');
+    });
 });

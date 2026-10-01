@@ -54,6 +54,13 @@ describe('MyTrips pending rates carpoodatos modal', () => {
     });
 });
 
+describe('MyTrips scroll to query loc', () => {
+    it('waits for DOM and guards missing scroll targets', () => {
+        expect(source).toContain('this.$nextTick');
+        expect(source).toMatch(/if \(domNode\) \{[\s\S]*offsetTop/);
+    });
+});
+
 describe('MyTrips donation after positive rating', () => {
     it('does not render the donation request modal', () => {
         expect(source).not.toContain('showModalRequestDonation');
@@ -64,5 +71,10 @@ describe('MyTrips donation after positive rating', () => {
         expect(source).toContain('shouldPromptDonationAfterRating');
         expect(source).toMatch(/name:\s*'donate-after-rating'/);
         expect(source).toMatch(/params:\s*\{\s*tripId/);
+    });
+
+    it('does not read needs_sellado when the rated trip is missing', () => {
+        expect(source).not.toMatch(/!data\.trip\.needs_sellado/);
+        expect(source).toContain('data.trip?.needs_sellado');
     });
 });

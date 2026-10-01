@@ -94,14 +94,18 @@
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 {{ $t('eliminarCuenta') }}
             </router-link>
+            <p class="my-account-nav__version">{{ appVersionText }}</p>
         </div>
     </aside>
 </template>
 
 <script>
 import { mapState } from 'pinia';
+import { Capacitor } from '@capacitor/core';
 import { useAuthStore } from '../../stores/auth';
 import { useDeviceStore } from '../../stores/device';
+import { useRootStore } from '../../stores/root';
+import { resolveAppVersionDisplayText } from '../../utils/customSplash';
 import {
     DESKTOP_DELETE_ACCOUNT_ROUTE,
     getMyAccountDesktopExpandedSection,
@@ -143,6 +147,14 @@ export default {
         },
         deleteAccountRoute() {
             return DESKTOP_DELETE_ACCOUNT_ROUTE;
+        },
+        appVersionText() {
+            return resolveAppVersionDisplayText({
+                appVersionInfo: useRootStore().appVersionInfo,
+                windowAppVersion:
+                    typeof window !== 'undefined' ? window.appVersion : null,
+                isNativePlatform: Capacitor.isNativePlatform()
+            });
         }
     },
     watch: {
@@ -317,5 +329,11 @@ export default {
 .my-account-nav__delete:hover,
 .my-account-nav__delete:focus {
     text-decoration: underline;
+}
+.my-account-nav__version {
+    margin: 0.75rem 0 0;
+    text-align: center;
+    color: #999;
+    font-size: 0.75rem;
 }
 </style>

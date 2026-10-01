@@ -72,9 +72,15 @@ describe('AdminUserMigrationNew view', () => {
         expect(source).toContain("from '../../utils/userMigrationFields.js'");
     });
 
-    it('defaults field sources to old account for email dni and created_at and new account for password and phone', () => {
+    it('defaults field sources to the keep account for email and password and the remove account for dni phone and created_at', () => {
         expect(source).toContain("from '../../utils/userMigrationFields.js'");
         expect(source).toContain('createDefaultFieldSources');
+        expect(i18nSource).toContain(
+            'Por defecto: email y contraseña de la cuenta a mantener; DNI, teléfono y fecha de creación de la cuenta a borrar.'
+        );
+        expect(i18nSource).toContain(
+            'Defaults: email and password from the account to keep; ID, phone, and creation date from the account to remove.'
+        );
     });
 
     it('highlights the selected field source cell in the comparison table', () => {

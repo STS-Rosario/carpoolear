@@ -375,7 +375,7 @@ import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 import AppButton from '../ui/AppButton.vue';
 
-import { useHead } from '@unhead/vue';
+import { injectHead } from '@unhead/vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { appLocaleToRoutingLanguage } from '../../main';
@@ -881,6 +881,10 @@ export default {
         }
     },
 
+    created() {
+        this.head = injectHead();
+    },
+
     mounted() {
         this.loadTrip();
         this.syncTripDetailMobilePageClass();
@@ -916,8 +920,8 @@ export default {
             handler: function () {
                 var self = this;
                 this.$nextTick(function () { self.enablePayment(); });
-                if (this.trip) {
-                    useHead({
+                if (this.trip && this.head) {
+                    this.head.push({
                         meta: [
                             {
                                 name: 'og:description',

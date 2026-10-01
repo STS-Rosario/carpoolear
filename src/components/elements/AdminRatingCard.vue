@@ -42,6 +42,7 @@
                     </span>
                 </template>
                 <AppButton
+                    v-if="canEdit"
                     variant="secondary"
                     size="sm"
                     class="admin-rating-card__edit"
@@ -150,6 +151,10 @@ export default {
         saving: {
             type: Boolean,
             default: false
+        },
+        canEdit: {
+            type: Boolean,
+            default: true
         }
     },
     emits: ['edit', 'save', 'cancel', 'update:editForm'],

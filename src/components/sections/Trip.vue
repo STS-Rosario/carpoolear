@@ -147,7 +147,7 @@ import dayjs from '../../dayjs';
 import { userRatingsFromProfile } from '../../utils/tripRating';
 import { shouldShowSelladoPending } from '../../utils/tripSelladoDisplay';
 import { shouldShowDriverSeatRequestLimitWarning } from '../../utils/tripSeatRequestsWarning.js';
-import { getTripLocationLabels } from '../../utils/ongoingTrip.js';
+import { getTripCardLocationLabels } from '../../utils/tripCardLocationLabels.js';
 import { formatTripCardDate, formatTripCardTime } from '../../utils/tripCardDisplay.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 
@@ -401,7 +401,7 @@ export default {
             });
         },
         locationLabels() {
-            return getTripLocationLabels(this.trip);
+            return getTripCardLocationLabels(this.trip, this.user);
         },
         cardDateLabel() {
             if (!this.trip) {

@@ -54,6 +54,21 @@ describe('shouldShowIdentityVerificationSuccessBanner', () => {
         ).toBe(false);
     });
 
+    it('returns true when a verified user has a closed manual request', () => {
+        expect(
+            shouldShowIdentityVerificationSuccessBanner({
+                user: verifiedUser,
+                manualStatus: {
+                    has_submission: true,
+                    paid: true,
+                    submitted_at: '2026-06-02 12:00:00',
+                    review_status: 'closed'
+                },
+                resultMessage: 'success'
+            })
+        ).toBe(true);
+    });
+
     it('returns true for a verified user without blocking manual state', () => {
         expect(
             shouldShowIdentityVerificationSuccessBanner({
@@ -78,4 +93,17 @@ describe('shouldShowIdentityVerificationSuccessBanner', () => {
             })
         ).toBe(true);
     });
+
+    it.each(['both_mismatch', 'name_mismatch', 'dni_mismatch'])(
+        'returns false when oauth callback reports %s even if user still looks verified',
+        (resultMessage) => {
+            expect(
+                shouldShowIdentityVerificationSuccessBanner({
+                    user: verifiedUser,
+                    manualStatus: null,
+                    resultMessage
+                })
+            ).toBe(false);
+        }
+    );
 });

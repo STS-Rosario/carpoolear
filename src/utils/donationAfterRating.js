@@ -10,13 +10,15 @@ export function shouldPromptDonationAfterRating({ user, tripId, tripsRated }) {
         return true;
     }
 
-    const donationForTrip = user.donations.find(
+    const donations = (user.donations || []).filter(Boolean);
+
+    const donationForTrip = donations.find(
         (donation) => Number(donation.trip_id) === normalizedTripId
     );
     if (donationForTrip) {
         return false;
     }
 
-    const tripDonations = user.donations.filter((donation) => donation.trip_id !== null);
+    const tripDonations = donations.filter((donation) => donation.trip_id !== null);
     return tripDonations.length < tripRatedLimit;
 }

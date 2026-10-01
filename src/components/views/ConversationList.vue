@@ -270,6 +270,7 @@ import {
 import AppButton from '../ui/AppButton.vue';
 import AppInput from '../ui/AppInput.vue';
 import { debounce } from '../../services/utility';
+import { isWebNotificationPermissionGranted } from '../../utils/notificationPermission';
 
 export default {
     name: 'conversation-list',
@@ -403,7 +404,9 @@ export default {
     },
 
     beforeUnmount() {
-        this.thread.stop();
+        if (this.thread) {
+            this.thread.stop();
+        }
         this.select(null);
     },
 
@@ -411,11 +414,6 @@ export default {
         $route: function () {
             if (!this.$route.meta.hide) {
                 this.select(null);
-            }
-        },
-        isMobile: function () {
-            if (!this.isMobile) {
-                router.push({ name: 'conversation-chat' });
             }
         },
         textSearch: function (newValue, oldValue) {
@@ -427,16 +425,13 @@ export default {
 
     mounted() {
         this.conversationsSearch();
-        if (!this.config.web_push_notification || window.Notification.permission !== 'granted') {
+        if (!this.config.web_push_notification || !isWebNotificationPermissionGranted()) {
             this.thread = new Thread(() => {
                 this.unreadMessage();
             });
             this.thread.run(20000);
         }
 
-        if (!this.isMobile) {
-            router.push({ name: 'conversation-chat' });
-        }
     },
     created() {
         this.debouncedSearch = debounce(() => {
@@ -599,25 +594,24 @@ export default {
      *
      * Height uses measured --app-header-offset (includes identity / ratings banners)
      * because .view-container already pads by that amount. Conversation-chat hides the
-     * mobile footer, so do not subtract a footer bar height here.
+     * mobile footer, so do not subtract a footer bar height here. Overlay keyboards
+     * (Android 15+) shrink this column via --app-keyboard-inset so the composer stays visible.
      */
     .conversation-list-page--mobile-chat {
         display: flex;
         flex-direction: column;
         min-height: 0;
         box-sizing: border-box;
-        height: calc(
-            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
+        --conversation-mobile-chat-height: calc(
+            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
-        height: calc(
-            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
+        --conversation-mobile-chat-height: calc(
+            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px) -
+                var(--app-keyboard-inset, 0px)
         );
-        max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - constant(safe-area-inset-bottom, 0px)
-        );
-        max-height: calc(
-            100dvh - var(--app-header-offset, 51px) - env(safe-area-inset-bottom, 0px)
-        );
+        height: var(--conversation-mobile-chat-height);
+        max-height: var(--conversation-mobile-chat-height);
         overflow: hidden;
         background-color: #fff;
     }

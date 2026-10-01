@@ -24,6 +24,17 @@
     margin-left: 4px;
 }
 
+.support-tickets-table__source-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    background: #eef6fb;
+    color: var(--ds-action, #1e5f9e);
+}
+
 .support-tickets-table__updated--warning {
     font-weight: bold;
     color: #8a6d3b;

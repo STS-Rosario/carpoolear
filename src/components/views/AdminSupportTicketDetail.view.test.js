@@ -20,6 +20,12 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('ticket-priority-label');
     });
 
+    it('shows the ticket origin in the meta row', () => {
+        expect(viewSource).toContain("$t('ticketOrigen')");
+        expect(viewSource).toContain('ticketSourceLabelKey');
+        expect(viewSource).toContain('ticket.source');
+    });
+
     it('links non-admin reply authors to the admin user profile', () => {
         expect(viewSource).toContain('replyAuthorLabel(reply)');
         expect(viewSource).toContain('userAdminProfileRoute()');

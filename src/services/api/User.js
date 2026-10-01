@@ -119,8 +119,12 @@ class UserApi extends TaggedApi {
         return this.post('/api/users/delete-account', {});
     }
 
-    getMercadoPagoOAuthUrl() {
-        return this.get('/api/users/mercadopago-oauth-url', {});
+    getMercadoPagoOAuthUrl(params = {}) {
+        return this.get('/api/users/mercadopago-oauth-url', params);
+    }
+
+    recordIdentityVerificationEvent(payload) {
+        return this.post('/api/users/identity-verification-events', payload);
     }
 
     getManualIdentityValidationCost() {

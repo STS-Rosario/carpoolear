@@ -13,7 +13,7 @@ import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
 import StaticPageApi from '../../services/api/StaticPage';
-import { bindInternalStaticPageLinks } from '../../utils/staticPageLinks';
+import { bindStaticPageLinks } from '../../utils/staticPageLinks';
 
 const staticPageApi = new StaticPageApi();
 
@@ -66,7 +66,7 @@ export default {
                 });
         },
         bindInternalLinks() {
-            bindInternalStaticPageLinks(this.$refs.content, router);
+            bindStaticPageLinks(this.$refs.content, router);
         },
         onBackClick() {
             router.back();

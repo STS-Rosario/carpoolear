@@ -35,6 +35,7 @@
                     :editing="editingId === reference.id"
                     :edit-comment="editComment"
                     :saving="saving"
+                    :can-edit="canEditReferences"
                     @edit="startEdit(reference)"
                     @save="saveReference(reference)"
                     @cancel="cancelEdit"
@@ -51,6 +52,9 @@ import AppButton from '../ui/AppButton.vue';
 import AdminReferenceCard from '../elements/AdminReferenceCard.vue';
 import { UserApi, AdminApi } from '../../services/api';
 import dialogs from '../../services/dialogs.js';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-user-recommendations',
@@ -71,11 +75,17 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            authUser: 'user'
+        }),
         hubRoute() {
             return {
                 name: 'admin-users-user',
                 params: { userId: this.$route.params.userId }
             };
+        },
+        canEditReferences() {
+            return can(this.authUser, ADMIN_PERMISSIONS.ReferencesEdit);
         },
         references() {
             return this.profileUser?.references_data || [];

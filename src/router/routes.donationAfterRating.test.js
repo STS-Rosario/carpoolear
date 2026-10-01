@@ -23,8 +23,10 @@ describe('donation after positive rating route', () => {
             `name: '${DONATION_AFTER_RATING_HEADER_ROUTE_NAMES[1]}'`
         );
         expect(routesSource).toContain('preview: true');
-        expect(routesSource).not.toMatch(
-            /preview-donation-after-rating[\s\S]*?beforeEnter/
+        const previewRoute = routesSource.match(
+            /name: 'preview-donation-after-rating'[\s\S]*?\n\s*\]\s*\n\s*: \[\]\)/
         );
+        expect(previewRoute).not.toBeNull();
+        expect(previewRoute[0]).not.toContain('beforeEnter');
     });
 });

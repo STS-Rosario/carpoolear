@@ -105,8 +105,10 @@ import {
     CARPOOLEAR_COLLABORATE_URL,
     CARPOOLEAR_INSTAGRAM_URL
 } from '../../utils/carpoolearSocialUrls.js';
-import { App } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
+import {
+    openExternalUrl,
+    resolveExternalLinksInHtml
+} from '../../utils/externalLink.js';
 
 export default {
     name: 'donation-after-rating',
@@ -138,29 +140,21 @@ export default {
         }),
         volunteerParagraphHtml() {
             const link = `<a href="${CARPOOLEAR_COLLABORATE_URL}" target="_blank" rel="noopener noreferrer">${this.$t('donationAfterRatingVolunteerLink')}</a>`;
-            return this.$t('donationAfterRatingVolunteerParagraph', { link });
+            return resolveExternalLinksInHtml(
+                this.$t('donationAfterRatingVolunteerParagraph', { link })
+            );
         },
         instagramParagraphHtml() {
             const link = `<a href="${CARPOOLEAR_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer">${this.$t('donationAfterRatingInstagramLink')}</a>`;
-            return this.$t('donationAfterRatingInstagramParagraph', { link });
+            return resolveExternalLinksInHtml(
+                this.$t('donationAfterRatingInstagramParagraph', { link })
+            );
         }
     },
     methods: {
         ...mapActions(useProfileStore, {
             registerDonation: 'registerDonation'
         }),
-        async openExternalBrowser(url) {
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    window.open(url, '_blank');
-                }
-            } else {
-                window.open(url, '_blank');
-            }
-        },
         notifyPreviewMode() {
             dialogs.message('Preview mode: donation actions are disabled.', {
                 duration: 4,
@@ -182,7 +176,7 @@ export default {
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig
                     });
-                    await this.openExternalBrowser(url);
+                    openExternalUrl(url);
                 } catch (error) {
                     console.error('Donation checkout failed:', error);
                     dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
@@ -214,7 +208,7 @@ export default {
                         userId: this.user && this.user.id,
                         appConfig: this.appConfig
                     });
-                    await this.openExternalBrowser(url);
+                    openExternalUrl(url);
                 } catch (error) {
                     console.error('Donation checkout failed:', error);
                     dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {

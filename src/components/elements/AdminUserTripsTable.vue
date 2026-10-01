@@ -22,7 +22,7 @@
                     <td>
                         <router-link
                             :to="{ name: 'detail_trip', params: { id: trip.id } }"
-                            target="_blank"
+                            :target="inAppLinkTarget()"
                             rel="noopener noreferrer"
                         >
                             {{ trip.id }}
@@ -67,6 +67,7 @@ import {
     formatOccupiedSeats,
     formatTripStatus
 } from '../../utils/adminTripTable';
+import { inAppLinkTarget } from '../../utils/externalLink.js';
 
 export default {
     name: 'admin-user-trips-table',
@@ -89,6 +90,7 @@ export default {
     },
     emits: ['cancel', 'open-detail'],
     methods: {
+        inAppLinkTarget,
         openDetail(trip) {
             this.$emit('open-detail', trip);
         },

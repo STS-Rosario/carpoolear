@@ -51,40 +51,67 @@
                                 </h4>
                             </div>
                             <div class="media-right">
-                                <button
-                                    @click="onAddClick(user)"
-                                    :class="
-                                        user.state === 'none'
-                                            ? 'btn-primary'
-                                            : 'btn-friend-request-sent'
-                                    "
-                                    class="btn"
-                                    :disabled="user.state != 'none'"
-                                >
-                                    <span
-                                        v-if="
-                                            user.state == 'none' &&
-                                            !idRequesting[user.id]
-                                        "
-                                    >
-                                        {{ $t('agregar') }}
-                                        <i
-                                            class="fa fa-plus"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </span>
-                                    <span
-                                        v-if="
-                                            idRequesting[user.id] &&
-                                            idRequesting[user.id] === true
-                                        "
-                                    >
-                                        <spinner class="blue"></spinner>
-                                    </span>
-                                    <span v-if="user.state != 'none'">{{
-                                        $t('solicitudAmistadEnviada')
-                                    }}</span>
-                                </button>
+                                 <button
+                                     @click="onButtonClick(user)"
+                                     :class="
+                                         user.state === 'none'
+                                             ? 'btn-primary'
+                                             : user.state === 'request'
+                                               ? 'btn-friend-request-cancel'
+                                               : 'btn-friend-request-sent'
+                                     "
+                                     class="btn"
+                                     :disabled="
+                                         user.state != 'none' &&
+                                         user.state != 'request'
+                                     "
+                                 >
+                                     <span
+                                         v-if="
+                                             user.state == 'none' &&
+                                             !idRequesting[user.id]
+                                         "
+                                     >
+                                         {{ $t('agregar') }}
+                                         <i
+                                             class="fa fa-plus"
+                                             aria-hidden="true"
+                                         ></i>
+                                     </span>
+                                     <span
+                                         v-if="
+                                             idRequesting[user.id] &&
+                                             idRequesting[user.id] === true
+                                         "
+                                     >
+                                         <spinner class="blue"></spinner>
+                                     </span>
+                                     <span
+                                         v-if="
+                                             user.state == 'request' &&
+                                             !idCanceling[user.id]
+                                         "
+                                     >
+                                         {{ $t('cancelar') }}
+                                         <i
+                                             class="fa fa-times"
+                                             aria-hidden="true"
+                                         ></i>
+                                     </span>
+                                     <span
+                                         v-if="idCanceling[user.id]"
+                                     >
+                                         <spinner class="blue"></spinner>
+                                     </span>
+                                     <span
+                                         v-if="
+                                             user.state != 'none' &&
+                                             user.state != 'request'
+                                         "
+                                     >
+                                         {{ $t('solicitudAmistadEnviada') }}
+                                     </span>
+                                 </button>
                             </div>
                         </div>
                     </li>
@@ -127,6 +154,7 @@ export default {
         return {
             text: '',
             idRequesting: {},
+            idCanceling: {},
             searchingRequest: null,
             debouncedSearch: null
         };
@@ -145,6 +173,7 @@ export default {
         ...mapActions(useFriendsStore, {
             search: 'searchUsers',
             request: 'request',
+            cancelRequest: 'cancelRequest',
             clearUserSearch: 'clearUserSearch'
         }),
         onSearchInput() {
@@ -156,6 +185,24 @@ export default {
             this.search(this.text);
         },
 
+        onButtonClick(user) {
+            if (user.state === 'none') {
+                this.onAddClick(user);
+            } else if (user.state === 'request') {
+                this.onCancelClick(user);
+            }
+        },
+        onCancelClick(user) {
+            this.idCanceling[user.id] = true;
+            this.cancelRequest(user.id).then(
+                () => {
+                    this.idCanceling[user.id] = false;
+                },
+                () => {
+                    this.idCanceling[user.id] = false;
+                }
+            );
+        },
         onAddClick(user) {
             this.idRequesting[user.id] = true;
             this.request(user.id).then(

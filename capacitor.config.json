@@ -10,7 +10,8 @@
     "minVersion": "14.0"
   },
   "android": {
-    "useLegacyBridge": true
+    "useLegacyBridge": true,
+    "adjustMarginsForEdgeToEdge": "auto"
   },
   "plugins": {
     "CapacitorHttp": {

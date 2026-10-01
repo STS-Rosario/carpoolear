@@ -11,6 +11,7 @@ import {
     formatTripContributionPesosLabel,
     formatAdminTripContributionLabel,
     formatAdminExcessContributionPercentageLabel,
+    formatAdminSuspectedContributionLabel,
     getNextTripExcessContributionSortState,
     getRequiresActionOnlyExcessContributions,
     parseTripExcessContributionListFromRoute,
@@ -53,6 +54,44 @@ describe('adminTripExcessContributionList', () => {
 
         it('returns null for missing values so the UI can show N/D', () => {
             expect(formatAdminExcessContributionPercentageLabel(null)).toBeNull();
+        });
+    });
+
+    describe('formatAdminSuspectedContributionLabel', () => {
+        it('formats the LLM suspected amount (currency units) as a peso label', () => {
+            expect(formatAdminSuspectedContributionLabel(24000)).toBe('$24000');
+            expect(formatAdminSuspectedContributionLabel(18500.5)).toBe('$18500.5');
+            expect(formatAdminSuspectedContributionLabel('24000.00')).toBe('$24000');
+        });
+
+        it('returns null for missing values so the UI can show N/D', () => {
+            expect(formatAdminSuspectedContributionLabel(null)).toBeNull();
+            expect(formatAdminSuspectedContributionLabel(undefined)).toBeNull();
+            expect(formatAdminSuspectedContributionLabel(0)).toBeNull();
+        });
+    });
+
+    describe('LLM contribution check columns', () => {
+        it('adds sortable suspected contribution and phone columns after the excess percentage', () => {
+            const keys = TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key);
+            const percentageIndex = keys.indexOf('excess_contribution_percentage');
+
+            expect(keys.slice(percentageIndex, percentageIndex + 4)).toEqual([
+                'excess_contribution_percentage',
+                'suspected_contribution',
+                'phone_in_description',
+                'has_private_note'
+            ]);
+            expect(
+                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
+                    (column) => column.key === 'suspected_contribution'
+                ).labelKey
+            ).toBe('contribucionSospechada');
+            expect(
+                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
+                    (column) => column.key === 'phone_in_description'
+                ).labelKey
+            ).toBe('telefonoEnDescripcion');
         });
     });
 
@@ -166,7 +205,7 @@ describe('adminTripExcessContributionList', () => {
                 direction: 'desc'
             })).toEqual({
                 page: 3,
-                perPage: 20,
+                perPage: 100,
                 requiresActionOnly: true,
                 sortKey: 'id',
                 sortDir: 'desc'

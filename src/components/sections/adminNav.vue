@@ -15,50 +15,8 @@
 
         <div class="admin-nav-sidebar" :class="{ 'is-mobile-open': mobileOpen }">
             <ul class="admin-nav-list">
-                <li>
-                    <router-link :to="{ name: 'admin-dashboard' }">{{ $t('adminNavTablero') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-page' }">{{ $t('adminNavGraficos') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-maintenance' }">{{ $t('adminNavMaintenance') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-users' }">{{ $t('adminNavUsuarios') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-user-migrations' }">{{ $t('migrarUsuarios') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-users-delete-list' }">{{ $t('pedidosDeEliminacionDeCuenta') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-trips' }">{{ $t('adminNavViajes') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-exceso-contribucion' }">{{ $t('adminNavExcesoContribucion') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-banned-users' }">{{ $t('usuariosBloqueados') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-manual-identity-validations' }">{{ $t('validacionesManuales') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-mp-rejected-validations' }">{{ $t('rechazosMercadoPago') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-support-tickets' }">{{ $t('soporte') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-changelogs' }">{{ $t('adminNavChangelog') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-car-brands' }">{{ $t('adminNavCarCatalog') }}</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'admin-car-colors' }">{{ $t('adminCarColors') }}</router-link>
+                <li v-for="item in navItems" :key="item.name">
+                    <router-link :to="{ name: item.name }">{{ $t(item.labelKey) }}</router-link>
                 </li>
             </ul>
         </div>
@@ -66,6 +24,9 @@
 </template>
 <script>
 import AppButton from '../ui/AppButton.vue';
+import { mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
+import { visibleAdminNavItems } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-nav',
@@ -76,6 +37,14 @@ export default {
         return {
             mobileOpen: false
         };
+    },
+    computed: {
+        ...mapState(useAuthStore, {
+            authUser: 'user'
+        }),
+        navItems() {
+            return visibleAdminNavItems(this.authUser);
+        }
     },
     watch: {
         $route() {

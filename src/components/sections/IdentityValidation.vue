@@ -1,7 +1,7 @@
 <template>
     <div class="identity-validation-component">
         <div class="identity-validation-page__card">
-            <h1 class="identity-validation-page__heading">{{ $t('validarIdentidad') }}</h1>
+            <h1 class="identity-validation-page__heading hidden-xs">{{ $t('validarIdentidad') }}</h1>
         <div
             v-if="showVerificationSuccessBanner"
             class="identity-verification-success-banner"
@@ -53,6 +53,9 @@
         <div v-else>
         <div class="alert alert-danger" v-if="resultMessage === 'error'">
             {{ $t('resultError') }}
+        </div>
+        <div class="alert alert-danger" v-if="resultMessage === 'missing_identification'">
+            {{ $t('resultMissingIdentification') }}
         </div>
         <div class="alert alert-warning" v-if="mismatchDetails">
             <p>{{ $t(mismatchDetails.reasonKey) }}</p>
@@ -112,9 +115,12 @@
                         :loading-qr="loadingQr"
                         :show-qr-panel="showQrPanel"
                         :qr-image-url="qrImageUrl"
+                        :show-mp-panel="showMpPanel"
+                        :mp-payment-url="mpPaymentUrl"
                         @pay-mp="payManualValidation"
                         @pay-qr="createManualValidationQrOrderAndShow"
                         @close-qr="closeManualValidationQrPanel"
+                        @close-mp="closeManualValidationMpPanel"
                     />
                     <template v-if="showPendingManualSwitchLink">
                         <hr class="manual-status-switch-separator" />
@@ -318,78 +324,25 @@
                     <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationDniWarningProfileLink') }}</a>
                     {{ $t('identityValidationDniWarningSuffix') }}
                 </div>
-                <div class="identity-validation-cards">
-                    <div
-                        v-if="identityValidationMpEnabled"
-                        class="identity-validation-card"
-                    >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
-                        <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>{{ $t('identidadModalAutoGratis') }}</li>
-                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
-                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
-                        </ul>
-                        <AppButton
-                            variant="primary"
-                            size="lg"
-                            block
-                            class="identity-validation-choice-cta"
-                            :style="identityValidationButtonSizingStyle"
-                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
-                            :loading="loadingOAuth"
-                            @click="startMercadoPagoOAuth"
-                        >
-                            {{ $t('validarConMercadoPago') }}
-                        </AppButton>
-                        <p class="identity-validation-mp-warning">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
-                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
-                        </p>
-                    </div>
-
-                    <div
-                        v-if="identityValidationManualEnabled"
-                        class="identity-validation-card"
-                    >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
-                        <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>
-                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
-                            </li>
-                            <li>{{ $t('identityValidationTimeLine') }}</li>
-                        </ul>
-                        <AppButton
-                            variant="secondary"
-                            size="lg"
-                            block
-                            class="identity-validation-choice-cta"
-                            :style="identityValidationButtonSizingStyle"
-                            :disabled="isIdentityValidationBlockedByMissingDni"
-                            @click="goToManualValidation"
-                        >
-                            {{ $t('solicitarVerificacionManual') }}
-                        </AppButton>
-                    </div>
-                </div>
+                <IdentityValidationChoiceCards
+                    :mp-enabled="identityValidationMpEnabled"
+                    :manual-enabled="identityValidationManualEnabled"
+                    :formatted-manual-cost="formattedManualCost"
+                    :blocked-by-missing-dni="isIdentityValidationBlockedByMissingDni"
+                    :loading-oauth="loadingOAuth"
+                    :button-sizing-style="identityValidationButtonSizingStyle"
+                    @choose-mp="openMercadoPagoConfirmModal"
+                    @choose-manual="goToManualValidation"
+                />
             </div>
 
             <div v-else class="identity-validation-main">
                 <header class="identity-validation-intro">
-                    <h1 class="identity-validation-title visible-xs-block">{{ $t('validarIdentidad') }}</h1>
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
-                    <p class="identity-validation-lead">{{ $t('identityValidationPageIntroEstoPermite') }}</p>
-                    <ul class="identity-validation-bullets">
-                        <li>{{ $t('identityValidationPageBullet1') }}</li>
-                        <li>{{ $t('identityValidationPageBullet2') }}</li>
-                        <li>{{ $t('identityValidationPageBullet3') }}</li>
-                    </ul>
-                    <p class="identity-validation-once">{{ $t('identidadModalUnaVez') }}</p>
-                    <p class="identity-validation-learn-more">
-                        {{ $t('identityValidationLearnMorePrefix') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationLearnMoreLink') }}</router-link>{{ $t('identityValidationLearnMoreSuffix') }}
+                    <p class="identity-validation-lead">
+                        {{ $t('identityValidationPageSummary') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationPageLearnMoreLink') }}</router-link>
                     </p>
+                    <p class="identity-validation-two-options">{{ $t('identityValidationPageTwoOptions') }}</p>
                 </header>
                 <div
                     v-if="isIdentityValidationBlockedByMissingDni"
@@ -400,72 +353,39 @@
                     {{ $t('identityValidationDniWarningSuffix') }}
                 </div>
 
-                <div class="identity-validation-cards">
-                    <div
-                        v-if="identityValidationMpEnabled"
-                        class="identity-validation-card"
-                    >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
-                        <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>{{ $t('identidadModalAutoGratis') }}</li>
-                            <li>{{ $t('identidadModalAutoInmediata') }}</li>
-                            <li>{{ $t('identidadModalAutoPuedeEliminarMp') }}</li>
-                        </ul>
-                        <AppButton
-                            variant="primary"
-                            size="lg"
-                            block
-                            class="identity-validation-choice-cta"
-                            :style="identityValidationButtonSizingStyle"
-                            :disabled="isIdentityValidationBlockedByMissingDni || loadingOAuth"
-                            :loading="loadingOAuth"
-                            @click="startMercadoPagoOAuth"
-                        >
-                            {{ $t('validarConMercadoPago') }}
-                        </AppButton>
-                        <p class="identity-validation-mp-warning">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $t('identityValidationMercadoPagoOwnershipWarningPrefix') }}
-                            <a href="#" @click.prevent="goToProfileEdit">{{ $t('identityValidationMercadoPagoOwnershipWarningProfileLink') }}</a>{{ $t('identityValidationMercadoPagoOwnershipWarningSuffix') }}
-                        </p>
-                    </div>
-
-                    <div
-                        v-if="identityValidationManualEnabled"
-                        class="identity-validation-card"
-                    >
-                        <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
-                        <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
-                        <ul class="identity-validation-card-bullets">
-                            <li>
-                                {{ $t('identityValidationCostLine', { cost: formattedManualCost }) }}
-                            </li>
-                            <li>{{ $t('identityValidationTimeLine') }}</li>
-                        </ul>
-                        <AppButton
-                            variant="secondary"
-                            size="lg"
-                            block
-                            class="identity-validation-choice-cta"
-                            :style="identityValidationButtonSizingStyle"
-                            :disabled="isIdentityValidationBlockedByMissingDni"
-                            @click="goToManualValidation"
-                        >
-                            {{ $t('solicitarVerificacionManual') }}
-                        </AppButton>
-                    </div>
-                </div>
+                <IdentityValidationChoiceCards
+                    :mp-enabled="identityValidationMpEnabled"
+                    :manual-enabled="identityValidationManualEnabled"
+                    :formatted-manual-cost="formattedManualCost"
+                    :blocked-by-missing-dni="isIdentityValidationBlockedByMissingDni"
+                    :loading-oauth="loadingOAuth"
+                    :button-sizing-style="identityValidationButtonSizingStyle"
+                    @choose-mp="openMercadoPagoConfirmModal"
+                    @choose-manual="goToManualValidation"
+                />
             </div>
         </div>
         </div>
+        <IdentityValidationMercadoPagoConfirmModal
+            :open="showMercadoPagoConfirmModal"
+            :loading="loadingOAuth"
+            @continue="confirmMercadoPagoOAuth"
+            @edit-profile="goToProfileEdit"
+            @back="closeMercadoPagoConfirmModal"
+        />
     </div>
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { Capacitor } from '@capacitor/core';
+import { mapState, mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
+import { useRootStore } from '../../stores/root';
 import { UserApi } from '../../services/api';
+import {
+    getIdentityVerificationClientContext,
+    IDENTITY_VERIFICATION_CLIENT_EVENTS
+} from '../../utils/identityVerificationClientContext';
 import QRCode from 'qrcode';
 import {
     isIdentityValidationActionBlockedByMissingDni,
@@ -490,13 +410,22 @@ import {
     getManualReviewNoteLabelKey
 } from '../../utils/manualIdentityValidationReviewNote';
 import { shouldShowIdentityVerificationSuccessBanner } from '../../utils/identityValidationSuccessBanner';
+import { syncAuthUserAfterIdentityVerificationSuccess } from '../../utils/userIdentityVerification';
 import {
     MERCADO_PAGO_MY_APPS_URL,
     shouldShowMercadoPagoIntegrationDisconnectHint
 } from '../../utils/mercadoPagoIntegrationDisconnectHint';
-import { isManualRejectedWithChoiceCards, canManualResubmitWithoutPayment, getManualValidationResubmitRoute, getManualValidationRestartRoute } from '../../utils/manualIdentityValidationStatus';
+import {
+    isManualRejectedWithChoiceCards,
+    canManualResubmitWithoutPayment,
+    getManualValidationResubmitRoute,
+    getManualValidationRestartRoute,
+    isManualIdentityValidationTerminalStatus
+} from '../../utils/manualIdentityValidationStatus';
 import IdentityValidationAdminReviewNote from '../IdentityValidationAdminReviewNote.vue';
 import ManualIdentityValidationPayOptions from './ManualIdentityValidationPayOptions.vue';
+import IdentityValidationChoiceCards from './IdentityValidationChoiceCards.vue';
+import IdentityValidationMercadoPagoConfirmModal from '../IdentityValidationMercadoPagoConfirmModal.vue';
 import AppButton from '../ui/AppButton.vue';
 
 const EMPTY_WARNING_PARTS = { layout: null, leadKey: null, tailKey: null };
@@ -506,6 +435,8 @@ export default {
     components: {
         IdentityValidationAdminReviewNote,
         ManualIdentityValidationPayOptions,
+        IdentityValidationChoiceCards,
+        IdentityValidationMercadoPagoConfirmModal,
         AppButton
     },
     data() {
@@ -526,9 +457,12 @@ export default {
             loadingPreference: false,
             loadingQr: false,
             showQrPanel: false,
+            showMpPanel: false,
+            mpPaymentUrl: null,
             qrImageUrl: null,
             qrData: null,
-            pollIntervalId: null
+            pollIntervalId: null,
+            showMercadoPagoConfirmModal: false
         };
     },
     computed: {
@@ -572,7 +506,7 @@ export default {
             );
         },
         /**
-         * Paid + docs sent + not yet approved/rejected — still in admin queue.
+         * Paid + docs sent + not yet approved/rejected/closed — still in admin queue.
          * Must not be hidden behind the green "already verified" banner (user may still
          * carry identity_validated from MP or stale cache while manual review runs).
          */
@@ -580,17 +514,13 @@ export default {
             if (!this.identityValidationManualEnabled) return false;
             const m = this.manualStatus;
             if (!m || !m.has_submission || !m.paid || !m.submitted_at) return false;
-            if (m.review_status === 'approved' || m.review_status === 'rejected') {
-                return false;
-            }
-            return true;
+            return !isManualIdentityValidationTerminalStatus(m.review_status);
         },
-        /** Docs submitted, awaiting admin (not approved/rejected). */
+        /** Docs submitted, awaiting admin (not approved/rejected/closed). */
         showManualValidationSubmittedNotice() {
             const m = this.manualStatus;
             if (!m || !m.submitted_at) return false;
-            const rs = m.review_status;
-            return rs !== 'approved' && rs !== 'rejected';
+            return !isManualIdentityValidationTerminalStatus(m.review_status);
         },
         /** Blue card: right after upload redirect (?result=manual_submitted). */
         showManualPendingReviewBlue() {
@@ -680,6 +610,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(useAuthStore, ['setUser', 'fetchUser']),
         formatDate(value) {
             if (!value) return '';
             const d = new Date(value);
@@ -727,10 +658,12 @@ export default {
                     const data = res.data || res;
                     const initPoint = data.init_point;
                     if (initPoint) {
-                        window.location.href = initPoint;
-                    } else {
-                        this.loadingPreference = false;
+                        this.closeManualValidationQrPanel();
+                        this.mpPaymentUrl = initPoint;
+                        this.showMpPanel = true;
+                        this.startManualValidationQrPolling();
                     }
+                    this.loadingPreference = false;
                 })
                 .catch(() => {
                     this.loadingPreference = false;
@@ -747,6 +680,7 @@ export default {
                     if (qrData && requestId) {
                         this.manualStatus.request_id = requestId;
                         this.qrData = qrData;
+                        this.closeManualValidationMpPanel();
                         this.showQrPanel = true;
                         this.qrImageUrl = null;
                         QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
@@ -766,12 +700,18 @@ export default {
             this.qrImageUrl = null;
             this.stopManualValidationQrPolling();
         },
+        closeManualValidationMpPanel() {
+            this.showMpPanel = false;
+            this.mpPaymentUrl = null;
+            this.stopManualValidationQrPolling();
+        },
         startManualValidationQrPolling() {
             this.stopManualValidationQrPolling();
             this.pollIntervalId = setInterval(() => {
                 this.fetchManualStatus().then(() => {
                     if (this.manualStatus.paid === true) {
                         this.closeManualValidationQrPanel();
+                        this.closeManualValidationMpPanel();
                     }
                 });
             }, 3000);
@@ -782,11 +722,36 @@ export default {
                 this.pollIntervalId = null;
             }
         },
-        startMercadoPagoOAuth() {
+        identityVerificationClientContext(surface) {
+            return {
+                surface,
+                ...getIdentityVerificationClientContext({
+                    getPlatform: () => Capacitor.getPlatform(),
+                    getAppVersion: () => {
+                        const info = useRootStore().appVersionInfo;
+                        if (info && info.version) {
+                            return info.version;
+                        }
+                        if (typeof window !== 'undefined' && window.appVersion) {
+                            return window.appVersion;
+                        }
+                        return null;
+                    }
+                })
+            };
+        },
+        recordIdentityVerificationClientEvent(name, surface) {
+            const userApi = new UserApi();
+            userApi.recordIdentityVerificationEvent({
+                name,
+                ...this.identityVerificationClientContext(surface)
+            }).catch(() => {});
+        },
+        startMercadoPagoOAuth(surface = 'choice_cards') {
             if (!this.user || this.loadingOAuth || this.isIdentityValidationBlockedByMissingDni) return;
             this.loadingOAuth = true;
             const userApi = new UserApi();
-            userApi.getMercadoPagoOAuthUrl()
+            userApi.getMercadoPagoOAuthUrl(this.identityVerificationClientContext(surface))
                 .then((res) => {
                     const url = (res.data && res.data.authorization_url) || res.authorization_url;
                     if (url) {
@@ -798,6 +763,27 @@ export default {
                 .catch(() => {
                     this.loadingOAuth = false;
                 });
+        },
+        openMercadoPagoConfirmModal() {
+            if (this.isIdentityValidationBlockedByMissingDni) return;
+            this.showMercadoPagoConfirmModal = true;
+            this.recordIdentityVerificationClientEvent(
+                IDENTITY_VERIFICATION_CLIENT_EVENTS.confirmModalShown,
+                'choice_cards'
+            );
+        },
+        closeMercadoPagoConfirmModal() {
+            if (this.showMercadoPagoConfirmModal) {
+                this.recordIdentityVerificationClientEvent(
+                    IDENTITY_VERIFICATION_CLIENT_EVENTS.confirmModalCancelled,
+                    'choice_cards'
+                );
+            }
+            this.showMercadoPagoConfirmModal = false;
+        },
+        confirmMercadoPagoOAuth() {
+            this.showMercadoPagoConfirmModal = false;
+            this.startMercadoPagoOAuth('choice_cards');
         },
         goToProfileEdit() {
             this.$router.push(PROFILE_EDIT_ROUTE);
@@ -812,12 +798,18 @@ export default {
         },
         onPendingManualSwitchClick() {
             if (getIdentityValidationPendingSwitchBehavior() === IDENTITY_VALIDATION_PENDING_SWITCH_BEHAVIOR_OAUTH) {
-                this.startMercadoPagoOAuth();
+                this.startMercadoPagoOAuth('pending_switch');
             }
         }
     },
     mounted() {
         this.fetchManualStatus();
+        syncAuthUserAfterIdentityVerificationSuccess({
+            resultMessage: this.resultMessage,
+            user: this.user,
+            setUser: this.setUser,
+            fetchUser: this.fetchUser
+        });
     },
     beforeUnmount() {
         this.stopManualValidationQrPolling();
@@ -1225,131 +1217,29 @@ export default {
     }
 }
 
-.identity-validation-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-    line-height: 1.3;
-    color: #333;
-}
-
 .identity-validation-lead {
     margin: 0 0 1rem;
     line-height: 1.5;
     color: #333;
 }
 
-/* Bullets only on this screen — scoped to root, not global `ul` */
-.identity-validation-component .identity-validation-bullets,
-.identity-validation-component .identity-validation-card-bullets {
-    list-style-type: disc;
-    list-style-position: outside;
-    padding-left: 1.5rem;
-    margin-left: 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: #333;
+.identity-validation-lead a {
+    font-weight: 700;
 }
 
-.identity-validation-component .identity-validation-bullets {
-    margin: 0 0 1rem;
-}
-
-.identity-validation-component .identity-validation-bullets li,
-.identity-validation-component .identity-validation-card-bullets li {
-    display: list-item;
-}
-
-.identity-validation-component .identity-validation-bullets li {
-    margin-bottom: 0.35rem;
-}
-
-.identity-validation-once {
-    margin: 0 0 0.75rem;
-    font-size: 0.95rem;
-    color: #333;
-}
-
-.identity-validation-learn-more {
+.identity-validation-two-options {
     margin: 0 0 1.75rem;
     font-size: 0.95rem;
     color: #333;
 }
 
-.identity-validation-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
 @media (min-width: 768px) {
-    .identity-validation-cards {
-        flex-direction: row;
-        align-items: stretch;
-        gap: 1.5rem;
-    }
-
-    .identity-validation-cards .identity-validation-card {
-        flex: 1 1 0;
-        min-width: 0;
-    }
-}
-
-.identity-validation-card {
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 1.25rem 1.25rem 1.5rem;
-    background: #fff;
-}
-
-@media (min-width: 768px) {
-    .identity-validation-main .identity-validation-card {
-        background: #fafafa;
-    }
-
-    .identity-validation-rejected-flow .identity-validation-cards {
+    .identity-validation-rejected-flow :deep(.identity-validation-cards) {
         background: #fff;
         border-radius: 6px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         padding: 1.75rem 2rem 2rem;
     }
-
-    .identity-validation-rejected-flow .identity-validation-card {
-        background: #fafafa;
-    }
 }
 
-.identity-validation-card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-    line-height: 1.3;
-    color: #333;
-}
-
-.identity-validation-card-desc {
-    margin: 0 0 1rem;
-    line-height: 1.5;
-    color: #333;
-    font-size: 0.95rem;
-}
-
-.identity-validation-component .identity-validation-card-bullets {
-    margin: 0 0 1.25rem;
-}
-
-.identity-validation-component .identity-validation-card-bullets li {
-    margin-bottom: 0.25rem;
-}
-
-.identity-validation-choice-cta {
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-.identity-validation-hint {
-    margin-top: 0.75rem;
-    margin-bottom: 0;
-    color: #333;
-}
 </style>

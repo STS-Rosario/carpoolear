@@ -26,6 +26,10 @@
             <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
             <ImpersonationBanner v-if="isImpersonating" />
             <headerApp></headerApp>
+            <SupportFeedbackTab
+                :onboarding-visible="onBoardingVisibility"
+                :custom-splash-visible="customSplashVisible"
+            />
             <main id="main">
                 <div
                     class="view-container clearfix"
@@ -56,11 +60,9 @@ import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { compareAndroidVersion, compareSemver } from './utils/versionCompare';
 import {
     CUSTOM_SPLASH_DISMISS_MS,
-    formatSplashVersionText,
     isAdminAppUrl,
     isCustomSplashVisible,
-    resolveSplashVersion,
-    SPLASH_WEB_BUILD_NUMBER
+    resolveAppVersionDisplayText
 } from './utils/customSplash';
 import footerApp from './components/sections/FooterApp.vue';
 import headerApp from './components/sections/HeaderApp.vue';
@@ -68,12 +70,14 @@ import onBoarding from './components/sections/OnBoarding.vue';
 import ForceUpgradeModal from './components/ForceUpgradeModal.vue';
 import IdentityValidationPromptModal from './components/IdentityValidationPromptModal.vue';
 import ChangelogModal from './components/ChangelogModal.vue';
+import SupportFeedbackTab from './components/SupportFeedbackTab.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 import ImpersonationBanner from './components/ImpersonationBanner.vue';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
 import ServerDownFullscreen from './components/ServerDownFullscreen.vue';
 import { useServerStatusStore } from './stores/serverStatus';
+import { installAppKeyboardInsetObserver } from './utils/appKeyboardInset.js';
 
 export default {
     name: 'app',
@@ -161,11 +165,15 @@ export default {
         this.getConfig();
     },
     beforeUnmount() {
+        if (typeof this.stopKeyboardInsetObserver === 'function') {
+            this.stopKeyboardInsetObserver();
+        }
         if (typeof document !== 'undefined') {
             document.body.classList.remove('has-mobile-tab-bar');
         }
     },
     mounted() {
+        this.stopKeyboardInsetObserver = installAppKeyboardInsetObserver();
         if (this.isFacebookApp) {
             if (!this.logged) {
                 this.fbLogin();
@@ -191,14 +199,11 @@ export default {
     computed: {
         // Same version we send in X-App-Version header for all requests (network.js getHeader)
         splashVersionText() {
-            return formatSplashVersionText({
-                version: resolveSplashVersion({
-                    appVersionInfo: useRootStore().appVersionInfo,
-                    windowAppVersion:
-                        typeof window !== 'undefined' ? window.appVersion : null
-                }),
-                isNativePlatform: Capacitor.isNativePlatform(),
-                webBuildNumber: SPLASH_WEB_BUILD_NUMBER
+            return resolveAppVersionDisplayText({
+                appVersionInfo: useRootStore().appVersionInfo,
+                windowAppVersion:
+                    typeof window !== 'undefined' ? window.appVersion : null,
+                isNativePlatform: Capacitor.isNativePlatform()
             });
         },
         ...mapState(useCordovaStore, {
@@ -330,7 +335,8 @@ export default {
             actualRouteName: '',
             showCustomSplash: true,
             showForceUpgrade: false,
-            versionCheckDone: false
+            versionCheckDone: false,
+            stopKeyboardInsetObserver: null
         };
     },
     components: {
@@ -340,6 +346,7 @@ export default {
         ForceUpgradeModal,
         IdentityValidationPromptModal,
         ChangelogModal,
+        SupportFeedbackTab,
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
         ImpersonationBanner,

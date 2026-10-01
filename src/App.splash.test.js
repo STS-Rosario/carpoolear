@@ -34,8 +34,7 @@ describe('App custom splash', () => {
     });
 
     it('shows version and build number on the vue splash overlay', () => {
-        expect(appSource).toContain('formatSplashVersionText');
-        expect(appSource).toContain('resolveSplashVersion');
-        expect(appSource).toContain('SPLASH_WEB_BUILD_NUMBER');
+        expect(appSource).toContain('resolveAppVersionDisplayText');
+        expect(appSource).toContain('splashVersionText');
     });
 });

@@ -39,6 +39,19 @@ describe('ConversationList.vue mobile chat layout', () => {
             /\.conversation-list-page--mobile-chat--tall-header\s*\{[^}]*64px/s
         );
     });
+
+    it('shrinks mobile chat by the overlay keyboard inset so the composer stays visible', () => {
+        const mobileStyles = getMobileStylesBlock();
+        expect(mobileStyles).toMatch(
+            /--conversation-mobile-chat-height:\s*calc\(\s*100dvh[\s\S]*?var\(--app-keyboard-inset,\s*0px\)/
+        );
+        expect(mobileStyles).toMatch(
+            /height:\s*var\(--conversation-mobile-chat-height\)/
+        );
+        expect(mobileStyles).toMatch(
+            /max-height:\s*var\(--conversation-mobile-chat-height\)/
+        );
+    });
 });
 
 describe('ConversationList.vue messages redesign', () => {
@@ -85,6 +98,26 @@ describe('ConversationList.vue messages redesign', () => {
 
     it('wraps list and chat in a messages-page__shell', () => {
         expect(viewSource).toContain('messages-page__shell');
+    });
+
+    it('does not navigate to conversation-chat without a conversation id', () => {
+        expect(viewSource).not.toMatch(
+            /router\.push\(\{\s*name:\s*'conversation-chat'\s*\}\)/
+        );
+    });
+
+    it('guards thread cleanup when polling was never started', () => {
+        expect(viewSource).toMatch(
+            /beforeUnmount\(\)\s*\{[^}]*if\s*\(\s*this\.thread\s*\)\s*\{[^}]*this\.thread\.stop\(\)/s
+        );
+    });
+
+    it('does not read window.Notification.permission on mount when the API is missing', () => {
+        expect(viewSource).not.toContain('window.Notification.permission');
+        expect(viewSource).toContain('isWebNotificationPermissionGranted');
+        expect(viewSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*isWebNotificationPermissionGranted\(\)/
+        );
     });
 
     it('sizes the conversation list scroll area below the header so load-more stays reachable', () => {

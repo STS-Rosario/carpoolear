@@ -22,16 +22,15 @@
                         {{ $t('rateItemNegativa') }}
                         <i class="fa fa-thumbs-down" aria-hidden="true"></i>
                     </span>
-
-                <span
-                    class="pull-right clickeable rate-item-reply-toggle"
-                    v-if="canReply"
-                    @click="showReply = !showReply"
-                >
-                    <i class="fa fa-reply" aria-hidden="true"></i>
-                    {{ $t('responder') }}
-                </span>
             </div>
+            <span
+                class="pull-right clickeable rate-item-reply-toggle"
+                v-if="canReply"
+                @click="showReply = !showReply"
+            >
+                <i class="fa fa-reply" aria-hidden="true"></i>
+                {{ $t('responder') }}
+            </span>
 
             <div class="rate-item-profile">
                 <router-link
@@ -102,15 +101,15 @@
                                     v-else-if="isNegativeRating(rate.rating)"
                                 ></i>
                             </span>
-                            <span
-                                class="pull-right clickeable rate-item-reply-toggle"
-                                v-if="canReply"
-                                @click="showReply = !showReply"
-                            >
-                                <i class="fa fa-reply" aria-hidden="true"></i>
-                                {{ $t('responder') }}
-                            </span>
                         </template>
+                        <span
+                            class="pull-right clickeable rate-item-reply-toggle"
+                            v-if="canReply"
+                            @click="showReply = !showReply"
+                        >
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                            {{ $t('responder') }}
+                        </span>
                     </div>
                     <template v-if="!notReply">
                         <div class="rate-item-detail">
@@ -134,7 +133,13 @@
             <AppTextarea
                 id="reply"
                 v-model="comment"
-                :label="$t('rateItemResponderALaCalificacion')"
+                :label="
+                    $t(
+                        notReply
+                            ? 'rateItemResponderALaReferencia'
+                            : 'rateItemResponderALaCalificacion'
+                    )
+                "
                 maxlength="260"
                 rows="3"
             />
@@ -149,7 +154,7 @@
         </div>
         <div
             class="reply_comment_content"
-            v-if="!notReply && rate.reply_comment"
+            v-if="rate.reply_comment"
         >
             <div class="reply_comment">
                 <strong>{{ profile.name }} {{ $t('rateItemRespondio') }}</strong>
@@ -194,13 +199,21 @@ export default {
         ...mapActions(useRatesStore, {
             reply: 'reply'
         }),
+        ...mapActions(useProfileStore, {
+            replyReference: 'replyReference'
+        }),
         onReply() {
-            let data = {
-                trip_id: this.rate.trip.id,
+            const data = {
                 user_id: this.rate.from.id,
                 comment: this.comment
             };
-            this.reply(data).then(() => {
+            const request = this.notReply
+                ? this.replyReference(data)
+                : this.reply({
+                      ...data,
+                      trip_id: this.rate.trip.id
+                  });
+            request.then(() => {
                 this.showReply = false;
                 this.rate.reply_comment = this.comment;
                 this.rate.reply_comment_created_at = dayjs(

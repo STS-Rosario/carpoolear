@@ -106,7 +106,10 @@ export default {
         onKeyDown(event) {
             if (event.key === 'Enter') {
                 if (this.results && this.results.length > 0) {
-                    this.onItemClick(this.results[this.indexAutocomplete]);
+                    const item = this.results[this.indexAutocomplete];
+                    if (item) {
+                        this.onItemClick(item);
+                    }
                 } else {
                     if (this.$parent.$jump && !this.vJumpDisabled) {
                         this.$parent.$jump(this.type);
@@ -189,6 +192,9 @@ export default {
                 });
         },
         onItemClick(item) {
+            if (!item) {
+                return;
+            }
             this.waiting = false;
             this.$emit('place_changed', item);
             this.results = [];

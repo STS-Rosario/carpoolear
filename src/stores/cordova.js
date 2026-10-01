@@ -5,6 +5,7 @@ import { AuthApi } from '../services/api';
 import bus from '../services/bus-event.js';
 import toast from '../cordova/toast.js';
 import { fireLazyRouterPush, getLazyRouter } from '../utils/routerLazy.js';
+import { openExternalUrl } from '../utils/externalLink.js';
 
 const authApi = new AuthApi();
 
@@ -93,7 +94,12 @@ export const useCordovaStore = defineStore('cordova', {
                 }
             } else {
                 // Sino estoy entrando desde la notificacion debería abrirme la URL
-                fireLazyRouterPush({ path: notification.url });
+                if (/^https?:\/\//i.test(notification.url || '')) {
+                    // e.g. announcements with an external_url
+                    openExternalUrl(notification.url);
+                } else {
+                    fireLazyRouterPush({ path: notification.url });
+                }
             }
             const { useNotificationsStore } = await import('./notifications');
             const notificationsStore = useNotificationsStore();

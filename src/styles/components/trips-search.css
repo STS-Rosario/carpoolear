@@ -90,21 +90,18 @@
     gap: 0;
 }
 
-.trips-search__field--origin {
-    position: relative;
-}
-
 .trips-search__swap {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    margin: -0.25rem 0 0.5rem auto;
+    margin: -0.25rem auto 0.5rem;
     padding: 0;
     border: 0;
     background: transparent;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .trips-search__swap img {
@@ -112,6 +109,10 @@
     height: 1.25rem;
     filter: brightness(0) saturate(100%) invert(27%) sepia(72%) saturate(742%)
         hue-rotate(176deg) brightness(92%) contrast(92%);
+}
+
+.trips-search__swap .swap-horizontal {
+    display: none;
 }
 
 .trips-search__clear {
@@ -401,22 +402,29 @@
     }
 
     .trips-search__field--origin,
-    .trips-search__field--destiny,
-    .trips-search__field--date {
+    .trips-search__field--destiny {
         flex: 1 1 0;
         min-width: 0;
     }
 
-    .trips-search__field--origin {
-        position: relative;
+    .trips-search__field--date {
+        flex: 0 0 9.5rem;
+        width: 9.5rem;
+        max-width: 9.5rem;
     }
 
     .trips-search__swap {
-        position: absolute;
-        top: 2.35rem;
-        right: -1rem;
-        margin: 0;
-        z-index: 1;
+        align-self: flex-end;
+        flex: 0 0 2rem;
+        margin: 0 -0.375rem 0.5rem;
+    }
+
+    .trips-search__swap .swap-horizontal {
+        display: block;
+    }
+
+    .trips-search__swap .swap-vertical {
+        display: none;
     }
 
     .trips-search__filters {

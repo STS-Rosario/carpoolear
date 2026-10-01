@@ -43,6 +43,7 @@
                 {{ $t('pagarConQR') }}
             </AppButton>
         </div>
+        <ManualValidationQrPaymentHelp v-if="qrEnabled" />
 
         <slot />
 
@@ -61,11 +62,55 @@
                 </div>
                 <p v-else class="manual-validation-text">{{ $t('cargando') }}...</p>
                 <p class="qr-expiry small">{{ $t('qrExpiraEn') }}</p>
+                <ManualValidationQrPaymentHelp />
                 <AppButton
                     variant="tertiary"
                     size="sm"
                     class="manual-validation-qr-close"
                     @click="$emit('close-qr')"
+                >
+                    {{ $t('cerrar') }}
+                </AppButton>
+            </div>
+        </div>
+
+        <div v-if="showMpPanel" class="mp-payment-panel panel panel-default">
+            <div class="panel-body mp-payment-panel__actions">
+                <AppButton
+                    variant="primary"
+                    size="lg"
+                    block
+                    class="manual-validation-pay-cta"
+                    :disabled="!mpPaymentUrl"
+                    @click="openMpCheckout"
+                >
+                    {{ $t('manualValidationPagarMercadoPago') }}
+                </AppButton>
+                <AppButton
+                    variant="secondary"
+                    size="lg"
+                    block
+                    class="manual-validation-pay-cta"
+                    :disabled="!mpPaymentUrl"
+                    @click="copyMpLink"
+                >
+                    {{ $t('copiarLinkDePago') }}
+                </AppButton>
+                <AppButton
+                    variant="secondary"
+                    size="lg"
+                    block
+                    class="manual-validation-pay-cta"
+                    :disabled="!mpPaymentUrl"
+                    @click="shareMpLink"
+                >
+                    {{ $t('enviarLinkDePago') }}
+                </AppButton>
+                <AppButton
+                    variant="tertiary"
+                    size="sm"
+                    class="manual-validation-mp-close"
+                    @click="$emit('close-mp')"
                 >
                     {{ $t('cerrar') }}
                 </AppButton>
@@ -80,11 +125,16 @@ import {
     MANUAL_VALIDATION_UPLOAD_WARNING_STYLE
 } from '../../utils/manualValidationUploadWarning';
 import AppButton from '../ui/AppButton.vue';
+import ManualValidationQrPaymentHelp from './ManualValidationQrPaymentHelp.vue';
+import toast from '../../cordova/toast.js';
+import { copyTextToClipboard } from '../../utils/copyTextToClipboard';
+import { shareContent } from '../../utils/shareContent.js';
 
 export default {
     name: 'ManualIdentityValidationPayOptions',
     components: {
-        AppButton
+        AppButton,
+        ManualValidationQrPaymentHelp
     },
     props: {
         costDisplay: {
@@ -111,18 +161,53 @@ export default {
             type: String,
             default: null
         },
+        showMpPanel: {
+            type: Boolean,
+            default: false
+        },
+        mpPaymentUrl: {
+            type: String,
+            default: null
+        },
         costUnavailable: {
             type: Boolean,
             default: false
         }
     },
-    emits: ['pay-mp', 'pay-qr', 'close-qr'],
+    emits: ['pay-mp', 'pay-qr', 'close-qr', 'close-mp'],
     computed: {
         manualValidationUploadWarningKey() {
             return getManualValidationUploadWarningKey();
         },
         manualValidationUploadWarningStyle() {
             return MANUAL_VALIDATION_UPLOAD_WARNING_STYLE;
+        }
+    },
+    methods: {
+        openMpCheckout() {
+            if (this.mpPaymentUrl) {
+                window.location.href = this.mpPaymentUrl;
+            }
+        },
+        async copyMpLink() {
+            const copied = await copyTextToClipboard(this.mpPaymentUrl);
+            if (copied) {
+                toast.toast(this.$t('linkDePagoCopiado'));
+            }
+        },
+        async shareMpLink() {
+            if (!this.mpPaymentUrl) {
+                return;
+            }
+            const title = this.$t('enviarLinkDePago');
+            const result = await shareContent({
+                title,
+                text: title,
+                url: this.mpPaymentUrl
+            });
+            if (!result.ok && !result.cancelled) {
+                await this.copyMpLink();
+            }
         }
     }
 };
@@ -189,8 +274,16 @@ export default {
     margin-top: 0.75rem;
 }
 
-.qr-payment-panel {
+.qr-payment-panel,
+.mp-payment-panel {
     margin-top: 1.25rem;
+}
+
+.mp-payment-panel__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
 }
 
 .qr-image-wrap {

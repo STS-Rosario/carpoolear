@@ -391,6 +391,8 @@
                     :suggested-description="
                         form.contribucionRecomendadaCardDescripcionText
                     "
+                    :pricing-breakdown="form.contributionPricingBreakdown"
+                    :config="form.config"
                     :price-error="
                         form.priceError.state ? form.priceError.message : ''
                     "
@@ -497,6 +499,37 @@
             </template>
         </modal>
 
+        <modal
+            v-if="showContributionExcessModal"
+            name="trip-creation-contribution-excess"
+            class="new-trip-wizard__contribution-excess-modal"
+            :hide-footer="true"
+            @close="closeContributionExcessModal"
+        >
+            <template #header>
+                <h3>{{ $t('tripContributionExcessModalTitle') }}</h3>
+            </template>
+            <template #body>
+                <div
+                    class="new-trip-wizard__contribution-excess text-left color-black"
+                    data-testid="trip-contribution-excess-modal"
+                >
+                    <p>{{ $t('tripContributionExcessModalBodyWarning') }}</p>
+                    <p>{{ $t('tripContributionExcessModalBodyApology') }}</p>
+                    <p>{{ $t('tripContributionExcessModalBodyThanks') }}</p>
+                    <div class="new-trip-wizard__contribution-excess-actions">
+                        <AppButton
+                            variant="primary"
+                            data-testid="trip-contribution-excess-confirm"
+                            @click="closeContributionExcessModal"
+                        >
+                            {{ $t('tripContributionExcessModalConfirm') }}
+                        </AppButton>
+                    </div>
+                </div>
+            </template>
+        </modal>
+
         <TripFormValidationSummary
             v-bind="form.tripFormValidationSummaryBindings"
         />
@@ -590,6 +623,7 @@ import {
 } from '../../utils/tripCreationStepQuery.js';
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
+import { shouldShowContributionExcessWarning } from '../../utils/tripCreationContributionExcessWarning.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -640,7 +674,10 @@ export default {
             showTemplateModal: false,
             availableTemplates: [],
             selectedTemplateName: '',
-            allowDraftPersist: true
+            allowDraftPersist: true,
+            showContributionExcessModal: false,
+            // Once per wizard instance: NewTrip re-keys the wizard for every new trip creation.
+            hasShownContributionExcessModal: false
         };
     },
 
@@ -1190,6 +1227,9 @@ export default {
             ) {
                 return;
             }
+            if (this.maybeShowContributionExcessModal()) {
+                return;
+            }
             if (
                 this.currentStep === STEP.DESTINATION &&
                 !this.form.wantsIntermediateStops
@@ -1213,6 +1253,34 @@ export default {
                 }
                 this.setCurrentStep(next);
             }
+        },
+        maybeShowContributionExcessModal() {
+            // Same description, price and maximum cap the contribution step validates against.
+            const {
+                description,
+                price,
+                maxPriceEnabled,
+                maximumSeatPriceCents,
+                maximumTripPriceCents
+            } = this.buildValidationContext();
+            const shouldShow = shouldShowContributionExcessWarning({
+                step: this.currentStep,
+                description,
+                price,
+                maxPriceEnabled,
+                maximumSeatPriceCents,
+                maximumTripPriceCents,
+                alreadyShown: this.hasShownContributionExcessModal,
+                isEdit: this.isEditTripFlow
+            });
+            if (shouldShow) {
+                this.hasShownContributionExcessModal = true;
+                this.showContributionExcessModal = true;
+            }
+            return shouldShow;
+        },
+        closeContributionExcessModal() {
+            this.showContributionExcessModal = false;
         },
         goBack() {
             if (this.currentStep === STEP.STOPS) {
@@ -1474,6 +1542,36 @@ export default {
 
 .new-trip-wizard__template-modal label {
     color: #333;
+}
+
+/*
+ * Modal stacks several default gaps between the slotted title and body
+ * (h3 bottom margin, header bottom padding, body top margin and padding, and
+ * the paragraph top margin): ~84px. Tighten them for this modal only.
+ */
+.new-trip-wizard__contribution-excess-modal :deep(.modal-header) {
+    padding-bottom: 0;
+}
+
+.new-trip-wizard__contribution-excess-modal :deep(.modal-header h3) {
+    margin: 0 0 0.625rem;
+}
+
+.new-trip-wizard__contribution-excess-modal :deep(.modal-body) {
+    margin-top: 0;
+    padding-top: 0.5rem;
+}
+
+.new-trip-wizard__contribution-excess p {
+    line-height: 1.45;
+    margin: 0 0 1rem;
+}
+
+.new-trip-wizard__contribution-excess-actions {
+    display: flex;
+    justify-content: center;
+    /* Collapses with the last paragraph's 1rem bottom margin: 24px before the button. */
+    margin-top: 1.5rem;
 }
 
 .new-trip-wizard__role-cards {

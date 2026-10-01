@@ -13,6 +13,11 @@ describe('AdminTrips table', () => {
         expect(source).toContain('admin-trips-row-clickable');
         expect(source).toMatch(/:key="viaje\.id"/);
     });
+
+    it('hides trip visibility toggle without trips.hide permission', () => {
+        expect(source).toContain('ADMIN_PERMISSIONS.TripsHide');
+        expect(source).toContain('can(this.authUser');
+    });
 });
 
 describe('AdminTrips URL state', () => {

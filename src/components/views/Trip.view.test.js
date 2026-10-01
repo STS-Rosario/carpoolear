@@ -237,3 +237,12 @@ describe('Trip.vue desktop column bands', () => {
         );
     });
 });
+
+describe('Trip.vue social meta tags', () => {
+    it('updates head metadata through injectHead instead of useHead in watchers', () => {
+        expect(viewSource).toContain("import { injectHead } from '@unhead/vue'");
+        expect(viewSource).not.toContain("import { useHead } from '@unhead/vue'");
+        expect(viewSource).toMatch(/created\(\)\s*\{[\s\S]*this\.head = injectHead\(\)/);
+        expect(viewSource).toMatch(/if \(this\.trip && this\.head\)\s*\{[\s\S]*this\.head\.push\(/);
+    });
+});

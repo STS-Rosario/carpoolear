@@ -93,6 +93,7 @@ export const useRootStore = defineStore('root', {
             const { usePassengerStore } = await import('./passenger');
             const { useDeviceStore } = await import('./device');
             const { useCordovaStore } = await import('./cordova');
+            const { useServerStatusStore } = await import('./serverStatus');
 
             const authStore = useAuthStore();
             const tripsStore = useTripsStore();
@@ -100,6 +101,7 @@ export const useRootStore = defineStore('root', {
             const passengerStore = usePassengerStore();
             const deviceStore = useDeviceStore();
             const cordovaStore = useCordovaStore();
+            const serverStatusStore = useServerStatusStore();
 
             // Lazy require to avoid circular dependency
             let ratesStore, carsStore, friendsStore;
@@ -131,6 +133,7 @@ export const useRootStore = defineStore('root', {
                 }
             }
             deviceStore.resize();
+            serverStatusStore.startHealthMonitoring();
 
             bus.emit('system-ready');
         },

@@ -23,6 +23,14 @@ describe('AdminMpRejectedValidationDetail view', () => {
         expect(viewSource).toContain("{{ $t('estado') }}:</strong>&nbsp;");
         expect(viewSource).toContain("{{ $t('revisionAdmin') }}:</strong>&nbsp;");
     });
+
+    it('shows which admin took the review action with action-specific label', () => {
+        expect(viewSource).toContain('shouldShowReviewAdminAction');
+        expect(viewSource).toContain('getReviewActionAdminLabelKey');
+        expect(viewSource).toContain('item.reviewed_by_name || $t(\'na\')');
+        expect(viewSource).toContain('$t(\'el\')');
+        expect(viewSource).toContain('formatDate(item.reviewed_at)');
+    });
 });
 
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');

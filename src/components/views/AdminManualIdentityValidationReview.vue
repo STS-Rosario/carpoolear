@@ -82,7 +82,7 @@
                                 class="admin-manual-identity-state-edit-save"
                                 :disabled="!hasStateChanges || savingState"
                                 :loading="savingState"
-                                @click="saveManualIdentityValidationState"
+                                @click="confirmSaveManualIdentityValidationState"
                             >
                                 <template v-if="savingState">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -112,11 +112,9 @@
                         >
                             {{ $t('crearTicketSoporte') }}
                         </AppButton>
-                        <p v-if="item.reviewed_at">
-                            <strong>{{ getActionDateLabel(item.review_status) }}:</strong> {{ formatDate(item.reviewed_at) }}
-                        </p>
-                        <p v-if="item.reviewed_by_name">
-                            <strong>{{ $t('revisadoPor') }}:</strong> {{ item.reviewed_by_name }}
+                        <p v-if="shouldShowReviewAdminAction(item)">
+                            <strong>{{ $t(getReviewActionAdminLabelKey(item.review_status)) }}:</strong>
+                            {{ item.reviewed_by_name || $t('na') }} {{ $t('el') }} {{ formatDate(item.reviewed_at) }}
                         </p>
                         <p v-if="item.review_note && item.review_note.trim()" class="review-note-display">
                             <strong>{{ $t('comentarioRevision') }}:</strong> {{ item.review_note }}
@@ -135,7 +133,7 @@
                                 class="private-admin-note-save-btn"
                                 :disabled="savingPrivateNote"
                                 :loading="savingPrivateNote"
-                                @click="savePrivateAdminNote"
+                                @click="confirmSavePrivateAdminNote"
                             >
                                 <template v-if="savingPrivateNote">{{ $t('guardando') }}</template>
                                 <template v-else>{{ $t('guardar') }}</template>
@@ -199,12 +197,32 @@
                                     :rows="3"
                                 />
                             </div>
+                            <AppField
+                                :label="$t('motivoRechazo')"
+                                label-for="manual-identity-reject-reason"
+                            >
+                                <select
+                                    id="manual-identity-reject-reason"
+                                    v-model="reviewRejectReason"
+                                    class="admin-page__select"
+                                >
+                                    <option value="">{{ $t('seleccionarMotivoRechazo') }}</option>
+                                    <!-- rejectReasonDocsIllegible and other coded causes -->
+                                    <option
+                                        v-for="reason in rejectReasons"
+                                        :key="reason.value"
+                                        :value="reason.value"
+                                    >
+                                        {{ $t(reason.labelKey) }}
+                                    </option>
+                                </select>
+                            </AppField>
                             <div class="review-actions-buttons">
                                 <AppButton
                                     variant="success"
                                     :disabled="submitting"
                                     :loading="submitting"
-                                    @click="review('approve')"
+                                    @click="confirmReview('approve')"
                                 >
                                     {{ $t('aprobar') }}
                                 </AppButton>
@@ -218,9 +236,9 @@
                                 </AppButton>
                                 <AppButton
                                     variant="danger"
-                                    :disabled="!hasComment || submitting"
-                                    :title="!hasComment ? $t('comentarioRequeridoParaAccion') : ''"
-                                    @click="review('reject')"
+                                    :disabled="!hasComment || !reviewRejectReason || submitting"
+                                    :title="rejectDisabledTitle"
+                                    @click="confirmReview('reject')"
                                 >
                                     {{ $t('rechazar') }}
                                 </AppButton>
@@ -229,7 +247,20 @@
                         </div>
                         <div v-else class="alert alert-warning">{{ $t('noPagadoNoRevisar') }}</div>
 
-                        <div class="purge-section mt-3">
+                        <div v-if="!isResolved(item)" class="admin-manual-identity-close form-group">
+                            <p class="text-muted">{{ $t('adminManualIdentityCloseHint') }}</p>
+                            <AppButton
+                                variant="secondary"
+                                size="sm"
+                                :disabled="closing"
+                                :loading="closing"
+                                @click="confirmClose"
+                            >
+                                {{ $t('cerrar') }}
+                            </AppButton>
+                        </div>
+
+                        <div v-if="can(this.user, ADMIN_PERMISSIONS.IdentityManualPurge)" class="purge-section mt-3">
                             <p class="text-muted purge-warning">{{ $t('purgarFotosAdvertencia') }}</p>
                             <AppButton
                                 variant="secondary"
@@ -266,13 +297,29 @@ import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import { displayDniOrDash as formatDisplayDniOrDash } from '../../utils/formatDisplayDni';
 import { shouldShowPurgedPhotosMessage } from '../../utils/adminManualIdentityValidationImages.js';
+import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
+import {
+    getReviewActionAdminLabelKey,
+    shouldShowReviewAdminAction
+} from '../../utils/adminReviewActionDisplay.js';
 import {
     MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS,
     buildManualIdentityValidationStatePayload,
     hasManualIdentityValidationStateChanges,
     hasPhotosSubmitted
 } from '../../utils/adminManualIdentityValidationStateEdit.js';
-import { shouldProceedWithReviewAction } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import {
+    getReviewActionConfirmMessageKey,
+    getSavePrivateNoteConfirmMessageKey,
+    getSaveStateConfirmMessageKey,
+    shouldProceedWithConfirmedAction,
+    shouldProceedWithReviewAction
+} from '../../utils/adminManualIdentityValidationReviewConfirm.js';
+import { isManualIdentityValidationResolved } from '../../utils/adminManualIdentityValidationsList.js';
+import {
+    MANUAL_IDENTITY_REJECT_REASONS,
+    isManualRejectReasonRequired
+} from '../../utils/manualIdentityValidationRejectReasons.js';
 
 export default {
     name: 'AdminManualIdentityValidationReview',
@@ -298,15 +345,27 @@ export default {
             stateSaveError: null,
             submitting: false,
             reviewError: null,
-            purging: false
+            reviewRejectReason: '',
+            purging: false,
+            closing: false,
+            ADMIN_PERMISSIONS
         };
     },
     computed: {
         ...mapState(useAuthStore, {
-            config: 'appConfig'
+            config: 'appConfig',
+            user: 'user'
         }),
         hasComment() {
             return this.reviewNote && this.reviewNote.trim() !== '';
+        },
+        rejectReasons() {
+            return MANUAL_IDENTITY_REJECT_REASONS;
+        },
+        rejectDisabledTitle() {
+            if (!this.hasComment) return this.$t('comentarioRequeridoParaAccion');
+            if (!this.reviewRejectReason) return this.$t('motivoRechazoRequerido');
+            return '';
         },
         reviewStatusOptions() {
             return MANUAL_IDENTITY_VALIDATION_REVIEW_STATUS_OPTIONS;
@@ -320,7 +379,10 @@ export default {
         }
     },
     methods: {
+        can,
         shouldShowPurgedPhotosMessage,
+        shouldShowReviewAdminAction,
+        getReviewActionAdminLabelKey,
         displayDniOrDash(value) {
             return formatDisplayDniOrDash(
                 value,
@@ -337,13 +399,8 @@ export default {
             if (status === 'awaiting_photos') return this.$t('estadoEsperandoFotos');
             if (status === 'approved') return this.$t('estadoAprobado');
             if (status === 'rejected') return this.$t('estadoRechazado');
+            if (status === 'closed') return this.$t('estadoCerrado');
             return status || '-';
-        },
-        getActionDateLabel(reviewStatus) {
-            if (reviewStatus === 'approved' || reviewStatus === 'approve') return this.$t('fechaAprobacion');
-            if (reviewStatus === 'rejected' || reviewStatus === 'reject') return this.$t('fechaRechazo');
-            if (reviewStatus === 'pending') return this.$t('fechaMarcadoPendiente');
-            return this.$t('fechaAccionAdmin');
         },
         applyResponseItem(res) {
             const data = res.data || res;
@@ -413,6 +470,15 @@ export default {
         showFullSize(type) {
             this.fullSizeImage = this.blobUrls[type] || null;
         },
+        confirmSavePrivateAdminNote() {
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSavePrivateNoteConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.savePrivateAdminNote();
+        },
         savePrivateAdminNote() {
             if (!this.item) return;
             this.savingPrivateNote = true;
@@ -427,6 +493,19 @@ export default {
                 .finally(() => {
                     this.savingPrivateNote = false;
                 });
+        },
+        confirmSaveManualIdentityValidationState() {
+            if (!this.item || !this.hasStateChanges) {
+                return;
+            }
+
+            const proceed = shouldProceedWithConfirmedAction(
+                () => confirm(this.$t(getSaveStateConfirmMessageKey()))
+            );
+            if (!proceed) {
+                return;
+            }
+            this.saveManualIdentityValidationState();
         },
         saveManualIdentityValidationState() {
             if (!this.item || !this.hasStateChanges) {
@@ -455,11 +534,12 @@ export default {
         },
         review(action) {
             if (action !== 'approve' && !this.hasComment) return;
+            if (isManualRejectReasonRequired(action) && !this.reviewRejectReason) return;
             this.submitting = true;
             this.reviewError = null;
             const api = new AdminApi();
             const note = (this.reviewNote && this.reviewNote.trim()) || '';
-            api.reviewManualIdentityValidation(this.id, action, note)
+            api.reviewManualIdentityValidation(this.id, action, note, isManualRejectReasonRequired(action) ? this.reviewRejectReason : undefined)
                 .then(() => {
                     const messageKey = action === 'approve' ? 'estadoAprobado' : action === 'reject' ? 'estadoRechazado' : 'accionMarcadoPendiente';
                     const estado = action === 'approve' ? 'success' : action === 'reject' ? 'error' : 'warning';
@@ -475,15 +555,45 @@ export default {
                 });
         },
         confirmReview(action) {
+            const messageKey = getReviewActionConfirmMessageKey(
+                action,
+                this.item && this.item.review_status
+            );
             const proceed = shouldProceedWithReviewAction(
                 action,
                 this.item && this.item.review_status,
-                () => confirm(this.$t('confirmMarcarPendienteYaPendiente'))
+                () => confirm(this.$t(messageKey))
             );
             if (!proceed) {
                 return;
             }
             this.review(action);
+        },
+        isResolved(item) {
+            return isManualIdentityValidationResolved(item);
+        },
+        confirmClose() {
+            if (!confirm(this.$t('confirmarCerrarManualIdentity'))) {
+                return;
+            }
+
+            this.closeManualIdentityValidation();
+        },
+        closeManualIdentityValidation() {
+            if (!this.item) return;
+
+            this.closing = true;
+            const api = new AdminApi();
+            api.updateManualIdentityValidationState(this.item.id, { review_status: 'closed' })
+                .then((res) => {
+                    this.applyResponseItem(res);
+                    dialogs.message(this.$t('estadoCerrado'), { duration: 2, estado: 'success' });
+                }, () => {
+                    dialogs.message(this.$t('resultError'), { duration: 3, estado: 'error' });
+                })
+                .finally(() => {
+                    this.closing = false;
+                });
         },
         confirmPurge() {
             if (!confirm(this.$t('confirmarPurgarFotos'))) return;
@@ -583,6 +693,9 @@ export default {
 .admin-manual-identity-state-edit-error {
     margin-top: 0.5rem;
     margin-bottom: 0;
+}
+.admin-manual-identity-close {
+    margin-top: 1rem;
 }
 .identity-validation-review-comment-user-visible {
     display: block;

@@ -8,6 +8,7 @@ import {
     PENDING_RATINGS_REDIRECT_ROUTE,
     shouldRedirectForPendingRatings
 } from '../utils/pendingRatingsEnforcement';
+import { can } from '../utils/adminPermissions';
 
 function getAuthStore () {
     return useAuthStore();
@@ -31,6 +32,12 @@ export function authAdmin(to, from, next) {
         authStore.checkLogin &&
         authStore.user.is_admin
     ) {
+        const required = to.meta && to.meta.adminPermission;
+        if (required && !can(authStore.user, required)) {
+            next(false);
+            router.replace({ name: 'admin-dashboard' });
+            return;
+        }
         next();
     } else {
         next(false);

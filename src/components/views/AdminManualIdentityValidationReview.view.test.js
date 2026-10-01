@@ -52,10 +52,90 @@ describe('AdminManualIdentityValidationReview view', () => {
         expect(viewSource).toContain('hasManualIdentityValidationStateChanges');
     });
 
-    it('confirms mark pending when request is already pending', () => {
+    it('labels closed review status as cerrado', () => {
+        expect(viewSource).toContain("status === 'closed'");
+        expect(viewSource).toContain('estadoCerrado');
+    });
+
+    it('confirms review actions before submitting', () => {
         expect(viewSource).toContain('confirmReview');
+        expect(viewSource).toContain('@click="confirmReview(\'approve\')"');
         expect(viewSource).toContain('@click="confirmReview(\'pending\')"');
-        expect(viewSource).toContain('confirmMarcarPendienteYaPendiente');
+        expect(viewSource).toContain('@click="confirmReview(\'reject\')"');
+        expect(viewSource).toContain('getReviewActionConfirmMessageKey');
         expect(viewSource).toContain('shouldProceedWithReviewAction');
+    });
+
+    it('confirms save actions before persisting changes', () => {
+        expect(viewSource).toContain('confirmSavePrivateAdminNote');
+        expect(viewSource).toContain('confirmSaveManualIdentityValidationState');
+        expect(viewSource).toContain('getSavePrivateNoteConfirmMessageKey');
+        expect(viewSource).toContain('getSaveStateConfirmMessageKey');
+        expect(viewSource).toContain('shouldProceedWithConfirmedAction');
+    });
+
+    it('confirms purge before deleting photos', () => {
+        expect(viewSource).toContain('confirmPurge');
+        expect(viewSource).toContain('@click="confirmPurge"');
+        expect(viewSource).toContain('ADMIN_PERMISSIONS.IdentityManualPurge');
+        expect(viewSource).toContain('can(this.user');
+    });
+
+    it('offers closing the request with confirmation wired to updateState', () => {
+        expect(viewSource).toContain('isManualIdentityValidationResolved');
+        expect(viewSource).toContain('adminManualIdentityCloseHint');
+        expect(viewSource).toContain('confirmClose');
+        expect(viewSource).toContain('@click="confirmClose"');
+        expect(viewSource).toContain("$t('cerrar')");
+        expect(viewSource).toContain("review_status: 'closed'");
+        expect(viewSource).toContain('updateManualIdentityValidationState');
+        expect(viewSource).toContain('confirmarCerrarManualIdentity');
+        expect(viewSource).toContain('closeManualIdentityValidation');
+    });
+
+    it('shows which admin took the review action with action-specific label', () => {
+        expect(viewSource).toContain('shouldShowReviewAdminAction');
+        expect(viewSource).toContain('getReviewActionAdminLabelKey');
+        expect(viewSource).toContain('item.reviewed_by_name || $t(\'na\')');
+        expect(viewSource).toContain('$t(\'el\')');
+        expect(viewSource).toContain('formatDate(item.reviewed_at)');
+    });
+
+    it('requires a coded reject reason before rejecting', () => {
+        expect(viewSource).toContain('MANUAL_IDENTITY_REJECT_REASONS');
+        expect(viewSource).toContain('reviewRejectReason');
+        expect(viewSource).toContain('isManualRejectReasonRequired');
+        expect(viewSource).toContain('rejectReasonDocsIllegible');
+        expect(viewSource).toContain('motivoRechazo');
+        expect(viewSource).toContain('reviewManualIdentityValidation(this.id, action, note');
+    });
+});
+
+const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+
+describe('AdminManualIdentityValidationReview i18n', () => {
+    it('defines coded reject reasons in all locales', () => {
+        expect(i18nSource).toContain("motivoRechazo: 'Motivo de rechazo'");
+        expect(i18nSource).toContain("motivoRechazo: 'Rejection reason'");
+        expect(i18nSource).toContain("rejectReasonDocsIllegible: 'Documentación ilegible'");
+        expect(i18nSource).toContain("rejectReasonDocsIllegible: 'Illegible documents'");
+        expect(i18nSource).toContain("rejectReasonSelfieMismatch: 'Selfie no coincide'");
+        expect(i18nSource).toContain("rejectReasonSelfieMismatch: 'Selfie does not match'");
+        expect(i18nSource).toContain("rejectReasonDocumentMismatch: 'Documento no coincide con el perfil'");
+        expect(i18nSource).toContain("rejectReasonDocumentMismatch: 'Document does not match the profile'");
+        expect(i18nSource).toContain("rejectReasonExpiredDocument: 'Documento vencido o inválido'");
+        expect(i18nSource).toContain("rejectReasonExpiredDocument: 'Expired or invalid document'");
+        expect(i18nSource).toContain("rejectReasonSuspectedFraud: 'Sospecha de fraude'");
+        expect(i18nSource).toContain("rejectReasonSuspectedFraud: 'Suspected fraud'");
+        expect(i18nSource).toContain("rejectReasonOther: 'Otro'");
+        expect(i18nSource).toContain("rejectReasonOther: 'Other'");
+        expect(i18nSource).toContain("seleccionarMotivoRechazo: 'Seleccioná un motivo'");
+        expect(i18nSource).toContain("seleccionarMotivoRechazo: 'Select a reason'");
+        expect(i18nSource).toContain("motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo'");
+        expect(i18nSource).toContain("motivoRechazoRequerido: 'You must select a rejection reason'");
+        expect(i18nSource).toContain('adminManualIdentityCloseHint');
+        expect(i18nSource).toContain("'Cierra la solicitud sin modificar la verificación de identidad del usuario.'");
+        expect(i18nSource).toContain("'Closes the request without modifying the user identity verification status.'");
     });
 });

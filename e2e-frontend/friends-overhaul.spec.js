@@ -133,7 +133,7 @@ test.describe('Friends overhaul', () => {
         ).toBeVisible();
     });
 
-    test('friend search shows sent label after requesting friendship', async ({
+    test('friend search lets the user cancel a sent request', async ({
         page
     }) => {
         await freezeClock(page);
@@ -166,15 +166,28 @@ test.describe('Friends overhaul', () => {
             });
         });
 
+        await page.route('**/api/friends/cancel-request/5', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify('OK')
+            });
+        });
+
         await page.goto('/setting/friends/search');
         await waitForPageReady(page);
 
         await searchFriends(page, 'Lil');
         await page.getByRole('button', { name: /agregar/i }).click();
 
-        const sentButton = page.getByRole('button', { name: /^enviada$/i });
-        await expect(sentButton).toBeVisible({ timeout: 15000 });
-        await expect(sentButton).toBeDisabled();
+        const cancelButton = page.getByRole('button', { name: /^cancelar$/i });
+        await expect(cancelButton).toBeVisible({ timeout: 15000 });
+        await expect(cancelButton).toBeEnabled();
+
+        await cancelButton.click();
+        await expect(
+            page.getByRole('button', { name: /agregar/i })
+        ).toBeVisible({ timeout: 15000 });
     });
 
     test('friends settings lists and removes outgoing pending requests', async ({

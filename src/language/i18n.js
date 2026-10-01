@@ -19,6 +19,18 @@ const messages = {
         verPerfilPublico: 'Ver perfil público',
         volverListaTicketsSoporte: 'Volver a la lista de mesa de ayuda',
         crearTicket: 'Crear ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Enviar feedback',
+        feedbackTabSubtitulo: 'Contanos qué pasó o qué se podría mejorar.',
+        feedbackTabAsunto: 'Asunto',
+        feedbackTabAsuntoPlaceholder: 'Resumen breve',
+        feedbackTabEnviar: 'Enviar',
+        feedbackTabExito: 'Feedback enviado correctamente',
+        feedbackTabError: 'No se pudo enviar el feedback. Intente de nuevo',
+        verTicket: 'Ver ticket',
+        ticketOrigen: 'Origen',
+        ticketOrigenFormulario: 'Formulario de mesa de ayuda',
+        ticketOrigenPestana: 'Pestaña de ayuda',
         categoriaTicket: 'Categoria',
         asuntoTicket: 'Asunto del ticket',
         asuntoTicketPlaceholder: 'Resumen breve del problema o consulta',
@@ -627,6 +639,27 @@ const messages = {
         tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
             '¿Cómo se calcula la contribución promedio?',
+        tripContributionBreakdownFuelLiter:
+            'Costo de 1L de nafta: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Litros de nafta de trayecto: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'Usamos un consumo promedio de {kmPerLiter} km/L ({litersPer100km} L/100km) para el cálculo.',
+        tripContributionBreakdownFuelCost:
+            'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimación de peajes: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Bonificado',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Asientos considerados: {count} asientos',
+        tripContributionBreakdownPerPerson:
+            'Costo por persona: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
@@ -688,6 +721,13 @@ const messages = {
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
         tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
+        tripContributionExcessModalTitle: 'Posible exceso de contribución',
+        tripContributionExcessModalBodyWarning:
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+        tripContributionExcessModalBodyApology:
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+        tripContributionExcessModalBodyThanks: 'Muchas gracias por hacer Carpoolear más justo.',
+        tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
@@ -781,12 +821,14 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
             'Luego de verificar, podés eliminar la integración con MP',
         identidadModalManualTitulo: 'Verificación manual',
+        identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
@@ -796,6 +838,11 @@ const messages = {
         identityValidationLearnMoreLink:
             'leer más sobre la verificación de cuenta',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'Existen {twoOptions} para verificar tu cuenta: {automatic} o {manual}.',
+        identityValidationTwoOptionsCount: 'dos opciones',
+        identityValidationTwoOptionsAutomatic: 'verificación automática',
+        identityValidationTwoOptionsManual: 'verificación manual',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -805,7 +852,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -821,10 +872,19 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -838,6 +898,9 @@ const messages = {
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
         esperandoPagoValidacionManual:
             'Esperando pago de la verificación manual',
+        errorPagoValidacionManual: 'El pago no se completó',
+        pagoValidacionManualFallido:
+            'El pago de la verificación manual no se completó. Podés intentar de nuevo.',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -872,6 +935,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
+        resultMissingIdentification:
+            'Mercado Pago no nos provee la información de tu documento por lo que no podemos verificar tu identidad',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
@@ -935,6 +1000,15 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        comoPagarElQR: '¿Cómo pagar el QR?',
+        comoHacerPagoQRTitulo: '¿Cómo hacer el pago con QR?',
+        comoHacerPagoQRCelular:
+            'Desde tu celular, le podes hacer una captura de pantalla al QR, luego tomas esa captura y se la enviás a otra persona amiga/familiar que tengas al lado. Puede ser cualquier app de chat que utilices (whatsapp o telegram). Cuando lo reciban, pedile que abran la captura en sus teléfonos así lo escaneas desde el tuyo, o también te lo podes enviar a tu misma cuenta de chat si podes levantar whatsapp web o telegram web en una computadora y escanear la imagen QR desde ahí.',
+        comoHacerPagoQRComputadoraPrefix:
+            'Desde una computadora, abris Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -946,6 +1020,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -997,6 +1074,7 @@ const messages = {
         tiempoEsperaHoras: 'hs',
         tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
+        verificado: 'Verificado',
         si: 'Sí',
         no: 'No',
         acciones: 'Acciones',
@@ -1005,7 +1083,7 @@ const messages = {
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
-        motivoRechazo: 'Motivo rechazo',
+        motivoRechazo: 'Motivo de rechazo',
         rechazoDniMismatch: 'DNI no coincide',
         rechazoNameMismatch: 'Nombre no coincide',
         both_mismatch: 'Ni el DNI ni el nombre coinciden',
@@ -1027,6 +1105,9 @@ const messages = {
         validarUsuario: 'Verificar usuario',
         validadoPor: 'Verificado por',
         revisadoPor: 'Revisado por',
+        aprobadoPor: 'Aprobado por',
+        rechazadoPor: 'Rechazado por',
+        marcadoPendientePor: 'Marcado pendiente por',
         el: 'el',
         fotos: 'Fotos',
         frenteDocumento: 'Frente del documento',
@@ -1039,6 +1120,14 @@ const messages = {
         comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
+        seleccionarMotivoRechazo: 'Seleccioná un motivo',
+        motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo',
+        rejectReasonDocsIllegible: 'Documentación ilegible',
+        rejectReasonSelfieMismatch: 'Selfie no coincide',
+        rejectReasonDocumentMismatch: 'Documento no coincide con el perfil',
+        rejectReasonExpiredDocument: 'Documento vencido o inválido',
+        rejectReasonSuspectedFraud: 'Sospecha de fraude',
+        rejectReasonOther: 'Otro',
         comentarioRevision: 'Comentario de revisión',
         revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
@@ -1049,6 +1138,20 @@ const messages = {
         marcarPendiente: 'Marcar como pendiente',
         confirmMarcarPendienteYaPendiente:
             'El estado ya es Pendiente por lo que no habrá cambios y no se notificará al usuario, está seguro que quiere hacerlo?',
+        confirmarAprobarManualIdentity:
+            '¿Confirmás aprobar esta solicitud de verificación de identidad?',
+        confirmarRechazarManualIdentity:
+            '¿Confirmás rechazar esta solicitud de verificación de identidad?',
+        confirmarMarcarPendienteManualIdentity:
+            '¿Confirmás marcar esta solicitud como pendiente?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            '¿Confirmás guardar la nota privada de administración?',
+        confirmarGuardarEstadoManualIdentity:
+            '¿Confirmás guardar los cambios de estado de esta solicitud?',
+        confirmarCerrarManualIdentity:
+            '¿Confirmás cerrar esta solicitud de verificación manual? No se modificará la verificación de la cuenta.',
+        adminManualIdentityCloseHint:
+            'Cierra la solicitud sin modificar la verificación de identidad del usuario.',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -1066,9 +1169,10 @@ const messages = {
         accion: 'Acción',
         usuario: 'Usuario',
         administracion: 'Administración',
-        buscoConductor: 'Busco Conductor',
+        buscoConductor: 'Busco conductores',
         buscoPasajero: 'Busco Pasajero',
         encontraTuProximoViaje: 'Encontrá tu próximo viaje',
+        invertirOrigenDestino: 'Invertir origen y destino',
         compartiAutoTagline:
             'Compartí tu viaje, ahorrá dinero y cuidá el planeta',
         viajesPublicados: 'Viajes publicados',
@@ -1079,7 +1183,6 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'Si carpooleabas antes del 5/8/17, tenés que entrar al sistema mediante el botón "ingresar con Facebook" para seguir usando el mismo usuario y recuperar tus calificaciones. Si no podés entrar, escribinos a',
-        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'o a nuestro Facebook así te ayudamos :)',
         noMostrar: 'No volver a mostrar',
         entendido: 'ENTENDIDO!',
@@ -1088,7 +1191,6 @@ const messages = {
         ingresaConCuenta: 'Ingresá con Email',
         debeActivarCuenta:
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
-        instalar: 'Instalar',
         donar: 'Aportar',
         donarEnSafari: 'Conocer más',
         ingresar: 'Ingresar',
@@ -1108,9 +1210,9 @@ const messages = {
         alIngresarApple: 'Al ingresar con Apple estas aceptando nuestros',
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
-            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a contacto@@carpoolear.com para solucionar el inconveniente.',
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a {adminEmail} para solucionar el inconveniente.',
         paraIngresarCuenta:
-            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a contacto@@carpoolear.com',
+            'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a {adminEmail}',
         emailOContra: 'Email o password incorrecto.',
         solicitudEnviada:
             'Su solicitud ya fue enviada, aguarde un momento por favor.',
@@ -1586,7 +1688,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -1606,24 +1707,18 @@ const messages = {
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
+        descargaLaApp: 'Descargá la app de Carpoolear',
+        descargaLaAppTexto:
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+        ahoraNo: 'Ahora no',
+        disponibleEnGooglePlay: 'Disponible en Google Play',
+        descargarEnAppStore: 'Descargar en App Store',
         elegirPropiaAventuraSoloMensual:
             'Elegí tu propia aventura (solo mensual)',
-        instalarApp: 'Instalar App',
-        instalarWebAppPWA:
-            'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
-        instalarAppEnIos: 'Instalar App en iOS',
-        instalarAppEnIosInstrucciones:
-            'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
         ticketEstadoEsperandoTuRespuesta: 'Esperando tu respuesta',
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -1646,6 +1741,78 @@ const messages = {
         footerEnRutaDesde: 'En ruta desde el año 2013',
         footerTerminosCondiciones: 'Términos y condiciones',
         adminNavTablero: 'Tablero',
+        adminNavActionLogs: 'Historial de acciones',
+        adminActionLogsAdminUser: 'ID de admin',
+        adminActionLogsAction: 'Acción',
+        adminActionLogsFrom: 'Desde',
+        adminActionLogsTo: 'Hasta',
+        adminActionLogsTargetUser: 'ID de usuario',
+        adminActionLogsDetails: 'Detalles',
+        adminActionLogsEmpty: 'No hay acciones registradas.',
+        adminActionLogsAllActions: 'Todas las acciones',
+        adminNavReporteVerificaciones: 'Reporte de verificaciones',
+        adminIvrTitulo: 'Reporte de verificaciones de identidad',
+        adminIvrDescripcion: 'Intentos de verificación de cuenta por período: cómo terminan y cuántas personas quedan sin verificar después de un fallo con Mercado Pago.',
+        adminIvrNotaDatosDesde: 'Los datos se registran desde el {date}. Antes de esa fecha los períodos aparecen en cero.',
+        adminIvrFiltros: 'Filtros del reporte',
+        adminIvrDesde: 'Desde',
+        adminIvrHasta: 'Hasta',
+        adminIvrAgruparPor: 'Agrupar por',
+        adminIvrAgruparMes: 'Mes',
+        adminIvrAgruparSemana: 'Semana',
+        adminIvrAgruparDia: 'Día',
+        adminIvrMetodo: 'Método',
+        adminIvrMetodoTodos: 'Todos',
+        adminIvrMetodoManual: 'Manual',
+        adminIvrMetodoMercadoPago: 'Mercado Pago',
+        adminIvrPlataforma: 'Plataforma',
+        adminIvrPlataformaTodas: 'Todas',
+        adminIvrSuperficie: 'Superficie',
+        adminIvrVersionApp: 'Versión de la app',
+        adminIvrNotaFiltrosCliente: 'Los intentos manuales no registran plataforma, superficie ni versión de la app: con estos filtros aparecen en cero.',
+        adminIvrErrorFechasRequeridas: 'Elegí las fechas desde y hasta.',
+        adminIvrErrorRangoInvalido: 'La fecha hasta tiene que ser igual o posterior a la fecha desde.',
+        adminIvrCargando: 'Cargando reporte…',
+        adminIvrErrorCarga: 'No se pudo cargar el reporte.',
+        adminIvrReintentar: 'Reintentar',
+        adminIvrSinDatos: 'No hay intentos de verificación en el rango elegido.',
+        adminIvrIntentosTotales: 'Intentos totales',
+        adminIvrIntentosManuales: 'Intentos manuales',
+        adminIvrIntentosMercadoPago: 'Intentos con Mercado Pago',
+        adminIvrSeccionManual: 'Verificación manual',
+        adminIvrSeccionManualAyuda: 'Un intento por cada solicitud manual pagada.',
+        adminIvrInconclusasAyuda: 'Inconclusas: no terminaron en aprobación ni rechazo y no esperan a un admin (por ejemplo, pagaron y nunca enviaron los documentos, o se pidió información y nunca la reenviaron).',
+        adminIvrSeccionAutomatica: 'Verificación automática (Mercado Pago)',
+        adminIvrSeccionAutomaticaAyuda: 'Un intento por cada inicio de conexión (OAuth) con Mercado Pago.',
+        adminIvrResultado: 'Resultado',
+        adminIvrCantidad: 'Cantidad',
+        adminIvrPorcentaje: '%',
+        adminIvrAprobadas: 'Aprobadas',
+        adminIvrRechazadas: 'Rechazadas',
+        adminIvrInconclusas: 'Inconclusas',
+        adminIvrPendientesDeRevision: 'Pendientes de revisión',
+        adminIvrError: 'Error',
+        adminIvrCanceladas: 'Canceladas',
+        adminIvrAbandonadas: 'Abandonadas',
+        adminIvrSeccionPeriodos: 'Detalle por período',
+        adminIvrPeriodoMes: 'Mes',
+        adminIvrPeriodoSemana: 'Semana (lunes)',
+        adminIvrPeriodoDia: 'Día',
+        adminIvrIntentos: 'Intentos',
+        adminIvrSeccionFunnel: 'Qué pasa después de un fallo con Mercado Pago',
+        adminIvrFunnelAyuda: 'Personas cuyo intento con Mercado Pago en el rango fue rechazado o terminó en error, y si después se verificaron de otra forma.',
+        adminIvrFunnelUsuariosFallidos: 'Personas con un intento fallido',
+        adminIvrFunnelResueltos: 'Verificadas después',
+        adminIvrFunnelSinResolver: 'Sin verificar',
+        adminIvrFunnelFallosSinUsuario: 'Fallos sin usuario (no se pueden seguir)',
+        adminIvrFunnelMercadoPago: 'Reintento con Mercado Pago',
+        adminIvrFunnelManual: 'Validación manual',
+        adminIvrFunnelRechazoMpAprobado: 'Un admin aprobó el rechazo de Mercado Pago',
+        adminIvrFunnelEdicionAdmin: 'Edición del perfil por un admin',
+        adminIvrFunnelResolucion: 'Resolución',
+        adminIvrGraficoManual: 'Resultados de la verificación manual por período',
+        adminIvrGraficoAutomatica: 'Resultados de Mercado Pago por período',
+        adminIvrGraficoFunnel: 'Resolución de los fallos con Mercado Pago',
         adminDashboardTitle: 'Tablero',
         adminDashboardManualVerifications: 'Verificaciones manuales pendientes',
         adminDashboardSupportTickets: 'Tickets de soporte pendientes',
@@ -1685,6 +1852,8 @@ const messages = {
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
+        contribucionSospechada: 'Contribución sospechada',
+        telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
         noHayExcesoContribucion: 'No hay viajes con posible exceso de contribución.',
@@ -1730,7 +1899,7 @@ const messages = {
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
-            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
+            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email y contraseña de la cuenta a mantener; DNI, teléfono y fecha de creación de la cuenta a borrar.',
         migracionCampo: 'Campo',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Contraseña',
@@ -1758,6 +1927,7 @@ const messages = {
         rateItemViajoAComo: 'Viajó a',
         rateItemComo: 'como',
         rateItemResponderALaCalificacion: 'Responder a la calificación',
+        rateItemResponderALaReferencia: 'Responder a la referencia',
         rateItemResponder: 'Responder',
         rateItemCancelar: 'Cancelar',
         rateItemRespondio: 'respondió:',
@@ -1935,6 +2105,18 @@ const messages = {
         verPerfilPublico: 'Ver perfil público',
         volverListaTicketsSoporte: 'Volver a la lista de mesa de ayuda',
         crearTicket: 'Crear ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Enviar feedback',
+        feedbackTabSubtitulo: 'Contanos qué pasó o qué se podría mejorar.',
+        feedbackTabAsunto: 'Asunto',
+        feedbackTabAsuntoPlaceholder: 'Resumen breve',
+        feedbackTabEnviar: 'Enviar',
+        feedbackTabExito: 'Feedback enviado correctamente',
+        feedbackTabError: 'No se pudo enviar el feedback. Intente de nuevo',
+        verTicket: 'Ver ticket',
+        ticketOrigen: 'Origen',
+        ticketOrigenFormulario: 'Formulario de mesa de ayuda',
+        ticketOrigenPestana: 'Pestaña de ayuda',
         categoriaTicket: 'Categoria',
         asuntoTicket: 'Asunto del ticket',
         asuntoTicketPlaceholder: 'Resumen breve del problema o consulta',
@@ -2340,7 +2522,7 @@ const messages = {
             'Estamos teniendo problemas para conectar con el servidor. Por favor esperá un momento e intentá de nuevo.',
         serverDownRetrying: 'Reintentando conexión…',
         serverDownRetryButton: 'Reintentar ahora',
-        buscoConductor: 'Conductor',
+        buscoConductor: 'Busco conductores',
         buscoPasajero: 'Pasajero',
         iniciarSesion: 'Comparte auto para llegar al lugar donde quierés ir',
         ingresaCuenta: 'Comparte auto para llegar al lugar donde quierés ir',
@@ -2499,6 +2681,27 @@ const messages = {
         tripContributionSuggested: 'Contribución promedio: $ {amount}',
         tripContributionHowCalculated:
             '¿Cómo se calcula la contribución promedio?',
+        tripContributionBreakdownFuelLiter:
+            'Costo de 1L de nafta: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Litros de nafta de trayecto: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'Usamos un consumo promedio de {kmPerLiter} km/L ({litersPer100km} L/100km) para el cálculo.',
+        tripContributionBreakdownFuelCost:
+            'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimación de peajes: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Bonificado',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Asientos considerados: {count} asientos',
+        tripContributionBreakdownPerPerson:
+            'Costo por persona: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Importante',
         tripContributionImportantBody:
             '<p>La contribución máxima es gastos de combustible + peaje dividido por la cantidad de asientos del auto. Durante la coordinación previa al viaje, cualquier persona puede indicar que se haga la división con tickets de combustible y peaje en mano.</p><p>Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D</p><p><strong>Pedir una contribución superior a la máxima va contra las reglas de Carpoolear y resultará en la suspensión de la cuenta.</strong></p>',
@@ -2560,6 +2763,13 @@ const messages = {
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
         tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
+        tripContributionExcessModalTitle: 'Posible exceso de contribución',
+        tripContributionExcessModalBodyWarning:
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+        tripContributionExcessModalBodyApology:
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+        tripContributionExcessModalBodyThanks: 'Muchas gracias por hacer Carpoolear más justo.',
+        tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
@@ -2628,12 +2838,14 @@ const messages = {
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
         identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
             'Luego de verificar, podés eliminar la integración con MP',
         identidadModalManualTitulo: 'Verificación manual',
+        identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
         identidadModalManualPlazo: 'Se aprueba dentro de 48 hs hábiles',
@@ -2643,6 +2855,11 @@ const messages = {
         identityValidationLearnMoreLink:
             'leer más sobre la verificación de cuenta',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'Existen {twoOptions} para verificar tu cuenta: {automatic} o {manual}.',
+        identityValidationTwoOptionsCount: 'dos opciones',
+        identityValidationTwoOptionsAutomatic: 'verificación automática',
+        identityValidationTwoOptionsManual: 'verificación manual',
         identidadModalPlazoInfo:
             'A partir de hoy tenés {days} días para verificar tu cuenta, luego será obligatoria para poder publicar viajes o enviar mensajes.',
         identidadModalOptionalInfo:
@@ -2652,7 +2869,11 @@ const messages = {
         manualValidationSwitchToMercadoPago:
             'Cambiar modo de verificación de cuenta a Mercado Pago (gratis)',
         identityValidationPageIntro:
-            'Para mantener la seguridad de la comunidad, necesitamos verificar tu cuenta.',
+            'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
+        identityValidationPageSummary:
+            'Una persona, una cuenta. Sin perfiles falsos. ',
+        identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
+        identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
         identityValidationPageBullet1: 'Evitar perfiles falsos.',
         identityValidationPageBullet2:
@@ -2668,10 +2889,19 @@ const messages = {
         identityValidationMercadoPagoOwnershipWarningProfileLink:
             'podés editarlo acá',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Antes de realizar la verificación, asegurate que el titular de la cuenta logueada en Mercado Pago coincida con el de Carpoolear.',
+        identityValidationMpConfirmName:
+            'El nombre completo debe coincidir en Carpoolear y Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continuar con la verificación',
+        identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
             'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
         identityValidationManualCardDesc:
-            'Si no tenés Mercado Pago o preferís no usarlo, podés enviar documentación para que nuestro equipo la revise.',
+            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+        identityValidationAutoBadgeFree: 'Gratis',
+        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
@@ -2685,6 +2915,9 @@ const messages = {
             'Si no podés o no querés usar Mercado Pago, podés solicitar una verificación manual (con costo).',
         esperandoPagoValidacionManual:
             'Esperando pago de la verificación manual',
+        errorPagoValidacionManual: 'El pago no se completó',
+        pagoValidacionManualFallido:
+            'El pago de la verificación manual no se completó. Podés intentar de nuevo.',
         debesPagarParaContinuar:
             'Iniciaste una verificación manual pero no completaste el pago. Pagá para continuar.',
         pagadoEsperandoRevision: 'Pagado, esperando revisión',
@@ -2719,6 +2952,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             'Si el link no funciona, podés hacerlo manualmente desde la app de Mercado Pago yendo a Menú-> Configuración -> Cuenta -> Seguridad -> Aplicaciones conectadas -> Carpoolear-SelladoVIaje -> Quitar permisos',
         resultError: 'Ocurrió un error. Intentá de nuevo.',
+        resultMissingIdentification:
+            'Mercado Pago no nos provee la información de tu documento por lo que no podemos verificar tu identidad',
         resultDniMismatch:
             'El DNI no coincide con el de tu perfil. Verificá que tu DNI esté cargado correctamente.',
         resultNameMismatch:
@@ -2782,6 +3017,15 @@ const messages = {
         costoValidacionManual: 'Costo de la verificación manual',
         pagarYContinuar: 'Pagar y continuar',
         pagarConQR: 'Pagar con QR',
+        comoPagarElQR: '¿Cómo pagar el QR?',
+        comoHacerPagoQRTitulo: '¿Cómo hacer el pago con QR?',
+        comoHacerPagoQRCelular:
+            'Desde tu celular, le podes hacer una captura de pantalla al QR, luego tomas esa captura y se la enviás a otra persona amiga/familiar que tengas al lado. Puede ser cualquier app de chat que utilices (whatsapp o telegram). Cuando lo reciban, pedile que abran la captura en sus teléfonos así lo escaneas desde el tuyo, o también te lo podes enviar a tu misma cuenta de chat si podes levantar whatsapp web o telegram web en una computadora y escanear la imagen QR desde ahí.',
+        comoHacerPagoQRComputadoraPrefix:
+            'Desde una computadora, abris Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -2793,6 +3037,9 @@ const messages = {
         manualValidationPayClosing:
             'Esto nos permitirá verificar tu cuenta correctamente.',
         manualValidationPagarMercadoPago: 'Pagar con Mercado Pago',
+        copiarLinkDePago: 'Copiar link de pago',
+        enviarLinkDePago: 'Enviar link de pago',
+        linkDePagoCopiado: 'Link de pago copiado',
         manualValidationVolverOpcionesDesktop:
             'Volver a opciones de verificación',
         manualValidationPagoProcesado: 'Pago procesado correctamente',
@@ -2844,6 +3091,7 @@ const messages = {
         tiempoEsperaHoras: 'hs',
         tiempoEsperaMinutos: 'min',
         pagado: 'Pagado',
+        verificado: 'Verificado',
         si: 'Sí',
         no: 'No',
         acciones: 'Acciones',
@@ -2852,7 +3100,7 @@ const messages = {
         noHayValidacionesManuales: 'No hay solicitudes de verificación manual.',
         rechazosMercadoPago: 'Rechazos verificación Mercado Pago',
         detalleRechazoMp: 'Detalle rechazo MP',
-        motivoRechazo: 'Motivo rechazo',
+        motivoRechazo: 'Motivo de rechazo',
         rechazoDniMismatch: 'DNI no coincide',
         rechazoNameMismatch: 'Nombre no coincide',
         both_mismatch: 'Ni el DNI ni el nombre coinciden',
@@ -2882,6 +3130,14 @@ const messages = {
         comentarioVisibleParaUsuario: 'Este mensaje lo verá el usuario',
         comentarioRequeridoParaAccion:
             'Debe escribir un comentario si quiere tomar esta acción',
+        seleccionarMotivoRechazo: 'Seleccioná un motivo',
+        motivoRechazoRequerido: 'Debés seleccionar un motivo de rechazo',
+        rejectReasonDocsIllegible: 'Documentación ilegible',
+        rejectReasonSelfieMismatch: 'Selfie no coincide',
+        rejectReasonDocumentMismatch: 'Documento no coincide con el perfil',
+        rejectReasonExpiredDocument: 'Documento vencido o inválido',
+        rejectReasonSuspectedFraud: 'Sospecha de fraude',
+        rejectReasonOther: 'Otro',
         comentarioRevision: 'Comentario de revisión',
         revisionAdmin: 'Revisión admin',
         fechaAccionAdmin: 'Fecha de acción del admin',
@@ -2892,6 +3148,20 @@ const messages = {
         marcarPendiente: 'Marcar como pendiente',
         confirmMarcarPendienteYaPendiente:
             'El estado ya es Pendiente por lo que no habrá cambios y no se notificará al usuario, está seguro que quiere hacerlo?',
+        confirmarAprobarManualIdentity:
+            '¿Confirmás aprobar esta solicitud de verificación de identidad?',
+        confirmarRechazarManualIdentity:
+            '¿Confirmás rechazar esta solicitud de verificación de identidad?',
+        confirmarMarcarPendienteManualIdentity:
+            '¿Confirmás marcar esta solicitud como pendiente?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            '¿Confirmás guardar la nota privada de administración?',
+        confirmarGuardarEstadoManualIdentity:
+            '¿Confirmás guardar los cambios de estado de esta solicitud?',
+        confirmarCerrarManualIdentity:
+            '¿Confirmás cerrar esta solicitud de verificación manual? No se modificará la verificación de la cuenta.',
+        adminManualIdentityCloseHint:
+            'Cierra la solicitud sin modificar la verificación de identidad del usuario.',
         accionMarcadoPendiente: 'Marcado como pendiente',
         rechazar: 'Rechazar',
         noPagadoNoRevisar: 'No pagado. No se puede revisar.',
@@ -3260,7 +3530,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -3297,24 +3566,18 @@ const messages = {
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
+        descargaLaApp: 'Descargá la app de Carpoolear',
+        descargaLaAppTexto:
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+        ahoraNo: 'Ahora no',
+        disponibleEnGooglePlay: 'Disponible en Google Play',
+        descargarEnAppStore: 'Descargar en App Store',
         elegirPropiaAventuraSoloMensual:
             'Elegí tu propia aventura (solo mensual)',
-        instalarApp: 'Instalar App',
-        instalarWebAppPWA:
-            'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
-        instalarAppEnIos: 'Instalar App en iOS',
-        instalarAppEnIosInstrucciones:
-            'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
         ticketEstadoEsperandoTuRespuesta: 'Esperando tu respuesta',
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -3337,6 +3600,78 @@ const messages = {
         footerEnRutaDesde: 'En ruta desde el año 2013',
         footerTerminosCondiciones: 'Términos y condiciones',
         adminNavTablero: 'Tablero',
+        adminNavActionLogs: 'Historial de acciones',
+        adminActionLogsAdminUser: 'ID de admin',
+        adminActionLogsAction: 'Acción',
+        adminActionLogsFrom: 'Desde',
+        adminActionLogsTo: 'Hasta',
+        adminActionLogsTargetUser: 'ID de usuario',
+        adminActionLogsDetails: 'Detalles',
+        adminActionLogsEmpty: 'No hay acciones registradas.',
+        adminActionLogsAllActions: 'Todas las acciones',
+        adminNavReporteVerificaciones: 'Reporte de verificaciones',
+        adminIvrTitulo: 'Reporte de verificaciones de identidad',
+        adminIvrDescripcion: 'Intentos de verificación de cuenta por período: cómo terminan y cuántas personas quedan sin verificar después de un fallo con Mercado Pago.',
+        adminIvrNotaDatosDesde: 'Los datos se registran desde el {date}. Antes de esa fecha los períodos aparecen en cero.',
+        adminIvrFiltros: 'Filtros del reporte',
+        adminIvrDesde: 'Desde',
+        adminIvrHasta: 'Hasta',
+        adminIvrAgruparPor: 'Agrupar por',
+        adminIvrAgruparMes: 'Mes',
+        adminIvrAgruparSemana: 'Semana',
+        adminIvrAgruparDia: 'Día',
+        adminIvrMetodo: 'Método',
+        adminIvrMetodoTodos: 'Todos',
+        adminIvrMetodoManual: 'Manual',
+        adminIvrMetodoMercadoPago: 'Mercado Pago',
+        adminIvrPlataforma: 'Plataforma',
+        adminIvrPlataformaTodas: 'Todas',
+        adminIvrSuperficie: 'Superficie',
+        adminIvrVersionApp: 'Versión de la app',
+        adminIvrNotaFiltrosCliente: 'Los intentos manuales no registran plataforma, superficie ni versión de la app: con estos filtros aparecen en cero.',
+        adminIvrErrorFechasRequeridas: 'Elegí las fechas desde y hasta.',
+        adminIvrErrorRangoInvalido: 'La fecha hasta tiene que ser igual o posterior a la fecha desde.',
+        adminIvrCargando: 'Cargando reporte…',
+        adminIvrErrorCarga: 'No se pudo cargar el reporte.',
+        adminIvrReintentar: 'Reintentar',
+        adminIvrSinDatos: 'No hay intentos de verificación en el rango elegido.',
+        adminIvrIntentosTotales: 'Intentos totales',
+        adminIvrIntentosManuales: 'Intentos manuales',
+        adminIvrIntentosMercadoPago: 'Intentos con Mercado Pago',
+        adminIvrSeccionManual: 'Verificación manual',
+        adminIvrSeccionManualAyuda: 'Un intento por cada solicitud manual pagada.',
+        adminIvrInconclusasAyuda: 'Inconclusas: no terminaron en aprobación ni rechazo y no esperan a un admin (por ejemplo, pagaron y nunca enviaron los documentos, o se pidió información y nunca la reenviaron).',
+        adminIvrSeccionAutomatica: 'Verificación automática (Mercado Pago)',
+        adminIvrSeccionAutomaticaAyuda: 'Un intento por cada inicio de conexión (OAuth) con Mercado Pago.',
+        adminIvrResultado: 'Resultado',
+        adminIvrCantidad: 'Cantidad',
+        adminIvrPorcentaje: '%',
+        adminIvrAprobadas: 'Aprobadas',
+        adminIvrRechazadas: 'Rechazadas',
+        adminIvrInconclusas: 'Inconclusas',
+        adminIvrPendientesDeRevision: 'Pendientes de revisión',
+        adminIvrError: 'Error',
+        adminIvrCanceladas: 'Canceladas',
+        adminIvrAbandonadas: 'Abandonadas',
+        adminIvrSeccionPeriodos: 'Detalle por período',
+        adminIvrPeriodoMes: 'Mes',
+        adminIvrPeriodoSemana: 'Semana (lunes)',
+        adminIvrPeriodoDia: 'Día',
+        adminIvrIntentos: 'Intentos',
+        adminIvrSeccionFunnel: 'Qué pasa después de un fallo con Mercado Pago',
+        adminIvrFunnelAyuda: 'Personas cuyo intento con Mercado Pago en el rango fue rechazado o terminó en error, y si después se verificaron de otra forma.',
+        adminIvrFunnelUsuariosFallidos: 'Personas con un intento fallido',
+        adminIvrFunnelResueltos: 'Verificadas después',
+        adminIvrFunnelSinResolver: 'Sin verificar',
+        adminIvrFunnelFallosSinUsuario: 'Fallos sin usuario (no se pueden seguir)',
+        adminIvrFunnelMercadoPago: 'Reintento con Mercado Pago',
+        adminIvrFunnelManual: 'Validación manual',
+        adminIvrFunnelRechazoMpAprobado: 'Un admin aprobó el rechazo de Mercado Pago',
+        adminIvrFunnelEdicionAdmin: 'Edición del perfil por un admin',
+        adminIvrFunnelResolucion: 'Resolución',
+        adminIvrGraficoManual: 'Resultados de la verificación manual por período',
+        adminIvrGraficoAutomatica: 'Resultados de Mercado Pago por período',
+        adminIvrGraficoFunnel: 'Resolución de los fallos con Mercado Pago',
         adminDashboardTitle: 'Tablero',
         adminDashboardManualVerifications: 'Verificaciones manuales pendientes',
         adminDashboardSupportTickets: 'Tickets de soporte pendientes',
@@ -3376,6 +3711,8 @@ const messages = {
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
+        contribucionSospechada: 'Contribución sospechada',
+        telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
         noHayExcesoContribucion: 'No hay viajes con posible exceso de contribución.',
@@ -3421,7 +3758,7 @@ const messages = {
             'La cuenta de {name} (ID: {id}) se encuentra suspendida por lo que no se puede realizar la migración',
         migracionElegirDatos: 'Elegí qué datos conservar',
         migracionElegirDatosAyuda:
-            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email, DNI y fecha de creación de la cuenta a borrar; contraseña y teléfono de la cuenta a mantener.',
+            'Hacé clic en el valor que querés usar en la cuenta final. Por defecto: email y contraseña de la cuenta a mantener; DNI, teléfono y fecha de creación de la cuenta a borrar.',
         migracionCampo: 'Campo',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Contraseña',
@@ -3449,6 +3786,7 @@ const messages = {
         rateItemViajoAComo: 'Viajó a',
         rateItemComo: 'como',
         rateItemResponderALaCalificacion: 'Responder a la calificación',
+        rateItemResponderALaReferencia: 'Responder a la referencia',
         rateItemResponder: 'Responder',
         rateItemCancelar: 'Cancelar',
         rateItemRespondio: 'respondió:',
@@ -3585,6 +3923,18 @@ const messages = {
         verPerfilPublico: 'View public profile',
         volverListaTicketsSoporte: 'Back to help desk ticket list',
         crearTicket: 'Create ticket',
+        pestanaFeedback: 'Feedback',
+        feedbackTabTitulo: 'Send feedback',
+        feedbackTabSubtitulo: 'Tell us what happened or what we could improve.',
+        feedbackTabAsunto: 'Subject',
+        feedbackTabAsuntoPlaceholder: 'Short summary',
+        feedbackTabEnviar: 'Send',
+        feedbackTabExito: 'Feedback sent successfully',
+        feedbackTabError: 'Could not send the feedback. Please try again',
+        verTicket: 'View ticket',
+        ticketOrigen: 'Origin',
+        ticketOrigenFormulario: 'Help desk form',
+        ticketOrigenPestana: 'Help tab',
         categoriaTicket: 'Category',
         asuntoTicket: 'Ticket subject',
         asuntoTicketPlaceholder: 'Short summary of the issue or request',
@@ -4186,6 +4536,26 @@ const messages = {
         tripContributionSuggested: 'Average contribution: $ {amount}',
         tripContributionHowCalculated:
             'How is the average contribution calculated?',
+        tripContributionBreakdownFuelLiter: 'Cost of 1L of fuel: $ {amount}',
+        tripContributionBreakdownLiters:
+            'Fuel for the route: {liters}L ({km}km)',
+        tripContributionBreakdownConsumptionTooltip:
+            'We use an average consumption of {kmPerLiter} km/L ({litersPer100km} L/100km) for the calculation.',
+        tripContributionBreakdownFuelCost:
+            'Fuel cost for the route: $ {pricePerLiter} x {liters}L = $ {amount}',
+        tripContributionBreakdownTolls:
+            'Estimated tolls: $ {amount} ({percent}%)',
+        tripContributionBreakdownSellado: 'Trip seal: $ {amount}',
+        tripContributionBreakdownSelladoBonificado: 'Waived',
+        tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
+        tripContributionBreakdownTotalWithSellado:
+            'Total: $ {fuel} + $ {tolls} + $ {sellado}',
+        tripContributionBreakdownTotalWithSelladoBonificado:
+            'Total: $ {fuel} + $ {tolls} + {sellado}',
+        tripContributionBreakdownOccupants:
+            'Seats considered: {count} seats',
+        tripContributionBreakdownPerPerson:
+            'Cost per person: $ {total} / {count} = $ {amount}',
         tripContributionImportantTitle: 'Important',
         tripContributionImportantBody:
             "<p>The maximum contribution is fuel costs plus tolls divided by the number of seats in the car. During coordination before the trip, anyone may ask that the split be done with fuel and toll receipts in hand.</p><p>By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let's have a good trip by taking care of each other :D</p><p><strong>Requesting a contribution above the maximum goes against Carpoolear rules and will result in account suspension.</strong></p>",
@@ -4247,6 +4617,13 @@ const messages = {
         tripCreationOr: 'or',
         tripCreationChooseTemplateTitle: 'Choose trip template',
         tripCreationChooseTemplatePlaceholder: 'Select a template',
+        tripContributionExcessModalTitle: 'Possible contribution excess',
+        tripContributionExcessModalBodyWarning:
+            'We detected a possible contribution excess. Please note that asking for a contribution higher than the stipulated maximum is prohibited and, if that is the case, it will result in an account suspension.',
+        tripContributionExcessModalBodyApology:
+            'If that is not the case, we apologize: this is an automatic check that can fail.',
+        tripContributionExcessModalBodyThanks: 'Thank you very much for making Carpoolear fairer.',
+        tripContributionExcessModalConfirm: 'Got it',
         tripCreationReplaceTemplateLabel: 'Choose a template to replace',
         tripCreationRouteDetails: 'Route details',
         tripCreationTotalPeopleLabel:
@@ -4316,7 +4693,10 @@ const messages = {
         validarConMercadoPagoDesc:
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
-            'To keep the community safe, we need to confirm your account.',
+            'For a safer Carpoolear community, you need to verify your account.',
+        identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+        identityValidationPageLearnMoreLink: 'See all the details',
+        identityValidationPageTwoOptions: 'You have two options:',
         identityValidationPageIntroEstoPermite: 'This allows',
         identityValidationPageBullet1: 'Reduce fake profiles.',
         identityValidationPageBullet2:
@@ -4326,7 +4706,10 @@ const messages = {
         identityValidationAutoCardDesc:
             'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
         identityValidationManualCardDesc:
-            "If you don't have Mercado Pago or prefer not to use it, you can send documents for our team to review.",
+            "Don't have Mercado Pago? Upload your documents and we'll review them.",
+        identityValidationAutoBadgeFree: 'Free',
+        identityValidationAutoBadgeInstant: 'Instant',
+        identityValidationManualBadgeTime: 'Up to 48hrs.',
         identityValidationCostLine: 'Cost: {cost}',
         identityValidationTimeLine:
             'Verification time: up to 48 business hours',
@@ -4336,6 +4719,9 @@ const messages = {
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",
         esperandoPagoValidacionManual:
             'Waiting for manual verification payment',
+        errorPagoValidacionManual: 'Payment did not complete',
+        pagoValidacionManualFallido:
+            'The manual verification payment did not complete. You can try again.',
         debesPagarParaContinuar:
             "You started a manual verification but didn't complete the payment. Pay to continue.",
         pagadoEsperandoRevision: 'Paid, waiting for review',
@@ -4371,6 +4757,8 @@ const messages = {
         identityVerificationSuccessMpDisconnectManualInstructions:
             "If the link doesn't work, you can do it manually from the Mercado Pago app by going to Menu -> Settings -> Account -> Security -> Connected apps -> Carpoolear-SelladoVIaje -> Remove permissions",
         resultError: 'An error occurred. Please try again.',
+        resultMissingIdentification:
+            'Mercado Pago does not provide your document information, so we cannot verify your identity.',
         resultDniMismatch:
             "The DNI doesn't match the one on your profile. Please make sure your DNI is correct.",
         resultNameMismatch:
@@ -4434,6 +4822,14 @@ const messages = {
         costoValidacionManual: 'Manual verification cost',
         pagarYContinuar: 'Pay and continue',
         pagarConQR: 'Pay with QR',
+        comoPagarElQR: 'How to pay with QR?',
+        comoHacerPagoQRTitulo: 'How to pay with QR',
+        comoHacerPagoQRCelular:
+            'From your phone, take a screenshot of the QR, then send that screenshot to a friend or family member next to you. You can use any chat app (WhatsApp or Telegram). When they receive it, ask them to open the screenshot on their phone so you can scan it from yours, or send it to your own chat account if you can open WhatsApp Web or Telegram Web on a computer and scan the QR image from there.',
+        comoHacerPagoQRComputadoraPrefix: 'From a computer, open Carpoolear ',
+        comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
+        comoHacerPagoQRComputadoraSuffix:
+            ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:
@@ -4445,6 +4841,9 @@ const messages = {
         manualValidationPayClosing:
             'This allows us to verify your account correctly.',
         manualValidationPagarMercadoPago: 'Pay with Mercado Pago',
+        copiarLinkDePago: 'Copy payment link',
+        enviarLinkDePago: 'Send payment link',
+        linkDePagoCopiado: 'Payment link copied',
         manualValidationVolverOpcionesDesktop: 'Back to verification options',
         manualValidationPagoProcesado: 'Payment processed successfully',
         manualValidationUploadIntro:
@@ -4493,6 +4892,7 @@ const messages = {
         tiempoEsperaHoras: 'h',
         tiempoEsperaMinutos: 'min',
         pagado: 'Paid',
+        verificado: 'Verified',
         si: 'Yes',
         no: 'No',
         acciones: 'Actions',
@@ -4547,12 +4947,14 @@ const messages = {
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
         identidadModalAutoTitulo: 'Automatic verification',
+        identidadModalAutoCostoEtiqueta: 'free',
         identidadModalAutoMp: 'If you have a Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalAutoPuedeEliminarMp:
             'After verifying, you can remove the MP integration',
         identidadModalManualTitulo: 'Manual verification',
+        identidadModalManualCostoEtiqueta: 'paid',
         identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
         identidadModalManualCosto: 'There is a cost',
         identidadModalManualPlazo: 'Approved within 48 business hours',
@@ -4560,6 +4962,11 @@ const messages = {
         identityValidationLearnMorePrefix: 'Want to know more? You can ',
         identityValidationLearnMoreLink: 'read more about account verification',
         identityValidationLearnMoreSuffix: '.',
+        identityValidationTwoOptions:
+            'There are {twoOptions} to verify your account: {automatic} or {manual}.',
+        identityValidationTwoOptionsCount: 'two options',
+        identityValidationTwoOptionsAutomatic: 'automatic verification',
+        identityValidationTwoOptionsManual: 'manual verification',
         identidadModalPlazoInfo:
             'From today you have {days} days to verify your account; after that it will be required to post trips or send messages.',
         identidadModalOptionalInfo:
@@ -4576,10 +4983,19 @@ const messages = {
             'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder. Your full name must match in Carpoolear and MP, you can ',
         identityValidationMercadoPagoOwnershipWarningProfileLink: 'edit it here',
         identityValidationMercadoPagoOwnershipWarningSuffix: '.',
+        identityValidationMpConfirmLead:
+            'Before verifying, make sure the account holder logged into Mercado Pago matches the Carpoolear account holder.',
+        identityValidationMpConfirmName:
+            'Your full name must match in Carpoolear and Mercado Pago.',
+        identityValidationMpConfirmContinue: 'Continue with verification',
+        identityValidationMpConfirmEditProfile: 'Edit my Carpoolear details',
         identidadNoValidada: 'Not verified',
         validarUsuario: 'Verify user',
         validadoPor: 'Verified by',
         revisadoPor: 'Reviewed by',
+        aprobadoPor: 'Approved by',
+        rechazadoPor: 'Rejected by',
+        marcadoPendientePor: 'Marked pending by',
         el: 'on',
         cargando: 'Loading...',
         fotos: 'Photos',
@@ -4598,10 +5014,32 @@ const messages = {
         fechaMarcadoPendiente: 'Marked pending date',
         comentarioRequeridoParaAccion:
             'You must write a comment to take this action.',
+        seleccionarMotivoRechazo: 'Select a reason',
+        motivoRechazoRequerido: 'You must select a rejection reason',
+        rejectReasonDocsIllegible: 'Illegible documents',
+        rejectReasonSelfieMismatch: 'Selfie does not match',
+        rejectReasonDocumentMismatch: 'Document does not match the profile',
+        rejectReasonExpiredDocument: 'Expired or invalid document',
+        rejectReasonSuspectedFraud: 'Suspected fraud',
+        rejectReasonOther: 'Other',
         aprobar: 'Approve',
         marcarPendiente: 'Mark as pending',
         confirmMarcarPendienteYaPendiente:
             'The status is already Pending so there will be no changes and the user will not be notified. Are you sure you want to proceed?',
+        confirmarAprobarManualIdentity:
+            'Confirm approving this identity verification request?',
+        confirmarRechazarManualIdentity:
+            'Confirm rejecting this identity verification request?',
+        confirmarMarcarPendienteManualIdentity:
+            'Confirm marking this request as pending?',
+        confirmarGuardarNotaPrivadaManualIdentity:
+            'Confirm saving the private admin note?',
+        confirmarGuardarEstadoManualIdentity:
+            'Confirm saving the state changes for this request?',
+        confirmarCerrarManualIdentity:
+            'Confirm closing this manual verification request? The account verification status will not be changed.',
+        adminManualIdentityCloseHint:
+            'Closes the request without modifying the user identity verification status.',
         accionMarcadoPendiente: 'Marked as pending',
         rechazar: 'Reject',
         noPagadoNoRevisar: 'Unpaid. Cannot review.',
@@ -4619,9 +5057,10 @@ const messages = {
         accion: 'Action',
         usuario: 'User',
         administracion: 'Administration',
-        buscoConductor: 'Looking for <strong>Driver</strong>',
+        buscoConductor: 'Looking for drivers',
         buscoPasajero: 'Looking for Passengers',
         encontraTuProximoViaje: 'Find your next trip',
+        invertirOrigenDestino: 'Swap origin and destination',
         compartiAutoTagline:
             'Share the ride, save money, and care for the planet',
         viajesPublicados: 'Published trips',
@@ -4632,7 +5071,6 @@ const messages = {
         carpoolear: 'Carpoolear',
         recuperarDeFacebook:
             'If you were carpooling before 8/5/17, you need to enter the system using the "log in with Facebook" button to continue using the same user and recover your ratings. If you cannot log in, write to us at',
-        carpoolearMail: 'carpoolear@@stsrosario.org.ar',
         recuperarDeFacebook2: 'or to our Facebook so we can help you :)',
         noMostrar: 'Do not show again',
         entendido: 'GOT IT!',
@@ -4641,7 +5079,6 @@ const messages = {
         ingresaConCuenta: 'Log in with Email',
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
-        instalar: 'Install',
         donar: 'Contribute',
         ingresar: 'Log in',
         loginEmailOrPhone: 'Email or phone',
@@ -4660,9 +5097,9 @@ const messages = {
         alIngresarApple: 'By logging in with Apple you are accepting our',
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
-            'Your account has been deactivated by the Carpoolear team. Contact us at contacto@@carpoolear.com to resolve the issue.',
+            'Your account has been deactivated by the Carpoolear team. Contact us at {adminEmail} to resolve the issue.',
         paraIngresarCuenta:
-            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at contacto@@carpoolear.com',
+            'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at {adminEmail}',
         emailOContra: 'Incorrect email or password.',
         solicitudEnviada:
             'Your request has already been sent, please wait a moment.',
@@ -5128,7 +5565,6 @@ const messages = {
         noCoincideCampos: 'Fields do not match',
         emailEnviadoConIndicaciones:
             'An email has been sent to your inbox with instructions to reset your password.',
-        instalarAppIos: 'Install App on iOS',
         selladoViaje: 'Trip seal',
         faltaPagarSellado: 'Seal payment pending',
         horaPlaceholder: 'Time (12:00)',
@@ -5148,23 +5584,18 @@ const messages = {
             'Enable notifications to get alerts for new messages and updates. Click below to proceed:',
         otorgarPermisos: 'Grant permissions',
         noMostrarDeNuevo: 'Do not show again',
+        descargaLaApp: 'Download the Carpoolear app',
+        descargaLaAppTexto:
+            "Get message and trip notifications instantly and keep Carpoolear always at hand. It's free.",
+        ahoraNo: 'Not now',
+        disponibleEnGooglePlay: 'Get it on Google Play',
+        descargarEnAppStore: 'Download on the App Store',
         elegirPropiaAventuraSoloMensual:
             'Choose your own adventure (monthly only)',
-        instalarApp: 'Install App',
-        instalarWebAppPWA:
-            'Install the web app (PWA) to receive notifications on your phone/PC for any updates.',
-        instalarAppEnIos: 'Install App on iOS',
-        instalarAppEnIosInstrucciones:
-            'To install Carpoolear on your iPhone or iPad:\n\n<strong style="color: red;">1. Open Safari browser</strong>\n 2. Tap the Share button (square with arrow pointing up)\n3. Scroll down and select "Add to Home Screen"\n4. Tap "Add" to confirm\n\nDone! Now you\'ll have notifications and quick access like any app on your phone.',
         ticketEstadoEsperandoTuRespuesta: 'Waiting for your reply',
         esperaUsuarioResponda: 'Waiting for the user to respond to the message',
         notificacionesPermitidas: 'Notifications allowed',
         notificacionesDenegadas: 'Notifications denied',
-        previeneMiniBarraInformacion:
-            'Prevents the mini information bar from appearing on smartphones',
-        guardaEventoDispareMasTarde: 'Saves the event to trigger later',
-        actualizarIUNotificarUsuario:
-            'Update the UI to notify the user that they can install your PWA',
         pendienteNoSeLimpiaBuscador:
             'Pending, the search is not cleared if the search params are empty',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -5187,6 +5618,78 @@ const messages = {
         footerEnRutaDesde: 'On the road since 2013',
         footerTerminosCondiciones: 'Terms and conditions',
         adminNavTablero: 'Dashboard',
+        adminNavActionLogs: 'Action history',
+        adminActionLogsAdminUser: 'Admin ID',
+        adminActionLogsAction: 'Action',
+        adminActionLogsFrom: 'From',
+        adminActionLogsTo: 'To',
+        adminActionLogsTargetUser: 'User ID',
+        adminActionLogsDetails: 'Details',
+        adminActionLogsEmpty: 'No admin actions recorded.',
+        adminActionLogsAllActions: 'All actions',
+        adminNavReporteVerificaciones: 'Verification report',
+        adminIvrTitulo: 'Identity verification report',
+        adminIvrDescripcion: 'Account verification attempts per period: how they end and how many people remain unverified after a failed Mercado Pago attempt.',
+        adminIvrNotaDatosDesde: 'Data is recorded from {date} on. Earlier periods show zeros.',
+        adminIvrFiltros: 'Report filters',
+        adminIvrDesde: 'From',
+        adminIvrHasta: 'To',
+        adminIvrAgruparPor: 'Group by',
+        adminIvrAgruparMes: 'Month',
+        adminIvrAgruparSemana: 'Week',
+        adminIvrAgruparDia: 'Day',
+        adminIvrMetodo: 'Method',
+        adminIvrMetodoTodos: 'All',
+        adminIvrMetodoManual: 'Manual',
+        adminIvrMetodoMercadoPago: 'Mercado Pago',
+        adminIvrPlataforma: 'Platform',
+        adminIvrPlataformaTodas: 'All',
+        adminIvrSuperficie: 'Surface',
+        adminIvrVersionApp: 'App version',
+        adminIvrNotaFiltrosCliente: 'Manual attempts carry no platform, surface or app version: with these filters they show as zero.',
+        adminIvrErrorFechasRequeridas: 'Choose both from and to dates.',
+        adminIvrErrorRangoInvalido: 'The to date must be the same as or after the from date.',
+        adminIvrCargando: 'Loading report…',
+        adminIvrErrorCarga: 'The report could not be loaded.',
+        adminIvrReintentar: 'Retry',
+        adminIvrSinDatos: 'There are no verification attempts in the selected range.',
+        adminIvrIntentosTotales: 'Total attempts',
+        adminIvrIntentosManuales: 'Manual attempts',
+        adminIvrIntentosMercadoPago: 'Mercado Pago attempts',
+        adminIvrSeccionManual: 'Manual verification',
+        adminIvrSeccionManualAyuda: 'One attempt per paid manual request.',
+        adminIvrInconclusasAyuda: 'Inconclusive: ended in neither approval nor rejection and is not waiting on an admin (e.g. paid but never sent documents, or info was requested and never re-sent).',
+        adminIvrSeccionAutomatica: 'Automatic verification (Mercado Pago)',
+        adminIvrSeccionAutomaticaAyuda: 'One attempt per Mercado Pago OAuth start.',
+        adminIvrResultado: 'Outcome',
+        adminIvrCantidad: 'Count',
+        adminIvrPorcentaje: '%',
+        adminIvrAprobadas: 'Approved',
+        adminIvrRechazadas: 'Rejected',
+        adminIvrInconclusas: 'Inconclusive',
+        adminIvrPendientesDeRevision: 'Pending review',
+        adminIvrError: 'Error',
+        adminIvrCanceladas: 'Cancelled',
+        adminIvrAbandonadas: 'Abandoned',
+        adminIvrSeccionPeriodos: 'Breakdown per period',
+        adminIvrPeriodoMes: 'Month',
+        adminIvrPeriodoSemana: 'Week (Monday)',
+        adminIvrPeriodoDia: 'Day',
+        adminIvrIntentos: 'Attempts',
+        adminIvrSeccionFunnel: 'What happens after a failed Mercado Pago attempt',
+        adminIvrFunnelAyuda: 'People whose Mercado Pago attempt in the range was rejected or errored, and whether they were verified another way later.',
+        adminIvrFunnelUsuariosFallidos: 'People with a failed attempt',
+        adminIvrFunnelResueltos: 'Verified later',
+        adminIvrFunnelSinResolver: 'Still unverified',
+        adminIvrFunnelFallosSinUsuario: 'Failures without a user (cannot be followed)',
+        adminIvrFunnelMercadoPago: 'Mercado Pago retry',
+        adminIvrFunnelManual: 'Manual validation',
+        adminIvrFunnelRechazoMpAprobado: 'Admin approved the Mercado Pago rejection',
+        adminIvrFunnelEdicionAdmin: 'Admin profile edit',
+        adminIvrFunnelResolucion: 'Resolution',
+        adminIvrGraficoManual: 'Manual verification outcomes per period',
+        adminIvrGraficoAutomatica: 'Mercado Pago outcomes per period',
+        adminIvrGraficoFunnel: 'How failed Mercado Pago attempts were resolved',
         adminDashboardTitle: 'Dashboard',
         adminDashboardManualVerifications: 'Pending manual verifications',
         adminDashboardSupportTickets: 'Pending support tickets',
@@ -5225,6 +5728,8 @@ const messages = {
         contribucionPotencial: 'Potential contribution',
         contribucionPromedio: 'Average contribution',
         porcentajeExceso: 'Excess percentage',
+        contribucionSospechada: 'Suspected contribution',
+        telefonoEnDescripcion: 'Phone in description',
         noDisponible: 'N/A',
         tieneNotas: 'Has notes?',
         noHayExcesoContribucion: 'No trips with potential excess contribution.',
@@ -5270,7 +5775,7 @@ const messages = {
             'The account of {name} (ID: {id}) is suspended so the migration cannot be performed',
         migracionElegirDatos: 'Choose which data to keep',
         migracionElegirDatosAyuda:
-            'Click the value you want on the final account. Defaults: email, ID, and creation date from the account to remove; password and phone from the account to keep.',
+            'Click the value you want on the final account. Defaults: email and password from the account to keep; ID, phone, and creation date from the account to remove.',
         migracionCampo: 'Field',
         migracionCampoEmail: 'Email',
         migracionCampoContrasena: 'Password',
@@ -5298,6 +5803,7 @@ const messages = {
         rateItemViajoAComo: 'Traveled to',
         rateItemComo: 'as',
         rateItemResponderALaCalificacion: 'Reply to review',
+        rateItemResponderALaReferencia: 'Reply to reference',
         rateItemResponder: 'Reply',
         rateItemCancelar: 'Cancel',
         rateItemRespondio: 'replied:',

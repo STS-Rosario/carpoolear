@@ -15,6 +15,7 @@ import ReferencesApi from './References';
 import TicketsApi from './TicketsApi';
 import TripLiveShareApi from './TripLiveShare';
 import ChangelogApi from './ChangelogApi';
+import HealthApi from './HealthApi';
 
 export {
     AuthApi,
@@ -33,5 +34,6 @@ export {
     AdminApi,
     ReferencesApi,
     TicketsApi,
-    ChangelogApi
+    ChangelogApi,
+    HealthApi
 };
