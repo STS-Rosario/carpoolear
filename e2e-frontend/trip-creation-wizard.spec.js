@@ -58,6 +58,54 @@ test.describe('trip creation wizard', () => {
         await expect(page.getByTestId('trip-creation-wizard-step-5')).toBeVisible();
     });
 
+    test('warns once about a possible contribution excess when leaving the description step', async ({
+        page
+    }) => {
+        await page.addInitScript(() => {
+            localStorage.setItem(
+                'TRIP_CREATION_DRAFT',
+                JSON.stringify({
+                    1: {
+                        currentStep: 9,
+                        maxVisitedStep: 9,
+                        price: '15000',
+                        trip: {
+                            is_passenger: 0,
+                            description: 'La contribución es de $24000 por persona'
+                        }
+                    }
+                })
+            );
+        });
+        await page.goto('/trips/create?resumeDraft=1');
+        await waitForPageReady(page);
+        await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
+
+        await page.getByTestId('trip-creation-next').click();
+
+        const modal = page.getByTestId('trip-contribution-excess-modal');
+        await expect(modal).toBeVisible();
+        await expect(
+            page.getByRole('heading', { name: 'Posible exceso de contribución' })
+        ).toBeVisible();
+        await expect(modal).toContainText('Detectamos un posible exceso de contribución.');
+        await expect(page.locator('.modal-footer')).toHaveCount(0);
+        await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
+
+        await page.getByTestId('trip-contribution-excess-confirm').click();
+        await expect(modal).toHaveCount(0);
+
+        await page.getByTestId('trip-creation-next').click();
+        await expect(page.getByTestId('trip-creation-wizard-step-10')).toBeVisible();
+        await expect(modal).toHaveCount(0);
+
+        await page.getByTestId('trip-creation-back').click();
+        await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
+        await page.getByTestId('trip-creation-next').click();
+        await expect(page.getByTestId('trip-creation-wizard-step-10')).toBeVisible();
+        await expect(modal).toHaveCount(0);
+    });
+
     test('update trip route shows wizard', async ({ page }) => {
         await page.route(/\/api\/trips\/1(\?.*)?$/, (route) => {
             route.fulfill({
