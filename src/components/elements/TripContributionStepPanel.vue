@@ -78,7 +78,7 @@
                 v-html="$t('tripContributionImportantBody')"
             ></div>
             <p class="trip-contribution-step__important-explainer">
-                {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }" target="_blank" rel="noopener noreferrer">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
+                {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }" :target="inAppLinkTarget()" rel="noopener noreferrer">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
             </p>
         </div>
     </div>
@@ -88,6 +88,7 @@
 import { formatContributionDisplayAmount } from '../../utils/tripContributionDisplay.js';
 import { shouldShowContributionBreakdown } from '../../utils/tripContributionBreakdown.js';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
+import { inAppLinkTarget } from '../../utils/externalLink.js';
 
 export default {
     name: 'trip-contribution-step-panel',
@@ -143,6 +144,7 @@ export default {
     },
 
     methods: {
+        inAppLinkTarget,
         toggleSuggested() {
             this.suggestedExpanded = !this.suggestedExpanded;
         }

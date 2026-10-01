@@ -75,8 +75,7 @@ import {
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from '../../utils/donationOptions.js';
-import { App } from '@capacitor/app';
-import { Capacitor } from '@capacitor/core';
+import { openExternalUrl } from '../../utils/externalLink.js';
 
 export default {
     name: 'donation-after-rating',
@@ -104,30 +103,19 @@ export default {
         ...mapActions(useProfileStore, {
             registerDonation: 'registerDonation'
         }),
-        async openExternalBrowser(url) {
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    window.open(url, '_blank');
-                }
-            } else {
-                window.open(url, '_blank');
-            }
-        },
-        async openDonationLink() {
-            let url = 'https://carpoolear.com.ar/aportar';
-            if (this.user && this.user.id) {
-                url = `${url}?u=${this.user.id}`;
-            }
-            await this.openExternalBrowser(url);
+        openDonationLink() {
+            openExternalUrl(
+                appendDonationTrackingUserId(
+                    'https://carpoolear.com.ar/aportar',
+                    this.user && this.user.id
+                )
+            );
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
                 let url = getDonationOnceUrl(this.donateValue);
                 url = appendDonationTrackingUserId(url, this.user && this.user.id);
-                await this.openExternalBrowser(url);
+                openExternalUrl(url);
                 await this.registerDonation({
                     has_donated: 1,
                     has_denied: 0,
@@ -146,7 +134,7 @@ export default {
             if (this.donateValue > 0) {
                 let url = getDonationMonthlyUrl(this.donateValue);
                 url = appendDonationTrackingUserId(url, this.user && this.user.id);
-                await this.openExternalBrowser(url);
+                openExternalUrl(url);
                 await this.registerDonation({
                     has_donated: 1,
                     has_denied: 0,

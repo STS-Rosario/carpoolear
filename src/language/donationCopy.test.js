@@ -66,7 +66,9 @@ describe('aportar page links', () => {
             path.resolve(__dirname, `../components/${relativePath}`),
             'utf8'
         );
-        expect(source).toMatch(/href=["']\/aportar|carpoolear\.com\.ar\/aportar/);
+        expect(source).toMatch(
+            /href=["']\/aportar|resolveExternalUrl\(['"]\/aportar|carpoolear\.com\.ar\/aportar/
+        );
         expect(source).not.toMatch(
             /href=["']\/donar|carpoolear\.com\.ar\/donar/
         );

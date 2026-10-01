@@ -15,7 +15,7 @@ describe('AdminUserTripsTable', () => {
         expect(source).toContain("{{ $t('asientosTotales') }}");
         expect(source).toContain("{{ $t('estado') }}");
         expect(source).toMatch(
-            /<router-link[\s\S]*name: 'detail_trip'[\s\S]*target="_blank"[\s\S]*\{\{ trip\.id \}\}/
+            /<router-link[\s\S]*name: 'detail_trip'[\s\S]*:target="inAppLinkTarget\(\)"[\s\S]*\{\{ trip\.id \}\}/
         );
     });
 

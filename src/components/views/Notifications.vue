@@ -90,6 +90,7 @@ import {
     requestNotificationPermission as requestPermissionStatus
 } from '../../utils/notificationPermission.js';
 import AppButton from '../ui/AppButton.vue';
+import { openExternalUrl } from '../../utils/externalLink.js';
 
 
 export default {
@@ -219,7 +220,7 @@ export default {
                     case 'announcement':
                         // open external url
                         if (n.extras.external_url) {
-                            window.open(n.extras.external_url);
+                            openExternalUrl(n.extras.external_url);
                         }
                         break;
                 }

@@ -55,7 +55,7 @@
                         class="mobile-header-bar__donate"
                         variant="header-donate"
                         size="sm"
-                        href="/aportar"
+                        :href="donationHref"
                     >
                         {{ $t('donar') }}
                         <template #iconRight>
@@ -211,7 +211,7 @@
                     class="header_donate-btn"
                     variant="header-donate"
                     size="sm"
-                    href="/aportar"
+                    :href="donationHref"
                 >
                     {{ $t('donar') }}
                     <template #iconRight>
@@ -337,6 +337,7 @@ import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import { resolveExternalUrl } from '../../utils/externalLink.js';
 import { UserApi } from '../../services/api';
 import {
     persistLocaleChoice,
@@ -438,6 +439,10 @@ export default {
             return n === 'identity_validation' || n === 'identity_validation_manual'
                 ? 'mobile-header-bar__title--settings-wide'
                 : '';
+        },
+        donationHref() {
+            // /aportar is served by the website, not the SPA (see resolveExternalUrl).
+            return resolveExternalUrl('/aportar');
         },
         mobileUtilityHeaderButtons() {
             if (!this.isMobile) {
