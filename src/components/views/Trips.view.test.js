@@ -257,45 +257,119 @@ describe('Trips.vue donation modal', () => {
     });
 });
 
-describe('Trips.vue search alert and install modal CTAs', () => {
-    it('hides the PWA install prompt on native platforms', () => {
-        expect(viewSource).toContain('shouldShowPwaInstallModal');
-        expect(viewSource).toContain("from '../../utils/pwaInstallModal.js'");
+describe('Trips.vue app store install prompt', () => {
+    const promptModal = () =>
+        viewSource.match(/showAppStorePrompt[\s\S]*?<\/modal>/)?.[0] || '';
 
-        const shouldShowBlock = viewSource.match(
-            /shouldShowInstallModal\(\)\s*\{[\s\S]*?\n\s*\},/
-        );
-        expect(shouldShowBlock).not.toBeNull();
-        expect(shouldShowBlock[0]).toContain('shouldShowPwaInstallModal');
-        expect(shouldShowBlock[0]).toContain('isNativePlatform');
-        expect(shouldShowBlock[0]).toContain('this.isIOS()');
-
-        expect(viewSource).toMatch(
-            /shouldShowPwaInstallModal\([\s\S]*?isNativePlatform[\s\S]*?this\.isIOS\(\)/
-        );
+    it('removes the PWA install flow', () => {
+        expect(viewSource).not.toContain('beforeinstallprompt');
+        expect(viewSource).not.toContain('installAppEvent');
+        expect(viewSource).not.toContain('installApp(');
+        expect(viewSource).not.toContain('pwaInstallModal');
+        expect(viewSource).not.toContain('instalarAppEnIos');
+        expect(viewSource).not.toContain('pwa_install_modal_dismissed');
     });
 
-    it('uses this.$t inside getInstallModalContent', () => {
-        expect(viewSource).toContain("this.$t('instalarApp')");
-        expect(viewSource).toContain("this.$t('instalarWebAppPWA')");
-        expect(viewSource).toContain("this.$t('instalarAppEnIos')");
-        expect(viewSource).not.toContain('title: $t(');
-        expect(viewSource).not.toContain('message: $t(');
+    it('decides visibility with getAppStorePrompt using user agent, touch, native and dismissal', () => {
+        expect(viewSource).toContain("from '../../utils/appStorePrompt.js'");
+        const call = viewSource.match(/getAppStorePrompt\(\{[\s\S]*?\}\)/)?.[0];
+        expect(call).toBeTruthy();
+        expect(call).toContain('navigator.userAgent');
+        expect(call).toContain('navigator.maxTouchPoints');
+        expect(call).toContain('isNativePlatform()');
+        expect(call).toContain('APP_STORE_PROMPT_DISMISSED_KEY');
     });
 
-    it('uses primary Instalar, secondary Entendido, tertiary No mostrar in install modal', () => {
-        const installModal = viewSource.match(
-            /showModalInstallApp[\s\S]*?<\/modal>/
+    it('renders outside the trips list so it shows with no trips or while searching', () => {
+        const tripsList = viewSource.match(
+            /<Loading :data="tripsLoadingData"[\s\S]*?<\/Loading>/
         )?.[0];
-        expect(installModal).toBeTruthy();
-        expect(installModal).toMatch(
-            /variant="primary"[\s\S]*?\$t\('instalar'\)/
+        expect(tripsList).toBeTruthy();
+        expect(tripsList).not.toContain('showAppStorePrompt');
+        expect(promptModal()).toContain("$t('descargaLaApp')");
+    });
+
+    it('hides the modal default "Cerrar" footer, keeping the header X', () => {
+        const openingTag = viewSource.match(
+            /<modal[^>]*v-if="showAppStorePrompt && appStorePrompt"[^>]*>/
+        )?.[0];
+        expect(openingTag).toBeTruthy();
+        expect(openingTag).toContain(':hide-footer="true"');
+    });
+
+    it('stacks the store badges vertically', () => {
+        const badgesCss = viewSource.match(/\.app-store-prompt__badges \{[^}]*\}/)?.[0];
+        expect(badgesCss).toBeTruthy();
+        expect(badgesCss).toContain('flex-direction: column');
+        expect(badgesCss).toContain('align-items: center');
+    });
+
+    it('adds about 40px of vertical spacing above and below the store badges', () => {
+        const badgesCss = viewSource.match(/\.app-store-prompt__badges \{[^}]*\}/)?.[0];
+        expect(badgesCss).toContain('margin: 40px 0;');
+    });
+
+    it('centers the side-by-side action buttons', () => {
+        const actionsCss = viewSource.match(/\.install-modal-actions \{[^}]*\}/)?.[0];
+        expect(actionsCss).toBeTruthy();
+        expect(actionsCss).toContain('justify-content: center');
+        expect(actionsCss).not.toContain('flex-direction: column');
+    });
+
+    it('renders the download title and text', () => {
+        const modal = promptModal();
+        expect(modal).toContain("$t('descargaLaApp')");
+        expect(modal).toContain("$t('descargaLaAppTexto')");
+        expect(modal).not.toContain('v-html');
+    });
+
+    it('renders one store badge link per platform badge, opening in a new tab', () => {
+        const modal = promptModal();
+        expect(modal).toMatch(/<a[\s\S]*?v-for="badge in appStorePrompt\.badges"/);
+        expect(modal).toContain(':href="badge.url"');
+        expect(modal).toContain('target="_blank"');
+        expect(modal).toContain('rel="noopener"');
+        expect(modal).toMatch(/<img[\s\S]*?:src="storeBadges\[badge\.store\]\.src"/);
+        expect(modal).toContain(':alt="$t(storeBadges[badge.store].alt)"');
+    });
+
+    it('uses the landing page store badge images with their alt texts', () => {
+        expect(viewSource).toMatch(/import \w+ from '\.\.\/\.\.\/assets\/googleplay\.png'/);
+        expect(viewSource).toMatch(/import \w+ from '\.\.\/\.\.\/assets\/appstore\.png'/);
+        const badges = viewSource.match(/storeBadges:\s*\{[\s\S]*?\n\s{12}\}/)?.[0];
+        expect(badges).toBeTruthy();
+        expect(badges).toMatch(/'google-play':\s*\{[\s\S]*?alt: 'disponibleEnGooglePlay'/);
+        expect(badges).toMatch(/'app-store':\s*\{[\s\S]*?alt: 'descargarEnAppStore'/);
+        expect(fs.existsSync(path.resolve(__dirname, '../../assets/googleplay.png'))).toBe(true);
+        expect(fs.existsSync(path.resolve(__dirname, '../../assets/appstore.png'))).toBe(true);
+    });
+
+    it('has a secondary "Ahora no" and a tertiary "No mostrar de nuevo" button', () => {
+        const modal = promptModal();
+        expect(modal).toMatch(
+            /variant="secondary"\s*@click="closeAppStorePrompt\(\)"[\s\S]*?\$t\('ahoraNo'\)/
         );
-        expect(installModal).toMatch(
-            /variant="secondary"[\s\S]*?\$t\('entendido'\)/
+        expect(modal).toMatch(
+            /variant="tertiary"\s*@click="dontShowAppStorePromptAgain\(\)"[\s\S]*?\$t\('noMostrarDeNuevo'\)/
         );
-        expect(installModal).toMatch(
-            /variant="tertiary"[\s\S]*?\$t\('noMostrarDeNuevo'\)/
+        expect(modal).toContain('@close="closeAppStorePrompt()"');
+    });
+
+    it('"Ahora no" only hides the prompt without persisting', () => {
+        const close = viewSource.match(/closeAppStorePrompt\(\)\s*\{[\s\S]*?\n\s{8}\},/)?.[0];
+        expect(close).toBeTruthy();
+        expect(close).toContain('this.showAppStorePrompt = false');
+        expect(close).not.toContain('localStorage');
+    });
+
+    it('"No mostrar de nuevo" hides the prompt and persists the new dismissal key', () => {
+        const dismiss = viewSource.match(
+            /dontShowAppStorePromptAgain\(\)\s*\{[\s\S]*?\n\s{8}\},/
+        )?.[0];
+        expect(dismiss).toBeTruthy();
+        expect(dismiss).toContain('this.showAppStorePrompt = false');
+        expect(dismiss).toContain(
+            "localStorage.setItem(APP_STORE_PROMPT_DISMISSED_KEY, 'true')"
         );
     });
 });

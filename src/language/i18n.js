@@ -1184,7 +1184,6 @@ const messages = {
         ingresaConCuenta: 'Ingresá con Email',
         debeActivarCuenta:
             'Para ingresar debes activar tu cuenta, te hemos enviado un link de activación a tu email para que puedas activar tu cuenta.',
-        instalar: 'Instalar',
         donar: 'Aportar',
         donarEnSafari: 'Conocer más',
         ingresar: 'Ingresar',
@@ -1643,7 +1642,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -1663,24 +1661,18 @@ const messages = {
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
+        descargaLaApp: 'Descargá la app de Carpoolear',
+        descargaLaAppTexto:
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+        ahoraNo: 'Ahora no',
+        disponibleEnGooglePlay: 'Disponible en Google Play',
+        descargarEnAppStore: 'Descargar en App Store',
         elegirPropiaAventuraSoloMensual:
             'Elegí tu propia aventura (solo mensual)',
-        instalarApp: 'Instalar App',
-        instalarWebAppPWA:
-            'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
-        instalarAppEnIos: 'Instalar App en iOS',
-        instalarAppEnIosInstrucciones:
-            'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
         ticketEstadoEsperandoTuRespuesta: 'Esperando tu respuesta',
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -3444,7 +3436,6 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        instalarAppIos: 'Instalar App en iOS',
         selladoViaje: 'Sellado de viaje',
         faltaPagarSellado: 'Falta pagar Sellado',
         horaPlaceholder: 'Hora (12:00)',
@@ -3481,24 +3472,18 @@ const messages = {
             'Parece que no aceptaste los permisos para que te podamos enviar notificaciones (en nuevos mensajes, etc.) en este dispositivo , presioná el botón si querés hacerlo:',
         otorgarPermisos: 'Otorgar permisos',
         noMostrarDeNuevo: 'No mostrar de nuevo',
+        descargaLaApp: 'Descargá la app de Carpoolear',
+        descargaLaAppTexto:
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+        ahoraNo: 'Ahora no',
+        disponibleEnGooglePlay: 'Disponible en Google Play',
+        descargarEnAppStore: 'Descargar en App Store',
         elegirPropiaAventuraSoloMensual:
             'Elegí tu propia aventura (solo mensual)',
-        instalarApp: 'Instalar App',
-        instalarWebAppPWA:
-            'Instalá la web app (PWA) para tener notificaciones en tu celular/PC ante cualquier novedad.',
-        instalarAppEnIos: 'Instalar App en iOS',
-        instalarAppEnIosInstrucciones:
-            'Para instalar Carpoolear en tu iPhone o iPad:\n\n<strong style="color: red;">1. Ingresar a navegador Safari</strong>\n 2. Toca el botón Compartir (cuadrado con flecha hacia arriba)\n3. Desplázate hacia abajo y selecciona "Agregar a inicio"\n4. Toca "Añadir" para confirmar\n\n¡Listo! Ahora tendrás notificaciones y acceso rápido como cualquier app en tu teléfono.',
         ticketEstadoEsperandoTuRespuesta: 'Esperando tu respuesta',
         esperaUsuarioResponda: 'Esperando a que el usuario responda al mensaje',
         notificacionesPermitidas: 'Notificaciones permitidas',
         notificacionesDenegadas: 'Notificaciones denegadas',
-        previeneMiniBarraInformacion:
-            'Previene a la mini barra de información que aparezca en smartphones',
-        guardaEventoDispareMasTarde:
-            'Guarda el evento para que se dispare más tarde',
-        actualizarIUNotificarUsuario:
-            'Actualizar la IU para notificarle al usuario que se puede instalar tu PWA',
         pendienteNoSeLimpiaBuscador:
             'Pendiente, no se limpia el buscador, si los search params están vacios',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
@@ -4991,7 +4976,6 @@ const messages = {
         ingresaConCuenta: 'Log in with Email',
         debeActivarCuenta:
             'To log in you must activate your account, we have sent an activation link to your email so you can activate your account.',
-        instalar: 'Install',
         donar: 'Contribute',
         ingresar: 'Log in',
         loginEmailOrPhone: 'Email or phone',
@@ -5439,7 +5423,6 @@ const messages = {
         noCoincideCampos: 'Fields do not match',
         emailEnviadoConIndicaciones:
             'An email has been sent to your inbox with instructions to reset your password.',
-        instalarAppIos: 'Install App on iOS',
         selladoViaje: 'Trip seal',
         faltaPagarSellado: 'Seal payment pending',
         horaPlaceholder: 'Time (12:00)',
@@ -5459,23 +5442,18 @@ const messages = {
             'Enable notifications to get alerts for new messages and updates. Click below to proceed:',
         otorgarPermisos: 'Grant permissions',
         noMostrarDeNuevo: 'Do not show again',
+        descargaLaApp: 'Download the Carpoolear app',
+        descargaLaAppTexto:
+            "Get message and trip notifications instantly and keep Carpoolear always at hand. It's free.",
+        ahoraNo: 'Not now',
+        disponibleEnGooglePlay: 'Get it on Google Play',
+        descargarEnAppStore: 'Download on the App Store',
         elegirPropiaAventuraSoloMensual:
             'Choose your own adventure (monthly only)',
-        instalarApp: 'Install App',
-        instalarWebAppPWA:
-            'Install the web app (PWA) to receive notifications on your phone/PC for any updates.',
-        instalarAppEnIos: 'Install App on iOS',
-        instalarAppEnIosInstrucciones:
-            'To install Carpoolear on your iPhone or iPad:\n\n<strong style="color: red;">1. Open Safari browser</strong>\n 2. Tap the Share button (square with arrow pointing up)\n3. Scroll down and select "Add to Home Screen"\n4. Tap "Add" to confirm\n\nDone! Now you\'ll have notifications and quick access like any app on your phone.',
         ticketEstadoEsperandoTuRespuesta: 'Waiting for your reply',
         esperaUsuarioResponda: 'Waiting for the user to respond to the message',
         notificacionesPermitidas: 'Notifications allowed',
         notificacionesDenegadas: 'Notifications denied',
-        previeneMiniBarraInformacion:
-            'Prevents the mini information bar from appearing on smartphones',
-        guardaEventoDispareMasTarde: 'Saves the event to trigger later',
-        actualizarIUNotificarUsuario:
-            'Update the UI to notify the user that they can install your PWA',
         pendienteNoSeLimpiaBuscador:
             'Pending, the search is not cleared if the search params are empty',
         seHaEnviadoEmailIndicacionesRestablecerContrasena:
