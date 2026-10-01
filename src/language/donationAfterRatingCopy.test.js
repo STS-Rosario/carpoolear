@@ -63,10 +63,8 @@ const ES_COPY = {
         '{team} (también conocido como “La gente de Carpu”)',
     donationAfterRatingSignOffTeamName:
         'Equipo Carpoolear',
-    donationAfterRatingCannotContributeLink:
-        'No puedo aportar',
-    donationAfterRatingCannotContributeSuffix:
-        ' ni siquiera difusión ahora :('
+    donationAfterRatingContinueWithoutContributing:
+        'Continuar sin aportar'
 };
 
 const EN_COPY = {
@@ -130,14 +128,14 @@ const EN_COPY = {
         '{team} (also known as “La gente de Carpu”)',
     donationAfterRatingSignOffTeamName:
         'The Carpoolear Team',
-    donationAfterRatingCannotContributeLink:
-        'I can\'t contribute',
-    donationAfterRatingCannotContributeSuffix:
-        ' or even help spread the word right now :('
+    donationAfterRatingContinueWithoutContributing:
+        'Continue without contributing'
 };
 
 /** Old copy that is not in the document. */
 const REMOVED_KEYS = [
+    'donationAfterRatingCannotContributeLink',
+    'donationAfterRatingCannotContributeSuffix',
     'donationAfterRatingMissionOrg',
     'donationAfterRatingBenefitVisibility',
     'donationAfterRatingBenefitPrioritySupport',

@@ -82,14 +82,14 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(buttonWithText(wrapper, 'donationAfterRatingOnceCta')).toBeTruthy();
     });
 
-    it('hides the rating-specific "No puedo aportar" skip button', async () => {
+    it('hides the rating-specific "Continuar sin aportar" skip button', async () => {
         const { wrapper } = await mountPage();
 
         expect(wrapper.find('.donation-after-rating__btn-skip').exists()).toBe(
             false
         );
         expect(wrapper.text()).not.toContain(
-            i18n.global.t('donationAfterRatingCannotContributeLink')
+            'Continuar sin aportar'
         );
     });
 
@@ -130,16 +130,14 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
     });
 
-    it('records the refusal and returns to trips from the after-rating "No puedo aportar" button', async () => {
+    it('records the refusal and returns to trips from the after-rating "Continuar sin aportar" button', async () => {
         const { wrapper, registerDonation, push } = await mountPage({ tripId: 7 });
         const skip = wrapper.find('.donation-after-rating__btn-skip');
 
         expect(skip.exists()).toBe(true);
         expect(skip.element.tagName).toBe('BUTTON');
         expect(skip.text().replace(/\s+/g, ' ').trim()).toBe(
-            `${i18n.global.t('donationAfterRatingCannotContributeLink')}${i18n.global.t(
-                'donationAfterRatingCannotContributeSuffix'
-            )}`
+            'Continuar sin aportar'
         );
 
         await skip.trigger('click');

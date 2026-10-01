@@ -78,10 +78,10 @@ const DOCUMENT = {
     ]
 };
 
-/** After-rating only: the "No puedo aportar" skip button, right before "Buen viaje!". */
+/** After-rating only: the "Continuar sin aportar" skip button, right before "Buen viaje!". */
 const SKIP = {
-    arg: 'No puedo aportar ni siquiera difusión ahora :(',
-    en: 'I can\'t contribute or even help spread the word right now :('
+    arg: 'Continuar sin aportar',
+    en: 'Continue without contributing'
 };
 
 function expectedTexts(locale, showsSkip) {
