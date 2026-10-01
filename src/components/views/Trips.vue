@@ -1409,7 +1409,7 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin: 24px 0;
+    margin: 40px 0;
 }
 
 .app-store-prompt__badges img {
