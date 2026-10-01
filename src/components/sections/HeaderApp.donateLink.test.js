@@ -25,6 +25,16 @@ vi.mock('@capacitor/core', async (importOriginal) => {
 
 vi.mock('../../router', () => ({ default: { push: vi.fn() } }));
 
+const HEADER_ROUTE_NAMES = [
+    'trips',
+    'my-trips',
+    'conversations-list',
+    'new-trip',
+    'login',
+    'register',
+    'notifications'
+];
+
 const stubs = {
     IdentityValidationCountdownBanner: true,
     PendingRatingsBanner: true,
@@ -50,15 +60,7 @@ async function mountLoggedInMobileHeader() {
 
     const router = createRouter({
         history: createMemoryHistory(),
-        routes: [
-            'trips',
-            'my-trips',
-            'conversations-list',
-            'new-trip',
-            'login',
-            'register',
-            'notifications'
-        ].map((name) => ({
+        routes: HEADER_ROUTE_NAMES.map((name) => ({
             path: name === 'trips' ? '/' : `/${name}`,
             name,
             component: { render: () => null }
@@ -77,10 +79,12 @@ async function mountLoggedInMobileHeader() {
     });
 }
 
-function donateHrefs(wrapper) {
-    return wrapper
+/** Both Aportar buttons (branded mobile bar and desktop bar) link to `href`. */
+function expectDonateButtonsToLinkTo(wrapper, href) {
+    const hrefs = wrapper
         .findAll('a.app-button--header-donate')
         .map((link) => link.attributes('href'));
+    expect(hrefs).toEqual([href, href]);
 }
 
 describe('HeaderApp Aportar button', () => {
@@ -97,9 +101,7 @@ describe('HeaderApp Aportar button', () => {
         setPlatform('web');
         const wrapper = await mountLoggedInMobileHeader();
 
-        const hrefs = donateHrefs(wrapper);
-        expect(hrefs).toHaveLength(2);
-        expect(hrefs).toEqual(['/aportar', '/aportar']);
+        expectDonateButtonsToLinkTo(wrapper, '/aportar');
     });
 
     it.each(['android', 'ios'])(
@@ -108,12 +110,10 @@ describe('HeaderApp Aportar button', () => {
             setPlatform(platform);
             const wrapper = await mountLoggedInMobileHeader();
 
-            const hrefs = donateHrefs(wrapper);
-            expect(hrefs).toHaveLength(2);
-            expect(hrefs).toEqual([
-                'https://www.carpoolear.com.ar/aportar',
+            expectDonateButtonsToLinkTo(
+                wrapper,
                 'https://www.carpoolear.com.ar/aportar'
-            ]);
+            );
         }
     );
 });
