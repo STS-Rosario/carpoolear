@@ -966,23 +966,21 @@ export default {
             this.setMobileSearchHeader(false);
             this.alreadySubscribe = false;
         },
-        async onDonate() {
+        onDonate() {
             // if we're in Capacitor iOS, do not show the modal, just open the link in the browser
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                let url = 'https://carpoolear.com.ar/aportar';
-                if (this.user && this.user.id) {
-                    url = `${url}?u=${this.user.id}`;
-                }
-                await this.openExternalBrowser(url);
+            if (isIOSCapacitor()) {
+                openExternalUrl(
+                    appendDonationTrackingUserId(
+                        'https://carpoolear.com.ar/aportar',
+                        this.user && this.user.id
+                    )
+                );
                 return;
             }
             this.showModal = true;
         },
-        async openExternalBrowser(url) {
-            openExternalUrl(url);
-        },
         onOpenLink(link) {
-            this.openExternalBrowser(link);
+            openExternalUrl(link);
         },
         async onDonateOnceTime() {
             if (this.donateValue > 0) {
@@ -992,7 +990,7 @@ export default {
                     this.user && this.user.id
                 );
                 // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
+                openExternalUrl(url);
                 this.showModal = false;
                 let data = {
                     has_donated: 1,
@@ -1015,7 +1013,7 @@ export default {
                     this.user && this.user.id
                 );
                 // Open in external browser (required for iOS donations)
-                await this.openExternalBrowser(url);
+                openExternalUrl(url);
                 this.showModal = false;
                 let data = {
                     has_donated: 1,
