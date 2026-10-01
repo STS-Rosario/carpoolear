@@ -20,3 +20,11 @@ export function resolveExternalUrl(url) {
         : url;
     return resolveCapacitorBundledHostUrl(absoluteUrl);
 }
+
+/**
+ * Open a link outside the app: a new tab on web, the system browser on native (Capacitor
+ * hands off-app-host window.open navigations to Safari / the default Android browser).
+ */
+export function openExternalUrl(url) {
+    window.open(resolveExternalUrl(url), '_blank');
+}
