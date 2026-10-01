@@ -3,6 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import i18n from '../../i18n';
+import { resolveWebAppBaseUrl } from '../../utils/supportTicketTripReport.js';
 
 const adminApi = vi.hoisted(() => ({
     getTripExcessContribution: vi.fn(),
@@ -22,7 +23,17 @@ vi.mock('../../services/api', async (importOriginal) => ({
 }));
 vi.mock('../../services/dialogs', () => ({ default: dialogs }));
 
-const TEMPLATE = 'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear';
+const NOW = new Date(2026, 9, 1, 10, 30);
+
+function expectedTemplateMessage() {
+    const base = resolveWebAppBaseUrl();
+    return i18n.global.t('excessContributionTemplatedTicketMessage', {
+        tripLink: `[${base}/trips/321](${base}/trips/321)`,
+        maxAmount: '$12000',
+        bannedUntil: '08/10/2026',
+        termsLink: `[${base}/terminos](${base}/terminos)`
+    });
+}
 const SUPPORT_TICKETS = 'admin.support.tickets';
 const EXCESS = 'admin.trips.excess_contribution';
 
@@ -36,6 +47,7 @@ function item(overrides = {}) {
         to_town: 'Córdoba',
         exceso_contribucion_status: 'pending',
         excess_contribution_support_tickets_count: 0,
+        maximum_seat_price_cents: 1200000,
         ...overrides
     };
 }
@@ -113,6 +125,8 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
     }, 30000);
 
     beforeEach(() => {
+        vi.useFakeTimers({ toFake: ['Date'] });
+        vi.setSystemTime(NOW);
         confirmSpy = vi.fn(() => true);
         vi.stubGlobal('confirm', confirmSpy);
         ticketsApi.adminCreate.mockReset();
@@ -120,6 +134,7 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
     });
@@ -193,9 +208,12 @@ describe('AdminExcesoContribucionDetail templated support ticket', () => {
             user_id: 15,
             type: 'excess_contribution',
             subject: i18n.global.t('ticketTypeExcessContribution'),
-            message_markdown: TEMPLATE,
+            message_markdown: expectedTemplateMessage(),
             trip_id: 321
         });
+        expect(ticketsApi.adminCreate.mock.calls[0][0].message_markdown).toContain(
+            'hasta el día 08/10/2026 '
+        );
         expect(dialogs.message).toHaveBeenCalledWith(
             i18n.global.t('excessContributionTemplatedTicketCreated'),
             { estado: 'success' }
