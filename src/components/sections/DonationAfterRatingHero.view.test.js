@@ -41,6 +41,15 @@ describe('DonationAfterRatingHero', () => {
         expect(heroSource).toContain('margin-top: 1.5rem');
     });
 
+    it('does not bold the mission lead (the copy document bolds nothing)', () => {
+        const emphasisRule = heroSource.match(
+            /\.donation-after-rating-hero__mission-lead-emphasis[^{]*\{[^}]*\}/
+        );
+        expect(emphasisRule).not.toBeNull();
+        expect(emphasisRule[0]).not.toMatch(/font-weight:\s*var\(--ds-font-weight-bold/);
+        expect(heroSource).not.toContain(':deep(strong)');
+    });
+
     it('shows the mission copy and vertically centers content on wide desktops', () => {
         expect(heroSource).toContain("$t('donationAfterRatingMissionLead')");
         expect(heroSource).not.toContain('donationAfterRatingMissionOrg');

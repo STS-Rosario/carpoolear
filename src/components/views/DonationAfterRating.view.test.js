@@ -83,6 +83,15 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
+    it('does not bold any copy (the copy document bolds nothing)', () => {
+        const linkRule = viewSource.match(
+            /\.donation-after-rating__alt-copy :deep\(a\)\s*\{[^}]*\}/
+        );
+        expect(linkRule).not.toBeNull();
+        expect(linkRule[0]).not.toMatch(/font-weight:\s*var\(--ds-font-weight-bold/);
+        expect(viewSource).not.toContain(':deep(strong)');
+    });
+
     it('returns to the trips list after starting a checkout', () => {
         expect(viewSource).toMatch(/name:\s*'trips'/);
     });
