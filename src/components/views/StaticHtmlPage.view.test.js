@@ -17,7 +17,7 @@ describe('StaticHtmlPage', () => {
     });
 
     it('binds internal FAQ subpage links through the SPA router', () => {
-        expect(viewSource).toContain('bindInternalStaticPageLinks');
+        expect(viewSource).toContain('bindStaticPageLinks');
     });
 });
 

@@ -10,7 +10,7 @@
 import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import router from '../../router';
 import bus from '../../services/bus-event.js';
-import { bindInternalStaticPageLinks } from '../../utils/staticPageLinks';
+import { bindStaticPageLinks } from '../../utils/staticPageLinks';
 import { mapActions } from 'pinia';
 import { useProfileStore } from '../../stores/profile';
 export default {
@@ -31,7 +31,7 @@ export default {
                 console.log('getTermsText component', data);
                 this.termText = data.content;
                 this.$nextTick(() => {
-                    bindInternalStaticPageLinks(this.$refs.content, router);
+                    bindStaticPageLinks(this.$refs.content, router);
                 });
             })
             .catch((err) => {

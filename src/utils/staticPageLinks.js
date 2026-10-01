@@ -5,7 +5,7 @@ const INTERNAL_STATIC_PAGE_ROUTES = {
     '/verificacion-cuenta': 'verificacion_cuenta'
 };
 
-export function bindInternalStaticPageLinks(container, router) {
+export function bindStaticPageLinks(container, router) {
     if (!container || !router) {
         return;
     }
