@@ -564,7 +564,6 @@ import {
     getDonationMonthlyUrl,
     getDonationOnceUrl
 } from '../../utils/donationOptions.js';
-import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {
     isIOSCapacitor,
@@ -979,20 +978,9 @@ export default {
             this.showModal = true;
         },
         async openExternalBrowser(url) {
-            // On iOS Capacitor, use App.openUrl() to open in external browser (Safari)
-            // This makes the user leave the app, which is required for donations
-            if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios') {
-                try {
-                    await App.openUrl({ url });
-                } catch (error) {
-                    console.error('Error opening URL in external browser:', error);
-                    // Fallback to window.open if App.openUrl fails
-                    window.open(url, '_blank');
-                }
-            } else {
-                // For web or Android, use window.open
-                window.open(url, '_blank');
-            }
+            // @capacitor/app has no openUrl; on iOS window.open already goes to Safari,
+            // which is required for donations.
+            window.open(url, '_blank');
         },
         onOpenLink(link) {
             this.openExternalBrowser(link);
