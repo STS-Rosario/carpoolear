@@ -78,6 +78,25 @@ const DOCUMENT = {
     ]
 };
 
+/** After-rating only: the "No puedo aportar" skip sentence, right after the one-time button. */
+const SKIP = {
+    arg: 'No puedo aportar ni siquiera difusión ahora :(',
+    en: 'I can\'t contribute or even help spread the word right now :('
+};
+
+const ONCE_CTA = {
+    arg: 'Quiero aportar por única vez',
+    en: 'I want to contribute just once'
+};
+
+function expectedTexts(locale, showsSkip) {
+    const texts = [...DOCUMENT[locale]];
+    if (showsSkip) {
+        texts.splice(texts.indexOf(ONCE_CTA[locale]) + 1, 0, SKIP[locale]);
+    }
+    return texts;
+}
+
 function setLocale(locale) {
     if (typeof i18n.global.locale === 'object') {
         i18n.global.locale.value = locale;
@@ -142,18 +161,18 @@ describe('DonationAfterRating page matches the copy document', () => {
     });
 
     describe.each([
-        ['after rating', { tripId: 7 }],
-        ['/donate page', {}]
-    ])('%s', (_label, props) => {
+        ['after rating', { tripId: 7 }, true],
+        ['/donate page', {}, false]
+    ])('%s', (_label, props, showsSkip) => {
         it.each(['arg', 'en'])(
-            'shows exactly the document texts, in order, in %s',
+            'shows exactly the document texts (plus the skip link only after rating), in order, in %s',
             async (locale) => {
                 vi.spyOn(console, 'warn').mockImplementation(() => {});
                 setLocale(locale);
                 const wrapper = await mountPage(props);
 
                 const pageText = squash(wrapper.text());
-                expect(pageText).toBe(squash(DOCUMENT[locale].join('')));
+                expect(pageText).toBe(squash(expectedTexts(locale, showsSkip).join('')));
             }
         );
 
@@ -206,8 +225,23 @@ describe('DonationAfterRating page matches the copy document', () => {
                 squash(DOCUMENT.arg[DOCUMENT.arg.length - 3])
             ]);
             expect(wrapper.find('.donation-after-rating__skip-link').exists()).toBe(
-                false
+                showsSkip
             );
+        });
+
+        it('places the skip link at the end of the one-time section, before the volunteer paragraph', async () => {
+            vi.spyOn(console, 'warn').mockImplementation(() => {});
+            const wrapper = await mountPage(props);
+
+            const skip = wrapper.find('.donation-after-rating__once .donation-after-rating__skip-link');
+            expect(skip.exists()).toBe(showsSkip);
+            if (showsSkip) {
+                const skipParagraph = skip.element.parentElement;
+                const button = wrapper.find('.donation-after-rating__btn-once').element;
+                expect(skipParagraph.previousElementSibling).toBe(button);
+                expect(skipParagraph.nextElementSibling).toBeNull();
+                expect(skip.element.closest('strong')).toBeNull();
+            }
         });
     });
 });

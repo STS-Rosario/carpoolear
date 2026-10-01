@@ -4,6 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import i18n from '../../i18n';
+import dialogs from '../../services/dialogs.js';
 
 const donationApi = vi.hoisted(() => ({
     getTiers: vi.fn(() => Promise.reject(new Error('offline'))),
@@ -129,6 +130,48 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
     });
 
+    it('records the refusal and returns to trips from the after-rating "No puedo aportar" link', async () => {
+        const { wrapper, registerDonation, push } = await mountPage({ tripId: 7 });
+        const skip = wrapper.find('.donation-after-rating__skip-link');
+
+        expect(skip.exists()).toBe(true);
+        expect(skip.attributes('href')).toBe('/trips');
+        expect(skip.text()).toBe(
+            i18n.global.t('donationAfterRatingCannotContributeLink')
+        );
+        expect(skip.element.parentElement.textContent.replace(/\s+/g, ' ').trim()).toBe(
+            `${i18n.global.t('donationAfterRatingCannotContributeLink')}${i18n.global.t(
+                'donationAfterRatingCannotContributeSuffix'
+            )}`
+        );
+
+        await skip.trigger('click');
+        await flushPromises();
+
+        expect(registerDonation).toHaveBeenCalledWith({
+            has_donated: 0,
+            has_denied: 1,
+            ammount: 0,
+            trip_id: 7
+        });
+        expect(push).toHaveBeenCalledWith({ name: 'trips' });
+    });
+
+    it('does not record a refusal from the skip link in preview mode', async () => {
+        const message = vi.spyOn(dialogs, 'message').mockImplementation(() => {});
+        const { wrapper, registerDonation, push } = await mountPage({
+            tripId: 7,
+            preview: true
+        });
+
+        await wrapper.find('.donation-after-rating__skip-link').trigger('click');
+        await flushPromises();
+
+        expect(message).toHaveBeenCalled();
+        expect(registerDonation).not.toHaveBeenCalled();
+        expect(push).not.toHaveBeenCalled();
+    });
+
     it('uses the after-rating source and trip when a trip is given', async () => {
         const { wrapper } = await mountPage({ tripId: 7 });
         await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
@@ -139,7 +182,7 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         await flushPromises();
 
         expect(wrapper.find('.donation-after-rating__skip-link').exists()).toBe(
-            false
+            true
         );
         expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
             amount: 5000,
