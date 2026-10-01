@@ -442,7 +442,6 @@ export default {
 
 .donation-after-rating__alt-copy :deep(a) {
     color: var(--ds-text-primary);
-    font-weight: var(--ds-font-weight-normal, 400);
     text-decoration: underline;
 }
 
