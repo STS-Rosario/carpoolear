@@ -280,6 +280,15 @@ describe('Trips.vue app store install prompt', () => {
         expect(call).toContain('APP_STORE_PROMPT_DISMISSED_KEY');
     });
 
+    it('renders outside the trips list so it shows with no trips or while searching', () => {
+        const tripsList = viewSource.match(
+            /<Loading :data="tripsLoadingData"[\s\S]*?<\/Loading>/
+        )?.[0];
+        expect(tripsList).toBeTruthy();
+        expect(tripsList).not.toContain('showAppStorePrompt');
+        expect(promptModal()).toContain("$t('descargaLaApp')");
+    });
+
     it('renders the download title and text', () => {
         const modal = promptModal();
         expect(modal).toContain("$t('descargaLaApp')");
