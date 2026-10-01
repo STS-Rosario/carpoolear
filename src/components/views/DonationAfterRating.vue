@@ -114,6 +114,15 @@
                                 </li>
                             </ul>
                         </div>
+                        <AppButton
+                            v-if="tripId"
+                            class="donation-after-rating__btn-skip"
+                            variant="secondary"
+                            @click="onContinueWithoutDonating"
+                        >
+                            {{ $t('donationAfterRatingCannotContributeLink')
+                            }}{{ $t('donationAfterRatingCannotContributeSuffix') }}
+                        </AppButton>
                         <div class="donation-after-rating__sign-off">
                             <p class="donation-after-rating__alt-copy">
                                 {{ $t('donationAfterRatingSignOffGreeting') }}
@@ -139,8 +148,9 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
+import { useProfileStore } from '../../stores/profile';
 import dialogs from '../../services/dialogs.js';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
@@ -194,6 +204,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions(useProfileStore, {
+            registerDonation: 'registerDonation'
+        }),
         externalHref(url) {
             return resolveExternalUrl(url);
         },
@@ -269,6 +282,19 @@ export default {
                     estado: 'error'
                 });
             }
+        },
+        async onContinueWithoutDonating() {
+            if (this.preview) {
+                this.notifyPreviewMode();
+                return;
+            }
+            await this.registerDonation({
+                has_donated: 0,
+                has_denied: 1,
+                ammount: 0,
+                trip_id: this.tripId
+            });
+            this.$router.push({ name: 'trips' });
         }
     }
 };
@@ -457,6 +483,24 @@ export default {
 
 .donation-after-rating__sign-off > p + p {
     margin-top: 0.25rem;
+}
+
+.donation-after-rating__btn-skip {
+    align-self: center;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.donation-after-rating__btn-skip.app-button--secondary {
+    background: transparent;
+    border: 2px solid var(--ds-text-secondary, #404040);
+    color: var(--ds-text-primary);
+}
+
+.donation-after-rating__btn-skip.app-button--secondary:hover:not(:disabled):not([aria-disabled='true']) {
+    background: rgba(64, 64, 64, 0.08);
+    border-color: var(--ds-text-secondary, #404040);
+    color: var(--ds-text-primary);
 }
 
 @media (min-width: 768px) {

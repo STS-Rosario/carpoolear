@@ -1355,6 +1355,9 @@ const messages = {
         donationAfterRatingSignOffTeam:
             '{team} (también conocido como “La gente de Carpu”)',
         donationAfterRatingSignOffTeamName: 'Equipo Carpoolear',
+        donationAfterRatingCannotContributeLink: 'No puedo aportar',
+        donationAfterRatingCannotContributeSuffix:
+            ' ni siquiera difusión ahora :(',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -5248,6 +5251,9 @@ const messages = {
         donationAfterRatingSignOffTeam:
             '{team} (also known as “La gente de Carpu”)',
         donationAfterRatingSignOffTeamName: 'The Carpoolear Team',
+        donationAfterRatingCannotContributeLink: 'I can\'t contribute',
+        donationAfterRatingCannotContributeSuffix:
+            ' or even help spread the word right now :(',
         calificacionesPendientes: 'Pending ratings',
         noHayCalificacionesPendientes: 'No pending ratings',
         cargandoCalificaciones: 'Loading ratings',
