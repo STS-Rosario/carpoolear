@@ -28,7 +28,7 @@ function createForm(overrides = {}) {
         saving: false,
         config: {
             module_seat_price_enabled: true,
-            module_max_price_enabled: false,
+            module_max_price_enabled: true,
             weekly_schedule: false,
             country_name: 'Argentina'
         },
@@ -53,8 +53,9 @@ function createForm(overrides = {}) {
         passengers: 0,
         wantsIntermediateStops: false,
         tripInfoStatus: 'ready',
-        maximum_seat_price_cents: 0,
-        maximum_trip_price_cents: 0,
+        // Maximum allowed contribution from trip-info: $100000 trip, $20000 per seat.
+        maximum_seat_price_cents: 2000000,
+        maximum_trip_price_cents: 10000000,
         recommended_seat_price_cents: 0,
         contributionPricingBreakdown: null,
         contribucionRecomendadaCardDescripcionText: '',
@@ -140,7 +141,7 @@ describe('NewTripCreationWizard contribution excess modal', () => {
         document.body.innerHTML = '';
     });
 
-    it('shows the modal when leaving the description step with an amount above the contribution', async () => {
+    it('shows the modal when leaving the description step with an amount above the maximum allowed contribution', async () => {
         const { wrapper, form } = await mountWizard();
         await goToStep(wrapper, STEP.DESCRIPTION);
         form.trip.description = EXCESSIVE_DESCRIPTION;
@@ -226,10 +227,23 @@ describe('NewTripCreationWizard contribution excess modal', () => {
         expect(excessModal()).not.toBeNull();
     });
 
-    it('does not show the modal when the description amount is within the contribution', async () => {
+    it('does not show the modal when the description asks more than the chosen price but within the maximum', async () => {
         const { wrapper, form } = await mountWizard();
         await goToStep(wrapper, STEP.DESCRIPTION);
-        form.trip.description = 'Contribución $15000, salgo puntual';
+        form.trip.description = 'Contribución $18000, salgo puntual';
+
+        await clickNext(wrapper);
+
+        expect(excessModal()).toBeNull();
+        expect(wrapper.vm.currentStep).toBe(STEP.LAST_DETAILS);
+    });
+
+    it('does not show the modal when there is no maximum allowed contribution', async () => {
+        const form = createForm();
+        form.config.module_max_price_enabled = false;
+        const { wrapper } = await mountWizard(form);
+        await goToStep(wrapper, STEP.DESCRIPTION);
+        form.trip.description = EXCESSIVE_DESCRIPTION;
 
         await clickNext(wrapper);
 

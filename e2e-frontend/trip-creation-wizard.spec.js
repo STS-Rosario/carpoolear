@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
+    MOCK_CONFIG,
     MOCK_TRIP_DETAIL,
     MOCK_USER,
     setupCatchAllMock,
@@ -58,10 +59,37 @@ test.describe('trip creation wizard', () => {
         await expect(page.getByTestId('trip-creation-wizard-step-5')).toBeVisible();
     });
 
-    test('warns once about a possible contribution excess when leaving the description step', async ({
-        page
-    }) => {
-        await page.addInitScript(() => {
+    /**
+     * Resumes a draft at the description step with a chosen contribution of
+     * $15000 while trip-info caps it at $20000 per seat ($100000 per trip / 5).
+     */
+    async function resumeDescriptionDraftWithMaximum(page, description) {
+        await page.route('**/api/config', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ ...MOCK_CONFIG, module_max_price_enabled: true })
+            });
+        });
+        await page.route('**/api/trips/trip-info', (route) => {
+            route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    status: true,
+                    data: {
+                        distance: 300000,
+                        duration: 12000,
+                        co2: 45000,
+                        route_needs_payment: false,
+                        recommended_trip_price_cents: 8000000,
+                        maximum_trip_price_cents: 10000000,
+                        pricing_breakdown: null
+                    }
+                })
+            });
+        });
+        await page.addInitScript((draftDescription) => {
             localStorage.setItem(
                 'TRIP_CREATION_DRAFT',
                 JSON.stringify({
@@ -69,15 +97,40 @@ test.describe('trip creation wizard', () => {
                         currentStep: 9,
                         maxVisitedStep: 9,
                         price: '15000',
+                        points: [
+                            {
+                                name: 'Rosario, Santa Fe',
+                                place: 'Rosario, Santa Fe',
+                                json: { id: 1, name: 'Rosario, Santa Fe' },
+                                location: { lat: -32.9468, lng: -60.6393 }
+                            },
+                            {
+                                name: 'Córdoba, Córdoba',
+                                place: 'Córdoba, Córdoba',
+                                json: { id: 2, name: 'Córdoba, Córdoba' },
+                                location: { lat: -31.4201, lng: -64.1888 }
+                            }
+                        ],
                         trip: {
                             is_passenger: 0,
-                            description: 'La contribución es de $24000 por persona'
+                            description: draftDescription
                         }
                     }
                 })
             );
-        });
+        }, description);
+        const tripInfo = page.waitForResponse('**/api/trips/trip-info');
         await page.goto('/trips/create?resumeDraft=1');
+        await tripInfo;
+    }
+
+    test('warns once about a possible contribution excess when leaving the description step', async ({
+        page
+    }) => {
+        await resumeDescriptionDraftWithMaximum(
+            page,
+            'La contribución es de $24000 por persona'
+        );
         await waitForPageReady(page);
         await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
 
@@ -106,7 +159,20 @@ test.describe('trip creation wizard', () => {
         await expect(modal).toHaveCount(0);
     });
 
-    test('update trip route shows wizard', async ({ page }) => {
+    test('does not warn when the description asks more than the chosen contribution but within the maximum', async ({
+        page
+    }) => {
+        await resumeDescriptionDraftWithMaximum(page, 'Contribución $18000 por persona');
+        await waitForPageReady(page);
+        await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
+
+        await page.getByTestId('trip-creation-next').click();
+
+        await expect(page.getByTestId('trip-creation-wizard-step-10')).toBeVisible();
+        await expect(page.getByTestId('trip-contribution-excess-modal')).toHaveCount(0);
+    });
+
+        test('update trip route shows wizard', async ({ page }) => {
         await page.route(/\/api\/trips\/1(\?.*)?$/, (route) => {
             route.fulfill({
                 status: 200,
