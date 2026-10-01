@@ -656,7 +656,7 @@ export default {
                 this.$router.push(normalized);
                 return;
             }
-            window.open(normalized, '_blank');
+            openExternalUrl(normalized);
         },
         isIOS() {
             return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
