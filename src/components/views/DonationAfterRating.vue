@@ -80,9 +80,14 @@
                                 >{{ $t('donationAfterRatingVolunteerLink') }}</a>
                             </template>
                         </i18n-t>
+                        <div class="donation-after-rating__word-of-mouth-block">
+                            <p class="donation-after-rating__alt-copy">
+                                {{ $t('donationAfterRatingWordOfMouthIntro') }}
+                            </p>
+                            <ul class="donation-after-rating__word-of-mouth">
                         <i18n-t
                             keypath="donationAfterRatingInstagramParagraph"
-                            tag="p"
+                            tag="li"
                             class="donation-after-rating__alt-copy"
                         >
                             <template #instagram>
@@ -102,15 +107,19 @@
                                 >{{ $t('donationAfterRatingFacebookLink') }}</a>
                             </template>
                         </i18n-t>
-                        <p v-if="tripId" class="donation-after-rating__alt-copy">
-                            <a
-                                href="/trips"
-                                class="donation-after-rating__skip-link"
-                                @click.prevent="onContinueWithoutDonating"
-                            >
-                                {{ $t('donationAfterRatingCannotContributeLink') }}
-                            </a>{{ $t('donationAfterRatingCannotContributeSuffix') }}
-                        </p>
+                                <li class="donation-after-rating__alt-copy">
+                                    {{ $t('donationAfterRatingWordOfMouthFaceToFace') }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="donation-after-rating__sign-off">
+                            <p class="donation-after-rating__alt-copy">
+                                {{ $t('donationAfterRatingSignOffGreeting') }}
+                            </p>
+                            <p class="donation-after-rating__alt-copy">
+                                {{ $t('donationAfterRatingSignOffTeam') }}
+                            </p>
+                        </div>
                     </section>
                 </div>
             </div>
@@ -254,19 +263,6 @@ export default {
                     estado: 'error'
                 });
             }
-        },
-        async onContinueWithoutDonating() {
-            if (this.preview) {
-                this.notifyPreviewMode();
-                return;
-            }
-            await this.registerDonation({
-                has_donated: 0,
-                has_denied: 1,
-                ammount: 0,
-                trip_id: this.tripId
-            });
-            this.$router.push({ name: 'trips' });
         }
     }
 };
@@ -450,6 +446,20 @@ export default {
     color: var(--ds-text-primary);
     font-weight: var(--ds-font-weight-bold, 700);
     text-decoration: underline;
+}
+
+.donation-after-rating__word-of-mouth {
+    margin: 0.75rem 0 0;
+    padding-inline-start: 1.5rem;
+    list-style: disc;
+}
+
+.donation-after-rating__word-of-mouth > li + li {
+    margin-top: 0.5rem;
+}
+
+.donation-after-rating__sign-off > p + p {
+    margin-top: 0.25rem;
 }
 
 .donation-after-rating__skip-link {

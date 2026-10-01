@@ -15,10 +15,6 @@
             </h1>
             <div class="donation-after-rating-hero__mission">
                 <p class="donation-after-rating-hero__mission-lead">
-                    <span
-                        class="donation-after-rating-hero__mission-org"
-                        v-html="$t('donationAfterRatingMissionOrg')"
-                    ></span>
                     <span class="donation-after-rating-hero__mission-lead-emphasis">
                         {{ $t('donationAfterRatingMissionLead') }}
                     </span>
