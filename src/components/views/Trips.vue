@@ -1409,7 +1409,7 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin: 15px 0;
+    margin: 24px 0;
 }
 
 .app-store-prompt__badges img {
@@ -1421,6 +1421,7 @@ export default {
 .install-modal-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
     margin-bottom: 10px;
     align-items: center;
