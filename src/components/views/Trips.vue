@@ -308,7 +308,7 @@
                         <template
                             v-if="
                                 isDonationTime() &&
-                                (!user || !user.monthly_donate) &&
+                                (!user || !isActiveClubCarpoolearMember(user)) &&
                                 !shouldHideDonationOnIOSCapacitor(user)
                             "
                         >
@@ -564,6 +564,7 @@ import modal from '../Modal';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import { appendDonationTrackingUserId } from '../../utils/donationOptions.js';
 import { startDonationCheckout } from '../../utils/donationCheckout.js';
+import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import { Capacitor } from '@capacitor/core';
 import {
     isIOSCapacitor,
@@ -630,6 +631,7 @@ export default {
         }
     },
     methods: {
+        isActiveClubCarpoolearMember,
         ...mapActions(useTripsStore, {
             search: 'tripsSearch',
             refreshTrips: 'refreshListAction',

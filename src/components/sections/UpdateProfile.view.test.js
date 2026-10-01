@@ -103,7 +103,7 @@ describe('UpdateProfile Club Carpoolear visibility', () => {
     it('shows membership visibility checkbox with join link for non-members', () => {
         expect(viewSource).toContain('update-profile-club-carpoolear');
         expect(viewSource).toContain('show_club_carpoolear_membership');
-        expect(viewSource).toContain('isActiveClubCarpoolearMember');
+        expect(viewSource).toContain('isClubCarpoolearMember');
         expect(viewSource).toContain("$t('mostrarMiembroClubCarpoolear')");
         expect(viewSource).toContain("name: 'donate'");
         expect(viewSource).toContain("$t('quieroSumarmeClubCarpoolear')");

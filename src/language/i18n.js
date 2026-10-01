@@ -231,6 +231,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Seleccioná esta opción y guardá los cambios si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'Datos públicos',
+        mostrarMiembroClubCarpoolear: 'Mostrar que soy miembro del Club Carpoolear',
+        quieroSumarmeClubCarpoolear: 'Quiero sumarme al Club Carpoolear',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
         cambiarPassword: 'Cambiar contraseña',
@@ -2379,6 +2381,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Tilda esta opción (y guardá cambios) si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'RUT y teléfono visibles',
+        mostrarMiembroClubCarpoolear: 'Mostrar que soy miembro del Club Carpoolear',
+        quieroSumarmeClubCarpoolear: 'Quiero sumarme al Club Carpoolear',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
         cambiarPassword: 'Cambiar contraseña',
@@ -4157,6 +4161,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Let anyone view your information. Leave this off to keep it private between you and your confirmed trip partners.',
         datosVisiblesCheck: 'Public data',
+        mostrarMiembroClubCarpoolear: 'Show that I am a Club Carpoolear member',
+        quieroSumarmeClubCarpoolear: 'I want to join Club Carpoolear',
         notificacionesPorCorreo: 'Receive notifications by email.',
         cambiarPassword: 'Change password',
         ingreseNuevaPassword: 'Enter your new password',

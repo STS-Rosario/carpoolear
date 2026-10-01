@@ -119,6 +119,7 @@ import Tab from '../elements/Tab';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
+import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 
 export default {
     name: 'my-trips',
@@ -304,7 +305,7 @@ export default {
                 return;
             }
             let tripRateds = parseFloat(this.config.donation.trips_rated);
-            if (this.user && !this.user.monthly_donate) {
+            if (this.user && !isActiveClubCarpoolearMember(this.user)) {
                 // solo si el usuario no es donador mensual
                 if (!this.user.donations) {
                     // no tengo intento de donaciones este mes debe aparecer

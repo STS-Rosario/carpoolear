@@ -419,6 +419,31 @@
                         ></div>
                     </div>
 
+                    <div
+                        class="checkbox update-profile-club-carpoolear"
+                        :class="{
+                            'update-profile-club-carpoolear--inactive': !isClubCarpoolearMember
+                        }"
+                    >
+                        <label>
+                            <input
+                                type="checkbox"
+                                v-model="user.show_club_carpoolear_membership"
+                                :true-value="1"
+                                :false-value="0"
+                                :disabled="!isClubCarpoolearMember"
+                            />
+                            {{ $t('mostrarMiembroClubCarpoolear') }}
+                        </label>
+                        <router-link
+                            v-if="!isClubCarpoolearMember"
+                            :to="{ name: 'donate' }"
+                            class="update-profile-club-carpoolear__join-link"
+                        >
+                            {{ $t('quieroSumarmeClubCarpoolear') }}
+                        </router-link>
+                    </div>
+
                     <div class="btn-container">
                         <span class="required-field-flag required-field-info">
                             {{ $t('camposObligatorios') }}
@@ -624,6 +649,7 @@ import {
 } from '../../utils/imageUpload';
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { cloneProfileUser } from '../../utils/profileUserClone';
+import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import { DELETE_ACCOUNT_QUERY } from '../../utils/myAccountMenuItems';
 
 class Error {
@@ -748,6 +774,9 @@ export default {
                 this.$route.query &&
                 this.$route.query.missing === 'patente'
             );
+        },
+        isClubCarpoolearMember() {
+            return isActiveClubCarpoolearMember(this.user);
         }
     },
     methods: {
@@ -767,6 +796,9 @@ export default {
         },
         syncProfileDraftFromStore() {
             this.user = cloneProfileUser(this.userData);
+            if (this.user && this.user.show_club_carpoolear_membership === undefined) {
+                this.user.show_club_carpoolear_membership = 1;
+            }
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = formatDocumentIdFromConfig(
                     this.user.nro_doc,
@@ -870,7 +902,8 @@ export default {
                 'do_not_alert_pending_rates', 'do_not_alert_pricing',
                 'autoaccept_requests', 'unaswered_messages_limit',
                 'account_number', 'account_type', 'account_bank',
-                'facebook_profile_url'
+                'facebook_profile_url',
+                'show_club_carpoolear_membership'
             ];
             const data = {};
             allowedProfileUpdateKeys.forEach((key) => {
@@ -1304,6 +1337,15 @@ export default {
     box-shadow: none;
     border-radius: 0;
     padding: 0;
+}
+
+.update-profile-club-carpoolear--inactive label {
+    color: #888;
+}
+
+.update-profile-club-carpoolear__join-link {
+    display: inline-block;
+    margin-top: 0.35rem;
 }
 
 .update-profile-datos-publicos {
