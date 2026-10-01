@@ -5,15 +5,15 @@
                 <span
                     class="donation-after-rating-hero__title-line donation-after-rating-hero__title-line--primary"
                 >
-                    {{ $t('donationAfterRatingHeroTitlePrimary') }}
+                    {{ $t(titlePrimaryKey) }}
                 </span>
                 <span
                     class="donation-after-rating-hero__title-line donation-after-rating-hero__title-line--accent"
                 >
-                    {{ $t('donationAfterRatingHeroTitleAccent') }}
+                    {{ $t(titleAccentKey) }}
                 </span>
             </h1>
-            <div class="donation-after-rating-hero__mission">
+            <div v-if="showMission" class="donation-after-rating-hero__mission">
                 <p class="donation-after-rating-hero__mission-lead">
                     <span class="donation-after-rating-hero__mission-lead-emphasis">
                         {{ $t('donationAfterRatingMissionLead') }}
@@ -46,6 +46,20 @@ import { getDonationAfterRatingHeroImageUrl } from '../../utils/donationAfterRat
 
 export default {
     name: 'DonationAfterRatingHero',
+    props: {
+        titlePrimaryKey: {
+            type: String,
+            default: 'donationAfterRatingHeroTitlePrimary'
+        },
+        titleAccentKey: {
+            type: String,
+            default: 'donationAfterRatingHeroTitleAccent'
+        },
+        showMission: {
+            type: Boolean,
+            default: true
+        }
+    },
     computed: {
         heroImageUrl() {
             return getDonationAfterRatingHeroImageUrl();

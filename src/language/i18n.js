@@ -1373,6 +1373,14 @@ const messages = {
             '{team} (también conocido como “La gente de Carpu”)',
         donationAfterRatingSignOffTeamName: 'Equipo Carpoolear',
         donationAfterRatingContinueWithoutContributing: 'Continuar sin aportar',
+        clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
+        clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
+        clubCarpoolearWelcomeResultFailed:
+            'No pudimos confirmar tu suscripción. Podés intentar de nuevo desde Aportar.',
+        clubCarpoolearWelcomeResultPending:
+            'Tu suscripción está pendiente de confirmación. Te avisamos cuando esté activa.',
+        clubCarpoolearWelcomeGoToTrips: 'Ir a viajes',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -2617,6 +2625,14 @@ const messages = {
         donationAfterRatingCannotContributeLink: 'No puedo aportar',
         donationAfterRatingCannotContributeSuffix:
             ' ni siquiera difusión ahora :(',
+        clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
+        clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
+        clubCarpoolearWelcomeResultFailed:
+            'No pudimos confirmar tu suscripción. Podés intentar de nuevo desde Aportar.',
+        clubCarpoolearWelcomeResultPending:
+            'Tu suscripción está pendiente de confirmación. Te avisamos cuando esté activa.',
+        clubCarpoolearWelcomeGoToTrips: 'Ir a viajes',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -5287,6 +5303,14 @@ const messages = {
         donationAfterRatingSignOffTeamName: 'The Carpoolear Team',
         donationAfterRatingContinueWithoutContributing:
             'Continue without contributing',
+        clubCarpoolearWelcomePageTitle: 'Carpoolear Club',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'You joined',
+        clubCarpoolearWelcomeHeroTitleAccent: 'the Carpoolear Club',
+        clubCarpoolearWelcomeResultFailed:
+            'We could not confirm your subscription. You can try again from Donate.',
+        clubCarpoolearWelcomeResultPending:
+            'Your subscription is pending confirmation. We will let you know when it is active.',
+        clubCarpoolearWelcomeGoToTrips: 'Go to trips',
         calificacionesPendientes: 'Pending ratings',
         noHayCalificacionesPendientes: 'No pending ratings',
         cargandoCalificaciones: 'Loading ratings',
