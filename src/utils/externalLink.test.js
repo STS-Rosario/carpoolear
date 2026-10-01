@@ -120,3 +120,39 @@ describe('resolveExternalUrl', () => {
         }
     );
 });
+
+describe('openExternalUrl', () => {
+    let open;
+
+    beforeEach(() => {
+        vi.resetModules();
+    });
+
+    afterEach(() => {
+        vi.unstubAllEnvs();
+        vi.unstubAllGlobals();
+    });
+
+    function setPlatformWithWindowOpen(platform) {
+        setPlatform(platform);
+        open = vi.fn();
+        window.open = open;
+    }
+
+    it.each([
+        ['web', 'https://carpoolear.com.ar/aportar?u=42'],
+        ['android', 'https://www.carpoolear.com.ar/aportar?u=42'],
+        ['ios', 'https://carpoolear.com.ar/aportar?u=42']
+    ])(
+        'on %s opens the resolved url in a new window (system browser on native)',
+        async (platform, expectedUrl) => {
+            setPlatformWithWindowOpen(platform);
+            const { openExternalUrl } = await loadHelper();
+
+            openExternalUrl('https://carpoolear.com.ar/aportar?u=42');
+
+            expect(open).toHaveBeenCalledTimes(1);
+            expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+        }
+    );
+});
