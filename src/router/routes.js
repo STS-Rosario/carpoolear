@@ -48,6 +48,7 @@ const AdminManualIdentityValidations = () => import('../components/views/AdminMa
 const AdminManualIdentityValidationReview = () => import('../components/views/AdminManualIdentityValidationReview.vue');
 const AdminMpRejectedValidations = () => import('../components/views/AdminMpRejectedValidations.vue');
 const AdminMpRejectedValidationDetail = () => import('../components/views/AdminMpRejectedValidationDetail.vue');
+const AdminIdentityVerificationReport = () => import('../components/views/AdminIdentityVerificationReport.vue');
 const AdminUserMigrationsList = () => import('../components/views/AdminUserMigrationsList.vue');
 const AdminUserMigrationNew = () => import('../components/views/AdminUserMigrationNew.vue');
 const Tickets = () => import('../components/views/Tickets.vue');
@@ -1420,6 +1421,25 @@ export default [
                 },
                 header: {
                     titleKey: 'detalleRechazoMp',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/identity-verification-report',
+        name: 'admin-identity-verification-report',
+        component: AdminIdentityVerificationReport,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.IdentityStats,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminNavReporteVerificaciones',
                     buttons: ['back']
                 }
             }

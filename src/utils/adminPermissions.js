@@ -46,6 +46,7 @@ export const ADMIN_NAV_ITEMS = [
     { name: 'admin-banned-users', labelKey: 'usuariosBloqueados', permission: ADMIN_PERMISSIONS.UsersBannedList },
     { name: 'admin-manual-identity-validations', labelKey: 'validacionesManuales', permission: ADMIN_PERMISSIONS.IdentityManualReview },
     { name: 'admin-mp-rejected-validations', labelKey: 'rechazosMercadoPago', permission: ADMIN_PERMISSIONS.IdentityMpReview },
+    { name: 'admin-identity-verification-report', labelKey: 'adminNavReporteVerificaciones', permission: ADMIN_PERMISSIONS.IdentityStats },
     { name: 'admin-support-tickets', labelKey: 'soporte', permission: ADMIN_PERMISSIONS.SupportTickets },
     { name: 'admin-action-logs', labelKey: 'adminNavActionLogs', permission: ADMIN_PERMISSIONS.AuditView },
     { name: 'admin-changelogs', labelKey: 'adminNavChangelog', permission: ADMIN_PERMISSIONS.ChangelogsManage },
