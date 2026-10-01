@@ -721,6 +721,13 @@ const messages = {
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
         tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
+        tripContributionExcessModalTitle: 'Posible exceso de contribución',
+        tripContributionExcessModalBodyWarning:
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+        tripContributionExcessModalBodyApology:
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+        tripContributionExcessModalBodyThanks: 'Muchas gracias por hacer Carpoolear más justo.',
+        tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
@@ -1806,6 +1813,8 @@ const messages = {
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
+        contribucionSospechada: 'Contribución sospechada',
+        telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
         noHayExcesoContribucion: 'No hay viajes con posible exceso de contribución.',
@@ -2676,6 +2685,13 @@ const messages = {
         tripCreationOr: 'o',
         tripCreationChooseTemplateTitle: 'Elegir plantilla de viaje',
         tripCreationChooseTemplatePlaceholder: 'Seleccionar plantilla',
+        tripContributionExcessModalTitle: 'Posible exceso de contribución',
+        tripContributionExcessModalBodyWarning:
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+        tripContributionExcessModalBodyApology:
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+        tripContributionExcessModalBodyThanks: 'Muchas gracias por hacer Carpoolear más justo.',
+        tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
         tripCreationTotalPeopleLabel:
@@ -3617,6 +3633,8 @@ const messages = {
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
+        contribucionSospechada: 'Contribución sospechada',
+        telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
         noHayExcesoContribucion: 'No hay viajes con posible exceso de contribución.',
@@ -4521,6 +4539,13 @@ const messages = {
         tripCreationOr: 'or',
         tripCreationChooseTemplateTitle: 'Choose trip template',
         tripCreationChooseTemplatePlaceholder: 'Select a template',
+        tripContributionExcessModalTitle: 'Possible contribution excess',
+        tripContributionExcessModalBodyWarning:
+            'We detected a possible contribution excess. Please note that asking for a contribution higher than the stipulated maximum is prohibited and, if that is the case, it will result in an account suspension.',
+        tripContributionExcessModalBodyApology:
+            'If that is not the case, we apologize: this is an automatic check that can fail.',
+        tripContributionExcessModalBodyThanks: 'Thank you very much for making Carpoolear fairer.',
+        tripContributionExcessModalConfirm: 'Got it',
         tripCreationReplaceTemplateLabel: 'Choose a template to replace',
         tripCreationRouteDetails: 'Route details',
         tripCreationTotalPeopleLabel:
@@ -5586,6 +5611,8 @@ const messages = {
         contribucionPotencial: 'Potential contribution',
         contribucionPromedio: 'Average contribution',
         porcentajeExceso: 'Excess percentage',
+        contribucionSospechada: 'Suspected contribution',
+        telefonoEnDescripcion: 'Phone in description',
         noDisponible: 'N/A',
         tieneNotas: 'Has notes?',
         noHayExcesoContribucion: 'No trips with potential excess contribution.',
