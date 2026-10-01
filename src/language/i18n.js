@@ -112,6 +112,9 @@ const messages = {
             '¿Crear un ticket de mesa de ayuda para {name} con el mensaje de plantilla? Se le enviará al usuario.',
         excessContributionTemplatedTicketCreated: 'Ticket de mesa de ayuda creado',
         excessContributionTemplatedTicketError: 'No se pudo crear el ticket de mesa de ayuda',
+        excessContributionTicketAlreadyExists:
+            'Este viaje ya tiene un ticket de exceso de contribución',
+        excessContributionTicketView: 'Ver ticket de exceso de contribución',
         /** Placeholder template for the excess contribution ticket; edit freely. */
         excessContributionTemplatedTicketMessage:
             'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',
@@ -4032,6 +4035,9 @@ const messages = {
             'Create a help desk ticket for {name} with the template message? It will be sent to the user.',
         excessContributionTemplatedTicketCreated: 'Help desk ticket created',
         excessContributionTemplatedTicketError: 'Couldn\'t create the help desk ticket',
+        excessContributionTicketAlreadyExists:
+            'This trip already has an excess contribution ticket',
+        excessContributionTicketView: 'View excess contribution ticket',
         /** Placeholder template for the excess contribution ticket; edit freely. */
         excessContributionTemplatedTicketMessage:
             'Just a test.\n\nthis is another paragraph\n\nEquipo Carpoolear',

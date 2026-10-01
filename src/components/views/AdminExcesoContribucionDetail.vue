@@ -85,34 +85,47 @@
                             <span v-else>-</span>
                         </p>
 
-                        <div class="admin-exceso-actions">
-                            <AppButton
-                                v-if="item.user_id"
-                                variant="secondary"
-                                size="sm"
+                        <div v-if="canManageSupportTickets" class="admin-exceso-actions">
+                            <router-link
+                                v-if="hasExcessTicket"
+                                class="admin-exceso-existing-ticket"
                                 :to="{
-                                    name: 'admin-support-ticket-new',
-                                    query: {
-                                        userId: item.user_id,
-                                        userName: item.user_name,
-                                        type: 'excess_contribution',
-                                        subject: $t('ticketTypeExcessContribution')
-                                    }
+                                    name: 'admin-support-ticket-detail',
+                                    params: { id: item.excess_contribution_ticket_id }
                                 }"
                             >
-                                {{ $t('crearTicketSoporte') }}
-                            </AppButton>
-                            <AppButton
-                                v-if="canCreateTemplatedTicket"
-                                variant="secondary"
-                                size="sm"
-                                class="admin-exceso-templated-ticket"
-                                :disabled="creatingTemplatedTicket"
-                                :loading="creatingTemplatedTicket"
-                                @click="createTemplatedTicket"
-                            >
-                                {{ $t('excessContributionTemplatedTicketButton') }}
-                            </AppButton>
+                                {{ $t('excessContributionTicketView') }}
+                                #{{ item.excess_contribution_ticket_id }}
+                            </router-link>
+                            <template v-else>
+                                <AppButton
+                                    variant="secondary"
+                                    size="sm"
+                                    class="admin-exceso-support-ticket"
+                                    :to="{
+                                        name: 'admin-support-ticket-new',
+                                        query: {
+                                            userId: item.user_id,
+                                            userName: item.user_name,
+                                            type: 'excess_contribution',
+                                            subject: $t('ticketTypeExcessContribution'),
+                                            tripId: item.id
+                                        }
+                                    }"
+                                >
+                                    {{ $t('crearTicketSoporte') }}
+                                </AppButton>
+                                <AppButton
+                                    variant="secondary"
+                                    size="sm"
+                                    class="admin-exceso-templated-ticket"
+                                    :disabled="creatingTemplatedTicket"
+                                    :loading="creatingTemplatedTicket"
+                                    @click="createTemplatedTicket"
+                                >
+                                    {{ $t('excessContributionTemplatedTicketButton') }}
+                                </AppButton>
+                            </template>
                         </div>
 
                         <div class="admin-exceso-status-actions mt-3">
@@ -184,11 +197,14 @@ export default {
         ...mapState(useAuthStore, {
             authUser: 'user'
         }),
-        canCreateTemplatedTicket() {
+        canManageSupportTickets() {
             return (
                 Boolean(this.item && this.item.user_id) &&
                 can(this.authUser, ADMIN_PERMISSIONS.SupportTickets)
             );
+        },
+        hasExcessTicket() {
+            return Boolean(this.item && this.item.excess_contribution_ticket_id);
         },
         statusActions() {
             if (!this.item) {
@@ -263,14 +279,24 @@ export default {
                 this.$t(key)
             );
             return this.adminCreateTicket(payload)
-                .then(() => {
+                .then((ticket) => {
                     this.item.excess_contribution_support_tickets_count =
                         Number(this.item.excess_contribution_support_tickets_count || 0) + 1;
+                    this.item.excess_contribution_ticket_id = ticket && ticket.id;
                     dialogs.message(this.$t('excessContributionTemplatedTicketCreated'), {
                         estado: 'success'
                     });
                 })
-                .catch(() => {
+                .catch((error) => {
+                    if (error && error.status === 409) {
+                        if (error.data && error.data.existing_ticket_id) {
+                            this.item.excess_contribution_ticket_id = error.data.existing_ticket_id;
+                        }
+                        dialogs.message(this.$t('excessContributionTicketAlreadyExists'), {
+                            estado: 'error'
+                        });
+                        return;
+                    }
                     dialogs.message(this.$t('excessContributionTemplatedTicketError'), {
                         estado: 'error'
                     });
