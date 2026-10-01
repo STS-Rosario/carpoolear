@@ -336,9 +336,8 @@ import PendingRatingsBanner from '../PendingRatingsBanner.vue';
 import HeaderMenuDropdown from './HeaderMenuDropdown.vue';
 import svgItem from '../SvgItem';
 import AppButton from '../ui/AppButton.vue';
-import { Capacitor } from '@capacitor/core';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
-import { resolveCapacitorBundledHostUrl } from '../../utils/capacitorRemoteUrl.js';
+import { resolveExternalUrl } from '../../utils/externalLink.js';
 import { UserApi } from '../../services/api';
 import {
     persistLocaleChoice,
@@ -442,12 +441,8 @@ export default {
                 : '';
         },
         donationHref() {
-            // On native the WebView is served from server.hostname (carpoolear.com.ar): a relative
-            // /aportar loads the bundled index.html (app reload). Use the remote site instead.
-            if (!Capacitor.isNativePlatform()) {
-                return '/aportar';
-            }
-            return resolveCapacitorBundledHostUrl('https://carpoolear.com.ar/aportar');
+            // /aportar is served by the website, not the SPA (see resolveExternalUrl).
+            return resolveExternalUrl('/aportar');
         },
         mobileUtilityHeaderButtons() {
             if (!this.isMobile) {
