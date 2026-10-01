@@ -289,6 +289,21 @@ describe('Trips.vue app store install prompt', () => {
         expect(promptModal()).toContain("$t('descargaLaApp')");
     });
 
+    it('hides the modal default "Cerrar" footer, keeping the header X', () => {
+        const openingTag = viewSource.match(
+            /<modal[^>]*v-if="showAppStorePrompt && appStorePrompt"[^>]*>/
+        )?.[0];
+        expect(openingTag).toBeTruthy();
+        expect(openingTag).toContain(':hide-footer="true"');
+    });
+
+    it('stacks the store badges vertically', () => {
+        const badgesCss = viewSource.match(/\.app-store-prompt__badges \{[^}]*\}/)?.[0];
+        expect(badgesCss).toBeTruthy();
+        expect(badgesCss).toContain('flex-direction: column');
+        expect(badgesCss).toContain('align-items: center');
+    });
+
     it('renders the download title and text', () => {
         const modal = promptModal();
         expect(modal).toContain("$t('descargaLaApp')");
