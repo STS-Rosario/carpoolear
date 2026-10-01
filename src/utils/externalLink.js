@@ -28,3 +28,12 @@ export function resolveExternalUrl(url) {
 export function openExternalUrl(url) {
     window.open(resolveExternalUrl(url), '_blank');
 }
+
+/**
+ * `target` for a router-link that opens an in-app route in a new tab on web. On native a
+ * new window can't show an in-app route (iOS hands it to UIApplication.open, Android
+ * reloads the WebView), so navigate in-app instead.
+ */
+export function inAppLinkTarget() {
+    return Capacitor.isNativePlatform() ? undefined : '_blank';
+}
