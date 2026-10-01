@@ -129,9 +129,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
-import { useProfileStore } from '../../stores/profile';
 import dialogs from '../../services/dialogs.js';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
@@ -185,9 +184,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions(useProfileStore, {
-            registerDonation: 'registerDonation'
-        }),
         externalHref(url) {
             return resolveExternalUrl(url);
         },
@@ -452,12 +448,6 @@ export default {
 
 .donation-after-rating__sign-off > p + p {
     margin-top: 0.25rem;
-}
-
-.donation-after-rating__skip-link {
-    color: var(--ds-text-primary);
-    font-weight: var(--ds-font-weight-normal, 400);
-    text-decoration: underline;
 }
 
 @media (min-width: 768px) {
