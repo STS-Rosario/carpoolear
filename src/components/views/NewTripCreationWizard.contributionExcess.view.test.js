@@ -156,7 +156,23 @@ describe('NewTripCreationWizard contribution excess modal', () => {
         expect(wrapper.vm.currentStep).toBe(STEP.DESCRIPTION);
     });
 
-    it('offers a single Entendido button, no footer, and closes on click', async () => {
+    it('renders the body as three translated paragraphs', async () => {
+        const { wrapper, form } = await mountWizard();
+        await goToStep(wrapper, STEP.DESCRIPTION);
+        form.trip.description = EXCESSIVE_DESCRIPTION;
+        await clickNext(wrapper);
+
+        const paragraphs = [...excessModal().querySelectorAll('p')].map((p) =>
+            p.textContent.trim()
+        );
+        expect(paragraphs).toEqual([
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+            'Muchas gracias por hacer Carpoolear más justo.'
+        ]);
+    });
+
+        it('offers a single Entendido button, no footer, and closes on click', async () => {
         const { wrapper, form } = await mountWizard();
         await goToStep(wrapper, STEP.DESCRIPTION);
         form.trip.description = EXCESSIVE_DESCRIPTION;

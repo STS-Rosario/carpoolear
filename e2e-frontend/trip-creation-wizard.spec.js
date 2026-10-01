@@ -141,7 +141,11 @@ test.describe('trip creation wizard', () => {
         await expect(
             page.getByRole('heading', { name: 'Posible exceso de contribución' })
         ).toBeVisible();
-        await expect(modal).toContainText('Detectamos un posible exceso de contribución.');
+        await expect(modal.locator('p')).toHaveText([
+            'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+            'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+            'Muchas gracias por hacer Carpoolear más justo.'
+        ]);
         await expect(page.locator('.modal-footer')).toHaveCount(0);
         await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
 

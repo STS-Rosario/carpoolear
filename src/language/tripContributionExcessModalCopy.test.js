@@ -1,24 +1,40 @@
 import { describe, expect, it } from 'vitest';
 import messages from './i18n';
 
-const TITLE_ES = 'Posible exceso de contribución';
-const BODY_ES =
-    'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta. Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar. Muchas gracias por hacer Carpoolear más justo.';
+const SPANISH = {
+    tripContributionExcessModalTitle: 'Posible exceso de contribución',
+    tripContributionExcessModalBodyWarning:
+        'Detectamos un posible exceso de contribución. Te comentamos que está prohibido pedir una contribución mayor a la máxima estipulada, y de ser así, resultará en una suspensión de la cuenta.',
+    tripContributionExcessModalBodyApology:
+        'Si no es así, te pedimos disculpas, es un checkeo automático que puede fallar.',
+    tripContributionExcessModalBodyThanks: 'Muchas gracias por hacer Carpoolear más justo.',
+    tripContributionExcessModalConfirm: 'Entendido'
+};
+
+const ENGLISH = {
+    tripContributionExcessModalTitle: 'Possible contribution excess',
+    tripContributionExcessModalBodyWarning:
+        'We detected a possible contribution excess. Please note that asking for a contribution higher than the stipulated maximum is prohibited and, if that is the case, it will result in an account suspension.',
+    tripContributionExcessModalBodyApology:
+        'If that is not the case, we apologize: this is an automatic check that can fail.',
+    tripContributionExcessModalBodyThanks: 'Thank you very much for making Carpoolear fairer.',
+    tripContributionExcessModalConfirm: 'Got it'
+};
 
 describe('trip creation contribution excess modal copy', () => {
-    it.each(['arg', 'chl'])('uses the agreed Spanish copy in %s', (locale) => {
-        expect(messages[locale].tripContributionExcessModalTitle).toBe(TITLE_ES);
-        expect(messages[locale].tripContributionExcessModalBody).toBe(BODY_ES);
-        expect(messages[locale].tripContributionExcessModalConfirm).toBe('Entendido');
+    it.each(['arg', 'chl'])('uses the agreed Spanish copy, one key per paragraph, in %s', (locale) => {
+        for (const [key, text] of Object.entries(SPANISH)) {
+            expect(messages[locale][key], key).toBe(text);
+        }
     });
 
-    it('uses the English copy in en', () => {
-        expect(messages.en.tripContributionExcessModalTitle).toBe(
-            'Possible contribution excess'
-        );
-        expect(messages.en.tripContributionExcessModalBody).toBe(
-            'We detected a possible contribution excess. Please note that asking for a contribution higher than the stipulated maximum is prohibited and, if that is the case, it will result in an account suspension. If that is not the case, we apologize: this is an automatic check that can fail. Thank you very much for making Carpoolear fairer.'
-        );
-        expect(messages.en.tripContributionExcessModalConfirm).toBe('Got it');
+    it('uses the English copy, one key per paragraph, in en', () => {
+        for (const [key, text] of Object.entries(ENGLISH)) {
+            expect(messages.en[key], key).toBe(text);
+        }
+    });
+
+    it.each(['arg', 'chl', 'en'])('drops the single-paragraph body key in %s', (locale) => {
+        expect(messages[locale].tripContributionExcessModalBody).toBeUndefined();
     });
 });
