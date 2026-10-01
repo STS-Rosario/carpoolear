@@ -19,10 +19,12 @@ describe('donation copy wording', () => {
         expect(messages.arg.tienesQueSeleccionarDonacion).toBe(
             'Tienes que seleccionar un valor de aporte'
         );
-        expect(messages.arg.donationAfterRatingHeroTitlePrimary).toBe('Necesitamos');
-        expect(messages.arg.donationAfterRatingHeroTitleAccent).toBe('Tu aporte');
+        expect(messages.arg.donationAfterRatingHeroTitlePrimary).toBe('Tu aporte');
+        expect(messages.arg.donationAfterRatingHeroTitleAccent).toBe(
+            'es fundamental'
+        );
         expect(messages.arg.donationAfterRatingJoinAccent).toBe(
-            'Comunidad Carpoolear'
+            'Club Carpoolear'
         );
     });
 
