@@ -195,4 +195,44 @@ describe('Trips external links', () => {
             expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
         }
     );
+
+    describe('app banner (url configured on the server)', () => {
+        const banner = {
+            url: 'https://carpoolear.com.ar/lucro',
+            image: 'https://carpoolear.com.ar/img/lucro.png'
+        };
+
+        it.each([
+            ['web', 'https://carpoolear.com.ar/lucro'],
+            ['android', 'https://www.carpoolear.com.ar/lucro'],
+            ['ios', 'https://carpoolear.com.ar/lucro']
+        ])(
+            'on %s opens an app-host banner url on the remote site',
+            async (platform, expectedUrl) => {
+                setPlatform(platform);
+                const { wrapper } = await mountTrips({ banner });
+
+                await wrapper.find('a.banner').trigger('click');
+
+                expect(open).toHaveBeenCalledWith(expectedUrl, '_blank');
+            }
+        );
+
+        it.each(['web', 'android', 'ios'])(
+            'on %s keeps routing in-app banner paths with the router',
+            async (platform) => {
+                setPlatform(platform);
+                const { wrapper, routerPush } = await mountTrips({
+                    banner: { ...banner, url: '/setting/identity-validation' }
+                });
+
+                await wrapper.find('a.banner').trigger('click');
+
+                expect(routerPush).toHaveBeenCalledWith(
+                    '/setting/identity-validation'
+                );
+                expect(open).not.toHaveBeenCalled();
+            }
+        );
+    });
 });
