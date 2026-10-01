@@ -499,6 +499,34 @@
             </template>
         </modal>
 
+        <modal
+            v-if="showContributionExcessModal"
+            name="trip-creation-contribution-excess"
+            :hide-footer="true"
+            @close="closeContributionExcessModal"
+        >
+            <template #header>
+                <h3>{{ $t('tripContributionExcessModalTitle') }}</h3>
+            </template>
+            <template #body>
+                <div
+                    class="new-trip-wizard__contribution-excess text-left color-black"
+                    data-testid="trip-contribution-excess-modal"
+                >
+                    <p>{{ $t('tripContributionExcessModalBody') }}</p>
+                    <div class="new-trip-wizard__contribution-excess-actions">
+                        <AppButton
+                            variant="primary"
+                            data-testid="trip-contribution-excess-confirm"
+                            @click="closeContributionExcessModal"
+                        >
+                            {{ $t('tripContributionExcessModalConfirm') }}
+                        </AppButton>
+                    </div>
+                </div>
+            </template>
+        </modal>
+
         <TripFormValidationSummary
             v-bind="form.tripFormValidationSummaryBindings"
         />
@@ -592,6 +620,7 @@ import {
 } from '../../utils/tripCreationStepQuery.js';
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
+import { shouldShowContributionExcessWarning } from '../../utils/tripCreationContributionExcessWarning.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -642,7 +671,10 @@ export default {
             showTemplateModal: false,
             availableTemplates: [],
             selectedTemplateName: '',
-            allowDraftPersist: true
+            allowDraftPersist: true,
+            showContributionExcessModal: false,
+            // Once per wizard instance: NewTrip re-keys the wizard for every new trip creation.
+            hasShownContributionExcessModal: false
         };
     },
 
@@ -1192,6 +1224,9 @@ export default {
             ) {
                 return;
             }
+            if (this.maybeShowContributionExcessModal()) {
+                return;
+            }
             if (
                 this.currentStep === STEP.DESTINATION &&
                 !this.form.wantsIntermediateStops
@@ -1215,6 +1250,23 @@ export default {
                 }
                 this.setCurrentStep(next);
             }
+        },
+        maybeShowContributionExcessModal() {
+            const shouldShow = shouldShowContributionExcessWarning({
+                step: this.currentStep,
+                description: this.form.trip.description,
+                price: this.form.price,
+                alreadyShown: this.hasShownContributionExcessModal,
+                isEdit: this.isEditTripFlow
+            });
+            if (shouldShow) {
+                this.hasShownContributionExcessModal = true;
+                this.showContributionExcessModal = true;
+            }
+            return shouldShow;
+        },
+        closeContributionExcessModal() {
+            this.showContributionExcessModal = false;
         },
         goBack() {
             if (this.currentStep === STEP.STOPS) {
@@ -1476,6 +1528,16 @@ export default {
 
 .new-trip-wizard__template-modal label {
     color: #333;
+}
+
+.new-trip-wizard__contribution-excess p {
+    line-height: 1.45;
+}
+
+.new-trip-wizard__contribution-excess-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .new-trip-wizard__role-cards {
