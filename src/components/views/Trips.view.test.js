@@ -304,9 +304,9 @@ describe('Trips.vue app store install prompt', () => {
         expect(badgesCss).toContain('align-items: center');
     });
 
-    it('adds 20-24px of vertical spacing above and below the store badges', () => {
+    it('adds about 40px of vertical spacing above and below the store badges', () => {
         const badgesCss = viewSource.match(/\.app-store-prompt__badges \{[^}]*\}/)?.[0];
-        expect(badgesCss).toMatch(/margin: 2[0-4]px 0;/);
+        expect(badgesCss).toContain('margin: 40px 0;');
     });
 
     it('centers the side-by-side action buttons', () => {
