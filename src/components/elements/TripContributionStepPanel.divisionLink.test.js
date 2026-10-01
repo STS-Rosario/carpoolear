@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import i18n from '../../i18n';
+import { stubCapacitorPlatform } from '../../utils/capacitorPlatform.fixture.js';
 
 const capacitorMock = vi.hoisted(() => ({
     isNativePlatform: vi.fn(() => false),
@@ -22,8 +23,7 @@ vi.mock('@capacitor/core', async (importOriginal) => {
 });
 
 function setPlatform(platform) {
-    capacitorMock.isNativePlatform.mockReturnValue(platform !== 'web');
-    capacitorMock.getPlatform.mockReturnValue(platform);
+    stubCapacitorPlatform(capacitorMock, platform);
 }
 
 async function mountPanel() {
@@ -64,6 +64,8 @@ function divisionLink(wrapper) {
 describe('TripContributionStepPanel "división de gastos" link', () => {
     afterEach(() => {
         setPlatform('web');
+        vi.unstubAllGlobals();
+        vi.unstubAllEnvs();
     });
 
     it('opens in a new tab on web', async () => {
