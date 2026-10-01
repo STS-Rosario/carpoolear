@@ -69,11 +69,13 @@ export default {
         return {
             creating: false,
             selectedUser: null,
+            tripUserId: null,
             createForm: {
                 user_id: null,
                 type: 'account_verification',
                 subject: '',
-                message_markdown: ''
+                message_markdown: '',
+                trip_id: null
             }
         };
     },
@@ -88,6 +90,9 @@ export default {
     watch: {
         selectedUser(user) {
             this.createForm.user_id = user && user.id ? user.id : null;
+            if (this.createForm.trip_id && (!user || user.id !== this.tripUserId)) {
+                this.createForm.trip_id = null;
+            }
             this.syncRouteQuery();
         },
         'createForm.type'() {
@@ -107,6 +112,11 @@ export default {
         applyPrefill() {
             const query = this.$route.query || {};
             const userId = parseInt(query.userId, 10);
+            const tripId = parseInt(query.tripId, 10);
+            if (!Number.isNaN(userId) && userId > 0 && !Number.isNaN(tripId) && tripId > 0) {
+                this.createForm.trip_id = tripId;
+                this.tripUserId = userId;
+            }
             if (!Number.isNaN(userId) && userId > 0) {
                 const userName = query.userName ? String(query.userName) : '';
                 this.selectedUser = { id: userId, name: userName, email: '' };
@@ -137,6 +147,9 @@ export default {
             if (this.createForm.message_markdown) {
                 query.message = this.createForm.message_markdown;
             }
+            if (this.createForm.trip_id) {
+                query.tripId = String(this.createForm.trip_id);
+            }
             this.$router.replace({ query });
         },
         createTicket() {
@@ -146,8 +159,12 @@ export default {
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'), { estado: 'success' });
                     this.$router.push({ name: 'admin-support-ticket-detail', params: { id: ticket.id } });
                 })
-                .catch(() => {
-                    dialogs.message(this.$t('errorDatos'), { estado: 'error' });
+                .catch((error) => {
+                    const messageKey =
+                        error && error.status === 409
+                            ? 'excessContributionTicketAlreadyExists'
+                            : 'errorDatos';
+                    dialogs.message(this.$t(messageKey), { estado: 'error' });
                 })
                 .finally(() => {
                     this.creating = false;
