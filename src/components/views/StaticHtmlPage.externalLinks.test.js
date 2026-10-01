@@ -2,6 +2,7 @@
 // @vitest-environment-options { "url": "https://carpoolear.com.ar/" }
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { flushPromises, shallowMount } from '@vue/test-utils';
+import { stubCapacitorPlatform } from '../../utils/capacitorPlatform.fixture.js';
 
 const capacitorMock = vi.hoisted(() => ({
     isNativePlatform: vi.fn(() => false),
@@ -39,26 +40,8 @@ vi.mock('../../services/api/StaticPage', () => ({
     }
 }));
 
-/** WebView origin per platform (capacitor.config.json server.hostname = carpoolear.com.ar). */
-const WEBVIEW_ORIGINS = {
-    web: 'https://carpoolear.com.ar',
-    android: 'https://carpoolear.com.ar',
-    ios: 'capacitor://carpoolear.com.ar'
-};
-
 function setPlatform(platform) {
-    capacitorMock.isNativePlatform.mockReturnValue(platform !== 'web');
-    capacitorMock.getPlatform.mockReturnValue(platform);
-    vi.stubGlobal('location', {
-        origin: WEBVIEW_ORIGINS[platform],
-        host: 'carpoolear.com.ar'
-    });
-    vi.stubEnv(
-        'VITE_API_URL',
-        platform === 'web'
-            ? 'https://carpoolear.com.ar'
-            : 'https://www.carpoolear.com.ar'
-    );
+    stubCapacitorPlatform(capacitorMock, platform);
 }
 
 async function mountFaq() {

@@ -4,6 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import i18n from '../../i18n';
+import { stubCapacitorPlatform } from '../../utils/capacitorPlatform.fixture.js';
 
 const capacitorMock = vi.hoisted(() => ({
     isNativePlatform: vi.fn(() => false),
@@ -25,26 +26,8 @@ vi.mock('@capacitor/core', async (importOriginal) => {
 vi.mock('../../router', () => ({ default: { push: vi.fn() } }));
 vi.mock('../../cordova/push-capacitor.js', () => ({ default: { init: vi.fn() } }));
 
-/** WebView origin per platform (capacitor.config.json server.hostname = carpoolear.com.ar). */
-const WEBVIEW_ORIGINS = {
-    web: 'https://carpoolear.com.ar',
-    android: 'https://carpoolear.com.ar',
-    ios: 'capacitor://carpoolear.com.ar'
-};
-
 function setPlatform(platform) {
-    capacitorMock.isNativePlatform.mockReturnValue(platform !== 'web');
-    capacitorMock.getPlatform.mockReturnValue(platform);
-    vi.stubGlobal('location', {
-        origin: WEBVIEW_ORIGINS[platform],
-        host: 'carpoolear.com.ar'
-    });
-    vi.stubEnv(
-        'VITE_API_URL',
-        platform === 'web'
-            ? 'https://carpoolear.com.ar'
-            : 'https://www.carpoolear.com.ar'
-    );
+    stubCapacitorPlatform(capacitorMock, platform);
 }
 
 async function mountNotificationsWith(notification) {
