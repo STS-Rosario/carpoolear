@@ -30,6 +30,15 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain('formatAdminExcessContributionPercentageLabel');
         expect(viewSource).toContain("$t('noDisponible')");
     });
+
+    it('renders suspected contribution and phone cells in sort-column order', () => {
+        const viewSource = fs.readFileSync(listPath, 'utf8');
+
+        expect(viewSource).toContain('formatAdminSuspectedContributionLabel');
+        expect(viewSource).toMatch(
+            /excess_contribution_percentage\)[^\n]*<\/td>\s*<td>\{\{ formatAdminSuspectedContributionLabel\(item\.suspected_contribution\) \?\? \$t\('noDisponible'\) \}\}<\/td>\s*<td>\{\{ item\.phone_in_description \? \$t\('si'\) : \$t\('no'\) \}\}<\/td>\s*<td>\{\{ item\.has_private_note/
+        );
+    });
 });
 
 describe('AdminExcesoContribucionDetail view', () => {
@@ -53,5 +62,16 @@ describe('AdminExcesoContribucionDetail view', () => {
         expect(viewSource).toContain('formatAdminTripContributionLabel');
         expect(viewSource).toContain('formatAdminExcessContributionPercentageLabel');
         expect(viewSource).toContain("$t('noDisponible')");
+    });
+
+    it('shows the LLM suspected contribution and phone flag', () => {
+        const viewSource = fs.readFileSync(detailPath, 'utf8');
+
+        expect(viewSource).toContain("$t('contribucionSospechada')");
+        expect(viewSource).toContain(
+            "formatAdminSuspectedContributionLabel(item.suspected_contribution) ?? $t('noDisponible')"
+        );
+        expect(viewSource).toContain("$t('telefonoEnDescripcion')");
+        expect(viewSource).toContain("item.phone_in_description ? $t('si') : $t('no')");
     });
 });
