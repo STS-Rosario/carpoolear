@@ -943,9 +943,6 @@ export default {
             }
             this.showModal = true;
         },
-        onOpenLink(link) {
-            openExternalUrl(link);
-        },
         onWhyDonate(websiteUrl) {
             if (this.user && !isIOSCapacitor()) {
                 this.$router.push({ name: 'donate' });

@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 // @vitest-environment-options { "url": "https://carpoolear.com.ar/" }
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import i18n from '../../i18n';
@@ -87,6 +87,11 @@ describe('DonationAfterRating external links', () => {
     let open;
     let consoleError;
     let consoleWarn;
+
+    // The page pulls in a large module graph; a cold import can exceed the 5s test timeout.
+    beforeAll(async () => {
+        await import('./DonationAfterRating.vue');
+    }, 30000);
 
     beforeEach(() => {
         open = vi.fn();
