@@ -83,12 +83,12 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
-    it('bolds through markup only, never through link CSS or v-html', () => {
+    it('bolds through markup only and lets links inherit the <strong> weight', () => {
         const linkRule = viewSource.match(
             /\.donation-after-rating__alt-copy :deep\(a\)\s*\{[^}]*\}/
         );
         expect(linkRule).not.toBeNull();
-        expect(linkRule[0]).not.toMatch(/font-weight:\s*var\(--ds-font-weight-bold/);
+        expect(linkRule[0]).not.toMatch(/font-weight/);
         expect(viewSource).not.toContain(':deep(strong)');
         expect(viewSource).not.toContain('v-html="$t(benefitKey)"');
         expect(viewSource).toContain('keypath="donationAfterRatingSignOffTeam"');
