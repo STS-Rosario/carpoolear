@@ -65,25 +65,25 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain(
             'keypath="donationAfterRatingInstagramParagraph"'
         );
+        expect(viewSource).toContain("$t('donationAfterRatingWordOfMouthIntro')");
         expect(viewSource).toContain(
-            "$t('donationAfterRatingCannotContributeLink')"
+            "$t('donationAfterRatingWordOfMouthFaceToFace')"
         );
-        expect(viewSource).toContain(
-            "$t('donationAfterRatingCannotContributeSuffix')"
-        );
-        expect(viewSource).toContain('getDonationOnceUrl');
-        expect(viewSource).toContain('getDonationMonthlyUrl');
+        expect(viewSource).toContain("$t('donationAfterRatingSignOffGreeting')");
+        expect(viewSource).toContain("$t('donationAfterRatingSignOffTeam')");
+        expect(viewSource).not.toContain('donationAfterRatingCannotContribute');
+        expect(viewSource).toContain('startDonationCheckout');
+        expect(viewSource).toContain("type: 'once'");
+        expect(viewSource).toContain("type: 'monthly'");
         expect(viewSource).toContain('onDonateOnceTime');
         expect(viewSource).toContain('onDonateMonthly');
-        expect(viewSource).toContain('onContinueWithoutDonating');
+        expect(viewSource).not.toContain('onContinueWithoutDonating');
         expect(viewSource).toContain('CARPOOLEAR_COLLABORATE_URL');
         expect(viewSource).toContain('CARPOOLEAR_INSTAGRAM_PROFILE_URL');
         expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
-    it('offers a skip link that returns to the trips list', () => {
-        expect(viewSource).toContain('href="/trips"');
-        expect(viewSource).toContain('onContinueWithoutDonating');
+    it('returns to the trips list after starting a checkout', () => {
         expect(viewSource).toMatch(/name:\s*'trips'/);
     });
 
@@ -92,7 +92,7 @@ describe('DonationAfterRating page content', () => {
         (locale) => {
             expect(messages[locale].donationAfterRatingHeroTitlePrimary).toBeTruthy();
             expect(messages[locale].donationAfterRatingMissionLead).toBeTruthy();
-            expect(messages[locale].donationAfterRatingMissionOrg).toBeTruthy();
+            expect(messages[locale].donationAfterRatingMissionOrg).toBeUndefined();
             expect(messages[locale].donationAfterRatingMissionBody).toBeTruthy();
             expect(messages[locale].donationAfterRatingJoinAccent).toBeTruthy();
             expect(
@@ -100,7 +100,7 @@ describe('DonationAfterRating page content', () => {
             ).toBeTruthy();
             expect(
                 messages[locale].donationAfterRatingMonthlyAmountIntro
-            ).toMatch(/<strong>.*<\/strong>/);
+            ).toBeTruthy();
             expect(
                 messages[locale].donationAfterRatingJoinCommunityMonthly
             ).toBeTruthy();
@@ -108,12 +108,10 @@ describe('DonationAfterRating page content', () => {
             expect(
                 messages[locale].donationAfterRatingVolunteerParagraph
             ).toContain('{link}');
-            for (const key of [
-                'donationAfterRatingBenefitVisibility',
-                'donationAfterRatingBenefitBadge'
-            ]) {
-                expect(messages[locale][key]).toBeTruthy();
-            }
+            expect(messages[locale].donationAfterRatingBenefitBadge).toBeTruthy();
+            expect(
+                messages[locale].donationAfterRatingBenefitVisibility
+            ).toBeUndefined();
         }
     );
 });

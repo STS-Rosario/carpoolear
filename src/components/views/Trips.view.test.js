@@ -245,13 +245,14 @@ describe('Trips.vue persisted search state', () => {
 });
 
 describe('Trips.vue donation modal', () => {
-    it('uses shared donation picker and Mercado Pago helpers', () => {
+    it('uses the shared donation picker and platform checkout helper', () => {
         expect(viewSource).toContain('DonationAmountPicker');
         expect(viewSource).toMatch(
             /components:\s*\{[^}]*DonationAmountPicker/s
         );
-        expect(viewSource).toContain('getDonationOnceUrl');
-        expect(viewSource).toContain('getDonationMonthlyUrl');
+        expect(viewSource).toContain('startDonationCheckout');
+        expect(viewSource).toContain("type: 'once'");
+        expect(viewSource).toContain("type: 'monthly'");
         expect(viewSource).not.toContain('value="2000"');
         expect(viewSource).not.toContain('value="10000"');
     });

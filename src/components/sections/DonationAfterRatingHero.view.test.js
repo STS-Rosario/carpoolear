@@ -43,8 +43,11 @@ describe('DonationAfterRatingHero', () => {
 
     it('shows the mission copy and vertically centers content on wide desktops', () => {
         expect(heroSource).toContain("$t('donationAfterRatingMissionLead')");
-        expect(heroSource).toContain("$t('donationAfterRatingMissionOrg')");
+        expect(heroSource).not.toContain('donationAfterRatingMissionOrg');
         expect(heroSource).toContain("$t('donationAfterRatingMissionBody')");
+        expect(heroSource.indexOf("$t('donationAfterRatingMissionLead')")).toBeLessThan(
+            heroSource.indexOf("$t('donationAfterRatingMissionBody')")
+        );
         expect(heroSource).toContain('donation-after-rating-hero__mission-lead-emphasis');
         expect(heroSource).toMatch(
             /@media \(min-width: 992px\)[\s\S]*donation-after-rating-hero__mission[\s\S]*display:\s*block/

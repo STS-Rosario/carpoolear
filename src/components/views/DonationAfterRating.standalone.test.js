@@ -129,7 +129,7 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
     });
 
-    it('keeps the after-rating skip link and trip source when a trip is given', async () => {
+    it('uses the after-rating source and trip when a trip is given', async () => {
         const { wrapper } = await mountPage({ tripId: 7 });
         await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
 
@@ -139,7 +139,7 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         await flushPromises();
 
         expect(wrapper.find('.donation-after-rating__skip-link').exists()).toBe(
-            true
+            false
         );
         expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
             amount: 5000,
