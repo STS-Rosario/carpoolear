@@ -1554,7 +1554,7 @@ export default {
 }
 
 .new-trip-wizard__contribution-excess-modal :deep(.modal-header h3) {
-    margin: 0;
+    margin: 0 0 0.625rem;
 }
 
 .new-trip-wizard__contribution-excess-modal :deep(.modal-body) {
@@ -1564,13 +1564,14 @@ export default {
 
 .new-trip-wizard__contribution-excess p {
     line-height: 1.45;
-    margin: 0 0 0.75rem;
+    margin: 0 0 1rem;
 }
 
 .new-trip-wizard__contribution-excess-actions {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    /* Collapses with the last paragraph's 1rem bottom margin: 24px before the button. */
+    margin-top: 1.5rem;
 }
 
 .new-trip-wizard__role-cards {
