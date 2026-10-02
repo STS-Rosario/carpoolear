@@ -16,8 +16,7 @@
 import { mapState } from 'pinia';
 import AppButton from '../ui/AppButton.vue';
 import { useTripsStore } from '../../stores/trips';
-import { shareContent } from '../../utils/shareContent.js';
-import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
+import { shareTripDetail } from '../../utils/tripDetailShare.js';
 
 export default {
     name: 'TripDetailShareButton',
@@ -33,29 +32,17 @@ export default {
     },
 
     methods: {
-        tripUrl() {
-            const route = this.$router.resolve({
-                name: 'detail_trip',
-                params: { id: this.trip.id }
-            });
-            return window.location.origin + route.href;
-        },
         async onShare() {
             if (!this.trip) {
                 return;
             }
 
-            const url = this.tripUrl();
-            const text = buildTripShareMessage({
+            await shareTripDetail({
                 trip: this.trip,
+                router: this.$router,
+                origin: window.location.origin,
                 locale: this.$i18n?.locale,
                 translate: (key, params) => this.$t(key, params)
-            });
-
-            await shareContent({
-                title: this.$t('tripCreationShareTrip'),
-                text,
-                url
             });
         }
     }

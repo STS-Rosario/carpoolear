@@ -469,6 +469,16 @@
     min-width: 0;
 }
 
+.trip-detail__share {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+.trip-detail--desktop .trip-detail__condiciones .trip-detail__share {
+    margin-top: 1.25rem;
+}
+
 .trip-detail--desktop .trip-detail__lugares-col {
     display: flex;
     flex-direction: column;
