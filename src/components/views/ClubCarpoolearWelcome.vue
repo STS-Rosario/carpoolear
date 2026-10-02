@@ -73,6 +73,10 @@ import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import AppButton from '../ui/AppButton.vue';
 import { DONATION_AFTER_RATING_BENEFIT_KEYS } from '../../utils/donationAfterRatingBenefits.js';
 import { normalizeClubCarpoolearWelcomeResult } from '../../utils/clubCarpoolearWelcomeResult.js';
+import {
+    CLUB_CARPOOLEAR_WELCOME_MARK_DELAY_MS
+} from '../../utils/clubCarpoolearWelcomeRedirect.js';
+import donationApi from '../../services/api/Donation.js';
 
 export default {
     name: 'ClubCarpoolearWelcome',
@@ -82,7 +86,8 @@ export default {
     },
     data() {
         return {
-            benefitKeys: DONATION_AFTER_RATING_BENEFIT_KEYS
+            benefitKeys: DONATION_AFTER_RATING_BENEFIT_KEYS,
+            welcomeShownTimeoutId: null
         };
     },
     computed: {
@@ -107,13 +112,40 @@ export default {
         if (this.welcomeResult === 'success') {
             this.fetchUser().catch(() => {});
         }
+        this.welcomeShownTimeoutId = setTimeout(() => {
+            this.markWelcomeShown();
+        }, CLUB_CARPOOLEAR_WELCOME_MARK_DELAY_MS);
+    },
+    beforeUnmount() {
+        if (this.welcomeShownTimeoutId) {
+            clearTimeout(this.welcomeShownTimeoutId);
+            this.welcomeShownTimeoutId = null;
+        }
     },
     methods: {
         ...mapActions(useAuthStore, {
-            fetchUser: 'fetchUser'
+            fetchUser: 'fetchUser',
+            setUser: 'setUser'
         }),
         goToTrips() {
             this.$router.push({ name: 'trips' });
+        },
+        markWelcomeShown() {
+            donationApi
+                .markWelcomeShown()
+                .then(() => {
+                    if (this.$store && false) {
+                        return;
+                    }
+                    const authStore = useAuthStore();
+                    if (authStore.user) {
+                        authStore.setUser({
+                            ...authStore.user,
+                            club_carpoolear_welcome_shown: 1
+                        });
+                    }
+                })
+                .catch(() => {});
         }
     }
 };

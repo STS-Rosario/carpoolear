@@ -4,6 +4,7 @@ import i18n from '../i18n';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
+import { shouldRedirectToClubCarpoolearWelcome } from '../utils/clubCarpoolearWelcomeRedirect.js';
 
 import routes from './routes.js';
 
@@ -24,6 +25,16 @@ router.beforeEach((to, from, next) => {
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};
     const user = authStore.checkLogin;
+    if (shouldRedirectToClubCarpoolearWelcome({
+        user: authStore.user,
+        routeName: to.name
+    })) {
+        next({
+            name: 'club-carpoolear-welcome',
+            query: { result: 'success' }
+        });
+        return;
+    }
     if (user && actionbar.footer) {
         if (actionbar.footer.show) {
             actionbarsStore.showFooter(true);
