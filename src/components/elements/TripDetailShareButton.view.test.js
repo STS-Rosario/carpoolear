@@ -15,12 +15,10 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).toContain("$t('tripCreationShareTrip')");
     });
 
-    it('shares trip url and localized message through shareContent', () => {
-        expect(componentSource).toContain('buildTripShareMessage');
-        expect(componentSource).toContain('shareContent');
-        expect(componentSource).toContain('detail_trip');
-        expect(componentSource).toMatch(
-            /onShare\(\)[\s\S]*?buildTripShareMessage[\s\S]*?shareContent/
-        );
+    it('delegates sharing to shareTripDetail', () => {
+        expect(componentSource).toContain('shareTripDetail');
+        expect(componentSource).toMatch(/onShare\(\)[\s\S]*?shareTripDetail/);
+        expect(componentSource).not.toContain('buildTripShareMessage');
+        expect(componentSource).not.toContain('shareContent');
     });
 });
