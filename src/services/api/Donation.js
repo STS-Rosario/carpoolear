@@ -12,6 +12,10 @@ class DonationApi extends TaggedApi {
     checkoutMonthly(data) {
         return this.post('/api/donations/checkout/monthly', data);
     }
+
+    markWelcomeShown() {
+        return this.post('/api/club-carpoolear/welcome-shown', {});
+    }
 }
 
 export default new DonationApi();

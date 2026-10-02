@@ -26,4 +26,11 @@ describe('ClubCarpoolearWelcome', () => {
         expect(viewSource).not.toContain('donationAfterRatingJoinPrefix');
         expect(viewSource).not.toContain('donationAfterRatingMissionLead');
     });
+
+    it('marks welcome as shown after a 3 second delay', () => {
+        expect(viewSource).toContain('CLUB_CARPOOLEAR_WELCOME_MARK_DELAY_MS');
+        expect(viewSource).toContain('markWelcomeShown');
+        expect(viewSource).toContain('setTimeout');
+        expect(viewSource).toContain('clearTimeout');
+    });
 });

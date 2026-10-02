@@ -8,6 +8,7 @@ import { completeSessionIfRegistrationReturnsToken } from '../utils/registration
 import { clearTripCreationDraftForLogout } from '../utils/tripCreationDraft.js';
 import { getLazyRouter } from '../utils/routerLazy.js';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
+import { shouldRedirectToClubCarpoolearWelcome, clubCarpoolearWelcomeLocation } from '../utils/clubCarpoolearWelcomeRedirect.js';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -217,9 +218,17 @@ export const useAuthStore = defineStore('auth', {
         fetchUser() {
             return userApi
                 .show()
-                .then((response) => {
+                .then(async (response) => {
                     this.setUser(response.data);
                     this.applyUserLocaleToI18n();
+                    const router = await getLazyRouter();
+                    const currentRouteName = router.currentRoute?.value?.name;
+                    if (shouldRedirectToClubCarpoolearWelcome({
+                        user: this.user,
+                        routeName: currentRouteName
+                    })) {
+                        router.replace(clubCarpoolearWelcomeLocation());
+                    }
                 })
                 .catch(() => {});
         },
