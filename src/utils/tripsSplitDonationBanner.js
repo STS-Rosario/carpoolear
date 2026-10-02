@@ -1,3 +1,5 @@
+import { isActiveClubCarpoolearMember } from './clubCarpoolearMember.js';
+
 export function shouldShowSplitDonationPanel({
     isDonationTime,
     user,
@@ -10,7 +12,7 @@ export function shouldShowSplitDonationPanel({
     if (
         !isDonationTime ||
         !user ||
-        user.monthly_donate ||
+        isActiveClubCarpoolearMember(user) ||
         hideOnIos
     ) {
         return false;

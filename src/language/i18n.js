@@ -231,6 +231,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Seleccioná esta opción y guardá los cambios si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'Datos públicos',
+        mostrarMiembroClubCarpoolear: 'Mostrar que soy miembro del Club Carpoolear',
+        quieroSumarmeClubCarpoolear: 'Quiero sumarme al Club Carpoolear',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
         cambiarPassword: 'Cambiar contraseña',
@@ -1371,6 +1373,14 @@ const messages = {
             '{team} (también conocido como “La gente de Carpu”)',
         donationAfterRatingSignOffTeamName: 'Equipo Carpoolear',
         donationAfterRatingContinueWithoutContributing: 'Continuar sin aportar',
+        clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
+        clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
+        clubCarpoolearWelcomeResultFailed:
+            'No pudimos confirmar tu suscripción. Podés intentar de nuevo desde Aportar.',
+        clubCarpoolearWelcomeResultPending:
+            'Tu suscripción está pendiente de confirmación. Te avisamos cuando esté activa.',
+        clubCarpoolearWelcomeGoToTrips: 'Ir a viajes',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -2379,6 +2389,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Tilda esta opción (y guardá cambios) si quieres que estos datos sean visibles para cualquier usuario que acceda tu perfil. Sino estos datos solo serán visibles para los pasajeros que confirmes en tu viaje, o para el conductor del viaje al que te subas y te confirme.',
         datosVisiblesCheck: 'RUT y teléfono visibles',
+        mostrarMiembroClubCarpoolear: 'Mostrar que soy miembro del Club Carpoolear',
+        quieroSumarmeClubCarpoolear: 'Quiero sumarme al Club Carpoolear',
         notificacionesPorCorreo:
             'Recibir notificaciones por correo electrónico.',
         cambiarPassword: 'Cambiar contraseña',
@@ -2613,6 +2625,14 @@ const messages = {
         donationAfterRatingCannotContributeLink: 'No puedo aportar',
         donationAfterRatingCannotContributeSuffix:
             ' ni siquiera difusión ahora :(',
+        clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
+        clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
+        clubCarpoolearWelcomeResultFailed:
+            'No pudimos confirmar tu suscripción. Podés intentar de nuevo desde Aportar.',
+        clubCarpoolearWelcomeResultPending:
+            'Tu suscripción está pendiente de confirmación. Te avisamos cuando esté activa.',
+        clubCarpoolearWelcomeGoToTrips: 'Ir a viajes',
         calificacionesPendientes: 'Calificaciones pendientes',
         noHayCalificacionesPendientes: 'No hay calificaciones pendientes',
         cargandoCalificaciones: 'Cargando calificaciones',
@@ -4157,6 +4177,8 @@ const messages = {
         tildaOpcionDatosVisibles:
             'Let anyone view your information. Leave this off to keep it private between you and your confirmed trip partners.',
         datosVisiblesCheck: 'Public data',
+        mostrarMiembroClubCarpoolear: 'Show that I am a Club Carpoolear member',
+        quieroSumarmeClubCarpoolear: 'I want to join Club Carpoolear',
         notificacionesPorCorreo: 'Receive notifications by email.',
         cambiarPassword: 'Change password',
         ingreseNuevaPassword: 'Enter your new password',
@@ -5281,6 +5303,14 @@ const messages = {
         donationAfterRatingSignOffTeamName: 'The Carpoolear Team',
         donationAfterRatingContinueWithoutContributing:
             'Continue without contributing',
+        clubCarpoolearWelcomePageTitle: 'Carpoolear Club',
+        clubCarpoolearWelcomeHeroTitlePrimary: 'You joined',
+        clubCarpoolearWelcomeHeroTitleAccent: 'the Carpoolear Club',
+        clubCarpoolearWelcomeResultFailed:
+            'We could not confirm your subscription. You can try again from Donate.',
+        clubCarpoolearWelcomeResultPending:
+            'Your subscription is pending confirmation. We will let you know when it is active.',
+        clubCarpoolearWelcomeGoToTrips: 'Go to trips',
         calificacionesPendientes: 'Pending ratings',
         noHayCalificacionesPendientes: 'No pending ratings',
         cargandoCalificaciones: 'Loading ratings',

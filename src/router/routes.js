@@ -15,6 +15,7 @@ const ResetPassword = () => import('../components/views/ResetPassword.vue');
 const Profile = () => import('../components/views/Profile.vue');
 const MyTrips = () => import('../components/views/MyTrips.vue');
 const DonationAfterRating = () => import('../components/views/DonationAfterRating.vue');
+const ClubCarpoolearWelcome = () => import('../components/views/ClubCarpoolearWelcome.vue');
 const Trips = () => import('../components/views/Trips.vue');
 const NewTrip = () => import('../components/views/NewTrip.vue');
 const Trip = () => import('../components/views/Trip.vue');
@@ -236,6 +237,24 @@ export default [
                 },
                 header: {
                     titleKey: 'donar',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/club-carpoolear/welcome',
+        name: 'club-carpoolear-welcome',
+        component: ClubCarpoolearWelcome,
+        beforeEnter: auth,
+        meta: {
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'home'
+                },
+                header: {
+                    titleKey: 'clubCarpoolearWelcomePageTitle',
                     buttons: ['back']
                 }
             }

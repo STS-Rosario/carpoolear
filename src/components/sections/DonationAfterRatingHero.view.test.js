@@ -9,8 +9,9 @@ describe('DonationAfterRatingHero', () => {
     it('renders the two-line hero title with Dela Gothic One styling', () => {
         expect(heroSource).toContain('donation-after-rating-hero');
         expect(heroSource).toContain('donation-after-rating-hero__title');
-        expect(heroSource).toContain("$t('donationAfterRatingHeroTitlePrimary')");
-        expect(heroSource).toContain("$t('donationAfterRatingHeroTitleAccent')");
+        expect(heroSource).toContain('$t(titlePrimaryKey)');
+        expect(heroSource).toContain('$t(titleAccentKey)');
+        expect(heroSource).toContain("default: 'donationAfterRatingHeroTitlePrimary'");
         expect(heroSource).toContain("'Dela Gothic One'");
         expect(heroSource).toContain('--ds-text-secondary');
         expect(heroSource).toContain('--ds-header-donate-bg');
@@ -51,6 +52,7 @@ describe('DonationAfterRatingHero', () => {
     });
 
     it('shows the mission copy and vertically centers content on wide desktops', () => {
+        expect(heroSource).toContain('v-if="showMission"');
         expect(heroSource).toContain("$t('donationAfterRatingMissionLead')");
         expect(heroSource).not.toContain('donationAfterRatingMissionOrg');
         expect(heroSource).toContain("$t('donationAfterRatingMissionBody')");
