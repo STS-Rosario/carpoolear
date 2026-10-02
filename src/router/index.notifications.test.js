@@ -26,4 +26,14 @@ describe('router notification count integration', () => {
             /router\.replace = function[\s\S]*return router\._push\(data\);/
         );
     });
+
+    it('redirects Club members who have not seen the welcome screen', () => {
+        const routerSource = fs.readFileSync(
+            path.resolve(__dirname, 'index.js'),
+            'utf8'
+        );
+
+        expect(routerSource).toContain('shouldRedirectToClubCarpoolearWelcome');
+        expect(routerSource).toContain("name: 'club-carpoolear-welcome'");
+    });
 });
