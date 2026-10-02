@@ -34,6 +34,6 @@ describe('router notification count integration', () => {
         );
 
         expect(routerSource).toContain('shouldRedirectToClubCarpoolearWelcome');
-        expect(routerSource).toContain("name: 'club-carpoolear-welcome'");
+        expect(routerSource).toContain('clubCarpoolearWelcomeLocation');
     });
 });

@@ -8,7 +8,7 @@ import { completeSessionIfRegistrationReturnsToken } from '../utils/registration
 import { clearTripCreationDraftForLogout } from '../utils/tripCreationDraft.js';
 import { getLazyRouter } from '../utils/routerLazy.js';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
-import { shouldRedirectToClubCarpoolearWelcome } from '../utils/clubCarpoolearWelcomeRedirect.js';
+import { shouldRedirectToClubCarpoolearWelcome, clubCarpoolearWelcomeLocation } from '../utils/clubCarpoolearWelcomeRedirect.js';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -227,10 +227,7 @@ export const useAuthStore = defineStore('auth', {
                         user: this.user,
                         routeName: currentRouteName
                     })) {
-                        router.replace({
-                            name: 'club-carpoolear-welcome',
-                            query: { result: 'success' }
-                        });
+                        router.replace(clubCarpoolearWelcomeLocation());
                     }
                 })
                 .catch(() => {});

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import AppButton from '../ui/AppButton.vue';
@@ -91,6 +91,9 @@ export default {
         };
     },
     computed: {
+        ...mapState(useAuthStore, {
+            user: 'user'
+        }),
         welcomeResult() {
             return normalizeClubCarpoolearWelcomeResult(this.$route?.query?.result);
         },
@@ -134,13 +137,9 @@ export default {
             donationApi
                 .markWelcomeShown()
                 .then(() => {
-                    if (this.$store && false) {
-                        return;
-                    }
-                    const authStore = useAuthStore();
-                    if (authStore.user) {
-                        authStore.setUser({
-                            ...authStore.user,
+                    if (this.user) {
+                        this.setUser({
+                            ...this.user,
                             club_carpoolear_welcome_shown: 1
                         });
                     }

@@ -29,6 +29,6 @@ describe('Club Carpoolear welcome shown client wiring', () => {
 
     it('redirects after fetchUser when the welcome screen is still pending', () => {
         expect(authSource).toContain('shouldRedirectToClubCarpoolearWelcome');
-        expect(authSource).toContain("name: 'club-carpoolear-welcome'");
+        expect(authSource).toContain('clubCarpoolearWelcomeLocation');
     });
 });

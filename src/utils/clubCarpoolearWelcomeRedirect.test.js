@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { shouldRedirectToClubCarpoolearWelcome } from './clubCarpoolearWelcomeRedirect.js';
+import {
+    clubCarpoolearWelcomeLocation,
+    shouldRedirectToClubCarpoolearWelcome
+} from './clubCarpoolearWelcomeRedirect.js';
 
 describe('shouldRedirectToClubCarpoolearWelcome', () => {
     it('returns false when there is no user', () => {
@@ -57,5 +60,12 @@ describe('shouldRedirectToClubCarpoolearWelcome', () => {
                 routeName: 'trips'
             })
         ).toBe(true);
+    });
+
+    it('builds the welcome route with a success result', () => {
+        expect(clubCarpoolearWelcomeLocation()).toEqual({
+            name: 'club-carpoolear-welcome',
+            query: { result: 'success' }
+        });
     });
 });

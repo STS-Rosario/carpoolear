@@ -4,7 +4,10 @@ import i18n from '../i18n';
 import { useAuthStore } from '../stores/auth';
 import { useActionbarsStore } from '../stores/actionbars';
 import { useBackgroundStore } from '../stores/background';
-import { shouldRedirectToClubCarpoolearWelcome } from '../utils/clubCarpoolearWelcomeRedirect.js';
+import {
+    clubCarpoolearWelcomeLocation,
+    shouldRedirectToClubCarpoolearWelcome
+} from '../utils/clubCarpoolearWelcomeRedirect.js';
 
 import routes from './routes.js';
 
@@ -29,10 +32,7 @@ router.beforeEach((to, from, next) => {
         user: authStore.user,
         routeName: to.name
     })) {
-        next({
-            name: 'club-carpoolear-welcome',
-            query: { result: 'success' }
-        });
+        next(clubCarpoolearWelcomeLocation());
         return;
     }
     if (user && actionbar.footer) {
