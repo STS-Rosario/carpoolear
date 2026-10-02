@@ -206,6 +206,7 @@
                             </div>
                             <div class="trip-detail__detalle-stats">
                                 <TripStats />
+                                <TripDetailShareButton v-if="isMobile" />
                             </div>
                             <div
                                 v-if="!isMobile"
@@ -216,6 +217,7 @@
                                         {{ $t('tripDetailConditions') }}
                                     </h3>
                                     <TripData />
+                                    <TripDetailShareButton v-if="!isMobile" />
                                 </div>
                             </div>
                         </div>
@@ -373,6 +375,7 @@ import TripData from '../elements/TripData';
 import TripStats from '../elements/TripStats';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
+import TripDetailShareButton from '../elements/TripDetailShareButton.vue';
 import AppButton from '../ui/AppButton.vue';
 
 import { injectHead } from '@unhead/vue';
@@ -1015,6 +1018,7 @@ export default {
         TripPassengers,
         TripButtons,
         TripPrice,
+        TripDetailShareButton,
         AppButton
     },
 
