@@ -8,20 +8,66 @@
                     'trip-detail--desktop': !isMobile
                 }"
             >
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'payment_failed'">
-                    <p>{{ $t('pagoFallo') }}</p>
-                    <p>{{ $t('viajeNoVisiblePagoFallo') }}</p>
-                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
-                    <div id="walletBrick_container"></div>
+                <div
+                    v-if="selladoBannerKind === 'pending'"
+                    class="un-litro-banner un-litro-banner--pending"
+                    role="status"
+                >
+                    <p>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerPending') }}
+                    </p>
+                    <AppButton
+                        variant="primary"
+                        size="sm"
+                        @click="onPaySellado"
+                    >
+                        {{
+                            $t('unLitroBannerPayAmount', {
+                                amount: formattedSelladoPayAmount
+                            })
+                        }}
+                    </AppButton>
                 </div>
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'pending_payment'">
-                    <p>{{ $t('pagoRapiPago') }}</p>
-                    <p>{{ $t('viajeNoVisibleRapiPago') }}</p>
+                <div
+                    v-else-if="selladoBannerKind === 'rapipago'"
+                    class="un-litro-banner un-litro-banner--rapipago"
+                    role="status"
+                >
+                    <p>
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerRapipago') }}
+                    </p>
+                    <AppButton variant="secondary" size="sm">
+                        {{ $t('unLitroBannerRapipagoAction') }}
+                    </AppButton>
                 </div>
-                <div class="alert alert-info alert-sellado-viaje" v-if="this.trip.state == 'awaiting_payment'">
-                    <p>{{ $t('viajeNoVisible') }}</p>
-                    <p>{{ $t('pagarSelladoViaje', { amount: $n(this.config.module_trip_creation_payment_amount_cents / 100, 'currency') }) }}</p>
-                    <div id="walletBrick_container"></div>
+                <div
+                    v-else-if="selladoBannerKind === 'failed'"
+                    class="un-litro-banner un-litro-banner--failed"
+                    role="alert"
+                >
+                    <p>
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerFailed') }}
+                    </p>
+                    <AppButton
+                        variant="danger"
+                        size="sm"
+                        @click="onPaySellado"
+                    >
+                        {{ $t('unLitroBannerRetry') }}
+                    </AppButton>
+                </div>
+                <div
+                    v-else-if="showSelladoPublishedBanner"
+                    class="un-litro-banner un-litro-banner--published"
+                    role="status"
+                >
+                    <p>
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerPublished') }}
+                    </p>
                 </div>
                 <div
                     class="alert alert-warning trip-seat-requests-warning"
@@ -366,6 +412,12 @@ import {
     getSeatsPillLabel,
     getSeatsPillTone
 } from '../../utils/tripCardDisplay.js';
+import {
+    selladoCheckoutUrl,
+    selladoDetailBannerKind,
+    shouldShowSelladoPublishedBanner
+} from '../../utils/tripSelladoUi.js';
+import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -421,7 +473,6 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
             showModalPricing: false,
-            paymentBrickRendering: false,
             acceptPassengerValue: 0,
             acceptPricing: 0
         };
@@ -488,7 +539,6 @@ export default {
                     // this.trip = trip;
                     this.points = trip.points;
                     var self = this;
-                    this.$nextTick(function () { self.enablePayment(); });
                     self.$nextTick(() => {
                         self.$nextTick(() => {
                             self.syncTripRouteMap();
@@ -841,43 +891,11 @@ export default {
             this.showModalRequestSeat = false;
             this.showModalPricing = false;
         },
-        enablePayment() {
-            if (typeof MercadoPago === 'undefined') return;
-            if (!this.trip || !this.trip.payment_id) return;
-            if (this.trip.state !== 'awaiting_payment' && this.trip.state !== 'payment_failed') return;
-            if (this.paymentBrickRendering) return;
-            this.paymentBrickRendering = true;
-
-            // Get or create the container
-            var container = document.getElementById('walletBrick_container');
-            if (!container) {
-                var banner = document.querySelector('.alert-sellado-viaje');
-                if (!banner) { this.paymentBrickRendering = false; return; }
-                container = document.createElement('div');
-                container.id = 'walletBrick_container';
-                banner.appendChild(container);
+        onPaySellado() {
+            const url = selladoCheckoutUrl(this.trip);
+            if (url) {
+                window.location.assign(url);
             }
-            container.innerHTML = '';
-
-            // Create a fresh MP instance and render the payment button
-            var mp = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
-            var preferenceId = this.trip.payment_id;
-            mp.bricks().create("wallet", "walletBrick_container", {
-                initialization: { preferenceId: preferenceId }
-            }).catch(function (err) {
-                console.error('[MP] brick creation error, retrying...', err);
-                setTimeout(function () {
-                    var c = document.getElementById('walletBrick_container');
-                    if (c && c.children.length > 0) return;
-                    if (c) c.innerHTML = '';
-                    var mp2 = new MercadoPago(process.env.MERCADO_PAGO_PUBLIC_KEY);
-                    mp2.bricks().create("wallet", "walletBrick_container", {
-                        initialization: { preferenceId: preferenceId }
-                    }).catch(function (err2) {
-                        console.error('[MP] brick creation retry failed:', err2);
-                    });
-                }, 2000);
-            });
         }
     },
 
@@ -889,17 +907,6 @@ export default {
         this.loadTrip();
         this.syncTripDetailMobilePageClass();
         bus.on('back-click', this.onBackClick);
-
-        // Load Mercado Pago SDK if not already loaded
-        if (typeof MercadoPago === 'undefined') {
-            var self = this;
-            var script = document.createElement('script');
-            script.src = 'https://sdk.mercadopago.com/js/v2';
-            script.onload = function () {
-                self.$nextTick(function () { self.enablePayment(); });
-            };
-            document.body.appendChild(script);
-        }
     },
 
     beforeUnmount() {
@@ -918,8 +925,6 @@ export default {
         trip: {
             deep: true,
             handler: function () {
-                var self = this;
-                this.$nextTick(function () { self.enablePayment(); });
                 if (this.trip && this.head) {
                     this.head.push({
                         meta: [
@@ -997,6 +1002,21 @@ export default {
         seatsLabel() {
             return getSeatsPillLabel(this.trip?.seats_available, this.$t);
         },
+        selladoBannerKind() {
+            return selladoDetailBannerKind(this.trip);
+        },
+        showSelladoPublishedBanner() {
+            return shouldShowSelladoPublishedBanner(
+                this.trip,
+                this.$route && this.$route.query
+            );
+        },
+        formattedSelladoPayAmount() {
+            const cents =
+                (this.config && this.config.module_trip_creation_payment_amount_cents) ||
+                0;
+            return `$${formatPesoIntegerFromCents(cents)}`;
+        },
         isTripExpired() {
             if (!this.trip || !this.trip.trip_date) {
                 return false;
@@ -1058,7 +1078,48 @@ export default {
         padding-top: 1.5em;
     }
 }
-#walletBrick_container {
-    margin-top: 1rem;
+
+.un-litro-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border-radius: 0.65rem;
+}
+
+.un-litro-banner p {
+    display: flex;
+    flex: 1 1 16rem;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.un-litro-banner i {
+    margin-top: 0.15rem;
+}
+
+.un-litro-banner--pending {
+    background: var(--ds-warning-bg, #ffecc8);
+    color: var(--ds-warning-text, #262626);
+}
+
+.un-litro-banner--rapipago {
+    background: var(--ds-info-bg, #e1effa);
+    color: var(--ds-text-primary, #22211f);
+}
+
+.un-litro-banner--failed {
+    background: var(--ds-error-bg, #fde8e8);
+    color: var(--ds-error-text, #7f1d1d);
+}
+
+.un-litro-banner--published {
+    background: var(--ds-success-bg, #bce7cc);
+    color: var(--ds-success-text, #147a42);
 }
 </style>
