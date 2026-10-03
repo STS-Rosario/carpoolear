@@ -64,6 +64,30 @@ describe('Modal close behavior', () => {
         );
     });
 
+    it('keeps title, close icon, and Cerrar spacing on trip-detail pages', () => {
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-wrapper\s+\.modal-container\s*\{[^}]*padding:\s*1\.5rem 1\.5rem 2rem/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-wrapper\s+\.modal-container\s*\{[^}]*gap:\s*0\.75rem/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header-with-close\s*\{[^}]*align-items:\s*center/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header-close\s*\{[^}]*padding:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header\s*\{[^}]*margin-bottom:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-body\s*\{[^}]*margin:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-footer\s*\{[^}]*padding:\s*0/s
+        );
+    });
+
     it('keeps long content scrollable within the viewport', () => {
     });
 
