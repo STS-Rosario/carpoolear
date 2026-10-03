@@ -8,6 +8,7 @@
                     :id="name"
                 >
                     <div class="modal-header modal-header-with-close">
+                        <slot name="header"></slot>
                         <button
                             type="button"
                             class="modal-header-close btn btn-link"
@@ -16,7 +17,6 @@
                         >
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
-                        <slot name="header"></slot>
                     </div>
 
                     <div class="modal-body">
@@ -166,13 +166,15 @@ export default {
 }
 
 .modal-header-with-close {
-    padding-right: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
 }
 
 .modal-header-close {
-    position: absolute;
-    top: 0;
-    right: 0;
+    flex-shrink: 0;
+    margin-left: auto;
     padding: 0 0.25rem;
     line-height: 1;
     font-size: 1.25rem;
@@ -181,7 +183,9 @@ export default {
 }
 
 .modal-header h3 {
-    margin-top: 0;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
 }
 
 .modal-body {
