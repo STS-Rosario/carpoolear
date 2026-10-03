@@ -167,6 +167,12 @@ export default {
     text-align: left;
 }
 
+.modal-header::before,
+.modal-header::after {
+    content: none;
+    display: none;
+}
+
 .modal-header-with-close {
     display: flex;
     align-items: flex-start;
