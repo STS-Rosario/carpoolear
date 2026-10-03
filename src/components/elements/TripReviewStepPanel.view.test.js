@@ -13,6 +13,12 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain("$t('tripReviewSectionVehicle')");
         expect(componentSource).toContain("$t('tripReviewSectionSeats')");
         expect(componentSource).toContain("$t('tripReviewSectionContribution')");
+        expect(componentSource).toContain('unLitroSectionTitle');
+        expect(componentSource).toContain('showUnLitroCard');
+        expect(componentSource).toContain('selladoCharged');
+        expect(componentSource).toContain('UnLitroInfoCard');
+        expect(componentSource).toContain('unLitroReviewIncludes');
+        expect(componentSource).toContain('formatPesoIntegerFromCents');
         expect(componentSource).toContain("$t('tripReviewSectionPreferences')");
         expect(componentSource).toContain("$t('tripReviewEdit')");
         expect(componentSource).toContain("emit('edit'");

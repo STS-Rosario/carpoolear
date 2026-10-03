@@ -352,5 +352,15 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(wizardSource).toContain(':pricing-breakdown=');
         expect(wizardSource).toContain('form.contributionPricingBreakdown');
         expect(wizardSource).toContain(':config="form.config"');
+        expect(wizardSource).toContain(':show-un-litro-card="form.showUnLitroCard"');
+        expect(wizardSource).toContain(':sellado-charged="form.selladoCharged"');
+        expect(wizardSource).toContain(':remaining-free-trips="form.remainingFreeTrips"');
+        expect(wizardSource).toContain('applySelladoChargeToBreakdown');
+        expect(viewSource).toContain('shouldChargeSellado');
+        expect(viewSource).toContain('shouldShowUnLitroCard');
+        expect(viewSource).toContain('selladoCharged');
+        expect(viewSource).toContain('showUnLitroCard');
+        expect(viewSource).not.toContain('alert-sellado-viaje');
+        expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
     });
 });

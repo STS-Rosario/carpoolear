@@ -44,6 +44,9 @@ describe('NewTripCreationWizard.vue', () => {
         expect(wizardSource).toContain('TripReviewStepPanel');
         expect(wizardSource).toContain('isSubmitDisabled');
         expect(wizardSource).toContain('tripCreationPublish');
+        expect(wizardSource).toContain('tripCreationContinueToPayment');
+        expect(wizardSource).toContain('form.selladoCharged');
+        expect(wizardSource).toContain('tripCreationStepLastDetailsSubtitleBeforePayment');
         expect(wizardSource).not.toContain('new-trip-wizard__last-section--return');
         expect(wizardSource).not.toContain('cargarViajeRegreso');
     });
