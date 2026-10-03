@@ -265,4 +265,14 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).not.toContain("$t('pagoFallo')");
         expect(viewSource).not.toContain("$t('pagarSelladoViaje'");
     });
+
+    it('opens Un litro explanation from every sellado banner', () => {
+        const cards = viewSource.match(/<UnLitroInfoCard[\s\S]*?\/>/g) || [];
+        expect(cards).toHaveLength(4);
+        cards.forEach((card) => {
+            expect(card).toContain('link-only');
+            expect(card).toContain(':free-trips-amount="freeTripsAmount"');
+        });
+        expect(viewSource).toContain("$t('unLitroWhatIsThis')");
+    });
 });

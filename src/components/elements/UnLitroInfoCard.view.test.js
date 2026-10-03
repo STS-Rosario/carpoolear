@@ -55,4 +55,12 @@ describe('UnLitroInfoCard', () => {
             'Tenés 2 viajes bonificados para probar la plataforma'
         );
     });
+
+    it('can show only Qué es esto for trip detail banners', () => {
+        const wrapper = mountCard({ charged: true, linkOnly: true });
+
+        expect(wrapper.text()).toContain('¿Qué es esto?');
+        expect(wrapper.text()).not.toContain('Este viaje suma Un litro para Carpoolear');
+        expect(wrapper.text()).not.toContain('Este viaje es bonificado');
+    });
 });
