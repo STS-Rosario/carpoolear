@@ -1,16 +1,20 @@
 <template>
-    <div class="un-litro-card" data-testid="un-litro-info-card">
-        <div class="un-litro-card__icon" aria-hidden="true">
+    <div
+        class="un-litro-card"
+        :class="{ 'un-litro-card--link-only': linkOnly }"
+        data-testid="un-litro-info-card"
+    >
+        <div v-if="!linkOnly" class="un-litro-card__icon" aria-hidden="true">
             <i class="fa fa-tint"></i>
         </div>
         <div class="un-litro-card__content">
-            <template v-if="charged">
+            <template v-if="!linkOnly && charged">
                 <h4 class="un-litro-card__title">
                     {{ $t('unLitroAppliesTitle') }}
                 </h4>
                 <p class="un-litro-card__body">{{ $t('unLitroAppliesBody') }}</p>
             </template>
-            <template v-else>
+            <template v-else-if="!linkOnly">
                 <span class="un-litro-card__badge">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     {{ $t('unLitroBonificadoBadge') }}
@@ -82,6 +86,10 @@ export default {
         freeTripsAmount: {
             type: Number,
             default: 0
+        },
+        linkOnly: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -166,5 +174,16 @@ export default {
 .un-litro-card__modal p {
     margin: 0 0 0.85rem;
     line-height: 1.45;
+}
+
+.un-litro-card--link-only {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.un-litro-card--link-only .un-litro-card__content {
+    display: inline;
 }
 </style>

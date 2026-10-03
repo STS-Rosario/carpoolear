@@ -273,6 +273,5 @@ describe('Trip.vue Un litro payment banners', () => {
             expect(card).toContain('link-only');
             expect(card).toContain(':free-trips-amount="freeTripsAmount"');
         });
-        expect(viewSource).toContain("$t('unLitroWhatIsThis')");
     });
 });

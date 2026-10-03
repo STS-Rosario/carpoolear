@@ -16,6 +16,10 @@
                     <p>
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         {{ $t('unLitroBannerPending') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
                     </p>
                     <AppButton
                         variant="primary"
@@ -37,6 +41,10 @@
                     <p>
                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                         {{ $t('unLitroBannerRapipago') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
                     </p>
                     <AppButton variant="secondary" size="sm">
                         {{ $t('unLitroBannerRapipagoAction') }}
@@ -50,6 +58,10 @@
                     <p>
                         <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                         {{ $t('unLitroBannerFailed') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
                     </p>
                     <AppButton
                         variant="danger"
@@ -67,6 +79,10 @@
                     <p>
                         <i class="fa fa-check-circle" aria-hidden="true"></i>
                         {{ $t('unLitroBannerPublished') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
                     </p>
                 </div>
                 <div
@@ -427,6 +443,7 @@ import TripStats from '../elements/TripStats';
 import TripPassengers from '../elements/TripPassengers';
 import TripButtons from '../elements/TripButtons';
 import AppButton from '../ui/AppButton.vue';
+import UnLitroInfoCard from '../elements/UnLitroInfoCard.vue';
 
 import { injectHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -1022,6 +1039,13 @@ export default {
                 0;
             return `$${formatPesoIntegerFromCents(cents)}`;
         },
+        freeTripsAmount() {
+            return (
+                (this.config &&
+                    this.config.module_trip_creation_payment_trips_threshold) ||
+                0
+            );
+        },
         isTripExpired() {
             if (!this.trip || !this.trip.trip_date) {
                 return false;
@@ -1040,7 +1064,8 @@ export default {
         TripPassengers,
         TripButtons,
         TripPrice,
-        AppButton
+        AppButton,
+        UnLitroInfoCard
     },
 
     props: ['id', 'location']
@@ -1098,10 +1123,15 @@ export default {
 .un-litro-banner p {
     display: flex;
     flex: 1 1 16rem;
+    flex-wrap: wrap;
     align-items: flex-start;
     gap: 0.55rem;
     margin: 0;
     line-height: 1.4;
+}
+
+.un-litro-banner :deep(.un-litro-card--link-only) {
+    display: inline;
 }
 
 .un-litro-banner i {
