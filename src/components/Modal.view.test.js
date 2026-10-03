@@ -58,6 +58,12 @@ describe('Modal close behavior', () => {
         expect(source).toMatch(/\.modal-header::after[\s\S]*display:\s*none/s);
     });
 
+    it('adds extra space below the footer close button', () => {
+        expect(source).toMatch(
+            /\.modal-footer\s*\{[^}]*padding-bottom:\s*1\.5rem/s
+        );
+    });
+
     it('keeps long content scrollable within the viewport', () => {
     });
 
