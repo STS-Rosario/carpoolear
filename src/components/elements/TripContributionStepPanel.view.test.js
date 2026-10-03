@@ -16,8 +16,10 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("$t('tripContributionHowCalculated')");
         expect(componentSource).toContain('TripContributionBreakdown');
         expect(componentSource).toContain('pricingBreakdown');
-        expect(componentSource).toContain("$t('tripContributionImportantTitle')");
-        expect(componentSource).toContain('tripContributionImportantBody');
+        expect(componentSource).toContain('UnLitroInfoCard');
+        expect(componentSource).toContain('showUnLitroCard');
+        expect(componentSource).toContain(':charged="selladoCharged"');
+        expect(componentSource).toContain(':remaining-free-trips="remainingFreeTrips"');
     });
 
     it('links to division de gastos help after suspension warning in importante notice', () => {

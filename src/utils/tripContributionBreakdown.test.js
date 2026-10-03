@@ -67,6 +67,24 @@ describe('tripContributionBreakdown', () => {
         expect(lines.selladoCost).toBe('0,50');
     });
 
+    it('formats table amounts as integer pesos', () => {
+        const lines = formatBreakdownLines({
+            ...baseBreakdown,
+            fuel_cents: 3840000,
+            tolls_cents: 960000,
+            sellado_cents: 160000,
+            total_cents: 4960000,
+            occupants: 4,
+            per_person_cents: 1240000
+        });
+
+        expect(lines.fuelCostInteger).toBe('38.400');
+        expect(lines.tollsCostInteger).toBe('9.600');
+        expect(lines.selladoCostInteger).toBe('1.600');
+        expect(lines.totalInteger).toBe('49.600');
+        expect(lines.perPersonInteger).toBe('12.400');
+    });
+
     it('fills occupants and per person from comfort preference when API left them null', () => {
         const five = withOccupants(baseBreakdown, false);
         expect(five.occupants).toBe(5);
