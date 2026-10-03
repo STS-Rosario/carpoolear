@@ -54,6 +54,8 @@ describe('Modal close behavior', () => {
             /\.modal-header(?:\s|:deep\s*\()h3[^}]*text-align:\s*left/s
         );
         expect(source).toMatch(/\.modal-body\s*\{[^}]*padding:\s*0/s);
+        expect(source).toMatch(/\.modal-header::before[\s\S]*display:\s*none/s);
+        expect(source).toMatch(/\.modal-header::after[\s\S]*display:\s*none/s);
     });
 
     it('keeps long content scrollable within the viewport', () => {
