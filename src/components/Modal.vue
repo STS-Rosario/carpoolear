@@ -163,6 +163,8 @@ export default {
     position: relative;
     flex-shrink: 0;
     border-bottom: none;
+    padding: 0;
+    text-align: left;
 }
 
 .modal-header-with-close {
@@ -182,10 +184,12 @@ export default {
     text-decoration: none !important;
 }
 
-.modal-header h3 {
+.modal-header h3,
+.modal-header :deep(h3) {
     margin: 0;
     flex: 1;
     min-width: 0;
+    text-align: left;
 }
 
 .modal-body {
@@ -194,6 +198,7 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     margin: 20px 0;
+    padding: 0;
 }
 
 .modal-footer {
