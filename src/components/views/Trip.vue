@@ -418,6 +418,7 @@ import {
     shouldShowSelladoPublishedBanner
 } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -894,8 +895,12 @@ export default {
         onPaySellado() {
             const url = selladoCheckoutUrl(this.trip);
             if (url) {
-                window.location.assign(url);
+                openExternalUrl(url);
+                return;
             }
+            dialogs.message(this.$t('errorAlGuardar'), {
+                estado: 'error'
+            });
         }
     },
 

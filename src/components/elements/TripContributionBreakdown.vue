@@ -151,7 +151,13 @@
         </dl>
 
         <p class="trip-contribution-breakdown__explainer">
-            {{ $t('tripContributionHowCalculatedExplainer') }}
+            {{
+                $t(
+                    lines.showSellado
+                        ? 'tripContributionHowCalculatedExplainer'
+                        : 'tripContributionHowCalculatedExplainerWithoutUnLitro'
+                )
+            }}
         </p>
         <p class="trip-contribution-breakdown__explainer">
             {{ $t('tripContributionTankTip') }}

@@ -209,6 +209,7 @@ import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
 import { isSelladoPending } from '../../utils/tripSelladoDisplay.js';
 import { selladoCheckoutUrl } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 import dayjs from '../../dayjs';
 import {
     buildTripCreationTemplateFromSnapshot,
@@ -315,8 +316,12 @@ export default {
         onPayNow() {
             const url = selladoCheckoutUrl(this.trip);
             if (url) {
-                window.location.assign(url);
+                openExternalUrl(url);
+                return;
             }
+            dialogs.message(this.$t('errorAlGuardar'), {
+                estado: 'error'
+            });
         },
         tripUrl() {
             const route = this.$router.resolve({
