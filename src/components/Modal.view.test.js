@@ -35,6 +35,18 @@ describe('Modal close behavior', () => {
         expect(source).toMatch(/type="button"/);
     });
 
+    it('keeps the title and close control on one header row, title left and close right', () => {
+        expect(source).toMatch(
+            /class="modal-header modal-header-with-close"[\s\S]*?<slot name="header">[\s\S]*?class="modal-header-close/
+        );
+        expect(source).toMatch(
+            /\.modal-header-with-close\s*\{[^}]*display:\s*flex/s
+        );
+        expect(source).toMatch(
+            /\.modal-header-close\s*\{[^}]*margin-left:\s*auto/s
+        );
+    });
+
     it('keeps long content scrollable within the viewport', () => {
     });
 
