@@ -98,4 +98,11 @@ describe('TripCreationSuccess.vue', () => {
         expect(payIdx).toBeGreaterThan(-1);
         expect(shareIdx).toBeGreaterThan(payIdx);
     });
+
+    it('scrolls to the top when the success screen is shown', () => {
+        expect(componentSource).toContain('window.scrollTo(0, 0)');
+        expect(componentSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*window\.scrollTo\(0,\s*0\)/
+        );
+    });
 });
