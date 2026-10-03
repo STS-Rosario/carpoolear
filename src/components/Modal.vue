@@ -215,6 +215,7 @@ export default {
     gap: 0.6rem;
     text-align: center;
     border-top: none;
+    padding-bottom: 1.5rem;
 }
 
 /*
