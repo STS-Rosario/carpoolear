@@ -148,6 +148,11 @@ export default {
     min-height: 0;
 }
 
+.modal-mask .modal-wrapper .modal-container {
+    padding: 1.5rem 1.5rem 2rem;
+    gap: 0.75rem;
+}
+
 .modal-container :deep(p),
 .modal-container :deep(label),
 .modal-container :deep(h3),
@@ -167,6 +172,10 @@ export default {
     text-align: left;
 }
 
+.modal-mask .modal-container .modal-header {
+    margin-bottom: 0;
+}
+
 .modal-header::before,
 .modal-header::after {
     content: none;
@@ -180,6 +189,10 @@ export default {
     gap: 0.75rem;
 }
 
+.modal-mask .modal-container .modal-header-with-close {
+    align-items: center;
+}
+
 .modal-header-close {
     flex-shrink: 0;
     margin-left: auto;
@@ -188,6 +201,10 @@ export default {
     font-size: 1.25rem;
     color: #333 !important;
     text-decoration: none !important;
+}
+
+.modal-mask .modal-container .modal-header-close {
+    padding: 0;
 }
 
 .modal-header h3,
@@ -207,6 +224,10 @@ export default {
     padding: 0;
 }
 
+.modal-mask .modal-container .modal-body {
+    margin: 0;
+}
+
 .modal-footer {
     flex-shrink: 0;
     display: flex;
@@ -216,6 +237,10 @@ export default {
     text-align: center;
     border-top: none;
     padding-bottom: 1.5rem;
+}
+
+.modal-mask .modal-container .modal-footer {
+    padding: 0;
 }
 
 /*
