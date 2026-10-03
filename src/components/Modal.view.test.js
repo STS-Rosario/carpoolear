@@ -47,6 +47,15 @@ describe('Modal close behavior', () => {
         );
     });
 
+    it('left-aligns the header title with the body paragraphs', () => {
+        expect(source).toMatch(/\.modal-header\s*\{[^}]*padding:\s*0/s);
+        expect(source).toMatch(/\.modal-header\s*\{[^}]*text-align:\s*left/s);
+        expect(source).toMatch(
+            /\.modal-header(?:\s|:deep\s*\()h3[^}]*text-align:\s*left/s
+        );
+        expect(source).toMatch(/\.modal-body\s*\{[^}]*padding:\s*0/s);
+    });
+
     it('keeps long content scrollable within the viewport', () => {
     });
 
