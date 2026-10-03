@@ -355,7 +355,7 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(wizardSource).toContain(':show-un-litro-card="form.showUnLitroCard"');
         expect(wizardSource).toContain(':sellado-charged="form.selladoCharged"');
         expect(wizardSource).toContain(':remaining-free-trips="form.remainingFreeTrips"');
-        expect(wizardSource).toContain('applySelladoChargeToBreakdown');
+        expect(viewSource).toContain('applySelladoChargeToBreakdown');
         expect(viewSource).toContain('shouldChargeSellado');
         expect(viewSource).toContain('shouldShowUnLitroCard');
         expect(viewSource).toContain('selladoCharged');

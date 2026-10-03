@@ -3,7 +3,13 @@
         <h3 class="new-trip-wizard__question">
             {{ $t('tripCreationStepLastDetailsTitle') }}
         </h3>
-        <p class="trip-review-step__subtitle label-soft">
+        <p
+            v-if="selladoCharged"
+            class="trip-review-step__subtitle label-soft"
+        >
+            {{ $t('tripCreationStepLastDetailsSubtitleBeforePayment') }}
+        </p>
+        <p v-else class="trip-review-step__subtitle label-soft">
             {{ $t('tripCreationStepLastDetailsSubtitle') }}
         </p>
 
@@ -95,8 +101,43 @@
             </div>
             <p class="trip-review-step__price">${{ formattedPrice }}</p>
             <p class="trip-review-step__price-caption label-soft">
-                {{ $t('tripReviewContributionPerPerson') }}
+                {{ contributionCaption }}
             </p>
+        </section>
+
+        <section
+            v-if="showUnLitroCard"
+            class="trip-review-step__section trip-review-step__section--un-litro"
+        >
+            <div class="trip-review-step__section-header">
+                <h4 class="trip-review-step__section-title">
+                    {{ $t('unLitroSectionTitle') }}
+                </h4>
+            </div>
+            <div v-if="selladoCharged" class="trip-review-step__un-litro">
+                <p class="trip-review-step__un-litro-amount">
+                    <i class="fa fa-tint" aria-hidden="true"></i>
+                    ${{ formattedSelladoAmount }}
+                </p>
+                <p class="trip-review-step__price-caption label-soft">
+                    {{
+                        $t('unLitroReviewPaidCaption', {
+                            amount: '$' + formattedPrice
+                        })
+                    }}
+                </p>
+                <UnLitroInfoCard
+                    class="trip-review-step__un-litro-card"
+                    :charged="true"
+                    :free-trips-amount="freeTripsAmount"
+                />
+            </div>
+            <UnLitroInfoCard
+                v-else
+                :charged="false"
+                :remaining-free-trips="remainingFreeTrips"
+                :free-trips-amount="freeTripsAmount"
+            />
         </section>
 
         <section class="trip-review-step__section">
@@ -181,12 +222,14 @@
 <script>
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
+import UnLitroInfoCard from './UnLitroInfoCard.vue';
 import {
     buildTripReviewPreferenceTags,
     formatTripReviewPrice,
     getTripReviewEditStep,
     getTripReviewRoutePoints
 } from '../../utils/tripReviewDisplay.js';
+import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 
 const PREF_LABEL_KEYS = {
     kids: 'tripReviewPrefKids',
@@ -199,7 +242,8 @@ export default {
 
     components: {
         modal,
-        AppButton
+        AppButton,
+        UnLitroInfoCard
     },
 
     props: {
@@ -213,6 +257,11 @@ export default {
         seatsCount: { type: [Number, String], default: 0 },
         showContribution: { type: Boolean, default: false },
         price: { type: [Number, String], default: '' },
+        showUnLitroCard: { type: Boolean, default: false },
+        selladoCharged: { type: Boolean, default: false },
+        selladoAmountCents: { type: Number, default: 0 },
+        remainingFreeTrips: { type: Number, default: 0 },
+        freeTripsAmount: { type: Number, default: 0 },
         allowKids: { type: Boolean, default: false },
         allowSmoking: { type: Boolean, default: false },
         allowAnimals: { type: Boolean, default: false },
@@ -240,6 +289,15 @@ export default {
         },
         formattedPrice() {
             return formatTripReviewPrice(this.price);
+        },
+        formattedSelladoAmount() {
+            return formatPesoIntegerFromCents(this.selladoAmountCents);
+        },
+        contributionCaption() {
+            if (this.showUnLitroCard && this.selladoCharged) {
+                return this.$t('unLitroReviewIncludes');
+            }
+            return this.$t('tripReviewContributionPerPerson');
         },
         preferenceTags() {
             return buildTripReviewPreferenceTags({
@@ -398,8 +456,20 @@ export default {
     color: #22211f;
 }
 
-.trip-review-step__price-caption {
-    margin: 0.15rem 0 0;
+.trip-review-step__un-litro-amount {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #22211f;
+}
+
+.trip-review-step__un-litro-amount .fa {
+    margin-right: 0.4rem;
+    color: var(--ds-action, #1e5f9e);
+}
+
+.trip-review-step__un-litro-card {
+    margin-top: 0.75rem;
 }
 
 .trip-review-step__pref-tags {

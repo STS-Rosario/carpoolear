@@ -386,13 +386,17 @@
                 <TripContributionStepPanel
                     :price="form.price"
                     :recommended-seat-price-cents="
-                        form.recommended_seat_price_cents
+                        form.recommendedSeatPriceCentsForDisplay
                     "
                     :suggested-description="
                         form.contribucionRecomendadaCardDescripcionText
                     "
                     :pricing-breakdown="form.contributionPricingBreakdown"
                     :config="form.config"
+                    :show-un-litro-card="form.showUnLitroCard"
+                    :sellado-charged="form.selladoCharged"
+                    :remaining-free-trips="form.remainingFreeTrips"
+                    :free-trips-amount="form.free_trips_amount"
                     :price-error="
                         form.priceError.state ? form.priceError.message : ''
                     "
@@ -444,6 +448,11 @@
                         !isPassenger && navigationOptions.seatPriceEnabled
                     "
                     :price="form.price"
+                    :show-un-litro-card="form.showUnLitroCard"
+                    :sellado-charged="form.selladoCharged"
+                    :sellado-amount-cents="form.selladoAmountCents"
+                    :remaining-free-trips="form.remainingFreeTrips"
+                    :free-trips-amount="form.free_trips_amount"
                     :allow-kids="form.trip.allow_kids"
                     :allow-smoking="form.trip.allow_smoking"
                     :allow-animals="form.trip.allow_animals"
@@ -719,7 +728,16 @@ export default {
             if (this.isEditTripFlow) {
                 return this.$t('actualizar');
             }
+            if (this.form.selladoCharged) {
+                return this.$t('tripCreationContinueToPayment');
+            }
             return this.$t('tripCreationPublish');
+        },
+        reviewSubtitleKey() {
+            if (this.form.selladoCharged) {
+                return 'tripCreationStepLastDetailsSubtitleBeforePayment';
+            }
+            return 'tripCreationStepLastDetailsSubtitle';
         },
         savingLabel() {
             return this.isEditTripFlow ? this.$t('guardando') : this.$t('creando');
