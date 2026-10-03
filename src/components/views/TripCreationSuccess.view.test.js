@@ -88,6 +88,8 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain("$t('unLitroPayOneLiter')");
         expect(componentSource).toContain("$t('unLitroPayLater')");
         expect(componentSource).toContain('selladoCheckoutUrl');
+        expect(componentSource).toContain('openExternalUrl');
+        expect(componentSource).toContain('dialogs.message');
         expect(componentSource).toContain('data-testid="un-litro-pay-qr"');
         expect(componentSource).toContain('data-testid="un-litro-pay-later"');
         expect(componentSource).not.toContain('RapiPago');

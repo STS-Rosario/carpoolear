@@ -259,6 +259,8 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain("$t('unLitroBannerRetry')");
         expect(viewSource).toContain("$t('unLitroBannerPublished')");
         expect(viewSource).toContain('selladoCheckoutUrl');
+        expect(viewSource).toContain('openExternalUrl');
+        expect(viewSource).toContain('dialogs.message');
         expect(viewSource).toContain('formatPesoIntegerFromCents');
         expect(viewSource).not.toContain("$t('pagoFallo')");
         expect(viewSource).not.toContain("$t('pagarSelladoViaje'");

@@ -26,6 +26,9 @@ describe('TripContributionBreakdown.vue', () => {
         expect(componentSource).toContain('tripContributionBreakdownOccupantsSplit');
         expect(componentSource).toContain('tripContributionBreakdownPerPersonLabel');
         expect(componentSource).toContain('tripContributionHowCalculatedExplainer');
+        expect(componentSource).toContain(
+            'tripContributionHowCalculatedExplainerWithoutUnLitro'
+        );
         expect(componentSource).toContain('tripContributionTankTip');
         expect(componentSource).toContain('lines.fuelCostInteger');
         expect(componentSource).toContain("$t('tripContributionBreakdownConsumptionTooltip'");
