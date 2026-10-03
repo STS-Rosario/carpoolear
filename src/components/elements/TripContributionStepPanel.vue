@@ -7,6 +7,13 @@
             {{ $t('tripCreationStepContributionSubtitle') }}
         </p>
 
+        <UnLitroInfoCard
+            v-if="showUnLitroCard"
+            :charged="selladoCharged"
+            :remaining-free-trips="remainingFreeTrips"
+            :free-trips-amount="freeTripsAmount"
+        />
+
         <div
             class="trip-contribution-step__amount"
             :class="{ 'has-error': Boolean(priceError) }"
@@ -85,16 +92,18 @@
 </template>
 
 <script>
-import { formatContributionDisplayAmount } from '../../utils/tripContributionDisplay.js';
+import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import { shouldShowContributionBreakdown } from '../../utils/tripContributionBreakdown.js';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
+import UnLitroInfoCard from './UnLitroInfoCard.vue';
 import { inAppLinkTarget } from '../../utils/externalLink.js';
 
 export default {
     name: 'trip-contribution-step-panel',
 
     components: {
-        TripContributionBreakdown
+        TripContributionBreakdown,
+        UnLitroInfoCard
     },
 
     props: {
@@ -121,6 +130,22 @@ export default {
         priceError: {
             type: String,
             default: ''
+        },
+        showUnLitroCard: {
+            type: Boolean,
+            default: false
+        },
+        selladoCharged: {
+            type: Boolean,
+            default: false
+        },
+        remainingFreeTrips: {
+            type: Number,
+            default: 0
+        },
+        freeTripsAmount: {
+            type: Number,
+            default: 0
         }
     },
 
@@ -134,9 +159,7 @@ export default {
 
     computed: {
         suggestedAmountLabel() {
-            return formatContributionDisplayAmount(
-                this.recommendedSeatPriceCents
-            );
+            return formatPesoIntegerFromCents(this.recommendedSeatPriceCents);
         },
         showContributionBreakdown() {
             return shouldShowContributionBreakdown(this.config);
