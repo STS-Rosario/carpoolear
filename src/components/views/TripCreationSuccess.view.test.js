@@ -13,9 +13,10 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain('!trip.is_passenger');
     });
 
-    it('builds share text with trip date, destination and url', () => {
-        expect(componentSource).toContain('buildTripShareMessage');
-        expect(componentSource).toContain('translate: (key, params) => this.$t(key, params)');
+    it('shares trip detail through shareTripDetail', () => {
+        expect(componentSource).toContain('shareTripDetail');
+        expect(componentSource).not.toContain('buildTripShareMessage');
+        expect(componentSource).not.toContain('shareContent');
         expect(componentSource).not.toContain("'publicarUnViajeCompartir'");
     });
 

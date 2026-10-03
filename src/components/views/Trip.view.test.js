@@ -151,16 +151,26 @@ describe('Trip.vue mobile trip-detail stack', () => {
         );
     });
 
-    it('does not include TripShare in the trip-detail stack', () => {
+    it('does not include the legacy TripShare social links in the trip-detail stack', () => {
         const stack = viewSource.match(
             /trip-detail__stack[\s\S]*?trip-route-map/
         )[0];
         expect(stack).not.toContain('<TripShare');
-        expect(stack).not.toContain('trip-detail__share');
         expect(viewSource).not.toMatch(/import TripShare from/);
         expect(stack.indexOf('TripPassengers')).toBeLessThan(
             stack.indexOf('trip-detail__cta')
         );
+    });
+
+    it('places the share button after stats on mobile and below Características on desktop', () => {
+        expect(viewSource).toContain('TripDetailShareButton');
+        expect(viewSource).toMatch(
+            /trip-detail__detalle-stats[\s\S]*TripStats[\s\S]*TripDetailShareButton[\s\S]*v-if="isMobile"/
+        );
+        expect(viewSource).toMatch(
+            /tripDetailConditions[\s\S]*TripData[\s\S]*TripDetailShareButton[\s\S]*v-if="!isMobile"/
+        );
+        expect(viewSource).not.toMatch(/import TripShare from/);
     });
 
     it('does not render the legacy desktop column-tree form row', () => {

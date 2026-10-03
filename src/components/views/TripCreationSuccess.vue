@@ -204,8 +204,7 @@ import AppInput from '../ui/AppInput.vue';
 import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import { useAuthStore } from '../../stores/auth';
-import { shareContent } from '../../utils/shareContent.js';
-import { buildTripShareMessage } from '../../utils/tripShareMessage.js';
+import { shareTripDetail } from '../../utils/tripDetailShare.js';
 import { isSelladoPending } from '../../utils/tripSelladoDisplay.js';
 import { selladoCheckoutUrl } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
@@ -323,25 +322,13 @@ export default {
                 estado: 'error'
             });
         },
-        tripUrl() {
-            const route = this.$router.resolve({
-                name: 'detail_trip',
-                params: { id: this.trip.id }
-            });
-            return window.location.origin + route.href;
-        },
         async onShare() {
-            const url = this.tripUrl();
-            const text = buildTripShareMessage({
+            await shareTripDetail({
                 trip: this.trip,
+                router: this.$router,
+                origin: window.location.origin,
                 locale: this.$i18n?.locale,
                 translate: (key, params) => this.$t(key, params)
-            });
-
-            await shareContent({
-                title: this.$t('tripCreationShareTrip'),
-                text,
-                url
             });
         },
         async refreshAvailableTemplates() {
