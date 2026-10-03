@@ -12,10 +12,7 @@ function mountCard(props = {}) {
             ...props
         },
         global: {
-            plugins: [i18n],
-            stubs: {
-                modal: true
-            }
+            plugins: [i18n]
         }
     });
 }
