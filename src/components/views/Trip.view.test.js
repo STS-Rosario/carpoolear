@@ -256,3 +256,32 @@ describe('Trip.vue social meta tags', () => {
         expect(viewSource).toMatch(/if \(this\.trip && this\.head\)\s*\{[\s\S]*this\.head\.push\(/);
     });
 });
+
+describe('Trip.vue Un litro payment banners', () => {
+    it('renders pending, rapipago, failed and published banners from payment state', () => {
+        expect(viewSource).toContain('selladoDetailBannerKind');
+        expect(viewSource).toContain('shouldShowSelladoPublishedBanner');
+        expect(viewSource).toContain("$t('unLitroBannerPending')");
+        expect(viewSource).toContain("$t('unLitroBannerPayAmount'");
+        expect(viewSource).toContain("$t('unLitroBannerRapipago')");
+        expect(viewSource).toContain("$t('unLitroBannerRapipagoAction')");
+        expect(viewSource).toContain("$t('unLitroBannerFailed')");
+        expect(viewSource).toContain("$t('unLitroBannerRetry')");
+        expect(viewSource).toContain("$t('unLitroBannerPublished')");
+        expect(viewSource).toContain('selladoCheckoutUrl');
+        expect(viewSource).toContain('openExternalUrl');
+        expect(viewSource).toContain('dialogs.message');
+        expect(viewSource).toContain('formatPesoIntegerFromCents');
+        expect(viewSource).not.toContain("$t('pagoFallo')");
+        expect(viewSource).not.toContain("$t('pagarSelladoViaje'");
+    });
+
+    it('opens Un litro explanation from every sellado banner', () => {
+        const cards = viewSource.match(/<UnLitroInfoCard[\s\S]*?\/>/g) || [];
+        expect(cards).toHaveLength(4);
+        cards.forEach((card) => {
+            expect(card).toContain('link-only');
+            expect(card).toContain(':free-trips-amount="freeTripsAmount"');
+        });
+    });
+});

@@ -4,16 +4,6 @@
             <h1 v-if="!showWizardSuccess" class="new-trip-page__heading">
                 {{ id || updatingTrip ? $t('editarViaje') : $t('crearViaje') }}
             </h1>
-            <div class="alert alert-info alert-sellado-viaje" v-if="this.config.module_trip_creation_payment_enabled">
-                <p>{{ $t('mensajeContandoSobreSelladoViaje') }}</p>
-                <p>{{ $t('podesHacerViajesGratis', { freeTrips: free_trips_amount }) }}</p>
-                <div v-if="trips_created_by_user_amount >= free_trips_amount">
-                    <p>{{ $t('yaCreasteViajes', { tripsCreated: trips_created_by_user_amount }) }}</p>
-                </div>
-                <div v-if="trips_created_by_user_amount < free_trips_amount">
-                    <p>{{ $t('teQuedaViajesGratis', { remaining: remainingFreeTrips }) }}</p>
-                </div>
-            </div>
 
             <TripCreationSuccess
                 v-if="showWizardSuccess && createdTrip"
@@ -87,6 +77,12 @@ import {
 } from '../../utils/tripSeatPrice.js';
 import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants.js';
 import { withOccupants } from '../../utils/tripContributionBreakdown.js';
+import {
+    applySelladoChargeToBreakdown,
+    remainingSelladoFreeTrips,
+    shouldChargeSellado,
+    shouldShowUnLitroCard
+} from '../../utils/tripSelladoUi.js';
 import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
@@ -486,7 +482,22 @@ export default {
             return this.config ? this.config.trip_card_design : '';
         },
         remainingFreeTrips() {
-            return this.free_trips_amount - this.trips_created_by_user_amount;
+            return remainingSelladoFreeTrips(
+                this.free_trips_amount,
+                this.trips_created_by_user_amount
+            );
+        },
+        showUnLitroCard() {
+            return shouldShowUnLitroCard({
+                selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled
+            });
+        },
+        selladoCharged() {
+            return shouldChargeSellado({
+                selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
+                routeNeedsPayment: this.route_needs_payment,
+                userOverFreeLimit: this.needs_to_pay_for_next_trip
+            });
         },
         center() {
             return this.config.map_coordinates;
@@ -508,8 +519,25 @@ export default {
         },
         contributionPricingBreakdown() {
             return withOccupants(
-                this.pricing_breakdown,
+                applySelladoChargeToBreakdown(
+                    this.pricing_breakdown,
+                    this.selladoCharged
+                ),
                 this.trip.rear_max_two_passengers
+            );
+        },
+        recommendedSeatPriceCentsForDisplay() {
+            const breakdown = this.contributionPricingBreakdown;
+            if (breakdown && breakdown.per_person_cents != null) {
+                return breakdown.per_person_cents;
+            }
+            return this.recommended_seat_price_cents;
+        },
+        selladoAmountCents() {
+            return (
+                (this.config &&
+                    this.config.module_trip_creation_payment_amount_cents) ||
+                0
             );
         },
         activeFormValidationMessages() {
@@ -2122,9 +2150,6 @@ span.error.max-contribution-reminder {
 textarea.form-control {
     min-height: 14em;
     height: auto;
-}
-.alert-sellado-viaje {
-    margin-top: -1em;
 }
 
 .trip-car-selection__label {

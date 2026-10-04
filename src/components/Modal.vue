@@ -8,6 +8,7 @@
                     :id="name"
                 >
                     <div class="modal-header modal-header-with-close">
+                        <slot name="header"></slot>
                         <button
                             type="button"
                             class="modal-header-close btn btn-link"
@@ -16,7 +17,6 @@
                         >
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </button>
-                        <slot name="header"></slot>
                     </div>
 
                     <div class="modal-body">
@@ -148,6 +148,11 @@ export default {
     min-height: 0;
 }
 
+.modal-mask .modal-wrapper .modal-container {
+    padding: 1.5rem 1.5rem 2rem;
+    gap: 0.75rem;
+}
+
 .modal-container :deep(p),
 .modal-container :deep(label),
 .modal-container :deep(h3),
@@ -163,16 +168,34 @@ export default {
     position: relative;
     flex-shrink: 0;
     border-bottom: none;
+    padding: 0;
+    text-align: left;
+}
+
+.modal-mask .modal-container .modal-header {
+    margin-bottom: 0;
+}
+
+.modal-header::before,
+.modal-header::after {
+    content: none;
+    display: none;
 }
 
 .modal-header-with-close {
-    padding-right: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.modal-mask .modal-container .modal-header-with-close {
+    align-items: center;
 }
 
 .modal-header-close {
-    position: absolute;
-    top: 0;
-    right: 0;
+    flex-shrink: 0;
+    margin-left: auto;
     padding: 0 0.25rem;
     line-height: 1;
     font-size: 1.25rem;
@@ -180,8 +203,16 @@ export default {
     text-decoration: none !important;
 }
 
-.modal-header h3 {
-    margin-top: 0;
+.modal-mask .modal-container .modal-header-close {
+    padding: 0;
+}
+
+.modal-header h3,
+.modal-header :deep(h3) {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    text-align: left;
 }
 
 .modal-body {
@@ -190,6 +221,11 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     margin: 20px 0;
+    padding: 0;
+}
+
+.modal-mask .modal-container .modal-body {
+    margin: 0;
 }
 
 .modal-footer {
@@ -200,6 +236,11 @@ export default {
     gap: 0.6rem;
     text-align: center;
     border-top: none;
+    padding-bottom: 1.5rem;
+}
+
+.modal-mask .modal-container .modal-footer {
+    padding: 0;
 }
 
 /*

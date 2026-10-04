@@ -35,6 +35,59 @@ describe('Modal close behavior', () => {
         expect(source).toMatch(/type="button"/);
     });
 
+    it('keeps the title and close control on one header row, title left and close right', () => {
+        expect(source).toMatch(
+            /class="modal-header modal-header-with-close"[\s\S]*?<slot name="header">[\s\S]*?class="modal-header-close/
+        );
+        expect(source).toMatch(
+            /\.modal-header-with-close\s*\{[^}]*display:\s*flex/s
+        );
+        expect(source).toMatch(
+            /\.modal-header-close\s*\{[^}]*margin-left:\s*auto/s
+        );
+    });
+
+    it('left-aligns the header title with the body paragraphs', () => {
+        expect(source).toMatch(/\.modal-header\s*\{[^}]*padding:\s*0/s);
+        expect(source).toMatch(/\.modal-header\s*\{[^}]*text-align:\s*left/s);
+        expect(source).toMatch(
+            /\.modal-header(?:\s|:deep\s*\()h3[^}]*text-align:\s*left/s
+        );
+        expect(source).toMatch(/\.modal-body\s*\{[^}]*padding:\s*0/s);
+        expect(source).toMatch(/\.modal-header::before[\s\S]*display:\s*none/s);
+        expect(source).toMatch(/\.modal-header::after[\s\S]*display:\s*none/s);
+    });
+
+    it('adds extra space below the footer close button', () => {
+        expect(source).toMatch(
+            /\.modal-footer\s*\{[^}]*padding-bottom:\s*1\.5rem/s
+        );
+    });
+
+    it('keeps title, close icon, and Cerrar spacing on trip-detail pages', () => {
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-wrapper\s+\.modal-container\s*\{[^}]*padding:\s*1\.5rem 1\.5rem 2rem/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-wrapper\s+\.modal-container\s*\{[^}]*gap:\s*0\.75rem/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header-with-close\s*\{[^}]*align-items:\s*center/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header-close\s*\{[^}]*padding:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-header\s*\{[^}]*margin-bottom:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-body\s*\{[^}]*margin:\s*0/s
+        );
+        expect(source).toMatch(
+            /\.modal-mask\s+\.modal-container\s+\.modal-footer\s*\{[^}]*padding:\s*0/s
+        );
+    });
+
     it('keeps long content scrollable within the viewport', () => {
     });
 

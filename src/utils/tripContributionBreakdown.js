@@ -1,4 +1,7 @@
-import { formatContributionDisplayAmount } from './tripContributionDisplay.js';
+import {
+    formatContributionDisplayAmount,
+    formatPesoIntegerFromCents
+} from './tripContributionDisplay.js';
 import {
     occupantsForPriceCalculation,
     seatPriceCentsFromTripPriceCents
@@ -68,6 +71,11 @@ export function formatBreakdownLines(breakdown) {
         total: formatContributionDisplayAmount(breakdown.total_cents),
         occupants: breakdown.occupants,
         perPerson: formatContributionDisplayAmount(breakdown.per_person_cents),
+        fuelCostInteger: formatPesoIntegerFromCents(breakdown.fuel_cents),
+        tollsCostInteger: formatPesoIntegerFromCents(breakdown.tolls_cents),
+        selladoCostInteger: formatPesoIntegerFromCents(selladoCents),
+        totalInteger: formatPesoIntegerFromCents(breakdown.total_cents),
+        perPersonInteger: formatPesoIntegerFromCents(breakdown.per_person_cents),
         kmPerLiter: breakdown.kilometers_per_liter,
         litersPer100Km: litersPer100KmFromKmPerLiter(
             breakdown.kilometers_per_liter

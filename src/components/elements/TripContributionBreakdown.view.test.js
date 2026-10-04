@@ -19,8 +19,18 @@ describe('TripContributionBreakdown.vue', () => {
         expect(componentSource).toContain("$t('tripContributionBreakdownTotalWithSellado'");
         expect(componentSource).toContain("$t('tripContributionBreakdownTotalWithSelladoBonificado'");
         expect(componentSource).toContain("$t('tripContributionBreakdownOccupants'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownPerPerson'");
-        expect(componentSource).toContain('tooltip-bottom');
+        expect(componentSource).toContain('tripContributionBreakdownFuel');
+        expect(componentSource).toContain('tripContributionBreakdownTollsLabel');
+        expect(componentSource).toContain('unLitroName');
+        expect(componentSource).toContain('tripContributionBreakdownTripTotal');
+        expect(componentSource).toContain('tripContributionBreakdownOccupantsSplit');
+        expect(componentSource).toContain('tripContributionBreakdownPerPersonLabel');
+        expect(componentSource).toContain('tripContributionHowCalculatedExplainer');
+        expect(componentSource).toContain(
+            'tripContributionHowCalculatedExplainerWithoutUnLitro'
+        );
+        expect(componentSource).toContain('tripContributionTankTip');
+        expect(componentSource).toContain('lines.fuelCostInteger');
         expect(componentSource).toContain("$t('tripContributionBreakdownConsumptionTooltip'");
         expect(componentSource).toContain('lines.showSellado');
         expect(componentSource).toContain('lines.selladoBonificado');

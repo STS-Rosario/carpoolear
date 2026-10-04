@@ -79,4 +79,31 @@ describe('TripCreationSuccess.vue', () => {
             /variant="secondary"[\s\S]*?data-testid="trip-creation-save-template"[\s\S]*?icon-left="fa fa-bookmark"/
         );
     });
+
+    it('shows Un litro payment methods before share actions when sellado is pending', () => {
+        expect(componentSource).toContain('isSelladoPending');
+        expect(componentSource).toContain("$t('unLitroPublishTitle')");
+        expect(componentSource).toContain("$t('unLitroPendingPaymentBadge')");
+        expect(componentSource).toContain("$t('unLitroPayMercadoPago')");
+        expect(componentSource).toContain("$t('unLitroPayQr')");
+        expect(componentSource).toContain("$t('unLitroPayOneLiter')");
+        expect(componentSource).toContain("$t('unLitroPayLater')");
+        expect(componentSource).toContain('selladoCheckoutUrl');
+        expect(componentSource).toContain('openExternalUrl');
+        expect(componentSource).toContain('dialogs.message');
+        expect(componentSource).toContain('data-testid="un-litro-pay-qr"');
+        expect(componentSource).toContain('data-testid="un-litro-pay-later"');
+        expect(componentSource).not.toContain('RapiPago');
+        const payIdx = componentSource.indexOf("$t('unLitroPayOneLiter')");
+        const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
+        expect(payIdx).toBeGreaterThan(-1);
+        expect(shareIdx).toBeGreaterThan(payIdx);
+    });
+
+    it('scrolls to the top when the success screen is shown', () => {
+        expect(componentSource).toContain('window.scrollTo(0, 0)');
+        expect(componentSource).toMatch(
+            /mounted\(\)\s*\{[\s\S]*window\.scrollTo\(0,\s*0\)/
+        );
+    });
 });

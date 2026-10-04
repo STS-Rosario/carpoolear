@@ -157,14 +157,16 @@ test.describe('Sellado - MercadoPago wallet button', () => {
     await page.goto(`/trips/${TRIP_ID}`);
     await waitForPageReady(page);
 
-    // 3. Verify the sellado banner is visible with correct text
-    await expect(page.getByText(/sellado de viaje/i).first()).toBeVisible({
+    // 3. Verify the Un litro pending banner is visible with the pay amount
+    await expect(
+      page.getByText(/tu viaje todavía no es visible/i).first()
+    ).toBeVisible({
       timeout: 15000,
     });
 
     // 4. Verify the Mercado Pago pay action rendered
     await expect(
-      page.getByRole('button', { name: /pagar con mercado pago/i })
+      page.getByRole('button', { name: /pagar \$1/i })
     ).toBeVisible({ timeout: 10000 });
   });
 
@@ -198,11 +200,11 @@ test.describe('Sellado - MercadoPago wallet button', () => {
     // Wait for trip to load
     await expect(page.getByText('Test trip for sellado MP button')).toBeVisible({ timeout: 15000 });
 
-    await expect(page.getByText(/sellado de viaje/i)).not.toBeVisible({
+    await expect(page.getByText(/tu viaje todavía no es visible/i)).not.toBeVisible({
       timeout: 5000,
     });
     await expect(
-      page.getByRole('button', { name: /pagar con mercado pago/i })
+      page.getByRole('button', { name: /pagar \$1/i })
     ).toHaveCount(0);
   });
 });
