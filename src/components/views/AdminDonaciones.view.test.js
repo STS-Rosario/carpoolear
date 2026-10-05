@@ -20,4 +20,11 @@ describe('AdminDonaciones', () => {
         expect(viewSource).toContain('kind');
         expect(viewSource).toContain('status');
     });
+
+    it('uses AppField, AppInput and AppButton for filters', () => {
+        expect(viewSource).toContain('AppField');
+        expect(viewSource).toContain('AppInput');
+        expect(viewSource).toContain('AppButton');
+        expect(viewSource).not.toContain('class="btn btn-default"');
+    });
 });
