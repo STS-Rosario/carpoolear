@@ -126,6 +126,14 @@ class AdminApi extends TaggedApi {
         return this.get('/api/admin/trip-excess-contributions', params);
     }
 
+    getDonationPayments(params = {}) {
+        return this.get('/api/admin/donations/payments', params);
+    }
+
+    getClubCarpoolearMembers(params = {}) {
+        return this.get('/api/admin/club-carpoolear/members', params);
+    }
+
     getTripExcessContribution(tripId) {
         return this.get('/api/admin/trip-excess-contributions/' + tripId, {});
     }

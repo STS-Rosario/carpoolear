@@ -31,7 +31,8 @@ export const ADMIN_PERMISSIONS = {
     CarCatalog: 'admin.cars.catalog',
     PulseView: 'admin.pulse.view',
     BadgesManage: 'admin.badges.manage',
-    CampaignsManage: 'admin.campaigns.manage'
+    CampaignsManage: 'admin.campaigns.manage',
+    DonationsManage: 'admin.donations.manage'
 };
 
 export const ADMIN_NAV_ITEMS = [
@@ -43,6 +44,8 @@ export const ADMIN_NAV_ITEMS = [
     { name: 'admin-users-delete-list', labelKey: 'pedidosDeEliminacionDeCuenta', permission: ADMIN_PERMISSIONS.UsersDeleteRequests },
     { name: 'admin-trips', labelKey: 'adminNavViajes', permission: ADMIN_PERMISSIONS.TripsView },
     { name: 'admin-exceso-contribucion', labelKey: 'adminNavExcesoContribucion', permission: ADMIN_PERMISSIONS.TripsExcessContribution },
+    { name: 'admin-donaciones', labelKey: 'adminNavDonaciones', permission: ADMIN_PERMISSIONS.DonationsManage },
+    { name: 'admin-club-carpoolear', labelKey: 'adminNavClubCarpoolear', permission: ADMIN_PERMISSIONS.DonationsManage },
     { name: 'admin-banned-users', labelKey: 'usuariosBloqueados', permission: ADMIN_PERMISSIONS.UsersBannedList },
     { name: 'admin-manual-identity-validations', labelKey: 'validacionesManuales', permission: ADMIN_PERMISSIONS.IdentityManualReview },
     { name: 'admin-mp-rejected-validations', labelKey: 'rechazosMercadoPago', permission: ADMIN_PERMISSIONS.IdentityMpReview },
