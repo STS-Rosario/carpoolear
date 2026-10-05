@@ -56,6 +56,9 @@ export async function startDonationCheckout({
             source,
             trip_id: tripId || undefined
         };
+        if (userId) {
+            payload.user_id = userId;
+        }
         const response =
             type === 'monthly'
                 ? await donationApi.checkoutMonthly(payload)
