@@ -281,6 +281,7 @@ export default {
 </script>
 <style scoped>
 .admin-club-status-toggle {
+    max-width: 32rem;
     margin-bottom: 16px;
 }
 
