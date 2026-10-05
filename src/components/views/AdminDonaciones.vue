@@ -4,27 +4,39 @@
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('adminDonaciones') }}</h2>
                 <form class="admin-donaciones-filters" @submit.prevent="applyFilters">
-                    <label>
-                        {{ $t('tipo') }}
-                        <select v-model="kind" @change="applyFilters">
+                    <AppField label-for="admin-donaciones-kind" :label="$t('tipo')">
+                        <select
+                            id="admin-donaciones-kind"
+                            v-model="kind"
+                            class="admin-donaciones-filters__select"
+                            @change="applyFilters"
+                        >
                             <option value="">{{ $t('todos') }}</option>
                             <option value="unica_vez">{{ $t('unicaVez') }}</option>
                             <option value="club">{{ $t('adminNavClubCarpoolear') }}</option>
                         </select>
-                    </label>
-                    <label>
-                        {{ $t('estado') }}
-                        <select v-model="status" @change="applyFilters">
+                    </AppField>
+                    <AppField label-for="admin-donaciones-status" :label="$t('estado')">
+                        <select
+                            id="admin-donaciones-status"
+                            v-model="status"
+                            class="admin-donaciones-filters__select"
+                            @change="applyFilters"
+                        >
                             <option value="">{{ $t('todos') }}</option>
                             <option value="approved">{{ $t('aprobado') }}</option>
                             <option value="pending">{{ $t('pendiente') }}</option>
                         </select>
-                    </label>
-                    <label>
+                    </AppField>
+                    <AppInput
+                        id="admin-donaciones-search"
+                        v-model="q"
+                        type="search"
+                        :label="$t('buscar')"
+                    />
+                    <AppButton variant="secondary" size="sm" type="submit">
                         {{ $t('buscar') }}
-                        <input v-model="q" type="search" />
-                    </label>
-                    <button type="submit" class="btn btn-default">{{ $t('buscar') }}</button>
+                    </AppButton>
                 </form>
                 <Loading :data="list">
                     <div class="table-responsive">
@@ -97,6 +109,9 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
@@ -256,6 +271,9 @@ export default {
     components: {
         AdminLayout,
         AdminPaginationBar,
+        AppButton,
+        AppField,
+        AppInput,
         Loading
     }
 };
@@ -269,10 +287,30 @@ export default {
     margin-bottom: 16px;
 }
 
-.admin-donaciones-filters label {
-    display: flex;
-    flex-direction: column;
-    font-weight: 600;
+.admin-donaciones-filters :deep(.app-field),
+.admin-donaciones-filters :deep(.app-input) {
+    flex: 1 1 160px;
+    max-width: 220px;
+    margin-bottom: 0;
+}
+
+.admin-donaciones-filters__select {
+    width: 100%;
+    border: 0;
+    border-radius: var(--ds-radius-input);
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-donaciones-filters__select:focus {
+    outline: none;
 }
 
 .admin-donaciones-th-sort {

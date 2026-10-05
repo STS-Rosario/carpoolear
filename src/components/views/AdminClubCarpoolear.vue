@@ -3,39 +3,35 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('adminClubCarpoolear') }}</h2>
-                <div class="admin-club-status-switch">
-                    <button
-                        type="button"
-                        class="btn"
-                        :class="status === 'current' ? 'btn-primary' : 'btn-default'"
-                        @click="setStatus('current')"
-                    >
-                        {{ $t('miembrosActuales') }}
-                    </button>
-                    <button
-                        type="button"
-                        class="btn"
-                        :class="status === 'former' ? 'btn-primary' : 'btn-default'"
-                        @click="setStatus('former')"
-                    >
-                        {{ $t('miembrosAnteriores') }}
-                    </button>
-                </div>
+                <AppSegmentToggle
+                    class="admin-club-status-toggle"
+                    :model-value="status"
+                    :options="membershipStatusOptions"
+                    @update:modelValue="setStatus"
+                />
                 <form class="admin-club-filters" @submit.prevent="applyFilters">
-                    <label>
-                        {{ $t('buscar') }}
-                        <input v-model="q" type="search" />
-                    </label>
-                    <label>
-                        {{ $t('plan') }}
-                        <select v-model="tier" @change="applyFilters">
+                    <AppInput
+                        id="admin-club-search"
+                        v-model="q"
+                        type="search"
+                        :label="$t('buscar')"
+                    />
+                    <AppField label-for="admin-club-tier" :label="$t('plan')">
+                        <select
+                            id="admin-club-tier"
+                            v-model="tier"
+                            class="admin-club-filters__select"
+                            @change="applyFilters"
+                        >
                             <option value="">{{ $t('todos') }}</option>
                             <option value="cafe">{{ $t('donationTierCafe') }}</option>
                             <option value="beer">{{ $t('donationTierBeer') }}</option>
                             <option value="food">{{ $t('donationTierFood') }}</option>
                         </select>
-                    </label>
-                    <button type="submit" class="btn btn-default">{{ $t('buscar') }}</button>
+                    </AppField>
+                    <AppButton variant="secondary" size="sm" type="submit">
+                        {{ $t('buscar') }}
+                    </AppButton>
                 </form>
                 <Loading :data="list">
                     <div class="table-responsive">
@@ -107,6 +103,10 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
@@ -133,6 +133,18 @@ export default {
         };
     },
     computed: {
+        membershipStatusOptions() {
+            return [
+                {
+                    value: 'current',
+                    label: this.$t('miembrosActuales')
+                },
+                {
+                    value: 'former',
+                    label: this.$t('miembrosAnteriores')
+                }
+            ];
+        },
         visibleColumns() {
             if (this.status === 'former') {
                 return ADMIN_CLUB_MEMBERS_SORT_COLUMNS;
@@ -259,14 +271,16 @@ export default {
     components: {
         AdminLayout,
         AdminPaginationBar,
+        AppButton,
+        AppField,
+        AppInput,
+        AppSegmentToggle,
         Loading
     }
 };
 </script>
 <style scoped>
-.admin-club-status-switch {
-    display: flex;
-    gap: 8px;
+.admin-club-status-toggle {
     margin-bottom: 16px;
 }
 
@@ -278,10 +292,30 @@ export default {
     margin-bottom: 16px;
 }
 
-.admin-club-filters label {
-    display: flex;
-    flex-direction: column;
-    font-weight: 600;
+.admin-club-filters :deep(.app-field),
+.admin-club-filters :deep(.app-input) {
+    flex: 1 1 160px;
+    max-width: 220px;
+    margin-bottom: 0;
+}
+
+.admin-club-filters__select {
+    width: 100%;
+    border: 0;
+    border-radius: var(--ds-radius-input);
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-club-filters__select:focus {
+    outline: none;
 }
 
 .admin-club-th-sort {
