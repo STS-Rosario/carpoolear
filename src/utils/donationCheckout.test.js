@@ -29,6 +29,13 @@ describe('donationCheckout', () => {
         });
 
         expect(url).toBe('https://mp.test/once');
+        const donationApi = (await import('../services/api/Donation.js')).default;
+        expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
+            amount: 5000,
+            source: 'after_rating',
+            trip_id: 12,
+            user_id: 7
+        });
     });
 
     it('falls back to static donation URLs when API is disabled', async () => {
