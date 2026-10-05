@@ -106,7 +106,8 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(donationApi.checkoutMonthly).toHaveBeenCalledWith({
             amount: 7500,
             source: 'donate_page',
-            trip_id: undefined
+            trip_id: undefined,
+            user_id: 42
         });
         expect(open).toHaveBeenCalledWith('https://mp.test/monthly', '_blank');
         expect(registerDonation).not.toHaveBeenCalled();
@@ -125,7 +126,8 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
             amount: 5000,
             source: 'donate_page',
-            trip_id: undefined
+            trip_id: undefined,
+            user_id: 42
         });
         expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
     });
@@ -182,7 +184,8 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
             amount: 5000,
             source: 'after_rating',
-            trip_id: 7
+            trip_id: 7,
+            user_id: 42
         });
     });
 });

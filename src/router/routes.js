@@ -43,6 +43,8 @@ const AdminUserRecommendations = () =>
 const AdminTrips = () => import('../components/views/AdminTrips.vue');
 const AdminExcesoContribucion = () => import('../components/views/AdminExcesoContribucion.vue');
 const AdminExcesoContribucionDetail = () => import('../components/views/AdminExcesoContribucionDetail.vue');
+const AdminDonaciones = () => import('../components/views/AdminDonaciones.vue');
+const AdminClubCarpoolear = () => import('../components/views/AdminClubCarpoolear.vue');
 const UsersDeleteList = () => import('../components/views/UsersDeleteList.vue');
 const BannedUsersList = () => import('../components/views/BannedUsersList.vue');
 const AdminManualIdentityValidations = () => import('../components/views/AdminManualIdentityValidations.vue');
@@ -1081,6 +1083,44 @@ export default [
                 header: {
                     titleKey: 'excesoContribucion',
                     buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/donaciones',
+        name: 'admin-donaciones',
+        component: AdminDonaciones,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.DonationsManage,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminDonaciones',
+                    buttons: []
+                }
+            }
+        }
+    },
+    {
+        path: '/admin/club-carpoolear',
+        name: 'admin-club-carpoolear',
+        component: AdminClubCarpoolear,
+        beforeEnter: authAdmin,
+        meta: {
+            adminPermission: ADMIN_PERMISSIONS.DonationsManage,
+            actionbar: {
+                footer: {
+                    show: true,
+                    active_id: 'admin'
+                },
+                header: {
+                    titleKey: 'adminClubCarpoolear',
+                    buttons: []
                 }
             }
         }

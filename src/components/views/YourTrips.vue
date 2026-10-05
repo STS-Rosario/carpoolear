@@ -120,6 +120,8 @@ import modal from '../Modal';
 import dialogs from '../../services/dialogs.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
+import { startDonationCheckout } from '../../utils/donationCheckout.js';
+import { openExternalUrl } from '../../utils/externalLink.js';
 
 export default {
     name: 'my-trips',
@@ -197,75 +199,39 @@ export default {
                 }
             });
         },
-        onDonateOnceTime() {
+        async donateCheckout(type) {
             if (this.donateValue > 0) {
-                var url = 'http://mpago.la/jgap'; // 50
-                switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/CaSZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/xntw';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/QEiN';
-                        break;
-                    default:
-                        break;
-                }
-                window.open(url, '_blank');
-                this.showModalRequestDonation = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
-                };
-                this.registerDonation(data);
-            } else {
-                dialogs.message(
-                    this.$t('valorDonacion'),
-                    {
+                try {
+                    const url = await startDonationCheckout({
+                        type,
+                        amount: this.donateValue,
+                        source: 'your_trips',
+                        tripId: this.modalTripId,
+                        userId: this.user && this.user.id,
+                        appConfig: this.appConfig
+                    });
+                    openExternalUrl(url);
+                } catch (error) {
+                    console.error('Donation checkout failed:', error);
+                    dialogs.message(this.$t('valorDonacion'), {
                         duration: 10,
                         estado: 'error'
-                    }
-                );
+                    });
+                    return;
+                }
+                this.showModalRequestDonation = false;
+            } else {
+                dialogs.message(this.$t('valorDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
             }
         },
+        onDonateOnceTime() {
+            return this.donateCheckout('once');
+        },
         onDonateMonthly() {
-            if (this.donateValue > 0) {
-                var url = 'http://mpago.la/1w3aci'; // 50
-                switch (this.donateValue) {
-                    case '100':
-                        url = 'http://mpago.la/BfZ';
-                        break;
-                    case '200':
-                        url = 'http://mpago.la/P02H';
-                        break;
-                    case '500':
-                        url = 'http://mpago.la/k8Xp';
-                        break;
-                    default:
-                        break;
-                }
-                window.open(url, '_blank');
-                this.showModalRequestDonation = false;
-                let data = {
-                    has_donated: 1,
-                    has_denied: 0,
-                    ammount: parseFloat(this.donateValue),
-                    trip_id: this.modalTripId
-                };
-                this.registerDonation(data);
-            } else {
-                dialogs.message(
-                    this.$t('valorDonacion'),
-                    {
-                        duration: 10,
-                        estado: 'error'
-                    }
-                );
-            }
+            return this.donateCheckout('monthly');
         },
 
         toPendingRates() {

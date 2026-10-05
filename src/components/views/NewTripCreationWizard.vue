@@ -1567,16 +1567,20 @@ export default {
  * (h3 bottom margin, header bottom padding, body top margin and padding, and
  * the paragraph top margin): ~84px. Tighten them for this modal only.
  */
-.new-trip-wizard__contribution-excess-modal :deep(.modal-header) {
+.new-trip-wizard__contribution-excess-modal.modal-mask :deep(.modal-wrapper .modal-container) {
+    gap: 0;
+}
+
+.new-trip-wizard__contribution-excess-modal :deep(.modal-container .modal-header) {
     padding-bottom: 0;
 }
 
-.new-trip-wizard__contribution-excess-modal :deep(.modal-header h3) {
+.new-trip-wizard__contribution-excess-modal :deep(.modal-container .modal-header h3) {
     margin: 0 0 0.625rem;
 }
 
-.new-trip-wizard__contribution-excess-modal :deep(.modal-body) {
-    margin-top: 0;
+.new-trip-wizard__contribution-excess-modal :deep(.modal-container .modal-body) {
+    margin: 0;
     padding-top: 0.5rem;
 }
 

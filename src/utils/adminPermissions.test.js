@@ -84,6 +84,8 @@ describe('visibleAdminNavItems', () => {
         expect(names).not.toContain('admin-changelogs');
         expect(names).not.toContain('admin-car-brands');
         expect(names).not.toContain('admin-car-colors');
+        expect(names).not.toContain('admin-donaciones');
+        expect(names).not.toContain('admin-club-carpoolear');
     });
 
     it('includes every nav item for a superadmin permission list', () => {
@@ -121,5 +123,21 @@ describe('identity verification report nav item', () => {
         const item = ADMIN_NAV_ITEMS.find((navItem) => navItem.name === 'admin-identity-verification-report');
 
         expect(item.labelKey).toBe('adminNavReporteVerificaciones');
+    });
+});
+
+describe('donation admin nav items', () => {
+    it('requires donations manage permission', () => {
+        const donations = ADMIN_NAV_ITEMS.find((item) => item.name === 'admin-donaciones');
+        const club = ADMIN_NAV_ITEMS.find((item) => item.name === 'admin-club-carpoolear');
+
+        expect(donations).toMatchObject({
+            labelKey: 'adminNavDonaciones',
+            permission: ADMIN_PERMISSIONS.DonationsManage
+        });
+        expect(club).toMatchObject({
+            labelKey: 'adminNavClubCarpoolear',
+            permission: ADMIN_PERMISSIONS.DonationsManage
+        });
     });
 });
