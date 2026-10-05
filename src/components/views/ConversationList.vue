@@ -12,7 +12,7 @@
             }
         ]"
     >
-        <CoordinateTrip v-show="isMobile"></CoordinateTrip>
+        <CoordinateTrip v-show="isMobile && hide"></CoordinateTrip>
         <div
             class="conversation-component container"
             :class="config.enable_footer ? 'with-footer' : 'without-footer'"
