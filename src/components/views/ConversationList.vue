@@ -12,7 +12,7 @@
             }
         ]"
     >
-        <CoordinateTrip v-show="isMobile && hide"></CoordinateTrip>
+        <CoordinateTrip v-show="showMobileTripHeader"></CoordinateTrip>
         <div
             class="conversation-component container"
             :class="config.enable_footer ? 'with-footer' : 'without-footer'"
@@ -302,6 +302,9 @@ export default {
 
         hide() {
             return this.$route.meta.hide;
+        },
+        showMobileTripHeader() {
+            return this.isMobile && this.hide;
         },
         messagesFilterCounts() {
             return countConversationsByKind(this.conversations);
