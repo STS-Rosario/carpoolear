@@ -144,6 +144,12 @@ describe('ProfileInfo Club Carpoolear tile', () => {
             /\.profile-info-panel__tile--club:hover[\s\S]*?border-color:\s*#ce0f2c/i
         );
     });
+
+    it('does not underline the club tile on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*text-decoration:\s*none/
+        );
+    });
 });
 
 describe('ProfileInfo cars display', () => {
