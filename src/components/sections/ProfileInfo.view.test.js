@@ -145,6 +145,18 @@ describe('ProfileInfo Club Carpoolear tile', () => {
         );
     });
 
+    it('uses a club-red border by default', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club\s*\{[^}]*border-color:\s*#ce0f2c/
+        );
+    });
+
+    it('washes the club tile with a light red background on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*background-color:\s*#fef5f6/
+        );
+    });
+
     it('does not underline the club tile on hover', () => {
         expect(cssSource).toMatch(
             /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*text-decoration:\s*none/
