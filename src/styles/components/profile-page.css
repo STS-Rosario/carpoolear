@@ -327,12 +327,6 @@
     text-decoration: underline;
 }
 
-.profile-info-panel__tile--club:hover .profile-info-panel__tile-what,
-.profile-info-panel__tile--club:focus .profile-info-panel__tile-what,
-.profile-info-panel__tile--club:focus-visible .profile-info-panel__tile-what {
-    text-decoration: none;
-}
-
 .profile-page .profile-info-component .profile-info-panel__tile-icon-wrap {
     display: inline-flex;
     align-items: center;
