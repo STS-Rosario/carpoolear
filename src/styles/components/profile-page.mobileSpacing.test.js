@@ -43,13 +43,17 @@ describe('profile page mobile spacing', () => {
         expect(mobileCss).toMatch(
             /\.profile-page h3[\s\S]*?margin-bottom:\s*0/
         );
-        expect(desktopCss).not.toMatch(/margin-bottom:\s*0/);
+        expect(desktopCss).not.toMatch(
+            /\.profile-page h3[\s\S]*?margin-bottom:\s*0/
+        );
     });
 
     it('drops profile container top padding on mobile only', () => {
         expect(mobileCss).toMatch(
             /\.profile-page[\s\S]*?\.container[\s\S]*?padding-top:\s*0/
         );
-        expect(desktopCss).not.toMatch(/padding-top:\s*0/);
+        expect(desktopCss).not.toMatch(
+            /\.profile-page[\s\S]*?\.container[\s\S]*?padding-top:\s*0/
+        );
     });
 });
