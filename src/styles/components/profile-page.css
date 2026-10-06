@@ -618,6 +618,18 @@
 }
 
 
+@media only screen and (max-width: 767px) {
+    .profile-page h3,
+    .profile-page .trips.container h3 {
+        margin-bottom: 0;
+    }
+
+    .profile-page .container,
+    .profile-page .trips.container {
+        padding-top: 0;
+    }
+}
+
 @media only screen and (min-width: 768px) {
     .profile-identity-header {
         flex-direction: row;
