@@ -9,3 +9,14 @@ export function isActiveClubCarpoolearMember(user) {
 
     return Boolean(user.monthly_donate);
 }
+
+export function isPublicClubCarpoolearMember(user) {
+    if (!user) {
+        return false;
+    }
+
+    return (
+        user.club_carpoolear_public_member === 1 ||
+        user.club_carpoolear_public_member === true
+    );
+}
