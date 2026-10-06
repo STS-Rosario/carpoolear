@@ -11,7 +11,9 @@
                 class="profile-info-panel__tile profile-info-panel__tile--full"
                 data-testid="profile-club-carpoolear-tile"
             >
-                <span class="profile-info-panel__tile-icon-wrap profile-info-panel__tile-icon-wrap--club">
+                <span
+                    class="profile-info-panel__tile-icon-wrap profile-info-panel__tile-icon-wrap--club"
+                >
                     <img
                         :src="badgeImageUrl('badges/club-carpoolear.png')"
                         :alt="$t('miembroClubCarpoolearTitulo')"

@@ -709,12 +709,6 @@
         margin-top: 0.5rem;
     }
 
-    .profile-info-panel__tile {
-        border: 1px solid #ddd;
-        border-radius: 0.5rem;
-        padding: 1rem;
-    }
-
     /* Keep ratings as a single stacked list on desktop too */
     .profile-page .profile-rates-component .column-rating {
         float: none;
