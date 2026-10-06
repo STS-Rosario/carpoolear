@@ -83,9 +83,25 @@ describe('ProfileInfo Club Carpoolear tile', () => {
         );
         expect(tilesBlock[0]).toContain('v-if="showClubCarpoolearTile"');
         expect(tilesBlock[0]).toContain('profile-info-panel__tile--full');
+        expect(tilesBlock[0]).toContain('profile-info-panel__tile--club');
         expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearTitulo')");
-        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearSub')");
+        expect(tilesBlock[0]).toContain('keypath="miembroClubCarpoolearSub"');
+        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearQueEsEsto')");
         expect(tilesBlock[0]).toContain('badges/club-carpoolear.png');
+    });
+
+    it('links the club tile and what-is-this copy to Aportar', () => {
+        const tilesBlock = viewSource.match(
+            /class="profile-info-panel__tiles"[\s\S]*?data-testid="profile-identity-tile"/
+        );
+
+        expect(tilesBlock).not.toBeNull();
+        expect(tilesBlock[0]).toContain('<router-link');
+        expect(tilesBlock[0]).toContain(':to="{ name: \'donate\' }"');
+        expect(tilesBlock[0]).toContain(
+            'data-testid="profile-club-carpoolear-tile"'
+        );
+        expect(tilesBlock[0]).toContain('miembroClubCarpoolearQueEsEsto');
     });
 
     it('gates the club tile with public Club Carpoolear membership', () => {
@@ -99,14 +115,18 @@ describe('ProfileInfo Club Carpoolear tile', () => {
     it('keeps Club Carpoolear tile copy in i18n', () => {
         expect(i18nSource).toContain('miembroClubCarpoolearTitulo');
         expect(i18nSource).toContain('miembroClubCarpoolearSub');
-        expect(i18nSource).toContain('Miembro del Club Carpoolear');
+        expect(i18nSource).toContain('miembroClubCarpoolearQueEsEsto');
+        expect(i18nSource).toContain('Integrante del Club Carpoolear');
         expect(i18nSource).toContain(
-            'Esta persona ayuda a mantener a Carpoolear andando :)'
+            'Esta persona ayuda a mantener a Carpoolear andando :) {link}'
         );
+        expect(i18nSource).toContain('¿Qué es esto?');
         expect(i18nSource).toContain('Club Carpoolear member');
         expect(i18nSource).toContain(
-            'This person helps keep Carpoolear going :)'
+            'This person helps keep Carpoolear going :) {link}'
         );
+        expect(i18nSource).toContain('What is this?');
+        expect(i18nSource).not.toContain('Miembro del Club Carpoolear');
     });
 
     it('lets the club tile span both desktop columns', () => {
@@ -116,6 +136,12 @@ describe('ProfileInfo Club Carpoolear tile', () => {
         );
         expect(cssSource).toMatch(
             /\.profile-info-panel__tile--full\s*\{[\s\S]*?grid-column:\s*1\s*\/\s*-1/
+        );
+    });
+
+    it('uses a club-red hover border on the Aportar tile', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[\s\S]*?border-color:\s*#ce0f2c/i
         );
     });
 });
