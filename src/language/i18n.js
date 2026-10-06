@@ -542,6 +542,9 @@ const messages = {
         miembroHaceUnDia: 'Miembro hace 1 día',
         usuarioVerificado: 'Usuario verificado',
         sobreMi: 'Sobre mí',
+        miembroClubCarpoolearTitulo: 'Miembro del Club Carpoolear',
+        miembroClubCarpoolearSub:
+            'Esta persona ayuda a mantener a Carpoolear andando :)',
         identidadVerificadaTitulo: 'Identidad verificada',
         identidadVerificadaSub: 'Verificó su DNI con Carpoolear',
         identidadNoVerificadaTitulo: 'Identidad no verificada',
@@ -3518,6 +3521,9 @@ const messages = {
         miembroHaceUnDia: 'Miembro hace 1 día',
         usuarioVerificado: 'Usuario verificado',
         sobreMi: 'Sobre mí',
+        miembroClubCarpoolearTitulo: 'Miembro del Club Carpoolear',
+        miembroClubCarpoolearSub:
+            'Esta persona ayuda a mantener a Carpoolear andando :)',
         identidadVerificadaTitulo: 'Identidad verificada',
         identidadVerificadaSub: 'Verificó su DNI con Carpoolear',
         identidadNoVerificadaTitulo: 'Identidad no verificada',
@@ -4638,6 +4644,9 @@ const messages = {
         miembroHaceUnDia: 'Member for 1 day',
         usuarioVerificado: 'Verified user',
         sobreMi: 'About me',
+        miembroClubCarpoolearTitulo: 'Club Carpoolear member',
+        miembroClubCarpoolearSub:
+            'This person helps keep Carpoolear going :)',
         identidadVerificadaTitulo: 'Identity verified',
         identidadVerificadaSub: 'Verified their ID with Carpoolear',
         identidadNoVerificadaTitulo: 'Identity not verified',

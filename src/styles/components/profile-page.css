@@ -290,8 +290,8 @@
 }
 
 .profile-info-panel__tiles {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 0.75rem;
     margin: 0.75rem 0 1rem;
 }
@@ -304,6 +304,10 @@
     border: 1px solid #ddd;
     border-radius: 0.5rem;
     background: #fff;
+}
+
+.profile-info-panel__tile--full {
+    grid-column: 1 / -1;
 }
 
 .profile-page .profile-info-component .profile-info-panel__tile-icon-wrap {
@@ -344,6 +348,20 @@
 
 .profile-page .profile-info-component .profile-info-panel__tile-icon--verified {
     color: var(--profile-verified, #2e7d32);
+}
+
+.profile-page .profile-info-component .profile-info-panel__tile-icon-wrap--club {
+    background: transparent;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0;
+}
+
+.profile-info-panel__tile-badge {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .profile-info-panel__tile-title {
@@ -686,13 +704,12 @@
     }
 
     .profile-info-panel__tiles {
-        flex-direction: row;
+        grid-template-columns: 1fr 1fr;
         gap: 1rem;
         margin-top: 0.5rem;
     }
 
     .profile-info-panel__tile {
-        flex: 1 1 0;
         border: 1px solid #ddd;
         border-radius: 0.5rem;
         padding: 1rem;
