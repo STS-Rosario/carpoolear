@@ -313,6 +313,9 @@
 .profile-info-panel__tile--club {
     text-decoration: none;
     color: inherit;
+    border-color: #ce0f2c;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
 }
 
 .profile-info-panel__tile--club:hover,
@@ -320,6 +323,7 @@
 .profile-info-panel__tile--club:focus-visible {
     border-color: #ce0f2c;
     text-decoration: none;
+    background-color: #fef5f6;
 }
 
 .profile-info-panel__tile-what {
