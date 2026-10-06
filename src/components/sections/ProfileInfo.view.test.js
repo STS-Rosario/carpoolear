@@ -4,8 +4,13 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'ProfileInfo.vue');
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const cssPath = path.resolve(
+    __dirname,
+    '../../styles/components/profile-page.css'
+);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const cssSource = fs.readFileSync(cssPath, 'utf8');
 
 describe('ProfileInfo public panel', () => {
     it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
@@ -63,6 +68,55 @@ describe('ProfileInfo public panel', () => {
             'Este usuario aún debe verificar su identidad'
         );
         expect(i18nSource).toContain('Sin datos de respuesta aún');
+    });
+});
+
+describe('ProfileInfo Club Carpoolear tile', () => {
+    it('renders the club tile before the identity tile for public members', () => {
+        const tilesBlock = viewSource.match(
+            /class="profile-info-panel__tiles"[\s\S]*?data-testid="profile-identity-tile"/
+        );
+
+        expect(tilesBlock).not.toBeNull();
+        expect(tilesBlock[0]).toContain(
+            'data-testid="profile-club-carpoolear-tile"'
+        );
+        expect(tilesBlock[0]).toContain('v-if="showClubCarpoolearTile"');
+        expect(tilesBlock[0]).toContain('profile-info-panel__tile--full');
+        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearTitulo')");
+        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearSub')");
+        expect(tilesBlock[0]).toContain('badges/club-carpoolear.png');
+    });
+
+    it('gates the club tile with public Club Carpoolear membership', () => {
+        expect(viewSource).toContain('isPublicClubCarpoolearMember');
+        expect(viewSource).toContain('showClubCarpoolearTile');
+        expect(viewSource).toMatch(
+            /showClubCarpoolearTile\(\)\s*\{[\s\S]*?isPublicClubCarpoolearMember\(this\.profile\)/
+        );
+    });
+
+    it('keeps Club Carpoolear tile copy in i18n', () => {
+        expect(i18nSource).toContain('miembroClubCarpoolearTitulo');
+        expect(i18nSource).toContain('miembroClubCarpoolearSub');
+        expect(i18nSource).toContain('Miembro del Club Carpoolear');
+        expect(i18nSource).toContain(
+            'Esta persona ayuda a mantener a Carpoolear andando :)'
+        );
+        expect(i18nSource).toContain('Club Carpoolear member');
+        expect(i18nSource).toContain(
+            'This person helps keep Carpoolear going :)'
+        );
+    });
+
+    it('lets the club tile span both desktop columns', () => {
+        expect(cssSource).toContain('profile-info-panel__tile--full');
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tiles\s*\{[\s\S]*?grid-template-columns:\s*1fr 1fr/
+        );
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--full\s*\{[\s\S]*?grid-column:\s*1\s*\/\s*-1/
+        );
     });
 });
 
