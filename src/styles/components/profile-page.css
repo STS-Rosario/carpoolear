@@ -310,6 +310,22 @@
     grid-column: 1 / -1;
 }
 
+.profile-info-panel__tile--club {
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile-info-panel__tile--club:hover,
+.profile-info-panel__tile--club:focus,
+.profile-info-panel__tile--club:focus-visible {
+    border-color: #ce0f2c;
+}
+
+.profile-info-panel__tile-what {
+    color: #ce0f2c;
+    text-decoration: underline;
+}
+
 .profile-page .profile-info-component .profile-info-panel__tile-icon-wrap {
     display: inline-flex;
     align-items: center;

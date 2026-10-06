@@ -6,9 +6,10 @@
         </template>
 
         <div class="profile-info-panel__tiles">
-            <div
+            <router-link
                 v-if="showClubCarpoolearTile"
-                class="profile-info-panel__tile profile-info-panel__tile--full"
+                :to="{ name: 'donate' }"
+                class="profile-info-panel__tile profile-info-panel__tile--full profile-info-panel__tile--club"
                 data-testid="profile-club-carpoolear-tile"
             >
                 <span
@@ -24,11 +25,19 @@
                     <p class="profile-info-panel__tile-title">
                         {{ $t('miembroClubCarpoolearTitulo') }}
                     </p>
-                    <p class="profile-info-panel__tile-sub">
-                        {{ $t('miembroClubCarpoolearSub') }}
-                    </p>
+                    <i18n-t
+                        keypath="miembroClubCarpoolearSub"
+                        tag="p"
+                        class="profile-info-panel__tile-sub"
+                    >
+                        <template #link>
+                            <span class="profile-info-panel__tile-what">{{
+                                $t('miembroClubCarpoolearQueEsEsto')
+                            }}</span>
+                        </template>
+                    </i18n-t>
                 </div>
-            </div>
+            </router-link>
             <div
                 class="profile-info-panel__tile"
                 data-testid="profile-identity-tile"
