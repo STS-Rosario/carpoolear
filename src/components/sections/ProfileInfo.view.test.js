@@ -150,6 +150,15 @@ describe('ProfileInfo Club Carpoolear tile', () => {
             /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*text-decoration:\s*none/
         );
     });
+
+    it('keeps the what-is-this link underlined on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile-what\s*\{[^}]*text-decoration:\s*underline/
+        );
+        expect(cssSource).not.toMatch(
+            /\.profile-info-panel__tile--club:hover \.profile-info-panel__tile-what/
+        );
+    });
 });
 
 describe('ProfileInfo cars display', () => {
