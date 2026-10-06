@@ -4,8 +4,13 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'ProfileInfo.vue');
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
+const cssPath = path.resolve(
+    __dirname,
+    '../../styles/components/profile-page.css'
+);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const cssSource = fs.readFileSync(cssPath, 'utf8');
 
 describe('ProfileInfo public panel', () => {
     it('renders sobre mi, identity tile, privacy note without duplicating header identity', () => {
@@ -63,6 +68,108 @@ describe('ProfileInfo public panel', () => {
             'Este usuario aún debe verificar su identidad'
         );
         expect(i18nSource).toContain('Sin datos de respuesta aún');
+    });
+});
+
+describe('ProfileInfo Club Carpoolear tile', () => {
+    it('renders the club tile before the identity tile for public members', () => {
+        const tilesBlock = viewSource.match(
+            /class="profile-info-panel__tiles"[\s\S]*?data-testid="profile-identity-tile"/
+        );
+
+        expect(tilesBlock).not.toBeNull();
+        expect(tilesBlock[0]).toContain(
+            'data-testid="profile-club-carpoolear-tile"'
+        );
+        expect(tilesBlock[0]).toContain('v-if="showClubCarpoolearTile"');
+        expect(tilesBlock[0]).toContain('profile-info-panel__tile--full');
+        expect(tilesBlock[0]).toContain('profile-info-panel__tile--club');
+        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearTitulo')");
+        expect(tilesBlock[0]).toContain('keypath="miembroClubCarpoolearSub"');
+        expect(tilesBlock[0]).toContain("$t('miembroClubCarpoolearQueEsEsto')");
+        expect(tilesBlock[0]).toContain('badges/club-carpoolear.png');
+    });
+
+    it('links the club tile and what-is-this copy to Aportar', () => {
+        const tilesBlock = viewSource.match(
+            /class="profile-info-panel__tiles"[\s\S]*?data-testid="profile-identity-tile"/
+        );
+
+        expect(tilesBlock).not.toBeNull();
+        expect(tilesBlock[0]).toContain('<router-link');
+        expect(tilesBlock[0]).toContain(':to="{ name: \'donate\' }"');
+        expect(tilesBlock[0]).toContain(
+            'data-testid="profile-club-carpoolear-tile"'
+        );
+        expect(tilesBlock[0]).toContain('miembroClubCarpoolearQueEsEsto');
+    });
+
+    it('gates the club tile with public Club Carpoolear membership', () => {
+        expect(viewSource).toContain('isPublicClubCarpoolearMember');
+        expect(viewSource).toContain('showClubCarpoolearTile');
+        expect(viewSource).toMatch(
+            /showClubCarpoolearTile\(\)\s*\{[\s\S]*?isPublicClubCarpoolearMember\(this\.profile\)/
+        );
+    });
+
+    it('keeps Club Carpoolear tile copy in i18n', () => {
+        expect(i18nSource).toContain('miembroClubCarpoolearTitulo');
+        expect(i18nSource).toContain('miembroClubCarpoolearSub');
+        expect(i18nSource).toContain('miembroClubCarpoolearQueEsEsto');
+        expect(i18nSource).toContain('Integrante del Club Carpoolear');
+        expect(i18nSource).toContain(
+            'Esta persona ayuda a mantener a Carpoolear andando :) {link}'
+        );
+        expect(i18nSource).toContain('¿Qué es esto?');
+        expect(i18nSource).toContain('Club Carpoolear member');
+        expect(i18nSource).toContain(
+            'This person helps keep Carpoolear going :) {link}'
+        );
+        expect(i18nSource).toContain('What is this?');
+        expect(i18nSource).not.toContain('Miembro del Club Carpoolear');
+    });
+
+    it('lets the club tile span both desktop columns', () => {
+        expect(cssSource).toContain('profile-info-panel__tile--full');
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tiles\s*\{[\s\S]*?grid-template-columns:\s*1fr 1fr/
+        );
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--full\s*\{[\s\S]*?grid-column:\s*1\s*\/\s*-1/
+        );
+    });
+
+    it('uses a club-red hover border on the Aportar tile', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[\s\S]*?border-color:\s*#ce0f2c/i
+        );
+    });
+
+    it('uses a club-red border by default', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club\s*\{[^}]*border-color:\s*#ce0f2c/
+        );
+    });
+
+    it('washes the club tile with a light red background on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*background-color:\s*#fef5f6/
+        );
+    });
+
+    it('does not underline the club tile on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile--club:hover[^{]*\{[^}]*text-decoration:\s*none/
+        );
+    });
+
+    it('keeps the what-is-this link underlined on hover', () => {
+        expect(cssSource).toMatch(
+            /\.profile-info-panel__tile-what\s*\{[^}]*text-decoration:\s*underline/
+        );
+        expect(cssSource).not.toMatch(
+            /\.profile-info-panel__tile--club:hover \.profile-info-panel__tile-what/
+        );
     });
 });
 

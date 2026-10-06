@@ -6,6 +6,38 @@
         </template>
 
         <div class="profile-info-panel__tiles">
+            <router-link
+                v-if="showClubCarpoolearTile"
+                :to="{ name: 'donate' }"
+                class="profile-info-panel__tile profile-info-panel__tile--full profile-info-panel__tile--club"
+                data-testid="profile-club-carpoolear-tile"
+            >
+                <span
+                    class="profile-info-panel__tile-icon-wrap profile-info-panel__tile-icon-wrap--club"
+                >
+                    <img
+                        :src="badgeImageUrl('badges/club-carpoolear.png')"
+                        :alt="$t('miembroClubCarpoolearTitulo')"
+                        class="profile-info-panel__tile-badge"
+                    />
+                </span>
+                <div>
+                    <p class="profile-info-panel__tile-title">
+                        {{ $t('miembroClubCarpoolearTitulo') }}
+                    </p>
+                    <i18n-t
+                        keypath="miembroClubCarpoolearSub"
+                        tag="p"
+                        class="profile-info-panel__tile-sub"
+                    >
+                        <template #link>
+                            <span class="profile-info-panel__tile-what">{{
+                                $t('miembroClubCarpoolearQueEsEsto')
+                            }}</span>
+                        </template>
+                    </i18n-t>
+                </div>
+            </router-link>
             <div
                 class="profile-info-panel__tile"
                 data-testid="profile-identity-tile"
@@ -248,6 +280,7 @@ import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import { formatDocumentIdFromConfig } from '../../utils/documentId';
 import { activeCarsWithPlate } from '../../utils/userCars.js';
+import { isPublicClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import AppButton from '../ui/AppButton.vue';
 
 export default {
@@ -333,6 +366,9 @@ export default {
                 delay = this.$t('enElMomento');
             }
             return this.$t('tiempoPromedioRespuesta', { delay });
+        },
+        showClubCarpoolearTile() {
+            return isPublicClubCarpoolearMember(this.profile);
         },
         showResponseTile() {
             return Boolean(this.config?.module_conversation_average_delay);
