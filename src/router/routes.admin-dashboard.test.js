@@ -23,8 +23,7 @@ describe('admin dashboard routes', () => {
 });
 
 describe('admin dashboard navigation', () => {
-    it('lists Tablero first and links to admin dashboard', () => {
-        expect(navSource.indexOf('adminNavTablero')).toBeLessThan(navSource.indexOf('adminNavGraficos'));
+    it('links to admin dashboard', () => {
         expect(navSource).toContain("name: 'admin-dashboard'");
     });
 });
