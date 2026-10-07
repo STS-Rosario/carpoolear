@@ -155,13 +155,13 @@
 }
 
 .trip-card-shell__seats--low {
-    background: var(--ds-error-bg);
-    color: var(--ds-error-solid);
+    background: var(--ds-warning-bg);
+    color: var(--ds-warning-solid);
 }
 
 .trip-card-shell__seats--full {
-    background: var(--ds-input-disabled-bg);
-    color: var(--ds-text-muted);
+    background: var(--ds-error-bg);
+    color: var(--ds-error-solid);
 }
 
 .trip-card-shell__divider {
