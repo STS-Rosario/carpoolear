@@ -1,10 +1,9 @@
 import { shareContent as defaultShareContent } from './shareContent.js';
 import { buildTripShareMessage } from './tripShareMessage.js';
-import { resolveWebAppBaseUrl } from './supportTicketTripReport.js';
+import { buildWebAppTripDetailUrl } from './supportTicketTripReport.js';
 
 export function buildAbsoluteTripDetailUrl(tripId, env = import.meta.env) {
-    const baseUrl = resolveWebAppBaseUrl(env);
-    return baseUrl ? `${baseUrl}/trips/${tripId}` : '';
+    return buildWebAppTripDetailUrl(tripId, env);
 }
 
 export async function shareTripDetail({
