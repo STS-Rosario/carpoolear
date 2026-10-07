@@ -47,11 +47,20 @@ export function buildTripReportSupportTicketMessage({
     return `${TRIP_REPORT_MESSAGE_SEPARATOR}\n\n${context}`;
 }
 
+export function buildTripDetailUrlFromBase(tripId, webAppBaseUrl) {
+    const baseUrl = normalizeWebAppBaseUrl(webAppBaseUrl);
+    return baseUrl ? `${baseUrl}/trips/${tripId}` : '';
+}
+
+export function buildWebAppTripDetailUrl(tripId, env = import.meta.env) {
+    return buildTripDetailUrlFromBase(tripId, resolveWebAppBaseUrl(env));
+}
+
 export function buildTripReportSupportTicketRoute({ trip, webAppBaseUrl }) {
     const tripId = trip && trip.id;
     const driver = trip && trip.user;
+    const tripUrl = buildTripDetailUrlFromBase(tripId, webAppBaseUrl);
     const baseUrl = normalizeWebAppBaseUrl(webAppBaseUrl);
-    const tripUrl = baseUrl ? `${baseUrl}/trips/${tripId}` : '';
     const driverProfileUrl =
         baseUrl && driver && driver.id ? `${baseUrl}/profile/${driver.id}` : '';
 

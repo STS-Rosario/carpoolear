@@ -23,12 +23,12 @@ describe('tripShareMessage', () => {
             translate: (key, params) => {
                 expect(key).toBe('tripShareMessage');
                 expect(params).not.toHaveProperty('url');
-                return `Te comparto mi viaje en Carpoolear para el ${params.day} ${params.time} a ${params.destination}`;
+                return `Te comparto mi viaje en Carpoolear para el ${params.day} a las ${params.time}hs a ${params.destination}`;
             }
         });
 
         expect(message).toBe(
-            'Te comparto mi viaje en Carpoolear para el lunes 15 de junio 14:00 a Buenos Aires'
+            'Te comparto mi viaje en Carpoolear para el lunes 15 de junio a las 14:00hs a Buenos Aires'
         );
     });
 });

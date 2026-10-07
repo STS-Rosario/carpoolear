@@ -1630,7 +1630,7 @@ const messages = {
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Carpoolear',
         tripShareMessage:
-            'Te comparto mi viaje en Carpoolear para el {day} {time} a {destination}',
+            'Te comparto mi viaje en Carpoolear para el {day} a las {time}hs a {destination}',
         compartirPlataforma:
             'Carpoolear: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
@@ -3557,7 +3557,7 @@ const messages = {
         publicarUnViajeCompartir:
             'Publicar un viaje para compartir en Apalan-car',
         tripShareMessage:
-            'Te comparto mi viaje en Apalan-car para el {day} {time} a {destination}',
+            'Te comparto mi viaje en Apalan-car para el {day} a las {time}hs a {destination}',
         compartirPlataforma:
             'Apalan-car: plataforma para compartir viajes en autos',
         estoyEnMovil: 'Estoy en móvil',
