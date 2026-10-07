@@ -66,9 +66,9 @@ describe('NewTrip.vue negative contribution validation', () => {
     });
 
     it('sets min zero on contribution inputs', () => {
-        expect(uiSource).toMatch(/min="0"/s);
+        expect(uiSource).toMatch(/min=0/s);
         expect(wizardSource).toMatch(
-            /<AppInput[\s\S]*?type="number"[\s\S]*?min="0"/
+            /<AppInput[\s\S]*?type="number"[\s\S]*?min=0/
         );
     });
 });
@@ -364,4 +364,5 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
     });
 });
+
 
