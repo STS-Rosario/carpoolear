@@ -38,6 +38,7 @@
     "test:frontend:screenshots:debug": "npx playwright test --project=frontend e2e-frontend/screenshots.spec.js --workers=1 --headed --max-failures=1",
     "test:frontend:ui": "npx playwright test --project=frontend --ui",
     "test:unit": "vitest",
+    "test:coverage": "vitest run --coverage",
     "fix:capacitor:cordova-gradle": "node scripts/fix-capacitor-cordova-gradle.js",
     "optimize:static-images": "node scripts/optimize-static-images.mjs"
   },
@@ -96,6 +97,7 @@
     "@babel/runtime": "^7.29.2",
     "@playwright/test": "^1.58.2",
     "@vitejs/plugin-vue": "^6.0.5",
+    "@vitest/coverage-v8": "^4.1.4",
     "@vue/compiler-sfc": "^3.2",
     "@vue/test-utils": "^2.5.1",
     "autoprefixer": "~8.6.4",
