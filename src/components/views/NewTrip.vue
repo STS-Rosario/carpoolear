@@ -397,6 +397,8 @@ export default {
             this.resetTripCreationForm();
         }
 
+        if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
+
         next();
 
         if (!this.id) {
