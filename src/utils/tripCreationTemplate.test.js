@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+﻿import { beforeEach, describe, expect, it, vi } from 'vitest';
 import dayjs from '../dayjs.js';
 
 const { mockStore, mockIndex, mockShow } = vi.hoisted(() => ({
@@ -213,7 +213,7 @@ describe('getWizardNavigationAfterTemplateApply', () => {
         const { getWizardNavigationAfterTemplateApply } = await import('./tripCreationTemplate.js');
         expect(getWizardNavigationAfterTemplateApply()).toEqual({
             currentStep: 5,
-            maxVisitedStep: 9
+            maxVisitedStep: 10
         });
     });
 });
