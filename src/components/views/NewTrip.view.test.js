@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+﻿import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -280,7 +280,7 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(leaveGuard).toBeTruthy();
         expect(leaveGuard).toContain('showWizardSuccess');
         expect(leaveGuard).toContain('clearTripCreationDraft');
-        // Remounting the wizard here syncs ?step=1 and races Ver viaje → detail.
+        // Remounting the wizard here syncs ?step=1 and races Ver viaje â†’ detail.
         expect(leaveGuard).not.toContain('this.resetTripCreationForm');
 
         expect(viewSource).toMatch(
@@ -364,3 +364,4 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
     });
 });
+
