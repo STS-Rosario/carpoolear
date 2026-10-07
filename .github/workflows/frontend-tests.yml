@@ -1,4 +1,4 @@
-name: Frontend Tests
+﻿name: Frontend Tests
 
 on:
   push:
@@ -21,6 +21,9 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Install Playwright browsers
+      - name: Run unit tests
+        run: npm run test:unit -- --run
+
         run: npx playwright install --with-deps chromium
 
       - name: Start dev server
