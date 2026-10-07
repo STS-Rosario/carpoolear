@@ -1,23 +1,20 @@
 import { shareContent as defaultShareContent } from './shareContent.js';
 import { buildTripShareMessage } from './tripShareMessage.js';
+import { resolveWebAppBaseUrl } from './supportTicketTripReport.js';
 
-export function buildAbsoluteTripDetailUrl(router, tripId, origin) {
-    const route = router.resolve({
-        name: 'detail_trip',
-        params: { id: tripId }
-    });
-    return origin + route.href;
+export function buildAbsoluteTripDetailUrl(tripId, env = import.meta.env) {
+    const baseUrl = resolveWebAppBaseUrl(env);
+    return baseUrl ? `${baseUrl}/trips/${tripId}` : '';
 }
 
 export async function shareTripDetail({
     trip,
-    router,
-    origin,
     locale,
     translate,
-    shareContent = defaultShareContent
+    shareContent = defaultShareContent,
+    env = import.meta.env
 }) {
-    const url = buildAbsoluteTripDetailUrl(router, trip.id, origin);
+    const url = buildAbsoluteTripDetailUrl(trip.id, env);
     const text = buildTripShareMessage({
         trip,
         locale,

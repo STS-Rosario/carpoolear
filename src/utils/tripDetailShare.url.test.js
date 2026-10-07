@@ -13,20 +13,12 @@ describe('buildAbsoluteTripDetailUrl', () => {
         ).toBe('https://carpoolear.com.ar/app/trips/482502');
     });
 
-    it('does not use hash-router hrefs from window.location.origin', () => {
-        const router = {
-            resolve: vi.fn(() => ({ href: '#/trips/482502' }))
-        };
-
+    it('normalizes a trailing slash on VITE_WEB_URL', () => {
         expect(
             buildAbsoluteTripDetailUrl(482502, {
-                VITE_WEB_URL: 'https://carpoolear.com.ar/app/',
-                router,
-                origin: 'https://carpoolear.com.ar'
+                VITE_WEB_URL: 'https://carpoolear.com.ar/app/'
             })
         ).toBe('https://carpoolear.com.ar/app/trips/482502');
-
-        expect(router.resolve).not.toHaveBeenCalled();
     });
 });
 

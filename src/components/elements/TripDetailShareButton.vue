@@ -39,8 +39,6 @@ export default {
 
             await shareTripDetail({
                 trip: this.trip,
-                router: this.$router,
-                origin: window.location.origin,
                 locale: this.$i18n?.locale,
                 translate: (key, params) => this.$t(key, params)
             });

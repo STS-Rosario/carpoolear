@@ -5,19 +5,12 @@ import {
 } from './tripDetailShare.js';
 
 describe('buildAbsoluteTripDetailUrl', () => {
-    it('builds an absolute url for the trip detail route', () => {
-        const router = {
-            resolve: vi.fn(() => ({ href: '/app/trips/42' }))
-        };
-
+    it('builds an absolute url for the trip detail route from VITE_WEB_URL', () => {
         expect(
-            buildAbsoluteTripDetailUrl(router, 42, 'https://carpoolear.com.ar')
+            buildAbsoluteTripDetailUrl(42, {
+                VITE_WEB_URL: 'https://carpoolear.com.ar/app'
+            })
         ).toBe('https://carpoolear.com.ar/app/trips/42');
-
-        expect(router.resolve).toHaveBeenCalledWith({
-            name: 'detail_trip',
-            params: { id: 42 }
-        });
     });
 });
 
@@ -41,11 +34,10 @@ describe('shareTripDetail', () => {
 
         await shareTripDetail({
             trip,
-            router: { resolve: () => ({ href: '/app/trips/7' }) },
-            origin: 'https://carpoolear.com.ar',
             locale: 'es',
             translate,
-            shareContent
+            shareContent,
+            env: { VITE_WEB_URL: 'https://carpoolear.com.ar/app' }
         });
 
         expect(shareContent).toHaveBeenCalledWith({
