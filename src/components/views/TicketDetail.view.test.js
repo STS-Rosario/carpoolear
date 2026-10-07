@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -63,7 +63,7 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('openBlobImageInNewTab');
         expect(viewSource).toContain('@click="openBlobImageInNewTab(attachmentBlobUrls[attachment.id])"');
         expect(viewSource).toContain('ticket-attachment-thumb clickable-img');
-        expect(viewSource).toContain('.clickable-img {\n    cursor: pointer;\n}');
+        expect(viewSource).toContain('.clickable-img { cursor: pointer; }');
     });
 
     it('shows title above the reply composer', () => {
