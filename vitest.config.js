@@ -14,5 +14,11 @@ export default {
         environment: 'node',
         include: ['src/**/*.test.js'],
         exclude: ['node_modules', 'e2e', 'dist']
+    },
+    coverage: {
+        provider: 'v8',
+        reporter: ['text', 'json', 'html'],
+        reportsDirectory: './coverage',
+        exclude: ['node_modules', 'e2e', 'e2e-frontend', 'dist', 'src/**/*.test.js']
     }
 };
