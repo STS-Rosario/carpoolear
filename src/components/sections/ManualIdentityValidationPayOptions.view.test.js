@@ -42,7 +42,10 @@ describe('ManualIdentityValidationPayOptions shared component', () => {
         expect(helpSource).toContain("$t('comoHacerPagoQRCelular')");
         expect(helpSource).toContain("$t('comoHacerPagoQRComputadoraPrefix')");
         expect(helpSource).toContain("$t('comoHacerPagoQRComputadoraLink')");
-        expect(helpSource).toContain("$t('comoHacerPagoQRComputadoraSuffix')");
+        expect(helpSource).toContain('$t(computerSuffixKey)');
+        expect(helpSource).toContain(
+            "computerSuffixKey: { type: String, default: 'comoHacerPagoQRComputadoraSuffix' }"
+        );
         expect(helpSource).toContain('CARPOOLEAR_APP_URL');
         expect(helpSource).toContain('target="_blank"');
         expect(helpSource).toContain('rel="noopener noreferrer"');

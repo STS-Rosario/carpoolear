@@ -86,6 +86,21 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('CARPOOLEAR_FACEBOOK_PROFILE_URL');
     });
 
+    it('offers QR payment for one-time aportes when the config flag is on', () => {
+        expect(viewSource).toContain('isPlatformDonationsQrEnabled');
+        expect(viewSource).toContain('startDonationQrCheckout');
+        expect(viewSource).toContain("$t('pagarConQR')");
+        expect(viewSource).toContain("$t('escaneáConAppMercadoPago')");
+        expect(viewSource).toContain("$t('qrExpiraEn')");
+        expect(viewSource).toContain('showQrPanel');
+        expect(viewSource).toContain('ManualValidationQrPaymentHelp');
+        expect(viewSource).toContain('onDonateOnceQr');
+        expect(viewSource).toContain('donation-after-rating__btn-qr');
+        expect(viewSource).toContain(
+            "computer-suffix-key=\"comoHacerPagoQRComputadoraSuffixAportar\""
+        );
+    });
+
     it('bolds through markup only and lets links inherit the <strong> weight', () => {
         const linkRule = viewSource.match(
             /\.donation-after-rating__alt-copy :deep\(a\)\s*\{[^}]*\}/
