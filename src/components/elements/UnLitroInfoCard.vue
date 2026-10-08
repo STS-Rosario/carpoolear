@@ -14,6 +14,22 @@
                 </h4>
                 <p class="un-litro-card__body">{{ $t('unLitroAppliesBody') }}</p>
             </template>
+            <template v-else-if="!linkOnly && nextTripComplimentary">
+                <h4 class="un-litro-card__title">
+                    {{ $t('unLitroComplimentaryNextTripTitle') }}
+                </h4>
+                <p class="un-litro-card__body">
+                    {{ $t('unLitroComplimentaryNextTripBody') }}
+                </p>
+            </template>
+            <template v-else-if="!linkOnly && complimentary">
+                <h4 class="un-litro-card__title">
+                    {{ $t('unLitroComplimentaryCreateTitle') }}
+                </h4>
+                <p class="un-litro-card__body">
+                    {{ $t('unLitroComplimentaryCreateBody') }}
+                </p>
+            </template>
             <template v-else-if="!linkOnly">
                 <span class="un-litro-card__badge">
                     <i class="fa fa-check" aria-hidden="true"></i>
@@ -76,6 +92,14 @@ export default {
 
     props: {
         charged: {
+            type: Boolean,
+            default: false
+        },
+        complimentary: {
+            type: Boolean,
+            default: false
+        },
+        nextTripComplimentary: {
             type: Boolean,
             default: false
         },
