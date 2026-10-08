@@ -42,6 +42,10 @@ export function isPlatformDonationsApiEnabled(appConfig) {
     return Boolean(appConfig?.['platform_donations_api_enabled']);
 }
 
+export function isPlatformDonationsQrEnabled(appConfig) {
+    return Boolean(appConfig?.['platform_donations_qr_enabled']);
+}
+
 export async function startDonationCheckout({
     type,
     amount,
@@ -77,4 +81,28 @@ export async function startDonationCheckout({
             : getDonationOnceUrl(amount);
 
     return appendDonationTrackingUserId(staticUrl, userId);
+}
+
+export async function startDonationQrCheckout({
+    amount,
+    source,
+    tripId,
+    userId,
+    appConfig
+}) {
+    if (!isPlatformDonationsQrEnabled(appConfig)) {
+        throw new Error('QR payment is not available');
+    }
+
+    const payload = {
+        amount: parseInt(amount, 10),
+        source,
+        trip_id: tripId || undefined
+    };
+    if (userId) {
+        payload.user_id = userId;
+    }
+
+    const response = await donationApi.checkoutQrOrder(payload);
+    return response?.data ?? response;
 }

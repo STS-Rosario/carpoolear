@@ -13,6 +13,10 @@ class DonationApi extends TaggedApi {
         return this.post('/api/donations/checkout/monthly', data);
     }
 
+    checkoutQrOrder(data) {
+        return this.post('/api/donations/checkout/qr-order', data);
+    }
+
     markWelcomeShown() {
         return this.post('/api/club-carpoolear/welcome-shown', {});
     }
