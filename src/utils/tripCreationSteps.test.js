@@ -286,7 +286,8 @@ describe('tripCreationSteps validateStep', () => {
             validateStep(STEP.CONTRIBUTION, {
                 isPassenger: false,
                 seatPriceEnabled: true,
-                price: '1500'
+                price: '1500',
+                noCobrarSena: true
             }).valid
         ).toBe(true);
 
@@ -295,6 +296,49 @@ describe('tripCreationSteps validateStep', () => {
                 isPassenger: true,
                 seatPriceEnabled: true,
                 price: ''
+            }).valid
+        ).toBe(true);
+    });
+
+    it('requires the no-deposit commitment on the contribution step for drivers', () => {
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500'
+            })
+        ).toEqual({
+            valid: false,
+            errors: { noCobrarSena: 'teComprometesANoCobrarSena' }
+        });
+
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500',
+                noCobrarSena: false
+            })
+        ).toEqual({
+            valid: false,
+            errors: { noCobrarSena: 'teComprometesANoCobrarSena' }
+        });
+
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500',
+                noCobrarSena: true
+            }).valid
+        ).toBe(true);
+
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: true,
+                seatPriceEnabled: true,
+                price: '1500',
+                noCobrarSena: false
             }).valid
         ).toBe(true);
     });

@@ -43,6 +43,7 @@ describe('tripCreationFormReset', () => {
             time: '14:00',
             price: '5000',
             no_lucrar: true,
+            no_cobrar_sena: true,
             sameCity: true,
             trip: {
                 is_passenger: 0,
@@ -84,6 +85,7 @@ describe('tripCreationFormReset', () => {
         expect(form.time).toBe('10:00');
         expect(form.price).toBe('');
         expect(form.no_lucrar).toBe(false);
+        expect(form.no_cobrar_sena).toBe(false);
         expect(form.trip.description).toBe('');
         expect(form.trip.total_seats).toBe(2);
         expect(form.trip.allow_smoking).toBe(false);

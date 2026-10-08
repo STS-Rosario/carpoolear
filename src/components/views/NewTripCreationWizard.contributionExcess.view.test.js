@@ -49,6 +49,7 @@ function createForm(overrides = {}) {
         ],
         price: '15000',
         no_lucrar: false,
+        no_cobrar_sena: true,
         cars: [],
         passengers: 0,
         wantsIntermediateStops: false,

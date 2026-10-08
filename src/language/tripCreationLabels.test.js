@@ -45,6 +45,8 @@ const KEYS = [
     'tripContributionHowCalculated',
     'tripContributionImportantTitle',
     'tripContributionImportantBody',
+    'meComprometoNoCobrarSena',
+    'teComprometesANoCobrarSena',
     'tripCreationStepDescriptionQuestion',
     'tripCreationStepLastDetailsTitle',
     'tripCreationStepLastDetailsSubtitle',
@@ -108,6 +110,17 @@ describe('trip creation labels (i18n)', () => {
     it.each(['arg', 'chl', 'en'])('%s locale has trip creation wizard keys', (locale) => {
         KEYS.forEach((key) => {
             expect(messages[locale][key]).toBeTruthy();
+        });
+    });
+
+    it('uses the no-deposit commitment copy on the contribution step', () => {
+        ['arg', 'chl'].forEach((locale) => {
+            expect(messages[locale].meComprometoNoCobrarSena).toBe(
+                'Me comprometo a no cobrar seña a los pasajeros'
+            );
+            expect(messages[locale].teComprometesANoCobrarSena).toBe(
+                'Debes indicar que te comprometes a no cobrar seña a los pasajeros.'
+            );
         });
     });
 });

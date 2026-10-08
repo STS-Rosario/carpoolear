@@ -364,3 +364,9 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
     });
 });
+
+describe('NewTrip.vue no-deposit commitment', () => {
+    it('defaults the no-deposit checkbox to unchecked', () => {
+        expect(viewSource).toMatch(/no_cobrar_sena:\s*false/);
+    });
+});

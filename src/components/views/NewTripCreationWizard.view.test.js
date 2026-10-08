@@ -301,4 +301,16 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /validateCurrentStep\(\)[\s\S]*syncSeatPriceErrors/
         );
     });
+
+    it('binds the no-deposit commitment on the contribution step and validates it', () => {
+        expect(wizardSource).toContain(':no-cobrar-sena="form.no_cobrar_sena"');
+        expect(wizardSource).toContain(
+            '@update:noCobrarSena="form.no_cobrar_sena = $event"'
+        );
+        expect(wizardSource).toContain(
+            'noCobrarSena: this.form.no_cobrar_sena'
+        );
+        expect(wizardSource).toContain('stepErrors.noCobrarSena');
+        expect(wizardSource).toContain('$t(stepErrors.noCobrarSena)');
+    });
 });
