@@ -63,4 +63,33 @@ describe('UnLitroInfoCard', () => {
         expect(wrapper.text()).not.toContain('Este viaje suma Un litro para Carpoolear');
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
     });
+
+    it('explains that Carpoolear invites this trip after an empty paid sellado', () => {
+        const wrapper = mountCard({
+            charged: false,
+            complimentary: true
+        });
+
+        expect(wrapper.text()).toContain('Esta vez invita Carpoolear.');
+        expect(wrapper.text()).toContain(
+            'Tuviste un viaje donde aportaste 1L para Carpoolear'
+        );
+        expect(wrapper.text()).not.toContain('Este viaje es bonificado');
+        expect(wrapper.text()).not.toContain(
+            'Este viaje suma Un litro para Carpoolear'
+        );
+    });
+
+    it('tells the driver the next trip is waived after a finished empty paid sellado', () => {
+        const wrapper = mountCard({
+            charged: false,
+            nextTripComplimentary: true
+        });
+
+        expect(wrapper.text()).toContain('El próximo viaje invita Carpoolear.');
+        expect(wrapper.text()).toContain(
+            'En este viaje aportaste 1L para Carpoolear'
+        );
+        expect(wrapper.text()).not.toContain('Esta vez invita Carpoolear.');
+    });
 });

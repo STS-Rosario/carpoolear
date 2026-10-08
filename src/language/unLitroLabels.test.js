@@ -13,6 +13,12 @@ const KEYS = {
         'Te queda {remaining} viaje sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
     unLitroBonificadoRemainingPlural:
         'Te quedan {remaining} viajes sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
+    unLitroComplimentaryCreateTitle: 'Esta vez invita Carpoolear.',
+    unLitroComplimentaryCreateBody:
+        'Tuviste un viaje donde aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en este viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
+    unLitroComplimentaryNextTripTitle: 'El próximo viaje invita Carpoolear.',
+    unLitroComplimentaryNextTripBody:
+        'En este viaje aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en el próximo viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
     unLitroModalTitle: '¿Qué es Un litro para Carpoolear?',
     unLitroModalBody1:
         'Carpoolear es un proyecto sin fines de lucro que se sostiene con trabajo voluntario. En algunos trayectos (por ahora Rosario ↔ Buenos Aires), al crear un viaje se suma 1 litro de nafta a los gastos, y ese litro va para Carpoolear.',
@@ -78,6 +84,12 @@ const EN_KEYS = {
         'You have {remaining} trip left without One liter for Carpoolear. After that, 1 liter is added to the trip cost.',
     unLitroBonificadoRemainingPlural:
         'You have {remaining} trips left without One liter for Carpoolear. After that, 1 liter is added to the trip cost.',
+    unLitroComplimentaryCreateTitle: 'This time Carpoolear invites you.',
+    unLitroComplimentaryCreateBody:
+        'You had a trip where you contributed 1L for Carpoolear and could not share the cost, so on this trip that you would normally pay, we are waiving it. Thank you for helping Carpoolear keep running and thank you for sharing your trips :)',
+    unLitroComplimentaryNextTripTitle: 'The next trip is on Carpoolear.',
+    unLitroComplimentaryNextTripBody:
+        'On this trip you contributed 1L for Carpoolear and could not share the cost, so on the next trip that you would normally pay, we are waiving it. Thank you for helping Carpoolear keep running and thank you for sharing your trips :)',
     unLitroModalTitle: 'What is One liter for Carpoolear?',
     unLitroModalBody1:
         'Carpoolear is a non-profit project sustained by volunteer work. On some routes (for now Rosario ↔ Buenos Aires), creating a trip adds 1 liter of fuel to the expenses, and that liter goes to Carpoolear.',
