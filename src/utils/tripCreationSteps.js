@@ -37,14 +37,16 @@ export const ALL_WIZARD_STEPS = [
 
 const DRIVER_STEPS = ALL_WIZARD_STEPS;
 
+// A passenger requests a single seat for themselves and does not set the
+// trip's preferences (those belong to whoever drives), so both the seat
+// count step and the preferences/description step are skipped entirely,
+// the same way the car and contribution steps already are for passengers.
 const PASSENGER_STEPS = [
     STEP.ROLE,
     STEP.ORIGIN,
     STEP.DESTINATION,
     STEP.STOPS,
     STEP.SCHEDULE,
-    STEP.SEATS,
-    STEP.DESCRIPTION,
     STEP.LAST_DETAILS
 ];
 
@@ -74,7 +76,13 @@ export function isCarStep(step) {
 }
 
 export function isStepDisabledForPassenger(step, isPassenger) {
-    return isPassenger && (step === STEP.CAR || step === STEP.CONTRIBUTION);
+    return (
+        isPassenger &&
+        (step === STEP.CAR ||
+            step === STEP.SEATS ||
+            step === STEP.CONTRIBUTION ||
+            step === STEP.DESCRIPTION)
+    );
 }
 
 function getNavigationOptions(options = {}) {
@@ -305,7 +313,11 @@ function validateCar({
     return { valid: true, errors: {} };
 }
 
-function validateSeats({ totalSeats = 0, passengers = 0 }) {
+function validateSeats({ isPassenger = false, totalSeats = 0, passengers = 0 }) {
+    if (isPassenger) {
+        return { valid: true, errors: {} };
+    }
+
     if (Number(totalSeats) < 1) {
         return { valid: false, errors: { seats: 'lugaresDisponibles' } };
     }
@@ -359,7 +371,11 @@ function validateContribution({
     return { valid: true, errors: {} };
 }
 
-function validateDescription({ description = '' }) {
+function validateDescription({ isPassenger = false, description = '' }) {
+    if (isPassenger) {
+        return { valid: true, errors: {} };
+    }
+
     const valid = String(description).trim().length > 0;
     return {
         valid,

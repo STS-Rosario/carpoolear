@@ -28,4 +28,14 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain("$t('tripReviewNoLucrarModalTitle')");
         expect(componentSource).toContain('showNoLucrarModal');
     });
+
+    it('hides seats and preferences sections for passengers', () => {
+        // Mirrors the existing showVehicle/showContribution pattern: the
+        // section (and its edit link into a step passengers cannot see)
+        // is skipped entirely instead of just shown disabled.
+        expect(componentSource).toContain('v-if="showSeats"');
+        expect(componentSource).toContain('v-if="showPreferences"');
+        expect(componentSource).toContain('showSeats: { type: Boolean, default: true }');
+        expect(componentSource).toContain('showPreferences: { type: Boolean, default: true }');
+    });
 });

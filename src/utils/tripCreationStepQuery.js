@@ -1,4 +1,9 @@
-import { ALL_WIZARD_STEPS, isStepDisabledForPassenger, STEP } from './tripCreationSteps.js';
+import {
+    ALL_WIZARD_STEPS,
+    getVisibleSteps,
+    isStepDisabledForPassenger,
+    STEP
+} from './tripCreationSteps.js';
 
 export const TRIP_CREATION_STEP_QUERY_PARAM = 'step';
 
@@ -41,7 +46,17 @@ export function resolveStepFromQuery(
     }
 
     if (isStepDisabledForPassenger(step, isPassenger)) {
-        return step === STEP.CONTRIBUTION ? STEP.DESCRIPTION : STEP.SEATS;
+        // Land on the nearest step a passenger can actually see, in order:
+        // car/seats/contribution/description are all skipped for them, so a
+        // deep link into any of those resolves forward to whatever comes
+        // next (falling back to the last visible step if none does).
+        const visibleSteps = getVisibleSteps(isPassenger);
+        const fallbackStep = visibleSteps.find(
+            (visibleStep) => visibleStep > step
+        );
+        return fallbackStep != null
+            ? fallbackStep
+            : visibleSteps[visibleSteps.length - 1];
     }
 
     return step;

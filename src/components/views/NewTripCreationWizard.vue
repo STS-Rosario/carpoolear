@@ -443,6 +443,7 @@
                     :time-label="reviewTimeLabel"
                     :show-vehicle="!isPassenger"
                     :vehicle-label="reviewVehicleLabel"
+                    :show-seats="!isPassenger"
                     :seats-count="form.trip.total_seats"
                     :show-contribution="
                         !isPassenger && navigationOptions.seatPriceEnabled
@@ -453,6 +454,7 @@
                     :sellado-amount-cents="form.selladoAmountCents"
                     :remaining-free-trips="form.remainingFreeTrips"
                     :free-trips-amount="form.free_trips_amount"
+                    :show-preferences="!isPassenger"
                     :allow-kids="form.trip.allow_kids"
                     :allow-smoking="form.trip.allow_smoking"
                     :allow-animals="form.trip.allow_animals"
@@ -610,6 +612,7 @@ import {
     STEP,
     getNextStep,
     getPreviousStep,
+    isStepDisabledForPassenger,
     validateStep
 } from '../../utils/tripCreationSteps.js';
 import {
@@ -1147,7 +1150,7 @@ export default {
         revalidateVisitedSteps() {
             const steps = [];
             for (let s = STEP.ROLE; s <= this.maxVisitedStep; s++) {
-                if (this.isPassenger && (s === STEP.CAR || s === STEP.CONTRIBUTION)) {
+                if (isStepDisabledForPassenger(s, this.isPassenger)) {
                     continue;
                 }
                 if (
@@ -1354,7 +1357,7 @@ export default {
                 return;
             }
             this.form.trip.is_passenger = value;
-            if (this.isPassenger && this.currentStep === STEP.CAR) {
+            if (isStepDisabledForPassenger(this.currentStep, this.isPassenger)) {
                 this.setCurrentStep(STEP.SCHEDULE);
             }
             this.revalidateVisitedSteps();

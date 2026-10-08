@@ -67,7 +67,7 @@
             </p>
         </section>
 
-        <section class="trip-review-step__section">
+        <section v-if="showSeats" class="trip-review-step__section">
             <div class="trip-review-step__section-header">
                 <h4 class="trip-review-step__section-title">
                     {{ $t('tripReviewSectionSeats') }}
@@ -140,7 +140,7 @@
             />
         </section>
 
-        <section class="trip-review-step__section">
+        <section v-if="showPreferences" class="trip-review-step__section">
             <div class="trip-review-step__section-header">
                 <h4 class="trip-review-step__section-title">
                     {{ $t('tripReviewSectionPreferences') }}
@@ -254,6 +254,7 @@ export default {
         timeLabel: { type: String, default: '' },
         showVehicle: { type: Boolean, default: false },
         vehicleLabel: { type: String, default: '' },
+        showSeats: { type: Boolean, default: true },
         seatsCount: { type: [Number, String], default: 0 },
         showContribution: { type: Boolean, default: false },
         price: { type: [Number, String], default: '' },
@@ -262,6 +263,7 @@ export default {
         selladoAmountCents: { type: Number, default: 0 },
         remainingFreeTrips: { type: Number, default: 0 },
         freeTripsAmount: { type: Number, default: 0 },
+        showPreferences: { type: Boolean, default: true },
         allowKids: { type: Boolean, default: false },
         allowSmoking: { type: Boolean, default: false },
         allowAnimals: { type: Boolean, default: false },
