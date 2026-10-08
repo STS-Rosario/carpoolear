@@ -37,6 +37,21 @@ describe('RatePending.vue neutral ratings', () => {
     });
 });
 
+describe('RatePending.vue paid-more question', () => {
+    it('asks passengers rating a driver whether they paid more than the contribution', () => {
+        expect(viewSource).toContain('shouldAskPaidMoreThanContribution');
+        expect(viewSource).toContain('canSubmitPaidMoreAnswer');
+        expect(viewSource).toContain('buildRatingVotePayload');
+        expect(viewSource).toContain('ratePendingPaidMoreThanContribution');
+        expect(viewSource).toContain('ratePendingPaidMoreLegend');
+        expect(viewSource).toContain('ratePendingPaidMoreRequired');
+        expect(viewSource).toContain('formatTripContributionPesosLabel');
+        expect(viewSource).toContain("$t('si')");
+        expect(viewSource).toContain("$t('no')");
+        expect(viewSource).toContain('paidMore');
+    });
+});
+
 describe('RatePending.vue destination city', () => {
     it('does not read trip.points without a helper', () => {
         expect(viewSource).not.toMatch(
