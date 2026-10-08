@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { isSelladoPending } from './tripSelladoDisplay.js';
 
 const MERCADO_PAGO_CHECKOUT_BASE =
@@ -10,9 +11,51 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
 export function shouldChargeSellado({
     selladoEnabled,
     routeNeedsPayment,
-    userOverFreeLimit
+    userOverFreeLimit,
+    hasComplimentarySellado
 } = {}) {
-    return Boolean(selladoEnabled && routeNeedsPayment && userOverFreeLimit);
+    return Boolean(
+        selladoEnabled &&
+            routeNeedsPayment &&
+            userOverFreeLimit &&
+            !hasComplimentarySellado
+    );
+}
+
+export function shouldShowSelladoComplimentaryCard({
+    selladoEnabled,
+    routeNeedsPayment,
+    userOverFreeLimit,
+    hasComplimentarySellado
+} = {}) {
+    return Boolean(
+        selladoEnabled &&
+            routeNeedsPayment &&
+            userOverFreeLimit &&
+            hasComplimentarySellado
+    );
+}
+
+export function shouldShowSelladoEmptyTripCreditCard(
+    trip,
+    { isOwner } = {}
+) {
+    if (!isOwner || !trip) {
+        return false;
+    }
+    if (!trip.needs_sellado || isSelladoPending(trip)) {
+        return false;
+    }
+    if (trip.state === 'canceled') {
+        return false;
+    }
+    if (!trip.trip_date) {
+        return false;
+    }
+    if (!dayjs(trip.trip_date).isBefore(dayjs())) {
+        return false;
+    }
+    return (Number(trip.passenger_count) || 0) === 0;
 }
 
 export function remainingSelladoFreeTrips(freeTripsAmount, tripsCreatedByUser) {
