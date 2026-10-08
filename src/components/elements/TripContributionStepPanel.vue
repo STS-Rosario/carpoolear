@@ -101,9 +101,7 @@
                     :checked="noCobrarSena"
                     @change="$emit('update:noCobrarSena', $event.target.checked)"
                 />
-                <span>
-                    <strong>{{ $t('meComprometoNoCobrarSena') }}</strong>
-                </span>
+                <strong>{{ $t('meComprometoNoCobrarSena') }}</strong>
             </label>
             <span class="error" v-if="noCobrarSenaError">{{
                 noCobrarSenaError

@@ -277,6 +277,7 @@ export default {
                 puntoPartidaError: new Error(),
                 puntoLlegadaError: new Error(),
                 no_lucrar: false,
+                no_cobrar_sena: false,
                 sameCity: false,
                 points: [
                     {
