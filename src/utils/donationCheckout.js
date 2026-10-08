@@ -42,6 +42,22 @@ export function isPlatformDonationsApiEnabled(appConfig) {
     return Boolean(appConfig?.['platform_donations_api_enabled']);
 }
 
+export function isPlatformDonationsQrEnabled(appConfig) {
+    return Boolean(appConfig?.['platform_donations_qr_enabled']);
+}
+
+function buildDonationCheckoutPayload({ amount, source, tripId, userId }) {
+    const payload = {
+        amount: parseInt(amount, 10),
+        source,
+        trip_id: tripId || undefined
+    };
+    if (userId) {
+        payload.user_id = userId;
+    }
+    return payload;
+}
+
 export async function startDonationCheckout({
     type,
     amount,
@@ -51,14 +67,12 @@ export async function startDonationCheckout({
     appConfig
 }) {
     if (isPlatformDonationsApiEnabled(appConfig)) {
-        const payload = {
-            amount: parseInt(amount, 10),
+        const payload = buildDonationCheckoutPayload({
+            amount,
             source,
-            trip_id: tripId || undefined
-        };
-        if (userId) {
-            payload.user_id = userId;
-        }
+            tripId,
+            userId
+        });
         const response =
             type === 'monthly'
                 ? await donationApi.checkoutMonthly(payload)
@@ -77,4 +91,30 @@ export async function startDonationCheckout({
             : getDonationOnceUrl(amount);
 
     return appendDonationTrackingUserId(staticUrl, userId);
+}
+
+export async function startDonationQrCheckout({
+    amount,
+    source,
+    tripId,
+    userId,
+    appConfig
+}) {
+    if (!isPlatformDonationsQrEnabled(appConfig)) {
+        throw new Error('QR payment is not available');
+    }
+
+    const payload = buildDonationCheckoutPayload({
+        amount,
+        source,
+        tripId,
+        userId
+    });
+    const response = await donationApi.checkoutQrOrder(payload);
+    return response?.data ?? response;
+}
+
+export async function fetchDonationPaymentStatus(paymentId) {
+    const response = await donationApi.getPaymentStatus(paymentId);
+    return response?.data ?? response;
 }

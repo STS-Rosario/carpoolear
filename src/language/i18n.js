@@ -1102,6 +1102,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -1304,6 +1306,8 @@ const messages = {
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
             'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a {adminEmail} para solucionar el inconveniente.',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         paraIngresarCuenta:
             'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a {adminEmail}',
         emailOContra: 'Email o password incorrecto.',
@@ -2223,6 +2227,8 @@ const messages = {
         numeroDniOPasaporte: 'Número de DNI o Pasaporte',
         doc: 'RUT',
         soporte: 'Mesa de ayuda',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         navegacionAdministracion: 'Navegacion de administracion',
         detalleTicket: 'Detalle del ticket',
         ticketDeSoporte: 'Ticket de mesa de ayuda',
@@ -3238,6 +3244,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -5160,6 +5168,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' in a browser. Then go to Contribute and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:
@@ -5428,6 +5438,8 @@ const messages = {
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
             'Your account has been deactivated by the Carpoolear team. Contact us at {adminEmail} to resolve the issue.',
+        cuentaDesactivadaMesaAyuda:
+            'Your account has been deactivated by the Carpoolear team. Check your Mesa de ayuda messages to see the reason and contact the Carpoolear team.',
         paraIngresarCuenta:
             'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at {adminEmail}',
         emailOContra: 'Incorrect email or password.',

@@ -75,4 +75,11 @@ describe('Tickets list view', () => {
         expect(viewSource).not.toContain('v-model="form.type"');
         expect(viewSource).not.toContain('ref="createEditor"');
     });
+
+    it('hides the create-ticket action for banned users', () => {
+        expect(viewSource).toContain('isUserBanned');
+        expect(viewSource).toMatch(
+            /create-ticket-cta[\s\S]*v-if="!isBanned"|v-if="!isBanned"[\s\S]*create-ticket-cta/
+        );
+    });
 });

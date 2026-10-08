@@ -4,7 +4,7 @@
             <div class="tickets-page__card">
                 <h1 class="tickets-page__heading">{{ $t('soporte') }}</h1>
 
-                <div class="create-ticket-cta">
+                <div v-if="!isBanned" class="create-ticket-cta">
                     <AppButton
                         variant="primary"
                         :to="{ name: 'ticket-new' }"
@@ -93,7 +93,9 @@
 import AccountSettingsLayout from '../layouts/AccountSettingsLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import { mapActions, mapState } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 import { useTicketsStore } from '../../stores/tickets';
+import { isUserBanned } from '../../utils/bannedUserAccess.js';
 import dayjs from '../../dayjs';
 import { TICKET_TYPE_LABEL_KEYS, TICKET_PRIORITY_LABEL_KEYS } from '../../utils/supportTicketLabels';
 import { USER_TICKET_STATUS_LABEL_KEYS as STATUS_LABEL_KEYS } from '../../utils/supportTicketStatusLabels';
@@ -117,6 +119,10 @@ export default {
         ...mapState(useTicketsStore, {
             tickets: 'list'
         }),
+        ...mapState(useAuthStore, ['user']),
+        isBanned() {
+            return isUserBanned(this.user);
+        },
         safeTickets() {
             return Array.isArray(this.tickets) ? this.tickets : [];
         }

@@ -13,12 +13,22 @@ const donationApi = vi.hoisted(() => ({
     ),
     checkoutMonthly: vi.fn(() =>
         Promise.resolve({ init_point: 'https://mp.test/monthly' })
+    ),
+    checkoutQrOrder: vi.fn(() =>
+        Promise.resolve({
+            payment_id: 88,
+            qr_data: 'DONATE_QR',
+            order_id: 'ord-donate'
+        })
+    ),
+    getPaymentStatus: vi.fn(() =>
+        Promise.resolve({ payment_id: 88, status: 'pending' })
     )
 }));
 
 vi.mock('../../services/api/Donation.js', () => ({ default: donationApi }));
 
-async function mountPage(props = {}) {
+async function mountPage(props = {}, appConfig = {}) {
     const pinia = createPinia();
     setActivePinia(pinia);
     const { useAuthStore } = await import('../../stores/auth');
@@ -26,7 +36,11 @@ async function mountPage(props = {}) {
     useAuthStore().$patch({
         auth: true,
         user: { id: 42, name: 'Ana' },
-        appConfig: { platform_donations_api_enabled: true }
+        appConfig: {
+            platform_donations_api_enabled: true,
+            platform_donations_qr_enabled: true,
+            ...appConfig
+        }
     });
     const registerDonation = vi.fn(() => Promise.resolve());
     useProfileStore().registerDonation = registerDonation;
@@ -66,9 +80,12 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         vi.spyOn(console, 'warn').mockImplementation(() => {});
         donationApi.checkoutOnce.mockClear();
         donationApi.checkoutMonthly.mockClear();
+        donationApi.checkoutQrOrder.mockClear();
+        donationApi.getPaymentStatus.mockClear();
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
     });
@@ -187,5 +204,56 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
             trip_id: 7,
             user_id: 42
         });
+    });
+
+    it('hides the QR payment button when QR donations are disabled', async () => {
+        const { wrapper } = await mountPage(
+            {},
+            { platform_donations_qr_enabled: false }
+        );
+
+        expect(buttonWithText(wrapper, 'pagarConQR')).toBeFalsy();
+    });
+
+    it('starts a QR order for a one-time aporte and keeps the user on the page', async () => {
+        const { wrapper, push } = await mountPage();
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+
+        await buttonWithText(wrapper, 'pagarConQR').trigger('click');
+        await flushPromises();
+
+        expect(donationApi.checkoutQrOrder).toHaveBeenCalledWith({
+            amount: 5000,
+            source: 'donate_page',
+            trip_id: undefined,
+            user_id: 42
+        });
+        expect(open).not.toHaveBeenCalled();
+        expect(push).not.toHaveBeenCalled();
+        expect(wrapper.find('.qr-payment-panel').exists()).toBe(true);
+        expect(wrapper.text()).toContain(i18n.global.t('escaneáConAppMercadoPago'));
+    });
+
+    it('polls QR payment status and returns to trips when approved', async () => {
+        vi.useFakeTimers();
+        donationApi.getPaymentStatus
+            .mockResolvedValueOnce({ payment_id: 88, status: 'pending' })
+            .mockResolvedValueOnce({ payment_id: 88, status: 'approved' });
+
+        const { wrapper, push } = await mountPage();
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+        await buttonWithText(wrapper, 'pagarConQR').trigger('click');
+        await flushPromises();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        await flushPromises();
+        expect(push).not.toHaveBeenCalled();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        await flushPromises();
+
+        expect(donationApi.getPaymentStatus).toHaveBeenCalledWith(88);
+        expect(push).toHaveBeenCalledWith({ name: 'trips' });
+        expect(wrapper.find('.qr-payment-panel').exists()).toBe(false);
     });
 });

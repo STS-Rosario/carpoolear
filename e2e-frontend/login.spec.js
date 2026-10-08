@@ -87,12 +87,28 @@ test.describe('Login', () => {
     });
   });
 
-  test('shows "user banned" alert when user is banned', async ({ page }) => {
+  test('lets a banned user into mesa de ayuda after login', async ({ page }) => {
+    const { MOCK_USER } = require('./shared/mocks');
+
     await page.route('**/api/login', (route) => {
       route.fulfill({
-        status: 401,
+        status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ message: 'user_banned' }),
+        body: JSON.stringify({ token: 'banned-token', config: {} }),
+      });
+    });
+    await page.route('**/api/users/me', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: { ...MOCK_USER, banned: 1 } }),
+      });
+    });
+    await page.route('**/api/support/tickets**', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: [] }),
       });
     });
 
@@ -105,12 +121,9 @@ test.describe('Login', () => {
     });
     await page.getByRole('button', { name: /iniciar sesión/i }).click();
 
-    await expect(page.getByRole('alert')).toContainText(/desactivada/i, {
-      timeout: 10000,
-    });
-    await expect(page.getByRole('alert')).toContainText(
-      'admin@carpoolear.com.ar',
-      { timeout: 10000 }
-    );
+    await expect(page).toHaveURL(/soporte/, { timeout: 10000 });
+    await expect(
+      page.getByText(/desactivada por el equipo de Carpoolear/i)
+    ).toBeVisible({ timeout: 10000 });
   });
 });
