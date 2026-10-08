@@ -185,6 +185,7 @@ export default {
             commentError: new Error(),
             seatsError: new Error(),
             no_lucrar: false,
+            no_cobrar_sena: false,
             sameCity: false,
             points: [
                 {

@@ -54,6 +54,7 @@ function createInitialOtherTripState(defaultTime) {
         puntoPartidaError: createTripFormError(),
         puntoLlegadaError: createTripFormError(),
         no_lucrar: false,
+        no_cobrar_sena: false,
         sameCity: false,
         points: [createEmptyTripPoint(0), createEmptyTripPoint(1)],
         date: '',
@@ -83,6 +84,7 @@ export function applyTripCreationFormReset(form, options = {}) {
     form.price = '';
     form.returnPrice = '';
     form.no_lucrar = false;
+    form.no_cobrar_sena = false;
     form.sameCity = false;
     Object.assign(form.trip, createInitialTripCreationTrip());
     form.selectedCarId = null;

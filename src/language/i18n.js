@@ -321,6 +321,10 @@ const messages = {
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
         meComprometo: 'Me comprometo a no lucrar con el viaje',
+        meComprometoNoCobrarSena:
+            'Me comprometo a no cobrar seña a los pasajeros',
+        teComprometesANoCobrarSena:
+            'Debes indicar que te comprometes a no cobrar seña a los pasajeros.',
         meComprometoLucroTooltip:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra  terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D',
         viajeColaborativoLead: 'Este es un viaje colaborativo.',
@@ -2565,6 +2569,10 @@ const messages = {
         comoConductor: 'Como conductor',
         comoPasajero: 'Como pasajero',
         meComprometo: 'Me comprometo a no lucrar con el viaje',
+        meComprometoNoCobrarSena:
+            'Me comprometo a no cobrar seña a los pasajeros',
+        teComprometesANoCobrarSena:
+            'Debes indicar que te comprometes a no cobrar seña a los pasajeros.',
         meComprometoLucroTooltip:
             'Al pedir una contribución por encima de la máxima, es posible que el viaje sea considerado con fin de lucro y por lo tanto un transporte ilegal de pasajeros, pudiendo ser invalidado el seguro particular automotor y la cobertura contra  terceros asociada. Tengamos un buen viaje cuidándonos entre todos :D',
         viajeColaborativoLead: 'Este es un viaje colaborativo.',
@@ -4439,6 +4447,8 @@ const messages = {
         comoConductor: 'As a driver',
         comoPasajero: 'As a passenger',
         meComprometo: 'I commit to not profiting from the trip',
+        meComprometoNoCobrarSena:
+            'I commit not to charge passengers a deposit',
         meComprometoLucroTooltip:
             'By requesting a contribution above the maximum, the trip may be considered for-profit and therefore illegal passenger transport, potentially invalidating private car insurance and associated third-party coverage. Let’s have a good trip by taking care of each other :D',
         viajeColaborativoLead: 'This is a collaborative trip.',
@@ -4626,6 +4636,8 @@ const messages = {
         algunosDatosNoValidos: 'Some of the data entered is not valid.',
         teComprometesANoLucrar:
             'You must indicate that you commit to not profiting from the trip.',
+        teComprometesANoCobrarSena:
+            'You must indicate that you commit not to charge passengers a deposit.',
         viajesPasado:
             'Carpoolear does not allow trips to the past :), check the date and time of your trip.',
         fechaHoraLogicas:

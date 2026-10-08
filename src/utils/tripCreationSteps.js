@@ -323,7 +323,8 @@ function validateContribution({
     maxPriceEnabled = false,
     price = '',
     maximumSeatPriceCents = 0,
-    maximumTripPriceCents = 0
+    maximumTripPriceCents = 0,
+    noCobrarSena = false
 }) {
     if (isPassenger || !seatPriceEnabled) {
         return { valid: true, errors: {} };
@@ -353,6 +354,13 @@ function validateContribution({
         return {
             valid: false,
             errors: { price: 'precioMaximoExcedido' }
+        };
+    }
+
+    if (!noCobrarSena) {
+        return {
+            valid: false,
+            errors: { noCobrarSena: 'teComprometesANoCobrarSena' }
         };
     }
 
