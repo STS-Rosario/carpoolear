@@ -41,6 +41,7 @@
                                     <td>{{ item.from_town }}</td>
                                     <td>{{ item.to_town }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.seat_price_cents) }}</td>
+                                    <td>{{ formatTripContributionPesosLabel(item.maximum_seat_price_cents) }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</td>
                                     <td>{{ formatAdminTripContributionLabel(item.average_contribution_cents) ?? $t('noDisponible') }}</td>
                                     <td>{{ formatAdminExcessContributionPercentageLabel(item.excess_contribution_percentage) ?? $t('noDisponible') }}</td>
