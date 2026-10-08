@@ -370,6 +370,9 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toContain('selladoComplimentary');
         expect(viewSource).toContain('hasComplimentarySellado');
         expect(wizardSource).toContain(':sellado-complimentary="form.selladoComplimentary"');
+        expect(viewSource).toMatch(
+            /finalizeTripCreationSuccess\([\s\S]*loadSelladoViaje/
+        );
     });
 });
 
