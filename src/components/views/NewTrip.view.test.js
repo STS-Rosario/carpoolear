@@ -363,6 +363,14 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).not.toContain('alert-sellado-viaje');
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
     });
+
+    it('waives Un litro with complimentary copy when empty-trip credit applies', () => {
+        expect(viewSource).toContain('has_complimentary_sellado');
+        expect(viewSource).toContain('shouldShowSelladoComplimentaryCard');
+        expect(viewSource).toContain('selladoComplimentary');
+        expect(viewSource).toContain('hasComplimentarySellado');
+        expect(wizardSource).toContain(':sellado-complimentary="form.selladoComplimentary"');
+    });
 });
 
 describe('NewTrip.vue no-deposit commitment', () => {

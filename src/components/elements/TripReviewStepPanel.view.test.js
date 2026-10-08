@@ -16,6 +16,8 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain('unLitroSectionTitle');
         expect(componentSource).toContain('showUnLitroCard');
         expect(componentSource).toContain('selladoCharged');
+        expect(componentSource).toContain('selladoComplimentary');
+        expect(componentSource).toContain(':complimentary="selladoComplimentary"');
         expect(componentSource).toContain('UnLitroInfoCard');
         expect(componentSource).toContain('unLitroReviewIncludes');
         expect(componentSource).toContain('formatPesoIntegerFromCents');

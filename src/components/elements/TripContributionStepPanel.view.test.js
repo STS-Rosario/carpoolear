@@ -19,6 +19,7 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain('UnLitroInfoCard');
         expect(componentSource).toContain('showUnLitroCard');
         expect(componentSource).toContain(':charged="selladoCharged"');
+        expect(componentSource).toContain(':complimentary="selladoComplimentary"');
         expect(componentSource).toContain(':remaining-free-trips="remainingFreeTrips"');
     });
 
