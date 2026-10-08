@@ -74,24 +74,26 @@
                             })
                         }}
                     </p>
-                    <label class="rate-pending-paid-more-option">
-                        <input
-                            v-model="paidMoreChoice"
-                            type="radio"
-                            :name="'paid-more-' + rate.id"
-                            value="yes"
-                        />
-                        {{ $t('si') }}
-                    </label>
-                    <label class="rate-pending-paid-more-option">
-                        <input
-                            v-model="paidMoreChoice"
-                            type="radio"
-                            :name="'paid-more-' + rate.id"
-                            value="no"
-                        />
-                        {{ $t('no') }}
-                    </label>
+                    <div class="rate-pending-paid-more-options">
+                        <label class="rate-pending-paid-more-option">
+                            <input
+                                v-model="paidMoreChoice"
+                                type="radio"
+                                :name="'paid-more-' + rate.id"
+                                value="yes"
+                            />
+                            {{ $t('si') }}
+                        </label>
+                        <label class="rate-pending-paid-more-option">
+                            <input
+                                v-model="paidMoreChoice"
+                                type="radio"
+                                :name="'paid-more-' + rate.id"
+                                value="no"
+                            />
+                            {{ $t('no') }}
+                        </label>
+                    </div>
                     <p class="rate-pending-paid-more-legend">
                         {{ $t('ratePendingPaidMoreLegend') }}
                     </p>
@@ -256,3 +258,28 @@ export default {
     props: ['rate']
 };
 </script>
+<style scoped>
+.rate-pending-paid-more-question {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.35em;
+}
+
+.rate-pending-paid-more-options {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.rate-pending-paid-more-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    cursor: pointer;
+}
+
+.rate-pending-paid-more-legend {
+    font-style: italic;
+    color: #888;
+    margin-top: 0.35em;
+}
+</style>
