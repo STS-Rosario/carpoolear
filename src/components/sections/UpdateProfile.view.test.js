@@ -24,7 +24,7 @@ describe('UpdateProfile save error feedback', () => {
         expect(viewSource).toContain('getApiErrorMessage');
         expect(viewSource).toContain('profile-save-error');
         expect(viewSource).toContain('fa-exclamation-triangle');
-        expect(viewSource).toContain("dialogs.message(message, {");
+        expect(viewSource).toContain('dialogs.message(message, {');
     });
 });
 
