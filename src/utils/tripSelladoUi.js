@@ -8,17 +8,26 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
     return Boolean(selladoEnabled);
 }
 
+function wouldOtherwiseChargeSellado({
+    selladoEnabled,
+    routeNeedsPayment,
+    userOverFreeLimit
+} = {}) {
+    return Boolean(selladoEnabled && routeNeedsPayment && userOverFreeLimit);
+}
+
 export function shouldChargeSellado({
     selladoEnabled,
     routeNeedsPayment,
     userOverFreeLimit,
     hasComplimentarySellado
 } = {}) {
-    return Boolean(
-        selladoEnabled &&
-            routeNeedsPayment &&
-            userOverFreeLimit &&
-            !hasComplimentarySellado
+    return (
+        wouldOtherwiseChargeSellado({
+            selladoEnabled,
+            routeNeedsPayment,
+            userOverFreeLimit
+        }) && !hasComplimentarySellado
     );
 }
 
@@ -28,11 +37,12 @@ export function shouldShowSelladoComplimentaryCard({
     userOverFreeLimit,
     hasComplimentarySellado
 } = {}) {
-    return Boolean(
-        selladoEnabled &&
-            routeNeedsPayment &&
-            userOverFreeLimit &&
-            hasComplimentarySellado
+    return (
+        wouldOtherwiseChargeSellado({
+            selladoEnabled,
+            routeNeedsPayment,
+            userOverFreeLimit
+        }) && Boolean(hasComplimentarySellado)
     );
 }
 
