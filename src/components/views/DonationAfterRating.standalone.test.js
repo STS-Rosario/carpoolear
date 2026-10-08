@@ -85,6 +85,7 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
     });
@@ -231,5 +232,28 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(push).not.toHaveBeenCalled();
         expect(wrapper.find('.qr-payment-panel').exists()).toBe(true);
         expect(wrapper.text()).toContain(i18n.global.t('escaneáConAppMercadoPago'));
+    });
+
+    it('polls QR payment status and returns to trips when approved', async () => {
+        vi.useFakeTimers();
+        donationApi.getPaymentStatus
+            .mockResolvedValueOnce({ payment_id: 88, status: 'pending' })
+            .mockResolvedValueOnce({ payment_id: 88, status: 'approved' });
+
+        const { wrapper, push } = await mountPage();
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+        await buttonWithText(wrapper, 'pagarConQR').trigger('click');
+        await flushPromises();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        await flushPromises();
+        expect(push).not.toHaveBeenCalled();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        await flushPromises();
+
+        expect(donationApi.getPaymentStatus).toHaveBeenCalledWith(88);
+        expect(push).toHaveBeenCalledWith({ name: 'trips' });
+        expect(wrapper.find('.qr-payment-panel').exists()).toBe(false);
     });
 });
