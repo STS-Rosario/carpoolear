@@ -97,7 +97,7 @@ describe('DonationAfterRating page content', () => {
         expect(viewSource).toContain('onDonateOnceQr');
         expect(viewSource).toContain('donation-after-rating__btn-qr');
         expect(viewSource).toContain(
-            "computer-suffix-key=\"comoHacerPagoQRComputadoraSuffixAportar\""
+            'computer-suffix-key="comoHacerPagoQRComputadoraSuffixAportar"'
         );
     });
 
