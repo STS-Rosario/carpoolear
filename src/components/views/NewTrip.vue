@@ -356,15 +356,7 @@ export default {
             this.preselectDriverCar();
         });
 
-        userApi.selladoViaje().then((result) => {
-            // if user is over the free trips limit, show a message telling them they need to pay for the next trip
-            this.needs_to_pay_for_next_trip = this.config.module_trip_creation_payment_enabled && result.data.user_over_free_limit;
-            this.free_trips_amount = result.data.free_trips_amount;
-            this.trips_created_by_user_amount = result.data.trips_created_by_user_amount;
-            this.has_complimentary_sellado = Boolean(
-                result.data.has_complimentary_sellado
-            );
-        });
+        this.loadSelladoViaje();
 
         if (!this.id) {
             this.$nextTick(() => {
@@ -1639,11 +1631,25 @@ export default {
         refreshTripCreationTemplates() {
             this.$refs.tripCreationWizard?.refreshAvailableTemplates?.();
         },
+        loadSelladoViaje() {
+            return userApi.selladoViaje().then((result) => {
+                this.needs_to_pay_for_next_trip =
+                    this.config.module_trip_creation_payment_enabled &&
+                    result.data.user_over_free_limit;
+                this.free_trips_amount = result.data.free_trips_amount;
+                this.trips_created_by_user_amount =
+                    result.data.trips_created_by_user_amount;
+                this.has_complimentary_sellado = Boolean(
+                    result.data.has_complimentary_sellado
+                );
+            });
+        },
         finalizeTripCreationSuccess(trip) {
             this.$refs.tripCreationWizard?.cancelDraftSave?.();
             this.createdTrip = trip;
             this.showWizardSuccess = true;
             this.formValidationAttempted = false;
+            this.loadSelladoViaje();
             if (this.user?.id != null) {
                 clearTripCreationDraft(this.user.id);
             }
