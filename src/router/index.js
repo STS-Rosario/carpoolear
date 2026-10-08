@@ -8,6 +8,7 @@ import {
     clubCarpoolearWelcomeLocation,
     shouldRedirectToClubCarpoolearWelcome
 } from '../utils/clubCarpoolearWelcomeRedirect.js';
+import { bannedUserRedirectLocation } from '../utils/bannedUserAccess.js';
 
 import routes from './routes.js';
 
@@ -28,6 +29,11 @@ router.beforeEach((to, from, next) => {
     const actionbar = to.meta.actionbar || {};
     const background = to.meta.background || {};
     const user = authStore.checkLogin;
+    const bannedRedirect = bannedUserRedirectLocation(authStore.user, to.name);
+    if (bannedRedirect) {
+        next(bannedRedirect);
+        return;
+    }
     if (shouldRedirectToClubCarpoolearWelcome({
         user: authStore.user,
         routeName: to.name

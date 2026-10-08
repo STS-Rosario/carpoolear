@@ -9,6 +9,7 @@ import {
     shouldRedirectForPendingRatings
 } from '../utils/pendingRatingsEnforcement';
 import { can } from '../utils/adminPermissions';
+import { bannedUserRedirectLocation } from '../utils/bannedUserAccess.js';
 
 function getAuthStore () {
     return useAuthStore();
@@ -54,7 +55,11 @@ export function guest(to, from, next) {
         next();
     } else {
         next(false);
-        router.replace({ name: 'trips' });
+        router.replace(
+            bannedUserRedirectLocation(getAuthStore().user, to.name) || {
+                name: 'trips'
+            }
+        );
     }
 }
 

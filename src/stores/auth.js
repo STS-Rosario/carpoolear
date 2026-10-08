@@ -9,6 +9,7 @@ import { clearTripCreationDraftForLogout } from '../utils/tripCreationDraft.js';
 import { getLazyRouter } from '../utils/routerLazy.js';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
 import { shouldRedirectToClubCarpoolearWelcome, clubCarpoolearWelcomeLocation } from '../utils/clubCarpoolearWelcomeRedirect.js';
+import { isUserBanned } from '../utils/bannedUserAccess.js';
 
 const authApi = new AuthApi();
 const userApi = new UserApi();
@@ -114,6 +115,12 @@ export const useAuthStore = defineStore('auth', {
         async onLoggin(token) {
             this.setToken(token);
             await this.fetchUser();
+
+            if (isUserBanned(this.user)) {
+                const router = await getLazyRouter();
+                router.replace({ name: 'tickets' });
+                return;
+            }
 
             const [
                 { useCordovaStore },
