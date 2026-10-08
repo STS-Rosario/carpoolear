@@ -204,6 +204,7 @@ import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import ManualValidationQrPaymentHelp from '../sections/ManualValidationQrPaymentHelp.vue';
 import AppButton from '../ui/AppButton.vue';
 import {
+    fetchDonationPaymentStatus,
     isPlatformDonationsQrEnabled,
     startDonationCheckout,
     startDonationQrCheckout
@@ -247,8 +248,13 @@ export default {
             facebookUrl: CARPOOLEAR_FACEBOOK_PROFILE_URL,
             loadingQr: false,
             showQrPanel: false,
-            qrImageUrl: null
+            qrImageUrl: null,
+            qrPaymentId: null,
+            qrPollIntervalId: null
         };
+    },
+    beforeUnmount() {
+        this.stopQrPolling();
     },
     computed: {
         ...mapState(useAuthStore, {
@@ -332,7 +338,10 @@ export default {
                     appConfig: this.appConfig
                 });
                 const qrData = result?.qr_data ?? result?.data?.qr_data;
-                if (qrData) {
+                const paymentId =
+                    result?.payment_id ?? result?.data?.payment_id;
+                if (qrData && paymentId) {
+                    this.qrPaymentId = paymentId;
                     this.showQrPanel = true;
                     this.qrImageUrl = null;
                     QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
@@ -340,6 +349,7 @@ export default {
                             this.qrImageUrl = url;
                         }
                     });
+                    this.startQrPolling();
                 }
             } catch (error) {
                 console.error('Donation QR checkout failed:', error);
@@ -354,6 +364,38 @@ export default {
         closeQrPanel() {
             this.showQrPanel = false;
             this.qrImageUrl = null;
+            this.qrPaymentId = null;
+            this.stopQrPolling();
+        },
+        startQrPolling() {
+            this.stopQrPolling();
+            this.qrPollIntervalId = setInterval(() => {
+                this.pollQrPaymentStatus();
+            }, 3000);
+        },
+        stopQrPolling() {
+            if (this.qrPollIntervalId) {
+                clearInterval(this.qrPollIntervalId);
+                this.qrPollIntervalId = null;
+            }
+        },
+        async pollQrPaymentStatus() {
+            if (!this.qrPaymentId) {
+                return;
+            }
+            try {
+                const statusPayload = await fetchDonationPaymentStatus(
+                    this.qrPaymentId
+                );
+                const status =
+                    statusPayload?.status ?? statusPayload?.data?.status;
+                if (status === 'approved') {
+                    this.closeQrPanel();
+                    this.$router.push({ name: 'trips' });
+                }
+            } catch (error) {
+                console.error('Donation QR status poll failed:', error);
+            }
         },
         async onDonateMonthly() {
             if (this.preview) {

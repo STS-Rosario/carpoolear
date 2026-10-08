@@ -113,3 +113,8 @@ export async function startDonationQrCheckout({
     const response = await donationApi.checkoutQrOrder(payload);
     return response?.data ?? response;
 }
+
+export async function fetchDonationPaymentStatus(paymentId) {
+    const response = await donationApi.getPaymentStatus(paymentId);
+    return response?.data ?? response;
+}
