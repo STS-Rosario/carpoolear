@@ -267,7 +267,7 @@ export default {
 
 .rate-pending-paid-more-options {
     display: flex;
-    gap: 2.5rem;
+    gap: 1.5rem;
 }
 
 .rate-pending-paid-more-option {
