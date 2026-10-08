@@ -5,6 +5,8 @@ import {
     selladoCheckoutUrl,
     selladoDetailBannerKind,
     shouldChargeSellado,
+    shouldShowSelladoComplimentaryCard,
+    shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
     shouldShowUnLitroCard
 } from './tripSelladoUi.js';
@@ -45,6 +47,109 @@ describe('shouldChargeSellado', () => {
                 routeNeedsPayment: true,
                 userOverFreeLimit: false
             })
+        ).toBe(false);
+    });
+
+    it('does not charge when the user has complimentary empty-trip credit', () => {
+        expect(
+            shouldChargeSellado({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                userOverFreeLimit: true,
+                hasComplimentarySellado: true
+            })
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowSelladoComplimentaryCard', () => {
+    it('is true when this trip would be charged but empty-trip credit waives it', () => {
+        expect(
+            shouldShowSelladoComplimentaryCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                userOverFreeLimit: true,
+                hasComplimentarySellado: true
+            })
+        ).toBe(true);
+    });
+
+    it('is false when the route does not require sellado', () => {
+        expect(
+            shouldShowSelladoComplimentaryCard({
+                selladoEnabled: true,
+                routeNeedsPayment: false,
+                userOverFreeLimit: true,
+                hasComplimentarySellado: true
+            })
+        ).toBe(false);
+    });
+
+    it('is false while the user still has free trips', () => {
+        expect(
+            shouldShowSelladoComplimentaryCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                userOverFreeLimit: false,
+                hasComplimentarySellado: true
+            })
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowSelladoEmptyTripCreditCard', () => {
+    const finishedPaidEmptyTrip = {
+        needs_sellado: true,
+        sellado_pending: false,
+        state: 'ready',
+        trip_date: '2020-01-01 12:00:00',
+        passenger_count: 0
+    };
+
+    it('shows the next-trip credit card to the driver of a finished paid empty trip', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(finishedPaidEmptyTrip, {
+                isOwner: true
+            })
+        ).toBe(true);
+    });
+
+    it('hides the card from passengers', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(finishedPaidEmptyTrip, {
+                isOwner: false
+            })
+        ).toBe(false);
+    });
+
+    it('hides the card when the trip still has passengers', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(
+                { ...finishedPaidEmptyTrip, passenger_count: 1 },
+                { isOwner: true }
+            )
+        ).toBe(false);
+    });
+
+    it('hides the card when the trip has not finished yet', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(
+                { ...finishedPaidEmptyTrip, trip_date: '2099-01-01 12:00:00' },
+                { isOwner: true }
+            )
+        ).toBe(false);
+    });
+
+    it('hides the card when sellado was never paid', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(
+                {
+                    ...finishedPaidEmptyTrip,
+                    sellado_pending: true,
+                    state: 'awaiting_payment'
+                },
+                { isOwner: true }
+            )
         ).toBe(false);
     });
 });
