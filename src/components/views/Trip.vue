@@ -85,6 +85,11 @@
                         />
                     </p>
                 </div>
+                <UnLitroInfoCard
+                    v-if="showSelladoEmptyTripCreditCard"
+                    next-trip-complimentary
+                    :free-trips-amount="freeTripsAmount"
+                />
                 <div
                     class="alert alert-warning trip-seat-requests-warning"
                     role="alert"
@@ -433,6 +438,7 @@ import {
 import {
     selladoCheckoutUrl,
     selladoDetailBannerKind,
+    shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner
 } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
@@ -1035,6 +1041,11 @@ export default {
                 this.trip,
                 this.$route && this.$route.query
             );
+        },
+        showSelladoEmptyTripCreditCard() {
+            return shouldShowSelladoEmptyTripCreditCard(this.trip, {
+                isOwner: this.owner
+            });
         },
         formattedSelladoPayAmount() {
             const cents =
