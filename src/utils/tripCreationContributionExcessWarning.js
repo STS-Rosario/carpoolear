@@ -1,6 +1,14 @@
 import { STEP } from './tripCreationSteps.js';
-import { seatPriceCentsForApi } from './tripSeatPrice.js';
+import { parseSeatPriceInput, seatPriceCentsForApi } from './tripSeatPrice.js';
 import { hasPotentialExcessContribution } from './tripDescriptionContribution.js';
+
+/** Drivers typing $16 when they mean $16000: warn if the input is over $0 and below $2000. */
+export const IMPLAUSIBLY_LOW_CONTRIBUTION_INPUT_MAX_EXCLUSIVE = 2000;
+
+export function isImplausiblyLowContributionInput(price) {
+    const units = parseSeatPriceInput(price);
+    return units !== null && units > 0 && units < IMPLAUSIBLY_LOW_CONTRIBUTION_INPUT_MAX_EXCLUSIVE;
+}
 
 /**
  * Steps whose "Siguiente" commits one side of the comparison: the
@@ -48,6 +56,10 @@ export function shouldShowContributionExcessWarning({
 
     if (!CONTRIBUTION_EXCESS_CHECK_STEPS.includes(step)) {
         return false;
+    }
+
+    if (isImplausiblyLowContributionInput(price)) {
+        return true;
     }
 
     const maximumCents = maximumAllowedSeatPriceCents({
