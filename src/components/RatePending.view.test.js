@@ -68,7 +68,7 @@ describe('RatePending.vue paid-more question', () => {
         );
         expect(optionsRule).not.toBeNull();
         expect(optionsRule[0]).toMatch(/display:\s*flex/);
-        expect(optionsRule[0]).toMatch(/gap:\s*2\.5rem/);
+        expect(optionsRule[0]).toMatch(/gap:\s*1\.5rem/);
     });
 
     it('pulls the legend closer in lighter italic grey', () => {
