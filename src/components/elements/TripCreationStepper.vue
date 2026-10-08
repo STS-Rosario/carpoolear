@@ -149,6 +149,7 @@ export default {
 
 .trip-creation-stepper__bar--active {
     background: #e0e0e0;
+    box-shadow: 0 0 0 2px rgba(30, 95, 158, 0.35), 0 2px 4px rgba(30, 95, 158, 0.25);
 }
 
 .trip-creation-stepper__bar--completed {
