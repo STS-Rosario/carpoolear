@@ -25,6 +25,9 @@ export const useRatesStore = defineStore('rates', {
                 comment: data.comment,
                 rating: data.rating
             };
+            if (data.paid_more === true || data.paid_more === false) {
+                obj.paid_more = data.paid_more;
+            }
             return rateApi
                 .rate(data.trip_id, data.user_id, obj)
                 .then((response) => {

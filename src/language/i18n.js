@@ -1963,6 +1963,7 @@ const messages = {
         excesoContribucion: 'Exceso de contribución',
         soloRequierenAccion: 'Solo requieren acción',
         contribucion: 'Contribución',
+        contribucionMaximaColumna: 'Contribución máxima',
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
@@ -2035,6 +2036,10 @@ const messages = {
             'El comentario no puede estar vacío para los votos negativos.',
         ratePendingComentarioNoPuedeEstarVacioNeutral:
             'El comentario no puede estar vacío para los votos neutrales.',
+        ratePendingPaidMoreThanContribution: '¿Pagaste más de {amount}?',
+        ratePendingPaidMoreLegend:
+            'Esta información sólo la verá el equipo de Carpoolear, no será pública. Queremos hacer un Carpoolear más justo, y eso significa que sólo se dividan los gastos, que es el valor de la contribución por persona en el detalle del viaje. Si tuviste que pagar más, avisanos para poder avisarle a la persona que creó el viaje que sólo se pueden dividir gastos.',
+        ratePendingPaidMoreRequired: 'Respondé si pagaste más de la contribución.',
         rateItemPositiva: 'Positiva',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
@@ -3915,6 +3920,7 @@ const messages = {
         excesoContribucion: 'Exceso de contribución',
         soloRequierenAccion: 'Solo requieren acción',
         contribucion: 'Contribución',
+        contribucionMaximaColumna: 'Contribución máxima',
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
         porcentajeExceso: 'Porcentaje exceso',
@@ -3987,6 +3993,10 @@ const messages = {
             'El comentario no puede estar vacío para los votos negativos.',
         ratePendingComentarioNoPuedeEstarVacioNeutral:
             'El comentario no puede estar vacío para los votos neutrales.',
+        ratePendingPaidMoreThanContribution: '¿Pagaste más de {amount}?',
+        ratePendingPaidMoreLegend:
+            'Esta información sólo la verá el equipo de Carpoolear, no será pública. Queremos hacer un Carpoolear más justo, y eso significa que sólo se dividan los gastos, que es el valor de la contribución por persona en el detalle del viaje. Si tuviste que pagar más, avisanos para poder avisarle a la persona que creó el viaje que sólo se pueden dividir gastos.',
+        ratePendingPaidMoreRequired: 'Respondé si pagaste más de la contribución.',
         rateItemPositiva: 'Positiva',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negativa',
@@ -6047,6 +6057,7 @@ const messages = {
         excesoContribucion: 'Excess contribution',
         soloRequierenAccion: 'Only require action',
         contribucion: 'Contribution',
+        contribucionMaximaColumna: 'Maximum contribution',
         contribucionPotencial: 'Potential contribution',
         contribucionPromedio: 'Average contribution',
         porcentajeExceso: 'Excess percentage',
@@ -6119,6 +6130,10 @@ const messages = {
             'Comment cannot be empty for negative votes.',
         ratePendingComentarioNoPuedeEstarVacioNeutral:
             'Comment cannot be empty for neutral votes.',
+        ratePendingPaidMoreThanContribution: 'Did you pay more than {amount}?',
+        ratePendingPaidMoreLegend:
+            'Only the Carpoolear team will see this; it will not be public. We want a fairer Carpoolear, and that means only splitting costs, which is the per-person contribution on the trip details. If you had to pay more, tell us so we can let the person who created the trip know that only costs can be split.',
+        ratePendingPaidMoreRequired: 'Please answer whether you paid more than the contribution.',
         rateItemPositiva: 'Positive',
         rateItemNeutral: 'Neutral',
         rateItemNegativa: 'Negative',

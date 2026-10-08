@@ -88,4 +88,59 @@ describe('shouldShowContributionExcessWarning', () => {
         expect(shouldShowContributionExcessWarning({ ...excessive, price: '-5' })).toBe(false);
         expect(shouldShowContributionExcessWarning({ ...excessive, price: null })).toBe(false);
     });
+
+    it('warns when the contribution input is implausibly low', () => {
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                description: '',
+                price: '16'
+            })
+        ).toBe(true);
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                step: STEP.CONTRIBUTION,
+                description: '',
+                price: 16
+            })
+        ).toBe(true);
+    });
+
+    it('warns for an implausibly low contribution even without a computed maximum', () => {
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                description: '',
+                price: '16',
+                maxPriceEnabled: false,
+                maximumSeatPriceCents: 0,
+                maximumTripPriceCents: 0
+            })
+        ).toBe(true);
+    });
+
+    it('does not treat $0 or $2000 as an implausibly low contribution', () => {
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                description: '',
+                price: '0'
+            })
+        ).toBe(false);
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                description: '',
+                price: '2000'
+            })
+        ).toBe(false);
+        expect(
+            shouldShowContributionExcessWarning({
+                ...excessive,
+                description: '',
+                price: '1'
+            })
+        ).toBe(true);
+    });
 });

@@ -37,6 +37,51 @@ describe('RatePending.vue neutral ratings', () => {
     });
 });
 
+describe('RatePending.vue paid-more question', () => {
+    it('asks passengers rating a driver whether they paid more than the contribution', () => {
+        expect(viewSource).toContain('shouldAskPaidMoreThanContribution');
+        expect(viewSource).toContain('canSubmitPaidMoreAnswer');
+        expect(viewSource).toContain('buildRatingVotePayload');
+        expect(viewSource).toContain('ratePendingPaidMoreThanContribution');
+        expect(viewSource).toContain('ratePendingPaidMoreLegend');
+        expect(viewSource).toContain('ratePendingPaidMoreRequired');
+        expect(viewSource).toContain('formatTripContributionPesosLabel');
+        expect(viewSource).toContain("$t('si')");
+        expect(viewSource).toContain("$t('no')");
+        expect(viewSource).toContain('paidMore');
+        expect(viewSource).toContain('rate-pending-paid-more-options');
+    });
+
+    it('styles the paid-more title as a larger bold heading close to the choices', () => {
+        const questionRule = viewSource.match(
+            /\.rate-pending-paid-more-question\s*\{[^}]+\}/
+        );
+        expect(questionRule).not.toBeNull();
+        expect(questionRule[0]).toMatch(/font-weight:\s*700/);
+        expect(questionRule[0]).toMatch(/font-size:\s*1\.125rem/);
+        expect(questionRule[0]).toMatch(/margin-bottom:\s*0\.35em/);
+    });
+
+    it('keeps Sí and No far enough apart to avoid mis-taps', () => {
+        const optionsRule = viewSource.match(
+            /\.rate-pending-paid-more-options\s*\{[^}]+\}/
+        );
+        expect(optionsRule).not.toBeNull();
+        expect(optionsRule[0]).toMatch(/display:\s*flex/);
+        expect(optionsRule[0]).toMatch(/gap:\s*1\.5rem/);
+    });
+
+    it('pulls the legend closer in lighter italic grey', () => {
+        const legendRule = viewSource.match(
+            /\.rate-pending-paid-more-legend\s*\{[^}]+\}/
+        );
+        expect(legendRule).not.toBeNull();
+        expect(legendRule[0]).toMatch(/font-style:\s*italic/);
+        expect(legendRule[0]).toMatch(/color:\s*#888/);
+        expect(legendRule[0]).toMatch(/margin-top:\s*0\.35em/);
+    });
+});
+
 describe('RatePending.vue destination city', () => {
     it('does not read trip.points without a helper', () => {
         expect(viewSource).not.toMatch(

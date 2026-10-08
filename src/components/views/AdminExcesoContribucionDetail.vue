@@ -46,6 +46,7 @@
                             <strong>{{ $t('fecha') }}:</strong> {{ formatDate(item.trip_date) }}
                         </p>
                         <p><strong>{{ $t('contribucion') }}:</strong> {{ formatTripContributionPesosLabel(item.seat_price_cents) }}</p>
+                        <p><strong>{{ $t('contribucionMaximaColumna') }}:</strong> {{ formatTripContributionPesosLabel(item.maximum_seat_price_cents) }}</p>
                         <p><strong>{{ $t('contribucionPotencial') }}:</strong> {{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</p>
                         <p><strong>{{ $t('contribucionPromedio') }}:</strong> {{ formatAdminTripContributionLabel(item.average_contribution_cents) ?? $t('noDisponible') }}</p>
                         <p><strong>{{ $t('porcentajeExceso') }}:</strong> {{ formatAdminExcessContributionPercentageLabel(item.excess_contribution_percentage) ?? $t('noDisponible') }}</p>

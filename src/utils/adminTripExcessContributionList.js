@@ -12,6 +12,7 @@ export const TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS = [
     { key: 'from_town', labelKey: 'origen' },
     { key: 'to_town', labelKey: 'destino' },
     { key: 'seat_price_cents', labelKey: 'contribucion' },
+    { key: 'maximum_seat_price_cents', labelKey: 'contribucionMaximaColumna' },
     { key: 'potential_seat_price_cents', labelKey: 'contribucionPotencial' },
     { key: 'average_contribution_cents', labelKey: 'contribucionPromedio' },
     { key: 'excess_contribution_percentage', labelKey: 'porcentajeExceso' },

@@ -71,6 +71,23 @@ describe('adminTripExcessContributionList', () => {
         });
     });
 
+    describe('maximum contribution column', () => {
+        it('adds a sortable máxima column immediately after contribución', () => {
+            const keys = TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key);
+            const contribucionIndex = keys.indexOf('seat_price_cents');
+
+            expect(keys.slice(contribucionIndex, contribucionIndex + 2)).toEqual([
+                'seat_price_cents',
+                'maximum_seat_price_cents'
+            ]);
+            expect(
+                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
+                    (column) => column.key === 'maximum_seat_price_cents'
+                ).labelKey
+            ).toBe('contribucionMaximaColumna');
+        });
+    });
+
     describe('LLM contribution check columns', () => {
         it('adds sortable suspected contribution and phone columns after the excess percentage', () => {
             const keys = TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key);

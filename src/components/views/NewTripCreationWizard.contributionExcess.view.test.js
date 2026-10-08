@@ -267,6 +267,17 @@ describe('NewTripCreationWizard contribution excess modal', () => {
         expect(wrapper.vm.currentStep).toBe(STEP.LAST_DETAILS);
     });
 
+    it('shows the modal when leaving the contribution step with an implausibly low amount', async () => {
+        const { wrapper, form } = await mountWizard();
+        form.price = '16';
+        await goToStep(wrapper, STEP.CONTRIBUTION);
+
+        await clickNext(wrapper);
+
+        expect(excessModal()).not.toBeNull();
+        expect(wrapper.vm.currentStep).toBe(STEP.CONTRIBUTION);
+    });
+
     it('does not show the modal when editing an existing trip', async () => {
         const { wrapper, form } = await mountWizard(createForm({ id: 7 }));
         await goToStep(wrapper, STEP.DESCRIPTION);
