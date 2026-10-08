@@ -15,6 +15,7 @@ const ResetPassword = () => import('../components/views/ResetPassword.vue');
 const Profile = () => import('../components/views/Profile.vue');
 const MyTrips = () => import('../components/views/MyTrips.vue');
 const DonationAfterRating = () => import('../components/views/DonationAfterRating.vue');
+const PreviewRatePendingPassenger = () => import('../components/PreviewRatePendingPassenger.vue');
 const ClubCarpoolearWelcome = () => import('../components/views/ClubCarpoolearWelcome.vue');
 const Trips = () => import('../components/views/Trips.vue');
 const NewTrip = () => import('../components/views/NewTrip.vue');
@@ -1517,6 +1518,22 @@ export default [
                         footer: {
                             show: true,
                             active_id: 'home'
+                        },
+                        header: {
+                            buttons: []
+                        }
+                    }
+                }
+            },
+            {
+                path: '/preview/rate-pending-passenger',
+                name: 'preview-rate-pending-passenger',
+                component: PreviewRatePendingPassenger,
+                meta: {
+                    actionbar: {
+                        footer: {
+                            show: true,
+                            active_id: 'my-trips'
                         },
                         header: {
                             buttons: []

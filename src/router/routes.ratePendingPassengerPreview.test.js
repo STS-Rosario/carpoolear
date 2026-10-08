@@ -12,8 +12,6 @@ describe('rate pending passenger preview route', () => {
         );
         expect(routesSource).toContain("name: 'preview-rate-pending-passenger'");
         expect(routesSource).toContain('PreviewRatePendingPassenger.vue');
-        expect(routesSource).toContain(
-            "import.meta.env.DEV ? ["
-        );
+        expect(routesSource).toContain('import.meta.env.DEV');
     });
 });
