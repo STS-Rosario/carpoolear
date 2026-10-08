@@ -1304,6 +1304,8 @@ const messages = {
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
             'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a {adminEmail} para solucionar el inconveniente.',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         paraIngresarCuenta:
             'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a {adminEmail}',
         emailOContra: 'Email o password incorrecto.',
@@ -2223,6 +2225,8 @@ const messages = {
         numeroDniOPasaporte: 'Número de DNI o Pasaporte',
         doc: 'RUT',
         soporte: 'Mesa de ayuda',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         navegacionAdministracion: 'Navegacion de administracion',
         detalleTicket: 'Detalle del ticket',
         ticketDeSoporte: 'Ticket de mesa de ayuda',
@@ -5428,6 +5432,8 @@ const messages = {
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
             'Your account has been deactivated by the Carpoolear team. Contact us at {adminEmail} to resolve the issue.',
+        cuentaDesactivadaMesaAyuda:
+            'Your account has been deactivated by the Carpoolear team. Check your Mesa de ayuda messages to see the reason and contact the Carpoolear team.',
         paraIngresarCuenta:
             'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at {adminEmail}',
         emailOContra: 'Incorrect email or password.',

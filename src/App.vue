@@ -25,6 +25,7 @@
             <onBoarding key="1" v-if="onBoardingVisibility"></onBoarding>
             <MaintenanceAdminBanner v-if="maintenanceAdminStickyVisible" />
             <ImpersonationBanner v-if="isImpersonating" />
+            <BannedAccountBanner v-if="isBannedAccount" />
             <headerApp></headerApp>
             <SupportFeedbackTab
                 :onboarding-visible="onBoardingVisibility"
@@ -74,6 +75,8 @@ import SupportFeedbackTab from './components/SupportFeedbackTab.vue';
 import MaintenanceFullscreen from './components/MaintenanceFullscreen.vue';
 import MaintenanceAdminBanner from './components/MaintenanceAdminBanner.vue';
 import ImpersonationBanner from './components/ImpersonationBanner.vue';
+import BannedAccountBanner from './components/BannedAccountBanner.vue';
+import { isUserBanned } from './utils/bannedUserAccess.js';
 import OfflineStatusBar from './components/OfflineStatusBar.vue';
 import ServerDownFullscreen from './components/ServerDownFullscreen.vue';
 import { useServerStatusStore } from './stores/serverStatus';
@@ -221,6 +224,9 @@ export default {
             user: 'user',
             isImpersonating: 'isImpersonating'
         }),
+        isBannedAccount() {
+            return isUserBanned(this.user);
+        },
         ...mapState(useDeviceStore, {
             isFacebokApp: 'isFacebokApp',
             firsTimeMobileAppOpen: 'firsTimeMobileAppOpen',
@@ -350,6 +356,7 @@ export default {
         MaintenanceFullscreen,
         MaintenanceAdminBanner,
         ImpersonationBanner,
+        BannedAccountBanner,
         OfflineStatusBar,
         ServerDownFullscreen
     }

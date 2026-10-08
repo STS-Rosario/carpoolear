@@ -17,6 +17,7 @@ import { mapState } from 'pinia';
 import { useAuthStore } from '../stores/auth';
 import SupportFeedbackModal from './SupportFeedbackModal.vue';
 import { shouldShowSupportFeedbackTab } from '../utils/supportFeedbackTab';
+import { isUserBanned } from '../utils/bannedUserAccess.js';
 
 export default {
     name: 'support-feedback-tab',
@@ -40,14 +41,16 @@ export default {
     },
     computed: {
         ...mapState(useAuthStore, {
-            logged: 'checkLogin'
+            logged: 'checkLogin',
+            user: 'user'
         }),
         visible() {
             return shouldShowSupportFeedbackTab({
                 isLoggedIn: this.logged,
                 onboardingVisible: this.onboardingVisible,
                 customSplashVisible: this.customSplashVisible,
-                routeName: this.$route && this.$route.name
+                routeName: this.$route && this.$route.name,
+                isBanned: isUserBanned(this.user)
             });
         }
     }

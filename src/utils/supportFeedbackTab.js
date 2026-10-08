@@ -12,9 +12,10 @@ export function shouldShowSupportFeedbackTab({
     isLoggedIn,
     onboardingVisible,
     customSplashVisible,
-    routeName
+    routeName,
+    isBanned
 } = {}) {
-    if (!isLoggedIn || onboardingVisible || customSplashVisible) {
+    if (!isLoggedIn || onboardingVisible || customSplashVisible || isBanned) {
         return false;
     }
 
