@@ -65,6 +65,53 @@
                         >
                             {{ $t('donationAfterRatingOnceCta') }}
                         </AppButton>
+                        <AppButton
+                            v-if="qrEnabled"
+                            class="donation-after-rating__btn-qr"
+                            variant="secondary"
+                            :loading="loadingQr"
+                            :disabled="loadingQr"
+                            @click="onDonateOnceQr"
+                        >
+                            {{ $t('pagarConQR') }}
+                        </AppButton>
+                        <ManualValidationQrPaymentHelp
+                            v-if="qrEnabled"
+                            computer-suffix-key="comoHacerPagoQRComputadoraSuffixAportar"
+                        />
+                        <div
+                            v-if="showQrPanel"
+                            class="qr-payment-panel panel panel-default"
+                        >
+                            <div class="panel-body text-center">
+                                <p class="qr-instruction">
+                                    {{ $t('escaneáConAppMercadoPago') }}
+                                </p>
+                                <div v-if="qrImageUrl" class="qr-image-wrap">
+                                    <img
+                                        :src="qrImageUrl"
+                                        alt="QR"
+                                        class="qr-image"
+                                    />
+                                </div>
+                                <p v-else class="qr-loading">
+                                    {{ $t('cargando') }}...
+                                </p>
+                                <p class="qr-expiry small">
+                                    {{ $t('qrExpiraEn') }}
+                                </p>
+                                <ManualValidationQrPaymentHelp
+                                    computer-suffix-key="comoHacerPagoQRComputadoraSuffixAportar"
+                                />
+                                <AppButton
+                                    variant="tertiary"
+                                    size="sm"
+                                    @click="closeQrPanel"
+                                >
+                                    {{ $t('cerrar') }}
+                                </AppButton>
+                            </div>
+                        </div>
                     </section>
 
                     <section class="donation-after-rating__alternatives">
@@ -151,10 +198,16 @@ import { mapActions, mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { useProfileStore } from '../../stores/profile';
 import dialogs from '../../services/dialogs.js';
+import QRCode from 'qrcode';
 import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
+import ManualValidationQrPaymentHelp from '../sections/ManualValidationQrPaymentHelp.vue';
 import AppButton from '../ui/AppButton.vue';
-import { startDonationCheckout } from '../../utils/donationCheckout.js';
+import {
+    isPlatformDonationsQrEnabled,
+    startDonationCheckout,
+    startDonationQrCheckout
+} from '../../utils/donationCheckout.js';
 import { DONATION_AFTER_RATING_BENEFIT_KEYS } from '../../utils/donationAfterRatingBenefits.js';
 import {
     CARPOOLEAR_COLLABORATE_URL,
@@ -171,6 +224,7 @@ export default {
     components: {
         DonationAmountPicker,
         DonationAfterRatingHero,
+        ManualValidationQrPaymentHelp,
         AppButton
     },
     props: {
@@ -190,7 +244,10 @@ export default {
             benefitKeys: DONATION_AFTER_RATING_BENEFIT_KEYS,
             collaborateUrl: CARPOOLEAR_COLLABORATE_URL,
             instagramUrl: CARPOOLEAR_INSTAGRAM_PROFILE_URL,
-            facebookUrl: CARPOOLEAR_FACEBOOK_PROFILE_URL
+            facebookUrl: CARPOOLEAR_FACEBOOK_PROFILE_URL,
+            loadingQr: false,
+            showQrPanel: false,
+            qrImageUrl: null
         };
     },
     computed: {
@@ -200,6 +257,9 @@ export default {
         }),
         checkoutSource() {
             return this.tripId ? 'after_rating' : 'donate_page';
+        },
+        qrEnabled() {
+            return isPlatformDonationsQrEnabled(this.appConfig);
         }
     },
     methods: {
@@ -249,6 +309,51 @@ export default {
                     estado: 'error'
                 });
             }
+        },
+        async onDonateOnceQr() {
+            if (this.preview) {
+                this.notifyPreviewMode();
+                return;
+            }
+            if (this.donateValue <= 0) {
+                dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+                return;
+            }
+            this.loadingQr = true;
+            try {
+                const result = await startDonationQrCheckout({
+                    amount: this.donateValue,
+                    source: this.checkoutSource,
+                    tripId: this.tripId,
+                    userId: this.user && this.user.id,
+                    appConfig: this.appConfig
+                });
+                const qrData = result?.qr_data ?? result?.data?.qr_data;
+                if (qrData) {
+                    this.showQrPanel = true;
+                    this.qrImageUrl = null;
+                    QRCode.toDataURL(qrData, { width: 256, margin: 2 }, (err, url) => {
+                        if (!err) {
+                            this.qrImageUrl = url;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Donation QR checkout failed:', error);
+                dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+            } finally {
+                this.loadingQr = false;
+            }
+        },
+        closeQrPanel() {
+            this.showQrPanel = false;
+            this.qrImageUrl = null;
         },
         async onDonateMonthly() {
             if (this.preview) {
@@ -381,7 +486,8 @@ export default {
 }
 
 .donation-after-rating__btn-monthly,
-.donation-after-rating__btn-once {
+.donation-after-rating__btn-once,
+.donation-after-rating__btn-qr {
     width: fit-content;
     max-width: 100%;
     margin-left: auto;
@@ -430,6 +536,32 @@ export default {
 
 .donation-after-rating__btn-once {
     margin-top: 0;
+}
+
+.donation-after-rating__btn-qr {
+    margin-top: 0.75rem;
+}
+
+.qr-payment-panel {
+    margin-top: 1.25rem;
+}
+
+.qr-image-wrap {
+    margin: 1em 0;
+}
+
+.qr-image {
+    max-width: 256px;
+    height: auto;
+}
+
+.qr-instruction {
+    font-weight: bold;
+    color: #333;
+}
+
+.qr-expiry {
+    color: #666;
 }
 
 .donation-after-rating__btn-once.app-button--secondary {

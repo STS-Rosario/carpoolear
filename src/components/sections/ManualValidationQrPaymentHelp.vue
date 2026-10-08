@@ -16,7 +16,7 @@
                     :href="carpoolearAppUrl"
                     target="_blank"
                     rel="noopener noreferrer"
-                >{{ $t('comoHacerPagoQRComputadoraLink') }}</a>{{ $t('comoHacerPagoQRComputadoraSuffix') }}
+                >{{ $t('comoHacerPagoQRComputadoraLink') }}</a>{{ $t(computerSuffixKey) }}
             </p>
         </div>
     </div>
@@ -27,6 +27,9 @@ import { CARPOOLEAR_APP_URL } from '../../utils/qrPaymentHelp';
 
 export default {
     name: 'ManualValidationQrPaymentHelp',
+    props: {
+        computerSuffixKey: { type: String, default: 'comoHacerPagoQRComputadoraSuffix' }
+    },
     data() {
         return {
             helpOpen: false
