@@ -81,4 +81,29 @@ describe('TripContributionStepPanel.vue', () => {
             /v-if="showContributionBreakdown && pricingBreakdown"/
         );
     });
+
+    it('renders an unchecked no-deposit commitment checkbox that must be ticked to continue', () => {
+        expect(componentSource).toContain("$t('meComprometoNoCobrarSena')");
+        expect(componentSource).toContain('type="checkbox"');
+        expect(componentSource).toContain(':checked="noCobrarSena"');
+        expect(componentSource).toContain(
+            "@change=\"$emit('update:noCobrarSena', $event.target.checked)\""
+        );
+        expect(componentSource).toContain('noCobrarSenaError');
+        expect(componentSource).toMatch(
+            /noCobrarSena:\s*\{\s*type:\s*Boolean,\s*default:\s*false/
+        );
+        expect(componentSource).toContain("'update:noCobrarSena'");
+        expect(componentSource).toContain(
+            'data-testid="trip-contribution-no-sena"'
+        );
+        const importanteIndex = componentSource.indexOf(
+            'trip-contribution-step__important'
+        );
+        const checkboxIndex = componentSource.indexOf(
+            'trip-contribution-step__no-sena'
+        );
+        expect(importanteIndex).toBeGreaterThan(-1);
+        expect(checkboxIndex).toBeGreaterThan(importanteIndex);
+    });
 });

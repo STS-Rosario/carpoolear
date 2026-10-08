@@ -400,7 +400,14 @@
                     :price-error="
                         form.priceError.state ? form.priceError.message : ''
                     "
+                    :no-cobrar-sena="form.no_cobrar_sena"
+                    :no-cobrar-sena-error="
+                        stepErrors.noCobrarSena
+                            ? $t(stepErrors.noCobrarSena)
+                            : ''
+                    "
                     @update:price="onContributionPriceUpdate"
+                    @update:noCobrarSena="form.no_cobrar_sena = $event"
                 />
             </template>
 
@@ -1065,6 +1072,7 @@ export default {
                 passengers: this.form.passengers,
                 description: this.form.trip.description,
                 noLucrar: this.form.no_lucrar,
+                noCobrarSena: this.form.no_cobrar_sena,
                 seatPriceEnabled: Boolean(
                     this.form.config && this.form.config.module_seat_price_enabled
                 ),

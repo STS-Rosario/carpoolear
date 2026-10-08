@@ -88,6 +88,25 @@
                 {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }" :target="inAppLinkTarget()" rel="noopener noreferrer">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
             </p>
         </div>
+
+        <div
+            class="trip-contribution-step__no-sena"
+            :class="{ 'has-error': Boolean(noCobrarSenaError) }"
+        >
+            <label class="trip-contribution-step__no-sena-row">
+                <input
+                    type="checkbox"
+                    class="trip-contribution-step__no-sena-input"
+                    data-testid="trip-contribution-no-sena"
+                    :checked="noCobrarSena"
+                    @change="$emit('update:noCobrarSena', $event.target.checked)"
+                />
+                <strong>{{ $t('meComprometoNoCobrarSena') }}</strong>
+            </label>
+            <span class="error" v-if="noCobrarSenaError">{{
+                noCobrarSenaError
+            }}</span>
+        </div>
     </div>
 </template>
 
@@ -146,10 +165,18 @@ export default {
         freeTripsAmount: {
             type: Number,
             default: 0
+        },
+        noCobrarSena: {
+            type: Boolean,
+            default: false
+        },
+        noCobrarSenaError: {
+            type: String,
+            default: ''
         }
     },
 
-    emits: ['update:price'],
+    emits: ['update:price', 'update:noCobrarSena'],
 
     data() {
         return {
@@ -307,5 +334,27 @@ export default {
 
 .trip-contribution-step__important-body :deep(strong) {
     font-weight: 700;
+}
+
+.trip-contribution-step__no-sena {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: #eef5fb;
+}
+
+.trip-contribution-step__no-sena.has-error {
+    outline: 1px solid #c0392b;
+}
+
+.trip-contribution-step__no-sena-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.trip-contribution-step__no-sena-input {
+    margin-top: 0.2rem;
 }
 </style>
