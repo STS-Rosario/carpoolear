@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import dayjs from '../dayjs';
 import {
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationReviewActionAdminLabelKey,
@@ -96,12 +97,24 @@ describe('adminManualIdentityValidationDisplay', () => {
     });
 
     it('formats waiting time from submitted_at to now', () => {
-        const now = new Date('2026-06-18 12:30:00').getTime();
+        const now = dayjs.utc('2026-06-18 12:30:00').valueOf();
         const result = formatManualIdentityValidationWaitingTime({
             submitted_at: '2026-06-18 10:00:00'
         }, t, now);
 
         expect(result).toBe('2 tiempoEsperaHoras 30 tiempoEsperaMinutos');
+    });
+
+    it('treats the naive submitted_at timestamp as UTC regardless of local timezone', () => {
+        // submitted_at has no timezone suffix; it must be parsed as UTC, not as the
+        // browser's local time (previously caused "0min" for recent submissions in
+        // timezones ahead of UTC, e.g. America/Argentina/Buenos_Aires).
+        const now = dayjs.utc('2026-06-18 10:05:00').valueOf();
+        const result = formatManualIdentityValidationWaitingTime({
+            submitted_at: '2026-06-18 10:00:00'
+        }, t, now);
+
+        expect(result).toBe('5 tiempoEsperaMinutos');
     });
 
     it('maps approved review status to approved-by label key', () => {

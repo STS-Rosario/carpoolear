@@ -79,4 +79,18 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('sortKey: this.sortKey');
         expect(viewSource).toContain('sortDir: this.sortDir');
     });
+
+    it('renders a status filter and a search input above the table', () => {
+        expect(viewSource).toContain('v-model="status"');
+        expect(viewSource).toContain('v-model="q"');
+        expect(viewSource).toContain('applyFilters');
+        expect(viewSource.indexOf('admin-manual-filters')).toBeLessThan(viewSource.indexOf('<table'));
+    });
+
+    it('sends status and search params to the API and keeps them in the route query', () => {
+        expect(viewSource).toContain('status: this.status');
+        expect(viewSource).toContain('q: this.q');
+        expect(viewSource).toContain('query.status = this.status');
+        expect(viewSource).toContain('query.q = this.q');
+    });
 });

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import dayjs from '../dayjs';
 import {
     ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
     buildManualIdentityValidationListParams,
@@ -110,7 +111,7 @@ describe('adminManualIdentityValidationsList', () => {
         });
 
         it('sorts by waiting time in milliseconds', () => {
-            const now = new Date('2026-06-18 12:00:00').getTime();
+            const now = dayjs.utc('2026-06-18 12:00:00').valueOf();
             const list = [
                 {
                     id: 1,
@@ -264,6 +265,31 @@ describe('adminManualIdentityValidationsList', () => {
             });
         });
 
+        it('includes status and search params for the API', () => {
+            expect(
+                buildManualIdentityValidationListParams({
+                    page: 1,
+                    perPage: 20,
+                    status: 'pending',
+                    q: 'jane'
+                })
+            ).toEqual({
+                page: 1,
+                per_page: 20,
+                status: 'pending',
+                q: 'jane'
+            });
+        });
+
+        it('omits status and search params when empty', () => {
+            expect(
+                buildManualIdentityValidationListParams({ page: 1, perPage: 20, status: '', q: '' })
+            ).toEqual({
+                page: 1,
+                per_page: 20
+            });
+        });
+
         it('includes open account verification ticket sort params for the API', () => {
             expect(
                 buildManualIdentityValidationListParams({
@@ -295,8 +321,26 @@ describe('adminManualIdentityValidationsList', () => {
                 page: 3,
                 perPage: 50,
                 showResolved: true,
+                status: '',
+                q: '',
                 sortKey: 'user_name',
                 sortDir: 'asc'
+            });
+        });
+
+        it('reads status and search from route query', () => {
+            expect(
+                parseManualIdentityValidationListFromRoute({ status: 'approved', q: 'jane' })
+            ).toMatchObject({
+                status: 'approved',
+                q: 'jane'
+            });
+        });
+
+        it('defaults status and search to empty strings when absent', () => {
+            expect(parseManualIdentityValidationListFromRoute({})).toMatchObject({
+                status: '',
+                q: ''
             });
         });
     });
