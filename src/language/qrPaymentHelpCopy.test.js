@@ -35,4 +35,25 @@ describe('QR payment how-to copy', () => {
             'digital wallet'
         );
     });
+
+    it.each(['arg', 'chl'])(
+        '%s locale has Aportar-specific QR computer how-to copy',
+        (locale) => {
+            expect(messages[locale].comoHacerPagoQRComputadoraSuffixAportar).toContain(
+                'Aportar'
+            );
+            expect(
+                messages[locale].comoHacerPagoQRComputadoraSuffixAportar
+            ).toContain('billetera virtual');
+        }
+    );
+
+    it('en locale has Contribute-specific QR computer how-to copy', () => {
+        expect(messages.en.comoHacerPagoQRComputadoraSuffixAportar).toContain(
+            'Contribute'
+        );
+        expect(messages.en.comoHacerPagoQRComputadoraSuffixAportar).toContain(
+            'digital wallet'
+        );
+    });
 });

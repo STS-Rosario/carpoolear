@@ -675,6 +675,12 @@ const messages = {
             'Te queda {remaining} viaje sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
         unLitroBonificadoRemainingPlural:
             'Te quedan {remaining} viajes sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
+        unLitroComplimentaryCreateTitle: 'Esta vez invita Carpoolear.',
+        unLitroComplimentaryCreateBody:
+            'Tuviste un viaje donde aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en este viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
+        unLitroComplimentaryNextTripTitle: 'El próximo viaje invita Carpoolear.',
+        unLitroComplimentaryNextTripBody:
+            'En este viaje aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en el próximo viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
         unLitroModalTitle: '¿Qué es Un litro para Carpoolear?',
         unLitroModalBody1:
             'Carpoolear es un proyecto sin fines de lucro que se sostiene con trabajo voluntario. En algunos trayectos (por ahora Rosario ↔ Buenos Aires), al crear un viaje se suma 1 litro de nafta a los gastos, y ese litro va para Carpoolear.',
@@ -1096,6 +1102,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -1298,6 +1306,8 @@ const messages = {
         alIngresarFace: 'Al ingresar con Facebook estas aceptando nuestros',
         usuarioBanneado:
             'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Ponte en contacto con nosotros a {adminEmail} para solucionar el inconveniente.',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         paraIngresarCuenta:
             'Esta cuenta no se encuentra confirmada. Debes activarla desde tu correo, busca en tu bandeja de entrada/spam por un correo nuestro. Sino encuentras el correo ponte en contacto con nosotros a {adminEmail}',
         emailOContra: 'Email o password incorrecto.',
@@ -2217,6 +2227,8 @@ const messages = {
         numeroDniOPasaporte: 'Número de DNI o Pasaporte',
         doc: 'RUT',
         soporte: 'Mesa de ayuda',
+        cuentaDesactivadaMesaAyuda:
+            'Tu cuenta se encuentra desactivada por el equipo de Carpoolear. Revisá tus mensajes en Mesa de ayuda para ver la razón y comunicarte con el equipo de Carpoolear.',
         navegacionAdministracion: 'Navegacion de administracion',
         detalleTicket: 'Detalle del ticket',
         ticketDeSoporte: 'Ticket de mesa de ayuda',
@@ -2830,6 +2842,12 @@ const messages = {
             'Te queda {remaining} viaje sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
         unLitroBonificadoRemainingPlural:
             'Te quedan {remaining} viajes sin Un litro para Carpoolear. Después se suma 1 litro al costo del viaje.',
+        unLitroComplimentaryCreateTitle: 'Esta vez invita Carpoolear.',
+        unLitroComplimentaryCreateBody:
+            'Tuviste un viaje donde aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en este viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
+        unLitroComplimentaryNextTripTitle: 'El próximo viaje invita Carpoolear.',
+        unLitroComplimentaryNextTripBody:
+            'En este viaje aportaste 1L para Carpoolear y no pudiste compartir el gasto, por lo que en el próximo viaje que deberías pagarlo, te lo bonificamos. Gracias por aportar a que Carpoolear siga funcionando y gracias por compartir tus viajes :)',
         unLitroModalTitle: '¿Qué es Un litro para Carpoolear?',
         unLitroModalBody1:
             'Carpoolear es un proyecto sin fines de lucro que se sostiene con trabajo voluntario. En algunos trayectos (por ahora Rosario ↔ Buenos Aires), al crear un viaje se suma 1 litro de nafta a los gastos, y ese litro va para Carpoolear.',
@@ -3226,6 +3244,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -4797,6 +4817,12 @@ const messages = {
             'You have {remaining} trip left without One liter for Carpoolear. After that, 1 liter is added to the trip cost.',
         unLitroBonificadoRemainingPlural:
             'You have {remaining} trips left without One liter for Carpoolear. After that, 1 liter is added to the trip cost.',
+        unLitroComplimentaryCreateTitle: 'This time Carpoolear invites you.',
+        unLitroComplimentaryCreateBody:
+            'You had a trip where you contributed 1L for Carpoolear and could not share the cost, so on this trip that you would normally pay, we are waiving it. Thank you for helping Carpoolear keep running and thank you for sharing your trips :)',
+        unLitroComplimentaryNextTripTitle: 'The next trip is on Carpoolear.',
+        unLitroComplimentaryNextTripBody:
+            'On this trip you contributed 1L for Carpoolear and could not share the cost, so on the next trip that you would normally pay, we are waiving it. Thank you for helping Carpoolear keep running and thank you for sharing your trips :)',
         unLitroModalTitle: 'What is One liter for Carpoolear?',
         unLitroModalBody1:
             'Carpoolear is a non-profit project sustained by volunteer work. On some routes (for now Rosario ↔ Buenos Aires), creating a trip adds 1 liter of fuel to the expenses, and that liter goes to Carpoolear.',
@@ -5142,6 +5168,8 @@ const messages = {
         comoHacerPagoQRComputadoraLink: 'www.carpoolear.com.ar/app',
         comoHacerPagoQRComputadoraSuffix:
             ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
+        comoHacerPagoQRComputadoraSuffixAportar:
+            ' in a browser. Then go to Contribute and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:
@@ -5410,6 +5438,8 @@ const messages = {
         alIngresarFace: 'By logging in with Facebook you are accepting our',
         usuarioBanneado:
             'Your account has been deactivated by the Carpoolear team. Contact us at {adminEmail} to resolve the issue.',
+        cuentaDesactivadaMesaAyuda:
+            'Your account has been deactivated by the Carpoolear team. Check your Mesa de ayuda messages to see the reason and contact the Carpoolear team.',
         paraIngresarCuenta:
             'This account is not confirmed. You must activate it from your email, check your inbox/spam for an email from us. If you cannot find the email, contact us at {adminEmail}',
         emailOContra: 'Incorrect email or password.',

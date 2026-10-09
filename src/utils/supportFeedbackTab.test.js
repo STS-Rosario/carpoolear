@@ -23,6 +23,10 @@ describe('shouldShowSupportFeedbackTab', () => {
         expect(shouldShowSupportFeedbackTab({ ...visible, isLoggedIn: false })).toBe(false);
     });
 
+    it('hides the tab for banned users', () => {
+        expect(shouldShowSupportFeedbackTab({ ...visible, isBanned: true })).toBe(false);
+    });
+
     it('hides the tab during onboarding', () => {
         expect(shouldShowSupportFeedbackTab({ ...visible, onboardingVisible: true })).toBe(false);
     });

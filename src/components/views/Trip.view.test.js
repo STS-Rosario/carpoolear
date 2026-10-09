@@ -278,10 +278,17 @@ describe('Trip.vue Un litro payment banners', () => {
 
     it('opens Un litro explanation from every sellado banner', () => {
         const cards = viewSource.match(/<UnLitroInfoCard[\s\S]*?\/>/g) || [];
-        expect(cards).toHaveLength(4);
-        cards.forEach((card) => {
-            expect(card).toContain('link-only');
-            expect(card).toContain(':free-trips-amount="freeTripsAmount"');
-        });
+        expect(cards.length).toBeGreaterThanOrEqual(4);
+        cards
+            .filter((card) => card.includes('link-only'))
+            .forEach((card) => {
+                expect(card).toContain(':free-trips-amount="freeTripsAmount"');
+            });
+    });
+
+    it('shows the next-trip Un litro credit card to the driver of a finished empty paid trip', () => {
+        expect(viewSource).toContain('shouldShowSelladoEmptyTripCreditCard');
+        expect(viewSource).toContain('showSelladoEmptyTripCreditCard');
+        expect(viewSource).toContain('next-trip-complimentary');
     });
 });

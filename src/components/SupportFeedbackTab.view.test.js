@@ -14,6 +14,8 @@ describe('SupportFeedbackTab view', () => {
         expect(source).toContain("$t('pestanaFeedback')");
         expect(source).toContain('v-if="visible"');
         expect(source).toContain(':visible="showModal"');
+        expect(source).toContain('isUserBanned');
+        expect(source).toContain('isBanned:');
     });
 
     it('uses Interbus-style vertical tab positioning', () => {

@@ -51,3 +51,41 @@ describe('auth middleware guest trip detail access', () => {
         expect(replace).not.toHaveBeenCalled();
     });
 });
+
+describe('guest middleware banned users', () => {
+    beforeEach(() => {
+        replace.mockClear();
+    });
+
+    it('sends banned logged-in users from login to mesa de ayuda', async () => {
+        const { useAuthStore } = await import('../stores/auth');
+        useAuthStore.mockReturnValue({
+            checkLogin: true,
+            user: { banned: 1 }
+        });
+
+        const { guest } = await import('./middleware.js');
+        const next = vi.fn();
+
+        guest({ name: 'login' }, {}, next);
+
+        expect(next).toHaveBeenCalledWith(false);
+        expect(replace).toHaveBeenCalledWith({ name: 'tickets' });
+    });
+
+    it('sends regular logged-in users from login to trips', async () => {
+        const { useAuthStore } = await import('../stores/auth');
+        useAuthStore.mockReturnValue({
+            checkLogin: true,
+            user: { banned: 0 }
+        });
+
+        const { guest } = await import('./middleware.js');
+        const next = vi.fn();
+
+        guest({ name: 'login' }, {}, next);
+
+        expect(next).toHaveBeenCalledWith(false);
+        expect(replace).toHaveBeenCalledWith({ name: 'trips' });
+    });
+});
