@@ -130,6 +130,6 @@ describe('CUSTOM_SPLASH_DISMISS_MS', () => {
     });
 
     it('exposes the web build number used on the splash screen', () => {
-        expect(SPLASH_WEB_BUILD_NUMBER).toBe(153);
+        expect(SPLASH_WEB_BUILD_NUMBER).toBe(159);
     });
 });

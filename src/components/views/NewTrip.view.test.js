@@ -66,9 +66,9 @@ describe('NewTrip.vue negative contribution validation', () => {
     });
 
     it('sets min zero on contribution inputs', () => {
-        expect(uiSource).toMatch(/min="0"/s);
+        expect(uiSource).toMatch(/min=0/s);
         expect(wizardSource).toMatch(
-            /<AppInput[\s\S]*?type="number"[\s\S]*?min="0"/
+            /<AppInput[\s\S]*?type="number"[\s\S]*?min=0/
         );
     });
 });
@@ -280,7 +280,7 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(leaveGuard).toBeTruthy();
         expect(leaveGuard).toContain('showWizardSuccess');
         expect(leaveGuard).toContain('clearTripCreationDraft');
-        // Remounting the wizard here syncs ?step=1 and races Ver viaje → detail.
+        // Remounting the wizard here syncs ?step=1 and races Ver viaje â†’ detail.
         expect(leaveGuard).not.toContain('this.resetTripCreationForm');
 
         expect(viewSource).toMatch(

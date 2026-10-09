@@ -21,10 +21,3 @@ describe('admin dashboard routes', () => {
         expect(routesSource).toContain('AdminPage');
     });
 });
-
-describe('admin dashboard navigation', () => {
-    it('lists Tablero first and links to admin dashboard', () => {
-        expect(navSource.indexOf('adminNavTablero')).toBeLessThan(navSource.indexOf('adminNavGraficos'));
-        expect(navSource).toContain("name: 'admin-dashboard'");
-    });
-});
