@@ -12,6 +12,7 @@
                             @change="applyFilters"
                         >
                             <option value="">{{ $t('todos') }}</option>
+                            <option value="awaiting_photos">{{ $t('estadoEsperandoFotos') }}</option>
                             <option value="pending">{{ $t('pendiente') }}</option>
                             <option value="approved">{{ $t('aprobado') }}</option>
                             <option value="rejected">{{ $t('rechazado') }}</option>
