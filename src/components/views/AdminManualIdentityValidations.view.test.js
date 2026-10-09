@@ -93,4 +93,24 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('query.status = this.status');
         expect(viewSource).toContain('query.q = this.q');
     });
+
+    it('shows a subtle clear-filters button only when a filter is active', () => {
+        expect(viewSource).toContain('v-if="hasActiveFilters"');
+        expect(viewSource).toContain('variant="tertiary"');
+        expect(viewSource).toContain('@click="clearFilters"');
+        expect(viewSource).toContain("{{ $t('limpiarFiltros') }}");
+    });
+
+    it('clears status, search and show-resolved when clearing filters', () => {
+        const methodsAt = viewSource.indexOf('methods: {');
+        const clearFiltersAt = viewSource.indexOf('clearFilters()', methodsAt);
+        const nextMethodAt = viewSource.indexOf('toggleSort(column)', clearFiltersAt);
+        const clearFiltersBody = viewSource.slice(clearFiltersAt, nextMethodAt);
+
+        expect(clearFiltersAt).toBeGreaterThan(-1);
+        expect(clearFiltersBody).toContain("this.status = ''");
+        expect(clearFiltersBody).toContain("this.q = ''");
+        expect(clearFiltersBody).toContain('this.showResolved = false');
+        expect(clearFiltersBody).toContain('this.syncRouteQuery()');
+    });
 });

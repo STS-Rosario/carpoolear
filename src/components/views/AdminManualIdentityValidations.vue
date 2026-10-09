@@ -27,6 +27,15 @@
                     <AppButton variant="secondary" size="sm" type="submit">
                         {{ $t('buscar') }}
                     </AppButton>
+                    <AppButton
+                        v-if="hasActiveFilters"
+                        variant="tertiary"
+                        size="sm"
+                        type="button"
+                        @click="clearFilters"
+                    >
+                        {{ $t('limpiarFiltros') }}
+                    </AppButton>
                 </form>
                 <div class="show-resolved-toggle">
                     <label>
@@ -195,6 +204,11 @@ export default {
             this.syncRouteQuery();
         }
     },
+    computed: {
+        hasActiveFilters() {
+            return Boolean(this.status || this.q || this.showResolved);
+        }
+    },
     methods: {
         getAdminUserProfileRoute,
         accountVerificationTicketsRoute(userId) {
@@ -257,6 +271,13 @@ export default {
             this.$router.replace({ query });
         },
         applyFilters() {
+            this.listPage = 1;
+            this.syncRouteQuery();
+        },
+        clearFilters() {
+            this.status = '';
+            this.q = '';
+            this.showResolved = false;
             this.listPage = 1;
             this.syncRouteQuery();
         },
