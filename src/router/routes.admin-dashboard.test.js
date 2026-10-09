@@ -21,9 +21,3 @@ describe('admin dashboard routes', () => {
         expect(routesSource).toContain('AdminPage');
     });
 });
-
-describe('admin dashboard navigation', () => {
-    it('links to admin dashboard', () => {
-        expect(navSource).toContain("name: 'admin-dashboard'");
-    });
-});

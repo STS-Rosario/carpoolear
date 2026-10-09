@@ -4,11 +4,15 @@ import { createPinia, setActivePinia } from 'pinia';
 const countActionMock = vi.fn(() => Promise.resolve());
 const getMessagesMock = vi.fn(() => Promise.resolve({ data: [] }));
 
-vi.mock('../services/api', () => ({
-    ConversationApi: class ConversationApiMock {
-        getMessages = getMessagesMock;
-    }
-}));
+vi.mock('../services/api', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        ConversationApi: class ConversationApiMock {
+            getMessages = getMessagesMock
+        }
+    };
+});
 
 vi.mock('../services/dialogs.js', () => ({
     default: {
