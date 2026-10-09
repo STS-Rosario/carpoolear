@@ -3,6 +3,41 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('validacionesManuales') }}</h2>
+                <form class="admin-manual-filters" @submit.prevent="applyFilters">
+                    <AppField label-for="admin-manual-status" :label="$t('estado')">
+                        <select
+                            id="admin-manual-status"
+                            v-model="status"
+                            class="admin-manual-filters__select"
+                            @change="applyFilters"
+                        >
+                            <option value="">{{ $t('todos') }}</option>
+                            <option value="awaiting_photos">{{ $t('estadoEsperandoFotos') }}</option>
+                            <option value="pending">{{ $t('pendiente') }}</option>
+                            <option value="approved">{{ $t('aprobado') }}</option>
+                            <option value="rejected">{{ $t('rechazado') }}</option>
+                            <option value="closed">{{ $t('estadoCerrado') }}</option>
+                        </select>
+                    </AppField>
+                    <AppInput
+                        id="admin-manual-search"
+                        v-model="q"
+                        type="search"
+                        :label="$t('buscar')"
+                    />
+                    <AppButton variant="secondary" size="sm" type="submit">
+                        {{ $t('buscar') }}
+                    </AppButton>
+                    <AppButton
+                        v-if="hasActiveFilters"
+                        variant="tertiary"
+                        size="sm"
+                        type="button"
+                        @click="clearFilters"
+                    >
+                        {{ $t('limpiarFiltros') }}
+                    </AppButton>
+                </form>
                 <div class="show-resolved-toggle">
                     <label>
                         <input v-model="showResolved" type="checkbox" />
@@ -116,6 +151,9 @@
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
+import AppButton from '../ui/AppButton.vue';
+import AppField from '../ui/AppField.vue';
+import AppInput from '../ui/AppInput.vue';
 import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
@@ -146,6 +184,8 @@ export default {
             listPage: 1,
             listPerPage: DEFAULT_ADMIN_PER_PAGE,
             showResolved: getShowResolvedManualIdentityValidations(),
+            status: '',
+            q: '',
             sortKey: null,
             sortDir: 'asc',
             sortableColumns: MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS
@@ -163,6 +203,11 @@ export default {
             saveShowResolvedManualIdentityValidations(value);
             this.listPage = 1;
             this.syncRouteQuery();
+        }
+    },
+    computed: {
+        hasActiveFilters() {
+            return Boolean(this.status || this.q || this.showResolved);
         }
     },
     methods: {
@@ -200,6 +245,8 @@ export default {
             if (this.$route.query.show_resolved != null) {
                 this.showResolved = parsed.showResolved;
             }
+            this.status = parsed.status;
+            this.q = parsed.q;
         },
         syncRouteQuery() {
             const query = {};
@@ -212,11 +259,28 @@ export default {
             if (this.showResolved) {
                 query.show_resolved = '1';
             }
+            if (this.status) {
+                query.status = this.status;
+            }
+            if (this.q) {
+                query.q = this.q;
+            }
             if (this.sortKey) {
                 query.sort = this.sortKey;
                 query.direction = this.sortDir;
             }
             this.$router.replace({ query });
+        },
+        applyFilters() {
+            this.listPage = 1;
+            this.syncRouteQuery();
+        },
+        clearFilters() {
+            this.status = '';
+            this.q = '';
+            this.showResolved = false;
+            this.listPage = 1;
+            this.syncRouteQuery();
         },
         toggleSort(column) {
             const next = getNextManualIdentityValidationSortState(
@@ -236,6 +300,8 @@ export default {
                 page: this.listPage,
                 perPage: this.listPerPage,
                 showResolved: this.showResolved,
+                status: this.status,
+                q: this.q,
                 sortKey: this.sortKey,
                 sortDir: this.sortDir
             });
@@ -278,11 +344,48 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         Loading,
+        AppButton,
+        AppField,
+        AppInput,
         AppPrimaryLink
     }
 };
 </script>
 <style scoped>
+.admin-manual-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+}
+
+.admin-manual-filters :deep(.app-field),
+.admin-manual-filters :deep(.app-input) {
+    flex: 1 1 160px;
+    max-width: 220px;
+    margin-bottom: 0;
+}
+
+.admin-manual-filters__select {
+    width: 100%;
+    border: 0;
+    border-radius: var(--ds-radius-input);
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: var(--ds-input-padding-y, 0.75rem) var(--ds-input-padding-x, 1rem);
+    color: var(--ds-input-text, #22211f);
+    font-family: inherit;
+    font-size: var(--ds-input-font-size, 1rem);
+    line-height: 1.3;
+    box-sizing: border-box;
+}
+
+.admin-manual-filters__select:focus {
+    outline: none;
+}
+
 .show-resolved-toggle {
     margin-bottom: 16px;
 }

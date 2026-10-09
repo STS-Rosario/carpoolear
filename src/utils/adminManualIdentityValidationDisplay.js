@@ -1,3 +1,4 @@
+import dayjs from '../dayjs';
 import { getIdentityValidationMethodLabelKey } from './adminUserIdentityVerification.js';
 
 export function getManualIdentityValidationVerifiedLabel(item, t) {
@@ -55,10 +56,10 @@ export {
 } from './adminReviewActionDisplay.js';
 
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
-    const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;
+    const submitted = item.submitted_at ? dayjs.utc(item.submitted_at).valueOf() : null;
     if (!submitted) return '-';
     const end = item.manual_validation_started_at
-        ? new Date(item.manual_validation_started_at).getTime()
+        ? dayjs.utc(item.manual_validation_started_at).valueOf()
         : now;
     let diffMs = Math.max(0, end - submitted);
     const days = Math.floor(diffMs / 86400000);

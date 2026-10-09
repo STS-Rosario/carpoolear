@@ -1,3 +1,4 @@
+import dayjs from '../dayjs';
 import { parseAdminPaginationFromRoute } from './adminPagination';
 
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
@@ -111,9 +112,9 @@ function getManualIdentityValidationWaitingTimeMs(item, now = Date.now()) {
         return null;
     }
 
-    const submitted = new Date(item.submitted_at).getTime();
+    const submitted = dayjs.utc(item.submitted_at).valueOf();
     const end = item.manual_validation_started_at
-        ? new Date(item.manual_validation_started_at).getTime()
+        ? dayjs.utc(item.manual_validation_started_at).valueOf()
         : now;
     /* eslint-enable camelcase */
 
@@ -253,6 +254,8 @@ export function buildManualIdentityValidationListParams({
     page,
     perPage,
     showResolved = false,
+    status = '',
+    q = '',
     sortKey = null,
     sortDir = 'asc'
 } = {}) {
@@ -266,6 +269,12 @@ export function buildManualIdentityValidationListParams({
     }
     if (showResolved) {
         params.show_resolved = '1';
+    }
+    if (status) {
+        params.status = status;
+    }
+    if (q) {
+        params.q = q;
     }
     if (sortKey) {
         params.sort = sortKey;
@@ -287,6 +296,8 @@ export function parseManualIdentityValidationListFromRoute(query = {}) {
         page: pagination.page,
         perPage: pagination.perPage,
         showResolved,
+        status: query.status ? String(query.status) : '',
+        q: query.q ? String(query.q) : '',
         sortKey,
         sortDir
     };
