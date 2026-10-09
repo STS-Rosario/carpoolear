@@ -21,6 +21,9 @@ const DESC_FIRST_SUPPORT_TICKET_SORT_COLUMNS = new Set(['created_at', 'updated_a
 function parseSupportTicketSortFromRoute(query = {}) {
     const sortRaw = query.sort != null ? String(query.sort) : '';
     const sortKey = sortRaw && ADMIN_SUPPORT_TICKET_SORT_KEYS.has(sortRaw) ? sortRaw : null;
+    if (!sortKey) {
+        return { sortKey: null, sortDir: 'desc' };
+    }
     const directionRaw = String(query.direction || '').toLowerCase();
     const sortDir = directionRaw === 'asc' ? 'asc' : 'desc';
 
