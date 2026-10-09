@@ -67,13 +67,77 @@
             <table class="table table-hover support-tickets-table support-tickets-table--compact">
                 <thead>
                     <tr>
-                        <th class="support-tickets-table__subject">{{ capitalizeFirst($t('asuntoTicket')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('prioridad')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('creado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('actualizado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('estado')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('asignadoA')) }}</th>
-                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('categoriaTicket')) }}</th>
+                        <th
+                            class="support-tickets-table__subject admin-support-th-sort"
+                            @click="toggleSort('subject')"
+                        >
+                            {{ capitalizeFirst($t('asuntoTicket')) }}
+                            <span
+                                v-if="sortKey === 'subject'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('priority')"
+                        >
+                            {{ capitalizeFirst($t('prioridad')) }}
+                            <span
+                                v-if="sortKey === 'priority'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th class="support-tickets-table__narrow">{{ capitalizeFirst($t('columnaClub')) }}</th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('created_at')"
+                        >
+                            {{ capitalizeFirst($t('creado')) }}
+                            <span
+                                v-if="sortKey === 'created_at'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('updated_at')"
+                        >
+                            {{ capitalizeFirst($t('actualizado')) }}
+                            <span
+                                v-if="sortKey === 'updated_at'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('status')"
+                        >
+                            {{ capitalizeFirst($t('estado')) }}
+                            <span
+                                v-if="sortKey === 'status'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('assigned_to')"
+                        >
+                            {{ capitalizeFirst($t('asignadoA')) }}
+                            <span
+                                v-if="sortKey === 'assigned_to'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
+                        <th
+                            class="support-tickets-table__narrow admin-support-th-sort"
+                            @click="toggleSort('type')"
+                        >
+                            {{ capitalizeFirst($t('categoriaTicket')) }}
+                            <span
+                                v-if="sortKey === 'type'"
+                                class="admin-support-sort-hint"
+                            >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,6 +172,15 @@
                             </span>
                         </td>
                         <td class="support-tickets-table__narrow"><span :class="priorityClass(ticket.priority)">{{ priorityLabel(ticket.priority) }}</span></td>
+                        <td class="support-tickets-table__narrow">
+                            <img
+                                v-if="ticketOwnerIsClubMember(ticket)"
+                                :src="clubCarpoolearBadgeUrl"
+                                width="20"
+                                height="20"
+                                :alt="$t('adminClubCarpoolear')"
+                            />
+                        </td>
                         <td class="support-tickets-table__narrow" :title="fullDate(ticket.created_at)">{{ relativeDate(ticket.created_at) }}</td>
                         <td
                             class="support-tickets-table__narrow"
@@ -150,6 +223,7 @@ import {
 import { USER_TICKET_TYPE_OPTIONS } from '../../utils/supportTicketTypeOptions';
 import { TICKET_SOURCE_FEEDBACK_TAB } from '../../utils/supportTicketSources';
 import {
+    getNextAdminSupportTicketSortState,
     parseAdminSupportTicketListFiltersFromRoute
 } from '../../utils/adminSupportTicketListFilters';
 import { getUpdatedAgeAttentionClass, hasUnreadUserReplyIndicator } from '../../utils/supportTicketUpdatedAgeAttention';
@@ -171,6 +245,8 @@ export default {
             filterOpen: false,
             filterCreatedByAdmin: false,
             filterUserId: null,
+            sortKey: null,
+            sortDir: 'desc',
             listPage: 1,
             TICKET_SOURCE_FEEDBACK_TAB,
             listPerPage: DEFAULT_ADMIN_PER_PAGE,
@@ -189,6 +265,9 @@ export default {
         listPagination() {
             return this.listMeta && this.listMeta.pagination ? this.listMeta.pagination : null;
         },
+        clubCarpoolearBadgeUrl() {
+            return process.env.ROUTE_BASE + 'img/badges/club-carpoolear.png';
+        },
         listFilters() {
             return {
                 type: this.filterType,
@@ -198,7 +277,9 @@ export default {
                 createdByAdmin: this.filterCreatedByAdmin,
                 userId: this.filterUserId,
                 page: this.listPage,
-                perPage: this.listPerPage
+                perPage: this.listPerPage,
+                sortKey: this.sortKey,
+                sortDir: this.sortDir
             };
         }
     },
@@ -224,6 +305,8 @@ export default {
             this.filterOpen = parsed.open;
             this.filterCreatedByAdmin = parsed.createdByAdmin;
             this.filterUserId = parsed.userId;
+            this.sortKey = parsed.sortKey;
+            this.sortDir = parsed.sortDir;
             this.listPage = parsed.page;
             this.listPerPage = parsed.perPage;
         },
@@ -253,7 +336,22 @@ export default {
             if (this.listPerPage !== DEFAULT_ADMIN_PER_PAGE) {
                 query.per_page = String(this.listPerPage);
             }
+            if (this.sortKey) {
+                query.sort = this.sortKey;
+                query.direction = this.sortDir;
+            }
             this.$router.replace({ query });
+        },
+        toggleSort(column) {
+            const next = getNextAdminSupportTicketSortState(
+                this.sortKey,
+                this.sortDir,
+                column
+            );
+            this.sortKey = next.sortKey;
+            this.sortDir = next.sortDir;
+            this.listPage = 1;
+            this.syncFiltersToRoute();
         },
         applyFilters() {
             this.listPage = 1;
@@ -365,6 +463,9 @@ export default {
             const name = assignedAdminDisplayName(ticket);
             return name || '-';
         },
+        ticketOwnerIsClubMember(ticket) {
+            return Number(ticket && ticket.club_carpoolear_active) === 1;
+        },
         goPrevPage() {
             const pagination = this.listPagination;
             if (!pagination || pagination.current_page <= 1) {
@@ -418,6 +519,22 @@ export default {
 .support-tickets-table thead th {
     background-color: #f3f6fa;
     border: 1px solid #dcdcdc;
+}
+
+.admin-support-th-sort {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.admin-support-th-sort:hover {
+    background: #f5f5f5;
+}
+
+.admin-support-sort-hint {
+    color: #666;
+    margin-left: 4px;
+    font-size: 12px;
 }
 
 .support-tickets-table tbody td {

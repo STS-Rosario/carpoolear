@@ -63,7 +63,9 @@ describe('tickets store', () => {
             priority: 'high',
             needsReply: true,
             page: 2,
-            perPage: 30
+            perPage: 30,
+            sortKey: 'priority',
+            sortDir: 'desc'
         });
 
         expect(apiMock.adminList).toHaveBeenCalledWith({
@@ -71,7 +73,9 @@ describe('tickets store', () => {
             priority: 'high',
             needs_reply: '1',
             page: 2,
-            per_page: 30
+            per_page: 30,
+            sort: 'priority',
+            direction: 'desc'
         });
     });
 

@@ -14,12 +14,13 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('priorityLabel(ticket.priority)');
     });
 
-    it('orders thead subject first then priority then dates and status with category last', () => {
+    it('orders thead subject first then priority then Club then dates and status with category last', () => {
         const theadStart = viewSource.indexOf('<thead>');
         const theadEnd = viewSource.indexOf('</thead>');
         const thead = viewSource.slice(theadStart, theadEnd);
         const sub = thead.indexOf("$t('asuntoTicket')");
         const pri = thead.indexOf("$t('prioridad')");
+        const club = thead.indexOf("$t('columnaClub')");
         const cre = thead.indexOf("$t('creado')");
         const upd = thead.indexOf("$t('actualizado')");
         const est = thead.indexOf("$t('estado')");
@@ -27,20 +28,65 @@ describe('AdminSupportTickets view', () => {
         const cat = thead.indexOf("$t('categoriaTicket')");
         expect(sub).toBeGreaterThan(-1);
         expect(sub).toBeLessThan(pri);
-        expect(pri).toBeLessThan(cre);
+        expect(pri).toBeLessThan(club);
+        expect(club).toBeLessThan(cre);
         expect(cre).toBeLessThan(upd);
         expect(upd).toBeLessThan(est);
         expect(est).toBeLessThan(asg);
         expect(asg).toBeLessThan(cat);
     });
 
-    it('shows subject link before priority and category cell last in row', () => {
-        const subjectCell = viewSource.indexOf('#{{ ticket.id }}');
-        const priCell = viewSource.indexOf('priorityLabel(ticket.priority)');
-        const catCell = viewSource.indexOf('ticketCategoryLabel(ticket.type)');
+    it('does not make the Club header sortable', () => {
+        const theadStart = viewSource.indexOf('<thead>');
+        const theadEnd = viewSource.indexOf('</thead>');
+        const thead = viewSource.slice(theadStart, theadEnd);
+        const clubAt = thead.indexOf("$t('columnaClub')");
+        expect(clubAt).toBeGreaterThan(-1);
+        const thStart = thead.lastIndexOf('<th', clubAt);
+        const thEnd = thead.indexOf('</th>', clubAt);
+        const clubTh = thead.slice(thStart, thEnd);
+        expect(clubTh).not.toContain('toggleSort');
+        expect(clubTh).not.toContain('@click');
+        expect(viewSource).not.toContain("@click=\"toggleSort('club");
+    });
+
+    it('makes every header except Club sortable with explicit toggleSort keys', () => {
+        expect(viewSource).toContain("toggleSort('subject')");
+        expect(viewSource).toContain("toggleSort('priority')");
+        expect(viewSource).toContain("toggleSort('created_at')");
+        expect(viewSource).toContain("toggleSort('updated_at')");
+        expect(viewSource).toContain("toggleSort('status')");
+        expect(viewSource).toContain("toggleSort('assigned_to')");
+        expect(viewSource).toContain("toggleSort('type')");
+        expect(viewSource).toContain('admin-support-th-sort');
+        expect(viewSource).toContain('getNextAdminSupportTicketSortState');
+    });
+
+    it('shows subject link before priority then Club then category cell last in row', () => {
+        const tbodyStart = viewSource.indexOf('<tbody>');
+        const tbodyEnd = viewSource.indexOf('</tbody>');
+        const tbody = viewSource.slice(tbodyStart, tbodyEnd);
+        const subjectCell = tbody.indexOf('#{{ ticket.id }}');
+        const priCell = tbody.indexOf('priorityLabel(ticket.priority)');
+        const clubCell = tbody.indexOf('ticketOwnerIsClubMember(ticket)');
+        const creCell = tbody.indexOf('relativeDate(ticket.created_at)');
+        const catCell = tbody.indexOf('ticketCategoryLabel(ticket.type)');
         expect(subjectCell).toBeGreaterThan(-1);
         expect(subjectCell).toBeLessThan(priCell);
-        expect(priCell).toBeLessThan(catCell);
+        expect(priCell).toBeLessThan(clubCell);
+        expect(clubCell).toBeLessThan(creCell);
+        expect(creCell).toBeLessThan(catCell);
+    });
+
+    it('shows a 20x20 Club logo when the ticket owner is a Club member', () => {
+        expect(viewSource).toContain('v-if="ticketOwnerIsClubMember(ticket)"');
+        expect(viewSource).toContain('width="20"');
+        expect(viewSource).toContain('height="20"');
+        expect(viewSource).toContain('badges/club-carpoolear.png');
+        expect(viewSource).toContain("process.env.ROUTE_BASE + 'img/badges/club-carpoolear.png'");
+        expect(viewSource).toContain("$t('adminClubCarpoolear')");
+        expect(viewSource).toContain('club_carpoolear_active');
+        expect(viewSource).toContain('Number(');
     });
 
     it('shows ticket owner display name next to the subject for admin context', () => {
@@ -111,6 +157,15 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('parseAdminSupportTicketListFiltersFromRoute');
         expect(viewSource).toContain('fetchAdminList(this.listFilters)');
         expect(viewSource).toContain('syncFiltersToRoute');
+    });
+
+    it('puts sortKey and sortDir on listFilters and persists them in the route', () => {
+        expect(viewSource).toContain('sortKey: this.sortKey');
+        expect(viewSource).toContain('sortDir: this.sortDir');
+        expect(viewSource).toContain('query.sort = this.sortKey');
+        expect(viewSource).toContain('query.direction = this.sortDir');
+        expect(viewSource).toContain('this.sortKey = parsed.sortKey');
+        expect(viewSource).toContain('this.sortDir = parsed.sortDir');
     });
 
     it('passes userId filter from route query to admin ticket list fetch', () => {
