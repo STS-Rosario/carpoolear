@@ -49,15 +49,23 @@ describe('tripCreationSteps step labels', () => {
 });
 
 describe('tripCreationSteps navigation', () => {
-    it('lists ten steps for drivers and skips car/contribution for passengers', () => {
+    it('lists ten steps for drivers and skips car/seats/contribution/preferences for passengers', () => {
         expect(ALL_WIZARD_STEPS).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         expect(getVisibleSteps(false)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 7, 9, 10]);
+        // A passenger always requests a single seat and never sets the
+        // trip's preferences (that is the driver's call), so car, seats,
+        // contribution and description/preferences are all skipped.
+        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 10]);
     });
 
-    it('marks step 6 as disabled for passengers', () => {
-        expect(isStepDisabledForPassenger(6, true)).toBe(true);
-        expect(isStepDisabledForPassenger(6, false)).toBe(false);
+    it('marks car, seats, contribution and description as disabled for passengers', () => {
+        expect(isStepDisabledForPassenger(STEP.CAR, true)).toBe(true);
+        expect(isStepDisabledForPassenger(STEP.CAR, false)).toBe(false);
+        expect(isStepDisabledForPassenger(STEP.SEATS, true)).toBe(true);
+        expect(isStepDisabledForPassenger(STEP.SEATS, false)).toBe(false);
+        expect(isStepDisabledForPassenger(STEP.CONTRIBUTION, true)).toBe(true);
+        expect(isStepDisabledForPassenger(STEP.DESCRIPTION, true)).toBe(true);
+        expect(isStepDisabledForPassenger(STEP.DESCRIPTION, false)).toBe(false);
         expect(isCarStep(6)).toBe(true);
     });
 
@@ -109,11 +117,15 @@ describe('tripCreationSteps navigation', () => {
     });
 
     it('navigates next and previous across passenger-visible steps', () => {
+        // For passengers, schedule is immediately followed by the review
+        // step: car, seats, contribution and description are all skipped.
         expect(
             getNextStep(STEP.SCHEDULE, true, { wantsIntermediateStops: false })
-        ).toBe(STEP.SEATS);
+        ).toBe(STEP.LAST_DETAILS);
         expect(
-            getPreviousStep(STEP.SEATS, true, { wantsIntermediateStops: false })
+            getPreviousStep(STEP.LAST_DETAILS, true, {
+                wantsIntermediateStops: false
+            })
         ).toBe(STEP.SCHEDULE);
         expect(
             getNextStep(STEP.SCHEDULE, false, { wantsIntermediateStops: false })
@@ -136,6 +148,9 @@ describe('tripCreationSteps navigation', () => {
         );
         expect(canNavigateToStep(STEP.STOPS, STEP.ORIGIN, false)).toBe(false);
         expect(canNavigateToStep(STEP.CAR, 5, true)).toBe(false);
+        expect(canNavigateToStep(STEP.SEATS, 10, true)).toBe(false);
+        expect(canNavigateToStep(STEP.DESCRIPTION, 10, true)).toBe(false);
+        expect(canNavigateToStep(STEP.SEATS, 10, false)).toBe(true);
     });
 });
 
@@ -253,11 +268,29 @@ describe('tripCreationSteps validateStep', () => {
         ).toBe(false);
     });
 
-    it('validates description step', () => {
+    it('validates description step for drivers only', () => {
         expect(
             validateStep(STEP.DESCRIPTION, { description: 'Viaje a la costa' }).valid
         ).toBe(true);
         expect(validateStep(STEP.DESCRIPTION, { description: '' }).valid).toBe(false);
+        // Passengers never see this step (preferences are the driver's
+        // call), so an empty description must not block them.
+        expect(
+            validateStep(STEP.DESCRIPTION, {
+                isPassenger: true,
+                description: ''
+            }).valid
+        ).toBe(true);
+    });
+
+    it('skips seat count validation for passengers (they always request one seat)', () => {
+        expect(
+            validateStep(STEP.SEATS, {
+                isPassenger: true,
+                totalSeats: 0,
+                passengers: 5
+            }).valid
+        ).toBe(true);
     });
 
     it('requires contribution per person on contribution step for drivers when enabled', () => {

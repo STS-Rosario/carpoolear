@@ -257,12 +257,7 @@
     display: flex;
     align-items: center;
     gap: 0.65rem;
-    padding: 0.75rem 0;
-    border-top: 1px solid var(--trip-detail-divider);
-}
-.trip-detail--mobile .trip-detail__passengers .list-item:first-of-type, .trip-detail--desktop .trip-detail__passengers .list-item:first-of-type {
-    border-top: none;
-    padding-top: 0;
+    padding: 0 0 0.75rem;
 }
 .trip-detail--mobile .trip-detail__passengers .trip_passenger_avatar, .trip-detail--desktop .trip-detail__passengers .trip_passenger_avatar {
     display: inline-flex;
@@ -771,13 +766,7 @@
     display: flex;
     align-items: center;
     gap: 0.65rem;
-    padding: 0.75rem 0;
-    border-top: 1px solid var(--trip-detail-divider);
-}
-
-.trip-detail--desktop .trip-detail__passengers .list-item:first-of-type {
-    border-top: none;
-    padding-top: 0;
+    padding: 0 0 0.75rem;
 }
 
 .trip-detail--desktop .trip-detail__passengers .trip_passenger_avatar {

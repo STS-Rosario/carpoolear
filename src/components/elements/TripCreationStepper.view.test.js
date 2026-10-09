@@ -44,4 +44,12 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).toContain('seatPriceEnabled');
         expect(componentSource).toContain('STEP.CONTRIBUTION');
     });
+
+    it('highlights the active step bar with a subtle shadow', () => {
+        const activeBarRule = componentSource.match(
+            /\.trip-creation-stepper__bar--active\s*{([^}]*)}/
+        );
+        expect(activeBarRule).not.toBeNull();
+        expect(activeBarRule[1]).toMatch(/box-shadow:/);
+    });
 });
