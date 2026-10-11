@@ -89,6 +89,58 @@ describe('tickets store', () => {
         expect(store.adminListMeta).toBeNull();
     });
 
+    it('keeps previous adminList while a keepPrevious fetch is in flight', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        const previousMeta = {
+            pagination: { current_page: 1, per_page: 20, total: 1, total_pages: 1 }
+        };
+        apiMock.adminList.mockResolvedValueOnce({
+            data: [{ id: 10 }],
+            meta: previousMeta
+        });
+
+        const store = useTicketsStore();
+        await store.fetchAdminList();
+
+        let resolveRefresh;
+        apiMock.adminList.mockImplementationOnce(() => new Promise((resolve) => {
+            resolveRefresh = resolve;
+        }));
+
+        const pending = store.fetchAdminList({}, { keepPrevious: true });
+
+        expect(store.adminList).toEqual([{ id: 10 }]);
+        expect(store.adminListMeta).toEqual(previousMeta);
+
+        resolveRefresh({
+            data: [{ id: 11 }],
+            meta: { pagination: { current_page: 1, per_page: 20, total: 1, total_pages: 1 } }
+        });
+        await pending;
+
+        expect(store.adminList).toEqual([{ id: 11 }]);
+    });
+
+    it('keeps previous adminList when a keepPrevious fetch fails', async () => {
+        const { useTicketsStore } = await import('./tickets');
+        const previousMeta = {
+            pagination: { current_page: 1, per_page: 20, total: 1, total_pages: 1 }
+        };
+        apiMock.adminList.mockResolvedValueOnce({
+            data: [{ id: 10 }],
+            meta: previousMeta
+        });
+
+        const store = useTicketsStore();
+        await store.fetchAdminList();
+
+        apiMock.adminList.mockRejectedValueOnce(new Error('network error'));
+
+        await expect(store.fetchAdminList({}, { keepPrevious: true })).rejects.toThrow('network error');
+        expect(store.adminList).toEqual([{ id: 10 }]);
+        expect(store.adminListMeta).toEqual(previousMeta);
+    });
+
     it('creates support ticket from admin and returns payload data', async () => {
         const { useTicketsStore } = await import('./tickets');
         apiMock.adminCreate.mockResolvedValue({ data: { id: 88, user_id: 45, type: 'account_verification' } });
