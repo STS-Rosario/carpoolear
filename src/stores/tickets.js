@@ -36,7 +36,7 @@ export const useTicketsStore = defineStore('tickets', {
             return ticketsApi.close(id, payload).then((response) => response.data);
         },
         fetchAdminList(filters, options = {}) {
-            const keepPrevious = Boolean(options && options.keepPrevious);
+            const keepPrevious = Boolean(options.keepPrevious);
             if (!keepPrevious) {
                 this.adminList = null;
                 this.adminListMeta = null;
