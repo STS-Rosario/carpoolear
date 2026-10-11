@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const routesSource = fs.readFileSync(path.resolve(__dirname, 'routes.js'), 'utf8');
+const routesSource = fs
+    .readFileSync(path.resolve(__dirname, 'routes.js'), 'utf8')
+    .replace(/\r\n/g, '\n');
 
 function routeBlock(name) {
     const match = routesSource.match(
