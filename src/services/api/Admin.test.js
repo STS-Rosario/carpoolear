@@ -1,42 +1,103 @@
-import { describe, it, expect } from 'vitest';
-import fs from 'node:fs';
-import path from 'path';
-import { fileURLToPath } from 'node:url';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import AdminApi from './Admin.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const apiSource = fs.readFileSync(path.resolve(__dirname, 'Admin.js'), 'utf8');
+const networkMock = vi.hoisted(() => ({
+    pendingRequest: { add: () => {} },
+    get: vi.fn(() => Promise.resolve({})),
+    post: vi.fn(() => Promise.resolve({})),
+    patch: vi.fn(() => Promise.resolve({})),
+    addRequest: vi.fn()
+}));
 
-describe('AdminApi - contract verification (source code patterns)', () => {
-    it('targets user-migrations endpoints', () => {
-        expect(apiSource).toContain('/api/admin/user-migrations');
-        expect(apiSource).toContain('getUserMigrations');
-        expect(apiSource).toContain('createUserMigration');
+vi.mock('../network.js', () => ({ default: networkMock }));
+
+describe('AdminApi contract', () => {
+    beforeEach(() => {
+        networkMock.get.mockClear();
+        networkMock.post.mockClear();
+        networkMock.patch.mockClear();
+        networkMock.addRequest.mockClear();
     });
 
-    it('patches admin rating and reference endpoints', () => {
-        expect(apiSource).toContain('updateRating');
-        expect(apiSource).toContain("'/api/admin/ratings/' + ratingId");
-        expect(apiSource).toContain('adminUpdateReference');
-        expect(apiSource).toContain("'/api/admin/references/' + referenceId");
-        expect(apiSource).toContain('getUserRatings');
-        expect(apiSource).toContain("'/api/admin/users/' + userId + '/ratings'");
+    it('GETs the user-migrations list with params', () => {
+        const params = { page: 2 };
+
+        new AdminApi().getUserMigrations(params);
+
+        expect(networkMock.get).toHaveBeenCalledWith(
+            '/api/admin/user-migrations',
+            params,
+            undefined
+        );
     });
 
-    it('posts private admin note to manual identity validation endpoint', () => {
-        expect(apiSource).toContain('updateManualIdentityValidationPrivateNote');
-        expect(apiSource).toContain("'/api/admin/manual-identity-validations/' + manualIdentityValidationId + '/private-note'");
-        expect(apiSource).toContain('private_admin_note');
+    it('POSTs a new user migration', () => {
+        const data = { user_id: 1 };
+
+        new AdminApi().createUserMigration(data);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/user-migrations',
+            data,
+            undefined
+        );
     });
 
-    it('posts review_status and paid to manual identity validation state endpoint', () => {
-        expect(apiSource).toContain('updateManualIdentityValidationState');
-        expect(apiSource).toContain("'/api/admin/manual-identity-validations/' + manualIdentityValidationId + '/state'");
-        expect(apiSource).toContain('review_status');
-        expect(apiSource).toContain('paid');
+    it('PATCHes a rating by id', () => {
+        const data = { score: 5 };
+
+        new AdminApi().updateRating(9, data);
+
+        expect(networkMock.patch).toHaveBeenCalledWith(
+            '/api/admin/ratings/9',
+            data,
+            undefined
+        );
     });
 
-    it('exposes admin action-logs list', () => {
-        expect(apiSource).toContain('getActionLogs');
-        expect(apiSource).toContain('/api/admin/action-logs');
+    it('PATCHes a reference by id', () => {
+        const data = { note: 'ok' };
+
+        new AdminApi().updateReference(4, data);
+
+        expect(networkMock.patch).toHaveBeenCalledWith(
+            '/api/admin/references/4',
+            data,
+            undefined
+        );
+    });
+
+    it('POSTs a private admin note to a manual identity validation', () => {
+        new AdminApi().updateManualIdentityValidationPrivateNote(3, 'hola');
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/manual-identity-validations/3/private-note',
+            { private_admin_note: 'hola' },
+            undefined
+        );
+    });
+
+    it('POSTs review_status and paid to the manual identity validation state endpoint', () => {
+        const payload = { review_status: 'approved', paid: true };
+
+        new AdminApi().updateManualIdentityValidationState(3, payload);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/manual-identity-validations/3/state',
+            payload,
+            undefined
+        );
+    });
+
+    it('GETs the admin action-logs list', () => {
+        const params = { page: 1 };
+
+        new AdminApi().getActionLogs(params);
+
+        expect(networkMock.get).toHaveBeenCalledWith(
+            '/api/admin/action-logs',
+            params,
+            undefined
+        );
     });
 });

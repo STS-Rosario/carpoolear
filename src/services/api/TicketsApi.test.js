@@ -1,42 +1,86 @@
-import { describe, it, expect } from 'vitest';
-import fs from 'node:fs';
-import path from 'path';
-import { fileURLToPath } from 'node:url';
-import TicketsApi from './TicketsApi';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import TicketsApi from './TicketsApi.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const apiSource = fs.readFileSync(path.resolve(__dirname, 'TicketsApi.js'), 'utf8');
+const networkMock = vi.hoisted(() => ({
+    pendingRequest: { add: () => {} },
+    get: vi.fn(() => Promise.resolve({})),
+    post: vi.fn(() => Promise.resolve({})),
+    put: vi.fn(() => Promise.resolve({})),
+    addRequest: vi.fn()
+}));
+
+vi.mock('../network.js', () => ({ default: networkMock }));
 
 describe('TicketsApi admin ticket actions', () => {
-    it('targets needs-review endpoint', () => {
-        expect(apiSource).toContain('/needs-review');
-        expect(apiSource).toContain('adminMarkNeedsReview');
+    beforeEach(() => {
+        networkMock.get.mockClear();
+        networkMock.post.mockClear();
+        networkMock.put.mockClear();
+        networkMock.addRequest.mockClear();
     });
 
-    it('targets purge-attachments endpoint', () => {
-        expect(apiSource).toContain('adminPurgeAttachments');
-        expect(apiSource).toContain('/purge-attachments');
+    it('POSTs needs-review for a ticket id', () => {
+        new TicketsApi().adminMarkNeedsReview(5);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/support/tickets/5/needs-review',
+            {},
+            undefined
+        );
     });
 
-    it('targets unresolve endpoint', () => {
-        expect(apiSource).toContain('adminUnresolve');
-        expect(apiSource).toContain('/unresolve');
+    it('POSTs purge-attachments for a ticket id', () => {
+        new TicketsApi().adminPurgeAttachments(5);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/support/tickets/5/purge-attachments',
+            {},
+            undefined
+        );
     });
 
-    it('targets type endpoint for admin category updates', () => {
-        expect(apiSource).toContain('adminSetType');
-        expect(apiSource).toContain('/type');
+    it('POSTs unresolve for a ticket id', () => {
+        new TicketsApi().adminUnresolve(5);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/support/tickets/5/unresolve',
+            {},
+            undefined
+        );
+    });
+
+    it('PUTs the type for an admin category update', () => {
+        new TicketsApi().adminSetType(5, 'bug');
+
+        expect(networkMock.put).toHaveBeenCalledWith(
+            '/api/admin/support/tickets/5/type',
+            { type: 'bug' },
+            undefined
+        );
     });
 });
 
 describe('TicketsApi admin reply templates', () => {
-    it('targets reply-templates endpoints', () => {
-        expect(apiSource).toContain('/api/admin/support/reply-templates');
-        expect(apiSource).toContain('/duplicate');
+    beforeEach(() => {
+        networkMock.post.mockClear();
+    });
+
+    it('POSTs duplicate for a reply template id', () => {
+        new TicketsApi().adminReplyTemplateDuplicate(3);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/admin/support/reply-templates/3/duplicate',
+            {},
+            undefined
+        );
     });
 });
 
 describe('TicketsApi.toFormData', () => {
+    beforeEach(() => {
+        networkMock.post.mockClear();
+    });
+
     it('limits attachments to three files', () => {
         const api = new TicketsApi();
         const files = [
@@ -53,5 +97,17 @@ describe('TicketsApi.toFormData', () => {
 
         expect(form.get('subject')).toBe('hello');
         expect(form.getAll('attachments[]')).toHaveLength(3);
+    });
+
+    it('POSTs multipart form data when creating a ticket', () => {
+        const api = new TicketsApi();
+
+        api.create({ subject: 'hello' });
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/support/tickets',
+            expect.any(FormData),
+            undefined
+        );
     });
 });
