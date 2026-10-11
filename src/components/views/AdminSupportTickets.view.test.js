@@ -155,7 +155,7 @@ describe('AdminSupportTickets view', () => {
 
     it('loads admin list using route query filters', () => {
         expect(viewSource).toContain('parseAdminSupportTicketListFiltersFromRoute');
-        expect(viewSource).toContain('fetchAdminList(this.listFilters)');
+        expect(viewSource).toContain('fetchAdminList(this.listFilters,');
         expect(viewSource).toContain('syncFiltersToRoute');
     });
 
@@ -192,6 +192,12 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain("document.addEventListener('visibilitychange', this.handleVisibilityChange)");
         expect(viewSource).toContain('setInterval');
         expect(viewSource).toContain('loadTickets({ silent: true })');
+    });
+
+    it('keeps the current list on silent refresh and shows loading instead of empty on filter changes', () => {
+        expect(viewSource).toContain('fetchAdminList(this.listFilters, { keepPrevious: silent })');
+        expect(viewSource).toContain('<p v-if="loading"');
+        expect(viewSource).toContain('v-else-if="!safeTickets.length"');
     });
 
     it('compacts the search row: sm Buscar, checkbox inset, space before table', () => {

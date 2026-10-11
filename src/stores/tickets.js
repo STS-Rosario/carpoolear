@@ -35,17 +35,22 @@ export const useTicketsStore = defineStore('tickets', {
         closeTicket(id, payload) {
             return ticketsApi.close(id, payload).then((response) => response.data);
         },
-        fetchAdminList(filters) {
-            this.adminList = null;
-            this.adminListMeta = null;
+        fetchAdminList(filters, options = {}) {
+            const keepPrevious = Boolean(options.keepPrevious);
+            if (!keepPrevious) {
+                this.adminList = null;
+                this.adminListMeta = null;
+            }
             const params = buildAdminSupportTicketListParams(filters);
             return ticketsApi.adminList(params).then((response) => {
                 this.adminList = response.data || [];
                 this.adminListMeta = response.meta || null;
                 return response;
             }).catch((error) => {
-                this.adminList = [];
-                this.adminListMeta = null;
+                if (!keepPrevious) {
+                    this.adminList = [];
+                    this.adminListMeta = null;
+                }
                 return Promise.reject(error);
             });
         },
