@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const routesSource = fs.readFileSync(path.join(__dirname, 'routes.js'), 'utf8');
+const routesSource = fs
+    .readFileSync(path.join(__dirname, 'routes.js'), 'utf8')
+    .replace(/\r\n/g, '\n');
 
 function routeBlock(name) {
     const nameIndex = routesSource.indexOf(`name: '${name}'`);
