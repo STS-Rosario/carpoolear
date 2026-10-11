@@ -363,7 +363,7 @@ export default {
                 this.loading = true;
                 this.error = '';
             }
-            return this.fetchAdminList(this.listFilters)
+            return this.fetchAdminList(this.listFilters, { keepPrevious: silent })
                 .catch(() => {
                     if (!silent) {
                         this.error = this.$t('errorCargandoTickets');

@@ -155,7 +155,7 @@ describe('AdminSupportTickets view', () => {
 
     it('loads admin list using route query filters', () => {
         expect(viewSource).toContain('parseAdminSupportTicketListFiltersFromRoute');
-        expect(viewSource).toContain('fetchAdminList(this.listFilters)');
+        expect(viewSource).toContain('fetchAdminList(this.listFilters, { keepPrevious: silent })');
         expect(viewSource).toContain('syncFiltersToRoute');
     });
 
