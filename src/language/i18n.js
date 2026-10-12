@@ -2141,6 +2141,7 @@ const messages = {
         groupChatUnmuteNotifications: 'Activar notificaciones',
         groupChatNotificationsOn: 'Notificaciones activadas',
         groupChatNotificationsOff: 'Notificaciones silenciadas',
+        chatCerrado: 'Chat cerrado',
         coordinateTripContributionWarningDriver:
             'Recuerde no superar la contribución del viaje{amountPart} ya que el seguro automotor no lo cubrirá en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
         coordinateTripContributionWarningPassengerPrefix:
@@ -4100,6 +4101,7 @@ const messages = {
         groupChatUnmuteNotifications: 'Activar notificaciones',
         groupChatNotificationsOn: 'Notificaciones activadas',
         groupChatNotificationsOff: 'Notificaciones silenciadas',
+        chatCerrado: 'Chat cerrado',
         solicitudFueEnviada: 'La solicitud fue enviada.',
         teHasSubidoAlViaje: 'Te has subido al viaje.',
         yaSubidoMismoViaje:
@@ -6261,6 +6263,7 @@ const messages = {
         groupChatUnmuteNotifications: 'Unmute notifications',
         groupChatNotificationsOn: 'Notifications on',
         groupChatNotificationsOff: 'Notifications muted',
+        chatCerrado: 'Chat closed',
         coordinateTripContributionWarningDriver:
             'Remember not to exceed the trip contribution{amountPart}, since auto insurance will not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
         coordinateTripContributionWarningPassengerPrefix:

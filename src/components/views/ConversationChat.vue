@@ -63,6 +63,15 @@
                 </template>
             </div>
             <div
+                v-if="isConversationClosed"
+                class="list-group-item conversation-chat-closed"
+                role="alert"
+            >
+                <p class="alert alert-warning conversation-chat-closed__message">
+                    {{ $t('chatCerrado') }}
+                </p>
+            </div>
+            <div
                 id="messagesWrapper"
                 ref="messagesWrapper"
                 class="list-group-item clearfix conversation-messages"
@@ -98,7 +107,7 @@
                     ></MessageView>
                 </template>
             </div>
-            <div class="list-group-item message-composer">
+            <div class="list-group-item message-composer" v-if="!isConversationClosed">
                 <div class="message-composer-editor-wrap">
                     <editor
                         :key="editorKey"
@@ -250,6 +259,13 @@ export default {
         isGroupChat() {
             return isTripGroupConversation(this.conversation);
         },
+        isConversationClosed() {
+            return (
+                !!this.conversation &&
+                (this.conversation.closed === true ||
+                    !!this.conversation.closed_at)
+            );
+        },
         groupChatTitle() {
             return formatTripGroupChatTitle(
                 this.$t.bind(this),
@@ -297,6 +313,7 @@ export default {
         sendMessage() {
             if (this.$redirectToIdentityValidationIfRequired()) return;
             if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
+            if (this.isConversationClosed) return;
             const editor = this.$refs.messageEditor;
             if (!editor) return;
             const text = (editor.invoke('getMarkdown') || '').trim();

@@ -67,4 +67,18 @@ describe('ConversationChat.vue user ratings', () => {
             /otherUserProfileRoute[\s\S]*name:\s*'profile'/
         );
     });
+
+    it('shows a closed banner and hides the composer for closed chats', () => {
+        expect(viewSource).toContain('chatCerrado');
+        expect(viewSource).toContain('isConversationClosed');
+        expect(viewSource).toMatch(
+            /conversation-chat-closed[\s\S]*chatCerrado/s
+        );
+        expect(viewSource).toMatch(
+            /message-composer[^>]*v-if="!isConversationClosed"/
+        );
+        expect(viewSource).toMatch(
+            /sendMessage\(\)[\s\S]*isConversationClosed[\s\S]*return;/
+        );
+    });
 });
