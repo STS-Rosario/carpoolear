@@ -518,17 +518,27 @@ export default {
     color: var(--ds-text-secondary, #666);
 }
 .trip-driver__car :deep(.trip-car-details) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+    row-gap: 0.1rem;
     margin: 0;
 }
 .trip-driver__car :deep(.trip-car-details__title) {
+    flex: 1 0 100%;
     font-size: 1rem;
     margin-bottom: 0.25rem;
 }
 .trip-driver__car :deep(.trip-car-details__line) {
-    margin: 0 0 0.1em;
+    margin: 0;
     font-size: 0.8125rem;
     line-height: 1.35;
     color: var(--ds-text-secondary, #666);
+    white-space: nowrap;
+}
+.trip-driver__car :deep(.trip-car-details__deleted) {
+    flex: 1 0 100%;
 }
 .trip-driver__mobile .trip_driver_img_container {
     display: block;
@@ -676,25 +686,6 @@ export default {
         height: 6.7rem;
     }
 }
-@media only screen and (max-width: 767px) {
-    .trip-driver__car :deep(.trip-car-details) {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        column-gap: 0.75rem;
-        row-gap: 0.1rem;
-    }
-    .trip-driver__car :deep(.trip-car-details__title) {
-        flex: 1 0 100%;
-    }
-    .trip-driver__car :deep(.trip-car-details__line) {
-        margin: 0;
-        white-space: nowrap;
-    }
-    .trip-driver__car :deep(.trip-car-details__deleted) {
-        flex: 1 0 100%;
-    }
-}
 @media only screen and (min-width: 768px) {
     .trip-driver__mobile-top {
         display: grid;
@@ -728,6 +719,17 @@ export default {
     .trip-driver__car {
         grid-column: 3;
         margin-left: 0;
+    }
+    .trip-driver__car :deep(.trip-car-details) {
+        display: block;
+    }
+    .trip-driver__car :deep(.trip-car-details__title) {
+        flex: none;
+    }
+    .trip-driver__car :deep(.trip-car-details__line) {
+        display: block;
+        margin: 0 0 0.1em;
+        white-space: normal;
     }
     .driver-profile div.row:last-child {
         min-height: 11rem;
