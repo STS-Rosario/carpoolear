@@ -132,4 +132,16 @@ describe('TripDriver trip-detail redesign header', () => {
             /\.trip-driver__car\s*\{[^}]*grid-column:\s*3/
         );
     });
+
+    it('puts marca, modelo and patente on one row on mobile', () => {
+        expect(source).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*?\.trip-car-details\s*\{[^}]*display:\s*flex/
+        );
+        expect(source).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*?\.trip-car-details__title\s*\{[^}]*flex:\s*1 0 100%/
+        );
+        expect(source).toMatch(
+            /@media[^{]*max-width:\s*767px[^{]*\{[\s\S]*?\.trip-car-details__line\s*\{[^}]*white-space:\s*nowrap/
+        );
+    });
 });
