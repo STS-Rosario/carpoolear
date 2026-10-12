@@ -676,6 +676,25 @@ export default {
         height: 6.7rem;
     }
 }
+@media only screen and (max-width: 767px) {
+    .trip-driver__car :deep(.trip-car-details) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 0.75rem;
+        row-gap: 0.1rem;
+    }
+    .trip-driver__car :deep(.trip-car-details__title) {
+        flex: 1 0 100%;
+    }
+    .trip-driver__car :deep(.trip-car-details__line) {
+        margin: 0;
+        white-space: nowrap;
+    }
+    .trip-driver__car :deep(.trip-car-details__deleted) {
+        flex: 1 0 100%;
+    }
+}
 @media only screen and (min-width: 768px) {
     .trip-driver__mobile-top {
         display: grid;
