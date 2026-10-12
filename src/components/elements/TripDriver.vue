@@ -507,12 +507,13 @@ export default {
 }
 .trip-driver__mobile-top {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     gap: 0.75rem;
 }
 .trip-driver__car {
-    flex: 0 0 auto;
-    margin-left: auto;
+    flex: 1 0 100%;
+    margin-left: 0;
     text-align: left;
     color: var(--ds-text-secondary, #666);
 }
