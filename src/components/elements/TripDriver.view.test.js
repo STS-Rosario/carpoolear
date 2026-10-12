@@ -112,4 +112,24 @@ describe('TripDriver trip-detail redesign header', () => {
             /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip_driver_img\s*\{[^}]*max-height:\s*none/
         );
     });
+
+    it('moves car details onto their own full-width row on mobile and keeps them beside the driver on desktop', () => {
+        const style = source.split('<style scoped>')[1] || '';
+        const [mobileStyle, desktopStyle = ''] = style.split(
+            /@media only screen and \(min-width:\s*768px\)/
+        );
+
+        expect(mobileStyle).toMatch(
+            /\.trip-driver__mobile-top\s*\{[^}]*flex-wrap:\s*wrap/
+        );
+        expect(mobileStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*flex:\s*1 0 100%/
+        );
+        expect(desktopStyle).toMatch(
+            /\.trip-driver__mobile-top\s*\{[^}]*display:\s*grid/
+        );
+        expect(desktopStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*grid-column:\s*3/
+        );
+    });
 });
