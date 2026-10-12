@@ -141,7 +141,7 @@ describe('TripDriver trip-detail redesign header', () => {
         ) || '';
 
         expect(baseStyle).toMatch(
-            /\.trip-car-details\)?\s*\{[^}]*display:\s*flex/
+            /\.trip-driver__car\s*\{[^}]*display:\s*flex/
         );
         expect(baseStyle).toMatch(
             /\.trip-car-details__title\)?\s*\{[^}]*flex:\s*1 0 100%/
@@ -150,7 +150,7 @@ describe('TripDriver trip-detail redesign header', () => {
             /\.trip-car-details__line\)?\s*\{[^}]*white-space:\s*nowrap/
         );
         expect(desktopStyle).toMatch(
-            /\.trip-car-details\)?\s*\{[^}]*display:\s*block/
+            /\.trip-driver__car\s*\{[^}]*display:\s*block|\.trip-car-details\)?\s*\{[^}]*display:\s*block/
         );
     });
 });
