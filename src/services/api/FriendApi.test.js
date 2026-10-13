@@ -17,10 +17,10 @@ describe('FriendApi', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('GETs the friends index with query params', () => {
+    it('GETs the friends index with query params', async () => {
         const params = { page: 2 };
 
-        new FriendApi().index(params);
+        await new FriendApi().index(params);
 
         expect(networkMock.get).toHaveBeenCalledWith(
             '/api/friends',
@@ -29,8 +29,8 @@ describe('FriendApi', () => {
         );
     });
 
-    it('POSTs to accept a friend request by user id', () => {
-        new FriendApi().accept(4);
+    it('POSTs to accept a friend request by user id', async () => {
+        await new FriendApi().accept(4);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/friends/accept/4',
@@ -39,8 +39,8 @@ describe('FriendApi', () => {
         );
     });
 
-    it('POSTs to cancel a friend request by user id', () => {
-        new FriendApi().cancelRequest(4);
+    it('POSTs to cancel a friend request by user id', async () => {
+        await new FriendApi().cancelRequest(4);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/friends/cancel-request/4',
@@ -49,8 +49,8 @@ describe('FriendApi', () => {
         );
     });
 
-    it('POSTs to toggle trip alerts for a user id', () => {
-        new FriendApi().toggleTripAlerts(9);
+    it('POSTs to toggle trip alerts for a user id', async () => {
+        await new FriendApi().toggleTripAlerts(9);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/friends/trip-alerts/9',

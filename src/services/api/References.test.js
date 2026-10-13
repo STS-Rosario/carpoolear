@@ -15,10 +15,10 @@ describe('ReferencesApi', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('POSTs a new reference', () => {
+    it('POSTs a new reference', async () => {
         const data = { rating: 5, comment: 'great' };
 
-        new ReferencesApi().create(data);
+        await new ReferencesApi().create(data);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/references',
@@ -27,10 +27,10 @@ describe('ReferencesApi', () => {
         );
     });
 
-    it('POSTs a reply to a reference by author user id', () => {
+    it('POSTs a reply to a reference by author user id', async () => {
         const data = { body: 'thanks' };
 
-        new ReferencesApi().reply(12, data);
+        await new ReferencesApi().reply(12, data);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/references/reply/12',

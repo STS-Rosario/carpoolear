@@ -17,10 +17,10 @@ describe('AuthApi', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('POSTs credentials to the login endpoint', () => {
+    it('POSTs credentials to the login endpoint', async () => {
         const creds = { email: 'a@b.com', password: 'secret' };
 
-        new AuthApi().login(creds);
+        await new AuthApi().login(creds);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/login',
@@ -29,8 +29,8 @@ describe('AuthApi', () => {
         );
     });
 
-    it('POSTs to the logout endpoint', () => {
-        new AuthApi().logout();
+    it('POSTs to the logout endpoint', async () => {
+        await new AuthApi().logout();
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/logout',
@@ -39,10 +39,10 @@ describe('AuthApi', () => {
         );
     });
 
-    it('POSTs the handoff data to consume impersonation', () => {
+    it('POSTs the handoff data to consume impersonation', async () => {
         const data = { token: 'abc123' };
 
-        new AuthApi().consumeImpersonation(data);
+        await new AuthApi().consumeImpersonation(data);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/auth/impersonate/consume',
@@ -51,8 +51,8 @@ describe('AuthApi', () => {
         );
     });
 
-    it('POSTs an empty body to stop impersonation', () => {
-        new AuthApi().stopImpersonation();
+    it('POSTs an empty body to stop impersonation', async () => {
+        await new AuthApi().stopImpersonation();
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/impersonate/stop',

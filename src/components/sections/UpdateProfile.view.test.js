@@ -4,8 +4,12 @@ import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'UpdateProfile.vue');
 const i18nPath = path.resolve(__dirname, '../../language/i18n.js');
-const viewSource = fs.readFileSync(viewPath, 'utf8');
-const i18nSource = fs.readFileSync(i18nPath, 'utf8');
+const viewSource = fs
+    .readFileSync(viewPath, 'utf8')
+    .replace(/\r\n/g, '\n');
+const i18nSource = fs
+    .readFileSync(i18nPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('UpdateProfile missing patente routing', () => {
     it('redirects missing patente guidance to the Autos settings section', () => {
@@ -24,7 +28,7 @@ describe('UpdateProfile save error feedback', () => {
         expect(viewSource).toContain('getApiErrorMessage');
         expect(viewSource).toContain('profile-save-error');
         expect(viewSource).toContain('fa-exclamation-triangle');
-        expect(viewSource).toContain('dialogs.message(message, {');
+        expect(viewSource).toContain("dialogs.message(message, {\n                        duration: 10,\n                        estado: 'error'\n                    })");
     });
 });
 

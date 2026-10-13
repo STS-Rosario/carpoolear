@@ -17,8 +17,8 @@ describe('UserApi', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('defaults to /me when no id is provided on show', () => {
-        new UserApi().show();
+    it('defaults to /me when no id is provided on show', async () => {
+        await new UserApi().show();
 
         expect(networkMock.get).toHaveBeenCalledWith(
             '/api/users/me',
@@ -27,10 +27,10 @@ describe('UserApi', () => {
         );
     });
 
-    it('passes query params when requesting the Mercado Pago OAuth URL', () => {
+    it('passes query params when requesting the Mercado Pago OAuth URL', async () => {
         const params = { surface: 'choice_cards' };
 
-        new UserApi().getMercadoPagoOAuthUrl(params);
+        await new UserApi().getMercadoPagoOAuthUrl(params);
 
         expect(networkMock.get).toHaveBeenCalledWith(
             '/api/users/mercadopago-oauth-url',
@@ -39,10 +39,10 @@ describe('UserApi', () => {
         );
     });
 
-    it('posts whitelisted identity verification client events', () => {
+    it('posts whitelisted identity verification client events', async () => {
         const payload = { event: 'viewed', surface: 'choice_cards' };
 
-        new UserApi().recordIdentityVerificationEvent(payload);
+        await new UserApi().recordIdentityVerificationEvent(payload);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/users/identity-verification-events',
@@ -51,11 +51,11 @@ describe('UserApi', () => {
         );
     });
 
-    it('appends _method=PUT and posts multipart when updating a user', () => {
+    it('appends _method=PUT and posts multipart when updating a user', async () => {
         const form = new FormData();
         form.append('name', 'jane');
 
-        new UserApi().update(form);
+        await new UserApi().update(form);
 
         expect(form.get('_method')).toBe('PUT');
         expect(networkMock.post).toHaveBeenCalledWith('/api/users', form, {

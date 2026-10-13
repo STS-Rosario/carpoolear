@@ -397,8 +397,6 @@ export default {
             this.resetTripCreationForm();
         }
 
-        if (this.$redirectToMyTripsIfPendingRatingsRequired()) return;
-
         next();
 
         if (!this.id) {
@@ -1489,6 +1487,10 @@ export default {
             this.saving = true;
             if (!this.updatingTrip) {
                 if (this.$redirectToIdentityValidationIfRequired()) {
+                    this.saving = false;
+                    return;
+                }
+                if (this.$redirectToMyTripsIfPendingRatingsRequired()) {
                     this.saving = false;
                     return;
                 }

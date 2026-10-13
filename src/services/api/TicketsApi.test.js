@@ -19,8 +19,8 @@ describe('TicketsApi admin ticket actions', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('POSTs needs-review for a ticket id', () => {
-        new TicketsApi().adminMarkNeedsReview(5);
+    it('POSTs needs-review for a ticket id', async () => {
+        await new TicketsApi().adminMarkNeedsReview(5);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/admin/support/tickets/5/needs-review',
@@ -29,8 +29,8 @@ describe('TicketsApi admin ticket actions', () => {
         );
     });
 
-    it('POSTs purge-attachments for a ticket id', () => {
-        new TicketsApi().adminPurgeAttachments(5);
+    it('POSTs purge-attachments for a ticket id', async () => {
+        await new TicketsApi().adminPurgeAttachments(5);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/admin/support/tickets/5/purge-attachments',
@@ -39,8 +39,8 @@ describe('TicketsApi admin ticket actions', () => {
         );
     });
 
-    it('POSTs unresolve for a ticket id', () => {
-        new TicketsApi().adminUnresolve(5);
+    it('POSTs unresolve for a ticket id', async () => {
+        await new TicketsApi().adminUnresolve(5);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/admin/support/tickets/5/unresolve',
@@ -49,8 +49,8 @@ describe('TicketsApi admin ticket actions', () => {
         );
     });
 
-    it('PUTs the type for an admin category update', () => {
-        new TicketsApi().adminSetType(5, 'bug');
+    it('PUTs the type for an admin category update', async () => {
+        await new TicketsApi().adminSetType(5, 'bug');
 
         expect(networkMock.put).toHaveBeenCalledWith(
             '/api/admin/support/tickets/5/type',
@@ -65,8 +65,8 @@ describe('TicketsApi admin reply templates', () => {
         networkMock.post.mockClear();
     });
 
-    it('POSTs duplicate for a reply template id', () => {
-        new TicketsApi().adminReplyTemplateDuplicate(3);
+    it('POSTs duplicate for a reply template id', async () => {
+        await new TicketsApi().adminReplyTemplateDuplicate(3);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/admin/support/reply-templates/3/duplicate',
@@ -99,10 +99,10 @@ describe('TicketsApi.toFormData', () => {
         expect(form.getAll('attachments[]')).toHaveLength(3);
     });
 
-    it('POSTs multipart form data when creating a ticket', () => {
+    it('POSTs multipart form data when creating a ticket', async () => {
         const api = new TicketsApi();
 
-        api.create({ subject: 'hello' });
+        await api.create({ subject: 'hello' });
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/support/tickets',
