@@ -11,7 +11,25 @@ const carStepPanelPath = path.resolve(
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 const wizardSource = fs.readFileSync(wizardPath, 'utf8');
 const carStepPanelSource = fs.readFileSync(carStepPanelPath, 'utf8');
-const uiSource = viewSource + wizardSource + carStepPanelSource;
+const contributionStepPanelSource = fs.readFileSync(
+    path.resolve(__dirname, '../elements/TripContributionStepPanel.vue'),
+    'utf8'
+);
+const preferencesStepPanelSource = fs.readFileSync(
+    path.resolve(__dirname, '../elements/TripPreferencesStepPanel.vue'),
+    'utf8'
+);
+const tripSeatsSource = fs.readFileSync(
+    path.resolve(__dirname, '../elements/TripSeats.vue'),
+    'utf8'
+);
+const uiSource =
+    viewSource +
+    wizardSource +
+    carStepPanelSource +
+    contributionStepPanelSource +
+    preferencesStepPanelSource +
+    tripSeatsSource;
 
 describe('NewTrip.vue page card shell', () => {
     it('wraps content in a white card with Crear/Editar viaje heading', () => {
@@ -66,9 +84,9 @@ describe('NewTrip.vue negative contribution validation', () => {
     });
 
     it('sets min zero on contribution inputs', () => {
-        expect(uiSource).toMatch(/min="0"/s);
-        expect(wizardSource).toMatch(
-            /<AppInput[\s\S]*?type="number"[\s\S]*?min="0"/
+        expect(contributionStepPanelSource).toMatch(/min="0"/);
+        expect(contributionStepPanelSource).toMatch(
+            /<input[\s\S]*?type="number"[\s\S]*?min="0"/
         );
     });
 });
@@ -109,10 +127,10 @@ describe('NewTrip.vue trip car selection', () => {
 
 describe('NewTrip.vue autoaccept friends requests', () => {
     it('defaults autoaccept friends requests to checked on new trips', () => {
-        expect(uiSource).toContain("$t('aceptarPedidosAmigosAutomaticamente')");
+        expect(uiSource).toContain("$t('tripPrefFriendsTitle')");
         expect(uiSource).toContain('autoaccept_friends_requests');
         expect(viewSource).toMatch(/autoaccept_friends_requests:\s*true/);
-        expect(uiSource).toContain('checkbox-trip-autoaccept-friends');
+        expect(preferencesStepPanelSource).toContain('update:autoacceptFriends');
     });
 
     it('includes autoaccept_friends_requests in create payload normalization', () => {
@@ -229,7 +247,7 @@ describe('NewTrip.vue rear seat comfort preference', () => {
 
 describe('NewTrip.vue trip cars editor modal', () => {
     it('opens in-page cars editor instead of navigating to profile settings', () => {
-        expect(carStepPanelSource).toContain("$t('editarAutosEnViaje')");
+        expect(carStepPanelSource).toContain("$t('tripCreationAddVehicle')");
         expect(carStepPanelSource).toContain("$emit('edit-cars')");
         expect(wizardSource).toContain('@edit-cars="form.openTripCarsModal"');
         expect(uiSource).not.toContain("$t('agregarNuevoAutoEnPerfil')");
@@ -280,7 +298,7 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(leaveGuard).toBeTruthy();
         expect(leaveGuard).toContain('showWizardSuccess');
         expect(leaveGuard).toContain('clearTripCreationDraft');
-        // Remounting the wizard here syncs ?step=1 and races Ver viaje → detail.
+        // Remounting the wizard here syncs ?step=1 and races Ver viaje -> detail.
         expect(leaveGuard).not.toContain('this.resetTripCreationForm');
 
         expect(viewSource).toMatch(

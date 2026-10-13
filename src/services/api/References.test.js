@@ -1,17 +1,41 @@
-import { describe, expect, it } from 'vitest';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import ReferencesApi from './References.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const apiSource = fs.readFileSync(
-    path.resolve(__dirname, 'References.js'),
-    'utf8'
-);
+const networkMock = vi.hoisted(() => ({
+    pendingRequest: { add: () => {} },
+    post: vi.fn(() => Promise.resolve({})),
+    addRequest: vi.fn()
+}));
+
+vi.mock('../network.js', () => ({ default: networkMock }));
 
 describe('ReferencesApi', () => {
-    it('posts a reply to a reference by author user id', () => {
-        expect(apiSource).toContain('reply(');
-        expect(apiSource).toContain('/api/references/reply/');
+    beforeEach(() => {
+        networkMock.post.mockClear();
+        networkMock.addRequest.mockClear();
+    });
+
+    it('POSTs a new reference', async () => {
+        const data = { rating: 5, comment: 'great' };
+
+        await new ReferencesApi().create(data);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/references',
+            data,
+            undefined
+        );
+    });
+
+    it('POSTs a reply to a reference by author user id', async () => {
+        const data = { body: 'thanks' };
+
+        await new ReferencesApi().reply(12, data);
+
+        expect(networkMock.post).toHaveBeenCalledWith(
+            '/api/references/reply/12',
+            data,
+            undefined
+        );
     });
 });

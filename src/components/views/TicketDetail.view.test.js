@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'TicketDetail.vue');
-const viewSource = fs.readFileSync(viewPath, 'utf8');
+const viewSource = fs
+    .readFileSync(viewPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('TicketDetail user view', () => {
     it('shows ticket detail page title', () => {
