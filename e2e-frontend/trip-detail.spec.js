@@ -215,10 +215,10 @@ test.describe('Trip detail page', () => {
       from_town: 'Mar del Plata',
       to_town: 'Rosario',
       car: {
-        patente: 'AC700UH',
-        brand_name: 'VOLKSWAGEN',
-        model_name: 'SAVEIRO PICK - UP CROSS',
-        year: 2018,
+        patente: 'AE322FE',
+        brand_name: 'FERRARI',
+        model_name: 'F 612',
+        year: 2011,
       },
     });
     await setupTripRoute(page, otherTrip);
@@ -230,7 +230,7 @@ test.describe('Trip detail page', () => {
     const car = page.locator('.trip-driver__car');
     await expect(name).toBeVisible({ timeout: 15000 });
     await expect(car).toBeVisible();
-    await expect(page.getByText('SAVEIRO PICK - UP CROSS 2018')).toBeVisible();
+    await expect(page.getByText('F 612 2011')).toBeVisible();
 
     const nameBox = await name.boundingBox();
     const carBox = await car.boundingBox();
@@ -238,6 +238,15 @@ test.describe('Trip detail page', () => {
     expect(carBox).toBeTruthy();
     expect(carBox.y).toBeGreaterThan(nameBox.y + nameBox.height - 2);
     expect(nameBox.height).toBeLessThan(40);
+
+    const lines = page.locator('.trip-driver__car .trip-car-details__line');
+    await expect(lines).toHaveCount(3);
+    const firstLine = await lines.nth(0).boundingBox();
+    const lastLine = await lines.nth(2).boundingBox();
+    expect(firstLine).toBeTruthy();
+    expect(lastLine).toBeTruthy();
+    expect(Math.abs(firstLine.y - lastLine.y)).toBeLessThan(8);
+    expect(lastLine.x).toBeGreaterThan(firstLine.x);
   });
 
   test('on desktop, car details stay beside the driver', async ({ page }) => {
