@@ -58,14 +58,6 @@
                 >
                     {{ replySubmitting ? $t('enviando') : $t('responder') }}
                 </AppButton>
-                <AppButton
-                    v-if="showUserCloseButton"
-                    variant="secondary"
-                    class="mleft-10"
-                    @click="closeTicket"
-                >
-                    {{ $t('cerrarTicket') }}
-                </AppButton>
             </div>
         </div>
     </div>
@@ -129,9 +121,6 @@ export default {
         showReplyForm() {
             return this.ticket
                 && !['Resuelto', 'Cerrado'].includes(this.ticket.status);
-        },
-        showUserCloseButton() {
-            return this.ticket && this.ticket.status === 'En revision';
         }
     },
     methods: {
@@ -139,8 +128,7 @@ export default {
         markdownToHtml,
         ...mapActions(useTicketsStore, {
             fetchOne: 'fetchOne',
-            replyTicket: 'replyTicket',
-            closeTicketAction: 'closeTicket'
+            replyTicket: 'replyTicket'
         }),
         capitalizeFirst(value) {
             if (!value) return '';
@@ -251,20 +239,6 @@ export default {
                     } catch (e) {
                         console.warn('TicketDetail: could not reset reply form', e);
                     }
-                });
-        },
-        closeTicket() {
-            const message = window.prompt(this.$t('mensajeOpcionalCierre')) || '';
-            if (!window.confirm(this.$t('confirmarCierreTicket'))) {
-                return;
-            }
-            this.closeTicketAction(this.id, { message_markdown: message })
-                .then(() => this.refresh())
-                .then(() => {
-                    dialogs.message(this.$t('ticketCerrado'), SUCCESS_TOAST_OPTIONS);
-                })
-                .catch(() => {
-                    dialogs.message(this.$t('errorCerrandoTicket'), ERROR_TOAST_OPTIONS);
                 });
         }
     },
