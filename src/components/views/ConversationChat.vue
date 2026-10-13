@@ -65,7 +65,7 @@
             <div
                 v-if="isConversationClosed"
                 class="list-group-item conversation-chat-closed"
-                role="alert"
+                role="status"
             >
                 <p class="alert alert-warning conversation-chat-closed__message">
                     {{ $t('chatCerrado') }}
@@ -260,11 +260,8 @@ export default {
             return isTripGroupConversation(this.conversation);
         },
         isConversationClosed() {
-            return (
-                !!this.conversation &&
-                (this.conversation.closed === true ||
-                    !!this.conversation.closed_at)
-            );
+            if (!this.conversation) return false;
+            return !!this.conversation.closed || !!this.conversation.closed_at;
         },
         groupChatTitle() {
             return formatTripGroupChatTitle(
@@ -320,6 +317,12 @@ export default {
             if (text.length) {
                 this.sending.message = true;
                 this.send(text)
+                    .then(() => {
+                        // Only clear the composer once the message was sent.
+                        this.editorKey += 1;
+                        this.editorHasContent = false;
+                        this.$forceUpdate();
+                    })
                     .catch((err) => {
                         if (this.$checkError(err, 'identity_validation_required')) {
                             this.$router.push({ name: 'identity_validation' });
@@ -330,9 +333,6 @@ export default {
                     })
                     .finally(() => {
                         this.sending.message = false;
-                        this.editorKey += 1;
-                        this.editorHasContent = false;
-                        this.$forceUpdate();
                     });
             }
         },

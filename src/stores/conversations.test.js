@@ -15,11 +15,24 @@ const showByTripMock = vi.fn(() =>
     })
 );
 
-const { listMock } = vi.hoisted(() => ({
+const { listMock, sendMock, showMock } = vi.hoisted(() => ({
     listMock: vi.fn(() =>
         Promise.resolve({
             data: [],
             meta: { pagination: { total_pages: 1, current_page: 1 } }
+        })
+    ),
+    sendMock: vi.fn(),
+    showMock: vi.fn(() =>
+        Promise.resolve({
+            data: {
+                id: 9,
+                type: 1,
+                users: [
+                    { id: 1, name: 'Driver' },
+                    { id: 2, name: 'Passenger' }
+                ]
+            }
         })
     )
 }));
@@ -38,18 +51,9 @@ vi.mock('../services/api', async (importOriginal) => {
                 });
             }
 
-            show() {
-                return Promise.resolve({
-                    data: {
-                        id: 9,
-                        type: 1,
-                        users: [
-                            { id: 1, name: 'Driver' },
-                            { id: 2, name: 'Passenger' }
-                        ]
-                    }
-                });
-            }
+            show = showMock;
+
+            send = sendMock;
 
             getMessages() {
                 return Promise.resolve({ data: [] });
@@ -217,5 +221,74 @@ describe('conversations store listSearch load-more loading', () => {
         await expect(store.listSearch({ next: true })).rejects.toThrow('network');
 
         expect(store.listLoadingMore).toBe(false);
+    });
+});
+
+describe('conversations store closed conversations', () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+        sendMock.mockReset();
+        showMock.mockReset();
+        showMock.mockResolvedValue({
+            data: {
+                id: 9,
+                type: 1,
+                users: [
+                    { id: 1, name: 'Driver' },
+                    { id: 2, name: 'Passenger' }
+                ]
+            }
+        });
+    });
+
+    it('derives the closed flag from closed_at when fetching a conversation', async () => {
+        showMock.mockResolvedValueOnce({
+            data: { id: 9, type: 1, closed_at: '2026-08-01T00:00:00.000Z' }
+        });
+
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        await store.select(9);
+
+        expect(store.conversationSelected.closed).toBe(true);
+    });
+
+    it('marks the conversation closed and warns when the backend rejects a send with conversation_closed', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const { default: dialogs } = await import('../services/dialogs.js');
+        const store = useConversationsStore();
+
+        store.selectedID = 9;
+        store.conversationSelected = { id: 9, type: 1, closed: false };
+        dialogs.message.mockClear();
+        sendMock.mockRejectedValueOnce({
+            status: 422,
+            data: { errors: { conversation_id: ['conversation_closed'] } }
+        });
+
+        await expect(store.sendMessage('hola')).rejects.toBeTruthy();
+
+        expect(store.conversationSelected.closed).toBe(true);
+        expect(store.conversationSelected.closed_at).toBeTruthy();
+        expect(dialogs.message).toHaveBeenCalledWith('chatCerrado', {
+            estado: 'warning'
+        });
+    });
+
+    it('does not mark the conversation closed for unrelated send errors', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+
+        store.selectedID = 9;
+        store.conversationSelected = { id: 9, type: 1, closed: false };
+        sendMock.mockRejectedValueOnce({
+            status: 500,
+            data: { errors: {} }
+        });
+
+        await expect(store.sendMessage('hola')).rejects.toBeTruthy();
+
+        expect(store.conversationSelected.closed).toBe(false);
     });
 });

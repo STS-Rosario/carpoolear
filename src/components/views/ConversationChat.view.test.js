@@ -81,4 +81,20 @@ describe('ConversationChat.vue user ratings', () => {
             /sendMessage\(\)[\s\S]*isConversationClosed[\s\S]*return;/
         );
     });
+
+    it('marks the closed banner with a status role (not alert)', () => {
+        expect(viewSource).toMatch(
+            /conversation-chat-closed"\s+role="status"/
+        );
+        expect(viewSource).not.toMatch(
+            /conversation-chat-closed"\s+role="alert"/
+        );
+    });
+
+    it('only clears the composer after a successful send (preserves text on error)', () => {
+        expect(viewSource).toMatch(
+            /\.then\(\(\)\s*=>\s*\{[\s\S]*editorKey \+= 1[\s\S]*\}\)\s*\.catch/s
+        );
+        expect(viewSource).not.toMatch(/\.finally\([\s\S]*editorKey \+= 1/);
+    });
 });
