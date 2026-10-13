@@ -298,7 +298,7 @@ describe('NewTrip.vue trip creation template snapshot', () => {
         expect(leaveGuard).toBeTruthy();
         expect(leaveGuard).toContain('showWizardSuccess');
         expect(leaveGuard).toContain('clearTripCreationDraft');
-        // Remounting the wizard here syncs ?step=1 and races Ver viaje â†’ detail.
+        // Remounting the wizard here syncs ?step=1 and races Ver viaje -> detail.
         expect(leaveGuard).not.toContain('this.resetTripCreationForm');
 
         expect(viewSource).toMatch(

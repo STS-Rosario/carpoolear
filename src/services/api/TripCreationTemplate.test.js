@@ -17,8 +17,8 @@ describe('TripCreationTemplateApi', () => {
         networkMock.addRequest.mockClear();
     });
 
-    it('GETs the template index', () => {
-        new TripCreationTemplateApi().index();
+    it('GETs the template index', async () => {
+        await new TripCreationTemplateApi().index();
 
         expect(networkMock.get).toHaveBeenCalledWith(
             '/api/trip-creation-templates',
@@ -27,10 +27,10 @@ describe('TripCreationTemplateApi', () => {
         );
     });
 
-    it('POSTs a new template', () => {
+    it('POSTs a new template', async () => {
         const data = { name: 'roadtrip' };
 
-        new TripCreationTemplateApi().store(data);
+        await new TripCreationTemplateApi().store(data);
 
         expect(networkMock.post).toHaveBeenCalledWith(
             '/api/trip-creation-templates',
@@ -39,8 +39,8 @@ describe('TripCreationTemplateApi', () => {
         );
     });
 
-    it('GETs a template by URL-encoded name', () => {
-        new TripCreationTemplateApi().show('a b');
+    it('GETs a template by URL-encoded name', async () => {
+        await new TripCreationTemplateApi().show('a b');
 
         expect(networkMock.get).toHaveBeenCalledWith(
             '/api/trip-creation-templates/a%20b',
