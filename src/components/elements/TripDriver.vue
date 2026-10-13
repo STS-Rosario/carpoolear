@@ -512,18 +512,15 @@ export default {
     gap: 0.75rem;
 }
 .trip-driver__car {
-    flex: 1 0 100%;
-    margin-left: 0;
-    text-align: left;
-    color: var(--ds-text-secondary, #666);
-}
-.trip-driver__car :deep(.trip-car-details) {
     display: flex;
+    flex: 1 0 100%;
     flex-wrap: wrap;
     align-items: baseline;
     column-gap: 0.75rem;
     row-gap: 0.1rem;
-    margin: 0;
+    margin-left: 0;
+    text-align: left;
+    color: var(--ds-text-secondary, #666);
 }
 .trip-driver__car :deep(.trip-car-details__title) {
     flex: 1 0 100%;
@@ -717,11 +714,9 @@ export default {
         grid-column: 2;
     }
     .trip-driver__car {
+        display: block;
         grid-column: 3;
         margin-left: 0;
-    }
-    .trip-driver__car :deep(.trip-car-details) {
-        display: block;
     }
     .trip-driver__car :deep(.trip-car-details__title) {
         flex: none;
