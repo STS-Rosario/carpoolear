@@ -23,6 +23,7 @@ export function buildTripShareMessage({
     locale = 'es',
     translate
 }) {
+    const origin = trip?.['from_town'] || '';
     const destination = trip?.['to_town'] || '';
     const tripDate = trip?.['trip_date'];
     const day = formatTripShareDay(tripDate, locale);
@@ -31,6 +32,7 @@ export function buildTripShareMessage({
     return translate('tripShareMessage', {
         day,
         time,
+        origin,
         destination
     });
 }

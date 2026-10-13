@@ -194,4 +194,125 @@ test.describe('Trip detail page', () => {
     await expect(page.getByText('Pasajero Tres')).toBeVisible();
     await expect(page.getByText('Pasajero Cuatro')).toBeVisible();
   });
+
+  test('on mobile, car details sit below the driver instead of squishing the name', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 414, height: 896 });
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const otherTrip = makeMockTrip(TRIP_ID, {
+      user: {
+        id: 999,
+        name: 'Ayelen Seifo',
+        image: null,
+        positive_ratings: 11,
+        negative_ratings: 0,
+      },
+      from_town: 'Mar del Plata',
+      to_town: 'Rosario',
+      car: {
+        patente: 'AE322FE',
+        brand_name: 'FERRARI',
+        model_name: 'F 612',
+        year: 2011,
+      },
+    });
+    await setupTripRoute(page, otherTrip);
+
+    await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
+
+    const name = page.locator('.trip-driver__mobile-name');
+    const car = page.locator('.trip-driver__car');
+    await expect(name).toBeVisible({ timeout: 15000 });
+    await expect(car).toBeVisible();
+    await expect(page.getByText('F 612 2011')).toBeVisible();
+
+    const nameBox = await name.boundingBox();
+    const carBox = await car.boundingBox();
+    expect(nameBox).toBeTruthy();
+    expect(carBox).toBeTruthy();
+    expect(carBox.y).toBeGreaterThan(nameBox.y + nameBox.height - 2);
+    expect(nameBox.height).toBeLessThan(40);
+
+    const lines = page.locator('.trip-driver__car .trip-car-details__line');
+    await expect(lines).toHaveCount(3);
+    const firstLine = await lines.nth(0).boundingBox();
+    const lastLine = await lines.nth(2).boundingBox();
+    expect(firstLine).toBeTruthy();
+    expect(lastLine).toBeTruthy();
+    expect(Math.abs(firstLine.y - lastLine.y)).toBeLessThan(8);
+    expect(lastLine.x).toBeGreaterThan(firstLine.x);
+  });
+
+  test('on desktop, car details stay beside the driver', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const otherTrip = makeMockTrip(TRIP_ID, {
+      user: {
+        id: 999,
+        name: 'Ayelen Seifo',
+        image: null,
+        positive_ratings: 11,
+        negative_ratings: 0,
+      },
+      car: {
+        patente: 'AC700UH',
+        brand_name: 'VOLKSWAGEN',
+        model_name: 'SAVEIRO PICK - UP CROSS',
+        year: 2018,
+      },
+    });
+    await setupTripRoute(page, otherTrip);
+
+    await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
+
+    const name = page.locator('.trip-driver__mobile-name');
+    const car = page.locator('.trip-driver__car');
+    await expect(name).toBeVisible({ timeout: 15000 });
+    await expect(car).toBeVisible();
+
+    const nameBox = await name.boundingBox();
+    const carBox = await car.boundingBox();
+    expect(nameBox).toBeTruthy();
+    expect(carBox).toBeTruthy();
+    expect(carBox.x).toBeGreaterThan(nameBox.x + nameBox.width);
+    expect(Math.abs(carBox.y - nameBox.y)).toBeLessThan(24);
+  });
+
+  test('share message includes origin and destination', async ({ page }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+    await page.addInitScript(() => {
+      window.__sharedPayloads = [];
+      navigator.share = async (payload) => {
+        window.__sharedPayloads.push(payload);
+      };
+    });
+
+    const otherTrip = makeMockTrip(TRIP_ID, {
+      user: { id: 999, name: 'Other Driver', image: null, positive_ratings: 5, negative_ratings: 0 },
+      from_town: 'Mar del Plata',
+      to_town: 'Rosario',
+    });
+    await setupTripRoute(page, otherTrip);
+
+    await page.goto(`/trips/${TRIP_ID}`);
+    await waitForPageReady(page);
+
+    await page.getByTestId('trip-detail-share').click();
+    const payloads = await page.evaluate(() => window.__sharedPayloads);
+    expect(payloads[0].text).toMatch(/de Mar del Plata a Rosario/);
+  });
 });

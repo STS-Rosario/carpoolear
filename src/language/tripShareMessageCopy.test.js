@@ -13,22 +13,23 @@ function translateArg(key, params) {
 describe('tripShareMessage copy (i18n)', () => {
     it('Spanish locales include “a las” and “hs” around the time placeholder', () => {
         expect(messages.arg.tripShareMessage).toBe(
-            'Te comparto mi viaje en Carpoolear para el {day} a las {time}hs a {destination}'
+            'Te comparto mi viaje en Carpoolear para el {day} a las {time}hs de {origin} a {destination}'
         );
         expect(messages.chl.tripShareMessage).toBe(
-            'Te comparto mi viaje en Apalan-car para el {day} a las {time}hs a {destination}'
+            'Te comparto mi viaje en Apalan-car para el {day} a las {time}hs de {origin} a {destination}'
         );
     });
 
     it('English locale keeps an explicit preposition before the time', () => {
         expect(messages.en.tripShareMessage).toBe(
-            "I'm sharing my Carpoolear trip on {day} at {time} to {destination}"
+            "I'm sharing my Carpoolear trip on {day} at {time} from {origin} to {destination}"
         );
     });
 
     it('buildTripShareMessage applies Spanish tripShareMessage placeholders', () => {
         const message = buildTripShareMessage({
             trip: {
+                from_town: 'Mar del Plata',
                 to_town: 'San Carlos de Bariloche',
                 trip_date: '2026-10-08 12:00:00'
             },
@@ -37,7 +38,7 @@ describe('tripShareMessage copy (i18n)', () => {
         });
 
         expect(message).toBe(
-            'Te comparto mi viaje en Carpoolear para el jueves 8 de octubre a las 12:00hs a San Carlos de Bariloche'
+            'Te comparto mi viaje en Carpoolear para el jueves 8 de octubre a las 12:00hs de Mar del Plata a San Carlos de Bariloche'
         );
     });
 });

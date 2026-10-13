@@ -112,4 +112,45 @@ describe('TripDriver trip-detail redesign header', () => {
             /@media[^{]*min-width:\s*768px[^{]*\{[\s\S]*?\.trip_driver_img\s*\{[^}]*max-height:\s*none/
         );
     });
+
+    it('moves car details onto their own full-width row on mobile and keeps them beside the driver on desktop', () => {
+        const style = source.split('<style scoped>')[1] || '';
+        const [mobileStyle, desktopStyle = ''] = style.split(
+            /@media only screen and \(min-width:\s*768px\)/
+        );
+
+        expect(mobileStyle).toMatch(
+            /\.trip-driver__mobile-top\s*\{[^}]*flex-wrap:\s*wrap/
+        );
+        expect(mobileStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*flex:\s*1 0 100%/
+        );
+        expect(desktopStyle).toMatch(
+            /\.trip-driver__mobile-top\s*\{[^}]*display:\s*grid/
+        );
+        expect(desktopStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*grid-column:\s*3/
+        );
+    });
+
+    it('puts marca, modelo and patente on one row on mobile', () => {
+        const style = source.split('<style scoped>')[1] || '';
+        const [baseStyle, ...mediaStyles] = style.split(/@media/);
+        const desktopStyle = mediaStyles.find((block) =>
+            /min-width:\s*768px/.test(block)
+        ) || '';
+
+        expect(baseStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*display:\s*flex/
+        );
+        expect(baseStyle).toMatch(
+            /\.trip-car-details__title\)?\s*\{[^}]*flex:\s*1 0 100%/
+        );
+        expect(baseStyle).toMatch(
+            /\.trip-car-details__line\)?\s*\{[^}]*white-space:\s*nowrap/
+        );
+        expect(desktopStyle).toMatch(
+            /\.trip-driver__car\s*\{[^}]*display:\s*block|\.trip-car-details\)?\s*\{[^}]*display:\s*block/
+        );
+    });
 });
