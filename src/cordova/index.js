@@ -11,7 +11,7 @@ import { useCordovaStore } from '../stores/cordova';
 import { useRootStore } from '../stores/root';
 
 window.facebook = facebook;
-window.appVersion = '4.0.22';
+window.appVersion = '4.0.23';
 
 const NETWORK_POLL_INTERVAL_MS = 5000;
 let networkMonitoringStarted = false;

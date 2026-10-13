@@ -6,7 +6,6 @@ const apiMock = {
     show: vi.fn(),
     create: vi.fn(),
     reply: vi.fn(),
-    close: vi.fn(),
     adminList: vi.fn(),
     adminShow: vi.fn(),
     adminReply: vi.fn(),
