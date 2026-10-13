@@ -76,11 +76,10 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain("!['Resuelto', 'Cerrado'].includes(this.ticket.status)");
     });
 
-    it('shows close ticket only while under review, not when resolved or closed', () => {
-        expect(viewSource).toContain('showUserCloseButton');
-        expect(viewSource).toContain("this.ticket.status === 'En revision'");
-        expect(viewSource).not.toContain("['Resuelto', 'En revision']");
-        expect(viewSource).not.toContain('v-else-if="showUserCloseButton"');
+    it('does not show a close ticket button on the user-facing ticket detail', () => {
+        expect(viewSource).not.toContain('showUserCloseButton');
+        expect(viewSource).not.toContain("$t('cerrarTicket')");
+        expect(viewSource).not.toContain('@click="closeTicket"');
     });
 
     it('shows relative message date with tooltip containing full timestamp', () => {
@@ -114,11 +113,12 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain('attachmentInput');
     });
 
-    it('shows success and error snackbars when the user closes a ticket', () => {
-        expect(viewSource).toContain('ticketCerrado');
-        expect(viewSource).toContain('errorCerrandoTicket');
-        expect(viewSource).toContain("dialogs.message(this.$t('ticketCerrado')");
-        expect(viewSource).toContain("dialogs.message(this.$t('errorCerrandoTicket')");
+    it('does not expose user-side close ticket actions or snackbars', () => {
+        expect(viewSource).not.toContain('closeTicketAction');
+        expect(viewSource).not.toContain("dialogs.message(this.$t('ticketCerrado')");
+        expect(viewSource).not.toContain("dialogs.message(this.$t('errorCerrandoTicket')");
+        expect(viewSource).not.toContain('mensajeOpcionalCierre');
+        expect(viewSource).not.toContain('confirmarCierreTicket');
     });
 
     it('uses a taller, vertically resizable reply editor', () => {
