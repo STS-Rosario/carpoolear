@@ -32,9 +32,6 @@ export const useTicketsStore = defineStore('tickets', {
         replyTicket(id, payload) {
             return ticketsApi.reply(id, payload).then((response) => response.data);
         },
-        closeTicket(id, payload) {
-            return ticketsApi.close(id, payload).then((response) => response.data);
-        },
         fetchAdminList(filters, options = {}) {
             const keepPrevious = Boolean(options.keepPrevious);
             if (!keepPrevious) {
