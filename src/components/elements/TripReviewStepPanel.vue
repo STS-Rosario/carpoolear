@@ -137,6 +137,7 @@
             </div>
             <UnLitroInfoCard
                 v-else
+                class="trip-review-step__un-litro-card"
                 :charged="false"
                 :complimentary="selladoComplimentary"
                 :bonificado="selladoBonificado"
@@ -362,7 +363,8 @@ export default {
 }
 
 .trip-review-step__section--un-litro {
-    padding-top: 0.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
 }
 
 .trip-review-step__price-caption {
@@ -489,6 +491,11 @@ export default {
 
 .trip-review-step__un-litro-card {
     margin-top: 0.15rem;
+    margin-bottom: 0;
+}
+
+.trip-review-step__section--un-litro :deep(.un-litro-card) {
+    margin-bottom: 0;
 }
 
 .trip-review-step__pref-tags {
