@@ -8,6 +8,45 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
     return Boolean(selladoEnabled);
 }
 
+export function isTripCreationPaymentQrEnabled(config) {
+    return Boolean(config && config.module_trip_creation_payment_qr_enabled);
+}
+
+export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
+    if (!selladoEnabled || !trip) {
+        return null;
+    }
+    if (
+        trip.needs_sellado ||
+        (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado)
+    ) {
+        return 'charged';
+    }
+    return 'bonificado';
+}
+
+export function isOverSelladoFreeLimit({
+    quotaLoaded,
+    remainingFreeTrips,
+    userOverFreeLimit
+} = {}) {
+    if (quotaLoaded) {
+        return (Number(remainingFreeTrips) || 0) <= 0;
+    }
+    return Boolean(userOverFreeLimit);
+}
+
+export function shouldShowSelladoBonificadoCard({
+    selladoEnabled,
+    routeNeedsPayment,
+    hasComplimentarySellado
+} = {}) {
+    if (!selladoEnabled || hasComplimentarySellado) {
+        return false;
+    }
+    return !routeNeedsPayment;
+}
+
 function wouldOtherwiseChargeSellado({
     selladoEnabled,
     routeNeedsPayment,
@@ -129,12 +168,23 @@ export function selladoDetailBannerKind(trip) {
     return null;
 }
 
-export function shouldShowSelladoPublishedBanner(trip, query = {}) {
-    if (!trip || !trip.needs_sellado || isSelladoPending(trip)) {
-        return false;
+export function isSelladoPaymentReturnQuery(query = {}) {
+    if (query.sellado_paid === '1' || query.sellado_paid === true) {
+        return true;
     }
     const status = String(
         query.collection_status || query.status || query.payment_result || ''
     ).toLowerCase();
     return status === 'approved' || status === 'success';
+}
+
+export function shouldShowSelladoPublishedBanner(trip, query = {}) {
+    if (!trip || !trip.needs_sellado || isSelladoPending(trip)) {
+        return false;
+    }
+    return isSelladoPaymentReturnQuery(query);
+}
+
+export function shouldShowSelladoProcessingBanner(trip, query = {}) {
+    return isSelladoPending(trip) && isSelladoPaymentReturnQuery(query);
 }

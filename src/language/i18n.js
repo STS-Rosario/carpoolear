@@ -666,9 +666,9 @@ const messages = {
             '¿Cómo se calcula la contribución sugerida?',
         unLitroName: 'Un litro para Carpoolear',
         unLitroWhatIsThis: '¿Qué es esto?',
-        unLitroAppliesTitle: 'Este viaje suma Un litro para Carpoolear',
+        unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
-            'Es 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y ya está incluido en el aporte por persona, así que se reparte entre todos los que viajan.',
+            'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -711,6 +711,8 @@ const messages = {
         unLitroPayLater: 'Pagar después',
         unLitroBannerPending:
             'Tu viaje todavía no es visible. Pagá Un litro para Carpoolear para publicarlo.',
+        unLitroBannerProcessing:
+            'El pago se está procesando, pronto estará listo y el viaje será público.',
         unLitroBannerPayAmount: 'Pagar {amount}',
         unLitroBannerRapipago:
             'Tu viaje se publica cuando pagues en RapiPago. Te avisamos apenas se acredite.',
@@ -1104,6 +1106,8 @@ const messages = {
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' desde un navegador. Luego vas a tu viaje y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -2834,9 +2838,9 @@ const messages = {
             '¿Cómo se calcula la contribución sugerida?',
         unLitroName: 'Un litro para Carpoolear',
         unLitroWhatIsThis: '¿Qué es esto?',
-        unLitroAppliesTitle: 'Este viaje suma Un litro para Carpoolear',
+        unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
-            'Es 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y ya está incluido en el aporte por persona, así que se reparte entre todos los que viajan.',
+            'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -2879,6 +2883,8 @@ const messages = {
         unLitroPayLater: 'Pagar después',
         unLitroBannerPending:
             'Tu viaje todavía no es visible. Pagá Un litro para Carpoolear para publicarlo.',
+        unLitroBannerProcessing:
+            'El pago se está procesando, pronto estará listo y el viaje será público.',
         unLitroBannerPayAmount: 'Pagar {amount}',
         unLitroBannerRapipago:
             'Tu viaje se publica cuando pagues en RapiPago. Te avisamos apenas se acredite.',
@@ -3247,6 +3253,8 @@ const messages = {
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' desde un navegador. Luego vas a tu viaje y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -4810,9 +4818,9 @@ const messages = {
             'How is the suggested contribution calculated?',
         unLitroName: 'One liter for Carpoolear',
         unLitroWhatIsThis: 'What is this?',
-        unLitroAppliesTitle: 'This trip adds One liter for Carpoolear',
+        unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
         unLitroAppliesBody:
-            'It is 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is already included in the per-person contribution, so it is split among everyone traveling.',
+            'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
         unLitroBonificadoBadge: 'Waived',
         unLitroBonificadoTitle: 'This trip is waived',
         unLitroBonificadoRemainingSingular:
@@ -4855,6 +4863,8 @@ const messages = {
         unLitroPayLater: 'Pay later',
         unLitroBannerPending:
             'Your trip is not visible yet. Pay One liter for Carpoolear to publish it.',
+        unLitroBannerProcessing:
+            'Payment is being processed. It will be ready soon and the trip will be public.',
         unLitroBannerPayAmount: 'Pay {amount}',
         unLitroBannerRapipago:
             'Your trip will be published when you pay at RapiPago. We will notify you as soon as it is confirmed.',
@@ -5172,6 +5182,8 @@ const messages = {
             ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' in a browser. Then go to Contribute and generate the QR payment. Scan it with your phone from any digital wallet.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' in a browser. Then go to your trip and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:

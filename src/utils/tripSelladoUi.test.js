@@ -1,14 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import {
     applySelladoChargeToBreakdown,
+    isOverSelladoFreeLimit,
     remainingSelladoFreeTrips,
     selladoCheckoutUrl,
     selladoDetailBannerKind,
     shouldChargeSellado,
+    shouldShowSelladoBonificadoCard,
     shouldShowSelladoComplimentaryCard,
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
-    shouldShowUnLitroCard
+    shouldShowSelladoProcessingBanner,
+    shouldShowUnLitroCard,
+    unLitroCardKindFromTrip,
+    isTripCreationPaymentQrEnabled
 } from './tripSelladoUi.js';
 
 describe('shouldShowUnLitroCard', () => {
@@ -16,6 +21,22 @@ describe('shouldShowUnLitroCard', () => {
         expect(shouldShowUnLitroCard({ selladoEnabled: true })).toBe(true);
         expect(shouldShowUnLitroCard({ selladoEnabled: false })).toBe(false);
         expect(shouldShowUnLitroCard({})).toBe(false);
+    });
+});
+
+describe('isTripCreationPaymentQrEnabled', () => {
+    it('follows the sellado QR config flag', () => {
+        expect(
+            isTripCreationPaymentQrEnabled({
+                module_trip_creation_payment_qr_enabled: true
+            })
+        ).toBe(true);
+        expect(
+            isTripCreationPaymentQrEnabled({
+                module_trip_creation_payment_qr_enabled: false
+            })
+        ).toBe(false);
+        expect(isTripCreationPaymentQrEnabled({})).toBe(false);
     });
 });
 
@@ -56,6 +77,85 @@ describe('shouldChargeSellado', () => {
                 selladoEnabled: true,
                 routeNeedsPayment: true,
                 userOverFreeLimit: true,
+                hasComplimentarySellado: true
+            })
+        ).toBe(false);
+    });
+});
+
+describe('isOverSelladoFreeLimit', () => {
+    it('uses remaining free trips after the quota has loaded', () => {
+        expect(
+            isOverSelladoFreeLimit({
+                quotaLoaded: true,
+                remainingFreeTrips: 0,
+                userOverFreeLimit: false
+            })
+        ).toBe(true);
+        expect(
+            isOverSelladoFreeLimit({
+                quotaLoaded: true,
+                remainingFreeTrips: 2,
+                userOverFreeLimit: true
+            })
+        ).toBe(false);
+    });
+
+    it('falls back to the API flag before the quota has loaded', () => {
+        expect(
+            isOverSelladoFreeLimit({
+                quotaLoaded: false,
+                remainingFreeTrips: 0,
+                userOverFreeLimit: false
+            })
+        ).toBe(false);
+        expect(
+            isOverSelladoFreeLimit({
+                quotaLoaded: false,
+                remainingFreeTrips: 0,
+                userOverFreeLimit: true
+            })
+        ).toBe(true);
+    });
+});
+
+describe('shouldShowSelladoBonificadoCard', () => {
+    it('does not show Bonificado when the route includes Un litro, even with remaining free trips', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                remainingFreeTrips: 2
+            })
+        ).toBe(false);
+    });
+
+    it('shows Bonificado when the route does not need Un litro', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: false,
+                remainingFreeTrips: 0
+            })
+        ).toBe(true);
+    });
+
+    it('does not show Bonificado when the user has to pay', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                remainingFreeTrips: 0
+            })
+        ).toBe(false);
+    });
+
+    it('does not show Bonificado when complimentary credit applies', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                remainingFreeTrips: 2,
                 hasComplimentarySellado: true
             })
         ).toBe(false);
@@ -162,6 +262,62 @@ describe('remainingSelladoFreeTrips', () => {
     });
 });
 
+describe('unLitroCardKindFromTrip', () => {
+    const selladoEnabled = { selladoEnabled: true };
+
+    it('shows charged when the created trip collected Un litro', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: true,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBe('charged');
+    });
+
+    it('shows charged when trip-info includes Un litro even if this trip did not collect payment', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBe('charged');
+    });
+
+    it('shows Bonificado when sellado is enabled but the route does not include Un litro', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: false }
+                },
+                selladoEnabled
+            )
+        ).toBe('bonificado');
+    });
+
+    it('still shows charged below contribución while a payment banner is showing', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: true,
+                    state: 'awaiting_payment',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBe('charged');
+    });
+});
+
 describe('applySelladoChargeToBreakdown', () => {
     const breakdown = {
         includes_sellado: true,
@@ -237,11 +393,43 @@ describe('shouldShowSelladoPublishedBanner', () => {
         expect(
             shouldShowSelladoPublishedBanner(trip, { collection_status: 'approved' })
         ).toBe(true);
+        expect(shouldShowSelladoPublishedBanner(trip, { sellado_paid: '1' })).toBe(
+            true
+        );
         expect(shouldShowSelladoPublishedBanner(trip, {})).toBe(false);
         expect(
             shouldShowSelladoPublishedBanner(
                 { ...trip, sellado_pending: true, state: 'awaiting_payment' },
                 { collection_status: 'approved' }
+            )
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowSelladoProcessingBanner', () => {
+    it('shows while sellado is still pending after a paid return', () => {
+        const pendingTrip = {
+            needs_sellado: true,
+            sellado_pending: true,
+            state: 'awaiting_payment'
+        };
+        expect(
+            shouldShowSelladoProcessingBanner(pendingTrip, { sellado_paid: '1' })
+        ).toBe(true);
+        expect(
+            shouldShowSelladoProcessingBanner(pendingTrip, {
+                collection_status: 'approved'
+            })
+        ).toBe(true);
+        expect(shouldShowSelladoProcessingBanner(pendingTrip, {})).toBe(false);
+        expect(
+            shouldShowSelladoProcessingBanner(
+                {
+                    needs_sellado: true,
+                    sellado_pending: false,
+                    state: 'ready'
+                },
+                { sellado_paid: '1' }
             )
         ).toBe(false);
     });

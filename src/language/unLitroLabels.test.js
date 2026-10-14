@@ -4,9 +4,9 @@ import messages from './i18n';
 const KEYS = {
     unLitroName: 'Un litro para Carpoolear',
     unLitroWhatIsThis: '¿Qué es esto?',
-    unLitroAppliesTitle: 'Este viaje suma Un litro para Carpoolear',
+    unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
     unLitroAppliesBody:
-        'Es 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y ya está incluido en el aporte por persona, así que se reparte entre todos los que viajan.',
+        'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
     unLitroBonificadoBadge: 'Bonificado',
     unLitroBonificadoTitle: 'Este viaje es bonificado',
     unLitroBonificadoRemainingSingular:
@@ -49,6 +49,8 @@ const KEYS = {
     unLitroPayLater: 'Pagar después',
     unLitroBannerPending:
         'Tu viaje todavía no es visible. Pagá Un litro para Carpoolear para publicarlo.',
+    unLitroBannerProcessing:
+        'El pago se está procesando, pronto estará listo y el viaje será público.',
     unLitroBannerPayAmount: 'Pagar {amount}',
     unLitroBannerRapipago:
         'Tu viaje se publica cuando pagues en RapiPago. Te avisamos apenas se acredite.',
@@ -75,9 +77,9 @@ const KEYS = {
 const EN_KEYS = {
     unLitroName: 'One liter for Carpoolear',
     unLitroWhatIsThis: 'What is this?',
-    unLitroAppliesTitle: 'This trip adds One liter for Carpoolear',
+    unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
     unLitroAppliesBody:
-        'It is 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is already included in the per-person contribution, so it is split among everyone traveling.',
+        'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
     unLitroBonificadoBadge: 'Waived',
     unLitroBonificadoTitle: 'This trip is waived',
     unLitroBonificadoRemainingSingular:
@@ -120,6 +122,8 @@ const EN_KEYS = {
     unLitroPayLater: 'Pay later',
     unLitroBannerPending:
         'Your trip is not visible yet. Pay One liter for Carpoolear to publish it.',
+    unLitroBannerProcessing:
+        'Payment is being processed. It will be ready soon and the trip will be public.',
     unLitroBannerPayAmount: 'Pay {amount}',
     unLitroBannerRapipago:
         'Your trip will be published when you pay at RapiPago. We will notify you as soon as it is confirmed.',

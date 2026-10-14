@@ -26,6 +26,8 @@ describe('TripPrice.vue voluntary contribution display', () => {
     it('renders pricing breakdown in the reference collapse when payload is present', () => {
         expect(viewSource).toContain('TripContributionBreakdown');
         expect(viewSource).toContain('trip.pricing_breakdown');
+        expect(viewSource).toContain('applySelladoChargeToBreakdown');
+        expect(viewSource).toContain('this.trip.needs_sellado');
         expect(viewSource).toContain('calculadoEnBaseNaftaDescription');
     });
 

@@ -195,7 +195,7 @@ describe('Trip.vue desktop column bands', () => {
         expect(actionsIdx).toBeGreaterThan(-1);
         expect(mapIdx).toBeGreaterThan(actionsIdx);
         expect(stack).toMatch(
-            /trip-detail__actions-grid[\s\S]*trip-detail__lugares-col[\s\S]*trip-detail__seats-pill[\s\S]*trip-detail__joined[\s\S]*TripPassengers[\s\S]*trip-detail__contribucion[\s\S]*TripPrice[\s\S]*trip-detail__cta[\s\S]*TripButtons/
+            /trip-detail__actions-grid[\s\S]*trip-detail__lugares-col[\s\S]*trip-detail__seats-pill[\s\S]*trip-detail__joined[\s\S]*TripPassengers[\s\S]*trip-detail__contribucion[\s\S]*TripPrice[\s\S]*UnLitroInfoCard[\s\S]*trip-detail__cta[\s\S]*TripButtons/
         );
         expect(stack).not.toContain('trip-detail__seats-passengers');
         expect(stack).not.toContain('trip-detail__price-cta');
@@ -268,12 +268,36 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain("$t('unLitroBannerFailed')");
         expect(viewSource).toContain("$t('unLitroBannerRetry')");
         expect(viewSource).toContain("$t('unLitroBannerPublished')");
-        expect(viewSource).toContain('selladoCheckoutUrl');
-        expect(viewSource).toContain('openExternalUrl');
-        expect(viewSource).toContain('dialogs.message');
         expect(viewSource).toContain('formatPesoIntegerFromCents');
         expect(viewSource).not.toContain("$t('pagoFallo')");
         expect(viewSource).not.toContain("$t('pagarSelladoViaje'");
+    });
+
+    it('shows a processing banner after sellado payment return and polls until paid', () => {
+        const pendingIdx = viewSource.indexOf(
+            'selladoBannerKind === \'pending\''
+        );
+        const processingIdx = viewSource.indexOf('showSelladoProcessingBanner');
+        expect(processingIdx).toBeGreaterThan(-1);
+        expect(processingIdx).toBeLessThan(pendingIdx);
+        expect(viewSource).toContain('shouldShowSelladoProcessingBanner');
+        expect(viewSource).toContain("$t('unLitroBannerProcessing')");
+        expect(viewSource).toContain('startSelladoPaymentPoll');
+        expect(viewSource).toContain('5000');
+        expect(viewSource).toContain('stopSelladoPaymentPoll');
+        expect(viewSource).toMatch(
+            /if\s*\(\s*this\.showSelladoProcessingBanner\s*\)/
+        );
+    });
+
+    it('opens the Un litro pay modal from Pagar without RapiPago', () => {
+        expect(viewSource).toContain('showUnLitroPayModal');
+        expect(viewSource).toContain('UnLitroPayCard');
+        expect(viewSource).toContain("$t('unLitroPublishTitle')");
+        expect(viewSource).toContain(':qr-enabled="qrEnabled"');
+        expect(viewSource).toContain('isTripCreationPaymentQrEnabled');
+        expect(viewSource).toContain('onPaySellado');
+        expect(viewSource).not.toContain('unLitroPayRapipago');
     });
 
     it('opens Un litro explanation from every sellado banner', () => {
@@ -290,5 +314,21 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('shouldShowSelladoEmptyTripCreditCard');
         expect(viewSource).toContain('showSelladoEmptyTripCreditCard');
         expect(viewSource).toContain('next-trip-complimentary');
+    });
+
+    it('shows Este viaje aporta or Bonificado below contribución when sellado is enabled', () => {
+        expect(viewSource).toContain('unLitroCardKindFromTrip');
+        expect(viewSource).toContain('tripDetailUnLitroKind');
+        expect(viewSource).toContain(':charged="tripDetailUnLitroKind === \'charged\'"');
+        expect(viewSource).toContain(
+            ':bonificado="tripDetailUnLitroKind === \'bonificado\'"'
+        );
+        const contribucion = viewSource.match(
+            /class="trip-detail__contribucion">[\s\S]*?<\/div>/
+        )?.[0];
+        expect(contribucion).toBeTruthy();
+        expect(contribucion.indexOf('TripPrice')).toBeLessThan(
+            contribucion.indexOf('UnLitroInfoCard')
+        );
     });
 });

@@ -56,4 +56,25 @@ describe('QR payment how-to copy', () => {
             'digital wallet'
         );
     });
+
+    it.each(['arg', 'chl'])(
+        '%s locale has Un litro-specific QR computer how-to copy',
+        (locale) => {
+            expect(
+                messages[locale].comoHacerPagoQRComputadoraSuffixUnLitro
+            ).toContain('viaje');
+            expect(
+                messages[locale].comoHacerPagoQRComputadoraSuffixUnLitro
+            ).toContain('billetera virtual');
+        }
+    );
+
+    it('en locale has Un litro-specific QR computer how-to copy', () => {
+        expect(messages.en.comoHacerPagoQRComputadoraSuffixUnLitro).toContain(
+            'trip'
+        );
+        expect(messages.en.comoHacerPagoQRComputadoraSuffixUnLitro).toContain(
+            'digital wallet'
+        );
+    });
 });
