@@ -87,6 +87,7 @@
                 </div>
                 <modal
                     v-if="showUnLitroPayModal"
+                    class="un-litro-pay-modal"
                     name="un-litro-pay"
                     :hide-footer="true"
                     @close="showUnLitroPayModal = false"
@@ -1126,6 +1127,11 @@ export default {
 </script>
 
 <style scoped>
+.un-litro-pay-modal :deep(.modal-container) {
+    width: min(36rem, calc(100vw - 2rem));
+    max-width: min(36rem, calc(100vw - 2rem));
+}
+
 .trip-detail__modal-actions {
     display: flex;
     flex-wrap: wrap;

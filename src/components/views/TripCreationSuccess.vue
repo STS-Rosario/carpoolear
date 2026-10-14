@@ -27,7 +27,10 @@
             </div>
         </template>
 
-        <div class="trip-creation-success__actions">
+        <div
+            v-if="!showUnLitroPayment"
+            class="trip-creation-success__actions"
+        >
             <AppButton
                 variant="primary"
                 block
@@ -132,7 +135,10 @@
             </template>
         </modal>
 
-        <div class="trip-creation-success__invite">
+        <div
+            v-if="!showUnLitroPayment"
+            class="trip-creation-success__invite"
+        >
             <TripInviteFriends
                 :trip-id="trip.id"
                 close-behavior="trip-detail"
@@ -344,6 +350,15 @@ export default {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
+}
+
+.trip-creation-success:has(.un-litro-pay-card) {
+    text-align: left;
+}
+
+.trip-creation-success:has(.un-litro-pay-card) .trip-creation-success__title {
+    color: var(--ds-action, #1e5f9e);
+    text-align: center;
 }
 
 .trip-creation-success__emoji {

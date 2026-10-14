@@ -15,8 +15,10 @@
             {{ $t('unLitroTripCreatedHidden') }}
         </div>
         <div class="un-litro-pay-card__amount">
-            <h3>{{ $t('unLitroName') }}</h3>
-            <p class="un-litro-pay-card__price">${{ formattedSelladoAmount }}</p>
+            <div class="un-litro-pay-card__amount-copy">
+                <h3>{{ $t('unLitroName') }}</h3>
+                <p class="un-litro-pay-card__price">${{ formattedSelladoAmount }}</p>
+            </div>
             <UnLitroInfoCard :charged="true" :free-trips-amount="freeTripsAmount" />
         </div>
         <p class="un-litro-pay-card__choose">
@@ -34,7 +36,9 @@
                 value="mercado_pago"
                 v-model="selectedMethod"
             />
-            <i class="fa fa-credit-card" aria-hidden="true"></i>
+            <span class="un-litro-pay-method__icon" aria-hidden="true">
+                <i class="fa fa-credit-card"></i>
+            </span>
             <span>
                 <strong>{{ $t('unLitroPayMercadoPago') }}</strong>
                 <em>{{ $t('unLitroPayMercadoPagoHint') }}</em>
@@ -55,7 +59,9 @@
                 v-model="selectedMethod"
                 :disabled="!qrEnabled"
             />
-            <i class="fa fa-qrcode" aria-hidden="true"></i>
+            <span class="un-litro-pay-method__icon" aria-hidden="true">
+                <i class="fa fa-qrcode"></i>
+            </span>
             <span>
                 <strong>{{ $t('unLitroPayQr') }}</strong>
                 <em>{{ $t('unLitroPayQrHint') }}</em>
@@ -79,29 +85,30 @@
                 />
             </div>
         </label>
-        <AppButton
-            variant="primary"
-            block
-            class="un-litro-pay-card__pay"
-            data-testid="un-litro-pay-now"
-            :loading="loadingQr"
-            :disabled="loadingQr"
-            @click="onPayNow"
-        >
-            {{
-                $t('unLitroBannerPayAmount', {
-                    amount: '$' + formattedSelladoAmount
-                })
-            }}
-        </AppButton>
-        <button
-            type="button"
-            class="un-litro-pay-card__later"
-            data-testid="un-litro-pay-later"
-            @click="onPayLater"
-        >
-            {{ $t('unLitroPayLater') }}
-        </button>
+        <div class="un-litro-pay-card__actions">
+            <button
+                type="button"
+                class="un-litro-pay-card__later"
+                data-testid="un-litro-pay-later"
+                @click="onPayLater"
+            >
+                {{ $t('unLitroPayLater') }}
+            </button>
+            <AppButton
+                variant="primary"
+                class="un-litro-pay-card__pay"
+                data-testid="un-litro-pay-now"
+                :loading="loadingQr"
+                :disabled="loadingQr"
+                @click="onPayNow"
+            >
+                {{
+                    $t('unLitroBannerPayAmount', {
+                        amount: '$' + formattedSelladoAmount
+                    })
+                }}
+            </AppButton>
+        </div>
     </div>
 </template>
 
@@ -297,13 +304,12 @@ export default {
 
 <style scoped>
 .un-litro-pay-card {
-    max-width: 500px;
+    max-width: 32rem;
     margin: 0 auto;
-    padding: 1rem;
     text-align: left;
-    background: var(--ds-neutral-bg, #fff);
-    border: 1px solid #e5e4e0;
-    border-radius: 0.75rem;
+    background: transparent;
+    container-type: inline-size;
+    container-name: un-litro-pay;
 }
 
 .un-litro-pay-card__trip {
@@ -354,6 +360,13 @@ export default {
     color: var(--ds-action, #1e5f9e);
 }
 
+.un-litro-pay-card__amount {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
 .un-litro-pay-card__amount h3 {
     margin: 0 0 0.35rem;
     font-size: 1rem;
@@ -361,21 +374,47 @@ export default {
 }
 
 .un-litro-pay-card__price {
-    margin: 0 0 0.75rem;
+    margin: 0;
     font-size: 1.75rem;
     font-weight: 700;
     line-height: 1.1;
 }
 
 .un-litro-pay-card__amount :deep(.un-litro-card) {
-    margin: 0 0 1rem;
+    margin: 0;
     padding: 0;
+    min-width: 0;
     background: transparent;
+}
+
+.un-litro-pay-card__amount :deep(.un-litro-card__content) {
+    min-width: 0;
 }
 
 .un-litro-pay-card__amount :deep(.un-litro-card__icon),
 .un-litro-pay-card__amount :deep(.un-litro-card__title) {
     display: none;
+}
+
+.un-litro-pay-card__amount :deep(.un-litro-card__body) {
+    margin: 0 0 0.35rem;
+}
+
+@container un-litro-pay (min-width: 28rem) {
+    .un-litro-pay-card__amount {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .un-litro-pay-card__amount-copy {
+        flex: 0 1 10rem;
+    }
+
+    .un-litro-pay-card__amount :deep(.un-litro-card) {
+        flex: 1 1 auto;
+        max-width: 18rem;
+    }
 }
 
 .un-litro-pay-card__choose {
@@ -408,13 +447,24 @@ export default {
     margin: 0;
 }
 
-.un-litro-pay-method i {
-    width: 1.25rem;
-    text-align: center;
+.un-litro-pay-method__icon {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.45rem;
+    background: var(--ds-action-bg, #eef4fb);
     color: var(--ds-action, #1e5f9e);
 }
 
-.un-litro-pay-method > span {
+.un-litro-pay-method i {
+    width: auto;
+    text-align: center;
+}
+
+.un-litro-pay-method > span:not(.un-litro-pay-method__icon) {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
@@ -452,15 +502,22 @@ export default {
     color: #666;
 }
 
+.un-litro-pay-card__actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.85rem;
+    margin-top: 0.75rem;
+}
+
 .un-litro-pay-card__pay {
-    margin-top: 0.5rem;
+    width: 100%;
 }
 
 .un-litro-pay-card__later {
     display: block;
     width: 100%;
-    margin-top: 0.85rem;
-    padding: 0;
+    margin: 0;
+    padding: 0.35rem 0;
     border: 0;
     background: transparent;
     text-align: center;
@@ -468,5 +525,23 @@ export default {
     font: inherit;
     font-weight: 700;
     cursor: pointer;
+}
+
+@container un-litro-pay (min-width: 28rem) {
+    .un-litro-pay-card__actions {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .un-litro-pay-card__pay {
+        width: auto;
+        min-width: 10.5rem;
+    }
+
+    .un-litro-pay-card__later {
+        width: auto;
+        padding: 0.35rem 0.75rem;
+    }
 }
 </style>
