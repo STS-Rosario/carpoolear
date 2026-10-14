@@ -139,6 +139,7 @@
                 v-else
                 :charged="false"
                 :complimentary="selladoComplimentary"
+                :bonificado="selladoBonificado"
                 :remaining-free-trips="remainingFreeTrips"
                 :free-trips-amount="freeTripsAmount"
             />

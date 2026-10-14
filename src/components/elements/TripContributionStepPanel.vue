@@ -11,6 +11,7 @@
             v-if="showUnLitroCard && (selladoCharged || selladoComplimentary || selladoBonificado)"
             :charged="selladoCharged"
             :complimentary="selladoComplimentary"
+            :bonificado="selladoBonificado"
             :remaining-free-trips="remainingFreeTrips"
             :free-trips-amount="freeTripsAmount"
         />

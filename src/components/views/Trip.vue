@@ -365,6 +365,12 @@
                                 </div>
                             </div>
                             <div class="trip-detail__contribucion">
+                                <UnLitroInfoCard
+                                    v-if="tripDetailUnLitroKind"
+                                    :charged="tripDetailUnLitroKind === 'charged'"
+                                    :bonificado="tripDetailUnLitroKind === 'bonificado'"
+                                    :free-trips-amount="freeTripsAmount"
+                                />
                                 <TripPrice />
                             </div>
                             <div class="trip-detail__cta">
@@ -439,7 +445,8 @@ import {
     selladoCheckoutUrl,
     selladoDetailBannerKind,
     shouldShowSelladoEmptyTripCreditCard,
-    shouldShowSelladoPublishedBanner
+    shouldShowSelladoPublishedBanner,
+    unLitroCardKindFromTrip
 } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import { openExternalUrl } from '../../utils/externalLink.js';
@@ -1045,6 +1052,12 @@ export default {
         showSelladoEmptyTripCreditCard() {
             return shouldShowSelladoEmptyTripCreditCard(this.trip, {
                 isOwner: this.owner
+            });
+        },
+        tripDetailUnLitroKind() {
+            return unLitroCardKindFromTrip(this.trip, {
+                selladoEnabled:
+                    this.config && this.config.module_trip_creation_payment_enabled
             });
         },
         formattedSelladoPayAmount() {

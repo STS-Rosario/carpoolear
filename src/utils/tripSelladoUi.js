@@ -8,6 +8,22 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
     return Boolean(selladoEnabled);
 }
 
+export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
+    if (!selladoEnabled || !trip) {
+        return null;
+    }
+    if (selladoDetailBannerKind(trip)) {
+        return null;
+    }
+    if (trip.needs_sellado) {
+        return 'charged';
+    }
+    if (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado) {
+        return 'bonificado';
+    }
+    return null;
+}
+
 export function isOverSelladoFreeLimit({
     quotaLoaded,
     remainingFreeTrips,

@@ -78,6 +78,12 @@
             <h2 class="trip-creation-success__title">{{ $t('tripCreationSuccessTitle') }}</h2>
             <div class="trip-creation-success__emoji" aria-hidden="true">🥳</div>
             <p class="trip-creation-success__heading">{{ $t('tripCreationSuccessAllSet') }}</p>
+            <UnLitroInfoCard
+                v-if="unLitroKind === 'bonificado'"
+                :charged="false"
+                :bonificado="unLitroKind === 'bonificado'"
+                :free-trips-amount="freeTripsAmount"
+            />
         </template>
 
         <div class="trip-creation-success__actions">
@@ -206,7 +212,7 @@ import dialogs from '../../services/dialogs.js';
 import { useAuthStore } from '../../stores/auth';
 import { shareTripDetail } from '../../utils/tripDetailShare.js';
 import { isSelladoPending } from '../../utils/tripSelladoDisplay.js';
-import { selladoCheckoutUrl } from '../../utils/tripSelladoUi.js';
+import { selladoCheckoutUrl, unLitroCardKindFromTrip } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import { openExternalUrl } from '../../utils/externalLink.js';
 import dayjs from '../../dayjs';
@@ -267,6 +273,12 @@ export default {
         }),
         showUnLitroPayment() {
             return isSelladoPending(this.trip);
+        },
+        unLitroKind() {
+            return unLitroCardKindFromTrip(this.trip, {
+                selladoEnabled:
+                    this.config && this.config.module_trip_creation_payment_enabled
+            });
         },
         formattedSelladoAmount() {
             return formatPesoIntegerFromCents(

@@ -88,6 +88,7 @@ import {
     shouldShowContributionBreakdown,
     withOccupants
 } from '../../utils/tripContributionBreakdown.js';
+import { applySelladoChargeToBreakdown } from '../../utils/tripSelladoUi.js';
 import SvgItem from '../SvgItem';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
 export default {
@@ -136,7 +137,10 @@ export default {
                 return null;
             }
             return withOccupants(
-                this.trip.pricing_breakdown,
+                applySelladoChargeToBreakdown(
+                    this.trip.pricing_breakdown,
+                    Boolean(this.trip.needs_sellado)
+                ),
                 this.trip.rear_max_two_passengers
             );
         },
