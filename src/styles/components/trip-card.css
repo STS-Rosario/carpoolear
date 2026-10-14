@@ -403,8 +403,7 @@
 .trips-section__list.row > [class*='col-'] > .trip,
 .trips-list .row > [class*='col-'] > .trip,
 .row > [class*='col-'] > .trip,
-.row > [class*='col-'].trip,
-.row > [class*='col-'].trip-needs-sellado {
+.row > [class*='col-'].trip {
     height: 100%;
     width: 100%;
     max-width: 100%;
