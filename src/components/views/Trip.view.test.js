@@ -268,12 +268,19 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain("$t('unLitroBannerFailed')");
         expect(viewSource).toContain("$t('unLitroBannerRetry')");
         expect(viewSource).toContain("$t('unLitroBannerPublished')");
-        expect(viewSource).toContain('selladoCheckoutUrl');
-        expect(viewSource).toContain('openExternalUrl');
-        expect(viewSource).toContain('dialogs.message');
         expect(viewSource).toContain('formatPesoIntegerFromCents');
         expect(viewSource).not.toContain("$t('pagoFallo')");
         expect(viewSource).not.toContain("$t('pagarSelladoViaje'");
+    });
+
+    it('opens the Un litro pay modal from Pagar without RapiPago', () => {
+        expect(viewSource).toContain('showUnLitroPayModal');
+        expect(viewSource).toContain('UnLitroPayCard');
+        expect(viewSource).toContain("$t('unLitroPublishTitle')");
+        expect(viewSource).toContain(':qr-enabled="qrEnabled"');
+        expect(viewSource).toContain('isTripCreationPaymentQrEnabled');
+        expect(viewSource).toContain('onPaySellado');
+        expect(viewSource).not.toContain('unLitroPayRapipago');
     });
 
     it('opens Un litro explanation from every sellado banner', () => {

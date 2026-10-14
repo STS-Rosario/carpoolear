@@ -11,7 +11,8 @@ import {
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
     shouldShowUnLitroCard,
-    unLitroCardKindFromTrip
+    unLitroCardKindFromTrip,
+    isTripCreationPaymentQrEnabled
 } from './tripSelladoUi.js';
 
 describe('shouldShowUnLitroCard', () => {
@@ -19,6 +20,22 @@ describe('shouldShowUnLitroCard', () => {
         expect(shouldShowUnLitroCard({ selladoEnabled: true })).toBe(true);
         expect(shouldShowUnLitroCard({ selladoEnabled: false })).toBe(false);
         expect(shouldShowUnLitroCard({})).toBe(false);
+    });
+});
+
+describe('isTripCreationPaymentQrEnabled', () => {
+    it('follows the sellado QR config flag', () => {
+        expect(
+            isTripCreationPaymentQrEnabled({
+                module_trip_creation_payment_qr_enabled: true
+            })
+        ).toBe(true);
+        expect(
+            isTripCreationPaymentQrEnabled({
+                module_trip_creation_payment_qr_enabled: false
+            })
+        ).toBe(false);
+        expect(isTripCreationPaymentQrEnabled({})).toBe(false);
     });
 });
 
