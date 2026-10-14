@@ -23,7 +23,7 @@ describe('UnLitroInfoCard', () => {
 
         expect(wrapper.text()).toContain('Este viaje aporta Un litro para Carpoolear');
         expect(wrapper.text()).toContain(
-            'Es 1 litro de nafta que ayuda a mantener la plataforma'
+            'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma'
         );
         expect(wrapper.text()).toContain('¿Qué es esto?');
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
