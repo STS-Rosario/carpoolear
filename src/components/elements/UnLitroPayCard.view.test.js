@@ -36,5 +36,7 @@ describe('UnLitroPayCard.vue', () => {
         expect(componentSource).toContain("$t('unLitroPayLater')");
         expect(componentSource).toContain('data-testid="un-litro-pay-now"');
         expect(componentSource).toContain('data-testid="un-litro-pay-qr"');
+        expect(componentSource).toContain('un-litro-pay-card__actions');
+        expect(componentSource).toContain('un-litro-pay-card__amount-copy');
     });
 });

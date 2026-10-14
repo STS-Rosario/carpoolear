@@ -101,6 +101,12 @@ describe('TripCreationSuccess.vue', () => {
         const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
         expect(payCardIdx).toBeGreaterThan(-1);
         expect(shareIdx).toBeGreaterThan(payCardIdx);
+        expect(componentSource).toContain(
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__actions"'
+        );
+        expect(componentSource).toContain(
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'
+        );
     });
 
     it('scrolls to the top when the success screen is shown', () => {
