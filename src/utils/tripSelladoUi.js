@@ -8,6 +8,31 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
     return Boolean(selladoEnabled);
 }
 
+export function isOverSelladoFreeLimit({
+    quotaLoaded,
+    remainingFreeTrips,
+    userOverFreeLimit
+} = {}) {
+    if (quotaLoaded) {
+        return (Number(remainingFreeTrips) || 0) <= 0;
+    }
+    return Boolean(userOverFreeLimit);
+}
+
+export function shouldShowSelladoBonificadoCard({
+    selladoEnabled,
+    routeNeedsPayment,
+    remainingFreeTrips,
+    hasComplimentarySellado
+} = {}) {
+    return Boolean(
+        selladoEnabled &&
+            routeNeedsPayment &&
+            (Number(remainingFreeTrips) || 0) > 0 &&
+            !hasComplimentarySellado
+    );
+}
+
 function wouldOtherwiseChargeSellado({
     selladoEnabled,
     routeNeedsPayment,

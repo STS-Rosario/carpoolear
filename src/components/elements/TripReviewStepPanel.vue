@@ -109,7 +109,7 @@
         </section>
 
         <section
-            v-if="showUnLitroCard"
+            v-if="showUnLitroCard && (selladoCharged || selladoComplimentary || selladoBonificado)"
             class="trip-review-step__section trip-review-step__section--un-litro"
         >
             <div class="trip-review-step__section-header">
@@ -264,6 +264,7 @@ export default {
         showUnLitroCard: { type: Boolean, default: false },
         selladoCharged: { type: Boolean, default: false },
         selladoComplimentary: { type: Boolean, default: false },
+        selladoBonificado: { type: Boolean, default: false },
         selladoAmountCents: { type: Number, default: 0 },
         remainingFreeTrips: { type: Number, default: 0 },
         freeTripsAmount: { type: Number, default: 0 },

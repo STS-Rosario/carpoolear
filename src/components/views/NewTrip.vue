@@ -79,8 +79,10 @@ import { seatPriceCentsFromTripPriceCents } from '../../utils/tripPriceOccupants
 import { withOccupants } from '../../utils/tripContributionBreakdown.js';
 import {
     applySelladoChargeToBreakdown,
+    isOverSelladoFreeLimit,
     remainingSelladoFreeTrips,
     shouldChargeSellado,
+    shouldShowSelladoBonificadoCard,
     shouldShowSelladoComplimentaryCard,
     shouldShowUnLitroCard
 } from '../../utils/tripSelladoUi.js';
@@ -223,6 +225,8 @@ export default {
             recommended_return_seat_price_cents: 0,
             free_trips_amount: 0,
             trips_created_by_user_amount: 0,
+            selladoQuotaLoaded: false,
+            tripInfoRequestId: 0,
             route_needs_payment: false,
             returnPrice: '',
             duration: 0,
@@ -495,7 +499,11 @@ export default {
             return shouldChargeSellado({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
-                userOverFreeLimit: this.needs_to_pay_for_next_trip,
+                userOverFreeLimit: isOverSelladoFreeLimit({
+                    quotaLoaded: this.selladoQuotaLoaded,
+                    remainingFreeTrips: this.remainingFreeTrips,
+                    userOverFreeLimit: this.needs_to_pay_for_next_trip
+                }),
                 hasComplimentarySellado: this.has_complimentary_sellado
             });
         },
@@ -503,7 +511,19 @@ export default {
             return shouldShowSelladoComplimentaryCard({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
-                userOverFreeLimit: this.needs_to_pay_for_next_trip,
+                userOverFreeLimit: isOverSelladoFreeLimit({
+                    quotaLoaded: this.selladoQuotaLoaded,
+                    remainingFreeTrips: this.remainingFreeTrips,
+                    userOverFreeLimit: this.needs_to_pay_for_next_trip
+                }),
+                hasComplimentarySellado: this.has_complimentary_sellado
+            });
+        },
+        selladoBonificado() {
+            return shouldShowSelladoBonificadoCard({
+                selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
+                routeNeedsPayment: this.route_needs_payment,
+                remainingFreeTrips: this.remainingFreeTrips,
                 hasComplimentarySellado: this.has_complimentary_sellado
             });
         },
@@ -1642,6 +1662,7 @@ export default {
                 this.has_complimentary_sellado = Boolean(
                     result.data.has_complimentary_sellado
                 );
+                this.selladoQuotaLoaded = true;
             });
         },
         finalizeTripCreationSuccess(trip) {
@@ -1731,9 +1752,14 @@ export default {
 
             if (type === 'trip') {
                 this.tripInfoStatus = TRIP_INFO_STATUS.LOADING;
+                this.tripInfoRequestId += 1;
             }
+            const requestId = this.tripInfoRequestId;
 
             tripApi.getTripInfo(data).then((result) => {
+                if (type === 'trip' && requestId !== this.tripInfoRequestId) {
+                    return;
+                }
                 if (result.status === true) {
                     if (type === 'trip') {
                         this.tripInfoStatus = TRIP_INFO_STATUS.READY;
@@ -1741,7 +1767,7 @@ export default {
                     trip.trip.distance = result.data.distance;
                     trip.duration = result.data.duration;
                     trip.trip.co2 = result.data.co2;
-                    trip.route_needs_payment = result.data.route_needs_payment;
+                    trip.route_needs_payment = Boolean(result.data.route_needs_payment);
                     
                     if (type === 'trip') {
                         this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
@@ -1764,6 +1790,9 @@ export default {
                     this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
                 }
             }).catch(() => {
+                if (type === 'trip' && requestId !== this.tripInfoRequestId) {
+                    return;
+                }
                 if (type === 'trip') {
                     this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
                 }

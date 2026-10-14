@@ -30,7 +30,7 @@
                     {{ $t('unLitroComplimentaryCreateBody') }}
                 </p>
             </template>
-            <template v-else-if="!linkOnly">
+            <template v-else-if="!linkOnly && remainingFreeTrips > 0">
                 <span class="un-litro-card__badge">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     {{ $t('unLitroBonificadoBadge') }}
@@ -38,7 +38,7 @@
                 <h4 class="un-litro-card__title">
                     {{ $t('unLitroBonificadoTitle') }}
                 </h4>
-                <p v-if="remainingFreeTrips > 0" class="un-litro-card__body">
+                <p class="un-litro-card__body">
                     {{ remainingMessage }}
                 </p>
             </template>

@@ -8,7 +8,7 @@
         </p>
 
         <UnLitroInfoCard
-            v-if="showUnLitroCard"
+            v-if="showUnLitroCard && (selladoCharged || selladoComplimentary || selladoBonificado)"
             :charged="selladoCharged"
             :complimentary="selladoComplimentary"
             :remaining-free-trips="remainingFreeTrips"
@@ -160,6 +160,10 @@ export default {
             default: false
         },
         selladoComplimentary: {
+            type: Boolean,
+            default: false
+        },
+        selladoBonificado: {
             type: Boolean,
             default: false
         },
