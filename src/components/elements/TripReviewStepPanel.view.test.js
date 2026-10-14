@@ -36,14 +36,14 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain('showNoLucrarModal');
     });
 
-    it('keeps charged Un litro compact with Qué es esto and a divider before preferences', () => {
+    it('shows Este viaje suma Un litro on the last step when the trip is charged', () => {
         const chargedBlock = componentSource.match(
             /class="trip-review-step__un-litro"[\s\S]*?<UnLitroInfoCard[\s\S]*?\/>/
         )?.[0];
 
         expect(chargedBlock).toBeTruthy();
-        expect(chargedBlock).toContain('link-only');
-        expect(chargedBlock).not.toContain(':charged="true"');
+        expect(chargedBlock).toContain(':charged="true"');
+        expect(chargedBlock).not.toContain('link-only');
         expect(componentSource).toContain(
             'trip-review-step__section--contribution'
         );

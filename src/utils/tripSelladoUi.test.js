@@ -102,7 +102,7 @@ describe('isOverSelladoFreeLimit', () => {
 });
 
 describe('shouldShowSelladoBonificadoCard', () => {
-    it('shows Bonificado only when the route would charge Un litro and free trips remain', () => {
+    it('shows Bonificado when free trips remain on a route that would charge Un litro', () => {
         expect(
             shouldShowSelladoBonificadoCard({
                 selladoEnabled: true,
@@ -112,14 +112,14 @@ describe('shouldShowSelladoBonificadoCard', () => {
         ).toBe(true);
     });
 
-    it('does not show Bonificado when the route does not need Un litro', () => {
+    it('shows Bonificado when the route does not need Un litro', () => {
         expect(
             shouldShowSelladoBonificadoCard({
                 selladoEnabled: true,
                 routeNeedsPayment: false,
-                remainingFreeTrips: 2
+                remainingFreeTrips: 0
             })
-        ).toBe(false);
+        ).toBe(true);
     });
 
     it('does not show Bonificado when the user has to pay', () => {
