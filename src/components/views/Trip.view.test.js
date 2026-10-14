@@ -291,4 +291,13 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('showSelladoEmptyTripCreditCard');
         expect(viewSource).toContain('next-trip-complimentary');
     });
+
+    it('shows Este viaje suma or Bonificado from trip-info on a created trip', () => {
+        expect(viewSource).toContain('unLitroCardKindFromTrip');
+        expect(viewSource).toContain('tripDetailUnLitroKind');
+        expect(viewSource).toContain(':charged="tripDetailUnLitroKind === \'charged\'"');
+        expect(viewSource).toContain(
+            ':bonificado="tripDetailUnLitroKind === \'bonificado\'"'
+        );
+    });
 });

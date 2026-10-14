@@ -24,6 +24,7 @@ describe('TripContributionStepPanel.vue', () => {
         );
         expect(componentSource).toContain(':charged="selladoCharged"');
         expect(componentSource).toContain(':complimentary="selladoComplimentary"');
+        expect(componentSource).toContain(':bonificado="selladoBonificado"');
         expect(componentSource).toContain(':remaining-free-trips="remainingFreeTrips"');
     });
 

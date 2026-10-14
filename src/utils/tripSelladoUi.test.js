@@ -10,7 +10,8 @@ import {
     shouldShowSelladoComplimentaryCard,
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
-    shouldShowUnLitroCard
+    shouldShowUnLitroCard,
+    unLitroCardKindFromTrip
 } from './tripSelladoUi.js';
 
 describe('shouldShowUnLitroCard', () => {
@@ -240,6 +241,62 @@ describe('remainingSelladoFreeTrips', () => {
         expect(remainingSelladoFreeTrips(2, 0)).toBe(2);
         expect(remainingSelladoFreeTrips(2, 1)).toBe(1);
         expect(remainingSelladoFreeTrips(2, 5)).toBe(0);
+    });
+});
+
+describe('unLitroCardKindFromTrip', () => {
+    const selladoEnabled = { selladoEnabled: true };
+
+    it('shows charged when the created trip collected Un litro', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: true,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBe('charged');
+    });
+
+    it('shows Bonificado when trip-info needed Un litro but this trip did not pay it', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBe('bonificado');
+    });
+
+    it('hides the card when trip-info says the route does not need Un litro', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: false }
+                },
+                selladoEnabled
+            )
+        ).toBeNull();
+    });
+
+    it('does not duplicate the charged card while a payment banner is showing', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: true,
+                    state: 'awaiting_payment',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                selladoEnabled
+            )
+        ).toBeNull();
     });
 });
 

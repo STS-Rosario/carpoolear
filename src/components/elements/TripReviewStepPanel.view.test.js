@@ -22,6 +22,7 @@ describe('TripReviewStepPanel.vue', () => {
             /v-if="showUnLitroCard && \(selladoCharged \|\| selladoComplimentary \|\| selladoBonificado\)"/
         );
         expect(componentSource).toContain(':complimentary="selladoComplimentary"');
+        expect(componentSource).toContain(':bonificado="selladoBonificado"');
         expect(componentSource).toContain('UnLitroInfoCard');
         expect(componentSource).toContain('unLitroReviewIncludes');
         expect(componentSource).toContain('formatPesoIntegerFromCents');

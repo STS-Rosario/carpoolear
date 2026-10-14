@@ -55,6 +55,20 @@ describe('UnLitroInfoCard', () => {
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
     });
 
+    it('shows Bonificado for a created waived trip even without remaining free trips', () => {
+        const wrapper = mountCard({
+            charged: false,
+            bonificado: true,
+            remainingFreeTrips: 0
+        });
+
+        expect(wrapper.text()).toContain('Bonificado');
+        expect(wrapper.text()).toContain('Este viaje es bonificado');
+        expect(wrapper.text()).not.toContain(
+            'Este viaje suma Un litro para Carpoolear'
+        );
+    });
+
     it('opens the explanation modal from Qué es esto', async () => {
         const wrapper = mountCard({ charged: true, freeTripsAmount: 2 });
         await wrapper.get('[data-testid="un-litro-what-is-this"]').trigger('click');
