@@ -10,6 +10,7 @@
                 :trip="createdTrip"
                 :creation-snapshot="creationSnapshot"
                 @start-return-trip="startReturnTripCreation"
+                @paid="onCreatedTripPaid"
             />
             <NewTripCreationWizard
                 v-else
@@ -1662,6 +1663,11 @@ export default {
                 );
                 this.selladoQuotaLoaded = true;
             });
+        },
+        onCreatedTripPaid(trip) {
+            if (trip) {
+                this.createdTrip = trip;
+            }
         },
         finalizeTripCreationSuccess(trip) {
             this.$refs.tripCreationWizard?.cancelDraftSave?.();

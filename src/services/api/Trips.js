@@ -82,6 +82,10 @@ class TripApi extends TaggedApi {
             friend_ids: friendIds
         });
     }
+
+    createSelladoQrOrder(tripId) {
+        return this.post('/api/trips/' + tripId + '/sellado/qr-order');
+    }
 }
 
 export { TripApi as default };

@@ -85,6 +85,25 @@
                         />
                     </p>
                 </div>
+                <modal
+                    v-if="showUnLitroPayModal"
+                    name="un-litro-pay"
+                    :hide-footer="true"
+                    @close="showUnLitroPayModal = false"
+                >
+                    <template #header>
+                        <h3>{{ $t('unLitroPublishTitle') }}</h3>
+                    </template>
+                    <template #body>
+                        <UnLitroPayCard
+                            :trip="trip"
+                            :qr-enabled="qrEnabled"
+                            radio-group-name="un-litro-pay-method-modal"
+                            @pay-later="showUnLitroPayModal = false"
+                            @paid="onSelladoPaid"
+                        />
+                    </template>
+                </modal>
                 <UnLitroInfoCard
                     v-if="showSelladoEmptyTripCreditCard"
                     next-trip-complimentary
@@ -442,14 +461,13 @@ import {
     getSeatsPillTone
 } from '../../utils/tripCardDisplay.js';
 import {
-    selladoCheckoutUrl,
+    isTripCreationPaymentQrEnabled,
     selladoDetailBannerKind,
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
     unLitroCardKindFromTrip
 } from '../../utils/tripSelladoUi.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
-import { openExternalUrl } from '../../utils/externalLink.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -460,6 +478,7 @@ import TripButtons from '../elements/TripButtons';
 import TripDetailShareButton from '../elements/TripDetailShareButton.vue';
 import AppButton from '../ui/AppButton.vue';
 import UnLitroInfoCard from '../elements/UnLitroInfoCard.vue';
+import UnLitroPayCard from '../elements/UnLitroPayCard.vue';
 
 import { injectHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -506,6 +525,7 @@ export default {
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
+            showUnLitroPayModal: false,
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0
@@ -926,14 +946,15 @@ export default {
             this.showModalPricing = false;
         },
         onPaySellado() {
-            const url = selladoCheckoutUrl(this.trip);
-            if (url) {
-                openExternalUrl(url);
-                return;
+            this.showUnLitroPayModal = true;
+        },
+        onSelladoPaid(trip) {
+            this.showUnLitroPayModal = false;
+            if (trip) {
+                this.trip = trip;
+            } else {
+                this.loadTrip();
             }
-            dialogs.message(this.$t('errorAlGuardar'), {
-                estado: 'error'
-            });
         }
     },
 
@@ -1060,6 +1081,9 @@ export default {
                     this.config && this.config.module_trip_creation_payment_enabled
             });
         },
+        qrEnabled() {
+            return isTripCreationPaymentQrEnabled(this.config);
+        },
         formattedSelladoPayAmount() {
             const cents =
                 (this.config && this.config.module_trip_creation_payment_amount_cents) ||
@@ -1093,7 +1117,8 @@ export default {
         TripPrice,
         TripDetailShareButton,
         AppButton,
-        UnLitroInfoCard
+        UnLitroInfoCard,
+        UnLitroPayCard
     },
 
     props: ['id', 'location']

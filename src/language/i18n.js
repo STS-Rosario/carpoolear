@@ -1104,6 +1104,8 @@ const messages = {
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' desde un navegador. Luego vas a tu viaje y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -3247,6 +3249,8 @@ const messages = {
             ' desde un navegador. Luego vas a la verificación de cuenta y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' desde un navegador. Luego vas a Aportar y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' desde un navegador. Luego vas a tu viaje y apretás para generar pago con el QR. Ahora escanealo con tu celular desde cualquier billetera virtual.',
         manualValidationPayIntro1:
             'Primero deberás realizar el pago de la verificación manual, que tiene un costo de {cost}.',
         manualValidationPayIntro2:
@@ -5172,6 +5176,8 @@ const messages = {
             ' in a browser. Then go to account verification and generate the QR payment. Scan it with your phone from any digital wallet.',
         comoHacerPagoQRComputadoraSuffixAportar:
             ' in a browser. Then go to Contribute and generate the QR payment. Scan it with your phone from any digital wallet.',
+        comoHacerPagoQRComputadoraSuffixUnLitro:
+            ' in a browser. Then go to your trip and generate the QR payment. Scan it with your phone from any digital wallet.',
         manualValidationPayIntro1:
             'First you need to pay for manual verification, which costs {cost}.',
         manualValidationPayIntro2:

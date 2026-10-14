@@ -8,6 +8,10 @@ export function shouldShowUnLitroCard({ selladoEnabled } = {}) {
     return Boolean(selladoEnabled);
 }
 
+export function isTripCreationPaymentQrEnabled(config) {
+    return Boolean(config && config.module_trip_creation_payment_qr_enabled);
+}
+
 export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
     if (!selladoEnabled || !trip) {
         return null;
