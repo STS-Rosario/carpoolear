@@ -10,6 +10,7 @@ import {
     shouldShowSelladoComplimentaryCard,
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner,
+    shouldShowSelladoProcessingBanner,
     shouldShowUnLitroCard,
     unLitroCardKindFromTrip,
     isTripCreationPaymentQrEnabled
@@ -392,11 +393,43 @@ describe('shouldShowSelladoPublishedBanner', () => {
         expect(
             shouldShowSelladoPublishedBanner(trip, { collection_status: 'approved' })
         ).toBe(true);
+        expect(shouldShowSelladoPublishedBanner(trip, { sellado_paid: '1' })).toBe(
+            true
+        );
         expect(shouldShowSelladoPublishedBanner(trip, {})).toBe(false);
         expect(
             shouldShowSelladoPublishedBanner(
                 { ...trip, sellado_pending: true, state: 'awaiting_payment' },
                 { collection_status: 'approved' }
+            )
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowSelladoProcessingBanner', () => {
+    it('shows while sellado is still pending after a paid return', () => {
+        const pendingTrip = {
+            needs_sellado: true,
+            sellado_pending: true,
+            state: 'awaiting_payment'
+        };
+        expect(
+            shouldShowSelladoProcessingBanner(pendingTrip, { sellado_paid: '1' })
+        ).toBe(true);
+        expect(
+            shouldShowSelladoProcessingBanner(pendingTrip, {
+                collection_status: 'approved'
+            })
+        ).toBe(true);
+        expect(shouldShowSelladoProcessingBanner(pendingTrip, {})).toBe(false);
+        expect(
+            shouldShowSelladoProcessingBanner(
+                {
+                    needs_sellado: true,
+                    sellado_pending: false,
+                    state: 'ready'
+                },
+                { sellado_paid: '1' }
             )
         ).toBe(false);
     });

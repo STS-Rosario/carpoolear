@@ -273,6 +273,23 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).not.toContain("$t('pagarSelladoViaje'");
     });
 
+    it('shows a processing banner after sellado payment return and polls until paid', () => {
+        const pendingIdx = viewSource.indexOf(
+            'selladoBannerKind === \'pending\''
+        );
+        const processingIdx = viewSource.indexOf('showSelladoProcessingBanner');
+        expect(processingIdx).toBeGreaterThan(-1);
+        expect(processingIdx).toBeLessThan(pendingIdx);
+        expect(viewSource).toContain('shouldShowSelladoProcessingBanner');
+        expect(viewSource).toContain("$t('unLitroBannerProcessing')");
+        expect(viewSource).toContain('startSelladoPaymentPoll');
+        expect(viewSource).toContain('5000');
+        expect(viewSource).toContain('stopSelladoPaymentPoll');
+        expect(viewSource).toMatch(
+            /if\s*\(\s*this\.showSelladoProcessingBanner\s*\)/
+        );
+    });
+
     it('opens the Un litro pay modal from Pagar without RapiPago', () => {
         expect(viewSource).toContain('showUnLitroPayModal');
         expect(viewSource).toContain('UnLitroPayCard');
