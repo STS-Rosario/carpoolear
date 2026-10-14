@@ -41,12 +41,12 @@ export function shouldShowSelladoBonificadoCard({
     remainingFreeTrips,
     hasComplimentarySellado
 } = {}) {
-    return Boolean(
-        selladoEnabled &&
-            routeNeedsPayment &&
-            (Number(remainingFreeTrips) || 0) > 0 &&
-            !hasComplimentarySellado
-    );
+    if (!selladoEnabled || hasComplimentarySellado) {
+        return false;
+    }
+    const mustPayThisRoute =
+        Boolean(routeNeedsPayment) && (Number(remainingFreeTrips) || 0) <= 0;
+    return !mustPayThisRoute;
 }
 
 function wouldOtherwiseChargeSellado({

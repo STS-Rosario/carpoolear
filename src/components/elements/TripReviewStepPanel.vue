@@ -131,7 +131,7 @@
                 </p>
                 <UnLitroInfoCard
                     class="trip-review-step__un-litro-card"
-                    link-only
+                    :charged="true"
                     :free-trips-amount="freeTripsAmount"
                 />
             </div>
