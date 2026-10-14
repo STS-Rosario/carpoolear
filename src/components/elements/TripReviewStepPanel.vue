@@ -86,7 +86,10 @@
             </span>
         </section>
 
-        <section v-if="showContribution" class="trip-review-step__section">
+        <section
+            v-if="showContribution"
+            class="trip-review-step__section trip-review-step__section--contribution"
+        >
             <div class="trip-review-step__section-header">
                 <h4 class="trip-review-step__section-title">
                     {{ $t('tripReviewSectionContribution') }}
@@ -128,7 +131,7 @@
                 </p>
                 <UnLitroInfoCard
                     class="trip-review-step__un-litro-card"
-                    :charged="true"
+                    link-only
                     :free-trips-amount="freeTripsAmount"
                 />
             </div>
@@ -352,6 +355,19 @@ export default {
     border-bottom: 1px solid #e8e8e8;
 }
 
+.trip-review-step__section--contribution {
+    padding-bottom: 0.5rem;
+    border-bottom: 0;
+}
+
+.trip-review-step__section--un-litro {
+    padding-top: 0.5rem;
+}
+
+.trip-review-step__price-caption {
+    margin: 0.2rem 0 0;
+}
+
 .trip-review-step__section-header {
     display: flex;
     align-items: center;
@@ -459,7 +475,7 @@ export default {
 }
 
 .trip-review-step__un-litro-amount {
-    margin: 0;
+    margin: 0 0 0.15rem;
     font-size: 1.35rem;
     font-weight: 700;
     color: #22211f;
@@ -471,7 +487,7 @@ export default {
 }
 
 .trip-review-step__un-litro-card {
-    margin-top: 0.75rem;
+    margin-top: 0.15rem;
 }
 
 .trip-review-step__pref-tags {
