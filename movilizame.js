@@ -10,7 +10,12 @@ console.log('Movilizame builder -- Starting building');
 
 const TARGET = process.env.TARGET_APP || argv.target || 'default';
 const PROD = argv.prod || false;
-const PLATFORM = argv.platform || 'android';
+const _rawPlatform = argv.platform || 'android';
+const PLATFORM = _rawPlatform === 'ios' ? 'ios' : _rawPlatform === 'android' ? 'android' : _rawPlatform === 'browser' ? 'browser' : null;
+if (!PLATFORM) {
+    console.error('Invalid platform. Must be one of: ios, android, browser');
+    process.exit(1);
+}
 if (PLATFORM === 'ios' || PLATFORM === 'android' || PLATFORM === 'browser') {
     process.env.CORDOVA = true;
 }
