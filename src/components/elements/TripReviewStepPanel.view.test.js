@@ -57,7 +57,10 @@ describe('TripReviewStepPanel.vue', () => {
             /\.trip-review-step__section--contribution \{[^}]*border-bottom:\s*0/
         );
         expect(componentSource).toContain(
-            '.trip-review-step__section--un-litro {\n    padding-top: 0.5rem;'
+            '.trip-review-step__section--un-litro {\n    padding-top: 1.25rem;\n    padding-bottom: 1.25rem;'
+        );
+        expect(componentSource).toContain(
+            '.trip-review-step__nolucrar {\n    margin-top: 1.25rem;'
         );
         expect(componentSource).toContain(
             '.trip-review-step__price-caption {\n    margin: 0.2rem 0 0;'
@@ -66,7 +69,11 @@ describe('TripReviewStepPanel.vue', () => {
             '.trip-review-step__un-litro-amount {\n    margin: 0 0 0.15rem;'
         );
         expect(componentSource).toContain(
-            '.trip-review-step__un-litro-card {\n    margin-top: 0.15rem;'
+            '.trip-review-step__un-litro-card {\n    margin-top: 0.15rem;\n    margin-bottom: 0;'
         );
+        expect(
+            (componentSource.match(/class="trip-review-step__un-litro-card"/g) || [])
+                .length
+        ).toBe(2);
     });
 });
