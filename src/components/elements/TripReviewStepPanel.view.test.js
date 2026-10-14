@@ -51,7 +51,10 @@ describe('TripReviewStepPanel.vue', () => {
             '.trip-review-step__section--contribution'
         );
         expect(componentSource).toContain(
-            '.trip-review-step__section--contribution {\n    padding-bottom: 0.5rem;\n    border-bottom: 0;'
+            '.trip-review-step__section--contribution {\n    padding-bottom: 0.5rem;'
+        );
+        expect(componentSource).not.toMatch(
+            /\.trip-review-step__section--contribution \{[^}]*border-bottom:\s*0/
         );
         expect(componentSource).toContain(
             '.trip-review-step__section--un-litro {\n    padding-top: 0.5rem;'
