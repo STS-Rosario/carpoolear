@@ -45,6 +45,16 @@ describe('UnLitroInfoCard', () => {
         );
     });
 
+    it('does not show Bonificado when the user has no remaining free trips', () => {
+        const wrapper = mountCard({
+            charged: false,
+            remainingFreeTrips: 0
+        });
+
+        expect(wrapper.text()).not.toContain('Bonificado');
+        expect(wrapper.text()).not.toContain('Este viaje es bonificado');
+    });
+
     it('opens the explanation modal from Qué es esto', async () => {
         const wrapper = mountCard({ charged: true, freeTripsAmount: 2 });
         await wrapper.get('[data-testid="un-litro-what-is-this"]').trigger('click');
