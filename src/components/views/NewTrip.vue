@@ -495,15 +495,18 @@ export default {
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled
             });
         },
+        selladoUserOverFreeLimit() {
+            return isOverSelladoFreeLimit({
+                quotaLoaded: this.selladoQuotaLoaded,
+                remainingFreeTrips: this.remainingFreeTrips,
+                userOverFreeLimit: this.needs_to_pay_for_next_trip
+            });
+        },
         selladoCharged() {
             return shouldChargeSellado({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
-                userOverFreeLimit: isOverSelladoFreeLimit({
-                    quotaLoaded: this.selladoQuotaLoaded,
-                    remainingFreeTrips: this.remainingFreeTrips,
-                    userOverFreeLimit: this.needs_to_pay_for_next_trip
-                }),
+                userOverFreeLimit: this.selladoUserOverFreeLimit,
                 hasComplimentarySellado: this.has_complimentary_sellado
             });
         },
@@ -511,11 +514,7 @@ export default {
             return shouldShowSelladoComplimentaryCard({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
-                userOverFreeLimit: isOverSelladoFreeLimit({
-                    quotaLoaded: this.selladoQuotaLoaded,
-                    remainingFreeTrips: this.remainingFreeTrips,
-                    userOverFreeLimit: this.needs_to_pay_for_next_trip
-                }),
+                userOverFreeLimit: this.selladoUserOverFreeLimit,
                 hasComplimentarySellado: this.has_complimentary_sellado
             });
         },
