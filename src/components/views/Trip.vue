@@ -9,7 +9,21 @@
                 }"
             >
                 <div
-                    v-if="selladoBannerKind === 'pending'"
+                    v-if="showSelladoProcessingBanner"
+                    class="un-litro-banner un-litro-banner--processing"
+                    role="status"
+                >
+                    <p>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerProcessing') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
+                    </p>
+                </div>
+                <div
+                    v-else-if="selladoBannerKind === 'pending'"
                     class="un-litro-banner un-litro-banner--pending"
                     role="status"
                 >
@@ -465,6 +479,7 @@ import {
     isTripCreationPaymentQrEnabled,
     selladoDetailBannerKind,
     shouldShowSelladoEmptyTripCreditCard,
+    shouldShowSelladoProcessingBanner,
     shouldShowSelladoPublishedBanner,
     unLitroCardKindFromTrip
 } from '../../utils/tripSelladoUi.js';
@@ -527,6 +542,7 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
             showUnLitroPayModal: false,
+            selladoPaymentPollId: null,
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0
@@ -956,6 +972,18 @@ export default {
             } else {
                 this.loadTrip();
             }
+        },
+        startSelladoPaymentPoll() {
+            this.stopSelladoPaymentPoll();
+            this.selladoPaymentPollId = setInterval(() => {
+                this.loadTrip();
+            }, 5000);
+        },
+        stopSelladoPaymentPoll() {
+            if (this.selladoPaymentPollId) {
+                clearInterval(this.selladoPaymentPollId);
+                this.selladoPaymentPollId = null;
+            }
         }
     },
 
@@ -970,6 +998,7 @@ export default {
     },
 
     beforeUnmount() {
+        this.stopSelladoPaymentPoll();
         this.destroyTripRouteMap();
         this.syncTripDetailMobilePageClass(false);
         bus.off('back-click', this.onBackClick);
@@ -981,6 +1010,16 @@ export default {
         },
         id: function (value) {
             this.loadTrip();
+        },
+        showSelladoProcessingBanner: {
+            immediate: true,
+            handler() {
+                if (this.showSelladoProcessingBanner) {
+                    this.startSelladoPaymentPoll();
+                    return;
+                }
+                this.stopSelladoPaymentPoll();
+            }
         },
         trip: {
             deep: true,
@@ -1067,6 +1106,12 @@ export default {
         },
         showSelladoPublishedBanner() {
             return shouldShowSelladoPublishedBanner(
+                this.trip,
+                this.$route && this.$route.query
+            );
+        },
+        showSelladoProcessingBanner() {
+            return shouldShowSelladoProcessingBanner(
                 this.trip,
                 this.$route && this.$route.query
             );
@@ -1200,6 +1245,11 @@ export default {
 .un-litro-banner--pending {
     background: var(--ds-warning-bg, #ffecc8);
     color: var(--ds-warning-text, #262626);
+}
+
+.un-litro-banner--processing {
+    background: var(--ds-info-bg, #e1effa);
+    color: var(--ds-text-primary, #22211f);
 }
 
 .un-litro-banner--rapipago {

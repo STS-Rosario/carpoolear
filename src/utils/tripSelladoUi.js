@@ -168,12 +168,23 @@ export function selladoDetailBannerKind(trip) {
     return null;
 }
 
-export function shouldShowSelladoPublishedBanner(trip, query = {}) {
-    if (!trip || !trip.needs_sellado || isSelladoPending(trip)) {
-        return false;
+export function isSelladoPaymentReturnQuery(query = {}) {
+    if (query.sellado_paid === '1' || query.sellado_paid === true) {
+        return true;
     }
     const status = String(
         query.collection_status || query.status || query.payment_result || ''
     ).toLowerCase();
     return status === 'approved' || status === 'success';
+}
+
+export function shouldShowSelladoPublishedBanner(trip, query = {}) {
+    if (!trip || !trip.needs_sellado || isSelladoPending(trip)) {
+        return false;
+    }
+    return isSelladoPaymentReturnQuery(query);
+}
+
+export function shouldShowSelladoProcessingBanner(trip, query = {}) {
+    return isSelladoPending(trip) && isSelladoPaymentReturnQuery(query);
 }

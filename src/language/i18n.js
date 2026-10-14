@@ -711,6 +711,8 @@ const messages = {
         unLitroPayLater: 'Pagar después',
         unLitroBannerPending:
             'Tu viaje todavía no es visible. Pagá Un litro para Carpoolear para publicarlo.',
+        unLitroBannerProcessing:
+            'El pago se está procesando, pronto estará listo y el viaje será público.',
         unLitroBannerPayAmount: 'Pagar {amount}',
         unLitroBannerRapipago:
             'Tu viaje se publica cuando pagues en RapiPago. Te avisamos apenas se acredite.',
@@ -2881,6 +2883,8 @@ const messages = {
         unLitroPayLater: 'Pagar después',
         unLitroBannerPending:
             'Tu viaje todavía no es visible. Pagá Un litro para Carpoolear para publicarlo.',
+        unLitroBannerProcessing:
+            'El pago se está procesando, pronto estará listo y el viaje será público.',
         unLitroBannerPayAmount: 'Pagar {amount}',
         unLitroBannerRapipago:
             'Tu viaje se publica cuando pagues en RapiPago. Te avisamos apenas se acredite.',
@@ -4859,6 +4863,8 @@ const messages = {
         unLitroPayLater: 'Pay later',
         unLitroBannerPending:
             'Your trip is not visible yet. Pay One liter for Carpoolear to publish it.',
+        unLitroBannerProcessing:
+            'Payment is being processed. It will be ready soon and the trip will be public.',
         unLitroBannerPayAmount: 'Pay {amount}',
         unLitroBannerRapipago:
             'Your trip will be published when you pay at RapiPago. We will notify you as soon as it is confirmed.',
