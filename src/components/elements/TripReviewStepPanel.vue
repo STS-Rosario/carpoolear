@@ -359,7 +359,6 @@ export default {
 
 .trip-review-step__section--contribution {
     padding-bottom: 0.5rem;
-    border-bottom: 0;
 }
 
 .trip-review-step__section--un-litro {
