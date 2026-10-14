@@ -109,7 +109,7 @@
         </section>
 
         <section
-            v-if="showUnLitroCard && (selladoCharged || selladoComplimentary || selladoBonificado)"
+            v-if="showUnLitroCard"
             class="trip-review-step__section trip-review-step__section--un-litro"
         >
             <div class="trip-review-step__section-header">
@@ -138,7 +138,7 @@
             <UnLitroInfoCard
                 v-else
                 class="trip-review-step__un-litro-card"
-                :charged="false"
+                :charged="!selladoBonificado && !selladoComplimentary"
                 :complimentary="selladoComplimentary"
                 :bonificado="selladoBonificado"
                 :remaining-free-trips="remainingFreeTrips"

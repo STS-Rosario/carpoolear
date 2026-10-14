@@ -666,7 +666,7 @@ const messages = {
             '¿Cómo se calcula la contribución sugerida?',
         unLitroName: 'Un litro para Carpoolear',
         unLitroWhatIsThis: '¿Qué es esto?',
-        unLitroAppliesTitle: 'Este viaje suma Un litro para Carpoolear',
+        unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
             'Es 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y ya está incluido en el aporte por persona, así que se reparte entre todos los que viajan.',
         unLitroBonificadoBadge: 'Bonificado',
@@ -2834,7 +2834,7 @@ const messages = {
             '¿Cómo se calcula la contribución sugerida?',
         unLitroName: 'Un litro para Carpoolear',
         unLitroWhatIsThis: '¿Qué es esto?',
-        unLitroAppliesTitle: 'Este viaje suma Un litro para Carpoolear',
+        unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
             'Es 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y ya está incluido en el aporte por persona, así que se reparte entre todos los que viajan.',
         unLitroBonificadoBadge: 'Bonificado',
@@ -4810,7 +4810,7 @@ const messages = {
             'How is the suggested contribution calculated?',
         unLitroName: 'One liter for Carpoolear',
         unLitroWhatIsThis: 'What is this?',
-        unLitroAppliesTitle: 'This trip adds One liter for Carpoolear',
+        unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
         unLitroAppliesBody:
             'It is 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is already included in the per-person contribution, so it is split among everyone traveling.',
         unLitroBonificadoBadge: 'Waived',

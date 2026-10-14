@@ -8,8 +8,8 @@
         </p>
 
         <UnLitroInfoCard
-            v-if="showUnLitroCard && (selladoCharged || selladoComplimentary || selladoBonificado)"
-            :charged="selladoCharged"
+            v-if="showUnLitroCard"
+            :charged="!selladoBonificado && !selladoComplimentary"
             :complimentary="selladoComplimentary"
             :bonificado="selladoBonificado"
             :remaining-free-trips="remainingFreeTrips"

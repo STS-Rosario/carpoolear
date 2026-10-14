@@ -365,13 +365,13 @@
                                 </div>
                             </div>
                             <div class="trip-detail__contribucion">
+                                <TripPrice />
                                 <UnLitroInfoCard
                                     v-if="tripDetailUnLitroKind"
                                     :charged="tripDetailUnLitroKind === 'charged'"
                                     :bonificado="tripDetailUnLitroKind === 'bonificado'"
                                     :free-trips-amount="freeTripsAmount"
                                 />
-                                <TripPrice />
                             </div>
                             <div class="trip-detail__cta">
                                 <TripButtons

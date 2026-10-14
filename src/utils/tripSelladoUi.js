@@ -12,16 +12,13 @@ export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
     if (!selladoEnabled || !trip) {
         return null;
     }
-    if (selladoDetailBannerKind(trip)) {
-        return null;
-    }
-    if (trip.needs_sellado) {
+    if (
+        trip.needs_sellado ||
+        (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado)
+    ) {
         return 'charged';
     }
-    if (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado) {
-        return 'bonificado';
-    }
-    return null;
+    return 'bonificado';
 }
 
 export function isOverSelladoFreeLimit({
@@ -38,15 +35,12 @@ export function isOverSelladoFreeLimit({
 export function shouldShowSelladoBonificadoCard({
     selladoEnabled,
     routeNeedsPayment,
-    remainingFreeTrips,
     hasComplimentarySellado
 } = {}) {
     if (!selladoEnabled || hasComplimentarySellado) {
         return false;
     }
-    const mustPayThisRoute =
-        Boolean(routeNeedsPayment) && (Number(remainingFreeTrips) || 0) <= 0;
-    return !mustPayThisRoute;
+    return !routeNeedsPayment;
 }
 
 function wouldOtherwiseChargeSellado({

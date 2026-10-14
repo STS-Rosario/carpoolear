@@ -522,7 +522,6 @@ export default {
             return shouldShowSelladoBonificadoCard({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
-                remainingFreeTrips: this.remainingFreeTrips,
                 hasComplimentarySellado: this.has_complimentary_sellado
             });
         },

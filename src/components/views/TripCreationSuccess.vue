@@ -78,12 +78,16 @@
             <h2 class="trip-creation-success__title">{{ $t('tripCreationSuccessTitle') }}</h2>
             <div class="trip-creation-success__emoji" aria-hidden="true">🥳</div>
             <p class="trip-creation-success__heading">{{ $t('tripCreationSuccessAllSet') }}</p>
-            <UnLitroInfoCard
-                v-if="unLitroKind === 'bonificado'"
-                :charged="false"
-                :bonificado="unLitroKind === 'bonificado'"
-                :free-trips-amount="freeTripsAmount"
-            />
+            <div v-if="unLitroKind" class="trip-creation-success__un-litro">
+                <h4 class="trip-creation-success__un-litro-title">
+                    {{ $t('unLitroSectionTitle') }}
+                </h4>
+                <UnLitroInfoCard
+                    :charged="unLitroKind === 'charged'"
+                    :bonificado="unLitroKind === 'bonificado'"
+                    :free-trips-amount="freeTripsAmount"
+                />
+            </div>
         </template>
 
         <div class="trip-creation-success__actions">
@@ -443,6 +447,25 @@ export default {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
+}
+
+.trip-creation-success__un-litro {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    text-align: left;
+}
+
+.trip-creation-success__un-litro-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+}
+
+.trip-creation-success__un-litro :deep(.un-litro-card) {
+    margin-bottom: 0;
 }
 
 .trip-creation-success__actions {
