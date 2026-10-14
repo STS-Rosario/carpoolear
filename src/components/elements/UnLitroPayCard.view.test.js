@@ -10,7 +10,7 @@ describe('UnLitroPayCard.vue', () => {
         expect(componentSource).toContain('qrEnabled');
         expect(componentSource).toContain('un-litro-pay-method--disabled');
         expect(componentSource).toContain(':disabled="!qrEnabled"');
-        expect(componentSource).toContain("value=\"qr\"");
+        expect(componentSource).toContain('value="qr"');
         expect(componentSource).toContain("$t('unLitroPayQr')");
         expect(componentSource).not.toContain('RapiPago');
         expect(componentSource).not.toContain('unLitroPayRapipago');
@@ -30,11 +30,11 @@ describe('UnLitroPayCard.vue', () => {
     });
 
     it('pays Mercado Pago from the selected method and offers Pagar después', () => {
-        expect(componentSource).toContain("value=\"mercado_pago\"");
+        expect(componentSource).toContain('value="mercado_pago"');
         expect(componentSource).toContain('selladoCheckoutUrl');
         expect(componentSource).toContain('openExternalUrl');
         expect(componentSource).toContain("$t('unLitroPayLater')");
-        expect(componentSource).toContain("data-testid=\"un-litro-pay-now\"");
-        expect(componentSource).toContain("data-testid=\"un-litro-pay-qr\"");
+        expect(componentSource).toContain('data-testid="un-litro-pay-now"');
+        expect(componentSource).toContain('data-testid="un-litro-pay-qr"');
     });
 });
