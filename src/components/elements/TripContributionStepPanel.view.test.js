@@ -20,9 +20,11 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain('showUnLitroCard');
         expect(componentSource).toContain('selladoBonificado');
         expect(componentSource).toMatch(
-            /v-if="showUnLitroCard && \(selladoCharged \|\| selladoComplimentary \|\| selladoBonificado\)"/
+            /v-if="showUnLitroCard"/
         );
-        expect(componentSource).toContain(':charged="selladoCharged"');
+        expect(componentSource).toContain(
+            ':charged="!selladoBonificado && !selladoComplimentary"'
+        );
         expect(componentSource).toContain(':complimentary="selladoComplimentary"');
         expect(componentSource).toContain(':bonificado="selladoBonificado"');
         expect(componentSource).toContain(':remaining-free-trips="remainingFreeTrips"');

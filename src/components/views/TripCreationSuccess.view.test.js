@@ -80,10 +80,14 @@ describe('TripCreationSuccess.vue', () => {
         );
     });
 
-    it('shows Bonificado when the created trip was waived Un litro', () => {
+    it('shows Bonificado or Este viaje aporta with last-step card styling', () => {
         expect(componentSource).toContain('unLitroCardKindFromTrip');
+        expect(componentSource).toContain('v-if="unLitroKind"');
+        expect(componentSource).toContain(':charged="unLitroKind === \'charged\'"');
         expect(componentSource).toContain(':bonificado="unLitroKind === \'bonificado\'"');
-        expect(componentSource).toContain('v-if="unLitroKind === \'bonificado\'"');
+        expect(componentSource).toContain('trip-creation-success__un-litro');
+        expect(componentSource).toContain("$t('unLitroSectionTitle')");
+        expect(componentSource).toContain('text-align: left');
     });
 
     it('shows Un litro payment methods before share actions when sellado is pending', () => {

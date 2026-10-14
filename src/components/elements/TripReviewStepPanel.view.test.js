@@ -19,7 +19,10 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain('selladoComplimentary');
         expect(componentSource).toContain('selladoBonificado');
         expect(componentSource).toMatch(
-            /v-if="showUnLitroCard && \(selladoCharged \|\| selladoComplimentary \|\| selladoBonificado\)"/
+            /v-if="showUnLitroCard"/
+        );
+        expect(componentSource).toContain(
+            ':charged="!selladoBonificado && !selladoComplimentary"'
         );
         expect(componentSource).toContain(':complimentary="selladoComplimentary"');
         expect(componentSource).toContain(':bonificado="selladoBonificado"');
@@ -36,7 +39,7 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain('showNoLucrarModal');
     });
 
-    it('shows Este viaje suma Un litro on the last step when the trip is charged', () => {
+    it('shows Este viaje aporta Un litro on the last step when the route includes Un litro', () => {
         const chargedBlock = componentSource.match(
             /class="trip-review-step__un-litro"[\s\S]*?<UnLitroInfoCard[\s\S]*?\/>/
         )?.[0];

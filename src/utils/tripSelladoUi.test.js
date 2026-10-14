@@ -102,14 +102,14 @@ describe('isOverSelladoFreeLimit', () => {
 });
 
 describe('shouldShowSelladoBonificadoCard', () => {
-    it('shows Bonificado when free trips remain on a route that would charge Un litro', () => {
+    it('does not show Bonificado when the route includes Un litro, even with remaining free trips', () => {
         expect(
             shouldShowSelladoBonificadoCard({
                 selladoEnabled: true,
                 routeNeedsPayment: true,
                 remainingFreeTrips: 2
             })
-        ).toBe(true);
+        ).toBe(false);
     });
 
     it('shows Bonificado when the route does not need Un litro', () => {
@@ -260,7 +260,7 @@ describe('unLitroCardKindFromTrip', () => {
         ).toBe('charged');
     });
 
-    it('shows Bonificado when trip-info needed Un litro but this trip did not pay it', () => {
+    it('shows charged when trip-info includes Un litro even if this trip did not collect payment', () => {
         expect(
             unLitroCardKindFromTrip(
                 {
@@ -270,10 +270,10 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
-        ).toBe('bonificado');
+        ).toBe('charged');
     });
 
-    it('hides the card when trip-info says the route does not need Un litro', () => {
+    it('shows Bonificado when sellado is enabled but the route does not include Un litro', () => {
         expect(
             unLitroCardKindFromTrip(
                 {
@@ -283,10 +283,10 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
-        ).toBeNull();
+        ).toBe('bonificado');
     });
 
-    it('does not duplicate the charged card while a payment banner is showing', () => {
+    it('still shows charged below contribución while a payment banner is showing', () => {
         expect(
             unLitroCardKindFromTrip(
                 {
@@ -296,7 +296,7 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
-        ).toBeNull();
+        ).toBe('charged');
     });
 });
 
