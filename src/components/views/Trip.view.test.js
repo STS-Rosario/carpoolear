@@ -298,7 +298,7 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain("$t('unLitroAdminNeedsPaymentTitle')");
         expect(viewSource).toContain("$t('unLitroAdminNeedsPaymentBody')");
         expect(viewSource).toMatch(
-            /v-if="showUnLitroOwnerPaymentBanner[\s\S]*selladoBannerKind === 'pending'/
+            /showUnLitroOwnerPaymentBanner[\s\S]{0,80}selladoBannerKind === 'pending'/
         );
         expect(viewSource).not.toMatch(
             /v-if="selladoBannerKind === 'pending'"/

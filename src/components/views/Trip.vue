@@ -9,7 +9,30 @@
                 }"
             >
                 <div
-                    v-if="selladoBannerKind === 'pending'"
+                    v-if="showUnLitroAdminNeedsPaymentCard"
+                    class="un-litro-banner un-litro-banner--pending"
+                    role="status"
+                    data-testid="un-litro-admin-needs-payment"
+                >
+                    <p>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        <span>
+                            <strong>{{
+                                $t('unLitroAdminNeedsPaymentTitle')
+                            }}</strong>
+                            {{ $t('unLitroAdminNeedsPaymentBody') }}
+                        </span>
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
+                    </p>
+                </div>
+                <div
+                    v-else-if="
+                        showUnLitroOwnerPaymentBanner &&
+                            selladoBannerKind === 'pending'
+                    "
                     class="un-litro-banner un-litro-banner--pending"
                     role="status"
                 >
@@ -34,7 +57,10 @@
                     </AppButton>
                 </div>
                 <div
-                    v-else-if="selladoBannerKind === 'rapipago'"
+                    v-else-if="
+                        showUnLitroOwnerPaymentBanner &&
+                            selladoBannerKind === 'rapipago'
+                    "
                     class="un-litro-banner un-litro-banner--rapipago"
                     role="status"
                 >
@@ -51,7 +77,10 @@
                     </AppButton>
                 </div>
                 <div
-                    v-else-if="selladoBannerKind === 'failed'"
+                    v-else-if="
+                        showUnLitroOwnerPaymentBanner &&
+                            selladoBannerKind === 'failed'
+                    "
                     class="un-litro-banner un-litro-banner--failed"
                     role="alert"
                 >
@@ -441,6 +470,10 @@ import {
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoPublishedBanner
 } from '../../utils/tripSelladoUi.js';
+import {
+    shouldShowUnLitroAdminNeedsPaymentCard,
+    shouldShowUnLitroOwnerPaymentBanner
+} from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import { openExternalUrl } from '../../utils/externalLink.js';
 import TripDriver from '../elements/TripDriver';
@@ -1035,6 +1068,12 @@ export default {
         },
         selladoBannerKind() {
             return selladoDetailBannerKind(this.trip);
+        },
+        showUnLitroOwnerPaymentBanner() {
+            return shouldShowUnLitroOwnerPaymentBanner(this.trip, this.user);
+        },
+        showUnLitroAdminNeedsPaymentCard() {
+            return shouldShowUnLitroAdminNeedsPaymentCard(this.trip, this.user);
         },
         showSelladoPublishedBanner() {
             return shouldShowSelladoPublishedBanner(
