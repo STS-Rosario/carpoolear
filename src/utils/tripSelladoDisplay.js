@@ -26,7 +26,7 @@ export function shouldShowSelladoPending(trip, currentUser) {
     }
 
     return (
-        currentUser.id === trip.user.id || Boolean(currentUser['is_admin'])
+        currentUser.id === trip.user.id || Boolean(currentUser.is_admin)
     );
 }
 
@@ -39,7 +39,7 @@ export function shouldShowUnLitroOwnerPaymentBanner(trip, currentUser) {
 }
 
 export function shouldShowUnLitroAdminNeedsPaymentCard(trip, currentUser) {
-    if (!isSelladoPending(trip) || !currentUser || !currentUser['is_admin']) {
+    if (!isSelladoPending(trip) || !currentUser || !currentUser.is_admin) {
         return false;
     }
 
