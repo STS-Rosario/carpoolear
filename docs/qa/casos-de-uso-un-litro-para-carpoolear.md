@@ -2,7 +2,7 @@
 
 Checklist para probar a mano que **Un litro para Carpoolear** (antes *Sellado de viaje*) funciona de punta a punta: creación, pago, visibilidad, edición, cupo gratis y crédito por viaje vacío.
 
-Usá este documento en el entorno de prueba (staging o un build de prueba). Marcá cada caso al completarlo. Si algo falla, anotá cuenta, ruta, fecha, plataforma y captura.
+Usá este documento en el entorno de prueba (staging o un build de prueba). Los pagos de Un litro van a **Mercado Pago de producción**: se debitan en cuentas reales, no hay cuentas de test. Marcá cada caso al completarlo. Si algo falla, anotá cuenta, ruta, fecha, plataforma y captura.
 
 ---
 
@@ -12,8 +12,9 @@ Un litro es el equivalente a **1 litro de nafta** que se suma a los gastos en al
 
 Mientras el pago no esté acreditado:
 
-- el viaje **queda creado, pero solo lo ve quien lo publicó**
-- no aparece en búsquedas de otras personas
+- el viaje **queda creado**, pero **no aparece en búsquedas** (tampoco para una admin)
+- quien lo publicó lo ve en **Mis viajes** y en el detalle, con el aviso para pagar
+- una admin **no** lo ve en el listado; **sí** puede abrir el detalle por **URL directa** y ve una tarjeta de que necesita el pago (sin botón para pagarlo ella)
 - no se puede invitar amistades
 - no se mandan alertas de “tu amistad publicó un viaje”
 
@@ -32,9 +33,12 @@ Necesitás al menos:
 | Conductora A (cuenta nueva o con pocos viajes) | Probar cupo de viajes bonificados |
 | Conductora B (ya superó el cupo gratis) | Probar cobro, pago MP, QR y crédito |
 | Otra persona C (sin relación o amistad, según el caso) | Verificar que el viaje impago no se ve |
+| Admin | Verificar que el impago no sale en el listado y que por URL directa ve la tarjeta de pago pendiente |
 | Amistad D de B, con alertas de viaje activas | Verificar que la alerta sale recién cuando el viaje se publica |
 
-También hace falta una cuenta de **Mercado Pago de prueba** (tarjeta de test o QR de test del ambiente).
+Hace falta una cuenta de **Mercado Pago real**. Este flujo usa las credenciales de **producción** de Carpoolear: el cobro de 1 L se debita de verdad. No uses cuentas de test de MP (ni tarjetas de prueba): no van a acreditar el viaje.
+
+Antes de pagar, confirmá el monto en pantalla. Si un caso no necesita acreditar (por ejemplo “pagar después” o “volver atrás del checkout”), no completes el pago.
 
 ### Plataformas
 
@@ -104,17 +108,18 @@ Qué **no** cuenta:
 
 ### 3.3 Crédito por viaje vacío
 
-Si una conductora **pagó** Un litro, el viaje se publicó, **ya pasó la fecha** y **nadie fue aceptada**, Carpoolear bonifica el **próximo** viaje que sí debería cobrarse.
+Si una conductora **pagó** Un litro y ese viaje **no tuvo pasajera aceptada**, Carpoolear no le vuelve a cobrar Un litro en los viajes siguientes **hasta que alguno sí lleve pasajera**.
 
-No da crédito:
+La cadena se mantiene si publica varias veces y todos esos viajes quedan vacíos: el 2.º, el 3.º y los que sigan se publican sin pagar. Recién cuando un viaje tiene **al menos una pasajera aceptada**, el **próximo** viaje que aplique se cobra de nuevo, como siempre.
 
-- Un viaje que todavía no salió
+No arranca el crédito:
+
+- Un viaje que todavía no salió (la fecha no pasó)
 - Un viaje que nunca se pagó
 - Un viaje cancelado
 - Un viaje que sí tuvo pasajeras aceptadas
-- Pedidos de asiento pendientes (no aceptados): **sí dejan el crédito**
 
-El crédito se usa una sola vez. Un viaje bonificado por crédito **no** genera otro crédito si también queda vacío.
+Pedidos de asiento pendientes (todavía no aceptados) **no cortan** el crédito: el viaje sigue contando como vacío.
 
 ### 3.4 No se cobra dos veces el mismo viaje
 
@@ -197,13 +202,16 @@ Después de **Continuar al pago**:
 
 ### 5.3 Pago con Mercado Pago (tarjeta / cuenta)
 
-- [ ] **Pagar** abre el checkout de Mercado Pago (web o app, según plataforma)
-- [ ] Un pago **aprobado** vuelve al detalle del viaje
+Es un cobro **real** (producción). El monto tiene que ser solo el de 1 L.
+
+- [ ] **Pagar** abre el checkout de Mercado Pago de producción (web o app, según plataforma)
+- [ ] Un pago **aprobado** con una cuenta MP real vuelve al detalle del viaje
 - [ ] Mientras acredita, puede verse “El pago se está procesando…”
 - [ ] Cuando acredita: banner verde “Pago acreditado. Tu viaje ya es visible…”
 - [ ] El viaje pasa a verse en búsquedas de otras personas
 - [ ] Quien publicó puede invitar amistades
 - [ ] El monto cobrado en MP es el de Un litro, no la contribución del viaje
+- [ ] En la cuenta de MP de quien pagó figura el débito; no alcanza con un sandbox de test
 
 ### 5.4 Pago con QR
 
@@ -246,7 +254,9 @@ Usá la conductora B (viaje impago Rosario → Buenos Aires) y la persona C.
 - [ ] C **no** lo ve en el buscador (mismos origen/destino/fecha)
 - [ ] C no entra por el link directo del viaje (no hay detalle usable)
 - [ ] Quien no inició sesión tampoco lo ve
-- [ ] Una persona admin, si busca como el resto, tampoco ve el viaje ajeno impago
+- [ ] Una persona admin, si busca como el resto, **tampoco** ve el viaje ajeno impago en el listado
+- [ ] La misma admin, con la **URL directa** del viaje, sí entra al detalle
+- [ ] En ese detalle ve una tarjeta de que el viaje **necesita el pago** de Un litro (sin botón para pagarlo ella)
 - [ ] No se pueden pedir asientos sobre un viaje impago
 - [ ] **Invitar amistades** está bloqueado, con el aviso de que hay que pagar primero
 
@@ -333,11 +343,13 @@ Con viaje impago, cambiar horario, asientos o descripción.
 
 ## 10. Crédito por viaje vacío (bonificación)
 
+La idea: no volver a cobrar Un litro mientras los viajes sigan sin pasajera. El cobro se retoma en el viaje **siguiente** al primero que sí tuvo a alguien aceptada.
+
 ### 10.1 Se genera el crédito
 
 Con la cuenta B:
 
-1. Publicar Rosario → Buenos Aires, pagar Un litro, **no aceptar a nadie**.
+1. Publicar Rosario → Buenos Aires, pagar Un litro (cobro real de MP), **no aceptar a nadie**.
 2. Esperar a que la fecha/hora del viaje haya pasado (en prueba se puede crear con fecha de ayer o ajustar el reloj/datos de prueba).
 
 - [ ] En el detalle de ese viaje, **solo la dueña** ve “El próximo viaje invita Carpoolear”
@@ -347,7 +359,7 @@ Con la cuenta B:
 - [ ] Si solo hubo pedidos pendientes, **sí** hay crédito
 - [ ] Si el viaje se canceló, **no** hay crédito
 
-### 10.2 Se usa el crédito
+### 10.2 El siguiente viaje sale bonificado
 
 El próximo viaje de B que **sí debería cobrarse** (misma ruta, cupo agotado):
 
@@ -356,10 +368,22 @@ El próximo viaje de B que **sí debería cobrarse** (misma ruta, cupo agotado):
 - [ ] El viaje se publica de una
 - [ ] Un litro no se suma al costo de este viaje
 
-### 10.3 El crédito no se reusa
+### 10.3 Varios viajes seguidos sin pasajera
 
-- [ ] Un segundo viaje que aplique **ya cobra** de nuevo
-- [ ] El viaje bonificado por crédito, si también queda vacío, **no** genera otro crédito
+Seguir publicando Rosario → Buenos Aires **sin aceptar a nadie**, y dejar que cada uno pase vacío:
+
+- [ ] El 2.º viaje (después del pago) sale bonificado
+- [ ] El 3.º también sale bonificado (no vuelve a pedir Un litro)
+- [ ] El 4.º igual, mientras ninguno haya tenido pasajera aceptada
+- [ ] En cada uno de esos, la dueña puede ver que Carpoolear invita / que el próximo también queda bonificado si sigue vacío
+
+### 10.4 Se corta cuando hay pasajera
+
+En uno de esos viajes vacíos (el original pago o uno bonificado), **aceptar a alguien**. Después, crear otro Rosario → Buenos Aires:
+
+- [ ] Ese viaje **siguiente** vuelve a pedir Un litro y Mercado Pago
+- [ ] No se publica hasta pagar
+- [ ] Si ese viaje pago otra vez queda vacío, la cadena de crédito **arranca de nuevo**
 
 ---
 
@@ -404,13 +428,17 @@ Revisar en **argentino (vos)**:
 
 Estos son regresiones. Si alguno ocurre, es un bug.
 
-- [ ] Un viaje impago aparece en el buscador de otra persona
+- [ ] Un viaje impago aparece en el buscador de otra persona o de una admin
+- [ ] Una admin no puede abrir por URL un viaje ajeno impago
+- [ ] Una admin ve el botón de pagar Un litro en un viaje que no es suyo
 - [ ] Se cobra Un litro en Rosario → Funes o en un viaje dentro de la misma ciudad/zona
 - [ ] Se cobra Un litro durante los viajes del cupo gratis
 - [ ] Se cobra dos veces el mismo viaje por editar la ruta
-- [ ] Se publica un viaje de corredor pago, cupo agotado, **sin** pagar y **sin** crédito
+- [ ] Se publica un viaje de corredor pago, cupo agotado, **sin** pagar y **sin** crédito de viaje vacío
 - [ ] Queda un viaje oculto para siempre después de un pago aprobado
-- [ ] El crédito de viaje vacío se usa más de una vez
+- [ ] Después de un viaje Un litro vacío, el siguiente cobra de nuevo (tendría que seguir bonificado)
+- [ ] Varios viajes seguidos sin pasajera: el 3.º o 4.º vuelve a pedir pago
+- [ ] Después de un viaje **con** pasajera aceptada, el siguiente se publica sin pagar
 - [ ] Las amistades reciben la alerta antes de que el pago esté acreditado
 - [ ] Un litro se cobra sobre la contribución total del viaje en vez del monto de 1 L
 - [ ] El QR o Mercado Pago de Un litro acredita un Club / donación, o al revés
@@ -426,11 +454,11 @@ En este orden, con una cuenta que ya superó el cupo y otra cuenta para buscar:
 3. Editar a una ruta que no aplica → sigue publicado, no pide pago.
 4. Volver a Rosario → Buenos Aires → **no** cobra de nuevo.
 5. Otro viaje Rosario → Buenos Aires → cobra de nuevo.
-6. Un viaje pago que pasó vacío → el siguiente Rosario → Buenos Aires sale bonificado.
+6. Un viaje pago que pasó vacío → el siguiente Rosario → Buenos Aires sale bonificado. Otro más, todavía sin pasajera, **también** sale bonificado. Recién después de aceptar a alguien, el que sigue cobra.
 7. Rosario → Funes → **no** cobra.
 8. Cuenta nueva: los dos primeros Rosario → Buenos Aires salen gratis; el tercero cobra.
 
-Si esos ocho dan bien, el núcleo está sano. El resto de este documento cubre bordes (QR, Rapipago, fallo, semanal, regreso, cupo con cancelaciones).
+Si esos ocho dan bien, el núcleo está sano. El resto de este documento cubre bordes (QR, Rapipago, fallo, semanal, regreso, cupo con cancelaciones). Los pagos de esta lista son cobros reales de Mercado Pago.
 
 ---
 
@@ -442,7 +470,7 @@ Incluí:
 - Plataforma (web escritorio, web móvil, Android, iOS)
 - Cuentas usadas
 - Origen, destino y paradas
-- Si la cuenta tenía cupo, crédito o ya había pagado ese viaje
+- Si la cuenta tenía cupo, crédito de viaje vacío (y cuántos vacíos seguidos) o ya había pagado ese viaje
 - Qué viste vs. qué esperabas
 - Capturas o ID del viaje
-- Si el dinero se debitó en Mercado Pago aunque el viaje no se haya publicado
+- Si el dinero se debitó en Mercado Pago (producción) aunque el viaje no se haya publicado
