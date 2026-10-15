@@ -270,8 +270,10 @@ Usá la conductora B (viaje impago Rosario → Buenos Aires) y la persona C.
 
 ### 6.3 Compartir
 
-- [ ] Con el viaje impago no está la pantalla de éxito con **Compartir** / **Cargar viaje de regreso** / **Guardar plantilla** (primero hay que pagar)
-- [ ] Con el viaje ya publicado, compartir y el resto de acciones vuelven a estar
+Después de crear, aunque Un litro esté impago, la pantalla de “viaje creado” **sí** muestra **Compartir**, **Cargar viaje de regreso** y **Guardar plantilla**. Eso no depende del pago.
+
+- [ ] El link compartido de un viaje **impago** no le sirve a otra persona: no entra al detalle
+- [ ] Después de pagar, el mismo tipo de link ya abre el viaje publicado
 
 ---
 
@@ -332,12 +334,13 @@ Con viaje impago, cambiar horario, asientos o descripción.
 
 ---
 
-## 9. Viaje de regreso, semanal y plantillas
+## 9. Viaje de regreso y plantillas
+
+Guardar o usar una plantilla **no está atado** a Un litro: se puede guardar con el viaje todavía impago. Lo que sí aplica son las reglas normales al **crear** un viaje (aunque el formulario venga de una plantilla o de un regreso).
 
 - [ ] Publicar ida con Un litro, pagar, y cargar el **regreso** (Buenos Aires → Rosario): el regreso es otro viaje y, si el cupo está agotado, **vuelve a pedir** Un litro
-- [ ] Un viaje **semanal** en corredor que aplica se cobra como cualquier otro (no se publica gratis por ser semanal)
 - [ ] Crear desde una **plantilla** de Rosario → Buenos Aires con cupo agotado: muestra Un litro y pide pago
-- [ ] Guardar plantilla recién está disponible cuando el viaje **no** está esperando el pago
+- [ ] Guardar plantilla está disponible aunque el viaje recién creado esté esperando el pago
 
 ---
 
@@ -350,7 +353,7 @@ La idea: no volver a cobrar Un litro mientras los viajes sigan sin pasajera. El 
 Con la cuenta B:
 
 1. Publicar Rosario → Buenos Aires, pagar Un litro (cobro real de MP), **no aceptar a nadie**.
-2. Esperar a que la fecha/hora del viaje haya pasado (en prueba se puede crear con fecha de ayer o ajustar el reloj/datos de prueba).
+2. Esperar a que la fecha/hora del viaje haya pasado. Lo más fácil: crearlo **para dentro de unos minutos** y esperar. No hace falta fecha de ayer ni tocar el reloj.
 
 - [ ] En el detalle de ese viaje, **solo la dueña** ve “El próximo viaje invita Carpoolear”
 - [ ] Otra persona no ve ese mensaje
@@ -429,7 +432,7 @@ Revisar en **argentino (vos)**:
 Estos son regresiones. Si alguno ocurre, es un bug.
 
 - [ ] Un viaje impago aparece en el buscador de otra persona o de una admin
-- [ ] Una admin no puede abrir por URL un viaje ajeno impago
+- [ ] Una admin **no puede** abrir por URL un viaje ajeno impago (sí tiene que poder entrar; ve la tarjeta de que necesita pago, sin botón para pagarlo)
 - [ ] Una admin ve el botón de pagar Un litro en un viaje que no es suyo
 - [ ] Se cobra Un litro en Rosario → Funes o en un viaje dentro de la misma ciudad/zona
 - [ ] Se cobra Un litro durante los viajes del cupo gratis
@@ -458,7 +461,7 @@ En este orden, con una cuenta que ya superó el cupo y otra cuenta para buscar:
 7. Rosario → Funes → **no** cobra.
 8. Cuenta nueva: los dos primeros Rosario → Buenos Aires salen gratis; el tercero cobra.
 
-Si esos ocho dan bien, el núcleo está sano. El resto de este documento cubre bordes (QR, Rapipago, fallo, semanal, regreso, cupo con cancelaciones). Los pagos de esta lista son cobros reales de Mercado Pago.
+Si esos ocho dan bien, el núcleo está sano. El resto de este documento cubre bordes (QR, Rapipago, fallo, regreso, cupo con cancelaciones). Los pagos de esta lista son cobros reales de Mercado Pago.
 
 ---
 
