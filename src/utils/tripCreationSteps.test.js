@@ -6,9 +6,11 @@ import {
     getNextStep,
     getPreviousStep,
     getTripCreationStepLabelKey,
+    getRoleSwitchState,
     getVisibleSteps,
     isCarStep,
     isStepDisabledForPassenger,
+    resolveVisibleStep,
     STEP,
     validateStep
 } from './tripCreationSteps.js';
@@ -46,26 +48,31 @@ describe('tripCreationSteps step labels', () => {
             'tripCreationStepLabelLastDetails'
         );
     });
+
+    it('labels the description step as details for passengers', () => {
+        expect(getTripCreationStepLabelKey(STEP.DESCRIPTION, true)).toBe(
+            'tripCreationStepLabelDescriptionPassenger'
+        );
+        expect(getTripCreationStepLabelKey(STEP.SCHEDULE, true)).toBe(
+            'tripCreationStepLabelSchedule'
+        );
+    });
 });
 
 describe('tripCreationSteps navigation', () => {
-    it('lists ten steps for drivers and skips car/seats/contribution/preferences for passengers', () => {
+    it('lists ten steps for drivers and skips car/seats/contribution for passengers', () => {
         expect(ALL_WIZARD_STEPS).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         expect(getVisibleSteps(false)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-        // A passenger always requests a single seat and never sets the
-        // trip's preferences (that is the driver's call), so car, seats,
-        // contribution and description/preferences are all skipped.
-        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 10]);
+        expect(getVisibleSteps(true)).toEqual([1, 2, 3, 4, 5, 9, 10]);
     });
 
-    it('marks car, seats, contribution and description as disabled for passengers', () => {
+    it('marks car, seats and contribution as disabled for passengers', () => {
         expect(isStepDisabledForPassenger(STEP.CAR, true)).toBe(true);
         expect(isStepDisabledForPassenger(STEP.CAR, false)).toBe(false);
         expect(isStepDisabledForPassenger(STEP.SEATS, true)).toBe(true);
         expect(isStepDisabledForPassenger(STEP.SEATS, false)).toBe(false);
         expect(isStepDisabledForPassenger(STEP.CONTRIBUTION, true)).toBe(true);
-        expect(isStepDisabledForPassenger(STEP.DESCRIPTION, true)).toBe(true);
-        expect(isStepDisabledForPassenger(STEP.DESCRIPTION, false)).toBe(false);
+        expect(isStepDisabledForPassenger(STEP.DESCRIPTION, true)).toBe(false);
         expect(isCarStep(6)).toBe(true);
     });
 
@@ -117,13 +124,11 @@ describe('tripCreationSteps navigation', () => {
     });
 
     it('navigates next and previous across passenger-visible steps', () => {
-        // For passengers, schedule is immediately followed by the review
-        // step: car, seats, contribution and description are all skipped.
         expect(
             getNextStep(STEP.SCHEDULE, true, { wantsIntermediateStops: false })
-        ).toBe(STEP.LAST_DETAILS);
+        ).toBe(STEP.DESCRIPTION);
         expect(
-            getPreviousStep(STEP.LAST_DETAILS, true, {
+            getPreviousStep(STEP.DESCRIPTION, true, {
                 wantsIntermediateStops: false
             })
         ).toBe(STEP.SCHEDULE);
@@ -149,8 +154,87 @@ describe('tripCreationSteps navigation', () => {
         expect(canNavigateToStep(STEP.STOPS, STEP.ORIGIN, false)).toBe(false);
         expect(canNavigateToStep(STEP.CAR, 5, true)).toBe(false);
         expect(canNavigateToStep(STEP.SEATS, 10, true)).toBe(false);
-        expect(canNavigateToStep(STEP.DESCRIPTION, 10, true)).toBe(false);
+        expect(canNavigateToStep(STEP.DESCRIPTION, 10, true)).toBe(true);
         expect(canNavigateToStep(STEP.SEATS, 10, false)).toBe(true);
+    });
+
+    it('keeps steps the role can see when resolving a visible step', () => {
+        expect(resolveVisibleStep(STEP.SEATS, false)).toBe(STEP.SEATS);
+        expect(resolveVisibleStep(STEP.DESCRIPTION, true)).toBe(STEP.DESCRIPTION);
+        expect(resolveVisibleStep(STEP.STOPS, true)).toBe(STEP.STOPS);
+    });
+
+    it('moves a step the role cannot see forward to the next visible one', () => {
+        // e.g. a passenger draft saved on seats before that step was skipped
+        expect(resolveVisibleStep(STEP.CAR, true)).toBe(STEP.DESCRIPTION);
+        expect(resolveVisibleStep(STEP.SEATS, true)).toBe(STEP.DESCRIPTION);
+        expect(resolveVisibleStep(STEP.CONTRIBUTION, true)).toBe(
+            STEP.DESCRIPTION
+        );
+        expect(
+            resolveVisibleStep(STEP.CONTRIBUTION, false, {
+                seatPriceEnabled: false
+            })
+        ).toBe(STEP.DESCRIPTION);
+        expect(
+            resolveVisibleStep(STEP.CONTRIBUTION, true, {
+                seatPriceEnabled: false
+            })
+        ).toBe(STEP.DESCRIPTION);
+    });
+});
+
+describe('tripCreationSteps role switch', () => {
+    it('sets one seat for passengers and remembers the driver seats', () => {
+        expect(
+            getRoleSwitchState({
+                toPassenger: true,
+                totalSeats: 3,
+                driverTotalSeats: null,
+                maxVisitedStep: STEP.ROLE
+            })
+        ).toEqual({
+            totalSeats: 1,
+            driverTotalSeats: 3,
+            maxVisitedStep: STEP.ROLE
+        });
+    });
+
+    it('restores the remembered driver seats when switching back', () => {
+        expect(
+            getRoleSwitchState({
+                toPassenger: false,
+                totalSeats: 1,
+                driverTotalSeats: 3,
+                maxVisitedStep: STEP.ROLE
+            }).totalSeats
+        ).toBe(3);
+    });
+
+    it('falls back to the driver default when no driver seats were picked', () => {
+        // e.g. a passenger draft resumed and then switched to driver
+        expect(
+            getRoleSwitchState({
+                toPassenger: false,
+                totalSeats: 1,
+                driverTotalSeats: null,
+                maxVisitedStep: STEP.ROLE
+            }).totalSeats
+        ).toBe(2);
+    });
+
+    it('sends a passenger who reached review back through the driver-only steps', () => {
+        const state = getRoleSwitchState({
+            toPassenger: false,
+            totalSeats: 1,
+            driverTotalSeats: null,
+            maxVisitedStep: STEP.LAST_DETAILS
+        });
+        expect(state.maxVisitedStep).toBe(STEP.SCHEDULE);
+        expect(canNavigateToStep(STEP.LAST_DETAILS, state.maxVisitedStep, false)).toBe(
+            false
+        );
+        expect(getNextStep(STEP.SCHEDULE, false)).toBe(STEP.CAR);
     });
 });
 
@@ -268,19 +352,17 @@ describe('tripCreationSteps validateStep', () => {
         ).toBe(false);
     });
 
-    it('validates description step for drivers only', () => {
+    it('validates description step for drivers and passengers', () => {
         expect(
             validateStep(STEP.DESCRIPTION, { description: 'Viaje a la costa' }).valid
         ).toBe(true);
         expect(validateStep(STEP.DESCRIPTION, { description: '' }).valid).toBe(false);
-        // Passengers never see this step (preferences are the driver's
-        // call), so an empty description must not block them.
         expect(
             validateStep(STEP.DESCRIPTION, {
                 isPassenger: true,
                 description: ''
             }).valid
-        ).toBe(true);
+        ).toBe(false);
     });
 
     it('skips seat count validation for passengers (they always request one seat)', () => {

@@ -35,33 +35,32 @@ describe('tripCreationStepQuery', () => {
     });
 
     it('resolves a disabled passenger step to the next step they can see', () => {
-        // Car, seats, contribution and description are all skipped for
-        // passengers, so a deep link into any of them lands on the next
-        // step that is actually visible for a passenger (last details).
-        expect(
-            resolveStepFromQuery('6', {
-                isPassenger: true,
-                isEdit: false
-            })
-        ).toBe(STEP.LAST_DETAILS);
-        expect(
-            resolveStepFromQuery('7', {
-                isPassenger: true,
-                isEdit: false
-            })
-        ).toBe(STEP.LAST_DETAILS);
-        expect(
-            resolveStepFromQuery('8', {
-                isPassenger: true,
-                isEdit: false
-            })
-        ).toBe(STEP.LAST_DETAILS);
+        ['6', '7', '8'].forEach((value) => {
+            expect(
+                resolveStepFromQuery(value, {
+                    isPassenger: true,
+                    isEdit: false
+                })
+            ).toBe(STEP.DESCRIPTION);
+        });
         expect(
             resolveStepFromQuery('9', {
                 isPassenger: true,
                 isEdit: false
             })
-        ).toBe(STEP.LAST_DETAILS);
+        ).toBe(STEP.DESCRIPTION);
+    });
+
+    it('remaps passenger deep links when seat price is disabled', () => {
+        ['6', '7', '8'].forEach((value) => {
+            expect(
+                resolveStepFromQuery(value, {
+                    isPassenger: true,
+                    isEdit: true,
+                    seatPriceEnabled: false
+                })
+            ).toBe(STEP.DESCRIPTION);
+        });
     });
 
     it('resolves contribution to description when skipped for drivers', () => {

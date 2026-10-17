@@ -785,6 +785,15 @@
     cursor: pointer;
 }
 
+/* Unlinked avatar/name (viewer cannot open passenger profiles): beats the
+   pointer cursor above, which outranks TripPassengers' scoped --static rule. */
+.trip-detail--mobile .trip-detail__passengers .trip_passenger_avatar--static,
+.trip-detail--desktop .trip-detail__passengers .trip_passenger_avatar--static,
+.trip-detail--mobile .trip-detail__passengers .trip_passenger_name--static,
+.trip-detail--desktop .trip-detail__passengers .trip_passenger_name--static {
+    cursor: default;
+}
+
 .trip-detail--desktop .trip-detail__passengers .trip_passenger_name {
     flex: 1 1 auto;
     min-width: 0;

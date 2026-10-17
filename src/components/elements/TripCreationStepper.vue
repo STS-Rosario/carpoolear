@@ -21,7 +21,7 @@
                 aria-hidden="true"
             ></span>
             <span class="trip-creation-stepper__label">
-                {{ $t(getTripCreationStepLabelKey(step)) }}
+                {{ $t(getTripCreationStepLabelKey(step, isPassenger)) }}
             </span>
         </button>
     </div>
@@ -67,11 +67,12 @@ export default {
 
     computed: {
         steps() {
-            if (this.seatPriceEnabled) {
-                return ALL_WIZARD_STEPS;
-            }
+            // Steps a passenger skips are hidden rather than shown disabled,
+            // so their stepper only lists what they actually fill in.
             return ALL_WIZARD_STEPS.filter(
-                (step) => step !== STEP.CONTRIBUTION
+                (step) =>
+                    !isStepDisabledForPassenger(step, this.isPassenger) &&
+                    (this.seatPriceEnabled || step !== STEP.CONTRIBUTION)
             );
         }
     },
@@ -79,10 +80,7 @@ export default {
     methods: {
         getTripCreationStepLabelKey,
         isSegmentDisabled(step) {
-            return (
-                isStepDisabledForPassenger(step, this.isPassenger) ||
-                !canNavigateToStep(step, this.maxVisitedStep, this.isPassenger)
-            );
+            return !canNavigateToStep(step, this.maxVisitedStep, this.isPassenger);
         },
         barClasses(step) {
             return {
@@ -91,9 +89,7 @@ export default {
                     step,
                     this.currentStep,
                     this.maxVisitedStep
-                ),
-                'trip-creation-stepper__bar--disabled':
-                    isStepDisabledForPassenger(step, this.isPassenger)
+                )
             };
         },
         segmentClasses(step) {
@@ -104,8 +100,6 @@ export default {
                     this.currentStep,
                     this.maxVisitedStep
                 ),
-                'trip-creation-stepper__segment--disabled':
-                    isStepDisabledForPassenger(step, this.isPassenger),
                 'trip-creation-stepper__segment--incomplete':
                     this.incompleteSteps.includes(step)
             };
@@ -156,10 +150,6 @@ export default {
     background: #4caf50;
 }
 
-.trip-creation-stepper__bar--disabled {
-    background: #ececec;
-}
-
 .trip-creation-stepper__label {
     font-size: 0.625rem;
     line-height: 1.25;
@@ -185,15 +175,6 @@ export default {
 .trip-creation-stepper__segment--active .trip-creation-stepper__label {
     color: #333;
     font-weight: 600;
-}
-
-.trip-creation-stepper__segment--disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-}
-
-.trip-creation-stepper__segment--disabled .trip-creation-stepper__label {
-    color: #aaa;
 }
 
 .trip-creation-stepper__segment:disabled {

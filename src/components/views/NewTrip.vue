@@ -651,15 +651,8 @@ export default {
                 );
             }
         },
-        'trip.is_passenger': function (value) {
+        'trip.is_passenger': function () {
             this.preselectDriverCar();
-            // Passengers request one seat for themselves: the seats step is
-            // skipped for them, so default it here instead of leaving
-            // whatever the driver-mode default (or a prior driver selection)
-            // happened to be.
-            if (Number(value) === 1) {
-                this.trip.total_seats = 1;
-            }
         },
         // 'trip.distance': function () {
         //     // TODO: FIX THIS
@@ -1143,13 +1136,7 @@ export default {
                     estado: 'error'
                 });
                 globalError = true;
-            } else if (
-                this.trip.is_passenger.toString() !== '1' &&
-                !this.trip.description
-            ) {
-                // Passengers never see the preferences/description step
-                // (preferences are the driver's call), so this trip never
-                // collects a description for them and must not block submit.
+            } else if (!this.trip.description) {
                 this.commentError.state = true;
                 this.commentError.message = this.$t('olvidasteDescripcion');
                 dialogs.message(this.$t('olvidasteDescripcion'), {

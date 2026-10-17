@@ -330,12 +330,12 @@
             </template>
 
             <!-- Step 5: Seats -->
-            <template v-if="currentStep === STEP.SEATS">
+            <template v-if="currentStep === STEP.SEATS && !isPassenger">
                 <h3 class="new-trip-wizard__question">
                     {{ $t('tripCreationStepSeatsQuestion') }}
                 </h3>
                 <TripSeatMapPanel
-                    v-if="!isPassenger && form.seatLayoutCapacity"
+                    v-if="form.seatLayoutCapacity"
                     :seat-layout-capacity="form.seatLayoutCapacity"
                     :passenger-seat-availability="form.passengerSeatAvailability"
                     @update:passenger-seat-availability="
@@ -344,11 +344,7 @@
                 />
                 <div class="trip_seats-available" v-else>
                     <label class="label-for-group">
-                        {{
-                            isPassenger
-                                ? $t('cuposNecesarios')
-                                : $t('lugaresDisponibles')
-                        }}
+                        {{ $t('lugaresDisponibles') }}
                     </label>
                     <div class="seats-widget">
                         <button
@@ -419,7 +415,9 @@
                                 ? $t(stepErrors.description)
                                 : ''
                     "
+                    :show-preferences="!isPassenger"
                     :show-friends="!isPassenger"
+                    :is-passenger="isPassenger"
                     :kids-icon="form.tripStaticImg('icon-baby.svg')"
                     :smoking-icon="form.tripStaticImg('icon-smoke.svg')"
                     :pets-icon="form.tripStaticImg('icon-pet.svg')"
@@ -612,7 +610,9 @@ import {
     STEP,
     getNextStep,
     getPreviousStep,
+    getRoleSwitchState,
     isStepDisabledForPassenger,
+    resolveVisibleStep,
     validateStep
 } from '../../utils/tripCreationSteps.js';
 import {
@@ -677,6 +677,9 @@ export default {
             STEP,
             currentStep: STEP.ROLE,
             maxVisitedStep: STEP.ROLE,
+            // Seats picked as a driver, kept while the role cards are on
+            // passenger so switching back does not lose them.
+            driverTotalSeats: null,
             incompleteSteps: [],
             stepErrors: {},
             draftTimer: null,
@@ -966,8 +969,18 @@ export default {
 
             applyTripCreationTemplateToForm(this.form, draft);
             this.form.parentTripId = draft.parentTripId || null;
-            this.currentStep = draft.currentStep || STEP.ROLE;
-            this.maxVisitedStep = draft.maxVisitedStep || this.currentStep;
+            // A draft saved on a step this role no longer shows (e.g. a
+            // passenger draft from before seats were skipped) resumes on the
+            // next visible step instead of rendering a hidden one.
+            this.currentStep = resolveVisibleStep(
+                draft.currentStep || STEP.ROLE,
+                this.isPassenger,
+                this.navigationOptions
+            );
+            this.maxVisitedStep = Math.max(
+                draft.maxVisitedStep || this.currentStep,
+                this.currentStep
+            );
             if (
                 this.form.points[0]?.json &&
                 last(this.form.points)?.json
@@ -1356,7 +1369,16 @@ export default {
             if (Number(this.form.trip.is_passenger) === value) {
                 return;
             }
+            const roleSwitch = getRoleSwitchState({
+                toPassenger: Number(value) === 1,
+                totalSeats: this.form.trip.total_seats,
+                driverTotalSeats: this.driverTotalSeats,
+                maxVisitedStep: this.maxVisitedStep
+            });
             this.form.trip.is_passenger = value;
+            this.form.trip.total_seats = roleSwitch.totalSeats;
+            this.driverTotalSeats = roleSwitch.driverTotalSeats;
+            this.maxVisitedStep = roleSwitch.maxVisitedStep;
             if (isStepDisabledForPassenger(this.currentStep, this.isPassenger)) {
                 this.setCurrentStep(STEP.SCHEDULE);
             }

@@ -751,6 +751,7 @@ const messages = {
             'cómo se calcula la contribución por persona',
         tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
+        tripCreationStepDescriptionQuestionPassenger: 'Detalles del viaje',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
             'Antes de publicarlo, chequeá que esté todo bien.',
@@ -762,6 +763,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Tus amigos de Carpoolear reservan sin que tengas que aprobar cada pedido.',
         tripPrefCommentsSection: 'Comentarios para los pasajeros',
+        tripPrefCommentsSectionPassenger: 'Comentarios para los conductores',
         tripReviewEdit: 'Editar',
         tripReviewSectionRoute: 'Recorrido',
         tripReviewSectionVehicle: 'Vehículo',
@@ -788,6 +790,7 @@ const messages = {
         tripCreationStepLabelCar: 'Auto',
         tripCreationStepLabelSeats: 'Asientos',
         tripCreationStepLabelDescription: 'Preferencias',
+        tripCreationStepLabelDescriptionPassenger: 'Detalles',
         tripCreationStepLabelLastDetails: 'Revisar',
         tripCreationSuccessTitle: 'Viaje creado',
         tripCreationSuccessAllSet: '¡Todo listo!',
@@ -2897,6 +2900,7 @@ const messages = {
             'cómo se calcula la contribución por persona',
         tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
+        tripCreationStepDescriptionQuestionPassenger: 'Detalles del viaje',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
             'Antes de publicarlo, chequeá que esté todo bien.',
@@ -2908,6 +2912,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Tus amigos de Carpoolear reservan sin que tengas que aprobar cada pedido.',
         tripPrefCommentsSection: 'Comentarios para los pasajeros',
+        tripPrefCommentsSectionPassenger: 'Comentarios para los conductores',
         tripReviewEdit: 'Editar',
         tripReviewSectionRoute: 'Recorrido',
         tripReviewSectionVehicle: 'Vehículo',
@@ -2934,6 +2939,7 @@ const messages = {
         tripCreationStepLabelCar: 'Auto',
         tripCreationStepLabelSeats: 'Asientos',
         tripCreationStepLabelDescription: 'Preferencias',
+        tripCreationStepLabelDescriptionPassenger: 'Detalles',
         tripCreationStepLabelLastDetails: 'Revisar',
         tripCreationSuccessTitle: 'Viaje creado',
         tripCreationSuccessAllSet: '¡Todo listo!',
@@ -4854,6 +4860,7 @@ const messages = {
             'how per-person contribution is calculated',
         tripContributionDivisionExplainerSuffix: ' for each trip.',
         tripCreationStepDescriptionQuestion: 'Preferences and details',
+        tripCreationStepDescriptionQuestionPassenger: 'Trip details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:
             'Before publishing, check that everything looks right.',
@@ -4865,6 +4872,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Your Carpoolear friends can book without you approving each request.',
         tripPrefCommentsSection: 'Comments for passengers',
+        tripPrefCommentsSectionPassenger: 'Comments for drivers',
         tripReviewEdit: 'Edit',
         tripReviewSectionRoute: 'Route',
         tripReviewSectionVehicle: 'Vehicle',
@@ -4891,6 +4899,7 @@ const messages = {
         tripCreationStepLabelCar: 'Car',
         tripCreationStepLabelSeats: 'Seats',
         tripCreationStepLabelDescription: 'Preferences',
+        tripCreationStepLabelDescriptionPassenger: 'Details',
         tripCreationStepLabelLastDetails: 'Review',
         tripCreationSuccessTitle: 'Trip created',
         tripCreationSuccessAllSet: 'All set!',

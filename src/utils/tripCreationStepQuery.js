@@ -1,7 +1,6 @@
 import {
     ALL_WIZARD_STEPS,
-    getVisibleSteps,
-    isStepDisabledForPassenger,
+    resolveVisibleStep,
     STEP
 } from './tripCreationSteps.js';
 
@@ -41,23 +40,7 @@ export function resolveStepFromQuery(
         return STEP.ORIGIN;
     }
 
-    if (step === STEP.CONTRIBUTION && !seatPriceEnabled) {
-        return STEP.DESCRIPTION;
-    }
-
-    if (isStepDisabledForPassenger(step, isPassenger)) {
-        // Land on the nearest step a passenger can actually see, in order:
-        // car/seats/contribution/description are all skipped for them, so a
-        // deep link into any of those resolves forward to whatever comes
-        // next (falling back to the last visible step if none does).
-        const visibleSteps = getVisibleSteps(isPassenger);
-        const fallbackStep = visibleSteps.find(
-            (visibleStep) => visibleStep > step
-        );
-        return fallbackStep != null
-            ? fallbackStep
-            : visibleSteps[visibleSteps.length - 1];
-    }
-
-    return step;
+    // Contribution with seat price off and the steps passengers skip
+    // (car/seats/contribution) land on the next step this role can see.
+    return resolveVisibleStep(step, isPassenger, { seatPriceEnabled });
 }

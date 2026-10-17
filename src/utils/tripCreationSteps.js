@@ -37,18 +37,22 @@ export const ALL_WIZARD_STEPS = [
 
 const DRIVER_STEPS = ALL_WIZARD_STEPS;
 
-// A passenger requests a single seat for themselves and does not set the
-// trip's preferences (those belong to whoever drives), so both the seat
-// count step and the preferences/description step are skipped entirely,
-// the same way the car and contribution steps already are for passengers.
+// A passenger requests a single seat for themselves, so the seat count step
+// is skipped along with car and contribution. They still write a description;
+// the trip preferences shown on that step belong to whoever drives and are
+// hidden for passengers by the wizard.
 const PASSENGER_STEPS = [
     STEP.ROLE,
     STEP.ORIGIN,
     STEP.DESTINATION,
     STEP.STOPS,
     STEP.SCHEDULE,
+    STEP.DESCRIPTION,
     STEP.LAST_DETAILS
 ];
+
+export const DEFAULT_DRIVER_TOTAL_SEATS = 2;
+export const PASSENGER_TOTAL_SEATS = 1;
 
 const STEP_LABEL_KEYS = {
     [STEP.ROLE]: 'tripCreationStepLabelRole',
@@ -63,7 +67,15 @@ const STEP_LABEL_KEYS = {
     [STEP.LAST_DETAILS]: 'tripCreationStepLabelLastDetails'
 };
 
-export function getTripCreationStepLabelKey(step) {
+// Passengers only write a description on that step (no preferences).
+const PASSENGER_STEP_LABEL_KEYS = {
+    [STEP.DESCRIPTION]: 'tripCreationStepLabelDescriptionPassenger'
+};
+
+export function getTripCreationStepLabelKey(step, isPassenger = false) {
+    if (isPassenger && PASSENGER_STEP_LABEL_KEYS[step]) {
+        return PASSENGER_STEP_LABEL_KEYS[step];
+    }
     return STEP_LABEL_KEYS[step] || '';
 }
 
@@ -80,9 +92,52 @@ export function isStepDisabledForPassenger(step, isPassenger) {
         isPassenger &&
         (step === STEP.CAR ||
             step === STEP.SEATS ||
-            step === STEP.CONTRIBUTION ||
-            step === STEP.DESCRIPTION)
+            step === STEP.CONTRIBUTION)
     );
+}
+
+/**
+ * Maps a step the current role cannot see (e.g. a passenger draft saved on
+ * the seats step, or a deep link into contribution with seat price off) to
+ * the next step that role can see, falling back to the last one.
+ */
+export function resolveVisibleStep(step, isPassenger, options = {}) {
+    const steps = getLinearSteps(isPassenger, {
+        wantsIntermediateStops: true,
+        seatPriceEnabled: options.seatPriceEnabled ?? true
+    });
+    if (steps.includes(step)) {
+        return step;
+    }
+    const next = steps.find((visibleStep) => visibleStep > step);
+    return next != null ? next : steps[steps.length - 1];
+}
+
+/**
+ * Seats and navigation after the role cards toggle driver/passenger.
+ * Passengers always request one seat; going back to driver restores the
+ * seats they had picked as a driver (or the driver default) and, since the
+ * passenger flow never showed car/seats/contribution, caps how far ahead
+ * they can jump so Siguiente walks them through those steps again.
+ */
+export function getRoleSwitchState({
+    toPassenger,
+    totalSeats,
+    driverTotalSeats = null,
+    maxVisitedStep
+}) {
+    if (toPassenger) {
+        return {
+            totalSeats: PASSENGER_TOTAL_SEATS,
+            driverTotalSeats: totalSeats,
+            maxVisitedStep
+        };
+    }
+    return {
+        totalSeats: driverTotalSeats ?? DEFAULT_DRIVER_TOTAL_SEATS,
+        driverTotalSeats: null,
+        maxVisitedStep: Math.min(maxVisitedStep, STEP.SCHEDULE)
+    };
 }
 
 function getNavigationOptions(options = {}) {
@@ -371,11 +426,7 @@ function validateContribution({
     return { valid: true, errors: {} };
 }
 
-function validateDescription({ isPassenger = false, description = '' }) {
-    if (isPassenger) {
-        return { valid: true, errors: {} };
-    }
-
+function validateDescription({ description = '' }) {
     const valid = String(description).trim().length > 0;
     return {
         valid,
