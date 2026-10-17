@@ -55,6 +55,19 @@ export {
     shouldShowReviewAdminAction as shouldShowManualIdentityValidationReviewAdminAction
 } from './adminReviewActionDisplay.js';
 
+export const ADMIN_DISPLAY_TIMEZONE = 'America/Argentina/Buenos_Aires';
+
+/**
+ * Backend timestamps come as naive UTC strings ("YYYY-MM-DD HH:mm:ss"); parse them
+ * as UTC and show them in Argentina time, independent of the browser timezone.
+ */
+export function formatManualIdentityValidationDateTime(value) {
+    if (!value) return '-';
+    const parsed = dayjs.utc(value);
+    if (!parsed.isValid()) return '-';
+    return parsed.tz(ADMIN_DISPLAY_TIMEZONE).format('DD/MM/YYYY HH:mm');
+}
+
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
     const submitted = item.submitted_at ? dayjs.utc(item.submitted_at).valueOf() : null;
     if (!submitted) return '-';

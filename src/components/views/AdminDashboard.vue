@@ -161,6 +161,7 @@ import { AdminApi } from '../../services/api';
 import { normalizeAdminDashboardResponse } from '../../utils/adminDashboardData';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
+    formatManualIdentityValidationDateTime,
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationStatusBadgeClass,
     getManualIdentityValidationStatusLabel
@@ -189,10 +190,7 @@ export default {
         };
     },
     methods: {
-        formatDate(value) {
-            if (!value) return '-';
-            return new Date(value).toLocaleString();
-        },
+        formatDate: formatManualIdentityValidationDateTime,
         formatWaitingTime(item) {
             return formatManualIdentityValidationWaitingTime(item, (key) => this.$t(key));
         },

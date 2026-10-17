@@ -316,6 +316,7 @@ import {
     shouldProceedWithReviewAction
 } from '../../utils/adminManualIdentityValidationReviewConfirm.js';
 import { isManualIdentityValidationResolved } from '../../utils/adminManualIdentityValidationsList.js';
+import { formatManualIdentityValidationDateTime } from '../../utils/adminManualIdentityValidationDisplay.js';
 import {
     MANUAL_IDENTITY_REJECT_REASONS,
     isManualRejectReasonRequired
@@ -390,10 +391,7 @@ export default {
                 '-'
             );
         },
-        formatDate(value) {
-            if (!value) return '-';
-            return new Date(value).toLocaleString();
-        },
+        formatDate: formatManualIdentityValidationDateTime,
         getStatusLabel(status) {
             if (status === 'pending') return this.$t('estadoPendiente');
             if (status === 'awaiting_photos') return this.$t('estadoEsperandoFotos');
