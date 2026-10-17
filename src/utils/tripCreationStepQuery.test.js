@@ -34,22 +34,36 @@ describe('tripCreationStepQuery', () => {
         ).toBe(STEP.ORIGIN);
     });
 
-    it('resolves passenger car step to seats', () => {
+    it('resolves a disabled passenger step to the next step they can see', () => {
+        ['6', '7', '8'].forEach((value) => {
+            expect(
+                resolveStepFromQuery(value, {
+                    isPassenger: true,
+                    isEdit: false
+                })
+            ).toBe(STEP.DESCRIPTION);
+        });
         expect(
-            resolveStepFromQuery('6', {
-                isPassenger: true,
-                isEdit: false
-            })
-        ).toBe(STEP.SEATS);
-    });
-
-    it('resolves contribution to description when skipped', () => {
-        expect(
-            resolveStepFromQuery('8', {
+            resolveStepFromQuery('9', {
                 isPassenger: true,
                 isEdit: false
             })
         ).toBe(STEP.DESCRIPTION);
+    });
+
+    it('remaps passenger deep links when seat price is disabled', () => {
+        ['6', '7', '8'].forEach((value) => {
+            expect(
+                resolveStepFromQuery(value, {
+                    isPassenger: true,
+                    isEdit: true,
+                    seatPriceEnabled: false
+                })
+            ).toBe(STEP.DESCRIPTION);
+        });
+    });
+
+    it('resolves contribution to description when skipped for drivers', () => {
         expect(
             resolveStepFromQuery('8', {
                 isPassenger: false,

@@ -12,9 +12,17 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).toContain('data-testid');
     });
 
-    it('disables car step segment for passengers', () => {
-        expect(componentSource).toContain('isStepDisabledForPassenger');
-        expect(componentSource).toContain('trip-creation-stepper__segment--disabled');
+    it('hides the steps passengers skip instead of showing them disabled', () => {
+        expect(componentSource).toMatch(
+            /!isStepDisabledForPassenger\(step, this\.isPassenger\)/
+        );
+        expect(componentSource).not.toContain('trip-creation-stepper__segment--disabled');
+    });
+
+    it('uses the passenger label for the description step', () => {
+        expect(componentSource).toContain(
+            'getTripCreationStepLabelKey(step, isPassenger)'
+        );
     });
 
     it('emits select only for allowed steps', () => {
@@ -31,7 +39,7 @@ describe('TripCreationStepper.vue', () => {
         expect(componentSource).toContain('getTripCreationStepLabelKey');
         expect(componentSource).toContain('trip-creation-stepper__label');
         expect(componentSource).toMatch(
-            /\$t\(getTripCreationStepLabelKey\(step\)\)/
+            /\$t\(getTripCreationStepLabelKey\(step, isPassenger\)\)/
         );
     });
 
@@ -43,5 +51,13 @@ describe('TripCreationStepper.vue', () => {
     it('hides contribution segment when seat price is disabled', () => {
         expect(componentSource).toContain('seatPriceEnabled');
         expect(componentSource).toContain('STEP.CONTRIBUTION');
+    });
+
+    it('highlights the active step bar with a subtle shadow', () => {
+        const activeBarRule = componentSource.match(
+            /\.trip-creation-stepper__bar--active\s*{([^}]*)}/
+        );
+        expect(activeBarRule).not.toBeNull();
+        expect(activeBarRule[1]).toMatch(/box-shadow:/);
     });
 });
