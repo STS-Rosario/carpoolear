@@ -1,3 +1,4 @@
+import dayjs from '../dayjs';
 import { getIdentityValidationMethodLabelKey } from './adminUserIdentityVerification.js';
 
 export function getManualIdentityValidationVerifiedLabel(item, t) {
@@ -54,11 +55,24 @@ export {
     shouldShowReviewAdminAction as shouldShowManualIdentityValidationReviewAdminAction
 } from './adminReviewActionDisplay.js';
 
+export const ADMIN_DISPLAY_TIMEZONE = 'America/Argentina/Buenos_Aires';
+
+/**
+ * Backend timestamps come as naive UTC strings ("YYYY-MM-DD HH:mm:ss"); parse them
+ * as UTC and show them in Argentina time, independent of the browser timezone.
+ */
+export function formatManualIdentityValidationDateTime(value) {
+    if (!value) return '-';
+    const parsed = dayjs.utc(value);
+    if (!parsed.isValid()) return '-';
+    return parsed.tz(ADMIN_DISPLAY_TIMEZONE).format('DD/MM/YYYY HH:mm');
+}
+
 export function formatManualIdentityValidationWaitingTime(item, t, now = Date.now()) {
-    const submitted = item.submitted_at ? new Date(item.submitted_at).getTime() : null;
+    const submitted = item.submitted_at ? dayjs.utc(item.submitted_at).valueOf() : null;
     if (!submitted) return '-';
     const end = item.manual_validation_started_at
-        ? new Date(item.manual_validation_started_at).getTime()
+        ? dayjs.utc(item.manual_validation_started_at).valueOf()
         : now;
     let diffMs = Math.max(0, end - submitted);
     const days = Math.floor(diffMs / 86400000);

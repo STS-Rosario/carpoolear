@@ -131,6 +131,7 @@ import {
 } from '../../utils/adminManualIdentityValidationsList';
 import { DEFAULT_ADMIN_PER_PAGE } from '../../utils/adminPagination';
 import {
+    formatManualIdentityValidationDateTime,
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationStatusBadgeClass,
     getManualIdentityValidationStatusLabel,
@@ -174,10 +175,7 @@ export default {
                 createdByAdmin: true
             });
         },
-        formatDate(value) {
-            if (!value) return '-';
-            return new Date(value).toLocaleString();
-        },
+        formatDate: formatManualIdentityValidationDateTime,
         formatWaitingTime(item) {
             return formatManualIdentityValidationWaitingTime(item, (key) => this.$t(key));
         },
