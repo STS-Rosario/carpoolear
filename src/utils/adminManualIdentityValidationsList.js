@@ -4,6 +4,26 @@ import { parseAdminPaginationFromRoute } from './adminPagination';
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
     'adminManualIdentityValidationsShowResolved';
 
+/**
+ * Status filter options; values match the backend `status` param and labels match
+ * the status column, so each option returns exactly the rows shown with that label.
+ */
+export const MANUAL_IDENTITY_VALIDATION_STATUS_FILTERS = [
+    { value: 'pending_payment', labelKey: 'estadoPendientePago' },
+    { value: 'awaiting_photos', labelKey: 'estadoEsperandoFotos' },
+    { value: 'pending_review', labelKey: 'estadoPendienteRevision' },
+    { value: 'approved', labelKey: 'estadoAprobado' },
+    { value: 'rejected', labelKey: 'estadoRechazado' },
+    { value: 'closed', labelKey: 'estadoCerrado' }
+];
+
+function normalizeManualIdentityValidationStatusFilter(value) {
+    const status = value ? String(value) : '';
+    return MANUAL_IDENTITY_VALIDATION_STATUS_FILTERS.some((option) => option.value === status)
+        ? status
+        : '';
+}
+
 export const MANUAL_IDENTITY_VALIDATION_SORT_COLUMNS = [
     { key: 'id', labelKey: 'id' },
     { key: 'user_name', labelKey: 'nombre' },
@@ -254,6 +274,8 @@ export function buildManualIdentityValidationListParams({
     page,
     perPage,
     showResolved = false,
+    status = '',
+    q = '',
     sortKey = null,
     sortDir = 'asc'
 } = {}) {
@@ -267,6 +289,12 @@ export function buildManualIdentityValidationListParams({
     }
     if (showResolved) {
         params.show_resolved = '1';
+    }
+    if (status) {
+        params.status = status;
+    }
+    if (q) {
+        params.q = q;
     }
     if (sortKey) {
         params.sort = sortKey;
@@ -288,6 +316,8 @@ export function parseManualIdentityValidationListFromRoute(query = {}) {
         page: pagination.page,
         perPage: pagination.perPage,
         showResolved,
+        status: normalizeManualIdentityValidationStatusFilter(query.status),
+        q: query.q ? String(query.q) : '',
         sortKey,
         sortDir
     };

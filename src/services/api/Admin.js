@@ -60,6 +60,12 @@ class AdminApi extends TaggedApi {
         );
     }
 
+    /**
+     * Paginated manual identity validations list.
+     * Params: page, per_page, show_resolved, status, q, sort, direction (all optional).
+     * status: see MANUAL_IDENTITY_VALIDATION_STATUS_FILTERS (ignores show_resolved when set).
+     * q: partial user name, or exact validation id when numeric.
+     */
     getManualIdentityValidations(params = {}) {
         return this.get('/api/admin/manual-identity-validations', params);
     }

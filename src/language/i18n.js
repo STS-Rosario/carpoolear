@@ -1381,6 +1381,8 @@ const messages = {
         referenciasDescripcion:
             'Las referencias son recomendaciones de la persona, no por un viaje en particular dentro de Carpoolear',
         buscar: 'Buscar',
+        limpiarFiltros: 'Limpiar filtros',
+        buscarNombreOId: 'Nombre o ID',
         opcional: 'opcional',
         pagoPendiente: 'Pago pendiente',
         pagoPendienteParaConfirmar: 'para confirmar',
@@ -2664,6 +2666,8 @@ const messages = {
         comenzar: '¡Comenzar!',
         siguiente: 'Siguiente',
         buscar: 'Buscar',
+        limpiarFiltros: 'Limpiar filtros',
+        buscarNombreOId: 'Nombre o ID',
         opcional: 'opcional',
         pagoPendiente: 'Pago pendiente',
         pagoPendienteParaConfirmar: 'para confirmar',
@@ -5492,6 +5496,8 @@ const messages = {
         referenciasDescripcion:
             'References are recommendations about the person, not about a specific trip within Carpoolear',
         buscar: 'Search',
+        limpiarFiltros: 'Clear filters',
+        buscarNombreOId: 'Name or ID',
         opcional: 'optional',
         pagoPendiente: 'Payment pending',
         pagoPendienteParaConfirmar: 'to confirm',

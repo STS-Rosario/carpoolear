@@ -79,4 +79,49 @@ describe('AdminManualIdentityValidations view', () => {
         expect(viewSource).toContain('sortKey: this.sortKey');
         expect(viewSource).toContain('sortDir: this.sortDir');
     });
+
+    it('renders a status filter and a search input above the table', () => {
+        expect(viewSource).toContain('v-model="status"');
+        expect(viewSource).toContain('v-model="q"');
+        expect(viewSource).toContain('applyFilters');
+        expect(viewSource.indexOf('admin-manual-filters')).toBeLessThan(viewSource.indexOf('<table'));
+    });
+
+    it('sends status and search params to the API and keeps them in the route query', () => {
+        expect(viewSource).toContain('status: this.status');
+        expect(viewSource).toContain('q: this.q');
+        expect(viewSource).toContain('query.status = this.status');
+        expect(viewSource).toContain('query.q = this.q');
+    });
+
+    it('shows a subtle clear-filters button only when a filter is active', () => {
+        expect(viewSource).toContain('v-if="hasActiveFilters"');
+        expect(viewSource).toContain('variant="tertiary"');
+        expect(viewSource).toContain('@click="clearFilters"');
+        expect(viewSource).toContain("{{ $t('limpiarFiltros') }}");
+    });
+
+    it('builds status options from the shared filter list so labels match the status column', () => {
+        expect(viewSource).toContain('v-for="option in statusFilters"');
+        expect(viewSource).toContain('statusFilters: MANUAL_IDENTITY_VALIDATION_STATUS_FILTERS');
+        expect(viewSource).not.toContain('<option value="pending">');
+    });
+
+    it('disables show-resolved while a status filter is active', () => {
+        expect(viewSource).toContain(':disabled="Boolean(status)"');
+    });
+
+    it('clears status and search but leaves show-resolved alone', () => {
+        const methodsAt = viewSource.indexOf('methods: {');
+        const clearFiltersAt = viewSource.indexOf('clearFilters()', methodsAt);
+        const nextMethodAt = viewSource.indexOf('toggleSort(column)', clearFiltersAt);
+        const clearFiltersBody = viewSource.slice(clearFiltersAt, nextMethodAt);
+
+        expect(clearFiltersAt).toBeGreaterThan(-1);
+        expect(clearFiltersBody).toContain("this.status = ''");
+        expect(clearFiltersBody).toContain("this.q = ''");
+        expect(clearFiltersBody).not.toContain('showResolved');
+        expect(clearFiltersBody).toContain('this.syncRouteQuery()');
+        expect(viewSource).toContain('return Boolean(this.status || this.q);');
+    });
 });
