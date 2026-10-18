@@ -720,6 +720,10 @@ const messages = {
         unLitroBannerRetry: 'Reintentar',
         unLitroBannerPublished:
             'Pago acreditado. Tu viaje ya es visible para toda la comunidad. Gracias por sumar Un litro para Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'Este viaje necesita el pago de Un litro para Carpoolear',
+        unLitroAdminNeedsPaymentBody:
+            'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
         tripContributionBreakdownFuel: 'Combustible',
         tripContributionBreakdownTollsLabel: 'Peajes',
         tripContributionBreakdownTripTotal: 'Total del viaje',
@@ -2895,6 +2899,10 @@ const messages = {
         unLitroBannerRetry: 'Reintentar',
         unLitroBannerPublished:
             'Pago acreditado. Tu viaje ya es visible para toda la comunidad. Gracias por sumar Un litro para Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'Este viaje necesita el pago de Un litro para Carpoolear',
+        unLitroAdminNeedsPaymentBody:
+            'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
         tripContributionBreakdownFuel: 'Combustible',
         tripContributionBreakdownTollsLabel: 'Peajes',
         tripContributionBreakdownTripTotal: 'Total del viaje',
@@ -4874,6 +4882,10 @@ const messages = {
         unLitroBannerRetry: 'Retry',
         unLitroBannerPublished:
             'Payment confirmed. Your trip is now visible to the whole community. Thanks for adding One liter for Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'This trip still needs One liter for Carpoolear payment',
+        unLitroAdminNeedsPaymentBody:
+            'It is not visible to other people yet. It will be published when payment is confirmed.',
         tripContributionBreakdownFuel: 'Fuel',
         tripContributionBreakdownTollsLabel: 'Tolls',
         tripContributionBreakdownTripTotal: 'Trip total',
