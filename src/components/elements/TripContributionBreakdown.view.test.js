@@ -6,20 +6,11 @@ const componentPath = path.resolve(__dirname, 'TripContributionBreakdown.vue');
 const componentSource = fs.readFileSync(componentPath, 'utf8');
 
 describe('TripContributionBreakdown.vue', () => {
-    it('formats API breakdown with i18n line items and consumption tooltip', () => {
+    it('renders the compact table without the leftover verbose list', () => {
         expect(componentSource).toContain('formatBreakdownLines');
         expect(componentSource).toContain('tripContributionBreakdown.js');
-        expect(componentSource).toContain("$t('tripContributionBreakdownFuelLiter'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownLiters'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownFuelCost'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownTolls'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownSellado'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownSelladoBonificado')");
-        expect(componentSource).toContain("$t('tripContributionBreakdownTotal'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownTotalWithSellado'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownTotalWithSelladoBonificado'");
-        expect(componentSource).toContain("$t('tripContributionBreakdownOccupants'");
-        expect(componentSource).toContain('tripContributionBreakdownFuel');
+        expect(componentSource).toContain('trip-contribution-breakdown__table');
+        expect(componentSource).toContain("$t('tripContributionBreakdownFuel')");
         expect(componentSource).toContain('tripContributionBreakdownTollsLabel');
         expect(componentSource).toContain('unLitroName');
         expect(componentSource).toContain('tripContributionBreakdownTripTotal');
@@ -31,19 +22,50 @@ describe('TripContributionBreakdown.vue', () => {
         );
         expect(componentSource).toContain('tripContributionTankTip');
         expect(componentSource).toContain('lines.fuelCostInteger');
-        expect(componentSource).toContain("$t('tripContributionBreakdownConsumptionTooltip'");
         expect(componentSource).toContain('lines.showSellado');
         expect(componentSource).toContain('lines.selladoBonificado');
+        expect(componentSource).not.toContain(
+            'trip-contribution-breakdown__details'
+        );
+        expect(componentSource).not.toContain(
+            "$t('tripContributionBreakdownFuelLiter'"
+        );
+        expect(componentSource).not.toContain(
+            "$t('tripContributionBreakdownLiters'"
+        );
+        expect(componentSource).not.toContain(
+            "$t('tripContributionBreakdownFuelCost'"
+        );
+        expect(componentSource).not.toContain(
+            "$t('tripContributionBreakdownOccupants'"
+        );
     });
 
-    it('does not use a button for the liters tooltip trigger', () => {
-        expect(componentSource).not.toMatch(
-            /<button[^>]*tooltip-bottom/
+    it('shows the toll percentage on the peajes table row', () => {
+        expect(componentSource).toMatch(
+            /\$t\(\s*'tripContributionBreakdownTollsLabel'\s*,\s*\{\s*percent:\s*lines\.tollsPercent/
         );
+    });
+
+    it('keeps the consumption tooltip on the fuel row', () => {
+        const fuelIndex = componentSource.indexOf(
+            "$t('tripContributionBreakdownFuel')"
+        );
+        const tooltipIndex = componentSource.indexOf(
+            "$t('tripContributionBreakdownConsumptionTooltip'"
+        );
+        const tollsIndex = componentSource.indexOf(
+            'tripContributionBreakdownTollsLabel'
+        );
+
+        expect(fuelIndex).toBeGreaterThan(-1);
+        expect(tooltipIndex).toBeGreaterThan(fuelIndex);
+        expect(tooltipIndex).toBeLessThan(tollsIndex);
+        expect(componentSource).not.toMatch(/<button[^>]*tooltip-bottom/);
         expect(componentSource).toContain('@click.stop');
     });
 
-    it('uses dark text so the list is readable on light backgrounds', () => {
+    it('uses dark text so the table is readable on light backgrounds', () => {
         expect(componentSource).toMatch(
             /\.trip-contribution-breakdown\s*\{[^}]*color:\s*var\(--ds-text-primary/s
         );
