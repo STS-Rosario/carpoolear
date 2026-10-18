@@ -16,18 +16,32 @@
                 v-bind:key="p.id"
             >
                 <span
+                    v-if="canViewPassengerProfiles"
                     @click="toUserProfile(p)"
                     class="trip_passenger_avatar"
                 >
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </span>
+                <span
+                    v-else
+                    class="trip_passenger_avatar trip_passenger_avatar--static"
+                >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
                 <a
+                    v-if="canViewPassengerProfiles"
                     href="#"
                     @click="toUserProfile(p)"
                     class="trip_passenger_name"
                 >
                     {{ p.first_name }}
                 </a>
+                <span
+                    v-else
+                    class="trip_passenger_name trip_passenger_name--static"
+                >
+                    {{ p.first_name }}
+                </span>
                 <a
                     v-if="owner"
                     href="#"
@@ -101,6 +115,7 @@ import { usePassengerStore } from '../../stores/passenger';
 import router from '../../router';
 import dialogs from '../../services/dialogs.js';
 import bus from '../../services/bus-event';
+import { isAcceptedPassengerOnTrip } from '../../utils/tripCoPassengers.js';
 export default {
     name: 'TripPassengers',
     data() {
@@ -133,6 +148,15 @@ export default {
         },
         owner() {
             return this.trip && this.user && this.user.id === this.trip.user.id;
+        },
+        canViewPassengerProfiles() {
+            return (
+                this.owner ||
+                isAcceptedPassengerOnTrip(
+                    this.trip?.allPassengerRequest,
+                    this.user?.id
+                )
+            );
         },
         displayPassengers() {
             if (Array.isArray(this.trip.passenger) && this.trip.passenger.length) {
@@ -257,5 +281,9 @@ export default {
 }
 .trip_passenger-chat {
     margin-left: 0.5em;
+}
+.trip_passenger_avatar--static,
+.trip_passenger_name--static {
+    cursor: default;
 }
 </style>

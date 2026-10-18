@@ -331,4 +331,23 @@ describe('Trip.vue Un litro payment banners', () => {
             contribucion.indexOf('UnLitroInfoCard')
         );
     });
+
+    it('shows an Un litro needs-payment card to admins without a pay button', () => {
+        expect(viewSource).toContain('shouldShowUnLitroAdminNeedsPaymentCard');
+        expect(viewSource).toContain('shouldShowUnLitroOwnerPaymentBanner');
+        expect(viewSource).toContain("$t('unLitroAdminNeedsPaymentTitle')");
+        expect(viewSource).toContain("$t('unLitroAdminNeedsPaymentBody')");
+        expect(viewSource).toMatch(
+            /showUnLitroOwnerPaymentBanner[\s\S]{0,80}selladoBannerKind === 'pending'/
+        );
+        expect(viewSource).not.toMatch(
+            /v-if="selladoBannerKind === 'pending'"/
+        );
+        const adminCard = viewSource.match(
+            /showUnLitroAdminNeedsPaymentCard[\s\S]*?unLitroAdminNeedsPaymentBody/
+        );
+        expect(adminCard).not.toBeNull();
+        expect(adminCard[0]).not.toContain('onPaySellado');
+        expect(adminCard[0]).not.toContain('unLitroBannerPayAmount');
+    });
 });

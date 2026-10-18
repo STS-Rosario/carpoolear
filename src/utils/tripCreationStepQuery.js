@@ -1,4 +1,8 @@
-import { ALL_WIZARD_STEPS, isStepDisabledForPassenger, STEP } from './tripCreationSteps.js';
+import {
+    ALL_WIZARD_STEPS,
+    resolveVisibleStep,
+    STEP
+} from './tripCreationSteps.js';
 
 export const TRIP_CREATION_STEP_QUERY_PARAM = 'step';
 
@@ -36,13 +40,7 @@ export function resolveStepFromQuery(
         return STEP.ORIGIN;
     }
 
-    if (step === STEP.CONTRIBUTION && !seatPriceEnabled) {
-        return STEP.DESCRIPTION;
-    }
-
-    if (isStepDisabledForPassenger(step, isPassenger)) {
-        return step === STEP.CONTRIBUTION ? STEP.DESCRIPTION : STEP.SEATS;
-    }
-
-    return step;
+    // Contribution with seat price off and the steps passengers skip
+    // (car/seats/contribution) land on the next step this role can see.
+    return resolveVisibleStep(step, isPassenger, { seatPriceEnabled });
 }

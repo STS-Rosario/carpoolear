@@ -1,10 +1,14 @@
 <template>
     <div class="trip-preferences-step">
         <h3 class="new-trip-wizard__question">
-            {{ $t('tripCreationStepDescriptionQuestion') }}
+            {{
+                isPassenger
+                    ? $t('tripCreationStepDescriptionQuestionPassenger')
+                    : $t('tripCreationStepDescriptionQuestion')
+            }}
         </h3>
 
-        <section class="trip-preferences-step__section">
+        <section v-if="showPreferences" class="trip-preferences-step__section">
             <h4 class="trip-preferences-step__section-title">
                 {{ $t('preferenciasViaje') }}
             </h4>
@@ -102,7 +106,11 @@
 
         <section class="trip-preferences-step__section">
             <h4 class="trip-preferences-step__section-title">
-                {{ $t('tripPrefCommentsSection') }}
+                {{
+                    isPassenger
+                        ? $t('tripPrefCommentsSectionPassenger')
+                        : $t('tripPrefCommentsSection')
+                }}
             </h4>
             <AppTextarea
                 class="trip-preferences-step__comments"
@@ -133,7 +141,9 @@ export default {
         autoacceptFriends: { type: Boolean, default: false },
         description: { type: String, default: '' },
         descriptionError: { type: String, default: '' },
+        showPreferences: { type: Boolean, default: true },
         showFriends: { type: Boolean, default: true },
+        isPassenger: { type: Boolean, default: false },
         kidsIcon: { type: String, default: '' },
         smokingIcon: { type: String, default: '' },
         petsIcon: { type: String, default: '' }

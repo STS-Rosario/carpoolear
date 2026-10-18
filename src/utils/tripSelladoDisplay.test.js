@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
     isInviteFriendsBlockedByUnpaidSellado,
     isSelladoPending,
-    shouldShowSelladoPending
+    shouldShowSelladoPending,
+    shouldShowUnLitroAdminNeedsPaymentCard,
+    shouldShowUnLitroOwnerPaymentBanner
 } from './tripSelladoDisplay';
 
 describe('isSelladoPending', () => {
@@ -60,6 +62,9 @@ describe('shouldShowSelladoPending', () => {
         expect(shouldShowSelladoPending(trip, owner)).toBe(true);
         expect(shouldShowSelladoPending(trip, otherUser)).toBe(false);
         expect(shouldShowSelladoPending(trip, null)).toBe(false);
+        expect(
+            shouldShowSelladoPending(trip, { id: 99, is_admin: true })
+        ).toBe(true);
     });
 
     it('falls back to needs_sellado and non-ready state when sellado_pending is missing', () => {
@@ -81,6 +86,61 @@ describe('shouldShowSelladoPending', () => {
         };
 
         expect(shouldShowSelladoPending(trip, owner)).toBe(false);
+    });
+});
+
+describe('shouldShowUnLitroOwnerPaymentBanner', () => {
+    const owner = { id: 10 };
+    const admin = { id: 99, is_admin: true };
+    const pendingTrip = {
+        needs_sellado: true,
+        sellado_pending: true,
+        state: 'awaiting_payment',
+        user: { id: owner.id }
+    };
+
+    it('is true only for the trip owner while Un litro is unpaid', () => {
+        expect(shouldShowUnLitroOwnerPaymentBanner(pendingTrip, owner)).toBe(
+            true
+        );
+        expect(shouldShowUnLitroOwnerPaymentBanner(pendingTrip, admin)).toBe(
+            false
+        );
+        expect(
+            shouldShowUnLitroOwnerPaymentBanner(pendingTrip, { id: 20 })
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowUnLitroAdminNeedsPaymentCard', () => {
+    const owner = { id: 10 };
+    const admin = { id: 99, is_admin: true };
+    const pendingTrip = {
+        needs_sellado: true,
+        sellado_pending: true,
+        state: 'awaiting_payment',
+        user: { id: owner.id }
+    };
+
+    it('shows an informational card to admins who are not the owner', () => {
+        expect(
+            shouldShowUnLitroAdminNeedsPaymentCard(pendingTrip, admin)
+        ).toBe(true);
+        expect(
+            shouldShowUnLitroAdminNeedsPaymentCard(pendingTrip, owner)
+        ).toBe(false);
+        expect(
+            shouldShowUnLitroAdminNeedsPaymentCard(pendingTrip, {
+                id: 20,
+                is_admin: false
+            })
+        ).toBe(false);
+        expect(
+            shouldShowUnLitroAdminNeedsPaymentCard(
+                { ...pendingTrip, sellado_pending: false, state: 'ready' },
+                admin
+            )
+        ).toBe(false);
     });
 });
 

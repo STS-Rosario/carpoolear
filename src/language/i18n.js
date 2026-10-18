@@ -722,6 +722,10 @@ const messages = {
         unLitroBannerRetry: 'Reintentar',
         unLitroBannerPublished:
             'Pago acreditado. Tu viaje ya es visible para toda la comunidad. Gracias por sumar Un litro para Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'Este viaje necesita el pago de Un litro para Carpoolear',
+        unLitroAdminNeedsPaymentBody:
+            'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
         tripContributionBreakdownFuel: 'Combustible',
         tripContributionBreakdownTollsLabel: 'Peajes',
         tripContributionBreakdownTripTotal: 'Total del viaje',
@@ -763,6 +767,7 @@ const messages = {
             'cómo se calcula la contribución por persona',
         tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
+        tripCreationStepDescriptionQuestionPassenger: 'Detalles del viaje',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
             'Antes de publicarlo, chequeá que esté todo bien.',
@@ -774,6 +779,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Tus amigos de Carpoolear reservan sin que tengas que aprobar cada pedido.',
         tripPrefCommentsSection: 'Comentarios para los pasajeros',
+        tripPrefCommentsSectionPassenger: 'Comentarios para los conductores',
         tripReviewEdit: 'Editar',
         tripReviewSectionRoute: 'Recorrido',
         tripReviewSectionVehicle: 'Vehículo',
@@ -800,6 +806,7 @@ const messages = {
         tripCreationStepLabelCar: 'Auto',
         tripCreationStepLabelSeats: 'Asientos',
         tripCreationStepLabelDescription: 'Preferencias',
+        tripCreationStepLabelDescriptionPassenger: 'Detalles',
         tripCreationStepLabelLastDetails: 'Revisar',
         tripCreationSuccessTitle: 'Viaje creado',
         tripCreationSuccessAllSet: '¡Todo listo!',
@@ -1395,6 +1402,8 @@ const messages = {
         referenciasDescripcion:
             'Las referencias son recomendaciones de la persona, no por un viaje en particular dentro de Carpoolear',
         buscar: 'Buscar',
+        limpiarFiltros: 'Limpiar filtros',
+        buscarNombreOId: 'Nombre o ID',
         opcional: 'opcional',
         pagoPendiente: 'Pago pendiente',
         pagoPendienteParaConfirmar: 'para confirmar',
@@ -2681,6 +2690,8 @@ const messages = {
         comenzar: '¡Comenzar!',
         siguiente: 'Siguiente',
         buscar: 'Buscar',
+        limpiarFiltros: 'Limpiar filtros',
+        buscarNombreOId: 'Nombre o ID',
         opcional: 'opcional',
         pagoPendiente: 'Pago pendiente',
         pagoPendienteParaConfirmar: 'para confirmar',
@@ -2894,6 +2905,10 @@ const messages = {
         unLitroBannerRetry: 'Reintentar',
         unLitroBannerPublished:
             'Pago acreditado. Tu viaje ya es visible para toda la comunidad. Gracias por sumar Un litro para Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'Este viaje necesita el pago de Un litro para Carpoolear',
+        unLitroAdminNeedsPaymentBody:
+            'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
         tripContributionBreakdownFuel: 'Combustible',
         tripContributionBreakdownTollsLabel: 'Peajes',
         tripContributionBreakdownTripTotal: 'Total del viaje',
@@ -2935,6 +2950,7 @@ const messages = {
             'cómo se calcula la contribución por persona',
         tripContributionDivisionExplainerSuffix: ' para cada viaje.',
         tripCreationStepDescriptionQuestion: 'Preferencias y detalles',
+        tripCreationStepDescriptionQuestionPassenger: 'Detalles del viaje',
         tripCreationStepLastDetailsTitle: 'Revisá tu viaje',
         tripCreationStepLastDetailsSubtitle:
             'Antes de publicarlo, chequeá que esté todo bien.',
@@ -2946,6 +2962,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Tus amigos de Carpoolear reservan sin que tengas que aprobar cada pedido.',
         tripPrefCommentsSection: 'Comentarios para los pasajeros',
+        tripPrefCommentsSectionPassenger: 'Comentarios para los conductores',
         tripReviewEdit: 'Editar',
         tripReviewSectionRoute: 'Recorrido',
         tripReviewSectionVehicle: 'Vehículo',
@@ -2972,6 +2989,7 @@ const messages = {
         tripCreationStepLabelCar: 'Auto',
         tripCreationStepLabelSeats: 'Asientos',
         tripCreationStepLabelDescription: 'Preferencias',
+        tripCreationStepLabelDescriptionPassenger: 'Detalles',
         tripCreationStepLabelLastDetails: 'Revisar',
         tripCreationSuccessTitle: 'Viaje creado',
         tripCreationSuccessAllSet: '¡Todo listo!',
@@ -4874,6 +4892,10 @@ const messages = {
         unLitroBannerRetry: 'Retry',
         unLitroBannerPublished:
             'Payment confirmed. Your trip is now visible to the whole community. Thanks for adding One liter for Carpoolear.',
+        unLitroAdminNeedsPaymentTitle:
+            'This trip still needs One liter for Carpoolear payment',
+        unLitroAdminNeedsPaymentBody:
+            'It is not visible to other people yet. It will be published when payment is confirmed.',
         tripContributionBreakdownFuel: 'Fuel',
         tripContributionBreakdownTollsLabel: 'Tolls',
         tripContributionBreakdownTripTotal: 'Trip total',
@@ -4914,6 +4936,7 @@ const messages = {
             'how per-person contribution is calculated',
         tripContributionDivisionExplainerSuffix: ' for each trip.',
         tripCreationStepDescriptionQuestion: 'Preferences and details',
+        tripCreationStepDescriptionQuestionPassenger: 'Trip details',
         tripCreationStepLastDetailsTitle: 'Review your trip',
         tripCreationStepLastDetailsSubtitle:
             'Before publishing, check that everything looks right.',
@@ -4925,6 +4948,7 @@ const messages = {
         tripPrefFriendsHelper:
             'Your Carpoolear friends can book without you approving each request.',
         tripPrefCommentsSection: 'Comments for passengers',
+        tripPrefCommentsSectionPassenger: 'Comments for drivers',
         tripReviewEdit: 'Edit',
         tripReviewSectionRoute: 'Route',
         tripReviewSectionVehicle: 'Vehicle',
@@ -4951,6 +4975,7 @@ const messages = {
         tripCreationStepLabelCar: 'Car',
         tripCreationStepLabelSeats: 'Seats',
         tripCreationStepLabelDescription: 'Preferences',
+        tripCreationStepLabelDescriptionPassenger: 'Details',
         tripCreationStepLabelLastDetails: 'Review',
         tripCreationSuccessTitle: 'Trip created',
         tripCreationSuccessAllSet: 'All set!',
@@ -5536,6 +5561,8 @@ const messages = {
         referenciasDescripcion:
             'References are recommendations about the person, not about a specific trip within Carpoolear',
         buscar: 'Search',
+        limpiarFiltros: 'Clear filters',
+        buscarNombreOId: 'Name or ID',
         opcional: 'optional',
         pagoPendiente: 'Payment pending',
         pagoPendienteParaConfirmar: 'to confirm',

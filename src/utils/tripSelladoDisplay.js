@@ -25,5 +25,23 @@ export function shouldShowSelladoPending(trip, currentUser) {
         return false;
     }
 
-    return currentUser.id === trip.user.id;
+    return (
+        currentUser.id === trip.user.id || Boolean(currentUser.is_admin)
+    );
+}
+
+export function shouldShowUnLitroOwnerPaymentBanner(trip, currentUser) {
+    if (!isSelladoPending(trip)) {
+        return false;
+    }
+
+    return Boolean(currentUser?.id && currentUser.id === trip.user?.id);
+}
+
+export function shouldShowUnLitroAdminNeedsPaymentCard(trip, currentUser) {
+    if (!isSelladoPending(trip) || !currentUser || !currentUser.is_admin) {
+        return false;
+    }
+
+    return currentUser.id !== trip.user?.id;
 }
