@@ -1,3 +1,4 @@
+import dayjs from '../dayjs';
 import { parseAdminPaginationFromRoute } from './adminPagination';
 
 export const ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY =
@@ -111,9 +112,9 @@ function getManualIdentityValidationWaitingTimeMs(item, now = Date.now()) {
         return null;
     }
 
-    const submitted = new Date(item.submitted_at).getTime();
+    const submitted = dayjs.utc(item.submitted_at).valueOf();
     const end = item.manual_validation_started_at
-        ? new Date(item.manual_validation_started_at).getTime()
+        ? dayjs.utc(item.manual_validation_started_at).valueOf()
         : now;
     /* eslint-enable camelcase */
 

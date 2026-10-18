@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import dayjs from '../dayjs';
 import {
     ADMIN_MANUAL_IDENTITY_VALIDATIONS_SHOW_RESOLVED_KEY,
     buildManualIdentityValidationListParams,
@@ -110,7 +111,7 @@ describe('adminManualIdentityValidationsList', () => {
         });
 
         it('sorts by waiting time in milliseconds', () => {
-            const now = new Date('2026-06-18 12:00:00').getTime();
+            const now = dayjs.utc('2026-06-18 12:00:00').valueOf();
             const list = [
                 {
                     id: 1,

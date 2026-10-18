@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import dayjs from '../dayjs';
 import {
+    formatManualIdentityValidationDateTime,
     formatManualIdentityValidationWaitingTime,
     getManualIdentityValidationReviewActionAdminLabelKey,
     getManualIdentityValidationStatusBadgeClass,
@@ -10,6 +12,11 @@ import {
 
 describe('adminManualIdentityValidationDisplay', () => {
     const t = (key) => key;
+
+    // Some tests pin the process timezone so a regression to `new Date(naive)` fails on UTC CI too.
+    afterEach(() => {
+        vi.unstubAllEnvs();
+    });
 
     it('labels pending paid reviews as pending revision', () => {
         expect(getManualIdentityValidationStatusLabel({
@@ -96,12 +103,41 @@ describe('adminManualIdentityValidationDisplay', () => {
     });
 
     it('formats waiting time from submitted_at to now', () => {
-        const now = new Date('2026-06-18 12:30:00').getTime();
+        const now = dayjs.utc('2026-06-18 12:30:00').valueOf();
         const result = formatManualIdentityValidationWaitingTime({
             submitted_at: '2026-06-18 10:00:00'
         }, t, now);
 
         expect(result).toBe('2 tiempoEsperaHoras 30 tiempoEsperaMinutos');
+    });
+
+    describe('in a browser ahead of UTC (America/Argentina/Buenos_Aires)', () => {
+        it('treats the naive submitted_at timestamp as UTC', () => {
+            vi.stubEnv('TZ', 'America/Argentina/Buenos_Aires');
+            const now = Date.UTC(2026, 5, 18, 10, 5, 0);
+            const result = formatManualIdentityValidationWaitingTime({
+                submitted_at: '2026-06-18 10:00:00'
+            }, t, now);
+
+            expect(result).toBe('5 tiempoEsperaMinutos');
+        });
+
+        it('formats naive UTC timestamps in Argentina time', () => {
+            vi.stubEnv('TZ', 'America/Argentina/Buenos_Aires');
+
+            expect(formatManualIdentityValidationDateTime('2026-06-18 13:00:00')).toBe('18/06/2026 10:00');
+        });
+    });
+
+    it('formats naive UTC timestamps in Argentina time on a UTC machine', () => {
+        vi.stubEnv('TZ', 'UTC');
+
+        expect(formatManualIdentityValidationDateTime('2026-06-18 02:30:00')).toBe('17/06/2026 23:30');
+    });
+
+    it('formats missing or invalid timestamps as a dash', () => {
+        expect(formatManualIdentityValidationDateTime(null)).toBe('-');
+        expect(formatManualIdentityValidationDateTime('not a date')).toBe('-');
     });
 
     it('maps approved review status to approved-by label key', () => {
