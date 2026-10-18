@@ -22,4 +22,11 @@ describe('TripPreferencesStepPanel.vue', () => {
         expect(componentSource).toContain('placeholderComentarioPasajeros');
         expect(componentSource).not.toMatch(/Opcional/i);
     });
+
+    it('can hide the driver preferences and use passenger copy', () => {
+        expect(componentSource).toContain('v-if="showPreferences"');
+        expect(componentSource).toContain('showPreferences: { type: Boolean, default: true }');
+        expect(componentSource).toContain("$t('tripCreationStepDescriptionQuestionPassenger')");
+        expect(componentSource).toContain("$t('tripPrefCommentsSectionPassenger')");
+    });
 });

@@ -1,5 +1,6 @@
 .DS_Store
 .env
+*.local
 node_modules/
 # npm only — do not commit Yarn lockfiles
 yarn.lock
