@@ -3,7 +3,11 @@
         <dl class="trip-contribution-breakdown__table">
             <div class="trip-contribution-breakdown__row">
                 <dt>
-                    {{ $t('tripContributionBreakdownFuel') }}
+                    {{
+                        $t('tripContributionBreakdownFuel', {
+                            liters: lines.liters
+                        })
+                    }}
                     <span
                         class="trip-contribution-breakdown__info tooltip-bottom"
                         :data-tooltip="
