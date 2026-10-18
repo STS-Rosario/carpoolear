@@ -1,116 +1,36 @@
 <template>
     <div class="trip-contribution-breakdown" v-if="lines">
-        <ul class="trip-contribution-breakdown__details">
-            <li>
-                {{
-                    $t('tripContributionBreakdownFuelLiter', {
-                        amount: lines.fuelPricePerLiter
-                    })
-                }}
-            </li>
-            <li>
-                {{
-                    $t('tripContributionBreakdownLiters', {
-                        liters: lines.liters,
-                        km: lines.distanceKm
-                    })
-                }}
-                <span
-                    class="trip-contribution-breakdown__info tooltip-bottom"
-                    :data-tooltip="
-                        $t('tripContributionBreakdownConsumptionTooltip', {
-                            kmPerLiter: lines.kmPerLiter,
-                            litersPer100km: lines.litersPer100Km
-                        })
-                    "
-                    @click.stop
-                >
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </span>
-            </li>
-            <li>
-                {{
-                    $t('tripContributionBreakdownFuelCost', {
-                        pricePerLiter: lines.fuelPricePerLiter,
-                        liters: lines.liters,
-                        amount: lines.fuelCost
-                    })
-                }}
-            </li>
-            <li>
-                {{
-                    $t('tripContributionBreakdownTolls', {
-                        amount: lines.tollsCost,
-                        percent: lines.tollsPercent
-                    })
-                }}
-            </li>
-            <li v-if="lines.showSellado">
-                <template v-if="lines.selladoBonificado">
-                    {{ $t('tripContributionBreakdownSellado').split(':')[0] }}:
-                    {{ $t('tripContributionBreakdownSelladoBonificado') }}
-                </template>
-                <template v-else>
-                    {{
-                        $t('tripContributionBreakdownSellado', {
-                            amount: lines.selladoCost
-                        })
-                    }}
-                </template>
-            </li>
-            <li>
-                <template v-if="!lines.showSellado">
-                    {{
-                        $t('tripContributionBreakdownTotal', {
-                            fuel: lines.fuelCost,
-                            tolls: lines.tollsCost
-                        })
-                    }}
-                </template>
-                <template v-else-if="lines.selladoBonificado">
-                    {{
-                        $t('tripContributionBreakdownTotalWithSelladoBonificado', {
-                            fuel: lines.fuelCost,
-                            tolls: lines.tollsCost,
-                            sellado: $t('tripContributionBreakdownSelladoBonificado')
-                        })
-                    }}
-                </template>
-                <template v-else>
-                    {{
-                        $t('tripContributionBreakdownTotalWithSellado', {
-                            fuel: lines.fuelCost,
-                            tolls: lines.tollsCost,
-                            sellado: lines.selladoCost
-                        })
-                    }}
-                </template>
-            </li>
-            <li>
-                {{
-                    $t('tripContributionBreakdownOccupants', {
-                        count: lines.occupants
-                    })
-                }}
-            </li>
-            <li>
-                {{
-                    $t('tripContributionBreakdownPerPerson', {
-                        total: lines.total,
-                        count: lines.occupants,
-                        amount: lines.perPerson
-                    })
-                }}
-            </li>
-        </ul>
-
         <dl class="trip-contribution-breakdown__table">
             <div class="trip-contribution-breakdown__row">
-                <dt>{{ $t('tripContributionBreakdownFuel') }}</dt>
+                <dt>
+                    {{
+                        $t('tripContributionBreakdownFuel', {
+                            liters: lines.liters
+                        })
+                    }}
+                    <span
+                        class="trip-contribution-breakdown__info tooltip-bottom"
+                        :data-tooltip="
+                            $t('tripContributionBreakdownConsumptionTooltip', {
+                                kmPerLiter: lines.kmPerLiter,
+                                litersPer100km: lines.litersPer100Km
+                            })
+                        "
+                        @click.stop
+                    >
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
+                </dt>
                 <dd>${{ lines.fuelCostInteger }}</dd>
             </div>
             <div class="trip-contribution-breakdown__row">
-                <dt>{{ $t('tripContributionBreakdownTollsLabel') }}</dt>
+                <dt>
+                    {{
+                        $t('tripContributionBreakdownTollsLabel', {
+                            percent: lines.tollsPercent
+                        })
+                    }}
+                </dt>
                 <dd>${{ lines.tollsCostInteger }}</dd>
             </div>
             <div
@@ -193,17 +113,6 @@ export default {
 .trip-contribution-breakdown {
     margin: 0;
     color: var(--ds-text-primary, #22211f);
-}
-
-.trip-contribution-breakdown__details {
-    margin: 0 0 1rem;
-    padding: 0;
-    list-style: none;
-    line-height: 1.55;
-}
-
-.trip-contribution-breakdown__details li + li {
-    margin-top: 0.2rem;
 }
 
 .trip-contribution-breakdown__info {

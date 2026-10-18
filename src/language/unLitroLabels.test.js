@@ -64,16 +64,16 @@ const KEYS = {
         'Este viaje necesita el pago de Un litro para Carpoolear',
     unLitroAdminNeedsPaymentBody:
         'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
-    tripContributionBreakdownFuel: 'Combustible',
-    tripContributionBreakdownTollsLabel: 'Peajes',
+    tripContributionBreakdownFuel: '{liters} litros de combustible premium',
+    tripContributionBreakdownTollsLabel: 'Peajes ({percent}%)',
     tripContributionBreakdownTripTotal: 'Total del viaje',
     tripContributionBreakdownOccupantsSplit:
         'Entre {count} personas (vos incluido)',
     tripContributionBreakdownPerPersonLabel: 'Por persona',
     tripContributionHowCalculatedExplainer:
-        'La contribución sugerida se calcula en función del recorrido, los peajes, Un litro para Carpoolear y el consumo de combustible, tomando como referencia un vehículo promedio con un consumo de 8 L cada 100 km en ruta.',
+        'La contribución promedio se calcula en función del recorrido, los peajes, Un litro para Carpoolear y el consumo de combustible, tomando como referencia un vehículo promedio con un consumo de 8 L cada 100 km en ruta.',
     tripContributionHowCalculatedExplainerWithoutUnLitro:
-        'La contribución sugerida se calcula en función del recorrido, los peajes y el consumo de combustible, tomando como referencia un vehículo promedio con un consumo de 8 L cada 100 km en ruta.',
+        'La contribución promedio se calcula en función del recorrido, los peajes y el consumo de combustible, tomando como referencia un vehículo promedio con un consumo de 8 L cada 100 km en ruta.',
     tripContributionTankTip:
         'Si tenés dudas sobre el consumo real de tu vehículo, la forma más precisa de calcularlo es llenar el tanque antes de salir y volver a llenarlo al llegar: la diferencia entre ambas cargas corresponde al combustible utilizado durante el viaje.'
 };
@@ -141,16 +141,16 @@ const EN_KEYS = {
         'This trip still needs One liter for Carpoolear payment',
     unLitroAdminNeedsPaymentBody:
         'It is not visible to other people yet. It will be published when payment is confirmed.',
-    tripContributionBreakdownFuel: 'Fuel',
-    tripContributionBreakdownTollsLabel: 'Tolls',
+    tripContributionBreakdownFuel: '{liters} liters of premium fuel',
+    tripContributionBreakdownTollsLabel: 'Tolls ({percent}%)',
     tripContributionBreakdownTripTotal: 'Trip total',
     tripContributionBreakdownOccupantsSplit:
         'Among {count} people (you included)',
     tripContributionBreakdownPerPersonLabel: 'Per person',
     tripContributionHowCalculatedExplainer:
-        'The suggested contribution is calculated from the route, tolls, One liter for Carpoolear and fuel consumption, using an average vehicle that uses 8 L every 100 km on the highway.',
+        'The average contribution is calculated from the route, tolls, One liter for Carpoolear and fuel consumption, using an average vehicle that uses 8 L every 100 km on the highway.',
     tripContributionHowCalculatedExplainerWithoutUnLitro:
-        'The suggested contribution is calculated from the route, tolls and fuel consumption, using an average vehicle that uses 8 L every 100 km on the highway.',
+        'The average contribution is calculated from the route, tolls and fuel consumption, using an average vehicle that uses 8 L every 100 km on the highway.',
     tripContributionTankTip:
         'If you are unsure about your vehicle’s real consumption, the most accurate way to calculate it is to fill the tank before leaving and fill it again on arrival: the difference between both fills is the fuel used during the trip.'
 };
@@ -168,15 +168,25 @@ describe('Un litro para Carpoolear copy', () => {
         });
     });
 
-    it('uses suggested contribution wording in Spanish locales', () => {
+    it('uses promedio contribution wording in Spanish locales', () => {
         expect(messages.arg.tripContributionSuggested).toBe(
-            'Contribución sugerida: $ {amount}'
+            'Contribución promedio: $ {amount}'
         );
         expect(messages.arg.tripContributionHowCalculated).toBe(
-            '¿Cómo se calcula la contribución sugerida?'
+            '¿Cómo se calcula la contribución promedio?'
         );
         expect(messages.chl.tripContributionSuggested).toBe(
-            'Contribución sugerida: $ {amount}'
+            'Contribución promedio: $ {amount}'
+        );
+        expect(messages.arg.tripContributionSuggested).not.toMatch(/sugerida/i);
+        expect(messages.arg.tripContributionHowCalculatedExplainer).not.toMatch(
+            /sugerida/i
+        );
+        expect(messages.en.tripContributionSuggested).toBe(
+            'Average contribution: $ {amount}'
+        );
+        expect(messages.en.tripContributionHowCalculated).toBe(
+            'How is the average contribution calculated?'
         );
     });
 });

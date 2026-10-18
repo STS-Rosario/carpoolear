@@ -43,6 +43,12 @@ describe('trip contribution breakdown labels', () => {
             expect(messages[locale].tripContributionBreakdownPerPerson).toBe(
                 'Costo por persona: $ {total} / {count} = $ {amount}'
             );
+            expect(messages[locale].tripContributionBreakdownFuel).toBe(
+                '{liters} litros de combustible premium'
+            );
+            expect(messages[locale].tripContributionBreakdownTollsLabel).toBe(
+                'Peajes ({percent}%)'
+            );
         }
     );
 
@@ -82,6 +88,12 @@ describe('trip contribution breakdown labels', () => {
         );
         expect(messages.en.tripContributionBreakdownPerPerson).toBe(
             'Cost per person: $ {total} / {count} = $ {amount}'
+        );
+        expect(messages.en.tripContributionBreakdownFuel).toBe(
+            '{liters} liters of premium fuel'
+        );
+        expect(messages.en.tripContributionBreakdownTollsLabel).toBe(
+            'Tolls ({percent}%)'
         );
     });
 });
