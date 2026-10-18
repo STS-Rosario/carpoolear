@@ -44,7 +44,7 @@ describe('trip contribution breakdown labels', () => {
                 'Costo por persona: $ {total} / {count} = $ {amount}'
             );
             expect(messages[locale].tripContributionBreakdownFuel).toBe(
-                'Combustible premium'
+                '{liters} litros de combustible premium'
             );
             expect(messages[locale].tripContributionBreakdownTollsLabel).toBe(
                 'Peajes ({percent}%)'
@@ -89,7 +89,9 @@ describe('trip contribution breakdown labels', () => {
         expect(messages.en.tripContributionBreakdownPerPerson).toBe(
             'Cost per person: $ {total} / {count} = $ {amount}'
         );
-        expect(messages.en.tripContributionBreakdownFuel).toBe('Premium fuel');
+        expect(messages.en.tripContributionBreakdownFuel).toBe(
+            '{liters} liters of premium fuel'
+        );
         expect(messages.en.tripContributionBreakdownTollsLabel).toBe(
             'Tolls ({percent}%)'
         );

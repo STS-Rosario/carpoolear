@@ -64,7 +64,7 @@ const KEYS = {
         'Este viaje necesita el pago de Un litro para Carpoolear',
     unLitroAdminNeedsPaymentBody:
         'Todavía no es visible para el resto de las personas. Se publica cuando se acredite el pago.',
-    tripContributionBreakdownFuel: 'Combustible premium',
+    tripContributionBreakdownFuel: '{liters} litros de combustible premium',
     tripContributionBreakdownTollsLabel: 'Peajes ({percent}%)',
     tripContributionBreakdownTripTotal: 'Total del viaje',
     tripContributionBreakdownOccupantsSplit:
@@ -141,7 +141,7 @@ const EN_KEYS = {
         'This trip still needs One liter for Carpoolear payment',
     unLitroAdminNeedsPaymentBody:
         'It is not visible to other people yet. It will be published when payment is confirmed.',
-    tripContributionBreakdownFuel: 'Premium fuel',
+    tripContributionBreakdownFuel: '{liters} liters of premium fuel',
     tripContributionBreakdownTollsLabel: 'Tolls ({percent}%)',
     tripContributionBreakdownTripTotal: 'Trip total',
     tripContributionBreakdownOccupantsSplit:
