@@ -30,7 +30,7 @@
                     {{ $t('unLitroComplimentaryCreateBody') }}
                 </p>
             </template>
-            <template v-else-if="!linkOnly">
+            <template v-else-if="!linkOnly && (bonificado || remainingFreeTrips > 0)">
                 <span class="un-litro-card__badge">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     {{ $t('unLitroBonificadoBadge') }}
@@ -96,6 +96,10 @@ export default {
             default: false
         },
         complimentary: {
+            type: Boolean,
+            default: false
+        },
+        bonificado: {
             type: Boolean,
             default: false
         },

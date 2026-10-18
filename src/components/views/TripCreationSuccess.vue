@@ -4,83 +4,33 @@
             <h2 class="trip-creation-success__title">
                 {{ $t('unLitroPublishTitle') }}
             </h2>
-            <div class="un-litro-pay-card">
-                <div class="un-litro-pay-card__trip">
-                    <div class="un-litro-pay-card__route">
-                        <strong>{{ tripRouteLabel }}</strong>
-                        <span class="un-litro-pay-card__badge">
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                            {{ $t('unLitroPendingPaymentBadge') }}
-                        </span>
-                    </div>
-                    <p class="un-litro-pay-card__when">{{ tripWhenLabel }}</p>
-                </div>
-                <div class="un-litro-pay-card__info">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    {{ $t('unLitroTripCreatedHidden') }}
-                </div>
-                <div class="un-litro-pay-card__amount">
-                    <h3>{{ $t('unLitroName') }}</h3>
-                    <p class="un-litro-pay-card__price">
-                        ${{ formattedSelladoAmount }}
-                    </p>
-                    <UnLitroInfoCard
-                        :charged="true"
-                        :free-trips-amount="freeTripsAmount"
-                    />
-                </div>
-                <p class="un-litro-pay-card__choose">
-                    {{ $t('unLitroChooseHowToPay') }}
-                </p>
-                <label class="un-litro-pay-method un-litro-pay-method--selected">
-                    <input
-                        type="radio"
-                        name="un-litro-pay-method"
-                        value="mercado_pago"
-                        checked
-                    />
-                    <i class="fa fa-credit-card" aria-hidden="true"></i>
-                    <span>
-                        <strong>{{ $t('unLitroPayMercadoPago') }}</strong>
-                        <em>{{ $t('unLitroPayMercadoPagoHint') }}</em>
-                    </span>
-                </label>
-                <label
-                    class="un-litro-pay-method un-litro-pay-method--disabled"
-                    data-testid="un-litro-pay-qr"
-                >
-                    <input type="radio" name="un-litro-pay-method" value="qr" disabled />
-                    <i class="fa fa-qrcode" aria-hidden="true"></i>
-                    <span>
-                        <strong>{{ $t('unLitroPayQr') }}</strong>
-                        <em>{{ $t('unLitroPayQrHint') }}</em>
-                    </span>
-                </label>
-                <AppButton
-                    variant="primary"
-                    block
-                    class="un-litro-pay-card__pay"
-                    data-testid="un-litro-pay-now"
-                    @click="onPayNow"
-                >
-                    {{ $t('unLitroPayOneLiter') }}
-                </AppButton>
-                <router-link
-                    class="un-litro-pay-card__later"
-                    data-testid="un-litro-pay-later"
-                    :to="{ name: 'detail_trip', params: { id: trip.id } }"
-                >
-                    {{ $t('unLitroPayLater') }}
-                </router-link>
-            </div>
+            <UnLitroPayCard
+                :trip="trip"
+                :qr-enabled="qrEnabled"
+                @pay-later="goToTrip"
+                @paid="onSelladoPaid"
+            />
         </template>
         <template v-else>
             <h2 class="trip-creation-success__title">{{ $t('tripCreationSuccessTitle') }}</h2>
             <div class="trip-creation-success__emoji" aria-hidden="true">🥳</div>
             <p class="trip-creation-success__heading">{{ $t('tripCreationSuccessAllSet') }}</p>
+            <div v-if="unLitroKind" class="trip-creation-success__un-litro">
+                <h4 class="trip-creation-success__un-litro-title">
+                    {{ $t('unLitroSectionTitle') }}
+                </h4>
+                <UnLitroInfoCard
+                    :charged="unLitroKind === 'charged'"
+                    :bonificado="unLitroKind === 'bonificado'"
+                    :free-trips-amount="freeTripsAmount"
+                />
+            </div>
         </template>
 
-        <div class="trip-creation-success__actions">
+        <div
+            v-if="!showUnLitroPayment"
+            class="trip-creation-success__actions"
+        >
             <AppButton
                 variant="primary"
                 block
@@ -185,7 +135,10 @@
             </template>
         </modal>
 
-        <div class="trip-creation-success__invite">
+        <div
+            v-if="!showUnLitroPayment"
+            class="trip-creation-success__invite"
+        >
             <TripInviteFriends
                 :trip-id="trip.id"
                 close-behavior="trip-detail"
@@ -198,6 +151,7 @@
 import { mapState } from 'pinia';
 import TripInviteFriends from '../sections/TripInviteFriends.vue';
 import UnLitroInfoCard from '../elements/UnLitroInfoCard.vue';
+import UnLitroPayCard from '../elements/UnLitroPayCard.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
@@ -206,10 +160,10 @@ import dialogs from '../../services/dialogs.js';
 import { useAuthStore } from '../../stores/auth';
 import { shareTripDetail } from '../../utils/tripDetailShare.js';
 import { isSelladoPending } from '../../utils/tripSelladoDisplay.js';
-import { selladoCheckoutUrl } from '../../utils/tripSelladoUi.js';
-import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
-import { openExternalUrl } from '../../utils/externalLink.js';
-import dayjs from '../../dayjs';
+import {
+    isTripCreationPaymentQrEnabled,
+    unLitroCardKindFromTrip
+} from '../../utils/tripSelladoUi.js';
 import {
     buildTripCreationTemplateFromSnapshot,
     canSaveTripCreationTemplateName,
@@ -218,20 +172,13 @@ import {
     saveTripCreationTemplate
 } from '../../utils/tripCreationTemplate.js';
 
-function cityNameFromPoint(point) {
-    if (!point) {
-        return '';
-    }
-    const address = point.json_address || {};
-    return address.ciudad || address.city || point.address || point.name || '';
-}
-
 export default {
     name: 'trip-creation-success',
 
     components: {
         TripInviteFriends,
         UnLitroInfoCard,
+        UnLitroPayCard,
         AppButton,
         AppField,
         AppInput,
@@ -249,7 +196,7 @@ export default {
         }
     },
 
-    emits: ['start-return-trip'],
+    emits: ['start-return-trip', 'paid'],
 
     data() {
         return {
@@ -268,29 +215,17 @@ export default {
         showUnLitroPayment() {
             return isSelladoPending(this.trip);
         },
-        formattedSelladoAmount() {
-            return formatPesoIntegerFromCents(
-                (this.config && this.config.module_trip_creation_payment_amount_cents) ||
-                    0
-            );
+        qrEnabled() {
+            return isTripCreationPaymentQrEnabled(this.config);
+        },
+        unLitroKind() {
+            return unLitroCardKindFromTrip(this.trip, {
+                selladoEnabled:
+                    this.config && this.config.module_trip_creation_payment_enabled
+            });
         },
         freeTripsAmount() {
             return (this.config && this.config.module_trip_creation_payment_trips_threshold) || 0;
-        },
-        tripRouteLabel() {
-            const points = this.trip.points || [];
-            const origin = cityNameFromPoint(points[0]) || this.trip.from_town || '';
-            const destination =
-                cityNameFromPoint(points[points.length - 1]) || this.trip.to_town || '';
-            return `${origin} → ${destination}`;
-        },
-        tripWhenLabel() {
-            if (!this.trip.trip_date) {
-                return '';
-            }
-            return `${dayjs(this.trip.trip_date).format('ddd, D MMM')} · ${dayjs(
-                this.trip.trip_date
-            ).format('HH:mm')} hs`;
         },
         canSaveTemplate() {
             const userId = this.user?.id;
@@ -312,15 +247,11 @@ export default {
     },
 
     methods: {
-        onPayNow() {
-            const url = selladoCheckoutUrl(this.trip);
-            if (url) {
-                openExternalUrl(url);
-                return;
-            }
-            dialogs.message(this.$t('errorAlGuardar'), {
-                estado: 'error'
-            });
+        goToTrip() {
+            this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
+        },
+        onSelladoPaid(trip) {
+            this.$emit('paid', trip);
         },
         async onShare() {
             await shareTripDetail({
@@ -421,6 +352,15 @@ export default {
     margin-bottom: 1.5rem;
 }
 
+.trip-creation-success:has(.un-litro-pay-card) {
+    text-align: left;
+}
+
+.trip-creation-success:has(.un-litro-pay-card) .trip-creation-success__title {
+    color: var(--ds-action, #1e5f9e);
+    text-align: center;
+}
+
 .trip-creation-success__emoji {
     font-size: 4rem;
     line-height: 1;
@@ -431,6 +371,29 @@ export default {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
+}
+
+.trip-creation-success__un-litro {
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+    text-align: left;
+}
+
+.trip-creation-success :deep(.un-litro-pay-card) {
+    margin-bottom: 2rem;
+}
+
+.trip-creation-success__un-litro-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+}
+
+.trip-creation-success__un-litro :deep(.un-litro-card) {
+    margin-bottom: 0;
 }
 
 .trip-creation-success__actions {
@@ -486,144 +449,4 @@ export default {
     color: #555;
 }
 
-.un-litro-pay-card {
-    max-width: 500px;
-    margin: 0 auto 2rem;
-    padding: 1rem;
-    text-align: left;
-    background: var(--ds-neutral-bg, #fff);
-    border: 1px solid #e5e4e0;
-    border-radius: 0.75rem;
-}
-
-.un-litro-pay-card__trip {
-    margin-bottom: 0.85rem;
-    padding: 0.85rem 1rem;
-    border: 1px solid #e5e4e0;
-    border-radius: 0.65rem;
-}
-
-.un-litro-pay-card__route {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-}
-
-.un-litro-pay-card__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    background: var(--ds-warning-bg, #ffecc8);
-    color: var(--ds-warning-text, #262626);
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
-.un-litro-pay-card__when {
-    margin: 0.4rem 0 0;
-    color: var(--ds-text-secondary, #404040);
-}
-
-.un-litro-pay-card__info {
-    display: flex;
-    gap: 0.55rem;
-    margin-bottom: 1rem;
-    padding: 0.85rem 1rem;
-    border-radius: 0.65rem;
-    background: var(--ds-info-bg, #e1effa);
-    color: var(--ds-text-primary, #22211f);
-    line-height: 1.4;
-}
-
-.un-litro-pay-card__info i {
-    margin-top: 0.15rem;
-    color: var(--ds-action, #1e5f9e);
-}
-
-.un-litro-pay-card__amount h3 {
-    margin: 0 0 0.35rem;
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-.un-litro-pay-card__price {
-    margin: 0 0 0.75rem;
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.1;
-}
-
-.un-litro-pay-card__amount :deep(.un-litro-card) {
-    margin: 0 0 1rem;
-    padding: 0;
-    background: transparent;
-}
-
-.un-litro-pay-card__amount :deep(.un-litro-card__icon),
-.un-litro-pay-card__amount :deep(.un-litro-card__title) {
-    display: none;
-}
-
-.un-litro-pay-card__choose {
-    margin: 0 0 0.65rem;
-    font-weight: 700;
-}
-
-.un-litro-pay-method {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.65rem;
-    padding: 0.85rem 1rem;
-    border: 1.5px solid #d9d7d2;
-    border-radius: 0.65rem;
-}
-
-.un-litro-pay-method--selected {
-    border-color: var(--ds-action, #1e5f9e);
-    background: var(--ds-action-bg, #eef4fb);
-}
-
-.un-litro-pay-method--disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-.un-litro-pay-method input {
-    margin: 0;
-}
-
-.un-litro-pay-method i {
-    width: 1.25rem;
-    text-align: center;
-    color: var(--ds-action, #1e5f9e);
-}
-
-.un-litro-pay-method span {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-}
-
-.un-litro-pay-method em {
-    font-style: normal;
-    color: var(--ds-text-secondary, #404040);
-    font-size: 0.9rem;
-}
-
-.un-litro-pay-card__pay {
-    margin-top: 0.5rem;
-}
-
-.un-litro-pay-card__later {
-    display: block;
-    margin-top: 0.85rem;
-    text-align: center;
-    color: var(--ds-action, #1e5f9e);
-    font-weight: 700;
-}
 </style>

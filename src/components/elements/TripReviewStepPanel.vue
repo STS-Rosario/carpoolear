@@ -86,7 +86,10 @@
             </span>
         </section>
 
-        <section v-if="showContribution" class="trip-review-step__section">
+        <section
+            v-if="showContribution"
+            class="trip-review-step__section trip-review-step__section--contribution"
+        >
             <div class="trip-review-step__section-header">
                 <h4 class="trip-review-step__section-title">
                     {{ $t('tripReviewSectionContribution') }}
@@ -134,8 +137,10 @@
             </div>
             <UnLitroInfoCard
                 v-else
-                :charged="false"
+                class="trip-review-step__un-litro-card"
+                :charged="!selladoBonificado && !selladoComplimentary"
                 :complimentary="selladoComplimentary"
+                :bonificado="selladoBonificado"
                 :remaining-free-trips="remainingFreeTrips"
                 :free-trips-amount="freeTripsAmount"
             />
@@ -262,6 +267,7 @@ export default {
         showUnLitroCard: { type: Boolean, default: false },
         selladoCharged: { type: Boolean, default: false },
         selladoComplimentary: { type: Boolean, default: false },
+        selladoBonificado: { type: Boolean, default: false },
         selladoAmountCents: { type: Number, default: 0 },
         remainingFreeTrips: { type: Number, default: 0 },
         freeTripsAmount: { type: Number, default: 0 },
@@ -352,6 +358,19 @@ export default {
 .trip-review-step__section {
     padding: 1rem 0;
     border-bottom: 1px solid #e8e8e8;
+}
+
+.trip-review-step__section--contribution {
+    padding-bottom: 0.5rem;
+}
+
+.trip-review-step__section--un-litro {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}
+
+.trip-review-step__price-caption {
+    margin: 0.2rem 0 0;
 }
 
 .trip-review-step__section-header {
@@ -461,7 +480,7 @@ export default {
 }
 
 .trip-review-step__un-litro-amount {
-    margin: 0;
+    margin: 0 0 0.15rem;
     font-size: 1.35rem;
     font-weight: 700;
     color: #22211f;
@@ -473,7 +492,12 @@ export default {
 }
 
 .trip-review-step__un-litro-card {
-    margin-top: 0.75rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0;
+}
+
+.trip-review-step__section--un-litro :deep(.un-litro-card) {
+    margin-bottom: 0;
 }
 
 .trip-review-step__pref-tags {

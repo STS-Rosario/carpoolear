@@ -21,9 +21,9 @@ describe('UnLitroInfoCard', () => {
     it('explains that the trip adds Un litro when sellado is charged', () => {
         const wrapper = mountCard({ charged: true });
 
-        expect(wrapper.text()).toContain('Este viaje suma Un litro para Carpoolear');
+        expect(wrapper.text()).toContain('Este viaje aporta Un litro para Carpoolear');
         expect(wrapper.text()).toContain(
-            'Es 1 litro de nafta que ayuda a mantener la plataforma'
+            'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma'
         );
         expect(wrapper.text()).toContain('¿Qué es esto?');
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
@@ -41,7 +41,31 @@ describe('UnLitroInfoCard', () => {
             'Te queda 1 viaje sin Un litro para Carpoolear'
         );
         expect(wrapper.text()).not.toContain(
-            'Este viaje suma Un litro para Carpoolear'
+            'Este viaje aporta Un litro para Carpoolear'
+        );
+    });
+
+    it('does not show Bonificado when the user has no remaining free trips', () => {
+        const wrapper = mountCard({
+            charged: false,
+            remainingFreeTrips: 0
+        });
+
+        expect(wrapper.text()).not.toContain('Bonificado');
+        expect(wrapper.text()).not.toContain('Este viaje es bonificado');
+    });
+
+    it('shows Bonificado for a created waived trip even without remaining free trips', () => {
+        const wrapper = mountCard({
+            charged: false,
+            bonificado: true,
+            remainingFreeTrips: 0
+        });
+
+        expect(wrapper.text()).toContain('Bonificado');
+        expect(wrapper.text()).toContain('Este viaje es bonificado');
+        expect(wrapper.text()).not.toContain(
+            'Este viaje aporta Un litro para Carpoolear'
         );
     });
 
@@ -60,7 +84,7 @@ describe('UnLitroInfoCard', () => {
         const wrapper = mountCard({ charged: true, linkOnly: true });
 
         expect(wrapper.text()).toContain('¿Qué es esto?');
-        expect(wrapper.text()).not.toContain('Este viaje suma Un litro para Carpoolear');
+        expect(wrapper.text()).not.toContain('Este viaje aporta Un litro para Carpoolear');
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
     });
 
@@ -76,7 +100,7 @@ describe('UnLitroInfoCard', () => {
         );
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
         expect(wrapper.text()).not.toContain(
-            'Este viaje suma Un litro para Carpoolear'
+            'Este viaje aporta Un litro para Carpoolear'
         );
     });
 

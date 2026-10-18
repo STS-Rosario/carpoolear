@@ -9,7 +9,21 @@
                 }"
             >
                 <div
-                    v-if="showUnLitroAdminNeedsPaymentCard"
+                    v-if="showSelladoProcessingBanner"
+                    class="un-litro-banner un-litro-banner--processing"
+                    role="status"
+                >
+                    <p>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        {{ $t('unLitroBannerProcessing') }}
+                        <UnLitroInfoCard
+                            link-only
+                            :free-trips-amount="freeTripsAmount"
+                        />
+                    </p>
+                </div>
+                <div
+                    v-else-if="showUnLitroAdminNeedsPaymentCard"
                     class="un-litro-banner un-litro-banner--pending"
                     role="status"
                     data-testid="un-litro-admin-needs-payment"
@@ -114,6 +128,26 @@
                         />
                     </p>
                 </div>
+                <modal
+                    v-if="showUnLitroPayModal"
+                    class="un-litro-pay-modal"
+                    name="un-litro-pay"
+                    :hide-footer="true"
+                    @close="showUnLitroPayModal = false"
+                >
+                    <template #header>
+                        <h3>{{ $t('unLitroPublishTitle') }}</h3>
+                    </template>
+                    <template #body>
+                        <UnLitroPayCard
+                            :trip="trip"
+                            :qr-enabled="qrEnabled"
+                            radio-group-name="un-litro-pay-method-modal"
+                            @pay-later="showUnLitroPayModal = false"
+                            @paid="onSelladoPaid"
+                        />
+                    </template>
+                </modal>
                 <UnLitroInfoCard
                     v-if="showSelladoEmptyTripCreditCard"
                     next-trip-complimentary
@@ -395,6 +429,12 @@
                             </div>
                             <div class="trip-detail__contribucion">
                                 <TripPrice />
+                                <UnLitroInfoCard
+                                    v-if="tripDetailUnLitroKind"
+                                    :charged="tripDetailUnLitroKind === 'charged'"
+                                    :bonificado="tripDetailUnLitroKind === 'bonificado'"
+                                    :free-trips-amount="freeTripsAmount"
+                                />
                             </div>
                             <div class="trip-detail__cta">
                                 <TripButtons
@@ -465,17 +505,18 @@ import {
     getSeatsPillTone
 } from '../../utils/tripCardDisplay.js';
 import {
-    selladoCheckoutUrl,
+    isTripCreationPaymentQrEnabled,
     selladoDetailBannerKind,
     shouldShowSelladoEmptyTripCreditCard,
-    shouldShowSelladoPublishedBanner
+    shouldShowSelladoProcessingBanner,
+    shouldShowSelladoPublishedBanner,
+    unLitroCardKindFromTrip
 } from '../../utils/tripSelladoUi.js';
 import {
     shouldShowUnLitroAdminNeedsPaymentCard,
     shouldShowUnLitroOwnerPaymentBanner
 } from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
-import { openExternalUrl } from '../../utils/externalLink.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -486,6 +527,7 @@ import TripButtons from '../elements/TripButtons';
 import TripDetailShareButton from '../elements/TripDetailShareButton.vue';
 import AppButton from '../ui/AppButton.vue';
 import UnLitroInfoCard from '../elements/UnLitroInfoCard.vue';
+import UnLitroPayCard from '../elements/UnLitroPayCard.vue';
 
 import { injectHead } from '@unhead/vue';
 import L from 'leaflet';
@@ -532,6 +574,8 @@ export default {
             attribution:
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
+            showUnLitroPayModal: false,
+            selladoPaymentPollId: null,
             showModalPricing: false,
             acceptPassengerValue: 0,
             acceptPricing: 0
@@ -952,14 +996,27 @@ export default {
             this.showModalPricing = false;
         },
         onPaySellado() {
-            const url = selladoCheckoutUrl(this.trip);
-            if (url) {
-                openExternalUrl(url);
-                return;
+            this.showUnLitroPayModal = true;
+        },
+        onSelladoPaid(trip) {
+            this.showUnLitroPayModal = false;
+            if (trip) {
+                this.trip = trip;
+            } else {
+                this.loadTrip();
             }
-            dialogs.message(this.$t('errorAlGuardar'), {
-                estado: 'error'
-            });
+        },
+        startSelladoPaymentPoll() {
+            this.stopSelladoPaymentPoll();
+            this.selladoPaymentPollId = setInterval(() => {
+                this.loadTrip();
+            }, 5000);
+        },
+        stopSelladoPaymentPoll() {
+            if (this.selladoPaymentPollId) {
+                clearInterval(this.selladoPaymentPollId);
+                this.selladoPaymentPollId = null;
+            }
         }
     },
 
@@ -974,6 +1031,7 @@ export default {
     },
 
     beforeUnmount() {
+        this.stopSelladoPaymentPoll();
         this.destroyTripRouteMap();
         this.syncTripDetailMobilePageClass(false);
         bus.off('back-click', this.onBackClick);
@@ -985,6 +1043,16 @@ export default {
         },
         id: function (value) {
             this.loadTrip();
+        },
+        showSelladoProcessingBanner: {
+            immediate: true,
+            handler() {
+                if (this.showSelladoProcessingBanner) {
+                    this.startSelladoPaymentPoll();
+                    return;
+                }
+                this.stopSelladoPaymentPoll();
+            }
         },
         trip: {
             deep: true,
@@ -1081,10 +1149,25 @@ export default {
                 this.$route && this.$route.query
             );
         },
+        showSelladoProcessingBanner() {
+            return shouldShowSelladoProcessingBanner(
+                this.trip,
+                this.$route && this.$route.query
+            );
+        },
         showSelladoEmptyTripCreditCard() {
             return shouldShowSelladoEmptyTripCreditCard(this.trip, {
                 isOwner: this.owner
             });
+        },
+        tripDetailUnLitroKind() {
+            return unLitroCardKindFromTrip(this.trip, {
+                selladoEnabled:
+                    this.config && this.config.module_trip_creation_payment_enabled
+            });
+        },
+        qrEnabled() {
+            return isTripCreationPaymentQrEnabled(this.config);
         },
         formattedSelladoPayAmount() {
             const cents =
@@ -1119,7 +1202,8 @@ export default {
         TripPrice,
         TripDetailShareButton,
         AppButton,
-        UnLitroInfoCard
+        UnLitroInfoCard,
+        UnLitroPayCard
     },
 
     props: ['id', 'location']
@@ -1127,6 +1211,11 @@ export default {
 </script>
 
 <style scoped>
+.un-litro-pay-modal :deep(.modal-container) {
+    width: min(36rem, calc(100vw - 2rem));
+    max-width: min(36rem, calc(100vw - 2rem));
+}
+
 .trip-detail__modal-actions {
     display: flex;
     flex-wrap: wrap;
@@ -1195,6 +1284,11 @@ export default {
 .un-litro-banner--pending {
     background: var(--ds-warning-bg, #ffecc8);
     color: var(--ds-warning-text, #262626);
+}
+
+.un-litro-banner--processing {
+    background: var(--ds-info-bg, #e1effa);
+    color: var(--ds-text-primary, #22211f);
 }
 
 .un-litro-banner--rapipago {

@@ -354,11 +354,16 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(wizardSource).toContain(':config="form.config"');
         expect(wizardSource).toContain(':show-un-litro-card="form.showUnLitroCard"');
         expect(wizardSource).toContain(':sellado-charged="form.selladoCharged"');
+        expect(wizardSource).toContain(':sellado-bonificado="form.selladoBonificado"');
         expect(wizardSource).toContain(':remaining-free-trips="form.remainingFreeTrips"');
         expect(viewSource).toContain('applySelladoChargeToBreakdown');
         expect(viewSource).toContain('shouldChargeSellado');
         expect(viewSource).toContain('shouldShowUnLitroCard');
+        expect(viewSource).toContain('shouldShowSelladoBonificadoCard');
+        expect(viewSource).toContain('isOverSelladoFreeLimit');
+        expect(viewSource).toContain('selladoQuotaLoaded');
         expect(viewSource).toContain('selladoCharged');
+        expect(viewSource).toContain('selladoBonificado');
         expect(viewSource).toContain('showUnLitroCard');
         expect(viewSource).not.toContain('alert-sellado-viaje');
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
@@ -372,6 +377,23 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(wizardSource).toContain(':sellado-complimentary="form.selladoComplimentary"');
         expect(viewSource).toMatch(
             /finalizeTripCreationSuccess\([\s\S]*loadSelladoViaje/
+        );
+        expect(
+            (wizardSource.match(/:sellado-bonificado="form.selladoBonificado"/g) || [])
+                .length
+        ).toBe(2);
+    });
+
+    it('keeps route_needs_payment from the latest trip-info response when the route is edited', () => {
+        expect(viewSource).toContain('tripInfoRequestId');
+        expect(viewSource).toMatch(
+            /requestId !== this\.tripInfoRequestId/
+        );
+        expect(viewSource).toContain(
+            'Boolean(result.data.route_needs_payment)'
+        );
+        expect(viewSource).toMatch(
+            /loadSelladoViaje[\s\S]*selladoQuotaLoaded\s*=\s*true/
         );
     });
 });

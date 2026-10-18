@@ -496,6 +496,14 @@
     flex: 0 1 auto;
 }
 
+.trip-detail--mobile .trip-detail__contribucion,
+.trip-detail--desktop .trip-detail__contribucion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
 .trip-detail--desktop .trip-detail__cta {
     width: fit-content;
 }

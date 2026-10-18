@@ -80,24 +80,33 @@ describe('TripCreationSuccess.vue', () => {
         );
     });
 
+    it('shows Bonificado or Este viaje aporta with last-step card styling', () => {
+        expect(componentSource).toContain('unLitroCardKindFromTrip');
+        expect(componentSource).toContain('v-if="unLitroKind"');
+        expect(componentSource).toContain(':charged="unLitroKind === \'charged\'"');
+        expect(componentSource).toContain(':bonificado="unLitroKind === \'bonificado\'"');
+        expect(componentSource).toContain('trip-creation-success__un-litro');
+        expect(componentSource).toContain("$t('unLitroSectionTitle')");
+        expect(componentSource).toContain('text-align: left');
+    });
+
     it('shows Un litro payment methods before share actions when sellado is pending', () => {
         expect(componentSource).toContain('isSelladoPending');
         expect(componentSource).toContain("$t('unLitroPublishTitle')");
-        expect(componentSource).toContain("$t('unLitroPendingPaymentBadge')");
-        expect(componentSource).toContain("$t('unLitroPayMercadoPago')");
-        expect(componentSource).toContain("$t('unLitroPayQr')");
-        expect(componentSource).toContain("$t('unLitroPayOneLiter')");
-        expect(componentSource).toContain("$t('unLitroPayLater')");
-        expect(componentSource).toContain('selladoCheckoutUrl');
-        expect(componentSource).toContain('openExternalUrl');
-        expect(componentSource).toContain('dialogs.message');
-        expect(componentSource).toContain('data-testid="un-litro-pay-qr"');
-        expect(componentSource).toContain('data-testid="un-litro-pay-later"');
+        expect(componentSource).toContain('UnLitroPayCard');
+        expect(componentSource).toContain(':qr-enabled="qrEnabled"');
+        expect(componentSource).toContain('isTripCreationPaymentQrEnabled');
         expect(componentSource).not.toContain('RapiPago');
-        const payIdx = componentSource.indexOf("$t('unLitroPayOneLiter')");
+        const payCardIdx = componentSource.indexOf('<UnLitroPayCard');
         const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
-        expect(payIdx).toBeGreaterThan(-1);
-        expect(shareIdx).toBeGreaterThan(payIdx);
+        expect(payCardIdx).toBeGreaterThan(-1);
+        expect(shareIdx).toBeGreaterThan(payCardIdx);
+        expect(componentSource).toContain(
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__actions"'
+        );
+        expect(componentSource).toContain(
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'
+        );
     });
 
     it('scrolls to the top when the success screen is shown', () => {
