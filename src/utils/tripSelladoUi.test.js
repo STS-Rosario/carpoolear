@@ -328,6 +328,20 @@ describe('unLitroCardKindFromTrip', () => {
         ).toBe('complimentary');
     });
 
+    it('keeps complimentary after the empty-trip credit was consumed on this trip', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    sellado_complimentary: true,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: false }
+            )
+        ).toBe('complimentary');
+    });
+
     it('keeps Bonificado on unpaid routes even when empty-trip credit is available', () => {
         expect(
             unLitroCardKindFromTrip(
