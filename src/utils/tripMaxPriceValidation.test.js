@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { exceedsMaximumSeatPrice } from './tripMaxPriceValidation.js';
+import {
+    exceedsMaximumSeatPrice,
+    resolveLiveContributionPriceError
+} from './tripMaxPriceValidation.js';
 
 describe('exceedsMaximumSeatPrice', () => {
     it('does not flag exceeded max contribution before trip-info loads', () => {
@@ -40,5 +43,32 @@ describe('exceedsMaximumSeatPrice', () => {
                 maximumTripPriceCents: 20000
             })
         ).toBe(false);
+    });
+});
+
+describe('resolveLiveContributionPriceError', () => {
+    const maxExceededMessage = 'La contribución máxima ($ 9.550) ha sido excedida';
+    const negativeMessage = 'La contribución no puede ser negativa';
+
+    it('hides the exceeded warning as soon as the amount is within the cap', () => {
+        expect(
+            resolveLiveContributionPriceError({
+                isNegative: false,
+                exceedsMax: false,
+                negativeMessage,
+                maxExceededMessage
+            })
+        ).toEqual({ state: false, message: '' });
+    });
+
+    it('keeps showing the exceeded warning while the amount is over the cap', () => {
+        expect(
+            resolveLiveContributionPriceError({
+                isNegative: false,
+                exceedsMax: true,
+                negativeMessage,
+                maxExceededMessage
+            })
+        ).toEqual({ state: true, message: maxExceededMessage });
     });
 });
