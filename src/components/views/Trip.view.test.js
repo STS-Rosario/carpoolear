@@ -111,7 +111,7 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(viewSource).toContain('trip-detail');
         expect(viewSource).toContain('trip-detail__stack');
         expect(viewSource).toContain("$t('tripDetailSection')");
-        expect(viewSource).toContain("$t('tripDetailDriverMessage')");
+        expect(viewSource).toContain('tripDetailDriverMessage');
         expect(viewSource).toContain('tripDetailPassengerMessage');
         expect(viewSource).toContain("$t('tripDetailConditions')");
         expect(viewSource).toContain("$t('tripDetailJoined')");

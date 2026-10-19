@@ -343,10 +343,12 @@
                                 class="trip-detail__detalle-aside"
                             >
                                 <div class="trip-detail__condiciones">
-                                    <h3 class="trip-detail__section-title">
-                                        {{ $t('tripDetailConditions') }}
-                                    </h3>
-                                    <TripData />
+                                    <template v-if="!trip.is_passenger">
+                                        <h3 class="trip-detail__section-title">
+                                            {{ $t('tripDetailConditions') }}
+                                        </h3>
+                                        <TripData />
+                                    </template>
                                     <TripDetailShareButton v-if="!isMobile" />
                                 </div>
                             </div>
@@ -357,7 +359,13 @@
                         class="trip-detail__section"
                     >
                         <h3 class="trip-detail__section-title">
-                            {{ $t('tripDetailDriverMessage') }}
+                            {{
+                                $t(
+                                    trip.is_passenger
+                                        ? 'tripDetailPassengerMessage'
+                                        : 'tripDetailDriverMessage'
+                                )
+                            }}
                         </h3>
                         <p class="trip-detail__driver-message">
                             {{ trip.description }}
@@ -365,7 +373,10 @@
                     </section>
 
                     <template v-if="isMobile">
-                        <section class="trip-detail__section">
+                        <section
+                            v-if="!trip.is_passenger"
+                            class="trip-detail__section"
+                        >
                             <h3 class="trip-detail__section-title">
                                 {{ $t('tripDetailConditions') }}
                             </h3>
