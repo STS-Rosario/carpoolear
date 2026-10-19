@@ -464,6 +464,7 @@
                     :remaining-free-trips="form.remainingFreeTrips"
                     :free-trips-amount="form.free_trips_amount"
                     :show-preferences="!isPassenger"
+                    :description="form.trip.description"
                     :allow-kids="form.trip.allow_kids"
                     :allow-smoking="form.trip.allow_smoking"
                     :allow-animals="form.trip.allow_animals"
