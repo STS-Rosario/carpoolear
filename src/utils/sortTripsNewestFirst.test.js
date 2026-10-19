@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { sortTripsNewestFirst } from './sortTripsNewestFirst.js';
+import {
+    sortTripsNewestFirst,
+    sortTripsOldestFirst
+} from './sortTripsNewestFirst.js';
 
 describe('sortTripsNewestFirst', () => {
     it('orders trips by trip_date descending, then id descending', () => {
@@ -35,5 +38,29 @@ describe('sortTripsNewestFirst', () => {
         expect(sortTripsNewestFirst(input)).not.toBe(input);
         expect(sortTripsNewestFirst(null)).toBeNull();
         expect(sortTripsNewestFirst(undefined)).toBeUndefined();
+    });
+});
+
+describe('sortTripsOldestFirst', () => {
+    it('orders trips by trip_date ascending, then id ascending', () => {
+        const sorted = sortTripsOldestFirst([
+            { id: 1, trip_date: '2026-08-12 10:00:00' },
+            { id: 3, trip_date: '2026-08-20 08:00:00' },
+            { id: 2, trip_date: '2026-08-20 08:00:00' },
+            { id: 4, trip_date: '2026-08-15 18:00:00' }
+        ]);
+
+        expect(sorted.map((item) => item.id)).toEqual([1, 4, 2, 3]);
+    });
+
+    it('keeps missing dates after dated upcoming items', () => {
+        const sorted = sortTripsOldestFirst([
+            { id: 1, trip_date: null },
+            { id: 2, trip_date: '2026-08-20 08:00:00' },
+            { id: 3, trip_date: '2026-08-12 10:00:00' }
+        ]);
+
+        expect(sorted.map((item) => item.id)).toEqual([3, 2, 1]);
+        expect(sortTripsOldestFirst(null)).toBeNull();
     });
 });
