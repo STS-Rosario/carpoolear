@@ -21,7 +21,7 @@
                     :disabled="inviteFriendsBlockedByUnpaidSellado"
                     @click="showInviteFriendsModal = true"
                 >
-                    {{ $t('invitarGenteAlViaje') }}
+                    {{ $t('invitarAmigosAlViaje') }}
                 </AppButton>
             </span>
         </div>
@@ -32,7 +32,7 @@
             :hideFooter="true"
         >
             <template #header>
-                <h3>{{ $t('invitarGenteAlViaje') }}</h3>
+                <h3>{{ $t('invitarAmigosAlViaje') }}</h3>
             </template>
             <template #body>
                 <TripInviteFriends
