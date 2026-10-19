@@ -9,6 +9,26 @@ function getTripComponentTags() {
     return source.match(/<Trip[\s\S]*?(?:\/>|<\/Trip>)/g) || [];
 }
 
+describe('MyTrips category sort order', () => {
+    it('renders each trip category newest first', () => {
+        expect(source).toContain('sortTripsNewestFirst');
+        expect(source).toContain('v-for="trip in sortedTrips"');
+        expect(source).toContain('v-for="trip in sortedOldTrips"');
+        expect(source).toContain('v-for="trip in sortedOldPassengerTrips"');
+        expect(source).toContain('v-for="request in sortedSeatRequests"');
+        expect(source).toContain('v-for="r in sortedPendingRequest"');
+        expect(source).toContain('v-for="r in sortedPendingPaymentRequests"');
+        expect(source).toContain('v-for="rate in sortedPendingRates"');
+        expect(source).not.toContain('v-for="trip in trips"');
+        expect(source).not.toContain('v-for="trip in oldTrips"');
+        expect(source).not.toContain('v-for="trip in oldPassengerTrips"');
+        expect(source).not.toContain('v-for="request in seatRequests"');
+        expect(source).not.toContain('v-for="r in pendingRequest"');
+        expect(source).not.toContain('v-for="r in pendingPaymentRequests"');
+        expect(source).not.toContain('v-for="rate in pendingRates"');
+    });
+});
+
 describe('MyTrips seat requests section', () => {
     it('shows solicitudes de asiento instead of proximos viajes como pasajero', () => {
         expect(source).toContain("$t('solicitudesDeAsiento')");
