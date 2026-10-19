@@ -213,7 +213,7 @@ describe('getWizardNavigationAfterTemplateApply', () => {
         const { getWizardNavigationAfterTemplateApply } = await import('./tripCreationTemplate.js');
         expect(getWizardNavigationAfterTemplateApply()).toEqual({
             currentStep: 5,
-            maxVisitedStep: 9
+            maxVisitedStep: 10
         });
     });
 });
