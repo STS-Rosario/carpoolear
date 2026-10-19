@@ -475,7 +475,8 @@
 
 .trip-detail__share .trip-invite-friends-trigger,
 .trip-detail__share .trip-invite-friends-trigger__tooltip,
-.trip-detail__share .trip-invite-friends-trigger .app-button {
+.trip-detail__share .trip-invite-friends-trigger .app-button,
+.trip-detail__share .trip-detail__save-template {
     width: 100%;
 }
 

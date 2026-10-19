@@ -1,6 +1,8 @@
 import { STEP } from './tripCreationSteps.js';
 import dayjs from '../dayjs.js';
 import TripCreationTemplateApi from '../services/api/TripCreationTemplate.js';
+import { restoreSelectedCarIdFromTrip } from './userCars.js';
+import { priceInputNumberFromStoredSeatPriceCents } from './tripSeatPrice.js';
 
 const tripCreationTemplateApi = new TripCreationTemplateApi();
 
@@ -218,4 +220,87 @@ export function buildTripCreationTemplateFromSnapshot(snapshot) {
         weeklySchedule: snapshot.weeklySchedule || 0,
         weeklyScheduleTime: snapshot.weeklyScheduleTime || '12:00'
     };
+}
+
+function weeklyScheduleTimeFromTrip(trip) {
+    const weeklyScheduleTime = trip?.['weekly_schedule_time'];
+    if (!weeklyScheduleTime) {
+        return '12:00';
+    }
+
+    const parsed = dayjs(weeklyScheduleTime, [
+        'YYYY-MM-DD HH:mm:ss',
+        'YYYY-MM-DDTHH:mm:ss',
+        'HH:mm:ss',
+        'HH:mm'
+    ]);
+    if (parsed.isValid()) {
+        return parsed.format('HH:mm');
+    }
+
+    const match = String(weeklyScheduleTime).match(/(\d{2}:\d{2})/);
+    return match ? match[1] : '12:00';
+}
+
+export function buildTripCreationSnapshotFromTrip(trip) {
+    if (!trip) {
+        return null;
+    }
+
+    const points = Array.isArray(trip.points) ? trip.points : [];
+    const seatLayoutCapacity = Number(trip.rear_max_two_passengers) ? 4 : 5;
+    const max = seatLayoutCapacity === 4 ? 3 : 4;
+    const offered = Math.min(Math.max(Number(trip.total_seats) || max, 1), max);
+    const price = priceInputNumberFromStoredSeatPriceCents(trip.seat_price_cents);
+
+    return {
+        trip: {
+            is_passenger: trip.is_passenger,
+            total_seats: trip.total_seats,
+            description: trip.description,
+            allow_kids: Number(trip.allow_kids) > 0,
+            allow_smoking: Number(trip.allow_smoking) > 0,
+            allow_animals: Number(trip.allow_animals) > 0,
+            rear_max_two_passengers: Number(trip.rear_max_two_passengers) > 0,
+            autoaccept_friends_requests:
+                trip.autoaccept_friends_requests == null
+                    ? true
+                    : Number(trip.autoaccept_friends_requests) > 0,
+            friendship_type_id: trip.friendship_type_id
+        },
+        points: points.map((point, index) => ({
+            name: point.address || point.name || '',
+            place: point.json_address
+                ? JSON.stringify(point.json_address)
+                : point.place,
+            json: point.json_address || point.json,
+            location:
+                point.lat != null && point.lng != null
+                    ? { lat: point.lat, lng: point.lng }
+                    : point.location || null,
+            id: point.id ?? index
+        })),
+        date: '',
+        dateAnswer: '',
+        time: '',
+        price: price ?? '',
+        no_lucrar: false,
+        selectedCarId: restoreSelectedCarIdFromTrip(trip),
+        seatLayoutCapacity,
+        passengerSeatAvailability: Array.from(
+            { length: max },
+            (_, index) => index < offered
+        ),
+        allowForeignPoints: false,
+        wantsIntermediateStops: points.length > 2,
+        useWeeklySchedule: Number(trip.weekly_schedule) > 0,
+        weeklySchedule: Number(trip.weekly_schedule) || 0,
+        weeklyScheduleTime: weeklyScheduleTimeFromTrip(trip)
+    };
+}
+
+export function buildTripCreationTemplateFromTrip(trip) {
+    return buildTripCreationTemplateFromSnapshot(
+        buildTripCreationSnapshotFromTrip(trip)
+    );
 }
