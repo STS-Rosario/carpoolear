@@ -530,6 +530,7 @@ import {
 } from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import UserApi from '../../services/api/User';
+import TripApi from '../../services/api/Trips.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -551,6 +552,7 @@ import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/le
 import 'leaflet-routing-machine';
 
 let userApi = new UserApi();
+const tripsApi = new TripApi();
 
 export default {
     name: 'trip',
@@ -1038,6 +1040,17 @@ export default {
                 this.loadTrip();
             }, 5000);
         },
+        syncSelladoPaymentFromReturn() {
+            const query = (this.$route && this.$route.query) || {};
+            const paymentId = query.payment_id || query.collection_id;
+            if (!paymentId || !this.id) {
+                return Promise.resolve();
+            }
+            return tripsApi
+                .syncSelladoPayment(this.id, paymentId)
+                .then(() => this.loadTrip())
+                .catch(() => {});
+        },
         stopSelladoPaymentPoll() {
             if (this.selladoPaymentPollId) {
                 clearInterval(this.selladoPaymentPollId);
@@ -1075,6 +1088,7 @@ export default {
             immediate: true,
             handler() {
                 if (this.showSelladoProcessingBanner) {
+                    this.syncSelladoPaymentFromReturn();
                     this.startSelladoPaymentPoll();
                     return;
                 }
