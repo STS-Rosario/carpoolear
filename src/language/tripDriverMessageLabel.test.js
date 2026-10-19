@@ -10,4 +10,13 @@ describe('trip detail driver message label', () => {
             'Mensaje del conductor'
         );
     });
+
+    it('uses Mensaje de quien busca viaje for passenger trips', () => {
+        expect(messages.arg.tripDetailPassengerMessage).toBe(
+            'Mensaje de quien busca viaje'
+        );
+        expect(messages.en.tripDetailPassengerMessage).toBe(
+            'Message from the person looking for a trip'
+        );
+    });
 });

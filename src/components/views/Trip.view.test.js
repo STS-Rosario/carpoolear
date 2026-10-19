@@ -112,6 +112,7 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(viewSource).toContain('trip-detail__stack');
         expect(viewSource).toContain("$t('tripDetailSection')");
         expect(viewSource).toContain("$t('tripDetailDriverMessage')");
+        expect(viewSource).toContain('tripDetailPassengerMessage');
         expect(viewSource).toContain("$t('tripDetailConditions')");
         expect(viewSource).toContain("$t('tripDetailJoined')");
     });
@@ -232,6 +233,18 @@ describe('Trip.vue desktop column bands', () => {
         )[0];
         expect(desktopBlock).toMatch(
             /v-if="tripCardTheme === 'light' \|\| !trip\.is_passenger"\s*\n\s*class="trip-detail__lugares"/
+        );
+    });
+
+    it('uses the passenger message label and hides Características on passenger trips', () => {
+        expect(viewSource).toMatch(
+            /trip\.is_passenger\s*\?\s*'tripDetailPassengerMessage'\s*:\s*'tripDetailDriverMessage'/
+        );
+        expect(viewSource).toMatch(
+            /trip-detail__detalle-aside[\s\S]*v-if="!trip\.is_passenger"[\s\S]*tripDetailConditions[\s\S]*TripData[\s\S]*TripDetailShareButton/
+        );
+        expect(viewSource).toMatch(
+            /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripData v-if="!trip\.is_passenger"|v-if="isMobile"[\s\S]*!trip\.is_passenger[\s\S]*tripDetailConditions/
         );
     });
 
