@@ -39,7 +39,7 @@
                 :disabled="submitting || !selectedFriendIds.length"
                 @click="onSubmit"
             >
-                {{ $t('invitarAmigos') }}
+                {{ $t('invitar') }}
             </AppButton>
             <AppButton
                 variant="secondary"
