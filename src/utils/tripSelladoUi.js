@@ -12,12 +12,22 @@ export function isTripCreationPaymentQrEnabled(config) {
     return Boolean(config && config.module_trip_creation_payment_qr_enabled);
 }
 
-export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
+export function unLitroCardKindFromTrip(
+    trip,
+    { selladoEnabled, hasComplimentarySellado } = {}
+) {
     if (!selladoEnabled || !trip) {
         return null;
     }
     if (trip.needs_sellado) {
         return 'charged';
+    }
+    if (
+        hasComplimentarySellado &&
+        trip.pricing_breakdown &&
+        trip.pricing_breakdown.includes_sellado
+    ) {
+        return 'complimentary';
     }
     return 'bonificado';
 }

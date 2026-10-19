@@ -9,6 +9,7 @@
                 v-if="showWizardSuccess && createdTrip"
                 :trip="createdTrip"
                 :creation-snapshot="creationSnapshot"
+                :has-complimentary-sellado="selladoComplimentary"
                 @start-return-trip="startReturnTripCreation"
                 @paid="onCreatedTripPaid"
             />
