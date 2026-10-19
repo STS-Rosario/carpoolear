@@ -14,6 +14,7 @@ import {
     shouldShowUnLitroCard,
     unLitroCardKindFromTrip,
     isTripCreationPaymentQrEnabled,
+    selladoPaidQueryRoute,
     withSelladoPaidQuery
 } from './tripSelladoUi.js';
 
@@ -483,6 +484,28 @@ describe('withSelladoPaidQuery', () => {
             params: { id: '101' },
             query: { loc: 'owner', sellado_paid: '1' }
         });
+    });
+});
+
+describe('selladoPaidQueryRoute', () => {
+    it('marks trip detail for polling and leaves trip creation alone', () => {
+        expect(
+            selladoPaidQueryRoute({
+                name: 'detail_trip',
+                params: { id: '103' },
+                query: {}
+            })
+        ).toEqual({
+            name: 'detail_trip',
+            params: { id: '103' },
+            query: { sellado_paid: '1' }
+        });
+        expect(
+            selladoPaidQueryRoute({
+                name: 'new-trip',
+                query: { step: '10' }
+            })
+        ).toBeNull();
     });
 });
 
