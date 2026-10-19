@@ -10,22 +10,36 @@ function getTripComponentTags() {
 }
 
 describe('MyTrips category sort order', () => {
-    it('renders each trip category newest first', () => {
+    it('sorts upcoming trips oldest first and past trips newest first', () => {
+        expect(source).toContain('sortTripsOldestFirst');
         expect(source).toContain('sortTripsNewestFirst');
+        expect(source).toMatch(
+            /sortedTrips\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.trips\)/
+        );
+        expect(source).toMatch(
+            /sortedSeatRequests\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.seatRequests\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingRequest\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.pendingRequest\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingPaymentRequests\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.pendingPaymentRequests\)/
+        );
+        expect(source).toMatch(
+            /sortedOldTrips\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.oldTrips\)/
+        );
+        expect(source).toMatch(
+            /sortedOldPassengerTrips\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.oldPassengerTrips\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingRates\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.pendingRates\)/
+        );
         expect(source).toContain('v-for="trip in sortedTrips"');
         expect(source).toContain('v-for="trip in sortedOldTrips"');
         expect(source).toContain('v-for="trip in sortedOldPassengerTrips"');
-        expect(source).toContain('v-for="request in sortedSeatRequests"');
-        expect(source).toContain('v-for="r in sortedPendingRequest"');
-        expect(source).toContain('v-for="r in sortedPendingPaymentRequests"');
-        expect(source).toContain('v-for="rate in sortedPendingRates"');
         expect(source).not.toContain('v-for="trip in trips"');
         expect(source).not.toContain('v-for="trip in oldTrips"');
         expect(source).not.toContain('v-for="trip in oldPassengerTrips"');
-        expect(source).not.toContain('v-for="request in seatRequests"');
-        expect(source).not.toContain('v-for="r in pendingRequest"');
-        expect(source).not.toContain('v-for="r in pendingPaymentRequests"');
-        expect(source).not.toContain('v-for="rate in pendingRates"');
     });
 });
 
