@@ -8,7 +8,7 @@
                 </h2></template>
                 <div class="request-list">
                     <PendingPaymentRequest
-                        v-for="r in pendingPaymentRequests"
+                        v-for="r in sortedPendingPaymentRequests"
                         v-bind:key="r.id"
                         :request="r"
                     ></PendingPaymentRequest>
@@ -30,7 +30,7 @@
                 </h2></template>
                 <div class="request-list">
                     <PendingRequest
-                        v-for="r in pendingRequest"
+                        v-for="r in sortedPendingRequest"
                         v-bind:key="r.id"
                         :user="r.user"
                         :trip="findTrip(r.trip_id)"
@@ -57,7 +57,7 @@
                 </h2></template>
                 <div class="request-list">
                     <RatePending
-                        v-for="rate in pendingRates"
+                        v-for="rate in sortedPendingRates"
                         v-bind:key="rate.id"
                         :rate="rate"
                         @rated="onUserRated"
@@ -83,7 +83,7 @@
             <Loading :data="trips">
                 <div class="trips-list">
                     <Trip
-                        v-for="trip in trips"
+                        v-for="trip in sortedTrips"
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
@@ -110,7 +110,7 @@
                 <template #title><h2>{{ $t('solicitudesDeAsiento') }}</h2></template>
                 <div class="trips-list">
                     <SeatRequestTrip
-                        v-for="request in seatRequests"
+                        v-for="request in sortedSeatRequests"
                         v-bind:key="request.id"
                         :trip="request.trip"
                         :requestState="request.request_state"
@@ -169,7 +169,7 @@
             <Loading :data="oldTrips">
                 <div class="trips-list">
                     <Trip
-                        v-for="trip in oldTrips"
+                        v-for="trip in sortedOldTrips"
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
@@ -195,7 +195,7 @@
                 <template #title><h2 v-html="$t('viajesMeSubi')"></h2></template>
                 <div class="trips-list">
                     <Trip
-                        v-for="trip in oldPassengerTrips"
+                        v-for="trip in sortedOldPassengerTrips"
                         v-bind:key="trip.id"
                         :trip="trip"
                         :user="user"
@@ -238,6 +238,7 @@ import bus from '../../services/bus-event.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { shouldPromptDonationAfterRating } from '../../utils/donationAfterRating.js';
 import { sortSubscriptions } from '../../utils/sortSubscriptions.js';
+import { sortTripsNewestFirst } from '../../utils/sortTripsNewestFirst.js';
 
 export default {
     name: 'my-trips',
@@ -286,6 +287,27 @@ export default {
         }),
         sortedSubscriptions() {
             return sortSubscriptions(this.subscriptions);
+        },
+        sortedTrips() {
+            return sortTripsNewestFirst(this.trips);
+        },
+        sortedOldTrips() {
+            return sortTripsNewestFirst(this.oldTrips);
+        },
+        sortedOldPassengerTrips() {
+            return sortTripsNewestFirst(this.oldPassengerTrips);
+        },
+        sortedSeatRequests() {
+            return sortTripsNewestFirst(this.seatRequests);
+        },
+        sortedPendingRequest() {
+            return sortTripsNewestFirst(this.pendingRequest);
+        },
+        sortedPendingPaymentRequests() {
+            return sortTripsNewestFirst(this.pendingPaymentRequests);
+        },
+        sortedPendingRates() {
+            return sortTripsNewestFirst(this.pendingRates);
         }
     },
 
