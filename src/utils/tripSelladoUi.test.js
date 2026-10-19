@@ -13,7 +13,8 @@ import {
     shouldShowSelladoProcessingBanner,
     shouldShowUnLitroCard,
     unLitroCardKindFromTrip,
-    isTripCreationPaymentQrEnabled
+    isTripCreationPaymentQrEnabled,
+    withSelladoPaidQuery
 } from './tripSelladoUi.js';
 
 describe('shouldShowUnLitroCard', () => {
@@ -466,6 +467,22 @@ describe('shouldShowSelladoPublishedBanner', () => {
                 { collection_status: 'approved' }
             )
         ).toBe(false);
+    });
+});
+
+describe('withSelladoPaidQuery', () => {
+    it('adds sellado_paid=1 so a QR return can poll until the webhook arrives', () => {
+        expect(
+            withSelladoPaidQuery({
+                name: 'detail_trip',
+                params: { id: '101' },
+                query: { loc: 'owner' }
+            })
+        ).toEqual({
+            name: 'detail_trip',
+            params: { id: '101' },
+            query: { loc: 'owner', sellado_paid: '1' }
+        });
     });
 });
 
