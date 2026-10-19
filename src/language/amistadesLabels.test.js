@@ -12,7 +12,7 @@ const AMISTADES_LABELS_ES = {
     invitarATodosMisAmigos: 'Invitar a todas mis amistades',
     invitarAmigosAlViaje: 'Invitar amistades al viaje',
     invitarAmigosSelladoPendiente:
-        'Una vez que pagues el sellado vas a poder invitar a tus amistades',
+        'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
     viajesDeMisAmigos: 'Viajes de mis amistades',
     tenesInvitacionesAmigosClickParaVerlas:
         'Tenés invitaciones a amistades, click acá para verlas',

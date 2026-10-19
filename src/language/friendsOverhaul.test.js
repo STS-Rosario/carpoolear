@@ -17,7 +17,7 @@ const FRIENDS_OVERHAUL_LABELS_ES = {
     invitarATodosMisAmigos: 'Invitar a todas mis amistades',
     invitarAmigosAlViaje: 'Invitar amistades al viaje',
     invitarAmigosSelladoPendiente:
-        'Una vez que pagues el sellado vas a poder invitar a tus amistades',
+        'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
     viajesDeMisAmigos: 'Viajes de mis amistades',
     otrosViajes: 'Otros viajes',
     tenesInvitacionesAmigosClickParaVerlas:
@@ -51,7 +51,7 @@ const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
         invitarATodosMisAmigos: 'Invite all my friends',
         invitarAmigosAlViaje: 'Invite friends to the trip',
         invitarAmigosSelladoPendiente:
-            "Once you pay the sellado you'll be able to invite your friends",
+            "Once you pay One liter for Carpoolear you'll be able to invite your friends",
         viajesDeMisAmigos: 'My friends trips',
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
