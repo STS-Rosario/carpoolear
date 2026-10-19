@@ -21,6 +21,7 @@
                 </h4>
                 <UnLitroInfoCard
                     :charged="unLitroKind === 'charged'"
+                    :complimentary="unLitroKind === 'complimentary'"
                     :bonificado="unLitroKind === 'bonificado'"
                     :free-trips-amount="freeTripsAmount"
                 />
@@ -193,6 +194,10 @@ export default {
         creationSnapshot: {
             type: Object,
             default: null
+        },
+        hasComplimentarySellado: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -221,7 +226,8 @@ export default {
         unLitroKind() {
             return unLitroCardKindFromTrip(this.trip, {
                 selladoEnabled:
-                    this.config && this.config.module_trip_creation_payment_enabled
+                    this.config && this.config.module_trip_creation_payment_enabled,
+                hasComplimentarySellado: this.hasComplimentarySellado
             });
         },
         freeTripsAmount() {
