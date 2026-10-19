@@ -177,6 +177,14 @@ export function selladoDetailBannerKind(trip) {
     return null;
 }
 
+export function withSelladoPaidQuery(route = {}) {
+    return {
+        name: route.name,
+        params: { ...(route.params || {}) },
+        query: { ...(route.query || {}), sellado_paid: '1' }
+    };
+}
+
 export function isSelladoPaymentReturnQuery(query = {}) {
     if (query.sellado_paid === '1' || query.sellado_paid === true) {
         return true;
