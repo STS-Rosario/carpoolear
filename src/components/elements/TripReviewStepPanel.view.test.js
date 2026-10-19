@@ -31,6 +31,9 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain('unLitroReviewIncludes');
         expect(componentSource).toContain('formatPesoIntegerFromCents');
         expect(componentSource).toContain("$t('tripReviewSectionPreferences')");
+        expect(componentSource).toContain("$t('tripReviewSectionDescription')");
+        expect(componentSource).toContain("onEdit('description')");
+        expect(componentSource).toContain('trip-review-step__description');
         expect(componentSource).toContain("$t('tripReviewEdit')");
         expect(componentSource).toContain("emit('edit'");
         expect(componentSource).toContain('getTripReviewEditStep');

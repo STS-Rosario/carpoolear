@@ -42,6 +42,9 @@ describe('NewTripCreationWizard.vue', () => {
     it('uses preferences and review step panels', () => {
         expect(wizardSource).toContain('TripPreferencesStepPanel');
         expect(wizardSource).toContain('TripReviewStepPanel');
+        expect(wizardSource).toMatch(
+            /TripReviewStepPanel[\s\S]*:description="form.trip.description"/
+        );
         expect(wizardSource).toContain('isSubmitDisabled');
         expect(wizardSource).toContain('tripCreationPublish');
         expect(wizardSource).toContain('tripCreationContinueToPayment');
