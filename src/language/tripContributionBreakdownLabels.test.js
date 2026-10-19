@@ -23,7 +23,7 @@ describe('trip contribution breakdown labels', () => {
                 'Estimación de peajes: $ {amount} ({percent}%)'
             );
             expect(messages[locale].tripContributionBreakdownSellado).toBe(
-                'Sellado de viaje: $ {amount}'
+                'Un litro para Carpoolear: $ {amount}'
             );
             expect(
                 messages[locale].tripContributionBreakdownSelladoBonificado
@@ -69,7 +69,7 @@ describe('trip contribution breakdown labels', () => {
             'Estimated tolls: $ {amount} ({percent}%)'
         );
         expect(messages.en.tripContributionBreakdownSellado).toBe(
-            'Trip seal: $ {amount}'
+            'One liter for Carpoolear: $ {amount}'
         );
         expect(messages.en.tripContributionBreakdownSelladoBonificado).toBe(
             'Waived'
