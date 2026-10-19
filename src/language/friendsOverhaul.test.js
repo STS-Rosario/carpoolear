@@ -3,6 +3,7 @@ import messages from './i18n';
 
 const FRIENDS_OVERHAUL_LABELS_ES = {
     invitarAmigos: 'Invitar a amistades',
+    invitar: 'Invitar',
     recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
     detenerAlertasViajeAmigo: 'No recibir más alertas de viaje de {name}',
     alertasViajeAmigoActivadas: 'Ahora recibirás alertas de viaje de {name}',
@@ -35,6 +36,7 @@ const FRIENDS_OVERHAUL_LABELS_BY_LOCALE = {
     chl: FRIENDS_OVERHAUL_LABELS_ES,
     en: {
         invitarAmigos: 'Invite friends',
+        invitar: 'Invite',
         recibirAlertasViajeAmigo: 'Receive trip alerts from {name}',
         detenerAlertasViajeAmigo: 'Stop receiving trip alerts from {name}',
         alertasViajeAmigoActivadas:

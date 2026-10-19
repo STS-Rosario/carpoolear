@@ -7,6 +7,7 @@ const AMISTADES_LABELS_ES = {
     misAmigos: 'Mis amistades',
     verAmigos: 'Ver amistades',
     invitarAmigos: 'Invitar a amistades',
+    invitar: 'Invitar',
     queresInvitarTusAmigos: '¿Querés invitar a tus amistades a este viaje?',
     invitarATodosMisAmigos: 'Invitar a todas mis amistades',
     invitarAmigosAlViaje: 'Invitar amistades al viaje',
