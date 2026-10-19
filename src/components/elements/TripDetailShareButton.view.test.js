@@ -22,10 +22,11 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).not.toContain('shareContent');
     });
 
-    it('shows Invitar gente al viaje below Compartir viaje for the owner', () => {
+    it('shows Invitar amistades al viaje below Compartir viaje for the owner', () => {
         expect(componentSource).toContain('canInviteFriendsToTrip');
         expect(componentSource).toContain('data-testid="trip-detail-invite-friends"');
-        expect(componentSource).toContain("$t('invitarGenteAlViaje')");
+        expect(componentSource).toContain("$t('invitarAmigosAlViaje')");
+        expect(componentSource).not.toContain("$t('invitarGenteAlViaje')");
         expect(componentSource).toMatch(
             /data-testid="trip-detail-share"[\s\S]*data-testid="trip-detail-invite-friends"/
         );
