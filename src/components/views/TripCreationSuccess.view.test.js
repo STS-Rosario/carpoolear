@@ -107,8 +107,21 @@ describe('TripCreationSuccess.vue', () => {
         const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
         expect(payCardIdx).toBeGreaterThan(-1);
         expect(shareIdx).toBeGreaterThan(payCardIdx);
+        expect(componentSource).not.toMatch(
+            /v-if="!showUnLitroPayment"[\s\S]*?class="trip-creation-success__actions"/
+        );
         expect(componentSource).toContain(
-            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__actions"'
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'
+        );
+    });
+
+    it('keeps share, return trip and save template visible while Un litro is unpaid', () => {
+        expect(componentSource).toContain('data-testid="trip-creation-share"');
+        expect(componentSource).toContain('data-testid="trip-creation-return-trip"');
+        expect(componentSource).toContain('data-testid="trip-creation-save-template"');
+        expect(componentSource).toContain('canSaveTemplate');
+        expect(componentSource).not.toMatch(
+            /v-if="!showUnLitroPayment"[\s\S]*?class="trip-creation-success__actions"/
         );
         expect(componentSource).toContain(
             'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'
