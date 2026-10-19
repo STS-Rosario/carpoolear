@@ -101,6 +101,9 @@ export function shouldShowSelladoEmptyTripCreditCard(
     if (!trip.needs_sellado || isSelladoPending(trip)) {
         return false;
     }
+    if (trip.sellado_empty_trip_credit_redeemed) {
+        return false;
+    }
     if (trip.state === 'canceled') {
         return false;
     }
