@@ -316,4 +316,12 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('stepErrors.noCobrarSena');
         expect(wizardSource).toContain('$t(stepErrors.noCobrarSena)');
     });
+
+    it('refreshes stepper incomplete marks when previously invalid fields are fixed', () => {
+        expect(wizardSource).toContain('resolveWizardStepperValidation');
+        expect(wizardSource).toContain('refreshIncompleteStepperState');
+        expect(wizardSource).toMatch(
+            /wizardValidationContext[\s\S]*refreshIncompleteStepperState/
+        );
+    });
 });
