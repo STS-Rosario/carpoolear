@@ -34,4 +34,16 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).toContain('maybeOpenInviteFriendsFromQuery');
         expect(componentSource).toContain('isInviteFriendsBlockedByUnpaidSellado');
     });
+
+    it('lets the owner save the trip as a template below invite', () => {
+        expect(componentSource).toContain('canSaveTemplate');
+        expect(componentSource).toContain('data-testid="trip-detail-save-template"');
+        expect(componentSource).toContain("$t('tripCreationSaveTemplate')");
+        expect(componentSource).toMatch(
+            /data-testid="trip-detail-invite-friends"[\s\S]*data-testid="trip-detail-save-template"/
+        );
+        expect(componentSource).toContain('buildTripCreationTemplateFromTrip');
+        expect(componentSource).toContain('saveTripCreationTemplate');
+        expect(componentSource).toContain("$t('tripCreationSaveTemplateTitle')");
+    });
 });
