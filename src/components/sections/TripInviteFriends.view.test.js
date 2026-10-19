@@ -60,6 +60,11 @@ describe('TripInviteFriends.vue', () => {
     it('submits selected friends through TripApi inviteFriends', () => {
         expect(componentSource).toContain('inviteFriends');
         expect(componentSource).toContain('onSubmit');
+        const submitButton = componentSource.match(
+            /data-testid="trip-invite-friends-submit"[\s\S]*?<\/AppButton>/
+        )[0];
+        expect(submitButton).toContain("$t('invitar')");
+        expect(submitButton).not.toContain("$t('invitarAmigos')");
     });
 
     it('emits close instead of persisting dismiss preference', () => {
