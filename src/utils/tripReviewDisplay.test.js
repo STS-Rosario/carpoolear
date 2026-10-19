@@ -14,6 +14,7 @@ describe('tripReviewDisplay', () => {
         expect(getTripReviewEditStep('seats')).toBe(STEP.SEATS);
         expect(getTripReviewEditStep('contribution')).toBe(STEP.CONTRIBUTION);
         expect(getTripReviewEditStep('preferences')).toBe(STEP.DESCRIPTION);
+        expect(getTripReviewEditStep('description')).toBe(STEP.DESCRIPTION);
     });
 
     it('returns origin, intermediates, and destination for the route list', () => {
