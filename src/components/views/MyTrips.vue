@@ -238,7 +238,10 @@ import bus from '../../services/bus-event.js';
 import { shouldHideDonationOnIOSCapacitor } from '../../services/capacitor.js';
 import { shouldPromptDonationAfterRating } from '../../utils/donationAfterRating.js';
 import { sortSubscriptions } from '../../utils/sortSubscriptions.js';
-import { sortTripsNewestFirst } from '../../utils/sortTripsNewestFirst.js';
+import {
+    sortTripsNewestFirst,
+    sortTripsOldestFirst
+} from '../../utils/sortTripsNewestFirst.js';
 
 export default {
     name: 'my-trips',
@@ -289,7 +292,7 @@ export default {
             return sortSubscriptions(this.subscriptions);
         },
         sortedTrips() {
-            return sortTripsNewestFirst(this.trips);
+            return sortTripsOldestFirst(this.trips);
         },
         sortedOldTrips() {
             return sortTripsNewestFirst(this.oldTrips);
@@ -298,13 +301,13 @@ export default {
             return sortTripsNewestFirst(this.oldPassengerTrips);
         },
         sortedSeatRequests() {
-            return sortTripsNewestFirst(this.seatRequests);
+            return sortTripsOldestFirst(this.seatRequests);
         },
         sortedPendingRequest() {
-            return sortTripsNewestFirst(this.pendingRequest);
+            return sortTripsOldestFirst(this.pendingRequest);
         },
         sortedPendingPaymentRequests() {
-            return sortTripsNewestFirst(this.pendingPaymentRequests);
+            return sortTripsOldestFirst(this.pendingPaymentRequests);
         },
         sortedPendingRates() {
             return sortTripsNewestFirst(this.pendingRates);
