@@ -72,25 +72,10 @@ describe('Trip.vue TripInviteFriends integration', () => {
 });
 
 describe('TripSeats.vue TripInviteFriends integration', () => {
-    it('shows invite button and modal below available seats for upcoming owner trips', () => {
-        expect(tripSeatsSource).toContain('canInviteFriendsToTrip');
-        expect(tripSeatsSource).toContain('isUpcomingTrip');
-        expect(tripSeatsSource).toContain('showInviteFriendsModal');
-        expect(tripSeatsSource).toContain("$t('invitarAmigosAlViaje')");
-        expect(tripSeatsSource).toContain('maybeOpenInviteFriendsFromQuery');
-        expect(tripSeatsSource).toMatch(
-            /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
-        );
-    });
-
-    it('auto-opens invite modal only from inviteFriends query param', () => {
-        expect(tripSeatsSource).toContain("query.inviteFriends !== '1'");
-        expect(tripSeatsSource).toContain('delete nextQuery.inviteFriends');
-    });
-
-    it('closes invite modal through TripInviteFriends close emit', () => {
-        expect(tripSeatsSource).toContain('@close="onInviteFriendsModalClose"');
-        expect(tripSeatsSource).not.toContain('close-behavior="trip-detail"');
+    it('does not keep invite friends on seats after trip-detail redesign', () => {
+        expect(tripSeatsSource).not.toContain('canInviteFriendsToTrip');
+        expect(tripSeatsSource).not.toContain('showInviteFriendsModal');
+        expect(tripSeatsSource).not.toContain("$t('invitarAmigosAlViaje')");
     });
 });
 
