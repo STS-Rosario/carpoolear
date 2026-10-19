@@ -298,6 +298,8 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('startSelladoPaymentPoll');
         expect(viewSource).toContain('5000');
         expect(viewSource).toContain('stopSelladoPaymentPoll');
+        expect(viewSource).toContain('syncSelladoPaymentFromReturn');
+        expect(viewSource).toContain('syncSelladoPayment');
         expect(viewSource).toMatch(
             /if\s*\(\s*this\.showSelladoProcessingBanner\s*\)/
         );
