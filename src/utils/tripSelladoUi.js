@@ -38,13 +38,9 @@ export function isOverSelladoFreeLimit({
 
 export function shouldShowSelladoBonificadoCard({
     selladoEnabled,
-    routeNeedsPayment,
-    hasComplimentarySellado
+    routeNeedsPayment
 } = {}) {
-    if (!selladoEnabled || hasComplimentarySellado) {
-        return false;
-    }
-    return !routeNeedsPayment;
+    return Boolean(selladoEnabled && !routeNeedsPayment);
 }
 
 function wouldOtherwiseChargeSellado({
