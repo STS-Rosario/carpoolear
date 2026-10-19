@@ -42,6 +42,21 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('inviteAllFriends');
     });
 
+    it('keeps the invite-all checkbox in normal flow so the box is not cropped', () => {
+        expect(componentSource).not.toMatch(
+            /class="checkbox"[\s\S]*invitarATodosMisAmigos/
+        );
+        expect(componentSource).toMatch(
+            /trip-invite-friends__friend[\s\S]*invitarATodosMisAmigos/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__list input\[type="checkbox"\]\s*\{[^}]*position:\s*static/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__list\s*\{[^}]*overflow:\s*visible/s
+        );
+    });
+
     it('submits selected friends through TripApi inviteFriends', () => {
         expect(componentSource).toContain('inviteFriends');
         expect(componentSource).toContain('onSubmit');
