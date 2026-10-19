@@ -22,6 +22,9 @@ export function unLitroCardKindFromTrip(
     if (trip.needs_sellado) {
         return 'charged';
     }
+    if (trip.sellado_complimentary) {
+        return 'complimentary';
+    }
     if (
         hasComplimentarySellado &&
         trip.pricing_breakdown &&
