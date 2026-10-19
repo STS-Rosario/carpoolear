@@ -150,7 +150,7 @@ describe('shouldShowSelladoBonificadoCard', () => {
         ).toBe(false);
     });
 
-    it('does not show Bonificado when complimentary credit applies', () => {
+    it('does not show Bonificado when complimentary credit applies on a paid route', () => {
         expect(
             shouldShowSelladoBonificadoCard({
                 selladoEnabled: true,
@@ -159,6 +159,17 @@ describe('shouldShowSelladoBonificadoCard', () => {
                 hasComplimentarySellado: true
             })
         ).toBe(false);
+    });
+
+    it('shows Bonificado when the route does not need Un litro even with complimentary credit', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: false,
+                remainingFreeTrips: 0,
+                hasComplimentarySellado: true
+            })
+        ).toBe(true);
     });
 });
 
