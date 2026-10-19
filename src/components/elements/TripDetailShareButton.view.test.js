@@ -35,6 +35,15 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).toContain('isInviteFriendsBlockedByUnpaidSellado');
     });
 
+    it('aligns the unpaid invite button with share and save-template', () => {
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends-trigger__tooltip\s*\{[^}]*display:\s*block/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends-trigger__tooltip\s*\{[^}]*padding:\s*0/s
+        );
+    });
+
     it('lets the owner save the trip as a template below invite', () => {
         expect(componentSource).toContain('canSaveTemplate');
         expect(componentSource).toContain('data-testid="trip-detail-save-template"');
