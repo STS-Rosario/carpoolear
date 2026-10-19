@@ -304,6 +304,21 @@ export default {
 </script>
 
 <style scoped>
+.trip-invite-friends-trigger,
+.trip-invite-friends-trigger__tooltip {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trip-invite-friends-trigger__tooltip {
+    padding: 0;
+}
+
+.trip-invite-friends-trigger :deep(.app-button) {
+    width: 100%;
+}
+
 .trip-detail__save-template-form label {
     color: #333;
 }
