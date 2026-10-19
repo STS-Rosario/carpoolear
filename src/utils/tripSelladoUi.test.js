@@ -251,6 +251,18 @@ describe('shouldShowSelladoEmptyTripCreditCard', () => {
         ).toBe(false);
     });
 
+    it('hides the card after the empty-trip credit was already used', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(
+                {
+                    ...finishedPaidEmptyTrip,
+                    sellado_empty_trip_credit_redeemed: true
+                },
+                { isOwner: true }
+            )
+        ).toBe(false);
+    });
+
     it('hides the card when sellado was never paid', () => {
         expect(
             shouldShowSelladoEmptyTripCreditCard(
