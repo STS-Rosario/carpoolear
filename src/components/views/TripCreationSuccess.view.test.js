@@ -86,7 +86,11 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain('unLitroCardKindFromTrip');
         expect(componentSource).toContain('v-if="unLitroKind"');
         expect(componentSource).toContain(':charged="unLitroKind === \'charged\'"');
+        expect(componentSource).toContain(
+            ':complimentary="unLitroKind === \'complimentary\'"'
+        );
         expect(componentSource).toContain(':bonificado="unLitroKind === \'bonificado\'"');
+        expect(componentSource).toContain('hasComplimentarySellado');
         expect(componentSource).toContain('trip-creation-success__un-litro');
         expect(componentSource).toContain("$t('unLitroSectionTitle')");
         expect(componentSource).toContain('text-align: left');

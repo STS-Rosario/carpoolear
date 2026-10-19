@@ -272,6 +272,9 @@ describe('NewTrip.vue trip cars editor modal', () => {
 describe('NewTrip.vue trip creation template snapshot', () => {
     it('passes a creation snapshot to the success screen for template saving', () => {
         expect(viewSource).toContain(':creation-snapshot="creationSnapshot"');
+        expect(viewSource).toContain(
+            ':has-complimentary-sellado="selladoComplimentary"'
+        );
         expect(viewSource).toContain('creationSnapshot: null');
         expect(viewSource).toMatch(
             /createTrip\(trip\)[\s\S]*?this\.creationSnapshot = buildOutboundTripCreationSnapshot\(this\)/s

@@ -315,6 +315,32 @@ describe('unLitroCardKindFromTrip', () => {
         ).toBe('bonificado');
     });
 
+    it('shows complimentary when empty-trip credit waived Un litro on a route that includes it', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: true }
+            )
+        ).toBe('complimentary');
+    });
+
+    it('keeps Bonificado on unpaid routes even when empty-trip credit is available', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: false }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: true }
+            )
+        ).toBe('bonificado');
+    });
+
     it('still shows charged below contribución while a payment banner is showing', () => {
         expect(
             unLitroCardKindFromTrip(

@@ -321,8 +321,13 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('tripDetailUnLitroKind');
         expect(viewSource).toContain(':charged="tripDetailUnLitroKind === \'charged\'"');
         expect(viewSource).toContain(
+            ':complimentary="tripDetailUnLitroKind === \'complimentary\'"'
+        );
+        expect(viewSource).toContain(
             ':bonificado="tripDetailUnLitroKind === \'bonificado\'"'
         );
+        expect(viewSource).toContain('hasComplimentarySellado');
+        expect(viewSource).toContain('selladoViaje');
         const contribucion = viewSource.match(
             /class="trip-detail__contribucion">[\s\S]*?<\/div>/
         )?.[0];
