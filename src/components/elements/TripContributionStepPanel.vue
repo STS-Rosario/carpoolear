@@ -9,7 +9,7 @@
 
         <UnLitroInfoCard
             v-if="showUnLitroCard"
-            :charged="!selladoBonificado && !selladoComplimentary"
+            :charged="selladoCharged"
             :complimentary="selladoComplimentary"
             :bonificado="selladoBonificado"
             :remaining-free-trips="remainingFreeTrips"

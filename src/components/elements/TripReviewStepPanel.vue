@@ -138,7 +138,7 @@
             <UnLitroInfoCard
                 v-else
                 class="trip-review-step__un-litro-card"
-                :charged="!selladoBonificado && !selladoComplimentary"
+                :charged="selladoCharged"
                 :complimentary="selladoComplimentary"
                 :bonificado="selladoBonificado"
                 :remaining-free-trips="remainingFreeTrips"
