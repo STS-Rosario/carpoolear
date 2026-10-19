@@ -850,6 +850,7 @@ const messages = {
         cerrarSesion: 'Cerrar sesión',
         pedidosDeEliminacionDeCuenta: 'Pedidos de eliminación de cuenta',
         invitarAmigos: 'Invitar a amistades',
+        invitar: 'Invitar',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
             'No recibir más alertas de viaje de {name}',
@@ -3449,6 +3450,7 @@ const messages = {
         quitarSolicitudAmigo: 'Quitar',
         quitarAmigo: 'Quitar amistad',
         invitarAmigos: 'Invitar a amistades',
+        invitar: 'Invitar',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
             'No recibir más alertas de viaje de {name}',
@@ -5022,6 +5024,7 @@ const messages = {
         cerrarSesion: 'Log out',
         pedidosDeEliminacionDeCuenta: 'Account deletion requests',
         invitarAmigos: 'Invite friends',
+        invitar: 'Invite',
         recibirAlertasViajeAmigo: 'Receive trip alerts from {name}',
         detenerAlertasViajeAmigo: 'Stop receiving trip alerts from {name}',
         alertasViajeAmigoActivadas:
