@@ -47,13 +47,19 @@ describe('TripInviteFriends.vue', () => {
             /class="checkbox"[\s\S]*invitarATodosMisAmigos/
         );
         expect(componentSource).toMatch(
-            /trip-invite-friends__friend[\s\S]*invitarATodosMisAmigos/
+            /trip-invite-friends__all[\s\S]*invitarATodosMisAmigos/
         );
         expect(componentSource).toMatch(
-            /\.trip-invite-friends__list input\[type="checkbox"\]\s*\{[^}]*position:\s*static/s
+            /v-for="friend in friends"[\s\S]*trip-invite-friends__friend/
         );
         expect(componentSource).toMatch(
-            /\.trip-invite-friends__list\s*\{[^}]*overflow:\s*visible/s
+            /\.trip-invite-friends__list input\[type="checkbox"\]\s*\{[^}]*transform:\s*none/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__all\s*\{[^}]*padding-left:/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__friend\s*\{[^}]*padding-left:/s
         );
     });
 
