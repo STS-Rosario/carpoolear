@@ -58,6 +58,12 @@
                     {{ $t('filtroTicketsAbiertos') }}
                 </label>
             </div>
+            <div class="checkbox form-group support-tickets-admin-filters__needs-reply">
+                <label>
+                    <input v-model="filterAssignedToMe" type="checkbox" />
+                    {{ $t('filtroTicketsAsignadosAMi') }}
+                </label>
+            </div>
             <AppButton variant="secondary" size="sm" type="submit">{{ $t('buscar') }}</AppButton>
         </form>
         <p v-if="loading" class="alert alert-info">{{ $t('cargandoNotificaciones') }}</p>
@@ -244,6 +250,7 @@ export default {
             filterNeedsReply: false,
             filterOpen: false,
             filterCreatedByAdmin: false,
+            filterAssignedToMe: false,
             filterUserId: null,
             sortKey: null,
             sortDir: 'desc',
@@ -275,6 +282,7 @@ export default {
                 needsReply: this.filterNeedsReply,
                 open: this.filterOpen,
                 createdByAdmin: this.filterCreatedByAdmin,
+                assignedToMe: this.filterAssignedToMe,
                 userId: this.filterUserId,
                 page: this.listPage,
                 perPage: this.listPerPage,
@@ -304,6 +312,7 @@ export default {
             this.filterNeedsReply = parsed.needsReply;
             this.filterOpen = parsed.open;
             this.filterCreatedByAdmin = parsed.createdByAdmin;
+            this.filterAssignedToMe = parsed.assignedToMe;
             this.filterUserId = parsed.userId;
             this.sortKey = parsed.sortKey;
             this.sortDir = parsed.sortDir;
@@ -326,6 +335,9 @@ export default {
             }
             if (this.filterCreatedByAdmin) {
                 query.created_by_admin = '1';
+            }
+            if (this.filterAssignedToMe) {
+                query.assigned_to_me = '1';
             }
             if (this.filterUserId) {
                 query.user_id = String(this.filterUserId);

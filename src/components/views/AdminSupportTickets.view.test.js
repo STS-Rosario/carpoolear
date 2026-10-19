@@ -141,9 +141,11 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('v-model="filterPriority"');
         expect(viewSource).toContain('v-model="filterNeedsReply"');
         expect(viewSource).toContain('v-model="filterOpen"');
+        expect(viewSource).toContain('v-model="filterAssignedToMe"');
         expect(viewSource).toContain("{{ $t('filtroTicketsTodasCategorias') }}");
         expect(viewSource).toContain("{{ $t('filtroTicketsRequiereRespuesta') }}");
         expect(viewSource).toContain("{{ $t('filtroTicketsAbiertos') }}");
+        expect(viewSource).toContain("{{ $t('filtroTicketsAsignadosAMi') }}");
     });
 
     it('renders admin pagination bar with per-page selector', () => {
@@ -177,6 +179,13 @@ describe('AdminSupportTickets view', () => {
         expect(viewSource).toContain('filterCreatedByAdmin');
         expect(viewSource).toContain('createdByAdmin: this.filterCreatedByAdmin');
         expect(viewSource).toContain("query.created_by_admin = '1'");
+    });
+
+    it('passes assignedToMe filter from route query to admin ticket list fetch', () => {
+        expect(viewSource).toContain('filterAssignedToMe');
+        expect(viewSource).toContain('assignedToMe: this.filterAssignedToMe');
+        expect(viewSource).toContain("query.assigned_to_me = '1'");
+        expect(viewSource).toContain('this.filterAssignedToMe = parsed.assignedToMe');
     });
 
     it('shows assigned admin column in tickets table', () => {
