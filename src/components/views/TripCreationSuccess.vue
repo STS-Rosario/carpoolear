@@ -28,10 +28,7 @@
             </div>
         </template>
 
-        <div
-            v-if="!showUnLitroPayment"
-            class="trip-creation-success__actions"
-        >
+        <div class="trip-creation-success__actions">
             <AppButton
                 variant="primary"
                 block
