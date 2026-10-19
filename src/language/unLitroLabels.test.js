@@ -80,9 +80,7 @@ const KEYS = {
     invitarAmigosSelladoPendiente:
         'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
     calculadoEnBaseNaftaSelladoSuffix:
-        ' y Un litro para Carpoolear incluídos (si aplica)',
-    contribucionRecomendadaCardDescripcionConSellado:
-        'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, Un litro para Carpoolear y peajes'
+        ' y Un litro para Carpoolear incluídos (si aplica)'
 };
 
 const EN_KEYS = {
@@ -174,6 +172,12 @@ describe('Un litro para Carpoolear copy', () => {
         Object.entries(KEYS).forEach(([key, value]) => {
             expect(messages[locale][key]).toBe(value);
         });
+    });
+
+    it('arg locale mentions Un litro in the recommended contribution card', () => {
+        expect(messages.arg.contribucionRecomendadaCardDescripcionConSellado).toBe(
+            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, Un litro para Carpoolear y peajes'
+        );
     });
 
     it('en locale has Un litro screenshots copy', () => {
