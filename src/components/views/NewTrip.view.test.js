@@ -74,6 +74,19 @@ describe('NewTrip.vue negative contribution validation', () => {
 });
 
 describe('NewTrip.vue max contribution validation timing', () => {
+    it('hides the max contribution warning while typing once the amount is within the cap', () => {
+        expect(viewSource).toContain('resolveLiveContributionPriceError');
+        expect(viewSource).toMatch(
+            /validatePrice\(\)[\s\S]*?resolveLiveContributionPriceError/s
+        );
+        expect(viewSource).toMatch(
+            /validateReturnPrice\(\)[\s\S]*?resolveLiveContributionPriceError/s
+        );
+        expect(viewSource).not.toMatch(
+            /validatePrice\(\)[\s\S]*?this\.priceError\.message ===\s*\n\s*this\.getMaxContributionExceededMessage/s
+        );
+    });
+
     it('defers max contribution checks until trip-info cap is available', () => {
         expect(viewSource).toContain("from '../../utils/tripMaxPriceValidation.js'");
         expect(viewSource).toContain('exceedsMaximumSeatPrice');
