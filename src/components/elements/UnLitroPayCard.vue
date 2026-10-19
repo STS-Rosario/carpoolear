@@ -121,7 +121,7 @@ import AppButton from '../ui/AppButton.vue';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs.js';
 import TripApi from '../../services/api/Trips.js';
-import { selladoCheckoutUrl, withSelladoPaidQuery } from '../../utils/tripSelladoUi.js';
+import { selladoCheckoutUrl, selladoPaidQueryRoute } from '../../utils/tripSelladoUi.js';
 import { isSelladoPending } from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
 import { openExternalUrl } from '../../utils/externalLink.js';
@@ -252,10 +252,9 @@ export default {
                         this.qrImageUrl = url;
                     }
                 });
-                if (this.$router && this.$route) {
-                    this.$router.replace(withSelladoPaidQuery(this.$route)).catch(
-                        () => {}
-                    );
+                const paidRoute = selladoPaidQueryRoute(this.$route);
+                if (this.$router && paidRoute) {
+                    this.$router.replace(paidRoute).catch(() => {});
                 }
                 this.startPolling();
             } catch {

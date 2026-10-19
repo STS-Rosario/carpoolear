@@ -185,6 +185,13 @@ export function withSelladoPaidQuery(route = {}) {
     };
 }
 
+export function selladoPaidQueryRoute(route = {}) {
+    if (route.name !== 'detail_trip') {
+        return null;
+    }
+    return withSelladoPaidQuery(route);
+}
+
 export function isSelladoPaymentReturnQuery(query = {}) {
     if (query.sellado_paid === '1' || query.sellado_paid === true) {
         return true;
