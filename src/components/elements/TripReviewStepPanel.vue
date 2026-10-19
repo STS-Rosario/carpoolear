@@ -174,6 +174,22 @@
             </div>
         </section>
 
+        <section class="trip-review-step__section">
+            <div class="trip-review-step__section-header">
+                <h4 class="trip-review-step__section-title">
+                    {{ $t('tripReviewSectionDescription') }}
+                </h4>
+                <button
+                    type="button"
+                    class="trip-review-step__edit"
+                    @click="onEdit('description')"
+                >
+                    {{ $t('tripReviewEdit') }}
+                </button>
+            </div>
+            <p class="trip-review-step__description">{{ description }}</p>
+        </section>
+
         <div
             v-if="showNoLucrar"
             class="trip-review-step__nolucrar"
@@ -272,6 +288,7 @@ export default {
         remainingFreeTrips: { type: Number, default: 0 },
         freeTripsAmount: { type: Number, default: 0 },
         showPreferences: { type: Boolean, default: true },
+        description: { type: String, default: '' },
         allowKids: { type: Boolean, default: false },
         allowSmoking: { type: Boolean, default: false },
         allowAnimals: { type: Boolean, default: false },
@@ -515,6 +532,14 @@ export default {
     color: #404040;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.trip-review-step__description {
+    margin: 0;
+    color: #22211f;
+    font-weight: 500;
+    line-height: 1.45;
+    white-space: pre-wrap;
 }
 
 .trip-review-step__nolucrar {
