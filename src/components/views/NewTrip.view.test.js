@@ -367,6 +367,12 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toContain('showUnLitroCard');
         expect(viewSource).not.toContain('alert-sellado-viaje');
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
+        expect(viewSource).toMatch(
+            /contribucionRecomendadaCardDescripcionText\(\)[\s\S]*this\.selladoCharged[\s\S]*contribucionRecomendadaCardDescripcionConSellado/
+        );
+        expect(viewSource).toMatch(
+            /contribucionPorPersonaTooltipText\(\)[\s\S]*this\.selladoCharged[\s\S]*contribucionPorPersonaTooltipConSellado/
+        );
     });
 
     it('waives Un litro with complimentary copy when empty-trip credit applies', () => {

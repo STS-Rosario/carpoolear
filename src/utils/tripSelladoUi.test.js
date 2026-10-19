@@ -289,7 +289,7 @@ describe('unLitroCardKindFromTrip', () => {
         ).toBe('charged');
     });
 
-    it('shows charged when trip-info includes Un litro even if this trip did not collect payment', () => {
+    it('shows Bonificado when this trip did not collect Un litro even if the route can include it', () => {
         expect(
             unLitroCardKindFromTrip(
                 {
@@ -299,7 +299,7 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
-        ).toBe('charged');
+        ).toBe('bonificado');
     });
 
     it('shows Bonificado when sellado is enabled but the route does not include Un litro', () => {

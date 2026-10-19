@@ -38,4 +38,16 @@ describe('TripPrice.vue voluntary contribution display', () => {
             /v-if="showContributionBreakdown && pricingBreakdown"/
         );
     });
+
+    it('mentions Un litro in fallback copy and price only when this trip collected it', () => {
+        expect(viewSource).toMatch(
+            /calculadoEnBaseNaftaDescription\(\)[\s\S]*this\.trip\.needs_sellado[\s\S]*calculadoEnBaseNaftaSelladoSuffix/
+        );
+        expect(viewSource).not.toMatch(
+            /calculadoEnBaseNaftaDescription\(\)[\s\S]*module_trip_creation_payment_enabled[\s\S]*calculadoEnBaseNaftaSelladoSuffix/
+        );
+        expect(viewSource).toMatch(
+            /recommendedPricePerSeat\(\)[\s\S]*this\.trip\.needs_sellado[\s\S]*module_trip_creation_payment_amount_cents/
+        );
+    });
 });
