@@ -4,7 +4,7 @@
             {{ $t('queresInvitarTusAmigos') }}
         </p>
         <div v-if="friends && friends.length" class="trip-invite-friends__list">
-            <div class="trip-invite-friends__friend">
+            <div class="trip-invite-friends__all">
                 <label>
                     <input
                         type="checkbox"
@@ -182,9 +182,18 @@ export default {
     overflow: visible;
 }
 
+.trip-invite-friends__all,
 .trip-invite-friends__friend {
     margin: 0.4rem 0;
     overflow: visible;
+}
+
+.trip-invite-friends__all {
+    padding-left: 0.5rem;
+}
+
+.trip-invite-friends__friend {
+    padding-left: 1.75rem;
 }
 
 .trip-invite-friends__list label {
@@ -199,6 +208,10 @@ export default {
     position: static;
     flex-shrink: 0;
     margin: 0;
+    transform: none;
+    width: 1.15em;
+    height: 1.15em;
+    accent-color: #555;
 }
 
 .trip-invite-friends__actions {
