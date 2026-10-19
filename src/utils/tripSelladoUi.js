@@ -16,10 +16,7 @@ export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
     if (!selladoEnabled || !trip) {
         return null;
     }
-    if (
-        trip.needs_sellado ||
-        (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado)
-    ) {
+    if (trip.needs_sellado) {
         return 'charged';
     }
     return 'bonificado';

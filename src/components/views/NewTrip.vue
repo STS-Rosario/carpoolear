@@ -533,13 +533,13 @@ export default {
             return this.config.map_zoom;
         },
         contribucionPorPersonaTooltipText() {
-            if (this.config && this.config.module_trip_creation_payment_enabled) {
+            if (this.selladoCharged) {
                 return this.$t('contribucionPorPersonaTooltipConSellado');
             }
             return this.$t('contribucionPorPersonaTooltipSinSellado');
         },
         contribucionRecomendadaCardDescripcionText() {
-            if (this.config && this.config.module_trip_creation_payment_enabled) {
+            if (this.selladoCharged) {
                 return this.$t('contribucionRecomendadaCardDescripcionConSellado');
             }
             return this.$t('contribucionRecomendadaCardDescripcionSinSellado');
