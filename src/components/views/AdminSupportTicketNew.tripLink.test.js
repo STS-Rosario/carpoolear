@@ -35,7 +35,20 @@ async function mountForm(query = EXCESS_QUERY) {
             mocks: { $route: { query }, $router: router },
             stubs: {
                 AdminLayout: { template: '<div><slot /></div>' },
-                UserSearchAutocomplete: true
+                UserSearchAutocomplete: true,
+                editor: {
+                    name: 'editor',
+                    props: ['initialValue'],
+                    template: '<div class="admin-support-ticket-new-editor" />',
+                    methods: {
+                        invoke(method) {
+                            if (method === 'getMarkdown') {
+                                return this.initialValue;
+                            }
+                            return null;
+                        }
+                    }
+                }
             }
         }
     });

@@ -20,4 +20,13 @@ describe('AdminSupportTicketNew view', () => {
         expect(source).toContain('query.subject');
         expect(source).toContain('query.message');
     });
+
+    it('uses the markdown editor for the ticket message', () => {
+        expect(source).toContain('ToastUiEditor');
+        expect(source).toContain('editor: ToastUiEditor');
+        expect(source).toContain('initial-edit-type="wysiwyg"');
+        expect(source).toContain(':initial-value="createForm.message_markdown"');
+        expect(source).toContain("invoke('getMarkdown')");
+        expect(source).not.toContain('AppTextarea');
+    });
 });
