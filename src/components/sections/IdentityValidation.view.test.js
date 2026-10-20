@@ -132,6 +132,7 @@ describe('IdentityValidation rejection warnings', () => {
         expect(viewSource).toContain('identity-validation-mismatch-support-warning__paragraph');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph1Key)');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2LeadKey)');
+        expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2LinkKey)');
         expect(viewSource).toContain('$t(mismatchSupportWarningParts.paragraph2TailKey)');
     });
 

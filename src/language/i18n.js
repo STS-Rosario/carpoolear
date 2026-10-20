@@ -1083,14 +1083,16 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
-            'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear. Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. Si tenés cuenta duplicada en Carpoolear, creá un ticket de Mesa de Ayuda así te ayudamos a normalizar tu cuenta y puedas terminar el proceso de verificación.',
+            'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear. Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. ¿Te sigue fallando la verificación? Creá un ticket de Mesa de Ayuda así revisamos tu problema.',
         identityValidationRejectionSupportWarningBothMismatchParagraph1:
             'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear.',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Lead:
-            'Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. Si tenés cuenta duplicada en Carpoolear, ',
+            'Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. ¿Te sigue fallando la verificación? ',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Tail:
-            ' así te ayudamos a normalizar tu cuenta y puedas terminar el proceso de verificación.',
+            ' así revisamos tu problema.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
+        identityValidationMismatchSupportTicketCtaBothMismatch:
+            'Creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         identityValidationAdminReviewNoteLabelApproved: 'Mensaje del equipo',
         identityValidationAdminReviewNoteLabelPending: 'Mensaje del equipo',
@@ -3241,14 +3243,16 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' así te ayudamos a resolverlo.',
         identityValidationRejectionSupportWarningBothMismatch:
-            'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear. Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. Si tenés cuenta duplicada en Carpoolear, creá un ticket de Mesa de Ayuda así te ayudamos a normalizar tu cuenta y puedas terminar el proceso de verificación.',
+            'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear. Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. ¿Te sigue fallando la verificación? Creá un ticket de Mesa de Ayuda así revisamos tu problema.',
         identityValidationRejectionSupportWarningBothMismatchParagraph1:
             'Parece que no coincide tu nombre ni DNI, revisá si usaste una cuenta de Mercado Pago del mismo titular que la de Carpoolear.',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Lead:
-            'Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. Si tenés cuenta duplicada en Carpoolear, ',
+            'Si necesitás modificar tu nombre y/o DNI de tu cuenta Carpoolear podes hacerlo editando tu perfil. ¿Te sigue fallando la verificación? ',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Tail:
-            ' así te ayudamos a normalizar tu cuenta y puedas terminar el proceso de verificación.',
+            ' así revisamos tu problema.',
         identityValidationMismatchSupportTicketCta: 'creá un ticket de Mesa de Ayuda',
+        identityValidationMismatchSupportTicketCtaBothMismatch:
+            'Creá un ticket de Mesa de Ayuda',
         identityValidationRejectionReasonLabel: 'Razón de rechazo',
         identityValidationAdminReviewNoteLabelApproved: 'Mensaje del equipo',
         identityValidationAdminReviewNoteLabelPending: 'Mensaje del equipo',
@@ -5178,14 +5182,16 @@ const messages = {
         identityValidationRejectionSupportWarningDniMismatchTail:
             ' so we can help resolve it.',
         identityValidationRejectionSupportWarningBothMismatch:
-            'It looks like neither your name nor DNI matches. Check that you used a Mercado Pago account belonging to the same holder as your Carpoolear account. If you need to update your name and/or DNI on your Carpoolear account, you can do so by editing your profile. If you have a duplicate Carpoolear account, create a Help Desk ticket so we can help you consolidate your account and complete the verification process.',
+            'It looks like neither your name nor DNI matches. Check that you used a Mercado Pago account belonging to the same holder as your Carpoolear account. If you need to update your name and/or DNI on your Carpoolear account, you can do so by editing your profile. Is the verification still failing? Create a Help Desk ticket so we can look into your problem.',
         identityValidationRejectionSupportWarningBothMismatchParagraph1:
             'It looks like neither your name nor DNI matches. Check that you used a Mercado Pago account belonging to the same holder as your Carpoolear account.',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Lead:
-            'If you need to update your name and/or DNI on your Carpoolear account, you can do so by editing your profile. If you have a duplicate Carpoolear account, ',
+            'If you need to update your name and/or DNI on your Carpoolear account, you can do so by editing your profile. Is the verification still failing? ',
         identityValidationRejectionSupportWarningBothMismatchParagraph2Tail:
-            ' so we can help you consolidate your account and complete the verification process.',
+            ' so we can look into your problem.',
         identityValidationMismatchSupportTicketCta: 'create a Help Desk ticket',
+        identityValidationMismatchSupportTicketCtaBothMismatch:
+            'Create a Help Desk ticket',
         identityValidationRejectionReasonLabel: 'Reason for rejection',
         identityValidationAdminReviewNoteLabelApproved: 'Message from the team',
         identityValidationAdminReviewNoteLabelPending: 'Message from the team',

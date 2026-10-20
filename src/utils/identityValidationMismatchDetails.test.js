@@ -75,6 +75,8 @@ describe('getIdentityValidationMismatchDetails', () => {
                 'identityValidationRejectionSupportWarningBothMismatchParagraph1',
             paragraph2LeadKey:
                 'identityValidationRejectionSupportWarningBothMismatchParagraph2Lead',
+            paragraph2LinkKey:
+                'identityValidationMismatchSupportTicketCtaBothMismatch',
             paragraph2TailKey:
                 'identityValidationRejectionSupportWarningBothMismatchParagraph2Tail'
         });
