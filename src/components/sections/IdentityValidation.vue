@@ -79,7 +79,7 @@
                     <p class="identity-validation-mismatch-support-warning__paragraph">
                         {{ $t(mismatchSupportWarningParts.paragraph2LeadKey) }}
                         <router-link :to="{ name: 'ticket-new' }">
-                            {{ $t('identityValidationMismatchSupportTicketCta') }}
+                            {{ $t(mismatchSupportWarningParts.paragraph2LinkKey) }}
                         </router-link>
                         {{ $t(mismatchSupportWarningParts.paragraph2TailKey) }}
                     </p>

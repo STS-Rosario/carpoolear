@@ -5,6 +5,8 @@ export const MISMATCH_RESULT_NAME = 'name_mismatch';
 export const MISMATCH_RESULT_BOTH = 'both_mismatch';
 export const BOTH_MISMATCH_WARNING_KEY =
     'identityValidationRejectionSupportWarningBothMismatch';
+export const BOTH_MISMATCH_TICKET_CTA_KEY =
+    'identityValidationMismatchSupportTicketCtaBothMismatch';
 export const WARNING_PART_LAYOUT_TWO_PARAGRAPH = 'twoParagraph';
 export const WARNING_PART_LAYOUT_INLINE_LINK = 'inlineLink';
 
@@ -70,6 +72,7 @@ export function getMismatchSupportWarningParts(warningKey) {
             layout: WARNING_PART_LAYOUT_TWO_PARAGRAPH,
             paragraph1Key: `${warningKey}Paragraph1`,
             paragraph2LeadKey: `${warningKey}Paragraph2Lead`,
+            paragraph2LinkKey: BOTH_MISMATCH_TICKET_CTA_KEY,
             paragraph2TailKey: `${warningKey}Paragraph2Tail`
         };
     }
