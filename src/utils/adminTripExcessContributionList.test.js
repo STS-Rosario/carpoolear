@@ -71,44 +71,52 @@ describe('adminTripExcessContributionList', () => {
         });
     });
 
-    describe('maximum contribution column', () => {
-        it('adds a sortable máxima column immediately after contribución', () => {
-            const keys = TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key);
-            const contribucionIndex = keys.indexOf('seat_price_cents');
-
-            expect(keys.slice(contribucionIndex, contribucionIndex + 2)).toEqual([
+    describe('list columns', () => {
+        it('keeps identity columns through contribución, then compact contribution and ticket columns', () => {
+            expect(TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key)).toEqual([
+                'id',
+                'user_name',
+                'from_town',
+                'to_town',
                 'seat_price_cents',
-                'maximum_seat_price_cents'
-            ]);
-            expect(
-                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
-                    (column) => column.key === 'maximum_seat_price_cents'
-                ).labelKey
-            ).toBe('contribucionMaximaColumna');
-        });
-    });
-
-    describe('LLM contribution check columns', () => {
-        it('adds sortable suspected contribution and phone columns after the excess percentage', () => {
-            const keys = TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key);
-            const percentageIndex = keys.indexOf('excess_contribution_percentage');
-
-            expect(keys.slice(percentageIndex, percentageIndex + 4)).toEqual([
-                'excess_contribution_percentage',
+                'maximum_seat_price_cents',
+                'average_contribution_cents',
+                'potential_seat_price_cents',
                 'suspected_contribution',
-                'phone_in_description',
-                'has_private_note'
+                'excess_contribution_support_tickets_count',
+                'exceso_contribucion_status'
             ]);
-            expect(
-                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
-                    (column) => column.key === 'suspected_contribution'
-                ).labelKey
-            ).toBe('contribucionSospechada');
-            expect(
-                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.find(
-                    (column) => column.key === 'phone_in_description'
-                ).labelKey
-            ).toBe('telefonoEnDescripcion');
+        });
+
+        it('uses short header labels with full-text tooltip keys after contribución', () => {
+            const byKey = Object.fromEntries(
+                TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => [column.key, column])
+            );
+
+            expect(byKey.maximum_seat_price_cents).toMatchObject({
+                labelKey: 'contribucionMaximaColumnaCorta',
+                titleKey: 'contribucionMaximaColumna'
+            });
+            expect(byKey.average_contribution_cents).toMatchObject({
+                labelKey: 'contribucionPromedioCorta',
+                titleKey: 'contribucionPromedio'
+            });
+            expect(byKey.potential_seat_price_cents).toMatchObject({
+                labelKey: 'contribucionSolicitadaCorta',
+                titleKey: 'contribucionSolicitada'
+            });
+            expect(byKey.suspected_contribution).toMatchObject({
+                labelKey: 'contribucionSospechadaCorta',
+                titleKey: 'contribucionSospechada'
+            });
+            expect(byKey.excess_contribution_support_tickets_count).toMatchObject({
+                labelKey: 'ticketColumnaCorta',
+                titleKey: 'ticketSoporte'
+            });
+            expect(byKey.exceso_contribucion_status).toMatchObject({
+                labelKey: 'estado',
+                titleKey: 'estado'
+            });
         });
     });
 
@@ -244,7 +252,7 @@ describe('adminTripExcessContributionList', () => {
             expect(TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS.map((column) => column.key)).toEqual(
                 expect.arrayContaining([
                     'average_contribution_cents',
-                    'excess_contribution_percentage',
+                    'potential_seat_price_cents',
                     'exceso_contribucion_status'
                 ])
             );
