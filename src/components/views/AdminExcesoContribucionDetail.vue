@@ -120,9 +120,7 @@
                                     variant="secondary"
                                     size="sm"
                                     class="admin-exceso-templated-ticket"
-                                    :disabled="creatingTemplatedTicket"
-                                    :loading="creatingTemplatedTicket"
-                                    @click="createTemplatedTicket"
+                                    @click="openTicketTemplateModal"
                                 >
                                     {{ $t('excessContributionTemplatedTicketButton') }}
                                 </AppButton>
@@ -149,22 +147,65 @@
                 <div v-else class="alert alert-warning">{{ $t('noHayExcesoContribucion') }}</div>
             </div>
         </div>
+
+        <div
+            v-if="ticketTemplateModalOpen"
+            class="admin-exceso-template-modal-backdrop"
+            data-testid="excess-ticket-template-modal"
+            @click.self="closeTicketTemplateModal"
+        >
+            <div class="admin-exceso-template-modal-dialog" @click.stop>
+                <div class="admin-exceso-template-modal-header">
+                    <strong class="admin-exceso-template-modal-title">{{ $t('plantillasModalTitulo') }}</strong>
+                    <button
+                        type="button"
+                        class="close admin-exceso-template-modal-close"
+                        @click="closeTicketTemplateModal"
+                    >
+                        &times;
+                    </button>
+                </div>
+                <ul class="list-unstyled admin-exceso-template-modal-list">
+                    <li
+                        v-for="template in ticketTemplates"
+                        :key="template.id"
+                        class="admin-exceso-template-modal-item"
+                    >
+                        <label class="admin-exceso-template-modal-option">
+                            <input
+                                v-model="selectedTicketTemplateId"
+                                type="radio"
+                                name="excess-ticket-template"
+                                :value="template.id"
+                                :data-testid="`excess-ticket-template-${template.id}`"
+                            />
+                            {{ $t(template.labelKey) }}
+                        </label>
+                    </li>
+                </ul>
+                <AppButton
+                    variant="primary"
+                    data-testid="excess-ticket-template-create"
+                    :disabled="!selectedTicketTemplateId"
+                    @click="createTicketFromSelectedTemplate"
+                >
+                    {{ $t('crearTicket') }}
+                </AppButton>
+            </div>
+        </div>
     </AdminLayout>
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import { AdminApi } from '../../services/api';
-import dialogs from '../../services/dialogs';
 import { useAuthStore } from '../../stores/auth';
-import { useTicketsStore } from '../../stores/tickets';
 import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
 import {
     adminTripSearchRoute,
-    buildExcessContributionTemplatedTicketPayload,
     excessContributionStatusActionLabel,
     excessContributionStatusButtonVariant,
     excessContributionStatusActions,
@@ -176,6 +217,10 @@ import {
     formatAdminExcessContributionPercentageLabel,
     formatAdminSuspectedContributionLabel
 } from '../../utils/adminTripExcessContributionList';
+import {
+    EXCESS_CONTRIBUTION_TICKET_TEMPLATES,
+    excessContributionTemplatedTicketNewRoute
+} from '../../utils/adminTripExcessContributionTicketTemplates';
 
 export default {
     name: 'AdminExcesoContribucionDetail',
@@ -191,7 +236,9 @@ export default {
             loading: true,
             updatingStatus: false,
             pendingStatus: null,
-            creatingTemplatedTicket: false
+            ticketTemplateModalOpen: false,
+            selectedTicketTemplateId: '',
+            ticketTemplates: EXCESS_CONTRIBUTION_TICKET_TEMPLATES
         };
     },
     computed: {
@@ -215,9 +262,6 @@ export default {
         }
     },
     methods: {
-        ...mapActions(useTicketsStore, {
-            adminCreateTicket: 'adminCreateTicket'
-        }),
         formatTripContributionPesosLabel,
         formatAdminTripContributionLabel,
         formatAdminExcessContributionPercentageLabel,
@@ -267,44 +311,27 @@ export default {
                     this.pendingStatus = null;
                 });
         },
-        createTemplatedTicket() {
-            if (!this.item || this.creatingTemplatedTicket) {
+        openTicketTemplateModal() {
+            this.selectedTicketTemplateId = '';
+            this.ticketTemplateModalOpen = true;
+        },
+        closeTicketTemplateModal() {
+            this.ticketTemplateModalOpen = false;
+            this.selectedTicketTemplateId = '';
+        },
+        createTicketFromSelectedTemplate() {
+            if (!this.item || !this.selectedTicketTemplateId) {
                 return;
             }
-            const name = this.item.user_name || `#${this.item.user_id}`;
-            if (!window.confirm(this.$t('excessContributionTemplatedTicketConfirm', { name }))) {
-                return;
-            }
-            this.creatingTemplatedTicket = true;
-            const payload = buildExcessContributionTemplatedTicketPayload(this.item, (key, params) =>
-                this.$t(key, params)
+            const agentName = this.authUser && this.authUser.name;
+            this.$router.push(
+                excessContributionTemplatedTicketNewRoute(
+                    this.item,
+                    this.selectedTicketTemplateId,
+                    (key, params) => this.$t(key, params),
+                    { agentName }
+                )
             );
-            return this.adminCreateTicket(payload)
-                .then((ticket) => {
-                    this.item.excess_contribution_support_tickets_count =
-                        Number(this.item.excess_contribution_support_tickets_count || 0) + 1;
-                    this.item.excess_contribution_ticket_id = ticket && ticket.id;
-                    dialogs.message(this.$t('excessContributionTemplatedTicketCreated'), {
-                        estado: 'success'
-                    });
-                })
-                .catch((error) => {
-                    if (error && error.status === 409) {
-                        if (error.data && error.data.existing_ticket_id) {
-                            this.item.excess_contribution_ticket_id = error.data.existing_ticket_id;
-                        }
-                        dialogs.message(this.$t('excessContributionTicketAlreadyExists'), {
-                            estado: 'error'
-                        });
-                        return;
-                    }
-                    dialogs.message(this.$t('excessContributionTemplatedTicketError'), {
-                        estado: 'error'
-                    });
-                })
-                .finally(() => {
-                    this.creatingTemplatedTicket = false;
-                });
         }
     },
     mounted() {
@@ -324,6 +351,64 @@ export default {
 
 .admin-exceso-templated-ticket {
     margin-left: 8px;
+}
+
+.admin-exceso-template-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+}
+
+.admin-exceso-template-modal-dialog {
+    background: #fff;
+    border-radius: 4px;
+    max-width: 520px;
+    width: 100%;
+    padding: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.admin-exceso-template-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.admin-exceso-template-modal-title {
+    font-size: 20px;
+    line-height: 1.2;
+    color: #222;
+}
+
+.admin-exceso-template-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    padding: 0 6px;
+}
+
+.admin-exceso-template-modal-list {
+    margin: 16px 0;
+}
+
+.admin-exceso-template-modal-item + .admin-exceso-template-modal-item {
+    margin-top: 8px;
+}
+
+.admin-exceso-template-modal-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .admin-exceso-status-action + .admin-exceso-status-action {

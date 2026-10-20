@@ -39,11 +39,21 @@
                     </select>
                 </AppField>
                 <AppInput v-model="createForm.subject" :label="$t('asuntoTicket')" />
-                <AppTextarea
-                    v-model="createForm.message_markdown"
+                <AppField
+                    class="admin-support-ticket-new__editor-field"
                     :label="$t('mensajeTicket')"
-                    :rows="4"
-                />
+                >
+                    <editor
+                        v-if="showMessageEditor"
+                        ref="messageEditor"
+                        :initial-value="createForm.message_markdown"
+                        :options="editorOptions"
+                        initial-edit-type="wysiwyg"
+                        height="400px"
+                        resizable
+                        @change="syncMessageFromEditor"
+                    />
+                </AppField>
                 <AppButton variant="primary" :disabled="createDisabled" @click="createTicket">
                     {{ creating ? $t('guardando') : $t('crearTicket') }}
                 </AppButton>
@@ -59,7 +69,7 @@ import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
-import AppTextarea from '../ui/AppTextarea.vue';
+import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import dialogs from '../../services/dialogs';
 
@@ -70,6 +80,12 @@ export default {
             creating: false,
             selectedUser: null,
             tripUserId: null,
+            showMessageEditor: false,
+            editorOptions: {
+                usageStatistics: false,
+                hideModeSwitch: true,
+                toolbarItems: [['bold', 'italic', 'strike'], ['ul', 'ol'], ['link']]
+            },
             createForm: {
                 user_id: null,
                 type: 'account_verification',
@@ -109,6 +125,16 @@ export default {
         ...mapActions(useTicketsStore, {
             adminCreateTicket: 'adminCreateTicket'
         }),
+        messageMarkdownFromEditor() {
+            const editor = this.$refs.messageEditor;
+            if (editor && typeof editor.invoke === 'function') {
+                return editor.invoke('getMarkdown') || '';
+            }
+            return this.createForm.message_markdown;
+        },
+        syncMessageFromEditor() {
+            this.createForm.message_markdown = this.messageMarkdownFromEditor();
+        },
         applyPrefill() {
             const query = this.$route.query || {};
             const userId = parseInt(query.userId, 10);
@@ -153,6 +179,7 @@ export default {
             this.$router.replace({ query });
         },
         createTicket() {
+            this.createForm.message_markdown = this.messageMarkdownFromEditor();
             this.creating = true;
             return this.adminCreateTicket(this.createForm)
                 .then((ticket) => {
@@ -173,6 +200,7 @@ export default {
     },
     mounted() {
         this.applyPrefill();
+        this.showMessageEditor = true;
     },
     components: {
         AdminLayout,
@@ -180,7 +208,7 @@ export default {
         AppButton,
         AppField,
         AppInput,
-        AppTextarea
+        editor: ToastUiEditor
     }
 };
 </script>
@@ -207,5 +235,9 @@ export default {
 
 .admin-support-ticket-new__type-select:focus {
     outline: none;
+}
+
+.admin-support-ticket-new__editor-field {
+    margin-bottom: 16px;
 }
 </style>

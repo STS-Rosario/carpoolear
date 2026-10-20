@@ -26,18 +26,24 @@ describe('AdminExcesoContribucion list view', () => {
         expect(viewSource).toContain('admin-exceso-th-sort');
         expect(viewSource).toContain('maximum_seat_price_cents');
         expect(viewSource).toContain('average_contribution_cents');
-        expect(viewSource).toContain('excess_contribution_percentage');
+        expect(viewSource).toContain('potential_seat_price_cents');
         expect(viewSource).toContain('formatAdminTripContributionLabel');
-        expect(viewSource).toContain('formatAdminExcessContributionPercentageLabel');
+        expect(viewSource).toContain('formatAdminSuspectedContributionLabel');
         expect(viewSource).toContain("$t('noDisponible')");
+        expect(viewSource).not.toContain('excess_contribution_percentage');
+        expect(viewSource).not.toContain('phone_in_description');
+        expect(viewSource).not.toContain('has_private_note');
+        expect(viewSource).not.toContain('formatAdminExcessContributionPercentageLabel');
     });
 
-    it('renders suspected contribution and phone cells in sort-column order', () => {
+    it('shows compact headers with full-text tooltips and compact contribution cells', () => {
         const viewSource = fs.readFileSync(listPath, 'utf8');
 
+        expect(viewSource).toContain(':title="$t(column.titleKey || column.labelKey)"');
+        expect(viewSource).toContain(':title="$t(\'acciones\')"');
         expect(viewSource).toContain('formatAdminSuspectedContributionLabel');
         expect(viewSource).toMatch(
-            /excess_contribution_percentage\)[^\n]*<\/td>\s*<td>\{\{ formatAdminSuspectedContributionLabel\(item\.suspected_contribution\) \?\? \$t\('noDisponible'\) \}\}<\/td>\s*<td>\{\{ item\.phone_in_description \? \$t\('si'\) : \$t\('no'\) \}\}<\/td>\s*<td>\{\{ item\.has_private_note/
+            /maximum_seat_price_cents\)[^\n]*<\/td>\s*<td>\{\{ formatAdminTripContributionLabel\(item\.average_contribution_cents\) \?\? \$t\('noDisponible'\) \}\}<\/td>\s*<td>\{\{ formatTripContributionPesosLabel\(item\.potential_seat_price_cents\) \}\}<\/td>\s*<td>\{\{ formatAdminSuspectedContributionLabel\(item\.suspected_contribution\) \?\? \$t\('noDisponible'\) \}\}<\/td>/
         );
     });
 });

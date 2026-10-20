@@ -1,7 +1,6 @@
 import { adminUserSupportTicketsRoute } from './adminUserSupportTicketsLink.js';
 import { contributionUnitsFromCents } from './tripContributionDisplay.js';
 import { parseAdminPaginationFromRoute } from './adminPagination';
-import { resolveWebAppBaseUrl } from './supportTicketTripReport.js';
 
 export const ADMIN_EXCESO_CONTRIBUCION_REQUIRES_ACTION_ONLY_KEY =
     'adminExcesoContribucionRequiresActionOnly';
@@ -12,15 +11,32 @@ export const TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS = [
     { key: 'from_town', labelKey: 'origen' },
     { key: 'to_town', labelKey: 'destino' },
     { key: 'seat_price_cents', labelKey: 'contribucion' },
-    { key: 'maximum_seat_price_cents', labelKey: 'contribucionMaximaColumna' },
-    { key: 'potential_seat_price_cents', labelKey: 'contribucionPotencial' },
-    { key: 'average_contribution_cents', labelKey: 'contribucionPromedio' },
-    { key: 'excess_contribution_percentage', labelKey: 'porcentajeExceso' },
-    { key: 'suspected_contribution', labelKey: 'contribucionSospechada' },
-    { key: 'phone_in_description', labelKey: 'telefonoEnDescripcion' },
-    { key: 'has_private_note', labelKey: 'tieneNotas' },
-    { key: 'excess_contribution_support_tickets_count', labelKey: 'ticketSoporte' },
-    { key: 'exceso_contribucion_status', labelKey: 'estado' }
+    {
+        key: 'maximum_seat_price_cents',
+        labelKey: 'contribucionMaximaColumnaCorta',
+        titleKey: 'contribucionMaximaColumna'
+    },
+    {
+        key: 'average_contribution_cents',
+        labelKey: 'contribucionPromedioCorta',
+        titleKey: 'contribucionPromedio'
+    },
+    {
+        key: 'potential_seat_price_cents',
+        labelKey: 'contribucionSolicitadaCorta',
+        titleKey: 'contribucionSolicitada'
+    },
+    {
+        key: 'suspected_contribution',
+        labelKey: 'contribucionSospechadaCorta',
+        titleKey: 'contribucionSospechada'
+    },
+    {
+        key: 'excess_contribution_support_tickets_count',
+        labelKey: 'ticketColumnaCorta',
+        titleKey: 'ticketSoporte'
+    },
+    { key: 'exceso_contribucion_status', labelKey: 'estado', titleKey: 'estado' }
 ];
 
 function createMemoryStorage() {
@@ -265,54 +281,4 @@ export function excessContributionStatusButtonVariant(status) {
         return 'danger';
     }
     return 'secondary';
-}
-
-/** Days the excess contribution sanction lasts; the template's banned-until date is today plus this. */
-export const EXCESS_CONTRIBUTION_SANCTION_DAYS = 7;
-
-function padDatePart(value) {
-    return String(value).padStart(2, '0');
-}
-
-/** Today (or `now`) plus `days`, formatted dd/mm/yyyy in local time. */
-export function excessContributionSanctionEndDate(
-    now = new Date(),
-    days = EXCESS_CONTRIBUTION_SANCTION_DAYS
-) {
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
-    return `${padDatePart(end.getDate())}/${padDatePart(end.getMonth() + 1)}/${end.getFullYear()}`;
-}
-
-function markdownUrlLink(url) {
-    return `[${url}](${url})`;
-}
-
-/**
- * Payload for POST /api/admin/support/tickets: an excess-contribution ticket for the
- * item's user and trip, with the i18n subject and the template message interpolated
- * with the public trip link, the maximum seat contribution, the sanction end date and
- * the terms link.
- */
-export function buildExcessContributionTemplatedTicketPayload(item, t, options = {}) {
-    const {
-        webAppBaseUrl = resolveWebAppBaseUrl(),
-        now = new Date(),
-        sanctionDays = EXCESS_CONTRIBUTION_SANCTION_DAYS
-    } = options;
-    const baseUrl = String(webAppBaseUrl || '').replace(/\/$/, '');
-
-    return {
-        user_id: item.user_id,
-        type: 'excess_contribution',
-        subject: t('ticketTypeExcessContribution'),
-        message_markdown: t('excessContributionTemplatedTicketMessage', {
-            tripLink: markdownUrlLink(`${baseUrl}/trips/${item.id}`),
-            maxAmount:
-                formatAdminTripContributionLabel(item.maximum_seat_price_cents) ??
-                t('noDisponible'),
-            bannedUntil: excessContributionSanctionEndDate(now, sanctionDays),
-            termsLink: markdownUrlLink(`${baseUrl}/terminos`)
-        }),
-        trip_id: item.id
-    };
 }

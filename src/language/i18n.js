@@ -109,20 +109,12 @@ const messages = {
         ticketTypeExcessContribution: 'Exceso de contribución',
         crearTicketSoporte: 'Crear ticket de mesa de ayuda',
         excessContributionTemplatedTicketButton: 'Crear ticket con plantilla',
-        excessContributionTemplatedTicketConfirm:
-            '¿Crear un ticket de mesa de ayuda para {name} con el mensaje de plantilla? Se le enviará al usuario.',
-        excessContributionTemplatedTicketCreated: 'Ticket de mesa de ayuda creado',
-        excessContributionTemplatedTicketError: 'No se pudo crear el ticket de mesa de ayuda',
+        excessContributionTicketTemplateFirst: '1er falta',
+        excessContributionTicketTemplateSecond: '2da falta',
+        excessContributionTicketTemplateThird: '3er falta',
         excessContributionTicketAlreadyExists:
             'Este viaje ya tiene un ticket de exceso de contribución',
         excessContributionTicketView: 'Ver ticket de exceso de contribución',
-        /** Excess contribution ticket template; params: tripLink, maxAmount, bannedUntil, termsLink. */
-        excessContributionTemplatedTicketMessage:
-            'Hola, cómo estás? Detectamos un exceso en el monto de contribución por persona en tu viaje {tripLink}.\n\n' +
-            'El monto máximo según la Calculadora Carpoolear es {maxAmount} y pediste más. Esto va contra las reglas como es explicado en la plataforma y al crear el viaje, por lo que esta es una notificación de la sanción.\n\n' +
-            'La sanción es hasta el día {bannedUntil} y al finalizar, para poder volver a utilizar tu cuenta, deberás abonar el costo de reactivación de la cuenta. Este costo sirve para pagar el tiempo que le toma al equipo de Carpoolear en investigar y procesar tu sanción.\n\n' +
-            'Te recomendamos leer los términos y condiciones para evitar futuras sanciones: {termsLink}.\n\n' +
-            'Equipo Carpoolear',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -2000,10 +1992,16 @@ const messages = {
         soloRequierenAccion: 'Solo requieren acción',
         contribucion: 'Contribución',
         contribucionMaximaColumna: 'Contribución máxima',
+        contribucionMaximaColumnaCorta: 'Cont. Máxima',
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
+        contribucionPromedioCorta: 'Cont. Promedio',
+        contribucionSolicitada: 'Contribución solicitada',
+        contribucionSolicitadaCorta: 'Cont. Solicitada',
         porcentajeExceso: 'Porcentaje exceso',
         contribucionSospechada: 'Contribución sospechada',
+        contribucionSospechadaCorta: 'Cont. Sospechada',
+        ticketColumnaCorta: 'Ticket',
         telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
@@ -2352,6 +2350,10 @@ const messages = {
         ticketTypeAccountRecovery: 'Recuperación de cuenta/Cuenta duplicada',
         ticketTypeExcessContribution: 'Exceso de contribución',
         crearTicketSoporte: 'Crear ticket de mesa de ayuda',
+        excessContributionTemplatedTicketButton: 'Crear ticket con plantilla',
+        excessContributionTicketTemplateFirst: '1er falta',
+        excessContributionTicketTemplateSecond: '2da falta',
+        excessContributionTicketTemplateThird: '3er falta',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -3994,10 +3996,16 @@ const messages = {
         soloRequierenAccion: 'Solo requieren acción',
         contribucion: 'Contribución',
         contribucionMaximaColumna: 'Contribución máxima',
+        contribucionMaximaColumnaCorta: 'Cont. Máxima',
         contribucionPotencial: 'Contribución potencial',
         contribucionPromedio: 'Contribución promedio',
+        contribucionPromedioCorta: 'Cont. Promedio',
+        contribucionSolicitada: 'Contribución solicitada',
+        contribucionSolicitadaCorta: 'Cont. Solicitada',
         porcentajeExceso: 'Porcentaje exceso',
         contribucionSospechada: 'Contribución sospechada',
+        contribucionSospechadaCorta: 'Cont. Sospechada',
+        ticketColumnaCorta: 'Ticket',
         telefonoEnDescripcion: 'Teléfono en descripción',
         noDisponible: 'N/D',
         tieneNotas: 'Tiene notas?',
@@ -4304,20 +4312,12 @@ const messages = {
         ticketTypeExcessContribution: 'Excess contribution',
         crearTicketSoporte: 'Create help desk ticket',
         excessContributionTemplatedTicketButton: 'Create templated ticket',
-        excessContributionTemplatedTicketConfirm:
-            'Create a help desk ticket for {name} with the template message? It will be sent to the user.',
-        excessContributionTemplatedTicketCreated: 'Help desk ticket created',
-        excessContributionTemplatedTicketError: 'Couldn\'t create the help desk ticket',
+        excessContributionTicketTemplateFirst: '1st offense',
+        excessContributionTicketTemplateSecond: '2nd offense',
+        excessContributionTicketTemplateThird: '3rd offense',
         excessContributionTicketAlreadyExists:
             'This trip already has an excess contribution ticket',
         excessContributionTicketView: 'View excess contribution ticket',
-        /** Excess contribution ticket template; params: tripLink, maxAmount, bannedUntil, termsLink. */
-        excessContributionTemplatedTicketMessage:
-            'Hi, how are you? We detected an excess in the per-person contribution amount on your trip {tripLink}.\n\n' +
-            'The maximum amount according to the Carpoolear Calculator is {maxAmount} and you asked for more. This goes against the rules, as explained on the platform and when creating the trip, so this is a notice of the sanction.\n\n' +
-            'The sanction lasts until {bannedUntil} and, once it ends, to be able to use your account again you will have to pay the account reactivation fee. This fee pays for the time it takes the Carpoolear team to investigate and process your sanction.\n\n' +
-            'We recommend reading the terms and conditions to avoid future sanctions: {termsLink}.\n\n' +
-            'The Carpoolear Team',
         adminUsuarioTieneTicketsSoporte: 'This user has {count} associated support ticket(s).',
         adminUsuarioVerTicketsSoporte: 'View support tickets ({count})',
         crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
@@ -6168,10 +6168,16 @@ const messages = {
         soloRequierenAccion: 'Only require action',
         contribucion: 'Contribution',
         contribucionMaximaColumna: 'Maximum contribution',
+        contribucionMaximaColumnaCorta: 'Max. cont.',
         contribucionPotencial: 'Potential contribution',
         contribucionPromedio: 'Average contribution',
+        contribucionPromedioCorta: 'Avg. cont.',
+        contribucionSolicitada: 'Requested contribution',
+        contribucionSolicitadaCorta: 'Req. cont.',
         porcentajeExceso: 'Excess percentage',
         contribucionSospechada: 'Suspected contribution',
+        contribucionSospechadaCorta: 'Susp. cont.',
+        ticketColumnaCorta: 'Ticket',
         telefonoEnDescripcion: 'Phone in description',
         noDisponible: 'N/A',
         tieneNotas: 'Has notes?',
