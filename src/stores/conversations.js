@@ -18,13 +18,27 @@ function normalizeId(id) {
     return isNaN(n) ? null : n;
 }
 
-/** Normalise conversation from API: ensure id and updated_at. */
+/** Normalise conversation from API: ensure id, updated_at and closed flag. */
 function normalizeConversation(conv) {
     if (!conv) return conv;
     const c = { ...conv };
     c.id = normalizeId(c.id);
     c.updated_at = c.updated_at || c.update_at || null;
+    c.closed = c.closed === true || !!c.closed_at;
     return c;
+}
+
+/**
+ * Detect a "conversation closed" API error. The backend rejects sends to a
+ * closed group chat with 422 and errors.conversation_id = 'conversation_closed'
+ * (not in errors.error[], so checkError() does not cover it).
+ */
+function isConversationClosedError(error) {
+    const errors = error && error.data && error.data.errors;
+    if (!errors) return false;
+    const raw = errors.conversation_id;
+    const values = Array.isArray(raw) ? raw : raw != null ? [raw] : [];
+    return values.includes('conversation_closed');
 }
 
 /** Deduplicate list by normalized id (keep first occurrence) and normalise each item. */
@@ -364,17 +378,18 @@ export const useConversationsStore = defineStore('conversations', {
             return conversationApi
                 .show(nid)
                 .then((response) => {
-                    if (response.data) {
-                        const conv = normalizeConversation(response.data);
-                        this.createMessages(conv.id);
-                        this.pushConversation(conv);
-                        this.setConversation(conv);
-                        this.findMessage({
-                            id: conv.id,
-                            more: false
-                        });
+                    if (!response.data) {
+                        return Promise.resolve(response.data);
                     }
-                    return Promise.resolve(response.data);
+                    const conv = normalizeConversation(response.data);
+                    this.createMessages(conv.id);
+                    this.pushConversation(conv);
+                    this.setConversation(conv);
+                    this.findMessage({
+                        id: conv.id,
+                        more: false
+                    });
+                    return Promise.resolve(conv);
                 })
                 .catch((error) => {
                     return Promise.reject(error);
@@ -436,8 +451,34 @@ export const useConversationsStore = defineStore('conversations', {
                             estado: 'error'
                         });
                     }
+                    if (isConversationClosedError(error)) {
+                        this.markSelectedConversationClosed();
+                        dialogs.message(i18n.global.t('chatCerrado'), {
+                            estado: 'warning'
+                        });
+                    }
                     return Promise.reject(error);
                 });
+        },
+
+        /** Locally flag the selected conversation as closed after a rejected send. */
+        markSelectedConversationClosed() {
+            const nid = this.selectedID;
+            if (nid == null) return;
+            const closedAt = new Date().toISOString();
+            if (this.conversationSelected) {
+                this.conversationSelected = {
+                    ...this.conversationSelected,
+                    closed: true,
+                    closed_at: this.conversationSelected.closed_at || closedAt
+                };
+            }
+            const list = this._list || [];
+            const conv = list.find((item) => normalizeId(item.id) === nid);
+            if (conv) {
+                conv.closed = true;
+                conv.closed_at = conv.closed_at || closedAt;
+            }
         },
 
         sendToAll({ message, users }) {
