@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'TripCreationSuccess.vue');
-const componentSource = fs.readFileSync(componentPath, 'utf8');
+const componentSource = fs
+    .readFileSync(componentPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('TripCreationSuccess.vue', () => {
     it('offers a return-trip button for driver trips', () => {

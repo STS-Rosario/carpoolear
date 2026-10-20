@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'AdminSupportTicketDetail.vue');
-const viewSource = fs.readFileSync(viewPath, 'utf8');
+const viewSource = fs
+    .readFileSync(viewPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('AdminSupportTicketDetail view', () => {
     it('shows a back link to admin tickets list', () => {
