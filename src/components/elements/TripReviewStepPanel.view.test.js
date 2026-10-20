@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'TripReviewStepPanel.vue');
-const componentSource = fs.readFileSync(componentPath, 'utf8');
+const componentSource = fs
+    .readFileSync(componentPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('TripReviewStepPanel.vue', () => {
     it('renders review sections with edit actions and no-lucrar modal', () => {

@@ -8,20 +8,19 @@ const carStepPanelPath = path.resolve(
     __dirname,
     '../elements/TripCarStepPanel.vue'
 );
-const viewSource = fs.readFileSync(viewPath, 'utf8');
-const wizardSource = fs.readFileSync(wizardPath, 'utf8');
-const carStepPanelSource = fs.readFileSync(carStepPanelPath, 'utf8');
-const contributionStepPanelSource = fs.readFileSync(
-    path.resolve(__dirname, '../elements/TripContributionStepPanel.vue'),
-    'utf8'
+const readSource = (filePath) =>
+    fs.readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n');
+const viewSource = readSource(viewPath);
+const wizardSource = readSource(wizardPath);
+const carStepPanelSource = readSource(carStepPanelPath);
+const contributionStepPanelSource = readSource(
+    path.resolve(__dirname, '../elements/TripContributionStepPanel.vue')
 );
-const preferencesStepPanelSource = fs.readFileSync(
-    path.resolve(__dirname, '../elements/TripPreferencesStepPanel.vue'),
-    'utf8'
+const preferencesStepPanelSource = readSource(
+    path.resolve(__dirname, '../elements/TripPreferencesStepPanel.vue')
 );
-const tripSeatsSource = fs.readFileSync(
-    path.resolve(__dirname, '../elements/TripSeats.vue'),
-    'utf8'
+const tripSeatsSource = readSource(
+    path.resolve(__dirname, '../elements/TripSeats.vue')
 );
 const uiSource =
     viewSource +

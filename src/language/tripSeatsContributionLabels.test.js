@@ -29,19 +29,19 @@ describe('inclusive trip seating and contribution labels', () => {
         });
     });
 
-    it('uses suggested wording for trip creation contribution accordion in Spanish locales', () => {
+    it('uses average wording for trip creation contribution accordion in Spanish locales', () => {
         ['arg', 'chl'].forEach((locale) => {
             expect(messages[locale].tripContributionSuggested).toBe(
-                'Contribución sugerida: $ {amount}'
+                'Contribución promedio: $ {amount}'
             );
             expect(messages[locale].tripContributionHowCalculated).toBe(
-                '¿Cómo se calcula la contribución sugerida?'
+                '¿Cómo se calcula la contribución promedio?'
             );
             expect(messages[locale].tripContributionSuggested).toMatch(
-                /sugerida/i
+                /promedio/i
             );
             expect(messages[locale].tripContributionHowCalculated).toMatch(
-                /sugerida/i
+                /promedio/i
             );
         });
     });
@@ -64,16 +64,16 @@ describe('inclusive trip seating and contribution labels', () => {
         );
     });
 
-    it('uses suggested wording for trip creation contribution accordion in English', () => {
+    it('uses average wording for trip creation contribution accordion in English', () => {
         expect(messages.en.tripContributionSuggested).toBe(
-            'Suggested contribution: $ {amount}'
+            'Average contribution: $ {amount}'
         );
         expect(messages.en.tripContributionHowCalculated).toBe(
-            'How is the suggested contribution calculated?'
+            'How is the average contribution calculated?'
         );
-        expect(messages.en.tripContributionSuggested).toMatch(/suggested/i);
+        expect(messages.en.tripContributionSuggested).toMatch(/average/i);
         expect(messages.en.tripContributionHowCalculated).toMatch(
-            /suggested/i
+            /average/i
         );
     });
 

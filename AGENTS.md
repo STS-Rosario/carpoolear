@@ -5,9 +5,10 @@ See `CLAUDE.md` for full architecture, commands, and project layout.
 
 ## Unit tests and lint
 
-- Run the full unit suite with `npm run test:unit` (Vitest, ~100-140s,
-  ~500 files / ~2600 tests). A single file is faster:
-  `npx vitest run src/<path>.test.js`.
+- Run the full unit suite with `npm run test:unit -- --run` (Vitest, ~100-140s,
+  ~500 files / ~2600 tests). Note `--run` is required: `npm run test:unit` alone
+  starts Vitest in watch mode and hangs (CI and `npm run check` use `--run`).
+  A single file is faster: `npx vitest run src/<path>.test.js`.
 - Lint with `npm run lint` (`eslint --ext .js src`). ESLint does **not**
   parse `.vue` files, so template/script issues in `.vue` are only caught by
   tests that read the file source.
