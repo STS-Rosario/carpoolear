@@ -12,15 +12,32 @@ export const TRIP_EXCESS_CONTRIBUTION_SORT_COLUMNS = [
     { key: 'from_town', labelKey: 'origen' },
     { key: 'to_town', labelKey: 'destino' },
     { key: 'seat_price_cents', labelKey: 'contribucion' },
-    { key: 'maximum_seat_price_cents', labelKey: 'contribucionMaximaColumna' },
-    { key: 'potential_seat_price_cents', labelKey: 'contribucionPotencial' },
-    { key: 'average_contribution_cents', labelKey: 'contribucionPromedio' },
-    { key: 'excess_contribution_percentage', labelKey: 'porcentajeExceso' },
-    { key: 'suspected_contribution', labelKey: 'contribucionSospechada' },
-    { key: 'phone_in_description', labelKey: 'telefonoEnDescripcion' },
-    { key: 'has_private_note', labelKey: 'tieneNotas' },
-    { key: 'excess_contribution_support_tickets_count', labelKey: 'ticketSoporte' },
-    { key: 'exceso_contribucion_status', labelKey: 'estado' }
+    {
+        key: 'maximum_seat_price_cents',
+        labelKey: 'contribucionMaximaColumnaCorta',
+        titleKey: 'contribucionMaximaColumna'
+    },
+    {
+        key: 'average_contribution_cents',
+        labelKey: 'contribucionPromedioCorta',
+        titleKey: 'contribucionPromedio'
+    },
+    {
+        key: 'potential_seat_price_cents',
+        labelKey: 'contribucionSolicitadaCorta',
+        titleKey: 'contribucionSolicitada'
+    },
+    {
+        key: 'suspected_contribution',
+        labelKey: 'contribucionSospechadaCorta',
+        titleKey: 'contribucionSospechada'
+    },
+    {
+        key: 'excess_contribution_support_tickets_count',
+        labelKey: 'ticketColumnaCorta',
+        titleKey: 'ticketSoporte'
+    },
+    { key: 'exceso_contribucion_status', labelKey: 'estado', titleKey: 'estado' }
 ];
 
 function createMemoryStorage() {

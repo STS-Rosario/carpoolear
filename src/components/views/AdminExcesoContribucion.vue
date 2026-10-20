@@ -19,6 +19,7 @@
                                         :key="column.key"
                                         scope="col"
                                         class="admin-exceso-th-sort"
+                                        :title="$t(column.titleKey || column.labelKey)"
                                         @click="toggleSort(column.key)"
                                     >
                                         {{ $t(column.labelKey) }}
@@ -27,7 +28,7 @@
                                             class="admin-exceso-sort-hint"
                                         >{{ sortDir === 'asc' ? '▲' : '▼' }}</span>
                                     </th>
-                                    <th scope="col">{{ $t('acciones') }}</th>
+                                    <th scope="col" :title="$t('acciones')">{{ $t('acciones') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,12 +43,9 @@
                                     <td>{{ item.to_town }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.seat_price_cents) }}</td>
                                     <td>{{ formatTripContributionPesosLabel(item.maximum_seat_price_cents) }}</td>
-                                    <td>{{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</td>
                                     <td>{{ formatAdminTripContributionLabel(item.average_contribution_cents) ?? $t('noDisponible') }}</td>
-                                    <td>{{ formatAdminExcessContributionPercentageLabel(item.excess_contribution_percentage) ?? $t('noDisponible') }}</td>
+                                    <td>{{ formatTripContributionPesosLabel(item.potential_seat_price_cents) }}</td>
                                     <td>{{ formatAdminSuspectedContributionLabel(item.suspected_contribution) ?? $t('noDisponible') }}</td>
-                                    <td>{{ item.phone_in_description ? $t('si') : $t('no') }}</td>
-                                    <td>{{ item.has_private_note ? $t('si') : $t('no') }}</td>
                                     <td>
                                         <router-link
                                             v-if="
@@ -131,7 +129,6 @@ import {
     excessContributionSupportTicketsRoute,
     formatTripContributionPesosLabel,
     formatAdminTripContributionLabel,
-    formatAdminExcessContributionPercentageLabel,
     formatAdminSuspectedContributionLabel,
     getNextTripExcessContributionSortState,
     getRequiresActionOnlyExcessContributions,
@@ -171,7 +168,6 @@ export default {
     methods: {
         formatTripContributionPesosLabel,
         formatAdminTripContributionLabel,
-        formatAdminExcessContributionPercentageLabel,
         formatAdminSuspectedContributionLabel,
         excessContributionStatusLabel,
         excessContributionStatusClass,
