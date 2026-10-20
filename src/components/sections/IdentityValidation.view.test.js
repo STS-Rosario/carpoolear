@@ -407,7 +407,16 @@ describe('IdentityValidation Mercado Pago confirm modal', () => {
 
     it('shows ownership copy with continue, edit profile, and back actions', () => {
         expect(viewSource).toContain("$t('identityValidationMpConfirmLead')");
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmConditionSession')"
+        );
         expect(viewSource).toContain("$t('identityValidationMpConfirmName')");
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmHelpPrefix')"
+        );
+        expect(viewSource).toContain(
+            "$t('identityValidationMpConfirmHelpLink')"
+        );
         expect(viewSource).toContain(
             "$t('identityValidationMpConfirmContinue')"
         );
@@ -415,6 +424,16 @@ describe('IdentityValidation Mercado Pago confirm modal', () => {
             "$t('identityValidationMpConfirmEditProfile')"
         );
         expect(viewSource).toContain("$t('volver')");
+    });
+
+    it('lists the Mercado Pago conditions and links to ticket creation from the modal', () => {
+        expect(viewSource).toContain(
+            'class="identity-validation-mp-confirm__conditions"'
+        );
+        expect(viewSource).toContain(
+            'class="identity-validation-mp-confirm__help"'
+        );
+        expect(viewSource).toContain(":to=\"{ name: 'ticket-new' }\"");
     });
 
     it('continues verification from the modal and can close it', () => {

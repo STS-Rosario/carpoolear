@@ -14,9 +14,10 @@
             <p class="identity-validation-mp-confirm__lead">
                 {{ $t('identityValidationMpConfirmLead') }}
             </p>
-            <p class="identity-validation-mp-confirm__name">
-                {{ $t('identityValidationMpConfirmName') }}
-            </p>
+            <ul class="identity-validation-mp-confirm__conditions">
+                <li>{{ $t('identityValidationMpConfirmConditionSession') }}</li>
+                <li>{{ $t('identityValidationMpConfirmName') }}</li>
+            </ul>
             <AppButton
                 variant="primary"
                 size="lg"
@@ -37,13 +38,19 @@
             >
                 {{ $t('identityValidationMpConfirmEditProfile') }}
             </AppButton>
-            <button
-                type="button"
+            <p class="identity-validation-mp-confirm__help">
+                {{ $t('identityValidationMpConfirmHelpPrefix') }}<router-link :to="{ name: 'ticket-new' }">{{ $t('identityValidationMpConfirmHelpLink') }}</router-link>
+            </p>
+            <AppButton
+                variant="tertiary"
+                size="lg"
+                block
                 class="identity-validation-mp-confirm__back"
+                icon-left="fa fa-chevron-left"
                 @click="$emit('back')"
             >
                 {{ $t('volver') }}
-            </button>
+            </AppButton>
         </div>
     </div>
 </template>
@@ -99,17 +106,54 @@ export default {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 }
 
-.identity-validation-mp-confirm__lead,
-.identity-validation-mp-confirm__name {
-    margin: 0 0 1rem;
+.identity-validation-mp-confirm__lead {
+    margin: 0 0 0.75rem;
     font-size: 1rem;
     line-height: 1.5;
     color: #222;
     font-weight: 700;
 }
 
-.identity-validation-mp-confirm__name {
-    font-weight: 400;
+.identity-validation-mp-confirm__conditions {
+    margin: 0 0 1rem;
+    padding-left: 0;
+    list-style: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #222;
+}
+
+.identity-validation-mp-confirm__conditions li {
+    position: relative;
+    padding-left: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.identity-validation-mp-confirm__conditions li:last-child {
+    margin-bottom: 0;
+}
+
+.identity-validation-mp-confirm__conditions li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: 0.55em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--ds-action, #1e5f9e);
+}
+
+.identity-validation-mp-confirm__help {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #444;
+}
+
+.identity-validation-mp-confirm__help a {
+    color: var(--ds-action, #1e5f9e);
+    font-weight: 600;
 }
 
 .identity-validation-mp-confirm__continue {
@@ -121,19 +165,6 @@ export default {
 }
 
 .identity-validation-mp-confirm__back {
-    display: block;
-    width: 100%;
-    padding: 0.5rem;
-    border: none;
-    background: transparent;
-    color: var(--ds-action, #1e5f9e);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.identity-validation-mp-confirm__back:hover,
-.identity-validation-mp-confirm__back:focus {
-    text-decoration: underline;
+    margin-top: 0.25rem;
 }
 </style>
