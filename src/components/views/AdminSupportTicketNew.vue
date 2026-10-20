@@ -42,7 +42,7 @@
                 <AppTextarea
                     v-model="createForm.message_markdown"
                     :label="$t('mensajeTicket')"
-                    :rows="4"
+                    :rows="16"
                 />
                 <AppButton variant="primary" :disabled="createDisabled" @click="createTicket">
                     {{ creating ? $t('guardando') : $t('crearTicket') }}
