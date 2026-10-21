@@ -48,13 +48,28 @@ function formatIdentityValidationMethod(type, translate) {
 export function buildAdminUserIdentityVerificationSection(user, { translate }) {
     const isVerified = isUserIdentityVerified(user);
 
+    const rejectedValidationId = user?.['mercado_pago_rejected_validation_id']
+        ? Number(user.mercado_pago_rejected_validation_id)
+        : null;
+
     const detailRows = IDENTITY_VERIFICATION_DETAIL_KEYS.filter((definition) =>
         definition.when(user)
-    ).map((definition) => ({
-        key: definition.key,
-        label: translate(definition.labelKey),
-        value: formatAdminUserPropertyValue(user[definition.key])
-    }));
+    ).map((definition) => {
+        const row = {
+            key: definition.key,
+            label: translate(definition.labelKey),
+            value: formatAdminUserPropertyValue(user[definition.key])
+        };
+
+        if (
+            definition.key === 'identity_validation_reject_reason' &&
+            rejectedValidationId
+        ) {
+            row.validationId = rejectedValidationId;
+        }
+
+        return row;
+    });
 
     return {
         isVerified,

@@ -89,4 +89,14 @@ describe('AdminUserDetail view', () => {
         expect(source).toContain('ADMIN_PERMISSIONS.UsersUnverify');
         expect(source).toContain('can(this.authUser');
     });
+
+    it('links to the Mercado Pago rejection detail from the identity rejection reason row', () => {
+        expect(source).toContain('admin-user-detail__rejection-link');
+        expect(source).toContain("name: 'admin-mp-rejected-validation-detail'");
+        expect(source).toContain('params: { id: row.validationId }');
+        expect(source).toContain("$t('verDetalle')");
+        expect(source).toContain('ADMIN_PERMISSIONS.IdentityMpReview');
+        expect(source).toContain('canLinkRejectionDetail');
+        expect(source).toContain('row.validationId');
+    });
 });
