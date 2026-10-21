@@ -82,7 +82,22 @@
                                     class="admin-user-detail__property"
                                 >
                                     <dt>{{ row.label }}</dt>
-                                    <dd>{{ row.value }}</dd>
+                                    <dd>
+                                        <span>{{ row.value }}</span>
+                                        <router-link
+                                            v-if="
+                                                row.validationId &&
+                                                canLinkRejectionDetail
+                                            "
+                                            class="admin-user-detail__rejection-link"
+                                            :to="{
+                                                name: 'admin-mp-rejected-validation-detail',
+                                                params: { id: row.validationId }
+                                            }"
+                                        >
+                                            {{ $t('verDetalle') }}
+                                        </router-link>
+                                    </dd>
                                 </div>
                             </dl>
                             <p
@@ -259,6 +274,9 @@ export default {
                 can(this.authUser, ADMIN_PERMISSIONS.UsersUnverify) &&
                 canClearAdminUserIdentityVerification(this.user)
             );
+        },
+        canLinkRejectionDetail() {
+            return can(this.authUser, ADMIN_PERMISSIONS.IdentityMpReview);
         }
     },
     methods: {
@@ -454,5 +472,10 @@ export default {
 .admin-user-detail__property dd {
     margin: 0;
     word-break: break-word;
+}
+
+.admin-user-detail__rejection-link {
+    margin-left: 8px;
+    white-space: nowrap;
 }
 </style>

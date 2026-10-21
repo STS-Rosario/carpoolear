@@ -78,6 +78,57 @@ describe('buildAdminUserIdentityVerificationSection', () => {
             }
         ]);
     });
+
+    it('attaches the rejected validation id to the rejection reason row when present', () => {
+        const section = buildAdminUserIdentityVerificationSection(
+            {
+                identity_validated: false,
+                identity_validated_at: null,
+                identity_validation_type: null,
+                identity_validation_rejected_at: '2026-06-02 11:30:00',
+                identity_validation_reject_reason: 'name_mismatch',
+                mercado_pago_rejected_validation_id: 4821,
+                validate_by_date: null
+            },
+            { translate }
+        );
+
+        const reasonRow = section.detailRows.find(
+            (row) => row.key === 'identity_validation_reject_reason'
+        );
+
+        expect(reasonRow).toEqual({
+            key: 'identity_validation_reject_reason',
+            label: 'Motivo de rechazo',
+            value: 'name_mismatch',
+            validationId: 4821
+        });
+    });
+
+    it('does not attach a validation id when the rejection id is missing', () => {
+        const section = buildAdminUserIdentityVerificationSection(
+            {
+                identity_validated: false,
+                identity_validated_at: null,
+                identity_validation_type: null,
+                identity_validation_rejected_at: '2026-06-02 11:30:00',
+                identity_validation_reject_reason: 'name_mismatch',
+                validate_by_date: null
+            },
+            { translate }
+        );
+
+        const reasonRow = section.detailRows.find(
+            (row) => row.key === 'identity_validation_reject_reason'
+        );
+
+        expect(reasonRow).toEqual({
+            key: 'identity_validation_reject_reason',
+            label: 'Motivo de rechazo',
+            value: 'name_mismatch'
+        });
+        expect(reasonRow.validationId).toBeUndefined();
+    });
 });
 
 describe('applyClearedIdentityValidationFields', () => {
