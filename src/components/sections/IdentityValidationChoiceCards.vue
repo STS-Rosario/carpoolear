@@ -35,6 +35,7 @@
                 <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
             </div>
             <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
+            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
             <AppButton
                 variant="primary"
                 size="lg"
@@ -47,7 +48,6 @@
             >
                 {{ $t('validarConMercadoPago') }}
             </AppButton>
-            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
         </div>
     </div>
 </template>
@@ -112,6 +112,8 @@ export default {
 }
 
 .identity-validation-card {
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--ds-action-border, #1e5f9e);
     border-radius: 10px;
     padding: 1.25rem 1.25rem 1.5rem;
@@ -162,13 +164,14 @@ export default {
 }
 
 .identity-validation-card-hint {
-    margin: 0.65rem 0 0;
+    margin: 0.75rem 0 1rem;
     font-size: 0.85rem;
     line-height: 1.4;
     color: #666;
 }
 
 .identity-validation-choice-cta {
+    margin-top: auto;
     letter-spacing: 0.01em;
 }
 </style>

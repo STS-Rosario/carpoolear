@@ -297,6 +297,23 @@ describe('IdentityValidation choice cards', () => {
         expect(mpIndex).toBeGreaterThan(-1);
         expect(manualIndex).toBeLessThan(mpIndex);
     });
+
+    it('aligns both choice CTAs at the bottom of stretched cards', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8').replace(/\r\n/g, '\n');
+        expect(cardsSource).toMatch(
+            /\.identity-validation-card \{[^}]*display:\s*flex;[^}]*flex-direction:\s*column/
+        );
+        expect(cardsSource).toMatch(
+            /\.identity-validation-choice-cta \{[^}]*margin-top:\s*auto/
+        );
+        const hintIndex = cardsSource.indexOf(
+            "$t('identidadModalAutoPuedeEliminarMp')"
+        );
+        const mpCtaIndex = cardsSource.indexOf("$t('validarConMercadoPago')");
+        expect(hintIndex).toBeGreaterThan(-1);
+        expect(mpCtaIndex).toBeGreaterThan(-1);
+        expect(hintIndex).toBeLessThan(mpCtaIndex);
+    });
 });
 
 describe('IdentityValidation compact intro', () => {
