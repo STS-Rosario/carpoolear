@@ -42,23 +42,6 @@
                             })
                         }}
                     </span>
-                    <div
-                        v-if="canInviteFriendsToTrip"
-                        class="trip-invite-friends-trigger"
-                    >
-                        <span
-                            class="tooltip-bottom trip-invite-friends-trigger__tooltip"
-                            :data-tooltip="inviteFriendsSelladoTooltip"
-                        >
-                            <AppButton
-                                variant="primary"
-                                :disabled="inviteFriendsBlockedByUnpaidSellado"
-                                @click="showInviteFriendsModal = true"
-                            >
-                                {{ $t('invitarAmigosAlViaje') }}
-                            </AppButton>
-                        </span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -98,42 +81,9 @@
                             })
                         }}
                     </span>
-                    <div
-                        v-if="canInviteFriendsToTrip"
-                        class="trip-invite-friends-trigger"
-                    >
-                        <span
-                            class="tooltip-bottom trip-invite-friends-trigger__tooltip"
-                            :data-tooltip="inviteFriendsSelladoTooltip"
-                        >
-                            <AppButton
-                                variant="primary"
-                                :disabled="inviteFriendsBlockedByUnpaidSellado"
-                                @click="showInviteFriendsModal = true"
-                            >
-                                {{ $t('invitarAmigosAlViaje') }}
-                            </AppButton>
-                        </span>
-                    </div>
                 </div>
             </div>
         </template>
-        <modal
-            :name="'invite-friends-modal'"
-            v-if="showInviteFriendsModal"
-            @close="onInviteFriendsModalClose"
-            :hideFooter="true"
-        >
-            <template #header>
-                <h3>{{ $t('invitarAmigosAlViaje') }}</h3>
-            </template>
-            <template #body>
-                <TripInviteFriends
-                    :trip-id="trip.id"
-                    @close="onInviteFriendsModalClose"
-                />
-            </template>
-        </modal>
     </div>
 </template>
 <script>
@@ -141,25 +91,14 @@ import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import SvgItem from '../SvgItem';
-import modal from '../Modal';
-import TripInviteFriends from '../sections/TripInviteFriends.vue';
-import AppButton from '../ui/AppButton.vue';
-import dayjs from '../../dayjs';
-import { isUpcomingTrip } from '../../utils/isUpcomingTrip.js';
 import {
     buildCoPassengerNamesText,
     isAcceptedPassengerOnTrip
 } from '../../utils/tripCoPassengers.js';
 import { shouldShowRearComfortNote } from '../../utils/tripRearComfortSeats.js';
-import { isInviteFriendsBlockedByUnpaidSellado } from '../../utils/tripSelladoDisplay.js';
 
 export default {
     name: 'TripSeats',
-    data() {
-        return {
-            showInviteFriendsModal: false
-        };
-    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
@@ -192,55 +131,10 @@ export default {
                 this.trip?.allPassengerRequest,
                 this.user?.id
             );
-        },
-        canInviteFriendsToTrip() {
-            return (
-                this.owner && this.trip && isUpcomingTrip(this.trip, dayjs)
-            );
-        },
-        inviteFriendsBlockedByUnpaidSellado() {
-            return isInviteFriendsBlockedByUnpaidSellado(this.trip);
-        },
-        inviteFriendsSelladoTooltip() {
-            return this.inviteFriendsBlockedByUnpaidSellado
-                ? this.$t('invitarAmigosSelladoPendiente')
-                : null;
-        }
-    },
-    watch: {
-        trip() {
-            this.maybeOpenInviteFriendsFromQuery();
-        }
-    },
-    mounted() {
-        this.maybeOpenInviteFriendsFromQuery();
-    },
-    methods: {
-        onInviteFriendsModalClose() {
-            this.showInviteFriendsModal = false;
-        },
-        maybeOpenInviteFriendsFromQuery() {
-            if (
-                !this.canInviteFriendsToTrip ||
-                this.inviteFriendsBlockedByUnpaidSellado
-            ) {
-                return;
-            }
-            const query = this.$route && this.$route.query;
-            if (!query || query.inviteFriends !== '1') {
-                return;
-            }
-            this.showInviteFriendsModal = true;
-            const nextQuery = { ...query };
-            delete nextQuery.inviteFriends;
-            this.$router.replace({ query: nextQuery });
         }
     },
     components: {
-        SvgItem,
-        modal,
-        TripInviteFriends,
-        AppButton
+        SvgItem
     }
 };
 </script>
@@ -290,13 +184,5 @@ export default {
     font-weight: 500;
     line-height: 1.3;
     text-transform: none;
-}
-
-.trip-invite-friends-trigger {
-    margin-top: 0.25rem;
-}
-
-.trip-invite-friends-trigger__tooltip {
-    display: inline-block;
 }
 </style>

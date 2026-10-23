@@ -12,15 +12,25 @@ export function isTripCreationPaymentQrEnabled(config) {
     return Boolean(config && config.module_trip_creation_payment_qr_enabled);
 }
 
-export function unLitroCardKindFromTrip(trip, { selladoEnabled } = {}) {
+export function unLitroCardKindFromTrip(
+    trip,
+    { selladoEnabled, hasComplimentarySellado } = {}
+) {
     if (!selladoEnabled || !trip) {
         return null;
     }
-    if (
-        trip.needs_sellado ||
-        (trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado)
-    ) {
+    if (trip.needs_sellado) {
         return 'charged';
+    }
+    if (trip.sellado_complimentary) {
+        return 'complimentary';
+    }
+    if (
+        hasComplimentarySellado &&
+        trip.pricing_breakdown &&
+        trip.pricing_breakdown.includes_sellado
+    ) {
+        return 'complimentary';
     }
     return 'bonificado';
 }
@@ -38,13 +48,9 @@ export function isOverSelladoFreeLimit({
 
 export function shouldShowSelladoBonificadoCard({
     selladoEnabled,
-    routeNeedsPayment,
-    hasComplimentarySellado
+    routeNeedsPayment
 } = {}) {
-    if (!selladoEnabled || hasComplimentarySellado) {
-        return false;
-    }
-    return !routeNeedsPayment;
+    return Boolean(selladoEnabled && !routeNeedsPayment);
 }
 
 function wouldOtherwiseChargeSellado({
@@ -93,6 +99,9 @@ export function shouldShowSelladoEmptyTripCreditCard(
         return false;
     }
     if (!trip.needs_sellado || isSelladoPending(trip)) {
+        return false;
+    }
+    if (trip.sellado_empty_trip_credit_redeemed) {
         return false;
     }
     if (trip.state === 'canceled') {
@@ -166,6 +175,21 @@ export function selladoDetailBannerKind(trip) {
         return 'pending';
     }
     return null;
+}
+
+export function withSelladoPaidQuery(route = {}) {
+    return {
+        name: route.name,
+        params: { ...(route.params || {}) },
+        query: { ...(route.query || {}), sellado_paid: '1' }
+    };
+}
+
+export function selladoPaidQueryRoute(route = {}) {
+    if (route.name !== 'detail_trip') {
+        return null;
+    }
+    return withSelladoPaidQuery(route);
 }
 
 export function isSelladoPaymentReturnQuery(query = {}) {

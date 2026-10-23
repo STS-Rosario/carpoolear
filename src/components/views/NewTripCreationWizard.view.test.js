@@ -42,6 +42,9 @@ describe('NewTripCreationWizard.vue', () => {
     it('uses preferences and review step panels', () => {
         expect(wizardSource).toContain('TripPreferencesStepPanel');
         expect(wizardSource).toContain('TripReviewStepPanel');
+        expect(wizardSource).toMatch(
+            /TripReviewStepPanel[\s\S]*:description="form.trip.description"/
+        );
         expect(wizardSource).toContain('isSubmitDisabled');
         expect(wizardSource).toContain('tripCreationPublish');
         expect(wizardSource).toContain('tripCreationContinueToPayment');
@@ -312,5 +315,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
         expect(wizardSource).toContain('stepErrors.noCobrarSena');
         expect(wizardSource).toContain('$t(stepErrors.noCobrarSena)');
+    });
+
+    it('refreshes stepper incomplete marks when previously invalid fields are fixed', () => {
+        expect(wizardSource).toContain('resolveWizardStepperValidation');
+        expect(wizardSource).toContain('refreshIncompleteStepperState');
+        expect(wizardSource).toMatch(
+            /wizardValidationContext[\s\S]*refreshIncompleteStepperState/
+        );
     });
 });

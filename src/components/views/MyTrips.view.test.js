@@ -9,6 +9,40 @@ function getTripComponentTags() {
     return source.match(/<Trip[\s\S]*?(?:\/>|<\/Trip>)/g) || [];
 }
 
+describe('MyTrips category sort order', () => {
+    it('sorts upcoming trips oldest first and past trips newest first', () => {
+        expect(source).toContain('sortTripsOldestFirst');
+        expect(source).toContain('sortTripsNewestFirst');
+        expect(source).toMatch(
+            /sortedTrips\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.trips\)/
+        );
+        expect(source).toMatch(
+            /sortedSeatRequests\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.seatRequests\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingRequest\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.pendingRequest\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingPaymentRequests\(\)\s*\{[\s\S]*sortTripsOldestFirst\(this\.pendingPaymentRequests\)/
+        );
+        expect(source).toMatch(
+            /sortedOldTrips\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.oldTrips\)/
+        );
+        expect(source).toMatch(
+            /sortedOldPassengerTrips\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.oldPassengerTrips\)/
+        );
+        expect(source).toMatch(
+            /sortedPendingRates\(\)\s*\{[\s\S]*sortTripsNewestFirst\(this\.pendingRates\)/
+        );
+        expect(source).toContain('v-for="trip in sortedTrips"');
+        expect(source).toContain('v-for="trip in sortedOldTrips"');
+        expect(source).toContain('v-for="trip in sortedOldPassengerTrips"');
+        expect(source).not.toContain('v-for="trip in trips"');
+        expect(source).not.toContain('v-for="trip in oldTrips"');
+        expect(source).not.toContain('v-for="trip in oldPassengerTrips"');
+    });
+});
+
 describe('MyTrips seat requests section', () => {
     it('shows solicitudes de asiento instead of proximos viajes como pasajero', () => {
         expect(source).toContain("$t('solicitudesDeAsiento')");

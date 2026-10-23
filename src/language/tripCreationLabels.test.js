@@ -63,6 +63,7 @@ const KEYS = [
     'tripReviewSectionSeats',
     'tripReviewSectionContribution',
     'tripReviewSectionPreferences',
+    'tripReviewSectionDescription',
     'tripReviewSeatsCount',
     'tripReviewContributionPerPerson',
     'tripReviewPrefKids',

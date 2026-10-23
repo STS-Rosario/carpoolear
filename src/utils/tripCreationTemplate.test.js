@@ -61,7 +61,13 @@ describe('applyTripCreationTemplateToForm', () => {
             weeklyScheduleTime: '12:00'
         };
         const template = {
-            trip: { is_passenger: 0, total_seats: 3, description: 'Viaje frecuente' },
+            trip: {
+                is_passenger: 0,
+                total_seats: 3,
+                description: 'Viaje frecuente',
+                punto_partida: 'Terminal de Ómnibus',
+                punto_llegada: 'Plaza Principal'
+            },
             points: [
                 { id: 0, name: 'Rosario', place: 'Rosario' },
                 { id: 1, name: 'Buenos Aires', place: 'Buenos Aires' }
@@ -86,6 +92,8 @@ describe('applyTripCreationTemplateToForm', () => {
 
         expect(form.trip.is_passenger).toBe(0);
         expect(form.trip.description).toBe('Viaje frecuente');
+        expect(form.trip.punto_partida).toBe('Terminal de Ómnibus');
+        expect(form.trip.punto_llegada).toBe('Plaza Principal');
         expect(form.points[0].name).toBe('Rosario');
         expect(form.dateAnswer).toBe('');
         expect(form.time).toBe('18:00');
@@ -224,7 +232,9 @@ describe('buildTripCreationTemplateFromSnapshot', () => {
             is_passenger: 0,
             total_seats: 3,
             description: 'Viaje frecuente',
-            allow_kids: true
+            allow_kids: true,
+            punto_partida: 'Terminal de Ómnibus',
+            punto_llegada: 'Plaza Principal'
         },
         points: [
             { id: 0, name: 'Rosario', place: 'Rosario' },
@@ -248,6 +258,8 @@ describe('buildTripCreationTemplateFromSnapshot', () => {
         const template = buildTripCreationTemplateFromSnapshot(snapshot);
 
         expect(template.trip.description).toBe('Viaje frecuente');
+        expect(template.trip.punto_partida).toBe('Terminal de Ómnibus');
+        expect(template.trip.punto_llegada).toBe('Plaza Principal');
         expect(template.points).toHaveLength(2);
         expect(template.points[0].name).toBe('Rosario');
         expect(template.price).toBe('5000');
@@ -258,6 +270,80 @@ describe('buildTripCreationTemplateFromSnapshot', () => {
         expect(template.date).toBe('');
         expect(template.dateAnswer).toBe('');
         expect(template.time).toBe('');
+    });
+});
+
+describe('buildTripCreationTemplateFromTrip', () => {
+    const trip = {
+        is_passenger: 0,
+        total_seats: 3,
+        description: 'Viaje frecuente',
+        allow_kids: 1,
+        allow_smoking: 0,
+        allow_animals: 1,
+        rear_max_two_passengers: 1,
+        autoaccept_friends_requests: 1,
+        friendship_type_id: 0,
+        punto_partida: 'Terminal de Ómnibus',
+        punto_llegada: 'Plaza Principal',
+        seat_price_cents: 500000,
+        car: { id: 9 },
+        weekly_schedule: 2,
+        weekly_schedule_time: '2026-06-15 08:00:00',
+        points: [
+            {
+                address: 'Rosario',
+                json_address: { ciudad: 'Rosario' },
+                lat: -32.9,
+                lng: -60.7
+            },
+            {
+                address: 'Córdoba',
+                json_address: { ciudad: 'Córdoba' },
+                lat: -31.4,
+                lng: -64.2
+            },
+            {
+                address: 'Buenos Aires',
+                json_address: { ciudad: 'Buenos Aires' },
+                lat: -34.6,
+                lng: -58.4
+            }
+        ]
+    };
+
+    it('rebuilds a reusable template from a saved trip and clears the date', async () => {
+        const { buildTripCreationTemplateFromTrip } = await import(
+            './tripCreationTemplate.js'
+        );
+        const template = buildTripCreationTemplateFromTrip(trip);
+
+        expect(template.trip.description).toBe('Viaje frecuente');
+        expect(template.trip.punto_partida).toBe('Terminal de Ómnibus');
+        expect(template.trip.punto_llegada).toBe('Plaza Principal');
+        expect(template.trip.total_seats).toBe(3);
+        expect(template.trip.allow_animals).toBe(true);
+        expect(template.trip.rear_max_two_passengers).toBe(true);
+        expect(template.points).toHaveLength(3);
+        expect(template.points[0].name).toBe('Rosario');
+        expect(template.points[0].location).toEqual({ lat: -32.9, lng: -60.7 });
+        expect(template.price).toBe(5000);
+        expect(template.selectedCarId).toBe(9);
+        expect(template.wantsIntermediateStops).toBe(true);
+        expect(template.useWeeklySchedule).toBe(true);
+        expect(template.weeklySchedule).toBe(2);
+        expect(template.weeklyScheduleTime).toBe('08:00');
+        expect(template.seatLayoutCapacity).toBe(4);
+        expect(template.date).toBe('');
+        expect(template.time).toBe('');
+    });
+
+    it('returns null without a trip', async () => {
+        const { buildTripCreationTemplateFromTrip } = await import(
+            './tripCreationTemplate.js'
+        );
+
+        expect(buildTripCreationTemplateFromTrip(null)).toBeNull();
     });
 });
 

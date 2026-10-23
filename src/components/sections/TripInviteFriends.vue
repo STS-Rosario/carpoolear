@@ -4,7 +4,7 @@
             {{ $t('queresInvitarTusAmigos') }}
         </p>
         <div v-if="friends && friends.length" class="trip-invite-friends__list">
-            <div class="checkbox">
+            <div class="trip-invite-friends__all">
                 <label>
                     <input
                         type="checkbox"
@@ -39,7 +39,7 @@
                 :disabled="submitting || !selectedFriendIds.length"
                 @click="onSubmit"
             >
-                {{ $t('invitarAmigos') }}
+                {{ $t('invitar') }}
             </AppButton>
             <AppButton
                 variant="secondary"
@@ -178,8 +178,22 @@ export default {
     color: #333;
 }
 
+.trip-invite-friends__list {
+    overflow: visible;
+}
+
+.trip-invite-friends__all,
 .trip-invite-friends__friend {
     margin: 0.4rem 0;
+    overflow: visible;
+}
+
+.trip-invite-friends__all {
+    padding-left: 0.5rem;
+}
+
+.trip-invite-friends__friend {
+    padding-left: 1.75rem;
 }
 
 .trip-invite-friends__list label {
@@ -187,6 +201,17 @@ export default {
     align-items: center;
     gap: 0.5rem;
     margin: 0;
+    overflow: visible;
+}
+
+.trip-invite-friends__list input[type="checkbox"] {
+    position: static;
+    flex-shrink: 0;
+    margin: 0;
+    transform: none;
+    width: 1.15em;
+    height: 1.15em;
+    accent-color: #555;
 }
 
 .trip-invite-friends__actions {

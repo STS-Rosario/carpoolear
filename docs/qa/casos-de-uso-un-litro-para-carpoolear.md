@@ -108,9 +108,11 @@ Qué **no** cuenta:
 
 ### 3.3 Crédito por viaje vacío
 
-Si una conductora **pagó** Un litro y ese viaje **no tuvo pasajera aceptada**, Carpoolear no le vuelve a cobrar Un litro en los viajes siguientes **hasta que alguno sí lleve pasajera**.
+Si una conductora **pagó** Un litro y ese viaje **no tuvo pasajera aceptada**, Carpoolear le invita Un litro **una sola vez** en el **próximo** viaje que sí debería cobrarse.
 
-La cadena se mantiene si publica varias veces y todos esos viajes quedan vacíos: el 2.º, el 3.º y los que sigan se publican sin pagar. Recién cuando un viaje tiene **al menos una pasajera aceptada**, el **próximo** viaje que aplique se cobra de nuevo, como siempre.
+Ese crédito se consume al crear el viaje bonificado. Publicar otro viaje de corredor pago después de eso **vuelve a cobrar** Un litro. No se puede encadenar viajes gratis con el mismo viaje vacío.
+
+Si tuvo **varios** viajes pagos vacíos, cada uno da **un** crédito. Un viaje que no aplica Un litro (por ejemplo una sola ciudad paga) **no** gasta el crédito.
 
 No arranca el crédito:
 
@@ -346,7 +348,7 @@ Guardar o usar una plantilla **no está atado** a Un litro: se puede guardar con
 
 ## 10. Crédito por viaje vacío (bonificación)
 
-La idea: no volver a cobrar Un litro mientras los viajes sigan sin pasajera. El cobro se retoma en el viaje **siguiente** al primero que sí tuvo a alguien aceptada.
+La idea: un viaje pago que quedó vacío da **un** viaje siguiente sin Un litro. Ese crédito se usa al crear el viaje, no se puede repetir con el mismo vacío.
 
 ### 10.1 Se genera el crédito
 
@@ -371,22 +373,22 @@ El próximo viaje de B que **sí debería cobrarse** (misma ruta, cupo agotado):
 - [ ] El viaje se publica de una
 - [ ] Un litro no se suma al costo de este viaje
 
-### 10.3 Varios viajes seguidos sin pasajera
+### 10.3 El crédito se usa una sola vez
 
-Seguir publicando Rosario → Buenos Aires **sin aceptar a nadie**, y dejar que cada uno pase vacío:
+Seguir publicando Rosario → Buenos Aires **sin aceptar a nadie**:
 
-- [ ] El 2.º viaje (después del pago) sale bonificado
-- [ ] El 3.º también sale bonificado (no vuelve a pedir Un litro)
-- [ ] El 4.º igual, mientras ninguno haya tenido pasajera aceptada
-- [ ] En cada uno de esos, la dueña puede ver que Carpoolear invita / que el próximo también queda bonificado si sigue vacío
+- [ ] El 2.º viaje (después del pago) sale bonificado: “Esta vez invita Carpoolear.”
+- [ ] El 3.º **vuelve a pedir Un litro** y Mercado Pago
+- [ ] En el detalle del 2.º, la dueña sigue viendo “Esta vez invita Carpoolear.”
+- [ ] En el detalle del 1.º (el pago vacío ya usado), **ya no** aparece “El próximo viaje invita Carpoolear”
 
-### 10.4 Se corta cuando hay pasajera
+### 10.4 Se genera de nuevo si otro viaje pago queda vacío
 
-En uno de esos viajes vacíos (el original pago o uno bonificado), **aceptar a alguien**. Después, crear otro Rosario → Buenos Aires:
+Pagar Un litro otra vez, no aceptar a nadie, esperar a que pase la fecha:
 
-- [ ] Ese viaje **siguiente** vuelve a pedir Un litro y Mercado Pago
-- [ ] No se publica hasta pagar
-- [ ] Si ese viaje pago otra vez queda vacío, la cadena de crédito **arranca de nuevo**
+- [ ] Ese viaje vuelve a mostrar el crédito a la dueña
+- [ ] El **siguiente** viaje de corredor pago sale bonificado una vez
+- [ ] El que sigue se cobra de nuevo
 
 ---
 
@@ -473,7 +475,7 @@ Incluí:
 - Plataforma (web escritorio, web móvil, Android, iOS)
 - Cuentas usadas
 - Origen, destino y paradas
-- Si la cuenta tenía cupo, crédito de viaje vacío (y cuántos vacíos seguidos) o ya había pagado ese viaje
+- Si la cuenta tenía cupo, crédito de viaje vacío (y si ya se había usado) o ya había pagado ese viaje
 - Qué viste vs. qué esperabas
 - Capturas o ID del viaje
 - Si el dinero se debitó en Mercado Pago (producción) aunque el viaje no se haya publicado

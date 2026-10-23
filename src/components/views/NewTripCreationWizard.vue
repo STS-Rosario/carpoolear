@@ -464,6 +464,7 @@
                     :remaining-free-trips="form.remainingFreeTrips"
                     :free-trips-amount="form.free_trips_amount"
                     :show-preferences="!isPassenger"
+                    :description="form.trip.description"
                     :allow-kids="form.trip.allow_kids"
                     :allow-smoking="form.trip.allow_smoking"
                     :allow-animals="form.trip.allow_animals"
@@ -647,6 +648,7 @@ import {
 import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.js';
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
 import { shouldShowContributionExcessWarning } from '../../utils/tripCreationContributionExcessWarning.js';
+import { resolveWizardStepperValidation } from '../../utils/tripCreationStepperValidation.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -807,6 +809,38 @@ export default {
         },
         hasAvailableTemplates() {
             return this.availableTemplates.length > 0;
+        },
+        wizardValidationContext() {
+            return {
+                points: this.form.points,
+                puntoPartida: this.form.trip.punto_partida,
+                puntoLlegada: this.form.trip.punto_llegada,
+                useWeeklySchedule: this.form.useWeeklySchedule,
+                weeklySchedule: this.form.weeklySchedule,
+                weeklyScheduleTime: this.form.weeklyScheduleTime,
+                dateAnswer: this.form.dateAnswer,
+                time: this.form.time,
+                isPassenger: this.isPassenger,
+                cars: this.form.cars,
+                selectedCarId: this.form.selectedCarId,
+                seatLayoutCapacity: this.form.seatLayoutCapacity,
+                totalSeats: this.form.trip.total_seats,
+                passengers: this.form.passengers,
+                description: this.form.trip.description,
+                noLucrar: this.form.no_lucrar,
+                noCobrarSena: this.form.no_cobrar_sena,
+                seatPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_seat_price_enabled
+                ),
+                maxPriceEnabled: Boolean(
+                    this.form.config && this.form.config.module_max_price_enabled
+                ),
+                price: this.form.price,
+                maximumSeatPriceCents: this.form.maximum_seat_price_cents,
+                maximumTripPriceCents: this.form.maximum_trip_price_cents,
+                osmCountry: this.form.config?.osm_country,
+                allowForeignPoints: this.form.allowForeignPoints
+            };
         }
     },
 
@@ -843,6 +877,12 @@ export default {
             deep: true,
             handler() {
                 this.scheduleDraftSave();
+            }
+        },
+        wizardValidationContext: {
+            deep: true,
+            handler() {
+                this.refreshIncompleteStepperState();
             }
         }
     },
@@ -1075,36 +1115,21 @@ export default {
             this.revalidateVisitedSteps();
         },
         buildValidationContext() {
-            return {
-                points: this.form.points,
-                puntoPartida: this.form.trip.punto_partida,
-                puntoLlegada: this.form.trip.punto_llegada,
-                useWeeklySchedule: this.form.useWeeklySchedule,
-                weeklySchedule: this.form.weeklySchedule,
-                weeklyScheduleTime: this.form.weeklyScheduleTime,
-                dateAnswer: this.form.dateAnswer,
-                time: this.form.time,
-                isPassenger: this.isPassenger,
-                cars: this.form.cars,
-                selectedCarId: this.form.selectedCarId,
-                seatLayoutCapacity: this.form.seatLayoutCapacity,
-                totalSeats: this.form.trip.total_seats,
-                passengers: this.form.passengers,
-                description: this.form.trip.description,
-                noLucrar: this.form.no_lucrar,
-                noCobrarSena: this.form.no_cobrar_sena,
-                seatPriceEnabled: Boolean(
-                    this.form.config && this.form.config.module_seat_price_enabled
-                ),
-                maxPriceEnabled: Boolean(
-                    this.form.config && this.form.config.module_max_price_enabled
-                ),
-                price: this.form.price,
-                maximumSeatPriceCents: this.form.maximum_seat_price_cents,
-                maximumTripPriceCents: this.form.maximum_trip_price_cents,
-                osmCountry: this.form.config?.osm_country,
-                allowForeignPoints: this.form.allowForeignPoints
-            };
+            return this.wizardValidationContext;
+        },
+        refreshIncompleteStepperState() {
+            const context = this.buildValidationContext();
+            const next = resolveWizardStepperValidation({
+                incompleteSteps: this.incompleteSteps,
+                currentStep: this.currentStep,
+                stepErrors: this.stepErrors,
+                validateStepFor: (step) => validateStep(step, context)
+            });
+            this.incompleteSteps = next.incompleteSteps;
+            this.stepErrors = next.stepErrors;
+            this.syncPuntoDetailErrors(this.stepErrors);
+            this.syncSeatPriceErrors(this.stepErrors);
+            this.syncDescriptionErrors(this.stepErrors);
         },
         syncPuntoDetailErrors(errors = {}) {
             if (errors.puntoPartida) {

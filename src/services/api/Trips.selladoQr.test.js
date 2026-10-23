@@ -13,4 +13,11 @@ describe('TripApi sellado QR', () => {
             "'/api/trips/' + tripId + '/sellado/qr-order'"
         );
     });
+
+    it('syncs Checkout Pro sellado payment from the Mercado Pago return URL', () => {
+        expect(apiSource).toContain('syncSelladoPayment');
+        expect(apiSource).toContain(
+            "'/api/trips/' + tripId + '/sellado/sync-payment'"
+        );
+    });
 });
