@@ -1,6 +1,30 @@
 <template>
     <div class="identity-validation-cards">
         <div
+            v-if="manualEnabled"
+            class="identity-validation-card"
+        >
+            <div class="identity-validation-card-header">
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
+                <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
+            </div>
+            <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
+            <AppButton
+                variant="primary"
+                size="lg"
+                block
+                class="identity-validation-choice-cta"
+                :style="buttonSizingStyle"
+                :disabled="blockedByMissingDni"
+                @click="$emit('choose-manual')"
+            >
+                {{ $t('solicitarVerificacionManual') }}
+            </AppButton>
+        </div>
+
+        <div
             v-if="mpEnabled"
             class="identity-validation-card"
         >
@@ -24,30 +48,6 @@
                 {{ $t('validarConMercadoPago') }}
             </AppButton>
             <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
-        </div>
-
-        <div
-            v-if="manualEnabled"
-            class="identity-validation-card"
-        >
-            <div class="identity-validation-card-header">
-                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
-                <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
-            </div>
-            <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
-            <AppButton
-                variant="primary"
-                size="lg"
-                block
-                class="identity-validation-choice-cta"
-                :style="buttonSizingStyle"
-                :disabled="blockedByMissingDni"
-                @click="$emit('choose-manual')"
-            >
-                {{ $t('solicitarVerificacionManual') }}
-            </AppButton>
         </div>
     </div>
 </template>

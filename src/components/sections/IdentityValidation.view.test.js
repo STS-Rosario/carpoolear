@@ -288,6 +288,15 @@ describe('IdentityValidation choice cards', () => {
             /\.identity-validation-choice-cta \{[\s\S]*text-transform:\s*uppercase/
         );
     });
+
+    it('lists manual verification before automatic Mercado Pago verification', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8').replace(/\r\n/g, '\n');
+        const manualIndex = cardsSource.indexOf("$t('identidadModalManualTitulo')");
+        const mpIndex = cardsSource.indexOf("$t('identidadModalAutoTitulo')");
+        expect(manualIndex).toBeGreaterThan(-1);
+        expect(mpIndex).toBeGreaterThan(-1);
+        expect(manualIndex).toBeLessThan(mpIndex);
+    });
 });
 
 describe('IdentityValidation compact intro', () => {

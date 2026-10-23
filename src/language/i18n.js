@@ -979,7 +979,7 @@ const messages = {
         identityValidationMpConfirmContinue: 'Continuar con la verificación',
         identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
-            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
             '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
@@ -3156,7 +3156,7 @@ const messages = {
         identityValidationMpConfirmContinue: 'Continuar con la verificación',
         identityValidationMpConfirmEditProfile: 'Editar mis datos de Carpoolear',
         identityValidationAutoCardDesc:
-            'Sólo si tenés cuenta de Mercado Pago. El sistema contrasta los datos con RENAPER.',
+            'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
             '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
@@ -5098,7 +5098,7 @@ const messages = {
         identityValidationPageBullet3:
             'Build trust among people sharing trips.',
         identityValidationAutoCardDesc:
-            'Only if you have a Mercado Pago account. The system checks your data against RENAPER.',
+            'The system checks your data against RENAPER through Mercado Pago. If the verification fails due to incorrect data or a technical issue, contact the Carpoolear Help Desk. If we cannot resolve it, you will have to complete the manual verification.',
         identityValidationManualCardDesc:
             "Don't have Mercado Pago? Upload your documents and we'll review them.",
         identityValidationAutoBadgeFree: 'Free',
