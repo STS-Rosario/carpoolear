@@ -1233,6 +1233,21 @@ export default {
     color: #333;
 }
 
+@media (max-width: 767px) {
+    .identity-validation-main {
+        padding-bottom: 0;
+    }
+
+    .identity-validation-lead {
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+    }
+
+    .identity-validation-two-options {
+        margin-bottom: 0.75rem;
+    }
+}
+
 @media (min-width: 768px) {
     .identity-validation-rejected-flow :deep(.identity-validation-cards) {
         background: #fff;

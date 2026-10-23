@@ -174,4 +174,28 @@ export default {
     margin-top: auto;
     letter-spacing: 0.01em;
 }
+
+@media (max-width: 767px) {
+    .identity-validation-cards {
+        gap: 0.5rem;
+    }
+
+    .identity-validation-card {
+        padding: 0.8125rem 1rem 0.875rem;
+    }
+
+    .identity-validation-card-header {
+        margin-bottom: 0.375rem;
+    }
+
+    .identity-validation-card-desc {
+        margin-bottom: 0.5rem;
+        line-height: 1.35;
+    }
+
+    .identity-validation-card-hint {
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+}
 </style>
