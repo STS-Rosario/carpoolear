@@ -94,14 +94,14 @@ export default {
 .identity-validation-cards {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
 @media (min-width: 768px) {
     .identity-validation-cards {
         flex-direction: row;
         align-items: stretch;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
     .identity-validation-cards .identity-validation-card {
@@ -116,7 +116,7 @@ export default {
     flex-direction: column;
     border: 1px solid var(--ds-action-border, #1e5f9e);
     border-radius: 10px;
-    padding: 1.25rem 1.25rem 1.5rem;
+    padding: 1rem 1rem 1.15rem;
     background: #fff;
 }
 
@@ -125,7 +125,7 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.35rem 0.5rem;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
 }
 
 .identity-validation-card-header .fa {
@@ -157,16 +157,16 @@ export default {
 }
 
 .identity-validation-card-desc {
-    margin: 0 0 1rem;
-    line-height: 1.5;
+    margin: 0 0 0.75rem;
+    line-height: 1.4;
     color: #333;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
 }
 
 .identity-validation-card-hint {
-    margin: 0.75rem 0 1rem;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
     color: #666;
 }
 
