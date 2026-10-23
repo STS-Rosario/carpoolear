@@ -1213,13 +1213,13 @@ export default {
         background: #fff;
         border-radius: 6px;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-        padding: 1.75rem 2rem 2rem;
+        padding: 1.25rem 1.75rem 1.5rem;
     }
 }
 
 .identity-validation-lead {
-    margin: 0 0 1rem;
-    line-height: 1.5;
+    margin: 0 0 0.5rem;
+    line-height: 1.35;
     color: #333;
 }
 
@@ -1228,9 +1228,24 @@ export default {
 }
 
 .identity-validation-two-options {
-    margin: 0 0 1.75rem;
-    font-size: 0.95rem;
+    margin: 0 0 0.9rem;
+    font-size: 0.9rem;
     color: #333;
+}
+
+@media (max-width: 767px) {
+    .identity-validation-main {
+        padding-bottom: 0;
+    }
+
+    .identity-validation-lead {
+        margin-bottom: 0.375rem;
+        line-height: 1.3;
+    }
+
+    .identity-validation-two-options {
+        margin-bottom: 0.75rem;
+    }
 }
 
 @media (min-width: 768px) {

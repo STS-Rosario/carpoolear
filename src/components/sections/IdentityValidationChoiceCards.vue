@@ -1,32 +1,6 @@
 <template>
     <div class="identity-validation-cards">
         <div
-            v-if="mpEnabled"
-            class="identity-validation-card"
-        >
-            <div class="identity-validation-card-header">
-                <i class="fa fa-shield" aria-hidden="true"></i>
-                <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
-            </div>
-            <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-            <AppButton
-                variant="primary"
-                size="lg"
-                block
-                class="identity-validation-choice-cta"
-                :style="buttonSizingStyle"
-                :disabled="blockedByMissingDni || loadingOauth"
-                :loading="loadingOauth"
-                @click="$emit('choose-mp')"
-            >
-                {{ $t('validarConMercadoPago') }}
-            </AppButton>
-            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
-        </div>
-
-        <div
             v-if="manualEnabled"
             class="identity-validation-card"
         >
@@ -47,6 +21,32 @@
                 @click="$emit('choose-manual')"
             >
                 {{ $t('solicitarVerificacionManual') }}
+            </AppButton>
+        </div>
+
+        <div
+            v-if="mpEnabled"
+            class="identity-validation-card"
+        >
+            <div class="identity-validation-card-header">
+                <i class="fa fa-shield" aria-hidden="true"></i>
+                <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
+                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
+            </div>
+            <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
+            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
+            <AppButton
+                variant="primary"
+                size="lg"
+                block
+                class="identity-validation-choice-cta"
+                :style="buttonSizingStyle"
+                :disabled="blockedByMissingDni || loadingOauth"
+                :loading="loadingOauth"
+                @click="$emit('choose-mp')"
+            >
+                {{ $t('validarConMercadoPago') }}
             </AppButton>
         </div>
     </div>
@@ -94,14 +94,14 @@ export default {
 .identity-validation-cards {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
 @media (min-width: 768px) {
     .identity-validation-cards {
         flex-direction: row;
         align-items: stretch;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
     .identity-validation-cards .identity-validation-card {
@@ -112,9 +112,11 @@ export default {
 }
 
 .identity-validation-card {
+    display: flex;
+    flex-direction: column;
     border: 1px solid var(--ds-action-border, #1e5f9e);
     border-radius: 10px;
-    padding: 1.25rem 1.25rem 1.5rem;
+    padding: 1rem 1rem 1.15rem;
     background: #fff;
 }
 
@@ -123,7 +125,7 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.35rem 0.5rem;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
 }
 
 .identity-validation-card-header .fa {
@@ -155,20 +157,45 @@ export default {
 }
 
 .identity-validation-card-desc {
-    margin: 0 0 1rem;
-    line-height: 1.5;
+    margin: 0 0 0.75rem;
+    line-height: 1.4;
     color: #333;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
 }
 
 .identity-validation-card-hint {
-    margin: 0.65rem 0 0;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
     color: #666;
 }
 
 .identity-validation-choice-cta {
+    margin-top: auto;
     letter-spacing: 0.01em;
+}
+
+@media (max-width: 767px) {
+    .identity-validation-cards {
+        gap: 0.5rem;
+    }
+
+    .identity-validation-card {
+        padding: 0.8125rem 1rem 0.875rem;
+    }
+
+    .identity-validation-card-header {
+        margin-bottom: 0.375rem;
+    }
+
+    .identity-validation-card-desc {
+        margin-bottom: 0.5rem;
+        line-height: 1.35;
+    }
+
+    .identity-validation-card-hint {
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
 }
 </style>
