@@ -87,8 +87,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs';
-import { can } from '../../utils/permissions';
-import { ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
+import { ADMIN_PERMISSIONS, can } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-support-ticket-new',
@@ -116,7 +115,7 @@ export default {
     },
     computed: {
         ...mapGetters(useAuthStore, {
-            authUser: 'authUser'
+            authUser: 'user'
         }),
         createDisabled() {
             return this.creating ||
@@ -214,6 +213,10 @@ export default {
                 delete payload.suspend_user;
             }
             if (!payload.private_note || payload.private_note.trim() === '') {
+                delete payload.private_note;
+            }
+            if (payload.type !== 'excess_contribution') {
+                delete payload.suspend_user;
                 delete payload.private_note;
             }
             return this.adminCreateTicket(payload)
