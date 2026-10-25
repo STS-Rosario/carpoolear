@@ -54,6 +54,20 @@
                         @change="syncMessageFromEditor"
                     />
                 </AppField>
+                <div v-if="showSuspendUserOption" class="form-group">
+                    <label class="checkbox-label">
+                        <input v-model="createForm.suspend_user" type="checkbox" />
+                        {{ $t('suspenderUsuario') }}
+                    </label>
+                </div>
+                <AppField v-if="showExcessUserNoteOption" :label="$t('notaPrivadaSoloAdmins')">
+                    <textarea
+                        v-model="createForm.private_note"
+                        class="form-control"
+                        rows="4"
+                        :placeholder="$t('notaPrivadaSoloAdmins')"
+                    ></textarea>
+                </AppField>
                 <AppButton variant="primary" :disabled="createDisabled" @click="createTicket">
                     {{ creating ? $t('guardando') : $t('crearTicket') }}
                 </AppButton>
@@ -63,7 +77,7 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import { mapActions, mapGetters } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import UserSearchAutocomplete from '../UserSearchAutocomplete.vue';
 import AppButton from '../ui/AppButton.vue';
@@ -71,7 +85,10 @@ import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
 import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
+import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs';
+import { can } from '../../utils/permissions';
+import { ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
 
 export default {
     name: 'admin-support-ticket-new',
@@ -91,16 +108,27 @@ export default {
                 type: 'account_verification',
                 subject: '',
                 message_markdown: '',
-                trip_id: null
+                trip_id: null,
+                suspend_user: false,
+                private_note: ''
             }
         };
     },
     computed: {
+        ...mapGetters(useAuthStore, {
+            authUser: 'authUser'
+        }),
         createDisabled() {
             return this.creating ||
                 !this.createForm.user_id ||
                 !this.createForm.subject ||
                 !this.createForm.message_markdown;
+        },
+        showSuspendUserOption() {
+            return this.createForm.type === 'excess_contribution' && can(this.authUser, ADMIN_PERMISSIONS.UsersSuspend);
+        },
+        showExcessUserNoteOption() {
+            return this.createForm.type === 'excess_contribution';
         }
     },
     watch: {
@@ -181,7 +209,14 @@ export default {
         createTicket() {
             this.createForm.message_markdown = this.messageMarkdownFromEditor();
             this.creating = true;
-            return this.adminCreateTicket(this.createForm)
+            const payload = { ...this.createForm };
+            if (!payload.suspend_user) {
+                delete payload.suspend_user;
+            }
+            if (!payload.private_note || payload.private_note.trim() === '') {
+                delete payload.private_note;
+            }
+            return this.adminCreateTicket(payload)
                 .then((ticket) => {
                     dialogs.message(this.$t('perfilActualizadoCorrectamente'), { estado: 'success' });
                     this.$router.push({ name: 'admin-support-ticket-detail', params: { id: ticket.id } });

@@ -160,4 +160,51 @@ describe('AdminSupportTicketNew trip link', () => {
             estado: 'error'
         });
     });
+
+    it('shows suspend checkbox and private note for excess_contribution when user can suspend', async () => {
+        ticketsApi.adminCreate.mockResolvedValue({ id: 78 });
+        const { wrapper } = await mountForm({}, { id: 1, is_admin: true, permissions: ['admin.users.suspend'] });
+
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.type = 'excess_contribution';
+        wrapper.vm.createForm.subject = 'Exceso';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = true;
+        wrapper.vm.createForm.private_note = 'Nota privada';
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.text()).toContain('suspenderUsuario');
+        expect(wrapper.text()).toContain('notaPrivadaSoloAdmins');
+
+        await wrapper.vm.createTicket();
+        await Promise.resolve();
+
+        expect(ticketsApi.adminCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: 'excess_contribution',
+                suspend_user: true,
+                private_note: 'Nota privada'
+            })
+        );
+    });
+
+    it('does not send empty suspend_user or private_note', async () => {
+        ticketsApi.adminCreate.mockResolvedValue({ id: 79 });
+        const { wrapper } = await mountForm({}, { id: 1, is_admin: true });
+
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.type = 'excess_contribution';
+        wrapper.vm.createForm.subject = 'Exceso';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = false;
+        wrapper.vm.createForm.private_note = '   ';
+        await wrapper.vm.$nextTick();
+
+        await wrapper.vm.createTicket();
+        await Promise.resolve();
+
+        const payload = ticketsApi.adminCreate.mock.calls.at(-1)[0];
+        expect(payload.suspend_user).toBeUndefined();
+        expect(payload.private_note).toBeUndefined();
+    });
 });
