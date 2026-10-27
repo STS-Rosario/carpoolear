@@ -1,6 +1,5 @@
 import L from 'leaflet';
 import '@maplibre/maplibre-gl-leaflet';
-import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const DEFAULT_MAP_STYLE_URL = process.env.VUE_APP_MAP_STYLE_URL || 'https://tiles.openfreemap.org/styles/liberty';
