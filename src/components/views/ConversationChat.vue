@@ -85,6 +85,13 @@
                     >
                         {{ $t('verMasMensajes') }}
                     </button>
+                    <p
+                        v-else-if="messages.length"
+                        class="messages-retention-note"
+                        role="status"
+                    >
+                        {{ $t('messagesRetentionNote') }}
+                    </p>
                 </div>
                 <template
                     v-for="item in messagesWithDaySeparators"
@@ -175,6 +182,7 @@ export default {
             editorKey: 0,
             editorHasContent: false,
             mustJump: false,
+            loadingOlderMessages: false,
             sending: {
                 message: false
             },
@@ -356,7 +364,29 @@ export default {
         },
 
         searchMore() {
-            this.findMessage({ more: true });
+            const wrapper = this.$refs.messagesWrapper;
+            const previousScrollTop = wrapper ? wrapper.scrollTop : 0;
+            const previousScrollHeight = wrapper ? wrapper.scrollHeight : 0;
+            const previousMessageCount = this.messages.length;
+            this.loadingOlderMessages = true;
+
+            return this.findMessage({ more: true })
+                .then(() =>
+                    this.$nextTick(() => {
+                        if (
+                            wrapper &&
+                            this.messages.length > previousMessageCount
+                        ) {
+                            wrapper.scrollTop =
+                                previousScrollTop +
+                                wrapper.scrollHeight -
+                                previousScrollHeight;
+                        }
+                    })
+                )
+                .finally(() => {
+                    this.loadingOlderMessages = false;
+                });
         },
 
         toggleNotifications() {
@@ -450,7 +480,9 @@ export default {
             }
         },
         messages: function () {
-            this.mustJump = true;
+            if (!this.loadingOlderMessages) {
+                this.mustJump = true;
+            }
         }
     },
     props: ['id'],
@@ -477,6 +509,15 @@ export default {
 #btn-more {
     padding: 1em 0;
     margin-top: 1.5rem;
+}
+.messages-retention-note {
+    background-color: #f5f5f5;
+    border-radius: 0.25rem;
+    color: #555;
+    font-size: 14px;
+    margin: 1.5rem 0 0;
+    padding: 1rem 0.75rem;
+    text-align: center;
 }
 #btn-send {
     color: #fff;
