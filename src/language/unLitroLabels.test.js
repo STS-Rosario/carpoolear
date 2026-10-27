@@ -7,6 +7,8 @@ const KEYS = {
     unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
     unLitroAppliesBody:
         'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
+    unLitroClubMemberPromo:
+        'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
     unLitroBonificadoBadge: 'Bonificado',
     unLitroBonificadoTitle: 'Este viaje es bonificado',
     unLitroBonificadoRemainingSingular:
@@ -89,6 +91,8 @@ const EN_KEYS = {
     unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
     unLitroAppliesBody:
         'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
+    unLitroClubMemberPromo:
+        'If you are part of Club Carpoolear, you do not pay 1L for Carpoolear — join us!',
     unLitroBonificadoBadge: 'Waived',
     unLitroBonificadoTitle: 'This trip is waived',
     unLitroBonificadoRemainingSingular:
