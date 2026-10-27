@@ -12,7 +12,12 @@ function mountCard(props = {}) {
             ...props
         },
         global: {
-            plugins: [i18n]
+            plugins: [i18n],
+            stubs: {
+                RouterLink: {
+                    template: '<a><slot /></a>'
+                }
+            }
         }
     });
 }

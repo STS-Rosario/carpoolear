@@ -50,6 +50,21 @@
             >
                 {{ $t('unLitroWhatIsThis') }}
             </button>
+            <router-link
+                v-if="charged && !linkOnly"
+                :to="{ name: 'donate' }"
+                class="un-litro-card__club-promo"
+                data-testid="un-litro-club-promo"
+            >
+                <img
+                    :src="clubBadgeUrl"
+                    :alt="$t('miembroClubCarpoolearTitulo')"
+                    class="un-litro-card__club-badge"
+                    width="20"
+                    height="20"
+                />
+                <span>{{ $t('unLitroClubMemberPromo') }}</span>
+            </router-link>
         </div>
         <modal v-if="showModal" name="un-litro-what-is" @close="showModal = false">
             <template #header>
@@ -128,6 +143,10 @@ export default {
     },
 
     computed: {
+        clubBadgeUrl() {
+            return process.env.ROUTE_BASE + 'img/badges/club-carpoolear.png';
+        },
+
         remainingMessage() {
             const key =
                 this.remainingFreeTrips === 1
@@ -197,6 +216,34 @@ export default {
     font-weight: 700;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.un-litro-card__club-promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: #fef5f6;
+    color: #ce0f2c;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.un-litro-card__club-promo:hover,
+.un-litro-card__club-promo:focus,
+.un-litro-card__club-promo:focus-visible {
+    color: #ce0f2c;
+    background: #fde8eb;
+    text-decoration: none;
+}
+
+.un-litro-card__club-badge {
+    display: block;
+    flex-shrink: 0;
 }
 
 .un-litro-card__modal p {
