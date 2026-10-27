@@ -22,6 +22,14 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).not.toContain('shareContent');
     });
 
+    it('offers a separate action to share the Instagram story image', () => {
+        expect(componentSource).toContain(
+            'data-testid="trip-detail-share-instagram-story"'
+        );
+        expect(componentSource).toContain("$t('tripShareInstagramStory')");
+        expect(componentSource).toContain('shareTripInstagramStory');
+    });
+
     it('shows Invitar amistades al viaje below Compartir viaje for the owner', () => {
         expect(componentSource).toContain('canInviteFriendsToTrip');
         expect(componentSource).toContain('data-testid="trip-detail-invite-friends"');

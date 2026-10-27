@@ -35,6 +35,13 @@ class TaggedApi {
         return xhr;
     }
 
+    getBlob(url, params, headers) {
+        const xhr = network.getBlob(url, params, headers);
+        this._addTags(xhr);
+
+        return xhr;
+    }
+
     post(url, body, headers) {
         const xhr = network.post(url, body, headers);
         this._addTags(xhr);

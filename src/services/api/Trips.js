@@ -26,6 +26,10 @@ class TripApi extends TaggedApi {
         return this.get('/api/trips/' + id);
     }
 
+    instagramStory(id) {
+        return this.getBlob('/api/trips/' + id + '/instagram-story');
+    }
+
     myTrips(asDriver) {
         return this.get('/api/users/get-trips', { as_driver: asDriver });
     }
