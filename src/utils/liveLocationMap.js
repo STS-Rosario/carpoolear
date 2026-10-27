@@ -7,6 +7,7 @@ import {
     bindLiveLocationMapZoomPersistence,
     getLiveLocationMapZoom
 } from './liveLocationMapZoom.js';
+import { addVectorTileLayer } from './mapTiles.js';
 
 export { createLiveLocationMarkerUpdater };
 
@@ -19,10 +20,7 @@ export function createLiveLocationMap(container, lat, lng, options = {}) {
         attributionControl: true
     }).setView([lat, lng], initialZoom);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    addVectorTileLayer(map);
 
     const marker = L.marker([lat, lng]).addTo(map);
     bindLiveLocationMapZoomPersistence(map, storage);

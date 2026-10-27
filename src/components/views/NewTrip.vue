@@ -272,9 +272,8 @@ export default {
             saving: false,
             allowForeignPoints: false,
             wantsIntermediateStops: false,
-            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution:
-                '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            url: null,
+            attribution: '',
             showReturnTrip: false,
             showRearMaxTwoSeatsConflictModal: false,
             outboundSeatsRadioRevision: 0,

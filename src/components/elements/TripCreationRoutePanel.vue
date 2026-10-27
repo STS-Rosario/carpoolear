@@ -53,6 +53,7 @@ import {
     tripWaypointIcon
 } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
+import { addVectorTileLayer } from '../../utils/mapTiles';
 
 export default {
     name: 'trip-creation-route-panel',
@@ -180,7 +181,7 @@ export default {
                 this.routeLatLngs[0].lng
             ];
             const map = L.map(el).setView(mapCenter, this.zoom);
-            L.tileLayer(this.url, { attribution: this.attribution }).addTo(map);
+            addVectorTileLayer(map);
             this.map = map;
 
             const routingLang =

@@ -550,6 +550,7 @@ import { appLocaleToRoutingLanguage } from '../../main';
 import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
+import { addVectorTileLayer } from '../../utils/mapTiles';
 
 let userApi = new UserApi();
 const tripsApi = new TripApi();
@@ -587,9 +588,8 @@ export default {
                     location: null
                 }
             ],
-            url: 'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            attribution:
-                '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            url: null,
+            attribution: '',
             showModalRequestSeat: false,
             showUnLitroPayModal: false,
             has_complimentary_sellado: false,
@@ -920,7 +920,7 @@ export default {
             this.destroyTripRouteMap();
             const c = this.center;
             const map = L.map(el).setView([c.lat, c.lng], this.zoom);
-            L.tileLayer(this.url, { attribution: this.attribution }).addTo(map);
+            addVectorTileLayer(map);
             this._tripLeafletMap = map;
             const points = this.trip.points.map((point) =>
                 L.latLng(point.lat, point.lng)
