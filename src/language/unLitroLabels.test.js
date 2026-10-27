@@ -7,6 +7,8 @@ const KEYS = {
     unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
     unLitroAppliesBody:
         'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
+    unLitroClubMemberPromo:
+        'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
     unLitroBonificadoBadge: 'Bonificado',
     unLitroBonificadoTitle: 'Este viaje es bonificado',
     unLitroBonificadoRemainingSingular:
@@ -75,7 +77,12 @@ const KEYS = {
     tripContributionHowCalculatedExplainerWithoutUnLitro:
         'La contribución promedio se calcula en función del recorrido, los peajes y el consumo de combustible, tomando como referencia un vehículo promedio con un consumo de 8 L cada 100 km en ruta.',
     tripContributionTankTip:
-        'Si tenés dudas sobre el consumo real de tu vehículo, la forma más precisa de calcularlo es llenar el tanque antes de salir y volver a llenarlo al llegar: la diferencia entre ambas cargas corresponde al combustible utilizado durante el viaje.'
+        'Si tenés dudas sobre el consumo real de tu vehículo, la forma más precisa de calcularlo es llenar el tanque antes de salir y volver a llenarlo al llegar: la diferencia entre ambas cargas corresponde al combustible utilizado durante el viaje.',
+    faltaPagarSellado: 'Falta pagar 1L para Carpoolear',
+    invitarAmigosSelladoPendiente:
+        'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
+    calculadoEnBaseNaftaSelladoSuffix:
+        ' y Un litro para Carpoolear incluídos (si aplica)'
 };
 
 const EN_KEYS = {
@@ -84,6 +91,8 @@ const EN_KEYS = {
     unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
     unLitroAppliesBody:
         'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
+    unLitroClubMemberPromo:
+        'If you are part of Club Carpoolear, you do not pay 1L for Carpoolear — join us!',
     unLitroBonificadoBadge: 'Waived',
     unLitroBonificadoTitle: 'This trip is waived',
     unLitroBonificadoRemainingSingular:
@@ -152,7 +161,14 @@ const EN_KEYS = {
     tripContributionHowCalculatedExplainerWithoutUnLitro:
         'The average contribution is calculated from the route, tolls and fuel consumption, using an average vehicle that uses 8 L every 100 km on the highway.',
     tripContributionTankTip:
-        'If you are unsure about your vehicle’s real consumption, the most accurate way to calculate it is to fill the tank before leaving and fill it again on arrival: the difference between both fills is the fuel used during the trip.'
+        'If you are unsure about your vehicle’s real consumption, the most accurate way to calculate it is to fill the tank before leaving and fill it again on arrival: the difference between both fills is the fuel used during the trip.',
+    faltaPagarSellado: 'Need to pay 1L for Carpoolear',
+    invitarAmigosSelladoPendiente:
+        "Once you pay One liter for Carpoolear you'll be able to invite your friends",
+    calculadoEnBaseNaftaSelladoSuffix:
+        ' and One liter for Carpoolear included (if applicable)',
+    contribucionRecomendadaCardDescripcionConSellado:
+        'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, One liter for Carpoolear, and tolls.'
 };
 
 describe('Un litro para Carpoolear copy', () => {
@@ -160,6 +176,12 @@ describe('Un litro para Carpoolear copy', () => {
         Object.entries(KEYS).forEach(([key, value]) => {
             expect(messages[locale][key]).toBe(value);
         });
+    });
+
+    it('arg locale mentions Un litro in the recommended contribution card', () => {
+        expect(messages.arg.contribucionRecomendadaCardDescripcionConSellado).toBe(
+            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, Un litro para Carpoolear y peajes'
+        );
     });
 
     it('en locale has Un litro screenshots copy', () => {
@@ -188,5 +210,20 @@ describe('Un litro para Carpoolear copy', () => {
         expect(messages.en.tripContributionHowCalculated).toBe(
             'How is the average contribution calculated?'
         );
+    });
+
+    it('does not show Sellado in user-facing copy except the Mercado Pago app name', () => {
+        const allowed = /Carpoolear-SelladoVIaje|\{sellado\}/gi;
+
+        ['arg', 'chl', 'en'].forEach((locale) => {
+            Object.entries(messages[locale]).forEach(([key, value]) => {
+                if (typeof value !== 'string') {
+                    return;
+                }
+                const remaining = value.replace(allowed, '');
+                expect(remaining, `${locale}.${key}`).not.toMatch(/sellado/i);
+                expect(remaining, `${locale}.${key}`).not.toMatch(/trip seal/i);
+            });
+        });
     });
 });

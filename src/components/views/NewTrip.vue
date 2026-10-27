@@ -9,6 +9,7 @@
                 v-if="showWizardSuccess && createdTrip"
                 :trip="createdTrip"
                 :creation-snapshot="creationSnapshot"
+                :has-complimentary-sellado="selladoComplimentary"
                 @start-return-trip="startReturnTripCreation"
                 @paid="onCreatedTripPaid"
             />
@@ -87,7 +88,10 @@ import {
     shouldShowSelladoComplimentaryCard,
     shouldShowUnLitroCard
 } from '../../utils/tripSelladoUi.js';
-import { exceedsMaximumSeatPrice } from '../../utils/tripMaxPriceValidation.js';
+import {
+    exceedsMaximumSeatPrice,
+    resolveLiveContributionPriceError
+} from '../../utils/tripMaxPriceValidation.js';
 import { isRearMaxTwoCompatibleWithSeats, shouldBlockSeatSelection } from '../../utils/tripRearComfortSeats.js';
 import {
     countAvailableSeats,
@@ -533,13 +537,13 @@ export default {
             return this.config.map_zoom;
         },
         contribucionPorPersonaTooltipText() {
-            if (this.config && this.config.module_trip_creation_payment_enabled) {
+            if (this.selladoCharged) {
                 return this.$t('contribucionPorPersonaTooltipConSellado');
             }
             return this.$t('contribucionPorPersonaTooltipSinSellado');
         },
         contribucionRecomendadaCardDescripcionText() {
-            if (this.config && this.config.module_trip_creation_payment_enabled) {
+            if (this.selladoCharged) {
                 return this.$t('contribucionRecomendadaCardDescripcionConSellado');
             }
             return this.$t('contribucionRecomendadaCardDescripcionSinSellado');
@@ -1809,37 +1813,25 @@ export default {
         },
         validatePrice() {
             const p = parseSeatPriceInput(this.price);
-            if (isNegativeSeatPriceInput(this.price)) {
-                this.markNegativeContributionError(this.priceError);
-                return;
-            }
-            if (
+            const exceedsMax =
                 this.config.module_max_price_enabled &&
                 exceedsMaximumSeatPrice({
                     seatPriceUnits: p,
                     maximumSeatPriceCents: this.maximum_seat_price_cents,
                     maximumTripPriceCents: this.maximum_trip_price_cents
-                })
-            ) {
-                this.priceError.state = true;
-                this.priceError.message = this.getMaxContributionExceededMessage(
-                    this.maximum_seat_price_cents
-                );
-                this.markMaxContributionExceededWarningAsShown();
-            } else if (
-                this.priceError.message ===
-                this.getMaxContributionExceededMessage(
+                });
+            const nextError = resolveLiveContributionPriceError({
+                isNegative: isNegativeSeatPriceInput(this.price),
+                exceedsMax,
+                negativeMessage: this.$t('contribucionPorPersonaNegativa'),
+                maxExceededMessage: this.getMaxContributionExceededMessage(
                     this.maximum_seat_price_cents
                 )
-            ) {
-                this.priceError.state = false;
-            }
-            if (
-                p !== null &&
-                this.priceError.message ===
-                    this.$t('contribucionPorPersonaRequerida')
-            ) {
-                this.priceError.state = false;
+            });
+            this.priceError.state = nextError.state;
+            this.priceError.message = nextError.message;
+            if (exceedsMax) {
+                this.markMaxContributionExceededWarningAsShown();
             }
         },
         recalculateRecommendedPrice() {
@@ -1978,38 +1970,23 @@ export default {
         },
         validateReturnPrice() {
             const p = parseSeatPriceInput(this.returnPrice);
-            if (isNegativeSeatPriceInput(this.returnPrice)) {
-                this.markNegativeContributionError(this.returnPriceError);
-                return;
-            }
-            if (
-                exceedsMaximumSeatPrice({
-                    seatPriceUnits: p,
-                    maximumSeatPriceCents:
-                        this.maximum_return_seat_price_cents,
-                    maximumTripPriceCents:
-                        this.maximum_return_trip_price_cents
-                })
-            ) {
-                this.returnPriceError.state = true;
-                this.returnPriceError.message = this.getMaxContributionExceededMessage(
-                    this.maximum_return_seat_price_cents
-                );
-                this.markReturnMaxContributionExceededWarningAsShown();
-            } else if (
-                this.returnPriceError.message ===
-                this.getMaxContributionExceededMessage(
+            const exceedsMax = exceedsMaximumSeatPrice({
+                seatPriceUnits: p,
+                maximumSeatPriceCents: this.maximum_return_seat_price_cents,
+                maximumTripPriceCents: this.maximum_return_trip_price_cents
+            });
+            const nextError = resolveLiveContributionPriceError({
+                isNegative: isNegativeSeatPriceInput(this.returnPrice),
+                exceedsMax,
+                negativeMessage: this.$t('contribucionPorPersonaNegativa'),
+                maxExceededMessage: this.getMaxContributionExceededMessage(
                     this.maximum_return_seat_price_cents
                 )
-            ) {
-                this.returnPriceError.state = false;
-            }
-            if (
-                p !== null &&
-                this.returnPriceError.message ===
-                    this.$t('contribucionPorPersonaRequerida')
-            ) {
-                this.returnPriceError.state = false;
+            });
+            this.returnPriceError.state = nextError.state;
+            this.returnPriceError.message = nextError.message;
+            if (exceedsMax) {
+                this.markReturnMaxContributionExceededWarningAsShown();
             }
         },
         resetReturnPoints(m, index) {

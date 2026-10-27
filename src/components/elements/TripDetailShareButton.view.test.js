@@ -21,4 +21,38 @@ describe('TripDetailShareButton.vue', () => {
         expect(componentSource).not.toContain('buildTripShareMessage');
         expect(componentSource).not.toContain('shareContent');
     });
+
+    it('shows Invitar amistades al viaje below Compartir viaje for the owner', () => {
+        expect(componentSource).toContain('canInviteFriendsToTrip');
+        expect(componentSource).toContain('data-testid="trip-detail-invite-friends"');
+        expect(componentSource).toContain("$t('invitarAmigosAlViaje')");
+        expect(componentSource).not.toContain("$t('invitarGenteAlViaje')");
+        expect(componentSource).toMatch(
+            /data-testid="trip-detail-share"[\s\S]*data-testid="trip-detail-invite-friends"/
+        );
+        expect(componentSource).toContain('showInviteFriendsModal');
+        expect(componentSource).toContain('maybeOpenInviteFriendsFromQuery');
+        expect(componentSource).toContain('isInviteFriendsBlockedByUnpaidSellado');
+    });
+
+    it('aligns the unpaid invite button with share and save-template', () => {
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends-trigger__tooltip\s*\{[^}]*display:\s*block/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends-trigger__tooltip\s*\{[^}]*padding:\s*0/s
+        );
+    });
+
+    it('lets the owner save the trip as a template below invite', () => {
+        expect(componentSource).toContain('canSaveTemplate');
+        expect(componentSource).toContain('data-testid="trip-detail-save-template"');
+        expect(componentSource).toContain("$t('tripCreationSaveTemplate')");
+        expect(componentSource).toMatch(
+            /data-testid="trip-detail-invite-friends"[\s\S]*data-testid="trip-detail-save-template"/
+        );
+        expect(componentSource).toContain('buildTripCreationTemplateFromTrip');
+        expect(componentSource).toContain('saveTripCreationTemplate');
+        expect(componentSource).toContain("$t('tripCreationSaveTemplateTitle')");
+    });
 });

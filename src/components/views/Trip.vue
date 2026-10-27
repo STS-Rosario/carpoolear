@@ -343,10 +343,12 @@
                                 class="trip-detail__detalle-aside"
                             >
                                 <div class="trip-detail__condiciones">
-                                    <h3 class="trip-detail__section-title">
-                                        {{ $t('tripDetailConditions') }}
-                                    </h3>
-                                    <TripData />
+                                    <template v-if="!trip.is_passenger">
+                                        <h3 class="trip-detail__section-title">
+                                            {{ $t('tripDetailConditions') }}
+                                        </h3>
+                                        <TripData />
+                                    </template>
                                     <TripDetailShareButton v-if="!isMobile" />
                                 </div>
                             </div>
@@ -357,7 +359,13 @@
                         class="trip-detail__section"
                     >
                         <h3 class="trip-detail__section-title">
-                            {{ $t('tripDetailDriverMessage') }}
+                            {{
+                                $t(
+                                    trip.is_passenger
+                                        ? 'tripDetailPassengerMessage'
+                                        : 'tripDetailDriverMessage'
+                                )
+                            }}
                         </h3>
                         <p class="trip-detail__driver-message">
                             {{ trip.description }}
@@ -365,7 +373,10 @@
                     </section>
 
                     <template v-if="isMobile">
-                        <section class="trip-detail__section">
+                        <section
+                            v-if="!trip.is_passenger"
+                            class="trip-detail__section"
+                        >
                             <h3 class="trip-detail__section-title">
                                 {{ $t('tripDetailConditions') }}
                             </h3>
@@ -432,6 +443,7 @@
                                 <UnLitroInfoCard
                                     v-if="tripDetailUnLitroKind"
                                     :charged="tripDetailUnLitroKind === 'charged'"
+                                    :complimentary="tripDetailUnLitroKind === 'complimentary'"
                                     :bonificado="tripDetailUnLitroKind === 'bonificado'"
                                     :free-trips-amount="freeTripsAmount"
                                 />
@@ -517,6 +529,8 @@ import {
     shouldShowUnLitroOwnerPaymentBanner
 } from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
+import UserApi from '../../services/api/User';
+import TripApi from '../../services/api/Trips.js';
 import TripDriver from '../elements/TripDriver';
 import TripDetailRoute from '../elements/TripDetailRoute';
 import TripPrice from '../elements/TripPrice';
@@ -536,6 +550,9 @@ import { appLocaleToRoutingLanguage } from '../../main';
 import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
+
+let userApi = new UserApi();
+const tripsApi = new TripApi();
 
 export default {
     name: 'trip',
@@ -575,6 +592,7 @@ export default {
                 '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             showModalRequestSeat: false,
             showUnLitroPayModal: false,
+            has_complimentary_sellado: false,
             selladoPaymentPollId: null,
             showModalPricing: false,
             acceptPassengerValue: 0,
@@ -995,6 +1013,16 @@ export default {
             this.showModalRequestSeat = false;
             this.showModalPricing = false;
         },
+        loadSelladoViaje() {
+            if (!this.user) {
+                return;
+            }
+            return userApi.selladoViaje().then((result) => {
+                this.has_complimentary_sellado = Boolean(
+                    result.data.has_complimentary_sellado
+                );
+            });
+        },
         onPaySellado() {
             this.showUnLitroPayModal = true;
         },
@@ -1012,6 +1040,17 @@ export default {
                 this.loadTrip();
             }, 5000);
         },
+        syncSelladoPaymentFromReturn() {
+            const query = (this.$route && this.$route.query) || {};
+            const paymentId = query.payment_id || query.collection_id;
+            if (!paymentId || !this.id) {
+                return Promise.resolve();
+            }
+            return tripsApi
+                .syncSelladoPayment(this.id, paymentId)
+                .then(() => this.loadTrip())
+                .catch(() => {});
+        },
         stopSelladoPaymentPoll() {
             if (this.selladoPaymentPollId) {
                 clearInterval(this.selladoPaymentPollId);
@@ -1026,6 +1065,7 @@ export default {
 
     mounted() {
         this.loadTrip();
+        this.loadSelladoViaje();
         this.syncTripDetailMobilePageClass();
         bus.on('back-click', this.onBackClick);
     },
@@ -1048,6 +1088,7 @@ export default {
             immediate: true,
             handler() {
                 if (this.showSelladoProcessingBanner) {
+                    this.syncSelladoPaymentFromReturn();
                     this.startSelladoPaymentPoll();
                     return;
                 }
@@ -1161,9 +1202,18 @@ export default {
             });
         },
         tripDetailUnLitroKind() {
+            const routeIncludesSellado = Boolean(
+                this.trip &&
+                    this.trip.pricing_breakdown &&
+                    this.trip.pricing_breakdown.includes_sellado
+            );
             return unLitroCardKindFromTrip(this.trip, {
                 selladoEnabled:
-                    this.config && this.config.module_trip_creation_payment_enabled
+                    this.config && this.config.module_trip_creation_payment_enabled,
+                hasComplimentarySellado:
+                    this.owner &&
+                    this.has_complimentary_sellado &&
+                    routeIncludesSellado
             });
         },
         qrEnabled() {

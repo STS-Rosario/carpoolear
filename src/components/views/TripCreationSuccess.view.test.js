@@ -86,7 +86,11 @@ describe('TripCreationSuccess.vue', () => {
         expect(componentSource).toContain('unLitroCardKindFromTrip');
         expect(componentSource).toContain('v-if="unLitroKind"');
         expect(componentSource).toContain(':charged="unLitroKind === \'charged\'"');
+        expect(componentSource).toContain(
+            ':complimentary="unLitroKind === \'complimentary\'"'
+        );
         expect(componentSource).toContain(':bonificado="unLitroKind === \'bonificado\'"');
+        expect(componentSource).toContain('hasComplimentarySellado');
         expect(componentSource).toContain('trip-creation-success__un-litro');
         expect(componentSource).toContain("$t('unLitroSectionTitle')");
         expect(componentSource).toContain('text-align: left');
@@ -103,8 +107,21 @@ describe('TripCreationSuccess.vue', () => {
         const shareIdx = componentSource.indexOf('data-testid="trip-creation-share"');
         expect(payCardIdx).toBeGreaterThan(-1);
         expect(shareIdx).toBeGreaterThan(payCardIdx);
+        expect(componentSource).not.toMatch(
+            /v-if="!showUnLitroPayment"[\s\S]*?class="trip-creation-success__actions"/
+        );
         expect(componentSource).toContain(
-            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__actions"'
+            'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'
+        );
+    });
+
+    it('keeps share, return trip and save template visible while Un litro is unpaid', () => {
+        expect(componentSource).toContain('data-testid="trip-creation-share"');
+        expect(componentSource).toContain('data-testid="trip-creation-return-trip"');
+        expect(componentSource).toContain('data-testid="trip-creation-save-template"');
+        expect(componentSource).toContain('canSaveTemplate');
+        expect(componentSource).not.toMatch(
+            /v-if="!showUnLitroPayment"[\s\S]*?class="trip-creation-success__actions"/
         );
         expect(componentSource).toContain(
             'v-if="!showUnLitroPayment"\n            class="trip-creation-success__invite"'

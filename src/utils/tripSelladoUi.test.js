@@ -13,7 +13,9 @@ import {
     shouldShowSelladoProcessingBanner,
     shouldShowUnLitroCard,
     unLitroCardKindFromTrip,
-    isTripCreationPaymentQrEnabled
+    isTripCreationPaymentQrEnabled,
+    selladoPaidQueryRoute,
+    withSelladoPaidQuery
 } from './tripSelladoUi.js';
 
 describe('shouldShowUnLitroCard', () => {
@@ -150,7 +152,7 @@ describe('shouldShowSelladoBonificadoCard', () => {
         ).toBe(false);
     });
 
-    it('does not show Bonificado when complimentary credit applies', () => {
+    it('does not show Bonificado when complimentary credit applies on a paid route', () => {
         expect(
             shouldShowSelladoBonificadoCard({
                 selladoEnabled: true,
@@ -159,6 +161,17 @@ describe('shouldShowSelladoBonificadoCard', () => {
                 hasComplimentarySellado: true
             })
         ).toBe(false);
+    });
+
+    it('shows Bonificado when the route does not need Un litro even with complimentary credit', () => {
+        expect(
+            shouldShowSelladoBonificadoCard({
+                selladoEnabled: true,
+                routeNeedsPayment: false,
+                remainingFreeTrips: 0,
+                hasComplimentarySellado: true
+            })
+        ).toBe(true);
     });
 });
 
@@ -240,6 +253,18 @@ describe('shouldShowSelladoEmptyTripCreditCard', () => {
         ).toBe(false);
     });
 
+    it('hides the card after the empty-trip credit was already used', () => {
+        expect(
+            shouldShowSelladoEmptyTripCreditCard(
+                {
+                    ...finishedPaidEmptyTrip,
+                    sellado_empty_trip_credit_redeemed: true
+                },
+                { isOwner: true }
+            )
+        ).toBe(false);
+    });
+
     it('hides the card when sellado was never paid', () => {
         expect(
             shouldShowSelladoEmptyTripCreditCard(
@@ -278,7 +303,7 @@ describe('unLitroCardKindFromTrip', () => {
         ).toBe('charged');
     });
 
-    it('shows charged when trip-info includes Un litro even if this trip did not collect payment', () => {
+    it('shows Bonificado when this trip did not collect Un litro even if the route can include it', () => {
         expect(
             unLitroCardKindFromTrip(
                 {
@@ -288,7 +313,7 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
-        ).toBe('charged');
+        ).toBe('bonificado');
     });
 
     it('shows Bonificado when sellado is enabled but the route does not include Un litro', () => {
@@ -300,6 +325,46 @@ describe('unLitroCardKindFromTrip', () => {
                     pricing_breakdown: { includes_sellado: false }
                 },
                 selladoEnabled
+            )
+        ).toBe('bonificado');
+    });
+
+    it('shows complimentary when empty-trip credit waived Un litro on a route that includes it', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: true }
+            )
+        ).toBe('complimentary');
+    });
+
+    it('keeps complimentary after the empty-trip credit was consumed on this trip', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    sellado_complimentary: true,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: true }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: false }
+            )
+        ).toBe('complimentary');
+    });
+
+    it('keeps Bonificado on unpaid routes even when empty-trip credit is available', () => {
+        expect(
+            unLitroCardKindFromTrip(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: false }
+                },
+                { selladoEnabled: true, hasComplimentarySellado: true }
             )
         ).toBe('bonificado');
     });
@@ -403,6 +468,44 @@ describe('shouldShowSelladoPublishedBanner', () => {
                 { collection_status: 'approved' }
             )
         ).toBe(false);
+    });
+});
+
+describe('withSelladoPaidQuery', () => {
+    it('adds sellado_paid=1 so a QR return can poll until the webhook arrives', () => {
+        expect(
+            withSelladoPaidQuery({
+                name: 'detail_trip',
+                params: { id: '101' },
+                query: { loc: 'owner' }
+            })
+        ).toEqual({
+            name: 'detail_trip',
+            params: { id: '101' },
+            query: { loc: 'owner', sellado_paid: '1' }
+        });
+    });
+});
+
+describe('selladoPaidQueryRoute', () => {
+    it('marks trip detail for polling and leaves trip creation alone', () => {
+        expect(
+            selladoPaidQueryRoute({
+                name: 'detail_trip',
+                params: { id: '103' },
+                query: {}
+            })
+        ).toEqual({
+            name: 'detail_trip',
+            params: { id: '103' },
+            query: { sellado_paid: '1' }
+        });
+        expect(
+            selladoPaidQueryRoute({
+                name: 'new-trip',
+                query: { step: '10' }
+            })
+        ).toBeNull();
     });
 });
 

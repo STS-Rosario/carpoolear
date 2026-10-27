@@ -48,31 +48,8 @@ describe('TripSeats.vue accepted passenger co-travelers', () => {
 });
 
 describe('TripSeats.vue invite friends placement', () => {
-    it('renders invite friends trigger below the available seats block', () => {
-        expect(viewSource).toContain('trip-invite-friends-trigger');
-        expect(viewSource).toContain("$t('invitarAmigosAlViaje')");
-        expect(viewSource).toMatch(
-            /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
-        );
-    });
-
-    it('disables invite friends with sellado tooltip while payment is pending', () => {
-        expect(viewSource).toContain('isInviteFriendsBlockedByUnpaidSellado');
-        expect(viewSource).toContain("$t('invitarAmigosSelladoPendiente')");
-        expect(viewSource).toMatch(
-            /:disabled="inviteFriendsBlockedByUnpaidSellado"/
-        );
-        expect(viewSource).toMatch(
-            /:data-tooltip="inviteFriendsSelladoTooltip"/
-        );
-        expect(viewSource).toMatch(
-            /inviteFriendsSelladoTooltip\(\)[\s\S]*invitarAmigosSelladoPendiente/
-        );
-    });
-
-    it('does not auto-open invite friends modal when sellado payment is pending', () => {
-        expect(viewSource).toMatch(
-            /maybeOpenInviteFriendsFromQuery[\s\S]*inviteFriendsBlockedByUnpaidSellado/
-        );
+    it('does not render invite friends on seats', () => {
+        expect(viewSource).not.toContain('trip-invite-friends-trigger');
+        expect(viewSource).not.toContain("$t('invitarAmigosAlViaje')");
     });
 });

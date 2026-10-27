@@ -465,9 +465,25 @@
 }
 
 .trip-detail__share {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-top: 1rem;
     width: 100%;
     max-width: 100%;
+}
+
+.trip-detail__share .trip-invite-friends-trigger,
+.trip-detail__share .trip-invite-friends-trigger__tooltip,
+.trip-detail__share .trip-invite-friends-trigger .app-button,
+.trip-detail__share .trip-detail__save-template {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trip-detail__share .trip-invite-friends-trigger__tooltip {
+    padding: 0;
 }
 
 .trip-detail--desktop .trip-detail__condiciones .trip-detail__share {
