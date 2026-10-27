@@ -42,29 +42,31 @@
                     {{ remainingMessage }}
                 </p>
             </template>
-            <button
-                type="button"
-                class="un-litro-card__link"
-                data-testid="un-litro-what-is-this"
-                @click="showModal = true"
-            >
-                {{ $t('unLitroWhatIsThis') }}
-            </button>
-            <router-link
-                v-if="charged && !linkOnly"
-                :to="{ name: 'donate' }"
-                class="un-litro-card__club-promo"
-                data-testid="un-litro-club-promo"
-            >
-                <img
-                    :src="clubBadgeUrl"
-                    :alt="$t('miembroClubCarpoolearTitulo')"
-                    class="un-litro-card__club-badge"
-                    width="20"
-                    height="20"
-                />
-                <span>{{ $t('unLitroClubMemberPromo') }}</span>
-            </router-link>
+            <div class="un-litro-card__actions">
+                <button
+                    type="button"
+                    class="un-litro-card__link"
+                    data-testid="un-litro-what-is-this"
+                    @click="showModal = true"
+                >
+                    {{ $t('unLitroWhatIsThis') }}
+                </button>
+                <router-link
+                    v-if="charged && !linkOnly"
+                    :to="{ name: 'donate' }"
+                    class="un-litro-card__club-promo"
+                    data-testid="un-litro-club-promo"
+                >
+                    <img
+                        :src="clubBadgeUrl"
+                        :alt="$t('miembroClubCarpoolearTitulo')"
+                        class="un-litro-card__club-badge"
+                        width="20"
+                        height="20"
+                    />
+                    <span>{{ $t('unLitroClubMemberPromo') }}</span>
+                </router-link>
+            </div>
         </div>
         <modal v-if="showModal" name="un-litro-what-is" @close="showModal = false">
             <template #header>
@@ -207,6 +209,12 @@ export default {
     line-height: 1.45;
 }
 
+.un-litro-card__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .un-litro-card__link {
     padding: 0;
     border: 0;
@@ -223,6 +231,7 @@ export default {
     align-items: center;
     gap: 0.45rem;
     margin-top: 0.65rem;
+    align-self: center;
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
     background: #fef5f6;
@@ -260,5 +269,23 @@ export default {
 
 .un-litro-card--link-only .un-litro-card__content {
     display: inline;
+}
+
+.un-litro-card--link-only .un-litro-card__actions {
+    display: inline;
+}
+
+@media (min-width: 768px) {
+    .un-litro-card__actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1rem;
+    }
+
+    .un-litro-card__club-promo {
+        margin-top: 0;
+        align-self: auto;
+    }
 }
 </style>
