@@ -11,7 +11,7 @@ import { addVectorTileLayer } from './mapTiles.js';
 
 export { createLiveLocationMarkerUpdater };
 
-export function createLiveLocationMap(container, lat, lng, options = {}) {
+export async function createLiveLocationMap(container, lat, lng, options = {}) {
     ensureLeafletDefaultIconImages();
     const storage = options.storage;
     const initialZoom = getLiveLocationMapZoom(storage);
@@ -20,7 +20,7 @@ export function createLiveLocationMap(container, lat, lng, options = {}) {
         attributionControl: true
     }).setView([lat, lng], initialZoom);
 
-    addVectorTileLayer(map);
+    await addVectorTileLayer(map);
 
     const marker = L.marker([lat, lng]).addTo(map);
     bindLiveLocationMapZoomPersistence(map, storage);

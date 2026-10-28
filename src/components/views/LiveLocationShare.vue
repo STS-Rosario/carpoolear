@@ -154,13 +154,13 @@ export default {
                 this.syncMap();
             }
         },
-        syncMap() {
+        async syncMap() {
             if (!this.hasCoordinates || !this.$refs.mapEl) {
                 return;
             }
             const { lat, lng } = this.share;
             if (!this.mapInstance) {
-                const created = createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                const created = await createLiveLocationMap(this.$refs.mapEl, lat, lng);
                 this.mapInstance = created.map;
                 this.marker = created.marker;
             } else {

@@ -167,7 +167,7 @@ export default {
                 this.map = null;
             }
         },
-        syncRouteMap() {
+        async syncRouteMap() {
             const el = this.$refs.mapEl;
             if (!el || !this.hasRoute || this.routeLatLngs.length < 2) {
                 this.destroyRouteMap();
@@ -181,7 +181,7 @@ export default {
                 this.routeLatLngs[0].lng
             ];
             const map = L.map(el).setView(mapCenter, this.zoom);
-            addVectorTileLayer(map);
+            await addVectorTileLayer(map);
             this.map = map;
 
             const routingLang =
