@@ -81,16 +81,21 @@
                         id="btn-more"
                         @click="searchMore"
                         v-if="!lastPageConversation"
+                        :disabled="loadingOlderMessages"
                         class="btn text-center btn-full-width"
                     >
                         {{ $t('verMasMensajes') }}
                     </button>
                     <p
-                        v-else-if="messages.length"
+                        v-else-if="conversation.history_pruned"
                         class="messages-retention-note"
                         role="status"
                     >
-                        {{ $t('messagesRetentionNote') }}
+                        {{
+                            $t('messagesRetentionNote', {
+                                period: messageRetentionPeriod
+                            })
+                        }}
                     </p>
                 </div>
                 <template
@@ -271,6 +276,13 @@ export default {
             if (!this.conversation) return false;
             return !!this.conversation.closed || !!this.conversation.closed_at;
         },
+        messageRetentionPeriod() {
+            const years = Number(this.config?.messages_retention_years) || 1;
+            if (this.$i18n.locale === 'en') {
+                return years === 1 ? '1 year' : `${years} years`;
+            }
+            return `${years} ${years === 1 ? 'año' : 'años'}`;
+        },
         groupChatTitle() {
             return formatTripGroupChatTitle(
                 this.$t.bind(this),
@@ -364,6 +376,10 @@ export default {
         },
 
         searchMore() {
+            if (this.loadingOlderMessages || this.lastPageConversation) {
+                return Promise.resolve();
+            }
+
             const wrapper = this.$refs.messagesWrapper;
             const previousScrollTop = wrapper ? wrapper.scrollTop : 0;
             const previousScrollHeight = wrapper ? wrapper.scrollHeight : 0;
