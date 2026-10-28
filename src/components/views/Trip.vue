@@ -908,7 +908,7 @@ export default {
             }
         },
 
-        syncTripRouteMap() {
+        async syncTripRouteMap() {
             const el = this.$refs.tripMapEl;
             if (this.isPassengersView) {
                 this.destroyTripRouteMap();
@@ -920,7 +920,7 @@ export default {
             this.destroyTripRouteMap();
             const c = this.center;
             const map = L.map(el).setView([c.lat, c.lng], this.zoom);
-            addVectorTileLayer(map);
+            await addVectorTileLayer(map);
             this._tripLeafletMap = map;
             const points = this.trip.points.map((point) =>
                 L.latLng(point.lat, point.lng)
