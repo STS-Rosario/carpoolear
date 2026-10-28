@@ -960,10 +960,6 @@ export default {
             });
             this._tripRoutingControl.addTo(map);
             map.invalidateSize();
-            try {
-                map.setView([-51.8, -59.0], 5, { animate: false });
-            } catch (e) {}
-
         },
 
         restoreData(trip) {
