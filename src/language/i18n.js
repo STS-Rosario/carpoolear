@@ -1839,7 +1839,7 @@ const messages = {
         noMostrarDeNuevo: 'No mostrar de nuevo',
         descargaLaApp: 'Descargá la app de Carpoolear',
         descargaLaAppTexto:
-            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano.',
         ahoraNo: 'Ahora no',
         disponibleEnGooglePlay: 'Disponible en Google Play',
         descargarEnAppStore: 'Descargar en App Store',
@@ -3847,7 +3847,7 @@ const messages = {
         noMostrarDeNuevo: 'No mostrar de nuevo',
         descargaLaApp: 'Descargá la app de Carpoolear',
         descargaLaAppTexto:
-            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano.',
         ahoraNo: 'Ahora no',
         disponibleEnGooglePlay: 'Disponible en Google Play',
         descargarEnAppStore: 'Descargar en App Store',
@@ -6025,7 +6025,7 @@ const messages = {
         noMostrarDeNuevo: 'Do not show again',
         descargaLaApp: 'Download the Carpoolear app',
         descargaLaAppTexto:
-            "Get message and trip notifications instantly and keep Carpoolear always at hand. It's free.",
+            'Get message and trip notifications instantly and keep Carpoolear always at hand.',
         ahoraNo: 'Not now',
         disponibleEnGooglePlay: 'Get it on Google Play',
         descargarEnAppStore: 'Download on the App Store',
