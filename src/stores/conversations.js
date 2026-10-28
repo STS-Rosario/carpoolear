@@ -401,14 +401,23 @@ export const useConversationsStore = defineStore('conversations', {
             if (!nid) return Promise.reject(new Error('No conversation id'));
             const msgObj = this.messages[nid];
             let timestamp = null;
+            let beforeId = null;
             if (more && msgObj && msgObj.list.length) {
-                timestamp = msgObj.list[0].created_at;
+                const oldestMessage = msgObj.list[0];
+                timestamp = oldestMessage.created_at;
+                beforeId = oldestMessage.id;
             }
 
             const unread = false;
             const read = true;
             return conversationApi
-                .getMessages(nid, { read, unread, pageSize, timestamp })
+                .getMessages(nid, {
+                    read,
+                    unread,
+                    pageSize,
+                    timestamp,
+                    before_id: beforeId
+                })
                 .then(async (response) => {
                     if (!more) {
                         this.blankMessages({ id: nid });

@@ -34,6 +34,7 @@ const MOCK_CONFIG = {
   trip_stars: false,
   api_price: false,
   fuel_price: 4.15,
+  messages_retention_years: 1,
   trip_card_design: 'default',
   module_on_boarding_new_user: { enabled: false, cards: 0 },
   allow_rating_reply: true,
@@ -509,6 +510,7 @@ function makeMockConversation(id, overrides = {}) {
     updated_at: '2025-06-10T10:30:00.000Z',
     last_message: { id: id * 10, text: `Message from conv ${id}`, created_at: '2025-06-10T10:30:00.000Z' },
     unread: false,
+    history_pruned: false,
     users: [
       { id: 1, name: 'Juan Pérez', positive_ratings: 10, negative_ratings: 1 },
       {

@@ -15,7 +15,8 @@ const showByTripMock = vi.fn(() =>
     })
 );
 
-const { listMock, sendMock, showMock } = vi.hoisted(() => ({
+const { getMessagesMock, listMock, sendMock, showMock } = vi.hoisted(() => ({
+    getMessagesMock: vi.fn(() => Promise.resolve({ data: [] })),
     listMock: vi.fn(() =>
         Promise.resolve({
             data: [],
@@ -55,8 +56,8 @@ vi.mock('../services/api', async (importOriginal) => {
 
             send = sendMock;
 
-            getMessages() {
-                return Promise.resolve({ data: [] });
+            getMessages(id, data) {
+                return getMessagesMock(id, data);
             }
 
             list() {
@@ -150,6 +151,36 @@ describe('conversations store list getter', () => {
 
         expect(updated.notifications_enabled).toBe(false);
         expect(store.conversationSelected.notifications_enabled).toBe(false);
+    });
+});
+
+describe('conversations store message pagination', () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+        getMessagesMock.mockClear();
+        getMessagesMock.mockResolvedValue({ data: [] });
+    });
+
+    it('uses the oldest message id with its timestamp as the pagination cursor', async () => {
+        const { useConversationsStore } = await import('./conversations');
+        const store = useConversationsStore();
+        const timestamp = '2026-01-02T03:04:05.000Z';
+
+        store.selectedID = 9;
+        store.messages[9] = {
+            list: [{ id: 42, created_at: timestamp }],
+            lastPage: false
+        };
+
+        await store.findMessage({ more: true });
+
+        expect(getMessagesMock).toHaveBeenCalledWith(9, {
+            read: true,
+            unread: false,
+            pageSize: 20,
+            timestamp,
+            before_id: 42
+        });
     });
 });
 
