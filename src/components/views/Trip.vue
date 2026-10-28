@@ -948,6 +948,9 @@ export default {
                 language: routingLang,
                 draggableWaypoints: false,
                 addWaypoints: false,
+                fitSelectedRoutes: false,
+                show: false,
+                routeWhileDragging: false,
                 createMarker(i, wp) {
                     return L.marker(wp.latLng, {
                         draggable: false,
@@ -957,6 +960,10 @@ export default {
             });
             this._tripRoutingControl.addTo(map);
             map.invalidateSize();
+            try {
+                map.setView([-51.8, -59.0], 5, { animate: false });
+            } catch (e) {}
+
         },
 
         restoreData(trip) {
