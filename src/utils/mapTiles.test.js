@@ -1,22 +1,27 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
-const { rasterLayer, vectorLayer, tileLayerAddTo, maplibreAddTo, maplibreGL, tileLayer } =
-    vi.hoisted(() => {
-        const rasterLayer = { kind: 'raster' };
-        const vectorLayer = { kind: 'vector' };
-        const tileLayerAddTo = vi.fn(() => rasterLayer);
-        const maplibreAddTo = vi.fn(() => vectorLayer);
-        const maplibreGL = vi.fn(() => ({ addTo: maplibreAddTo }));
-        const tileLayer = vi.fn(() => ({ addTo: tileLayerAddTo }));
-        return {
-            rasterLayer,
-            vectorLayer,
-            tileLayerAddTo,
-            maplibreAddTo,
-            maplibreGL,
-            tileLayer
-        };
-    });
+import {
+    loadPatchedMapStyle,
+    resetPatchedMapStyleCache,
+    addVectorTileLayer,
+    DEFAULT_RASTER_TILE_URL
+} from './mapTiles.js';
+import L from 'leaflet';
+
+const { rasterLayer, tileLayerAddTo, maplibreGL, tileLayer } = vi.hoisted(() => {
+    const rasterLayer = { kind: 'raster' };
+    const tileLayerAddTo = vi.fn(() => rasterLayer);
+    const maplibreGL = vi.fn(() => ({
+        addTo: vi.fn(() => ({ kind: 'vector' }))
+    }));
+    const tileLayer = vi.fn(() => ({ addTo: tileLayerAddTo }));
+    return {
+        rasterLayer,
+        tileLayerAddTo,
+        maplibreGL,
+        tileLayer
+    };
+});
 
 vi.mock('leaflet', () => ({
     default: {
@@ -30,14 +35,6 @@ vi.mock('maplibre-gl/dist/maplibre-gl.css', () => ({}));
 vi.mock('./mapStyleSpanishLabels.js', () => ({
     patchLibertyStyleForSpanishLabels: (style) => style
 }));
-
-import {
-    loadPatchedMapStyle,
-    resetPatchedMapStyleCache,
-    addVectorTileLayer,
-    DEFAULT_RASTER_TILE_URL
-} from './mapTiles.js';
-import L from 'leaflet';
 
 describe('mapTiles', () => {
     beforeEach(() => {
