@@ -1433,7 +1433,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Sumate al',
         donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu aporte mensual podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
+            'Con tu aporte mensual podemos mantener y seguir mejorando Carpoolear, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitPrioritySupportTitle: 'Soporte prioritario:',
         donationAfterRatingBenefitPrioritySupportText:
             'tus tickets de Mesa de Ayuda tendrán prioridad.',
@@ -2736,7 +2736,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Sumate al',
         donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu <strong>aporte mensual</strong> podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
+            'Con tu <strong>aporte mensual</strong> podemos mantener y seguir mejorando Carpoolear, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitVisibility:
             '<strong>Mayor visibilidad:</strong> tus viajes se van a mostrar primero en el listado, ayudándote a compartirlos más fácilmente.',
         donationAfterRatingBenefitPrioritySupport:
@@ -5627,7 +5627,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Join the',
         donationAfterRatingJoinAccent: 'Carpoolear Club',
         donationAfterRatingMonthlyBenefitsIntro:
-            'With your monthly contribution we can keep going and keep improving, and in return you get the following benefits for being part of it:',
+            'With your monthly contribution we can maintain and continue improving Carpoolear, and in return you get the following benefits for being part of it:',
         donationAfterRatingBenefitPrioritySupportTitle: 'Priority support:',
         donationAfterRatingBenefitPrioritySupportText:
             'your Help Desk tickets will have priority.',
