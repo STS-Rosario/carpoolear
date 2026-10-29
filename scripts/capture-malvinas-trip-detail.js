@@ -9,7 +9,7 @@ const fs = require('fs');
 const { chromium } = require('@playwright/test');
 const {
   freezeClock,
-  setupCatchAllMock,
+  setupApiOnlyCatchAll,
   setupCommonMocks,
   setupAuthState,
   waitForPageReady,
@@ -84,7 +84,7 @@ async function main() {
   const page = await context.newPage();
 
   await freezeClock(page);
-  await setupCatchAllMock(page);
+  await setupApiOnlyCatchAll(page);
   await setupCommonMocks(page);
   await setupAuthState(page);
 

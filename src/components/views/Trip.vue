@@ -551,6 +551,7 @@ import { leafletOsrmServiceUrl } from '../../utils/osrmRouting';
 import { ensureLeafletDefaultIconImages, tripWaypointIcon } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
 import { addVectorTileLayer } from '../../utils/mapTiles';
+import { bindRoutingWaypointFitOnError } from '../../utils/leafletTripMap';
 
 let userApi = new UserApi();
 const tripsApi = new TripApi();
@@ -560,6 +561,7 @@ export default {
     beforeCreate() {
         this._tripLeafletMap = null;
         this._tripRoutingControl = null;
+        this._tripMapGeneration = 0;
     },
     data() {
         return {
@@ -588,8 +590,6 @@ export default {
                     location: null
                 }
             ],
-            url: null,
-            attribution: '',
             showModalRequestSeat: false,
             showUnLitroPayModal: false,
             has_complimentary_sellado: false,
@@ -890,6 +890,7 @@ export default {
         },
 
         destroyTripRouteMap() {
+            this._tripMapGeneration += 1;
             if (this._tripRoutingControl && this._tripLeafletMap) {
                 try {
                     this._tripLeafletMap.removeControl(this._tripRoutingControl);
@@ -918,9 +919,18 @@ export default {
                 return;
             }
             this.destroyTripRouteMap();
+            const gen = this._tripMapGeneration;
             const c = this.center;
             const map = L.map(el).setView([c.lat, c.lng], this.zoom);
             await addVectorTileLayer(map);
+            if (gen !== this._tripMapGeneration) {
+                try {
+                    map.remove();
+                } catch (_) {
+                    /* noop */
+                }
+                return;
+            }
             this._tripLeafletMap = map;
             const points = this.trip.points.map((point) =>
                 L.latLng(point.lat, point.lng)
@@ -948,7 +958,6 @@ export default {
                 language: routingLang,
                 draggableWaypoints: false,
                 addWaypoints: false,
-                fitSelectedRoutes: false,
                 show: false,
                 routeWhileDragging: false,
                 createMarker(i, wp) {
@@ -959,6 +968,7 @@ export default {
                 }
             });
             this._tripRoutingControl.addTo(map);
+            bindRoutingWaypointFitOnError(this._tripRoutingControl, map, points);
             map.invalidateSize();
         },
 
