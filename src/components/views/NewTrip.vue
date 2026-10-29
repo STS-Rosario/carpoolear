@@ -272,8 +272,6 @@ export default {
             saving: false,
             allowForeignPoints: false,
             wantsIntermediateStops: false,
-            url: null,
-            attribution: '',
             showReturnTrip: false,
             showRearMaxTwoSeatsConflictModal: false,
             outboundSeatsRadioRevision: 0,

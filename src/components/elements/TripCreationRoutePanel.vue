@@ -54,9 +54,14 @@ import {
 } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
 import { addVectorTileLayer } from '../../utils/mapTiles';
+import { bindRoutingWaypointFitOnError } from '../../utils/leafletTripMap';
 
 export default {
     name: 'trip-creation-route-panel',
+
+    beforeCreate() {
+        this._routeMapGeneration = 0;
+    },
 
     props: {
         points: {
@@ -150,6 +155,7 @@ export default {
 
     methods: {
         destroyRouteMap() {
+            this._routeMapGeneration += 1;
             if (this.routingControl && this.map) {
                 try {
                     this.map.removeControl(this.routingControl);
@@ -176,12 +182,21 @@ export default {
 
             this.destroyRouteMap();
 
+            const gen = this._routeMapGeneration;
             const mapCenter = this.center || [
                 this.routeLatLngs[0].lat,
                 this.routeLatLngs[0].lng
             ];
             const map = L.map(el).setView(mapCenter, this.zoom);
             await addVectorTileLayer(map);
+            if (gen !== this._routeMapGeneration) {
+                try {
+                    map.remove();
+                } catch (_) {
+                    /* noop */
+                }
+                return;
+            }
             this.map = map;
 
             const routingLang =
@@ -208,6 +223,11 @@ export default {
                 }
             });
             this.routingControl.addTo(map);
+            bindRoutingWaypointFitOnError(
+                this.routingControl,
+                map,
+                this.routeLatLngs
+            );
             map.invalidateSize();
         }
     }

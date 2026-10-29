@@ -608,7 +608,7 @@ function isBackendApiUrl(url) {
   return pathname.startsWith('/api/');
 }
 
-async function setupCatchAllMock(page) {
+async function setupApiOnlyCatchAll(page) {
   await page.route(isBackendApiUrl, (route) => {
     route.fulfill({
       status: 200,
@@ -616,6 +616,10 @@ async function setupCatchAllMock(page) {
       body: JSON.stringify({}),
     });
   });
+}
+
+async function setupCatchAllMock(page) {
+  await setupApiOnlyCatchAll(page);
 
   // Block external map tiles (raster OSM + OpenFreeMap vector) for deterministic screenshots.
   await page.route(shouldAbortExternalMapTileRequest, (route) => {
@@ -883,6 +887,8 @@ module.exports = {
   // Utilities
   paginated,
   freezeClock,
+  isBackendApiUrl,
+  setupApiOnlyCatchAll,
   setupCatchAllMock,
   shouldAbortExternalMapTileRequest,
   shouldAbortOsmTileRequest,
