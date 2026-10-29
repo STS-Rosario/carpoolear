@@ -1735,6 +1735,7 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Nota privada',
         notaPrivadaSoloAdmins: 'Nota privada (sólo la ven los administradores)',
+        suspenderUsuario: 'Suspender usuario',
         adminManualIdentityEditState: 'Editar estado (admin)',
         adminManualIdentityEditStateHint:
             'Corrección manual de pagado y estado de revisión. No envía notificaciones al usuario.',
@@ -3686,6 +3687,7 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Nota privada',
         notaPrivadaSoloAdmins: 'Nota privada (sólo la ven los administradores)',
+        suspenderUsuario: 'Suspender usuario',
         adminManualIdentityEditState: 'Editar estado (admin)',
         adminManualIdentityEditStateHint:
             'Corrección manual de pagado y estado de revisión. No envía notificaciones al usuario.',
@@ -5923,6 +5925,7 @@ const messages = {
         eMail: 'E-mail',
         notaPrivada: 'Private note',
         notaPrivadaSoloAdmins: 'Private note (admins only)',
+        suspenderUsuario: 'Suspend user',
         adminManualIdentityEditState: 'Edit state (admin)',
         adminManualIdentityEditStateHint:
             'Manual override for paid and review status. Does not notify the user.',
