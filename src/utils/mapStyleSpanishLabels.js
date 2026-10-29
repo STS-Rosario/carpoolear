@@ -42,15 +42,15 @@ export function patchTextFieldExpression(expr) {
 
 export function patchLibertyStyleForSpanishLabels(style) {
     const next = JSON.parse(JSON.stringify(style));
-    for (const layer of next.layers || []) {
-        if (layer.type !== 'symbol' || !layer.layout) {
+    for (const symbolLayer of next.layers || []) {
+        if (symbolLayer.type !== 'symbol' || !symbolLayer.layout) {
             continue;
         }
-        const textField = layer.layout['text-field'];
+        const textField = symbolLayer.layout['text-field'];
         if (!Array.isArray(textField)) {
             continue;
         }
-        layer.layout['text-field'] = patchTextFieldExpression(textField);
+        symbolLayer.layout['text-field'] = patchTextFieldExpression(textField);
     }
     return next;
 }
