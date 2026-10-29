@@ -9,6 +9,15 @@
         >
             {{ $t('tripCreationShareTrip') }}
         </AppButton>
+        <AppButton
+            variant="secondary"
+            block
+            data-testid="trip-detail-share-instagram-story"
+            icon-left="fa fa-instagram"
+            @click="onShareInstagramStory"
+        >
+            {{ $t('tripShareInstagramStory') }}
+        </AppButton>
         <div v-if="canInviteFriendsToTrip" class="trip-invite-friends-trigger">
             <span
                 class="tooltip-bottom trip-invite-friends-trigger__tooltip"
@@ -126,6 +135,7 @@ import dialogs from '../../services/dialogs.js';
 import { useTripsStore } from '../../stores/trips';
 import { useAuthStore } from '../../stores/auth';
 import { shareTripDetail } from '../../utils/tripDetailShare.js';
+import { shareTripInstagramStory } from '../../utils/tripInstagramStoryShare.js';
 import { isUpcomingTrip } from '../../utils/isUpcomingTrip.js';
 import { isInviteFriendsBlockedByUnpaidSellado } from '../../utils/tripSelladoDisplay.js';
 import {
@@ -214,6 +224,28 @@ export default {
                 locale: this.$i18n?.locale,
                 translate: (key, params) => this.$t(key, params)
             });
+        },
+        async onShareInstagramStory() {
+            if (!this.trip) {
+                return;
+            }
+
+            try {
+                const result = await shareTripInstagramStory(
+                    this.trip.id,
+                    this.$t('tripShareInstagramStory')
+                );
+                if (result.ok && result.method === 'download') {
+                    dialogs.message(this.$t('tripShareStoryDownloaded'), {
+                        estado: 'success'
+                    });
+                }
+            } catch (error) {
+                console.error('Could not share trip Instagram story:', error);
+                dialogs.message(this.$t('tripShareStoryError'), {
+                    estado: 'error'
+                });
+            }
         },
         onInviteFriendsModalClose() {
             this.showInviteFriendsModal = false;

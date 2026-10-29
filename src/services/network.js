@@ -224,6 +224,20 @@ export default {
         );
     },
 
+    async getBlob(url, params, headers = {}) {
+        const source = this.newCancelToken();
+        const resolvedHeaders = await this.getHeader(headers);
+        return this.processResponse(
+            axios.get(API_URL + url, {
+                params: params,
+                headers: resolvedHeaders,
+                responseType: 'blob',
+                cancelToken: source.token
+            }),
+            source
+        );
+    },
+
     async post(url, body, headers = {}) {
         const source = this.newCancelToken();
         const resolvedHeaders = await this.getHeader(headers);
