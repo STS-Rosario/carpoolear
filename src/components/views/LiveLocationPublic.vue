@@ -82,7 +82,8 @@ export default {
         return {
             loaded: false,
             mapInstance: null,
-            marker: null
+            marker: null,
+            _mapGeneration: 0
         };
     },
     computed: {
@@ -132,13 +133,18 @@ export default {
             await this.$nextTick();
             this.syncMap();
         },
-        syncMap() {
+        async syncMap() {
             if (!this.hasCoordinates || !this.$refs.mapEl) {
                 return;
             }
             const { lat, lng } = this.publicView;
             if (!this.mapInstance) {
-                const created = createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                const gen = ++this._mapGeneration;
+                const created = await createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                if (gen !== this._mapGeneration) {
+                    destroyLiveLocationMap(created.map);
+                    return;
+                }
                 this.mapInstance = created.map;
                 this.marker = created.marker;
             } else {
@@ -154,6 +160,7 @@ export default {
         this.loadView();
     },
     beforeUnmount() {
+        this._mapGeneration += 1;
         destroyLiveLocationMap(this.mapInstance);
         this.resetStore();
     },
