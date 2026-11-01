@@ -340,7 +340,12 @@
                 <header class="identity-validation-intro">
                     <p class="identity-validation-lead">{{ $t('identityValidationPageIntro') }}</p>
                     <p class="identity-validation-lead">
-                        {{ $t('identityValidationPageSummary') }}<router-link :to="{ name: 'verificacion_cuenta' }">{{ $t('identityValidationPageLearnMoreLink') }}</router-link>
+                        {{ $t('identityValidationPageSummary') }}
+                    </p>
+                    <p class="identity-validation-learn-more">
+                        <router-link :to="{ name: 'verificacion_cuenta' }">{{
+                            $t('identityValidationPageLearnMoreLink')
+                        }}</router-link>
                     </p>
                     <p class="identity-validation-two-options">{{ $t('identityValidationPageTwoOptions') }}</p>
                 </header>
@@ -1224,6 +1229,15 @@ export default {
 }
 
 .identity-validation-lead a {
+    font-weight: 700;
+}
+
+.identity-validation-learn-more {
+    margin: 0 0 0.35rem;
+    line-height: 1.3;
+}
+
+.identity-validation-learn-more a {
     font-weight: 700;
 }
 

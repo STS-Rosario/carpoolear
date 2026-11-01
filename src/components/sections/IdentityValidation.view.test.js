@@ -312,7 +312,13 @@ describe('IdentityValidation choice cards', () => {
         const mpCtaIndex = cardsSource.indexOf("$t('validarConMercadoPago')");
         expect(hintIndex).toBeGreaterThan(-1);
         expect(mpCtaIndex).toBeGreaterThan(-1);
-        expect(hintIndex).toBeLessThan(mpCtaIndex);
+        expect(hintIndex).toBeGreaterThan(mpCtaIndex);
+    });
+
+    it('wraps choice card badges in a dedicated badges row', () => {
+        const cardsSource = fs.readFileSync(choiceCardsPath, 'utf8');
+        expect(cardsSource).toContain('identity-validation-card-badges');
+        expect(cardsSource).toContain('identity-validation-card-heading');
     });
 });
 
@@ -340,6 +346,9 @@ describe('IdentityValidation compact intro', () => {
         const summaryIndex = viewSource.indexOf(
             "$t('identityValidationPageSummary')"
         );
+        const learnMoreBlockIndex = viewSource.indexOf(
+            'identity-validation-learn-more'
+        );
         const learnMoreIndex = viewSource.indexOf(
             "$t('identityValidationPageLearnMoreLink')"
         );
@@ -348,7 +357,8 @@ describe('IdentityValidation compact intro', () => {
         );
 
         expect(summaryIndex).toBeGreaterThan(-1);
-        expect(learnMoreIndex).toBeGreaterThan(summaryIndex);
+        expect(learnMoreBlockIndex).toBeGreaterThan(summaryIndex);
+        expect(learnMoreIndex).toBeGreaterThan(learnMoreBlockIndex);
         expect(twoOptionsIndex).toBeGreaterThan(learnMoreIndex);
     });
 });

@@ -5,10 +5,14 @@
             class="identity-validation-card"
         >
             <div class="identity-validation-card-header">
-                <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
-                <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
+                <div class="identity-validation-card-heading">
+                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    <h2 class="identity-validation-card-title">{{ $t('identidadModalManualTitulo') }}</h2>
+                </div>
+                <div class="identity-validation-card-badges">
+                    <span class="identity-validation-card-badge">{{ formattedManualCost }}</span>
+                    <span class="identity-validation-card-badge">{{ $t('identityValidationManualBadgeTime') }}</span>
+                </div>
             </div>
             <p class="identity-validation-card-desc">{{ $t('identityValidationManualCardDesc') }}</p>
             <AppButton
@@ -29,13 +33,16 @@
             class="identity-validation-card"
         >
             <div class="identity-validation-card-header">
-                <i class="fa fa-shield" aria-hidden="true"></i>
-                <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
-                <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
+                <div class="identity-validation-card-heading">
+                    <i class="fa fa-shield" aria-hidden="true"></i>
+                    <h2 class="identity-validation-card-title">{{ $t('identidadModalAutoTitulo') }}</h2>
+                </div>
+                <div class="identity-validation-card-badges">
+                    <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeFree') }}</span>
+                    <span class="identity-validation-card-badge">{{ $t('identityValidationAutoBadgeInstant') }}</span>
+                </div>
             </div>
             <p class="identity-validation-card-desc">{{ $t('identityValidationAutoCardDesc') }}</p>
-            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
             <AppButton
                 variant="primary"
                 size="lg"
@@ -48,6 +55,7 @@
             >
                 {{ $t('validarConMercadoPago') }}
             </AppButton>
+            <p class="identity-validation-card-hint">{{ $t('identidadModalAutoPuedeEliminarMp') }}</p>
         </div>
     </div>
 </template>
@@ -128,9 +136,18 @@ export default {
     margin: 0 0 0.5rem;
 }
 
-.identity-validation-card-header .fa {
+.identity-validation-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.identity-validation-card-heading .fa {
     color: var(--ds-action, #1e5f9e);
     font-size: 1.15rem;
+    flex-shrink: 0;
 }
 
 .identity-validation-card-title {
@@ -139,7 +156,14 @@ export default {
     margin: 0;
     line-height: 1.3;
     color: #333;
-    flex: 1 1 auto;
+}
+
+.identity-validation-card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 0 1 auto;
 }
 
 .identity-validation-card-badge {
@@ -164,7 +188,7 @@ export default {
 }
 
 .identity-validation-card-hint {
-    margin: 0.5rem 0 0.75rem;
+    margin: 0.5rem 0 0;
     font-size: 0.8rem;
     line-height: 1.35;
     color: #666;
@@ -188,13 +212,18 @@ export default {
         margin-bottom: 0.375rem;
     }
 
+    .identity-validation-card-badges {
+        flex-basis: 100%;
+        padding-left: 1.5rem;
+    }
+
     .identity-validation-card-desc {
         margin-bottom: 0.5rem;
         line-height: 1.35;
     }
 
     .identity-validation-card-hint {
-        margin-bottom: 0.5rem;
+        margin-top: 0.45rem;
         line-height: 1.3;
     }
 }
