@@ -39,6 +39,7 @@ describe('TripReviewStepPanel.vue', () => {
         expect(componentSource).toContain("$t('tripReviewEdit')");
         expect(componentSource).toContain("emit('edit'");
         expect(componentSource).toContain('getTripReviewEditStep');
+        expect(componentSource).toContain('showNoLucrarOnReview');
         expect(componentSource).toContain('noLucrar');
         expect(componentSource).toContain("$t('tripReviewMoreInfo')");
         expect(componentSource).toContain("$t('tripReviewNoLucrarModalTitle')");

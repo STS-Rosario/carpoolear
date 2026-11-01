@@ -109,6 +109,56 @@
                 noCobrarSenaError
             }}</span>
         </div>
+
+        <div
+            class="trip-contribution-step__no-lucrar"
+            :class="{ 'has-error': Boolean(noLucrarError) }"
+        >
+            <label class="trip-contribution-step__no-lucrar-row">
+                <input
+                    type="checkbox"
+                    class="trip-contribution-step__no-lucrar-input"
+                    data-testid="trip-contribution-no-lucrar"
+                    :aria-label="$t('meComprometo')"
+                    :checked="noLucrar"
+                    @change="$emit('update:noLucrar', $event.target.checked)"
+                />
+                <span>
+                    <strong>{{ $t('meComprometo') }}</strong>
+                    <span class="trip-contribution-step__no-lucrar-lead">
+                        {{ $t('tripReviewNoLucrarLead') }}
+                        <button
+                            type="button"
+                            class="trip-contribution-step__more-info"
+                            @click.prevent="showNoLucrarModal = true"
+                        >
+                            {{ $t('tripReviewMoreInfo') }}
+                        </button>
+                    </span>
+                </span>
+            </label>
+            <span class="error" v-if="noLucrarError">{{ noLucrarError }}</span>
+        </div>
+
+        <modal
+            v-if="showNoLucrarModal"
+            @close="showNoLucrarModal = false"
+        >
+            <template #header>
+                <h3>{{ $t('tripReviewNoLucrarModalTitle') }}</h3>
+            </template>
+            <template #body>
+                <div
+                    class="trip-contribution-step__modal-body text-left color-black"
+                    v-html="$t('tripReviewNoLucrarModalBody')"
+                ></div>
+            </template>
+            <template #footer>
+                <AppButton variant="secondary" @click="showNoLucrarModal = false">
+                    {{ $t('cerrar') }}
+                </AppButton>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -117,6 +167,8 @@ import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.
 import { shouldShowContributionBreakdown } from '../../utils/tripContributionBreakdown.js';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
 import UnLitroInfoCard from './UnLitroInfoCard.vue';
+import modal from '../Modal';
+import AppButton from '../ui/AppButton.vue';
 import { inAppLinkTarget } from '../../utils/externalLink.js';
 
 export default {
@@ -124,7 +176,9 @@ export default {
 
     components: {
         TripContributionBreakdown,
-        UnLitroInfoCard
+        UnLitroInfoCard,
+        modal,
+        AppButton
     },
 
     props: {
@@ -183,14 +237,23 @@ export default {
         noCobrarSenaError: {
             type: String,
             default: ''
+        },
+        noLucrar: {
+            type: Boolean,
+            default: false
+        },
+        noLucrarError: {
+            type: String,
+            default: ''
         }
     },
 
-    emits: ['update:price', 'update:noCobrarSena'],
+    emits: ['update:price', 'update:noCobrarSena', 'update:noLucrar'],
 
     data() {
         return {
-            suggestedExpanded: false
+            suggestedExpanded: false,
+            showNoLucrarModal: false
         };
     },
 
@@ -366,5 +429,45 @@ export default {
 
 .trip-contribution-step__no-sena-input {
     margin-top: 0.2rem;
+}
+
+.trip-contribution-step__no-lucrar {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: #eef5fb;
+}
+
+.trip-contribution-step__no-lucrar.has-error {
+    outline: 1px solid #c0392b;
+}
+
+.trip-contribution-step__no-lucrar-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.trip-contribution-step__no-lucrar-input {
+    margin-top: 0.2rem;
+}
+
+.trip-contribution-step__no-lucrar-lead {
+    display: block;
+    margin-top: 0.25rem;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+.trip-contribution-step__more-info {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ds-action, #1e5f9e);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>

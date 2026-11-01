@@ -317,6 +317,17 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         expect(wizardSource).toContain('$t(stepErrors.noCobrarSena)');
     });
 
+    it('binds the no-profit commitment on the contribution step and shows it on review only without seat price', () => {
+        expect(wizardSource).toContain(':no-lucrar="form.no_lucrar"');
+        expect(wizardSource).toContain(
+            '@update:noLucrar="form.no_lucrar = $event"'
+        );
+        expect(wizardSource).toContain('noLucrar: this.form.no_lucrar');
+        expect(wizardSource).toContain('stepErrors.noLucrar');
+        expect(wizardSource).toContain(':show-no-lucrar-on-review=');
+        expect(wizardSource).toContain('navigationOptions.seatPriceEnabled');
+    });
+
     it('refreshes stepper incomplete marks when previously invalid fields are fixed', () => {
         expect(wizardSource).toContain('resolveWizardStepperValidation');
         expect(wizardSource).toContain('refreshIncompleteStepperState');

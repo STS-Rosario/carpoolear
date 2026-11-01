@@ -115,4 +115,22 @@ describe('TripContributionStepPanel.vue', () => {
         expect(importanteIndex).toBeGreaterThan(-1);
         expect(checkboxIndex).toBeGreaterThan(importanteIndex);
     });
+
+    it('renders the no-profit commitment checkbox after the no-deposit row', () => {
+        expect(componentSource).toContain("$t('meComprometo')");
+        expect(componentSource).toContain(':checked="noLucrar"');
+        expect(componentSource).toContain("'update:noLucrar'");
+        expect(componentSource).toContain('noLucrarError');
+        expect(componentSource).toContain(
+            'data-testid="trip-contribution-no-lucrar"'
+        );
+        expect(componentSource).toContain("$t('tripReviewNoLucrarModalTitle')");
+        const senaIndex = componentSource.indexOf(
+            'trip-contribution-step__no-sena'
+        );
+        const lucrarIndex = componentSource.indexOf(
+            'trip-contribution-step__no-lucrar'
+        );
+        expect(lucrarIndex).toBeGreaterThan(senaIndex);
+    });
 });
