@@ -37,3 +37,6 @@ coverage/
 # Git worktrees (local isolated checkouts)
 .worktrees/
 worktrees/
+
+# Local PR evidence screenshots (paste on GitHub; do not commit)
+.pr-screenshots/
