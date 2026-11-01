@@ -44,6 +44,11 @@ export function isAssignTicketDisabled(ticket, adminUserId) {
     return isReplyBlockedByOtherAdminAssignment(ticket, adminUserId);
 }
 
+export function shouldConfirmReassignBeforeAssign(ticket, adminUserId) {
+    return hasActiveTicketAssignment(ticket) &&
+        !isTicketAssignedToAdmin(ticket, adminUserId);
+}
+
 export function isReplyBlockedByOtherAdminAssignment(ticket, adminUserId) {
     return hasActiveTicketAssignment(ticket) &&
         !isTicketAssignedToAdmin(ticket, adminUserId);
