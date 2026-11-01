@@ -48,7 +48,7 @@ function createForm(overrides = {}) {
             { name: 'Córdoba', json: { id: 2 }, error: createError() }
         ],
         price: '15000',
-        no_lucrar: false,
+        no_lucrar: true,
         no_cobrar_sena: true,
         cars: [],
         passengers: 0,
