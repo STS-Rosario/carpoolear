@@ -140,7 +140,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-width: 0;
 }
 
@@ -160,10 +160,12 @@ export default {
 
 .identity-validation-card-badges {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 0.35rem;
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .identity-validation-card-badge {
@@ -210,11 +212,17 @@ export default {
 
     .identity-validation-card-header {
         margin-bottom: 0.375rem;
+        flex-wrap: nowrap;
     }
 
-    .identity-validation-card-badges {
-        flex-basis: 100%;
-        padding-left: 1.5rem;
+    .identity-validation-card-title {
+        font-size: 0.8125rem;
+        line-height: 1.25;
+    }
+
+    .identity-validation-card-badge {
+        font-size: 0.6875rem;
+        padding: 0.05rem 0.45rem;
     }
 
     .identity-validation-card-desc {
