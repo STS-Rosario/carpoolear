@@ -2167,9 +2167,9 @@ const messages = {
         groupChatNotificationsOff: 'Notificaciones silenciadas',
         chatCerrado: 'El viaje ya terminó por lo que el chat no está disponible.',
         coordinateTripContributionWarningDriver:
-            'Recuerde no superar la contribución del viaje{amountPart} ya que el seguro automotor no lo cubrirá en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
+            'Recuerde no superar la contribución del viaje{amountPart} ya que el seguro automotor podría no cubrirlo en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
         coordinateTripContributionWarningPassengerPrefix:
-            'Recuerde que el conductor deberá pedir la contribución establecida{amountPart}, ya que si se pide más el seguro automotor no los cubrirá en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
+            'Recuerde que el conductor deberá pedir la contribución establecida{amountPart}, ya que si se pide más el seguro automotor podría no cubrirlos en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
         coordinateTripContributionWarningPassengerReportLink: 'denúncielo',
         coordinateTripContributionWarningPassengerSuffix:
             ' para mantener una comunidad más segura.',
@@ -2222,7 +2222,7 @@ const messages = {
         precioMaximoExcedido:
             'La contribución máxima{maxContributionPart} ha sido excedida',
         recuerdeReglaContribucionMaximaExcedida:
-            'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor no lo cubrirá en caso de accidente, y será suspendido de la plataforma',
+            'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor podría no cubrirlo en caso de accidente, y será suspendido de la plataforma',
         contribucionPorPersonaRequerida:
             'Tenés que completar la contribución por persona.',
         contribucionPorPersonaNegativa:
@@ -6348,9 +6348,9 @@ const messages = {
         groupChatNotificationsOff: 'Notifications muted',
         chatCerrado: 'The trip has already ended, so the chat is not available.',
         coordinateTripContributionWarningDriver:
-            'Remember not to exceed the trip contribution{amountPart}, since auto insurance will not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
+            'Remember not to exceed the trip contribution{amountPart}, since auto insurance might not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
         coordinateTripContributionWarningPassengerPrefix:
-            'Remember that the driver must request the established contribution{amountPart}, because if more is requested auto insurance will not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
+            'Remember that the driver must request the established contribution{amountPart}, because if more is requested auto insurance might not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
         coordinateTripContributionWarningPassengerReportLink: 'report it',
         coordinateTripContributionWarningPassengerSuffix:
             ' to keep a safer community.',
@@ -6401,7 +6401,7 @@ const messages = {
         precioMaximoExcedido:
             'Maximum contribution{maxContributionPart} exceeded',
         recuerdeReglaContribucionMaximaExcedida:
-            'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance will not cover it in case of an accident, and you will be suspended from the platform',
+            'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance might not cover it in case of an accident, and you will be suspended from the platform',
         contribucionPorPersonaRequerida:
             'You must enter the per-person contribution.',
         contribucionPorPersonaNegativa:
