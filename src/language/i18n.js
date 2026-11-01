@@ -919,14 +919,14 @@ const messages = {
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
-        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoTitulo: 'Verificación Automática',
         identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
-            'Luego de verificar, podés eliminar la integración con MP',
-        identidadModalManualTitulo: 'Verificación manual',
+            'Luego de verificar, podés eliminar la integración con MP.',
+        identidadModalManualTitulo: 'Verificación Manual',
         identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -953,7 +953,7 @@ const messages = {
         identityValidationPageIntro:
             'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
         identityValidationPageSummary:
-            'Una persona, una cuenta. Sin perfiles falsos. ',
+            'Una persona, una cuenta. Sin perfiles falsos.',
         identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
         identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -985,14 +985,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
-            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+            'Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
-        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationAutoBadgeInstant: 'Sin demora',
         identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
-        solicitarVerificacionManual: 'Solicitar verificación manual',
+        solicitarVerificacionManual: 'Solicitar Verificación Manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -3101,14 +3101,14 @@ const messages = {
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
-        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoTitulo: 'Verificación Automática',
         identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
-            'Luego de verificar, podés eliminar la integración con MP',
-        identidadModalManualTitulo: 'Verificación manual',
+            'Luego de verificar, podés eliminar la integración con MP.',
+        identidadModalManualTitulo: 'Verificación Manual',
         identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -3135,7 +3135,7 @@ const messages = {
         identityValidationPageIntro:
             'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
         identityValidationPageSummary:
-            'Una persona, una cuenta. Sin perfiles falsos. ',
+            'Una persona, una cuenta. Sin perfiles falsos.',
         identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
         identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -3167,14 +3167,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
-            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+            'Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
-        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationAutoBadgeInstant: 'Sin demora',
         identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
-        solicitarVerificacionManual: 'Solicitar verificación manual',
+        solicitarVerificacionManual: 'Solicitar Verificación Manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -5103,7 +5103,7 @@ const messages = {
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
             'For a safer Carpoolear community, you need to verify your account.',
-        identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+        identityValidationPageSummary: 'One person, one account. No fake profiles.',
         identityValidationPageLearnMoreLink: 'See all the details',
         identityValidationPageTwoOptions: 'You have two options:',
         identityValidationPageIntroEstoPermite: 'This allows',
@@ -5115,14 +5115,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'The system checks your data against RENAPER through Mercado Pago. If the verification fails due to incorrect data or a technical issue, contact the Carpoolear Help Desk. If we cannot resolve it, you will have to complete the manual verification.',
         identityValidationManualCardDesc:
-            "Don't have Mercado Pago? Upload your documents and we'll review them.",
+            "Upload your documents and we'll review them.",
         identityValidationAutoBadgeFree: 'Free',
-        identityValidationAutoBadgeInstant: 'Instant',
+        identityValidationAutoBadgeInstant: 'No delay',
         identityValidationManualBadgeTime: 'Up to 48hrs.',
         identityValidationCostLine: 'Cost: {cost}',
         identityValidationTimeLine:
             'Verification time: up to 48 business hours',
-        solicitarVerificacionManual: 'Request manual verification',
+        solicitarVerificacionManual: 'Request Manual Verification',
         validacionManual: 'Manual verification',
         validacionManualDescCorta:
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",
@@ -5361,14 +5361,14 @@ const messages = {
         identidadModalOpcionesTitulo:
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
-        identidadModalAutoTitulo: 'Automatic verification',
+        identidadModalAutoTitulo: 'Automatic Verification',
         identidadModalAutoCostoEtiqueta: 'free',
         identidadModalAutoMp: 'If you have a Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalAutoPuedeEliminarMp:
-            'After verifying, you can remove the MP integration',
-        identidadModalManualTitulo: 'Manual verification',
+            'After verifying, you can remove the MP integration.',
+        identidadModalManualTitulo: 'Manual Verification',
         identidadModalManualCostoEtiqueta: 'paid',
         identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
         identidadModalManualCosto: 'There is a cost',

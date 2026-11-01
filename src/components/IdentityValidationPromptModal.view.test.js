@@ -91,7 +91,7 @@ describe('IdentityValidationPromptModal learn more link', () => {
 describe('MP disconnect copy', () => {
     it('defines Argentinian Spanish strings', () => {
         expect(messages.arg.identidadModalAutoPuedeEliminarMp).toBe(
-            'Luego de verificar, podés eliminar la integración con MP'
+            'Luego de verificar, podés eliminar la integración con MP.'
         );
         expect(messages.arg.identityVerificationSuccessMpDisconnectLead).toBe(
             '¡Todo listo! Ya verificamos tu identidad y podés '

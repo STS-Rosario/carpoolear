@@ -5,7 +5,7 @@ const SPANISH_EXPECTED = {
     identityValidationPageIntro:
         'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
     identityValidationPageSummary:
-        'Una persona, una cuenta. Sin perfiles falsos. ',
+        'Una persona, una cuenta. Sin perfiles falsos.',
     identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
     identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:'
 };
@@ -13,7 +13,7 @@ const SPANISH_EXPECTED = {
 const ENGLISH_EXPECTED = {
     identityValidationPageIntro:
         'For a safer Carpoolear community, you need to verify your account.',
-    identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+    identityValidationPageSummary: 'One person, one account. No fake profiles.',
     identityValidationPageLearnMoreLink: 'See all the details',
     identityValidationPageTwoOptions: 'You have two options:'
 };
