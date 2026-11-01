@@ -47,14 +47,18 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("name: 'division_de_gastos'");
         expect(componentSource).toContain(':target="inAppLinkTarget()"');
         expect(componentSource).toContain('rel="noopener noreferrer"');
-        const suspensionIndex = componentSource.indexOf(
-            'tripContributionImportantBody'
+        const bodyIndex = componentSource.indexOf(
+            'trip-contribution-step__important-body'
+        );
+        const pledgesIndex = componentSource.indexOf(
+            'trip-contribution-step__pledges'
         );
         const explainerIndex = componentSource.indexOf(
             'trip-contribution-step__important-explainer'
         );
-        expect(suspensionIndex).toBeGreaterThan(-1);
-        expect(explainerIndex).toBeGreaterThan(suspensionIndex);
+        expect(bodyIndex).toBeGreaterThan(-1);
+        expect(pledgesIndex).toBeGreaterThan(bodyIndex);
+        expect(explainerIndex).toBeGreaterThan(pledgesIndex);
     });
 
     it('does not write the suggested amount into the price input on click', () => {
@@ -95,8 +99,8 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("$t('meComprometoNoCobrarSena')");
         expect(componentSource).toContain('type="checkbox"');
         expect(componentSource).toContain(':checked="noCobrarSena"');
-        expect(componentSource).toContain(
-            "@change=\"$emit('update:noCobrarSena', $event.target.checked)\""
+        expect(componentSource).toMatch(
+            /@change="[\s\S]*?\$emit\('update:noCobrarSena', \$event\.target\.checked\)/
         );
         expect(componentSource).toContain('noCobrarSenaError');
         expect(componentSource).toMatch(
@@ -106,14 +110,18 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain(
             'data-testid="trip-contribution-no-sena"'
         );
-        const importanteIndex = componentSource.indexOf(
-            'trip-contribution-step__important'
+        const bodyIndex = componentSource.indexOf(
+            'trip-contribution-step__important-body'
         );
         const checkboxIndex = componentSource.indexOf(
             'trip-contribution-step__no-sena'
         );
-        expect(importanteIndex).toBeGreaterThan(-1);
-        expect(checkboxIndex).toBeGreaterThan(importanteIndex);
+        const explainerIndex = componentSource.indexOf(
+            'trip-contribution-step__important-explainer'
+        );
+        expect(bodyIndex).toBeGreaterThan(-1);
+        expect(checkboxIndex).toBeGreaterThan(bodyIndex);
+        expect(explainerIndex).toBeGreaterThan(checkboxIndex);
     });
 
     it('renders the no-profit commitment checkbox after the no-deposit row', () => {
