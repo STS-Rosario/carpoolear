@@ -54,6 +54,20 @@ describe('CoordinateTrip.vue', () => {
         );
     });
 
+    it('disables seat request until a new qualifying chat message exists', () => {
+        expect(viewSource).toContain("from '../../utils/seatRequestMessage.js'");
+        expect(viewSource).toContain('seatRequestRequiresNewMessage');
+        expect(viewSource).toContain('messagesList');
+        expect(viewSource).toMatch(
+            /:disabled="sending\.trip \|\| expiredTrip \|\| outboundSeatRequestNeedsMessage"/
+        );
+        expect(viewSource).toMatch(
+            /:disabled="sending\.returnTrip \|\| expiredReturnTrip \|\| returnSeatRequestNeedsMessage"/
+        );
+        expect(viewSource).toContain("$t('escribeUnMensajeParaSolicitarAsiento')");
+        expect(viewSource).toContain('message_required');
+    });
+
     it('keeps a space before the trip date on seat action buttons', () => {
         const outboundDate = viewSource.match(
             /v-if="!sending\.trip"[\s\S]*?<\/template>/
