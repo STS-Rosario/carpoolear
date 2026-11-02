@@ -1600,6 +1600,8 @@ const messages = {
             'No pidas asiento si no tenés seguridad de que vas a viajar, muchas personas también están buscando el mismo viaje que vos. Si ocurriera algo que te impida viajar, avisale lo más rápido que puedas a la persona con que ibas a compartir el viaje.',
         noVolverAMostrarMensaje: 'No volver a mostrar mensaje',
         solicitarAsiento: 'Solicitar asiento',
+        escribeUnMensajeParaSolicitarAsiento:
+            'Escribí un mensaje para solicitar un asiento',
         carpoodatosAntesConfirmar:
             'Antes de solicitar asiento, revisá el detalle del viaje y coordiná :',
         carpoodatosAntesConfirmarBullet1:
@@ -3545,6 +3547,8 @@ const messages = {
         noVolverAMostrarMensaje: 'No volver a mostrar mensaje',
         enviarMensaje: 'Enviar mensaje',
         solicitarAsiento: 'Solicitar asiento',
+        escribeUnMensajeParaSolicitarAsiento:
+            'Escribí un mensaje para solicitar un asiento',
         carpoodatosAntesConfirmar:
             'Antes de solicitar asiento, revisá el detalle del viaje y coordiná :',
         carpoodatosAntesConfirmarBullet1:
@@ -5793,6 +5797,8 @@ const messages = {
             "Don't request a seat if you're not sure you're going to travel, many other people are also looking for the same trip as you. If something happens that prevents you from traveling, let the person you were going to share the trip with know as soon as possible.",
         noVolverAMostrarMensaje: 'Do not show message again',
         solicitarAsiento: 'Request seat',
+        escribeUnMensajeParaSolicitarAsiento:
+            'Write a message to request a seat',
         carpoodatosAntesConfirmar:
             'Before requesting a seat, review the trip details and coordinate:',
         carpoodatosAntesConfirmarBullet1:
