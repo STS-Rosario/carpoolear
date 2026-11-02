@@ -212,7 +212,10 @@ import {
     resolveWebAppBaseUrl
 } from '../../utils/supportTicketTripReport.js';
 import { isTripGroupConversation } from '../../utils/tripGroupChatTitle.js';
-import { seatRequestRequiresNewMessage } from '../../utils/seatRequestMessage.js';
+import {
+    markLatestQualifyingSeatRequestMessageUsed,
+    seatRequestRequiresNewMessage
+} from '../../utils/seatRequestMessage.js';
 
 export default {
     name: 'conversation-chat',
@@ -363,6 +366,11 @@ export default {
                 this.make(trip.id)
                     .then((response) => {
                         trip.request = 'send';
+                        markLatestQualifyingSeatRequestMessageUsed({
+                            messages: this.messagesList,
+                            userId: this.user?.id,
+                            tripCreatedAt: trip.created_at
+                        });
                     })
                     .catch((error) => {
                         if (this.$checkError(error, 'identity_validation_required')) {

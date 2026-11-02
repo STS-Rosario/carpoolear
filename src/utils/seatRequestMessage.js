@@ -52,3 +52,33 @@ export function seatRequestRequiresNewMessage({
         tripCreatedAt
     });
 }
+
+export function markLatestQualifyingSeatRequestMessageUsed({
+    messages,
+    userId,
+    tripCreatedAt
+}) {
+    const qualifying = (messages || []).filter((message) =>
+        hasUnusedQualifyingSeatRequestMessage({
+            messages: [message],
+            userId,
+            tripCreatedAt
+        })
+    );
+    if (!qualifying.length) {
+        return null;
+    }
+    const latest = qualifying.reduce((current, candidate) => {
+        const currentMs = parseTimestamp(current.created_at);
+        const candidateMs = parseTimestamp(candidate.created_at);
+        if (candidateMs > currentMs) {
+            return candidate;
+        }
+        if (candidateMs === currentMs && Number(candidate.id) > Number(current.id)) {
+            return candidate;
+        }
+        return current;
+    });
+    latest.used_for_seat_request = true;
+    return latest;
+}
