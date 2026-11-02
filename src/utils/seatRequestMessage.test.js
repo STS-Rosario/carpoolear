@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     hasUnusedQualifyingSeatRequestMessage,
+    markLatestQualifyingSeatRequestMessageUsed,
     seatRequestRequiresNewMessage
 } from './seatRequestMessage.js';
 
@@ -137,5 +138,40 @@ describe('seatRequestRequiresNewMessage', () => {
                 tripCreatedAt
             })
         ).toBe(false);
+    });
+});
+
+describe('markLatestQualifyingSeatRequestMessageUsed', () => {
+    it('marks only the latest qualifying passenger message as used', () => {
+        const older = message({ id: 1, created_at: '2026-11-01 12:01:00' });
+        const latest = message({ id: 2, created_at: '2026-11-01 12:10:00' });
+
+        const marked = markLatestQualifyingSeatRequestMessageUsed({
+            messages: [older, latest],
+            userId: 10,
+            tripCreatedAt
+        });
+
+        expect(marked).toBe(latest);
+        expect(latest.used_for_seat_request).toBe(true);
+        expect(older.used_for_seat_request).toBe(false);
+        expect(
+            hasUnusedQualifyingSeatRequestMessage({
+                messages: [older, latest],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBe(true);
+    });
+
+    it('returns null when no qualifying message exists', () => {
+        const used = message({ used_for_seat_request: true });
+        expect(
+            markLatestQualifyingSeatRequestMessageUsed({
+                messages: [used],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBeNull();
     });
 });

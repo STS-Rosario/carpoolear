@@ -66,6 +66,7 @@ describe('CoordinateTrip.vue', () => {
         );
         expect(viewSource).toContain("$t('escribeUnMensajeParaSolicitarAsiento')");
         expect(viewSource).toContain('message_required');
+        expect(viewSource).toContain('markLatestQualifyingSeatRequestMessageUsed');
     });
 
     it('keeps a space before the trip date on seat action buttons', () => {
