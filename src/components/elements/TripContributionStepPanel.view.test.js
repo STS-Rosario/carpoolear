@@ -4,6 +4,10 @@ import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'TripContributionStepPanel.vue');
 const componentSource = fs.readFileSync(componentPath, 'utf8');
+const templateSource = componentSource.slice(
+    0,
+    componentSource.indexOf('</template>') + '</template>'.length
+);
 
 describe('TripContributionStepPanel.vue', () => {
     it('renders amount input with suggested accordion and importante notice', () => {
@@ -47,14 +51,21 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("name: 'division_de_gastos'");
         expect(componentSource).toContain(':target="inAppLinkTarget()"');
         expect(componentSource).toContain('rel="noopener noreferrer"');
-        const suspensionIndex = componentSource.indexOf(
-            'tripContributionImportantBody'
+        const bodyIndex = componentSource.indexOf(
+            'trip-contribution-step__important-body'
+        );
+        const pledgesIndex = componentSource.indexOf(
+            'trip-contribution-step__pledges'
         );
         const explainerIndex = componentSource.indexOf(
             'trip-contribution-step__important-explainer'
         );
-        expect(suspensionIndex).toBeGreaterThan(-1);
-        expect(explainerIndex).toBeGreaterThan(suspensionIndex);
+        expect(bodyIndex).toBeGreaterThan(-1);
+        expect(explainerIndex).toBeGreaterThan(bodyIndex);
+        expect(pledgesIndex).toBeGreaterThan(explainerIndex);
+        expect(templateSource).toMatch(
+            /trip-contribution-step__important-explainer[\s\S]*?<\/div>\s*<div class="trip-contribution-step__pledges">/
+        );
     });
 
     it('does not write the suggested amount into the price input on click', () => {
@@ -95,8 +106,8 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain("$t('meComprometoNoCobrarSena')");
         expect(componentSource).toContain('type="checkbox"');
         expect(componentSource).toContain(':checked="noCobrarSena"');
-        expect(componentSource).toContain(
-            "@change=\"$emit('update:noCobrarSena', $event.target.checked)\""
+        expect(componentSource).toMatch(
+            /@change="[\s\S]*?\$emit\('update:noCobrarSena', \$event\.target\.checked\)/
         );
         expect(componentSource).toContain('noCobrarSenaError');
         expect(componentSource).toMatch(
@@ -106,13 +117,38 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain(
             'data-testid="trip-contribution-no-sena"'
         );
-        const importanteIndex = componentSource.indexOf(
-            'trip-contribution-step__important'
+        const bodyIndex = templateSource.indexOf(
+            'trip-contribution-step__important-body'
         );
-        const checkboxIndex = componentSource.indexOf(
+        const checkboxIndex = templateSource.indexOf(
             'trip-contribution-step__no-sena'
         );
-        expect(importanteIndex).toBeGreaterThan(-1);
-        expect(checkboxIndex).toBeGreaterThan(importanteIndex);
+        const explainerIndex = templateSource.indexOf(
+            'trip-contribution-step__important-explainer'
+        );
+        expect(bodyIndex).toBeGreaterThan(-1);
+        expect(explainerIndex).toBeGreaterThan(bodyIndex);
+        expect(checkboxIndex).toBeGreaterThan(explainerIndex);
+        expect(templateSource).not.toMatch(
+            /trip-contribution-step__important[\s\S]*trip-contribution-step__pledges[\s\S]*trip-contribution-step__important-explainer/
+        );
+    });
+
+    it('renders the no-profit commitment checkbox after the no-deposit row', () => {
+        expect(componentSource).toContain("$t('meComprometo')");
+        expect(componentSource).toContain(':checked="noLucrar"');
+        expect(componentSource).toContain("'update:noLucrar'");
+        expect(componentSource).toContain('noLucrarError');
+        expect(componentSource).toContain(
+            'data-testid="trip-contribution-no-lucrar"'
+        );
+        expect(componentSource).toContain("$t('tripReviewNoLucrarModalTitle')");
+        const senaIndex = componentSource.indexOf(
+            'trip-contribution-step__no-sena'
+        );
+        const lucrarIndex = componentSource.indexOf(
+            'trip-contribution-step__no-lucrar'
+        );
+        expect(lucrarIndex).toBeGreaterThan(senaIndex);
     });
 });

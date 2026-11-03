@@ -402,7 +402,8 @@ describe('tripCreationSteps validateStep', () => {
                 isPassenger: false,
                 seatPriceEnabled: true,
                 price: '1500',
-                noCobrarSena: true
+                noCobrarSena: true,
+                noLucrar: true
             }).valid
         ).toBe(true);
 
@@ -444,7 +445,8 @@ describe('tripCreationSteps validateStep', () => {
                 isPassenger: false,
                 seatPriceEnabled: true,
                 price: '1500',
-                noCobrarSena: true
+                noCobrarSena: true,
+                noLucrar: true
             }).valid
         ).toBe(true);
 
@@ -454,6 +456,31 @@ describe('tripCreationSteps validateStep', () => {
                 seatPriceEnabled: true,
                 price: '1500',
                 noCobrarSena: false
+            }).valid
+        ).toBe(true);
+    });
+
+    it('requires the no-profit commitment on the contribution step for drivers', () => {
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500',
+                noCobrarSena: true,
+                noLucrar: false
+            })
+        ).toEqual({
+            valid: false,
+            errors: { noLucrar: 'teComprometesANoLucrar' }
+        });
+
+        expect(
+            validateStep(STEP.CONTRIBUTION, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                price: '1500',
+                noCobrarSena: true,
+                noLucrar: true
             }).valid
         ).toBe(true);
     });
@@ -474,17 +501,26 @@ describe('tripCreationSteps validateStep', () => {
         expect(validateStep(STEP.STOPS, { points: partial }).valid).toBe(false);
     });
 
-    it('validates last details for drivers', () => {
+    it('validates last details for drivers when seat price is disabled', () => {
         expect(
             validateStep(STEP.LAST_DETAILS, {
                 isPassenger: false,
+                seatPriceEnabled: false,
                 noLucrar: false
             }).valid
         ).toBe(false);
         expect(
             validateStep(STEP.LAST_DETAILS, {
                 isPassenger: false,
+                seatPriceEnabled: false,
                 noLucrar: true
+            }).valid
+        ).toBe(true);
+        expect(
+            validateStep(STEP.LAST_DETAILS, {
+                isPassenger: false,
+                seatPriceEnabled: true,
+                noLucrar: false
             }).valid
         ).toBe(true);
         expect(

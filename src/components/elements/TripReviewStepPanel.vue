@@ -191,7 +191,7 @@
         </section>
 
         <div
-            v-if="showNoLucrar"
+            v-if="showNoLucrarOnReview"
             class="trip-review-step__nolucrar"
             :class="{ 'has-error': Boolean(noLucrarError) }"
         >
@@ -292,7 +292,7 @@ export default {
         allowKids: { type: Boolean, default: false },
         allowSmoking: { type: Boolean, default: false },
         allowAnimals: { type: Boolean, default: false },
-        showNoLucrar: { type: Boolean, default: false },
+        showNoLucrarOnReview: { type: Boolean, default: false },
         noLucrar: { type: Boolean, default: false },
         noLucrarError: { type: String, default: '' }
     },

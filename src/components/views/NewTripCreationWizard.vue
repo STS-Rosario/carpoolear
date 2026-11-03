@@ -404,8 +404,17 @@
                             ? $t(stepErrors.noCobrarSena)
                             : ''
                     "
+                    :no-lucrar="form.no_lucrar"
+                    :no-lucrar-error="
+                        form.lucrarError.state
+                            ? form.lucrarError.message
+                            : stepErrors.noLucrar
+                                ? $t(stepErrors.noLucrar)
+                                : ''
+                    "
                     @update:price="onContributionPriceUpdate"
                     @update:noCobrarSena="form.no_cobrar_sena = $event"
+                    @update:noLucrar="form.no_lucrar = $event"
                 />
             </template>
 
@@ -468,14 +477,18 @@
                     :allow-kids="form.trip.allow_kids"
                     :allow-smoking="form.trip.allow_smoking"
                     :allow-animals="form.trip.allow_animals"
-                    :show-no-lucrar="!isPassenger"
+                    :show-no-lucrar-on-review="
+                        !isPassenger && !navigationOptions.seatPriceEnabled
+                    "
                     :no-lucrar="form.no_lucrar"
                     :no-lucrar-error="
-                        form.lucrarError.state
-                            ? form.lucrarError.message
-                            : stepErrors.lastDetails
-                                ? $t(stepErrors.lastDetails)
-                                : ''
+                        !isPassenger && !navigationOptions.seatPriceEnabled
+                            ? form.lucrarError.state
+                                ? form.lucrarError.message
+                                : stepErrors.lastDetails
+                                    ? $t(stepErrors.lastDetails)
+                                    : ''
+                            : ''
                     "
                     @edit="setCurrentStep"
                     @update:noLucrar="form.no_lucrar = $event"
