@@ -24,8 +24,12 @@ describe('document id config helpers', () => {
         ).toBe('30123456');
     });
 
-    it('rejects values outside allowed masks from app config', () => {
-        expect(isValidDocumentIdForConfig('ABC123', APP_CONFIG)).toBe(false);
+    it('accepts flexible passport values from app config', () => {
+        expect(isValidDocumentIdForConfig('ABC123', APP_CONFIG)).toBe(true);
+    });
+
+    it('rejects passport values shorter than 5 characters from app config', () => {
+        expect(isValidDocumentIdForConfig('AB12', APP_CONFIG)).toBe(false);
     });
 
     it('uses the longest mask for input maxlength', () => {

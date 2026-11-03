@@ -47,6 +47,11 @@ describe('formatMigrationFieldValue', () => {
                 profileIdFormat: '##.###.###,A########'
             })
         ).toBe('A33070219');
+        expect(
+            formatMigrationFieldValue('nro_doc', { nro_doc: 'abc123' }, {
+                profileIdFormat: '##.###.###,A########'
+            })
+        ).toBe('ABC123');
     });
 
     it('returns em dash when user or value is missing', () => {
