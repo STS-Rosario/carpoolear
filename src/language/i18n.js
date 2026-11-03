@@ -1478,6 +1478,10 @@ const messages = {
         donationAfterRatingClubLoginRequired:
             'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
         donationAfterRatingClubLoginOk: 'Ok',
+        donationAfterRatingGuestOnceWarning:
+            'No estás logueado, por lo que tu donación no quedará asociada a tu usuario. Te recomendamos loguearte así podemos identificarte como donante :)',
+        donationAfterRatingGuestOnceContinue: 'Donar sin ingresar',
+        donationAfterRatingGuestOnceLogin: 'Ingresar a Carpoolear',
         clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
         clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
         clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
@@ -2773,6 +2777,10 @@ const messages = {
         donationAfterRatingClubLoginRequired:
             'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
         donationAfterRatingClubLoginOk: 'Ok',
+        donationAfterRatingGuestOnceWarning:
+            'No estás logueado, por lo que tu donación no quedará asociada a tu usuario. Te recomendamos loguearte así podemos identificarte como donante :)',
+        donationAfterRatingGuestOnceContinue: 'Donar sin ingresar',
+        donationAfterRatingGuestOnceLogin: 'Ingresar a Carpoolear',
         donationAfterRatingOnceIntro:
             '¿No podés comprometerte a aportar cada mes? Podés hacerlo por única vez:',
         donationAfterRatingOnceCta: 'Quiero aportar por única vez',
@@ -5696,6 +5704,10 @@ const messages = {
         donationAfterRatingClubLoginRequired:
             'To be a Club Carpoolear member you need to be logged in to the app, we will redirect you',
         donationAfterRatingClubLoginOk: 'Ok',
+        donationAfterRatingGuestOnceWarning:
+            "You're not logged in, so your contribution won't be linked to your account. We recommend logging in so we can identify you as a donor :)",
+        donationAfterRatingGuestOnceContinue: 'Contribute without signing in',
+        donationAfterRatingGuestOnceLogin: 'Sign in to Carpoolear',
         clubCarpoolearWelcomePageTitle: 'Carpoolear Club',
         clubCarpoolearWelcomeHeroTitlePrimary: 'You joined',
         clubCarpoolearWelcomeHeroTitleAccent: 'the Carpoolear Club',
