@@ -12,6 +12,7 @@ describe('formatDisplayDni', () => {
         expect(formatDisplayDni('A33070219', PROFILE_ID_FORMAT)).toBe(
             'A33070219'
         );
+        expect(formatDisplayDni('abc123', PROFILE_ID_FORMAT)).toBe('ABC123');
     });
 
     it('returns null for empty values', () => {
@@ -20,8 +21,9 @@ describe('formatDisplayDni', () => {
         expect(formatDisplayDni('   ', '##.###.###')).toBeNull();
     });
 
-    it('returns null when value does not match any allowed mask', () => {
-        expect(formatDisplayDni('ABC123', PROFILE_ID_FORMAT)).toBeNull();
+    it('returns null when value is not a DNI or a 5 to 9 character passport', () => {
+        expect(formatDisplayDni('AB12', PROFILE_ID_FORMAT)).toBeNull();
+        expect(formatDisplayDni('ABCDEFGHIJ', PROFILE_ID_FORMAT)).toBeNull();
     });
 
     it('returns value as string when pattern is missing', () => {
