@@ -114,10 +114,44 @@ describe('UpdateProfile Club Carpoolear visibility', () => {
     });
 });
 
-describe('UpdateProfile document field description', () => {
-    it('prepends DNI or passport hint before the document verification copy', () => {
+describe('UpdateProfile document type', () => {
+    it('lets the user choose DNI or passport before entering the number', () => {
+        expect(viewSource).toContain('AppSegmentToggle');
+        expect(viewSource).toContain("$t('tipoDocumento')");
+        expect(viewSource).toContain('v-model="documentType"');
+        expect(viewSource).toContain('documentTypeOptions');
+        expect(viewSource).toContain("$t('pasaporte')");
+        expect(viewSource).toContain("$t('doc')");
+    });
+
+    it('formats and validates the number using the selected document type', () => {
+        expect(viewSource).toContain('inferDocumentType');
+        expect(viewSource).toContain('type: this.documentType');
+        expect(viewSource).toContain('DOCUMENT_TYPE_PASSPORT');
+        expect(viewSource).toContain('DOCUMENT_TYPE_DNI');
+    });
+
+    it('uses tel plus mask for DNI and uppercase text input for passport', () => {
+        expect(viewSource).toContain(':type="documentIdInputType"');
+        expect(viewSource).toContain('documentIdInputClass');
         expect(viewSource).toMatch(
-            /id="input-dni"[\s\S]*?\$t\('numeroDniOPasaporte'\)[\s\S]*?\$t\('incentivoDoc'\)/
+            /documentIdInputType\(\)[\s\S]*DOCUMENT_TYPE_PASSPORT[\s\S]*'text'/
+        );
+        expect(viewSource).toContain('app-input--document-id-passport');
+    });
+
+    it('keeps document type labels in i18n for all locales', () => {
+        expect(i18nSource).toMatch(/tipoDocumento:\s*'Tipo de documento'/);
+        expect(i18nSource).toMatch(/tipoDocumento:\s*'Document type'/);
+        expect(i18nSource).toMatch(/pasaporte:\s*'Pasaporte'/);
+        expect(i18nSource).toMatch(/pasaporte:\s*'Passport'/);
+    });
+});
+
+describe('UpdateProfile document field description', () => {
+    it('keeps the document verification copy on the number field', () => {
+        expect(viewSource).toMatch(
+            /id="input-dni"[\s\S]*?\$t\('incentivoDoc'\)/
         );
     });
 

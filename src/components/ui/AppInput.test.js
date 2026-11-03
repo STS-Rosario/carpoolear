@@ -26,4 +26,15 @@ describe('AppInput', () => {
         expect(source).toContain('app-input__control-wrap--action-right');
         expect(source).toContain('app-input__action-right');
     });
+
+    it('uppercases passport document input', () => {
+        const cssPath = path.resolve(
+            __dirname,
+            '../../styles/components/app-input.css'
+        );
+        const css = fs.readFileSync(cssPath, 'utf8');
+        expect(css).toMatch(
+            /\.app-input--document-id-passport[\s\S]*text-transform:\s*uppercase/
+        );
+    });
 });

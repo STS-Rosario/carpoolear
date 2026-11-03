@@ -14,6 +14,15 @@ describe('UsersCrud admin edit view', () => {
         expect(source).toContain('onDniModelUpdate(value)');
         expect(source).toContain('formatDocumentIdInput(');
         expect(source).toContain('resolveProfileIdFormats(this.settings)');
+        expect(source).toContain('type: this.documentType');
+    });
+
+    it('lets the admin choose DNI or passport before entering the number', () => {
+        expect(source).toContain('AppSegmentToggle');
+        expect(source).toContain("$t('tipoDocumento')");
+        expect(source).toContain('v-model="documentType"');
+        expect(source).toContain('documentTypeOptions');
+        expect(source).toContain('inferDocumentType');
     });
 
     it('keeps phone number keydown and paste guards on AppInput', () => {
