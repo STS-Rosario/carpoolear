@@ -452,9 +452,9 @@ export default {
                 : '';
         },
         donationLinkProps() {
-            // Logged-in users get the in-app donation page (router navigation, no reload).
-            // iOS native and visitors keep the website /aportar page (see resolveExternalUrl).
-            if (this.logged && !isIOSCapacitor()) {
+            // Web and Android stay in the app so guests can make a one-time aporte.
+            // iOS native still opens the website /aportar page (see resolveExternalUrl).
+            if (!isIOSCapacitor()) {
                 return { to: { name: 'donate' } };
             }
             return { href: resolveExternalUrl('/aportar') };

@@ -190,6 +190,52 @@
             </div>
         </div>
         </div>
+        <modal
+            v-if="showClubLoginModal"
+            name="club-carpoolear-login-required"
+            @close="showClubLoginModal = false"
+        >
+            <template #header>
+                <h3>{{ $t('donationAfterRatingJoinAccent') }}</h3>
+            </template>
+            <template #body>
+                <p>{{ $t('donationAfterRatingClubLoginRequired') }}</p>
+            </template>
+            <template #footer>
+                <AppButton
+                    variant="header-donate"
+                    @click="redirectToLoginForClub"
+                >
+                    {{ $t('donationAfterRatingClubLoginOk') }}
+                </AppButton>
+            </template>
+        </modal>
+        <modal
+            v-if="showGuestDonateModal"
+            name="guest-once-donation-warning"
+            @close="dismissGuestDonateModal"
+        >
+            <template #header>
+                <h3>{{ $t('donationAfterRatingOnceCta') }}</h3>
+            </template>
+            <template #body>
+                <p>{{ $t('donationAfterRatingGuestOnceWarning') }}</p>
+            </template>
+            <template #footer>
+                <AppButton
+                    variant="secondary"
+                    @click="continueGuestDonate"
+                >
+                    {{ $t('donationAfterRatingGuestOnceContinue') }}
+                </AppButton>
+                <AppButton
+                    variant="header-donate"
+                    @click="redirectToLoginForGuestDonate"
+                >
+                    {{ $t('donationAfterRatingGuestOnceLogin') }}
+                </AppButton>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -203,6 +249,7 @@ import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import ManualValidationQrPaymentHelp from '../sections/ManualValidationQrPaymentHelp.vue';
 import AppButton from '../ui/AppButton.vue';
+import modal from '../Modal';
 import {
     fetchDonationPaymentStatus,
     isPlatformDonationsQrEnabled,
@@ -226,7 +273,8 @@ export default {
         DonationAmountPicker,
         DonationAfterRatingHero,
         ManualValidationQrPaymentHelp,
-        AppButton
+        AppButton,
+        modal
     },
     props: {
         /** Set on the after-rating flow; absent on the trip-independent /donate page. */
@@ -250,7 +298,10 @@ export default {
             showQrPanel: false,
             qrImageUrl: null,
             qrPaymentId: null,
-            qrPollIntervalId: null
+            qrPollIntervalId: null,
+            showClubLoginModal: false,
+            showGuestDonateModal: false,
+            pendingGuestDonateKind: null
         };
     },
     beforeUnmount() {
@@ -284,11 +335,51 @@ export default {
                 estado: 'info'
             });
         },
+        warnGuestBeforeOnceDonate(kind) {
+            if (this.user) {
+                return false;
+            }
+            this.pendingGuestDonateKind = kind;
+            this.showGuestDonateModal = true;
+            return true;
+        },
+        dismissGuestDonateModal() {
+            this.showGuestDonateModal = false;
+            this.pendingGuestDonateKind = null;
+        },
+        continueGuestDonate() {
+            const kind = this.pendingGuestDonateKind;
+            this.showGuestDonateModal = false;
+            this.pendingGuestDonateKind = null;
+            if (kind === 'qr') {
+                this.completeOnceQrCheckout();
+                return;
+            }
+            this.completeOnceCheckout();
+        },
+        redirectToLoginForGuestDonate() {
+            this.dismissGuestDonateModal();
+            this.$router.rememberRoute = { name: 'donate' };
+            this.$router.replace({ name: 'login' });
+        },
         async onDonateOnceTime() {
             if (this.preview) {
                 this.notifyPreviewMode();
                 return;
             }
+            if (this.donateValue <= 0) {
+                dialogs.message(this.$t('tienesQueSeleccionarDonacion'), {
+                    duration: 10,
+                    estado: 'error'
+                });
+                return;
+            }
+            if (this.warnGuestBeforeOnceDonate('once')) {
+                return;
+            }
+            await this.completeOnceCheckout();
+        },
+        async completeOnceCheckout() {
             if (this.donateValue > 0) {
                 try {
                     const url = await startDonationCheckout({
@@ -328,6 +419,12 @@ export default {
                 });
                 return;
             }
+            if (this.warnGuestBeforeOnceDonate('qr')) {
+                return;
+            }
+            await this.completeOnceQrCheckout();
+        },
+        async completeOnceQrCheckout() {
             this.loadingQr = true;
             try {
                 const result = await startDonationQrCheckout({
@@ -397,9 +494,18 @@ export default {
                 console.error('Donation QR status poll failed:', error);
             }
         },
+        redirectToLoginForClub() {
+            this.showClubLoginModal = false;
+            this.$router.rememberRoute = { name: 'donate' };
+            this.$router.replace({ name: 'login' });
+        },
         async onDonateMonthly() {
             if (this.preview) {
                 this.notifyPreviewMode();
+                return;
+            }
+            if (!this.user) {
+                this.showClubLoginModal = true;
                 return;
             }
             if (this.donateValue > 0) {

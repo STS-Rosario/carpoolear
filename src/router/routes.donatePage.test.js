@@ -21,9 +21,9 @@ describe('trip-independent donation page route', () => {
         expect(block).toContain('component: DonationAfterRating');
     });
 
-    it('requires login but no trip, identity validation or complete profile', () => {
+    it('is public so guests can make a one-time aporte, with no trip or profile gates', () => {
         const block = routeBlock('donate');
-        expect(block).toContain('beforeEnter: auth,');
+        expect(block).not.toContain('beforeEnter: auth');
         expect(block).not.toContain(':tripId');
         expect(block).not.toContain('requireIdentityValidation');
         expect(block).not.toContain('profileComplete');
