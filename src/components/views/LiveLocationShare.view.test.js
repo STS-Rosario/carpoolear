@@ -12,6 +12,9 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('copyShareUrl');
         expect(viewSource).toContain('shareLiveUrl');
         expect(viewSource).toContain('shareContent');
+        expect(viewSource).toContain('copyTextToClipboard');
+        expect(viewSource).toContain('dialogs');
+        expect(viewSource).not.toContain('cordova/toast.js');
         expect(viewSource).not.toContain('navigator.share');
         expect(viewSource).toContain('live-location-share__stop');
         expect(viewSource).toMatch(
