@@ -1,6 +1,7 @@
 import { shareContent as defaultShareContent } from './shareContent.js';
 import { buildTripShareMessage } from './tripShareMessage.js';
 import { buildWebAppTripDetailUrl } from './supportTicketTripReport.js';
+import { copyTextToClipboard } from './copyTextToClipboard.js';
 import dialogs from '../services/dialogs.js';
 
 export function buildAbsoluteTripDetailUrl(tripId, env = import.meta.env) {
@@ -9,14 +10,6 @@ export function buildAbsoluteTripDetailUrl(tripId, env = import.meta.env) {
 
 export function buildTripShareClipboardText({ text, url }) {
     return [text, url].filter(Boolean).join('\n\n');
-}
-
-export async function copyTripShareToClipboard({ text, url }) {
-    const clip = buildTripShareClipboardText({ text, url });
-    if (!clip || typeof navigator === 'undefined' || !navigator.clipboard) {
-        throw new Error('clipboard_unavailable');
-    }
-    await navigator.clipboard.writeText(clip);
 }
 
 export async function shareTripDetail({
@@ -48,24 +41,27 @@ export async function shareTripDetail({
         return result;
     }
 
-    try {
-        await copyTripShareToClipboard({ text, url });
-        dialogs.message(translate('liveLocationCopySuccess'), {
-            estado: 'success'
-        });
-        return {
-            ...result,
-            ok: true,
-            method: 'clipboard',
-            copied: true
-        };
-    } catch (error) {
+    const copied = await copyTextToClipboard(
+        buildTripShareClipboardText({ text, url })
+    );
+    if (!copied) {
         if (import.meta.env.DEV) {
-            console.warn('[shareTripDetail] clipboard fallback failed', error);
+            console.warn('[shareTripDetail] clipboard fallback failed');
         }
         return {
             ...result,
+            ok: false,
             reason: result.reason || 'clipboard_failed'
         };
     }
+
+    dialogs.message(translate('liveLocationCopySuccess'), {
+        estado: 'success'
+    });
+    return {
+        ...result,
+        ok: true,
+        method: 'clipboard',
+        copied: true
+    };
 }

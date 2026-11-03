@@ -125,18 +125,11 @@ async function shareViaNavigator({ title, text, url }) {
 
 async function shareViaCapacitor({ title, text, url }) {
     const shareText = text || title || '';
-    const { data } = buildNavigatorSharePayload({ title, text: shareText, url });
-    const sharePayload = data || {
-        title,
-        text: shareText,
-        url
-    };
-
     const { Share } = await import('@capacitor/share');
     await Share.share({
-        title: sharePayload.title ?? title,
-        text: sharePayload.text ?? shareText,
-        url: sharePayload.url ?? url,
+        title,
+        text: shareText,
+        url,
         dialogTitle: title
     });
     return { ok: true, method: 'capacitor' };
@@ -163,17 +156,22 @@ export async function shareContent({ title, text, url }) {
         }
     }
 
+    let lastFailure = null;
+
     if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
         const result = await shareViaNavigator({ title, text: shareText, url });
         if (result.ok || result.cancelled) {
             logShareDevResult(result, 'navigator');
             return result;
         }
+        lastFailure = result;
     } else if (typeof navigator !== 'undefined') {
-        logShareDevResult(
-            { ok: false, method: 'navigator', reason: 'no_share_api' },
-            'navigator'
-        );
+        lastFailure = {
+            ok: false,
+            method: 'navigator',
+            reason: 'no_share_api'
+        };
+        logShareDevResult(lastFailure, 'navigator');
     }
 
     if (hasCordovaSocialShare()) {
@@ -191,7 +189,7 @@ export async function shareContent({ title, text, url }) {
         ok: false,
         cancelled: false,
         method: 'none',
-        reason: 'no_share_api'
+        reason: lastFailure?.reason || 'no_share_api'
     };
     logShareDevResult(result, 'none');
     return result;
