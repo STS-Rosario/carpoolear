@@ -36,12 +36,13 @@ export function hasActiveTicketAssignment(ticket) {
 }
 
 export function shouldShowAssignTicketButton(ticket, adminUserId) {
-    return isTicketAssignableByAdmin(ticket) &&
-        !isTicketAssignedToAdmin(ticket, adminUserId);
-}
-
-export function isAssignTicketDisabled(ticket, adminUserId) {
-    return isReplyBlockedByOtherAdminAssignment(ticket, adminUserId);
+    if (!ticket || isTicketAssignedToAdmin(ticket, adminUserId)) {
+        return false;
+    }
+    if (hasActiveTicketAssignment(ticket)) {
+        return !TERMINAL_STATUSES.includes(ticket.status);
+    }
+    return isTicketAssignableByAdmin(ticket);
 }
 
 export function shouldConfirmReassignBeforeAssign(ticket, adminUserId) {
