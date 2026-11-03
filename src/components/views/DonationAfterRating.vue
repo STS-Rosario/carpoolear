@@ -190,6 +190,26 @@
             </div>
         </div>
         </div>
+        <modal
+            v-if="showClubLoginModal"
+            name="club-carpoolear-login-required"
+            @close="showClubLoginModal = false"
+        >
+            <template #header>
+                <h3>{{ $t('donationAfterRatingJoinAccent') }}</h3>
+            </template>
+            <template #body>
+                <p>{{ $t('donationAfterRatingClubLoginRequired') }}</p>
+            </template>
+            <template #footer>
+                <AppButton
+                    variant="header-donate"
+                    @click="redirectToLoginForClub"
+                >
+                    {{ $t('donationAfterRatingClubLoginOk') }}
+                </AppButton>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -203,6 +223,7 @@ import DonationAmountPicker from '../elements/DonationAmountPicker.vue';
 import DonationAfterRatingHero from '../sections/DonationAfterRatingHero.vue';
 import ManualValidationQrPaymentHelp from '../sections/ManualValidationQrPaymentHelp.vue';
 import AppButton from '../ui/AppButton.vue';
+import modal from '../Modal';
 import {
     fetchDonationPaymentStatus,
     isPlatformDonationsQrEnabled,
@@ -226,7 +247,8 @@ export default {
         DonationAmountPicker,
         DonationAfterRatingHero,
         ManualValidationQrPaymentHelp,
-        AppButton
+        AppButton,
+        modal
     },
     props: {
         /** Set on the after-rating flow; absent on the trip-independent /donate page. */
@@ -250,7 +272,8 @@ export default {
             showQrPanel: false,
             qrImageUrl: null,
             qrPaymentId: null,
-            qrPollIntervalId: null
+            qrPollIntervalId: null,
+            showClubLoginModal: false
         };
     },
     beforeUnmount() {
@@ -397,9 +420,18 @@ export default {
                 console.error('Donation QR status poll failed:', error);
             }
         },
+        redirectToLoginForClub() {
+            this.showClubLoginModal = false;
+            this.$router.rememberRoute = { name: 'donate' };
+            this.$router.replace({ name: 'login' });
+        },
         async onDonateMonthly() {
             if (this.preview) {
                 this.notifyPreviewMode();
+                return;
+            }
+            if (!this.user) {
+                this.showClubLoginModal = true;
                 return;
             }
             if (this.donateValue > 0) {

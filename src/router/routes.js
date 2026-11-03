@@ -231,7 +231,6 @@ export default [
         path: '/donate',
         name: 'donate',
         component: DonationAfterRating,
-        beforeEnter: auth,
         meta: {
             actionbar: {
                 footer: {

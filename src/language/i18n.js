@@ -1475,6 +1475,9 @@ const messages = {
             '{team} (también conocido como “La gente de Carpu”)',
         donationAfterRatingSignOffTeamName: 'Equipo Carpoolear',
         donationAfterRatingContinueWithoutContributing: 'Continuar sin aportar',
+        donationAfterRatingClubLoginRequired:
+            'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
+        donationAfterRatingClubLoginOk: 'Ok',
         clubCarpoolearWelcomePageTitle: 'Club Carpoolear',
         clubCarpoolearWelcomeHeroTitlePrimary: 'Te sumaste',
         clubCarpoolearWelcomeHeroTitleAccent: 'al Club Carpoolear',
@@ -2767,6 +2770,9 @@ const messages = {
         donationAfterRatingJoinCommunityMonthly:
             'Quiero formar parte del Club Carpoolear',
         donationAfterRatingJoinCommunityMonthlyHint: 'cancelá cuando quieras',
+        donationAfterRatingClubLoginRequired:
+            'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
+        donationAfterRatingClubLoginOk: 'Ok',
         donationAfterRatingOnceIntro:
             '¿No podés comprometerte a aportar cada mes? Podés hacerlo por única vez:',
         donationAfterRatingOnceCta: 'Quiero aportar por única vez',
@@ -5687,6 +5693,9 @@ const messages = {
         donationAfterRatingSignOffTeamName: 'The Carpoolear Team',
         donationAfterRatingContinueWithoutContributing:
             'Continue without contributing',
+        donationAfterRatingClubLoginRequired:
+            'To be a Club Carpoolear member you need to be logged in to the app, we will redirect you',
+        donationAfterRatingClubLoginOk: 'Ok',
         clubCarpoolearWelcomePageTitle: 'Carpoolear Club',
         clubCarpoolearWelcomeHeroTitlePrimary: 'You joined',
         clubCarpoolearWelcomeHeroTitleAccent: 'the Carpoolear Club',
