@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/auth';
 import { useRatesStore } from '../stores/rates';
 import { hasRequiredProfileFields } from '../utils/profileRequirements';
 import { INCOMPLETE_PROFILE_UPDATE_ROUTE } from '../utils/tripCreateErrors';
+import { userNeedsIdentityValidation } from '../utils/identityValidationNavigation';
 import {
     PENDING_RATINGS_REDIRECT_ROUTE,
     shouldRedirectForPendingRatings
@@ -13,6 +14,15 @@ import { bannedUserRedirectLocation } from '../utils/bannedUserAccess.js';
 
 function getAuthStore () {
     return useAuthStore();
+}
+
+function abortToIncompleteProfile(to, next) {
+    router.rememberRoute = {
+        name: to.name,
+        params: to.params
+    };
+    next(false);
+    router.replace(INCOMPLETE_PROFILE_UPDATE_ROUTE);
 }
 
 export function auth(to, from, next) {
@@ -73,27 +83,7 @@ export function requireIdentityValidation(to, from, next) {
     const config = authStore.appConfig;
     const user = authStore.user;
 
-    const enforced =
-        config &&
-        config.identity_validation_enabled === true &&
-        config.identity_validation_optional !== true;
-
-    // Check if user needs validation (either new user flag or past deadline for current users)
-    let needsValidation = false;
-    if (enforced && user) {
-        if (user.identity_validation_required_for_user && !user.identity_validated) {
-            needsValidation = true;
-        } else if (user.validate_by_date && !user.identity_validated) {
-            // Check if deadline has passed for current users
-            const [y, m, d] = user.validate_by_date.split('-').map(Number);
-            const deadlineEndOfDay = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
-            if (Date.now() >= deadlineEndOfDay) {
-                needsValidation = true;
-            }
-        }
-    }
-
-    if (needsValidation) {
+    if (userNeedsIdentityValidation(user, config)) {
         next(false);
         router.replace({ name: 'identity_validation' });
         return;
@@ -118,24 +108,31 @@ export function requirePendingRatingsSubmission(to, from, next) {
 }
 
 export function requireIdentityPendingRatingsAndProfile(to, from, next) {
+    const user = getAuthStore().user;
+    if (!hasRequiredProfileFields(user)) {
+        abortToIncompleteProfile(to, next);
+        return;
+    }
     requireIdentityValidation(to, from, () => {
-        requirePendingRatingsSubmission(to, from, () => {
-            profileComplete(to, from, next);
-        });
+        requirePendingRatingsSubmission(to, from, next);
     });
+}
+
+/** Profile complete, then identity validation (no pending-ratings check). */
+export function requireProfileThenIdentityValidation(to, from, next) {
+    const user = getAuthStore().user;
+    if (!hasRequiredProfileFields(user)) {
+        abortToIncompleteProfile(to, next);
+        return;
+    }
+    requireIdentityValidation(to, from, next);
 }
 
 export function profileComplete(to, from, next) {
     const user = getAuthStore().user;
     if (!hasRequiredProfileFields(user)) {
-        router.rememberRoute = {
-            name: to.name,
-            params: to.params
-        };
-        console.log('problem');
-        next(false);
-        router.replace(INCOMPLETE_PROFILE_UPDATE_ROUTE);
-    } else {
-        next();
+        abortToIncompleteProfile(to, next);
+        return;
     }
+    next();
 }

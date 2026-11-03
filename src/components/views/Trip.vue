@@ -529,6 +529,7 @@ import {
     shouldShowUnLitroOwnerPaymentBanner
 } from '../../utils/tripSelladoDisplay.js';
 import { formatPesoIntegerFromCents } from '../../utils/tripContributionDisplay.js';
+import { redirectOnIdentityValidationRequiredError } from '../../utils/identityValidationNavigation.js';
 import UserApi from '../../services/api/User';
 import TripApi from '../../services/api/Trips.js';
 import TripDriver from '../elements/TripDriver';
@@ -838,7 +839,9 @@ export default {
                     })
                     .catch((error) => {
                         if (this.$checkError(error, 'identity_validation_required')) {
-                            this.$router.push({ name: 'identity_validation' });
+                            if (!redirectOnIdentityValidationRequiredError(this.$router)) {
+                                this.$router.push({ name: 'identity_validation' });
+                            }
                             dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
                                 estado: 'error'
                             });

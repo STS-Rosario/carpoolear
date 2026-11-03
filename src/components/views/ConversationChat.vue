@@ -178,6 +178,7 @@ import {
     getOtherParticipantRatings
 } from '../../utils/conversationOtherUserRatings.js';
 import { buildMessagesWithDaySeparators } from '../../utils/chatMessageDaySeparators.js';
+import { redirectOnIdentityValidationRequiredError } from '../../utils/identityValidationNavigation.js';
 
 export default {
     name: 'conversation-chat',
@@ -345,7 +346,9 @@ export default {
                     })
                     .catch((err) => {
                         if (this.$checkError(err, 'identity_validation_required')) {
-                            this.$router.push({ name: 'identity_validation' });
+                            if (!redirectOnIdentityValidationRequiredError(this.$router)) {
+                                this.$router.push({ name: 'identity_validation' });
+                            }
                             dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
                                 estado: 'error'
                             });

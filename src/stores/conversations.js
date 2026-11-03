@@ -7,6 +7,8 @@ import { isEnabledAsync } from '../services/debug';
 import dialogs from '../services/dialogs.js';
 import i18n from '../i18n';
 import { fireLazyRouterPush, lazyRouterPush } from '../utils/routerLazy.js';
+import { getIdentityValidationRedirectRoute } from '../utils/identityValidationNavigation.js';
+import { useAuthStore } from './auth';
 
 const conversationApi = new ConversationApi();
 const pageSize = 20;
@@ -221,17 +223,13 @@ export const useConversationsStore = defineStore('conversations', {
         },
 
         async createConversation(param) {
-            // Inline identity validation check (replaces redirectToIdentityValidationIfRequired)
-            const { useAuthStore } = await import('./auth');
             const authStore = useAuthStore();
-            const config = authStore.appConfig;
-            const currentUser = authStore.user;
-            const identityEnforced =
-                config &&
-                config.identity_validation_enabled === true &&
-                config.identity_validation_optional !== true;
-            if (identityEnforced && currentUser && currentUser.identity_validation_required_for_user && !currentUser.identity_validated) {
-                await lazyRouterPush({ name: 'identity_validation' });
+            const identityRedirect = getIdentityValidationRedirectRoute(
+                authStore.user,
+                authStore.appConfig
+            );
+            if (identityRedirect) {
+                await lazyRouterPush(identityRedirect);
                 return Promise.resolve();
             }
 
@@ -259,7 +257,14 @@ export const useConversationsStore = defineStore('conversations', {
                 .catch((error) => {
                     console.log(error);
                     if (checkError(error, 'identity_validation_required')) {
-                        fireLazyRouterPush({ name: 'identity_validation' });
+                        const authStore = useAuthStore();
+                        const identityRedirect = getIdentityValidationRedirectRoute(
+                            authStore.user,
+                            authStore.appConfig
+                        );
+                        fireLazyRouterPush(
+                            identityRedirect || { name: 'identity_validation' }
+                        );
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
@@ -455,7 +460,14 @@ export const useConversationsStore = defineStore('conversations', {
                 })
                 .catch((error) => {
                     if (checkError(error, 'identity_validation_required')) {
-                        fireLazyRouterPush({ name: 'identity_validation' });
+                        const authStore = useAuthStore();
+                        const identityRedirect = getIdentityValidationRedirectRoute(
+                            authStore.user,
+                            authStore.appConfig
+                        );
+                        fireLazyRouterPush(
+                            identityRedirect || { name: 'identity_validation' }
+                        );
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
