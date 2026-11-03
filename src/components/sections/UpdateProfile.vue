@@ -138,9 +138,24 @@
                     <p class="form-group">
                         {{ $t('siSosConductorDatosVisibles') }}
                     </p>
+                    <AppField>
+                        <template #label>
+                            {{ $t('tipoDocumento') }}
+                            <span
+                                class="required-field-flag"
+                                :title="$t('tituloCampoRequerido')"
+                                >(*)</span
+                            >
+                        </template>
+                        <AppSegmentToggle
+                            v-model="documentType"
+                            :options="documentTypeOptions"
+                        />
+                    </AppField>
                     <AppInput
                         id="input-dni"
-                        type="tel"
+                        :type="documentIdInputType"
+                        :class="documentIdInputClass"
                         :model-value="user.nro_doc"
                         @update:modelValue="onDniModelUpdate"
                         :placeholder="documentIdPlaceholder"
@@ -157,7 +172,6 @@
                                 >(*)</span
                             >
                             <span class="description">
-                                {{ $t('numeroDniOPasaporte') }}.
                                 {{ $t('incentivoDoc') }}
                                 <span v-if="documentIdPlaceholder">
                                     ({{ documentIdPlaceholder }})
@@ -621,12 +635,15 @@ import { useDeviceStore } from '../../stores/device';
 import { useProfileStore } from '../../stores/profile';
 import { inputIsNumber } from '../../services/utility';
 import {
+    DOCUMENT_TYPE_DNI,
+    DOCUMENT_TYPE_PASSPORT,
     cleanDocumentIdForStorageFromConfig,
     formatDocumentIdFromConfig,
     formatDocumentIdInput,
-    getDocumentIdPlaceholderFromConfig,
     getMaxDocumentIdInputLengthFromConfig,
+    inferDocumentType,
     isValidDocumentIdForConfig,
+    resolveDniFormats,
     resolveProfileIdFormats
 } from '../../utils/documentId';
 import Uploadfile from '../Uploadfile';
@@ -639,6 +656,7 @@ import Spinner from '../Spinner.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
+import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
 import { UserApi } from '../../services/api';
@@ -695,7 +713,8 @@ export default {
             showBannedDniModal: false,
             showNegativeRatingsInModal: false,
             showMesaAyudaModal: false,
-            userApi: null
+            userApi: null,
+            documentType: DOCUMENT_TYPE_DNI
         };
     },
     computed: {
@@ -709,11 +728,30 @@ export default {
         ...mapState(useDeviceStore, {
             isMobile: 'isMobile'
         }),
+        documentTypeOptions() {
+            return [
+                { value: DOCUMENT_TYPE_DNI, label: this.$t('doc') },
+                { value: DOCUMENT_TYPE_PASSPORT, label: this.$t('pasaporte') }
+            ];
+        },
         documentIdMaxLength() {
-            return getMaxDocumentIdInputLengthFromConfig(this.config);
+            return getMaxDocumentIdInputLengthFromConfig(this.config, {
+                type: this.documentType
+            });
         },
         documentIdPlaceholder() {
-            return getDocumentIdPlaceholderFromConfig(this.config);
+            if (this.documentType === DOCUMENT_TYPE_PASSPORT) {
+                return 'ABC12345';
+            }
+            return resolveDniFormats(this.config).join(' / ');
+        },
+        documentIdInputType() {
+            return this.documentType === DOCUMENT_TYPE_PASSPORT ? 'text' : 'tel';
+        },
+        documentIdInputClass() {
+            return this.documentType === DOCUMENT_TYPE_PASSPORT
+                ? 'app-input--document-id-passport'
+                : '';
         },
         iptUser() {
             if (this.user) {
@@ -799,10 +837,15 @@ export default {
             if (this.user && this.user.show_club_carpoolear_membership === undefined) {
                 this.user.show_club_carpoolear_membership = 1;
             }
+            this.documentType = inferDocumentType(
+                this.user && this.user.nro_doc,
+                resolveProfileIdFormats(this.config)
+            );
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = formatDocumentIdFromConfig(
                     this.user.nro_doc,
-                    this.config
+                    this.config,
+                    { type: this.documentType }
                 );
             }
         },
@@ -846,7 +889,8 @@ export default {
         onDniModelUpdate(value) {
             this.user.nro_doc = formatDocumentIdInput(
                 value,
-                resolveProfileIdFormats(this.config)
+                resolveProfileIdFormats(this.config),
+                { type: this.documentType }
             );
         },
         onPhotoChange(data) {
@@ -891,7 +935,8 @@ export default {
             if (this.user && this.user.nro_doc) {
                 this.user.nro_doc = cleanDocumentIdForStorageFromConfig(
                     this.user.nro_doc,
-                    this.config
+                    this.config,
+                    { type: this.documentType }
                 );
             }
             // Only send properties the backend allows for profile edit (email is read-only)
@@ -1069,14 +1114,20 @@ export default {
 
             // Get raw DNI value (strip any dots that might be present)
             const dniRaw = this.user && this.user.nro_doc
-                ? cleanDocumentIdForStorageFromConfig(this.user.nro_doc, this.config)
+                ? cleanDocumentIdForStorageFromConfig(
+                    this.user.nro_doc,
+                    this.config,
+                    { type: this.documentType }
+                )
                 : '';
 
             if (!dniRaw || dniRaw.length < 1) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('olvidasteDni');
                 globalError = true;
-            } else if (!isValidDocumentIdForConfig(this.user.nro_doc, this.config)) {
+            } else if (!isValidDocumentIdForConfig(this.user.nro_doc, this.config, {
+                type: this.documentType
+            })) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
@@ -1243,6 +1294,15 @@ export default {
         iptDni() {
             this.dniError.state = false;
         },
+        documentType(type) {
+            if (this.user && this.user.nro_doc) {
+                this.user.nro_doc = formatDocumentIdInput(
+                    this.user.nro_doc,
+                    resolveProfileIdFormats(this.config),
+                    { type }
+                );
+            }
+        },
         iptPhone() {
             this.phoneError.state = false;
         },
@@ -1302,6 +1362,7 @@ export default {
         AppButton,
         AppField,
         AppInput,
+        AppSegmentToggle,
         AppTextarea,
         modal
     }

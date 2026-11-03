@@ -89,6 +89,10 @@ textarea.app-input__control {
     font-size: var(--ds-input-font-size);
 }
 
+.app-input--document-id-passport {
+    text-transform: uppercase;
+}
+
 .app-input--error .app-input__control {
     border-color: var(--ds-input-error-border);
 }

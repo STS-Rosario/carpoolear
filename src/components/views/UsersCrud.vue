@@ -92,9 +92,19 @@
                                 </template>
                             </AppInput>
 
+                            <AppField>
+                                <template #label>
+                                    {{ $t('tipoDocumento') }}
+                                </template>
+                                <AppSegmentToggle
+                                    v-model="documentType"
+                                    :options="documentTypeOptions"
+                                />
+                            </AppField>
                             <AppInput
                                 id="input-dni"
-                                type="tel"
+                                :type="documentIdInputType"
+                                :class="documentIdInputClass"
                                 :model-value="newInfo.nro_doc"
                                 @update:modelValue="onDniModelUpdate"
                                 :placeholder="documentIdPlaceholder"
@@ -412,12 +422,15 @@ import { useProfileStore } from '../../stores/profile';
 import { Thread } from '../../classes/Threads.js';
 import { inputIsNumber } from '../../services/utility';
 import {
+    DOCUMENT_TYPE_DNI,
+    DOCUMENT_TYPE_PASSPORT,
     cleanDocumentIdForStorageFromConfig,
     formatDocumentIdFromConfig,
     formatDocumentIdInput,
-    getDocumentIdPlaceholderFromConfig,
     getMaxDocumentIdInputLengthFromConfig,
+    inferDocumentType,
     isValidDocumentIdForConfig,
+    resolveDniFormats,
     resolveProfileIdFormats
 } from '../../utils/documentId';
 import { normalizeFacebookProfileUrl } from '../../utils/facebookProfileUrl.js';
@@ -426,6 +439,7 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
+import AppSegmentToggle from '../ui/AppSegmentToggle.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
 import modal from '../Modal';
 import Spinner from '../Spinner.vue';
@@ -478,7 +492,8 @@ export default {
             loadingAction: false,
             adminApi: null,
             banNote: '',
-            clearingIdentity: false
+            clearingIdentity: false,
+            documentType: DOCUMENT_TYPE_DNI
         };
     },
 
@@ -490,11 +505,30 @@ export default {
             settings: 'appConfig',
             authUser: 'user'
         }),
+        documentTypeOptions() {
+            return [
+                { value: DOCUMENT_TYPE_DNI, label: this.$t('doc') },
+                { value: DOCUMENT_TYPE_PASSPORT, label: this.$t('pasaporte') }
+            ];
+        },
         documentIdMaxLength() {
-            return getMaxDocumentIdInputLengthFromConfig(this.settings);
+            return getMaxDocumentIdInputLengthFromConfig(this.settings, {
+                type: this.documentType
+            });
         },
         documentIdPlaceholder() {
-            return getDocumentIdPlaceholderFromConfig(this.settings);
+            if (this.documentType === DOCUMENT_TYPE_PASSPORT) {
+                return 'ABC12345';
+            }
+            return resolveDniFormats(this.settings).join(' / ');
+        },
+        documentIdInputType() {
+            return this.documentType === DOCUMENT_TYPE_PASSPORT ? 'text' : 'tel';
+        },
+        documentIdInputClass() {
+            return this.documentType === DOCUMENT_TYPE_PASSPORT
+                ? 'app-input--document-id-passport'
+                : '';
         },
         confirmModalTitle() {
             if (this.pendingAction === 'delete') return this.$t('confirmarEliminarUsuario');
@@ -626,11 +660,16 @@ export default {
                 identity_validated: this.currentUser.identity_validated,
                 identity_validated_at: this.currentUser.identity_validated_at
             };
+            this.documentType = inferDocumentType(
+                nroDocRaw,
+                resolveProfileIdFormats(this.settings)
+            );
             // Format nro_doc for display after loading
             if (this.newInfo.nro_doc) {
                 this.newInfo.nro_doc = formatDocumentIdFromConfig(
                     nroDocRaw,
-                    this.settings
+                    this.settings,
+                    { type: this.documentType }
                 );
             }
         },
@@ -641,7 +680,8 @@ export default {
         onDniModelUpdate(value) {
             this.newInfo.nro_doc = formatDocumentIdInput(
                 value,
-                resolveProfileIdFormats(this.settings)
+                resolveProfileIdFormats(this.settings),
+                { type: this.documentType }
             );
         },
 
@@ -666,6 +706,7 @@ export default {
                 patente: '',
                 facebook_profile_url: ''
             };
+            this.documentType = DOCUMENT_TYPE_DNI;
         },
         clear() {
             this.resetUserState();
@@ -784,7 +825,11 @@ export default {
                 globalError = true;
             } */
 
-            if (this.newInfo.nro_doc && !isValidDocumentIdForConfig(this.newInfo.nro_doc, this.settings)) {
+            if (this.newInfo.nro_doc && !isValidDocumentIdForConfig(
+                this.newInfo.nro_doc,
+                this.settings,
+                { type: this.documentType }
+            )) {
                 this.dniError.state = true;
                 this.dniError.message = this.$t('dniNoValido');
                 globalError = true;
@@ -814,7 +859,8 @@ export default {
                 const nroDocRaw = this.newInfo.nro_doc
                     ? cleanDocumentIdForStorageFromConfig(
                         this.newInfo.nro_doc,
-                        this.settings
+                        this.settings,
+                        { type: this.documentType }
                     )
                     : this.newInfo.nro_doc;
 
@@ -884,6 +930,15 @@ export default {
         },
         'newInfo.patente': function () {
             this.patenteError.state = false;
+        },
+        documentType(type) {
+            if (this.newInfo && this.newInfo.nro_doc) {
+                this.newInfo.nro_doc = formatDocumentIdInput(
+                    this.newInfo.nro_doc,
+                    resolveProfileIdFormats(this.settings),
+                    { type }
+                );
+            }
         }
     },
 
@@ -923,6 +978,7 @@ export default {
         AppButton,
         AppField,
         AppInput,
+        AppSegmentToggle,
         AppTextarea,
         modal,
         Spinner
