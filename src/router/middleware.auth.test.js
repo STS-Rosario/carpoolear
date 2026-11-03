@@ -25,14 +25,19 @@ describe('auth middleware guest trip detail access', () => {
         const router = (await import('../router')).default;
         const { auth } = await import('./middleware.js');
         const next = vi.fn();
-        const to = { name: 'detail_trip', params: { id: '42' } };
+        const to = {
+            name: 'detail_trip',
+            params: { id: '42' },
+            query: { ref: 'search' }
+        };
 
         auth(to, {}, next);
 
         expect(next).toHaveBeenCalledWith(false);
         expect(router.rememberRoute).toEqual({
             name: 'detail_trip',
-            params: { id: '42' }
+            params: { id: '42' },
+            query: { ref: 'search' }
         });
         expect(replace).toHaveBeenCalledWith({ name: 'login' });
     });

@@ -16,11 +16,16 @@ function getAuthStore () {
     return useAuthStore();
 }
 
-function abortToIncompleteProfile(to, next) {
+function rememberRouteFromTo(to) {
     router.rememberRoute = {
         name: to.name,
-        params: to.params
+        params: to.params,
+        query: to.query
     };
+}
+
+function abortToIncompleteProfile(to, next) {
+    rememberRouteFromTo(to);
     next(false);
     router.replace(INCOMPLETE_PROFILE_UPDATE_ROUTE);
 }
@@ -30,10 +35,7 @@ export function auth(to, from, next) {
         next();
     } else {
         next(false);
-        router.rememberRoute = {
-            name: to.name,
-            params: to.params
-        };
+        rememberRouteFromTo(to);
         router.replace({ name: 'login' });
     }
 }
@@ -52,10 +54,7 @@ export function authAdmin(to, from, next) {
         next();
     } else {
         next(false);
-        router.rememberRoute = {
-            name: to.name,
-            params: to.params
-        };
+        rememberRouteFromTo(to);
         router.replace({ name: 'login' });
     }
 }
@@ -108,20 +107,24 @@ export function requirePendingRatingsSubmission(to, from, next) {
 }
 
 export function requireIdentityPendingRatingsAndProfile(to, from, next) {
-    const user = getAuthStore().user;
-    if (!hasRequiredProfileFields(user)) {
+    const authStore = getAuthStore();
+    const user = authStore.user;
+    if (user && !hasRequiredProfileFields(user)) {
         abortToIncompleteProfile(to, next);
         return;
     }
-    requireIdentityValidation(to, from, () => {
-        requirePendingRatingsSubmission(to, from, next);
-    });
+    if (userNeedsIdentityValidation(user, authStore.appConfig)) {
+        next(false);
+        router.replace({ name: 'identity_validation' });
+        return;
+    }
+    requirePendingRatingsSubmission(to, from, next);
 }
 
 /** Profile complete, then identity validation (no pending-ratings check). */
 export function requireProfileThenIdentityValidation(to, from, next) {
     const user = getAuthStore().user;
-    if (!hasRequiredProfileFields(user)) {
+    if (user && !hasRequiredProfileFields(user)) {
         abortToIncompleteProfile(to, next);
         return;
     }
@@ -130,7 +133,7 @@ export function requireProfileThenIdentityValidation(to, from, next) {
 
 export function profileComplete(to, from, next) {
     const user = getAuthStore().user;
-    if (!hasRequiredProfileFields(user)) {
+    if (user && !hasRequiredProfileFields(user)) {
         abortToIncompleteProfile(to, next);
         return;
     }

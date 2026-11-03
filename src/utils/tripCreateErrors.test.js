@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
 import {
     INCOMPLETE_PROFILE_UPDATE_ROUTE,
     isProfileRequiredTripError,
@@ -48,6 +49,10 @@ describe('tripCreateErrors', () => {
 });
 
 describe('resolveTripCreateError', () => {
+    beforeEach(() => {
+        setActivePinia(createPinia());
+    });
+
     it('maps identity validation errors to a redirect and specific message', () => {
         const error = {
             status: 422,
@@ -59,6 +64,33 @@ describe('resolveTripCreateError', () => {
             redirectTo: { name: 'identity_validation' }
         });
         expect(checkError(error, 'identity_validation_required')).toBe(true);
+    });
+
+    it('maps identity validation errors to profile when user profile is incomplete', async () => {
+        const { useAuthStore } = await import('../stores/auth');
+        const authStore = useAuthStore();
+        authStore.user = {
+            image: '',
+            description: 'x',
+            nro_doc: '123',
+            mobile_phone: '341',
+            identity_validation_required_for_user: true,
+            identity_validated: false
+        };
+        authStore.appConfig = {
+            identity_validation_enabled: true,
+            identity_validation_optional: false
+        };
+
+        const error = {
+            status: 422,
+            data: { errors: { error: ['identity_validation_required'] } }
+        };
+
+        expect(resolveTripCreateError(error)).toEqual({
+            messageKey: 'debesValidarIdentidadParaAccion',
+            redirectTo: INCOMPLETE_PROFILE_UPDATE_ROUTE
+        });
     });
 
     it('maps driver verification errors to tienesQueSerConductor', () => {

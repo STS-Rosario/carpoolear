@@ -13,6 +13,15 @@ import { useAuthStore } from './auth';
 const conversationApi = new ConversationApi();
 const pageSize = 20;
 
+function redirectForIdentityValidationRequiredError() {
+    const authStore = useAuthStore();
+    const route = getIdentityValidationRedirectRoute(
+        authStore.user,
+        authStore.appConfig
+    );
+    fireLazyRouterPush(route || { name: 'identity_validation' });
+}
+
 /** Normalise conversation/message id to number for consistent comparison. */
 function normalizeId(id) {
     if (id == null || id === '') return null;
@@ -257,14 +266,7 @@ export const useConversationsStore = defineStore('conversations', {
                 .catch((error) => {
                     console.log(error);
                     if (checkError(error, 'identity_validation_required')) {
-                        const authStore = useAuthStore();
-                        const identityRedirect = getIdentityValidationRedirectRoute(
-                            authStore.user,
-                            authStore.appConfig
-                        );
-                        fireLazyRouterPush(
-                            identityRedirect || { name: 'identity_validation' }
-                        );
+                        redirectForIdentityValidationRequiredError();
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });
@@ -460,14 +462,7 @@ export const useConversationsStore = defineStore('conversations', {
                 })
                 .catch((error) => {
                     if (checkError(error, 'identity_validation_required')) {
-                        const authStore = useAuthStore();
-                        const identityRedirect = getIdentityValidationRedirectRoute(
-                            authStore.user,
-                            authStore.appConfig
-                        );
-                        fireLazyRouterPush(
-                            identityRedirect || { name: 'identity_validation' }
-                        );
+                        redirectForIdentityValidationRequiredError();
                         dialogs.message(i18n.global.t('debesValidarIdentidadParaAccion'), {
                             estado: 'error'
                         });

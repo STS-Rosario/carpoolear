@@ -45,6 +45,12 @@ describe('identityValidationNavigation', () => {
         ).toBeNull();
     });
 
+    it('returns null when user is not loaded yet', () => {
+        expect(getIdentityValidationRedirectRoute(null, enforcedConfig)).toBeNull();
+        expect(getIdentityValidationRedirectRoute(undefined, enforcedConfig)).toBeNull();
+        expect(shouldBlockForIncompleteProfile(null)).toBe(false);
+    });
+
     it('redirectIfIdentityValidationRequired navigates with replace when asked', () => {
         const router = { push: vi.fn(), replace: vi.fn() };
         const incomplete = { ...completeUser, mobile_phone: '' };

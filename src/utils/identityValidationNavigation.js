@@ -3,7 +3,7 @@ import { hasRequiredProfileFields } from './profileRequirements';
 import { INCOMPLETE_PROFILE_UPDATE_ROUTE } from './tripCreateErrors';
 
 export function shouldBlockForIncompleteProfile(user) {
-    return !hasRequiredProfileFields(user);
+    return Boolean(user) && !hasRequiredProfileFields(user);
 }
 
 export function userNeedsIdentityValidation(user, config) {
@@ -39,6 +39,9 @@ export function userNeedsIdentityValidation(user, config) {
  * @returns {object|null} vue-router location or null
  */
 export function getIdentityValidationRedirectRoute(user, config) {
+    if (!user) {
+        return null;
+    }
     if (shouldBlockForIncompleteProfile(user)) {
         return INCOMPLETE_PROFILE_UPDATE_ROUTE;
     }

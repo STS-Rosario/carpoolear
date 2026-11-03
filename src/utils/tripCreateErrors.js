@@ -1,4 +1,6 @@
 import { checkError } from '../../utils/helpers.js';
+import { useAuthStore } from '../stores/auth';
+import { getIdentityValidationRedirectRoute } from './identityValidationNavigation.js';
 import { getApiErrorMessage, isOfflineApiError } from './apiErrors.js';
 import { logGenericApiErrorForDebug } from './clientErrorReporting.js';
 import { isServerUnavailableApiError } from './serverErrors.js';
@@ -40,9 +42,15 @@ export function resolveTripCreateError(error) {
     }
 
     if (checkError(error, 'identity_validation_required')) {
+        const authStore = useAuthStore();
+        const redirectTo =
+            getIdentityValidationRedirectRoute(
+                authStore.user,
+                authStore.appConfig
+            ) || { name: 'identity_validation' };
         return {
             messageKey: 'debesValidarIdentidadParaAccion',
-            redirectTo: { name: 'identity_validation' }
+            redirectTo
         };
     }
 
