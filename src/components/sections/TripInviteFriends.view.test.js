@@ -42,9 +42,35 @@ describe('TripInviteFriends.vue', () => {
         expect(componentSource).toContain('inviteAllFriends');
     });
 
+    it('keeps the invite-all checkbox in normal flow so the box is not cropped', () => {
+        expect(componentSource).not.toMatch(
+            /class="checkbox"[\s\S]*invitarATodosMisAmigos/
+        );
+        expect(componentSource).toMatch(
+            /trip-invite-friends__all[\s\S]*invitarATodosMisAmigos/
+        );
+        expect(componentSource).toMatch(
+            /v-for="friend in friends"[\s\S]*trip-invite-friends__friend/
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__list input\[type="checkbox"\]\s*\{[^}]*transform:\s*none/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__all\s*\{[^}]*padding-left:/s
+        );
+        expect(componentSource).toMatch(
+            /\.trip-invite-friends__friend\s*\{[^}]*padding-left:/s
+        );
+    });
+
     it('submits selected friends through TripApi inviteFriends', () => {
         expect(componentSource).toContain('inviteFriends');
         expect(componentSource).toContain('onSubmit');
+        const submitButton = componentSource.match(
+            /data-testid="trip-invite-friends-submit"[\s\S]*?<\/AppButton>/
+        )[0];
+        expect(submitButton).toContain("$t('invitar')");
+        expect(submitButton).not.toContain("$t('invitarAmigos')");
     });
 
     it('emits close instead of persisting dismiss preference', () => {
@@ -72,25 +98,10 @@ describe('Trip.vue TripInviteFriends integration', () => {
 });
 
 describe('TripSeats.vue TripInviteFriends integration', () => {
-    it('shows invite button and modal below available seats for upcoming owner trips', () => {
-        expect(tripSeatsSource).toContain('canInviteFriendsToTrip');
-        expect(tripSeatsSource).toContain('isUpcomingTrip');
-        expect(tripSeatsSource).toContain('showInviteFriendsModal');
-        expect(tripSeatsSource).toContain("$t('invitarAmigosAlViaje')");
-        expect(tripSeatsSource).toContain('maybeOpenInviteFriendsFromQuery');
-        expect(tripSeatsSource).toMatch(
-            /trip-seats__availability[\s\S]*?trip-invite-friends-trigger/
-        );
-    });
-
-    it('auto-opens invite modal only from inviteFriends query param', () => {
-        expect(tripSeatsSource).toContain("query.inviteFriends !== '1'");
-        expect(tripSeatsSource).toContain('delete nextQuery.inviteFriends');
-    });
-
-    it('closes invite modal through TripInviteFriends close emit', () => {
-        expect(tripSeatsSource).toContain('@close="onInviteFriendsModalClose"');
-        expect(tripSeatsSource).not.toContain('close-behavior="trip-detail"');
+    it('does not keep invite friends on seats after trip-detail redesign', () => {
+        expect(tripSeatsSource).not.toContain('canInviteFriendsToTrip');
+        expect(tripSeatsSource).not.toContain('showInviteFriendsModal');
+        expect(tripSeatsSource).not.toContain("$t('invitarAmigosAlViaje')");
     });
 });
 

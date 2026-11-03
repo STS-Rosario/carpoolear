@@ -124,7 +124,7 @@ export default {
         },
         calculadoEnBaseNaftaDescription() {
             const base = this.$t('calculadoEnBaseNaftaBase');
-            if (this.config && this.config.module_trip_creation_payment_enabled) {
+            if (this.trip && this.trip.needs_sellado) {
                 return base + this.$t('calculadoEnBaseNaftaSelladoSuffix');
             }
             return base;
@@ -158,8 +158,9 @@ export default {
             const fuelPrice = this.config.module_max_price_fuel_price || 1500; // $/l
             const kilometersPerLiter = this.config.module_max_price_kilometer_by_liter || 10; // km/l
             const pricePerKilometer = fuelPrice / kilometersPerLiter; // $/km
-            const selladoViajePrice = this.config.module_trip_creation_payment_enabled ?
-                (this.config.module_trip_creation_payment_amount_cents || 0) / 100 : 0;
+            const selladoViajePrice = this.trip.needs_sellado
+                ? (this.config.module_trip_creation_payment_amount_cents || 0) / 100
+                : 0;
             const tollsVariancePercent = this.config.module_max_price_price_variance_tolls || 0;
             const distanceInKm = this.trip.distance / 1000;
             const basePriceCents = Math.round(distanceInKm * pricePerKilometer * 100);

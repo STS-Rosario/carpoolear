@@ -198,6 +198,10 @@
       background: rgba(240, 173, 78, 0.95);
       color: #333;
   }
+  .alertify-notifier .ajs-message.ajs-info {
+      background: var(--ds-info-bg);
+      color: var(--ds-text-primary);
+  }
   .alert-icon {
       width: 40px;
       float:left;

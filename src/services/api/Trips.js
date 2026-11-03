@@ -86,6 +86,12 @@ class TripApi extends TaggedApi {
     createSelladoQrOrder(tripId) {
         return this.post('/api/trips/' + tripId + '/sellado/qr-order');
     }
+
+    syncSelladoPayment(tripId, paymentId) {
+        return this.post('/api/trips/' + tripId + '/sellado/sync-payment', {
+            payment_id: paymentId
+        });
+    }
 }
 
 export { TripApi as default };

@@ -5,7 +5,8 @@ const EDIT_STEP_BY_SECTION = {
     vehicle: STEP.CAR,
     seats: STEP.SEATS,
     contribution: STEP.CONTRIBUTION,
-    preferences: STEP.DESCRIPTION
+    preferences: STEP.DESCRIPTION,
+    description: STEP.DESCRIPTION
 };
 
 export function getTripReviewEditStep(section) {

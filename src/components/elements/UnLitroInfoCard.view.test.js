@@ -12,7 +12,12 @@ function mountCard(props = {}) {
             ...props
         },
         global: {
-            plugins: [i18n]
+            plugins: [i18n],
+            stubs: {
+                RouterLink: {
+                    template: '<a><slot /></a>'
+                }
+            }
         }
     });
 }
@@ -27,6 +32,30 @@ describe('UnLitroInfoCard', () => {
         );
         expect(wrapper.text()).toContain('¿Qué es esto?');
         expect(wrapper.text()).not.toContain('Este viaje es bonificado');
+    });
+
+    it('promotes Club Carpoolear after Qué es esto when Un litro is charged', () => {
+        const wrapper = mountCard({ charged: true });
+
+        expect(wrapper.text()).toContain(
+            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!'
+        );
+        const promo = wrapper.get('[data-testid="un-litro-club-promo"]');
+        expect(promo.find('img').attributes('src')).toContain(
+            'badges/club-carpoolear.png'
+        );
+    });
+
+    it('does not show the Club Carpoolear promo on bonificado cards', () => {
+        const wrapper = mountCard({
+            charged: false,
+            remainingFreeTrips: 1
+        });
+
+        expect(wrapper.text()).not.toContain('Si sos parte del Club Carpoolear');
+        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
+            false
+        );
     });
 
     it('shows Bonificado when sellado is enabled but this trip does not pay it', () => {

@@ -667,6 +667,8 @@ const messages = {
         unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
             'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
+        unLitroClubMemberPromo:
+            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -746,7 +748,7 @@ const messages = {
             'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
         tripContributionBreakdownTolls:
             'Estimación de peajes: $ {amount} ({percent}%)',
-        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSellado: 'Un litro para Carpoolear: $ {amount}',
         tripContributionBreakdownSelladoBonificado: 'Bonificado',
         tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
         tripContributionBreakdownTotalWithSellado:
@@ -784,6 +786,7 @@ const messages = {
         tripReviewSectionSeats: 'Lugares disponibles',
         tripReviewSectionContribution: 'Aporte',
         tripReviewSectionPreferences: 'Preferencias',
+        tripReviewSectionDescription: 'Descripción',
         tripReviewSeatsCount: '{count} lugares',
         tripReviewContributionPerPerson: 'Contribución por persona',
         tripReviewPrefKids: 'Infancias',
@@ -847,6 +850,7 @@ const messages = {
         cerrarSesion: 'Cerrar sesión',
         pedidosDeEliminacionDeCuenta: 'Pedidos de eliminación de cuenta',
         invitarAmigos: 'Invitar a amistades',
+        invitar: 'Invitar',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
             'No recibir más alertas de viaje de {name}',
@@ -862,7 +866,7 @@ const messages = {
         invitarATodosMisAmigos: 'Invitar a todas mis amistades',
         invitarAmigosAlViaje: 'Invitar amistades al viaje',
         invitarAmigosSelladoPendiente:
-            'Una vez que pagues el sellado vas a poder invitar a tus amistades',
+            'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
         viajesDeMisAmigos: 'Viajes de mis amistades',
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
@@ -920,14 +924,14 @@ const messages = {
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
-        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoTitulo: 'Verificación Automática',
         identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
-            'Luego de verificar, podés eliminar la integración con MP',
-        identidadModalManualTitulo: 'Verificación manual',
+            'Luego de verificar, podés eliminar la integración con MP.',
+        identidadModalManualTitulo: 'Verificación Manual',
         identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -954,7 +958,7 @@ const messages = {
         identityValidationPageIntro:
             'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
         identityValidationPageSummary:
-            'Una persona, una cuenta. Sin perfiles falsos. ',
+            'Una persona, una cuenta. Sin perfiles falsos.',
         identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
         identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -986,14 +990,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
-            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+            'Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
-        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationAutoBadgeInstant: 'Sin demora',
         identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
-        solicitarVerificacionManual: 'Solicitar verificación manual',
+        solicitarVerificacionManual: 'Solicitar Verificación Manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -1434,7 +1438,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Sumate al',
         donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu aporte mensual podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
+            'Con tu aporte mensual podemos mantener y seguir mejorando Carpoolear, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitPrioritySupportTitle: 'Soporte prioritario:',
         donationAfterRatingBenefitPrioritySupportText:
             'tus tickets de Mesa de Ayuda tendrán prioridad.',
@@ -1583,14 +1587,14 @@ const messages = {
         aceptar: 'Aceptar',
         pagoFallo: 'PAGO FALLÓ',
         viajeNoVisiblePagoFallo:
-            'Este viaje aún no es visible para el resto de los usuarios. El pago del Sellado de Viaje falló, intentalo de nuevo.',
+            'Este viaje aún no es visible para el resto de los usuarios. El pago de Un litro para Carpoolear falló, intentalo de nuevo.',
         pagarSelladoViaje:
-            'Hacé click en el botón para pagar el Sellado de Viaje ({amount} en Mercado Pago).',
+            'Hacé click en el botón para pagar Un litro para Carpoolear ({amount} en Mercado Pago).',
         pagoRapiPago: 'PAGO EN RAPI PAGO',
         viajeNoVisibleRapiPago:
-            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje en Rapi Pago, la gente podrá verlo.',
+            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues Un litro para Carpoolear en Rapi Pago, la gente podrá verlo.',
         viajeNoVisible:
-            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.',
+            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues Un litro para Carpoolear, la gente podrá verlo.',
         carpoodatosAntesSolicitud:
             'Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.',
         carpoodatosCompromisoViaje:
@@ -1675,7 +1679,7 @@ const messages = {
         calculadoEnBaseNaftaBase:
             'Calculado en base a nafta premium, auto promedio de consumo 8L/100km y peajes incluídos',
         calculadoEnBaseNaftaSelladoSuffix:
-            ' y Sellado de Viaje incluídos (si aplica)',
+            ' y Un litro para Carpoolear incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -1686,6 +1690,7 @@ const messages = {
         tripDetailPageTitle: 'Detalle de viaje',
         tripDetailSection: 'Detalle',
         tripDetailDriverMessage: 'Mensaje de quien conduce',
+        tripDetailPassengerMessage: 'Mensaje de quien busca viaje',
         tripDetailConditions: 'Características',
         tripDetailJoined: 'Ya se sumaron',
         tripDetailStatDuration: 'Tiempo estimado',
@@ -1763,6 +1768,7 @@ const messages = {
             'Su cuenta ya fue verificada; para editar el nombre contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
+        messagesRetentionNote: 'Los mensajes de más de {period} son eliminados automáticamente.',
         escribirMensaje: 'Escribir mensaje...',
         enterNuevaLinea: 'Enter = nueva línea',
         ctrlEnterEnviar: 'Ctrl+Enter = enviar',
@@ -1819,8 +1825,8 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        selladoViaje: 'Sellado de viaje',
-        faltaPagarSellado: 'Falta pagar Sellado',
+        selladoViaje: 'Un litro para Carpoolear',
+        faltaPagarSellado: 'Falta pagar 1L para Carpoolear',
         horaPlaceholder: 'Hora (12:00)',
         buscarContacto: 'Buscar contacto',
         buscarPersonas: 'Buscar personas',
@@ -1840,7 +1846,7 @@ const messages = {
         noMostrarDeNuevo: 'No mostrar de nuevo',
         descargaLaApp: 'Descargá la app de Carpoolear',
         descargaLaAppTexto:
-            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano.',
         ahoraNo: 'Ahora no',
         disponibleEnGooglePlay: 'Disponible en Google Play',
         descargarEnAppStore: 'Descargar en App Store',
@@ -2118,12 +2124,12 @@ const messages = {
         pendingRequestNoPuedesAceptarEstaSolicitud2:
             'No puedes aceptar esta solicitud, todos los asientos del viaje están ocupados.',
         mensajeContandoSobreSelladoViaje:
-            'Mensaje contando sobre el Sellado de Viaje.',
+            'Mensaje contando sobre Un litro para Carpoolear.',
         podesHacerViajesGratis: 'Podés hacer {freeTrips} viajes gratis.',
         yaCreasteViajes:
-            'Ya creaste {tripsCreated} viajes, por lo que tenés que pagar el Sellado de Viaje.',
+            'Ya creaste {tripsCreated} viajes, por lo que tenés que pagar Un litro para Carpoolear.',
         teQuedaViajesGratis:
-            'Te quedan {remaining} viajes gratis, luego tendrás que pagar el Sellado de Viaje.',
+            'Te quedan {remaining} viajes gratis, luego tendrás que pagar Un litro para Carpoolear.',
         pendingPaymentConfirmarTuAsiento: 'Confirmá tu asiento',
         pendingPaymentTeHanAceptadoEnElViajeHacia:
             'Te han aceptado en el viaje hacia',
@@ -2168,9 +2174,9 @@ const messages = {
         groupChatNotificationsOff: 'Notificaciones silenciadas',
         chatCerrado: 'El viaje ya terminó por lo que el chat no está disponible.',
         coordinateTripContributionWarningDriver:
-            'Recuerde no superar la contribución del viaje{amountPart} ya que el seguro automotor no lo cubrirá en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
+            'Recuerde no superar la contribución del viaje{amountPart} ya que el seguro automotor podría no cubrirlo en caso de accidentes y está contra las reglas de uso de Carpoolear, por lo que podrá ser suspendido',
         coordinateTripContributionWarningPassengerPrefix:
-            'Recuerde que el conductor deberá pedir la contribución establecida{amountPart}, ya que si se pide más el seguro automotor no los cubrirá en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
+            'Recuerde que el conductor deberá pedir la contribución establecida{amountPart}, ya que si se pide más el seguro automotor podría no cubrirlos en caso de accidentes, y está contra las reglas de uso de Carpoolear. Si lo hace, ',
         coordinateTripContributionWarningPassengerReportLink: 'denúncielo',
         coordinateTripContributionWarningPassengerSuffix:
             ' para mantener una comunidad más segura.',
@@ -2223,7 +2229,7 @@ const messages = {
         precioMaximoExcedido:
             'La contribución máxima{maxContributionPart} ha sido excedida',
         recuerdeReglaContribucionMaximaExcedida:
-            'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor no lo cubrirá en caso de accidente, y será suspendido de la plataforma',
+            'Recuerde que exceder la contribución máxima está fuera de las reglas de Carpoolear, el seguro automotor podría no cubrirlo en caso de accidente, y será suspendido de la plataforma',
         contribucionPorPersonaRequerida:
             'Tenés que completar la contribución por persona.',
         contribucionPorPersonaNegativa:
@@ -2243,7 +2249,7 @@ const messages = {
         contribucionRecomendadaCardDescripcionSinSellado:
             'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium y peajes',
         contribucionRecomendadaCardDescripcionConSellado:
-            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, sellado de viaje y peajes',
+            'La contribución por persona considerando rendimiento de un auto promedio del parque automotor argentino (8L cada 100km en ruta), combustible premium, Un litro para Carpoolear y peajes',
         comentario: 'Comentario',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilogramos dióxido de carbono equivalente'
@@ -2745,7 +2751,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Sumate al',
         donationAfterRatingJoinAccent: 'Club Carpoolear',
         donationAfterRatingMonthlyBenefitsIntro:
-            'Con tu <strong>aporte mensual</strong> podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
+            'Con tu <strong>aporte mensual</strong> podemos mantener y seguir mejorando Carpoolear, a cambio obtenés los siguientes beneficios por ser parte:',
         donationAfterRatingBenefitVisibility:
             '<strong>Mayor visibilidad:</strong> tus viajes se van a mostrar primero en el listado, ayudándote a compartirlos más fácilmente.',
         donationAfterRatingBenefitPrioritySupport:
@@ -2878,6 +2884,8 @@ const messages = {
         unLitroAppliesTitle: 'Este viaje aporta Un litro para Carpoolear',
         unLitroAppliesBody:
             'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
+        unLitroClubMemberPromo:
+            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -2957,7 +2965,7 @@ const messages = {
             'Costo de nafta para trayecto: $ {pricePerLiter} x {liters}L = $ {amount}',
         tripContributionBreakdownTolls:
             'Estimación de peajes: $ {amount} ({percent}%)',
-        tripContributionBreakdownSellado: 'Sellado de viaje: $ {amount}',
+        tripContributionBreakdownSellado: 'Un litro para Carpoolear: $ {amount}',
         tripContributionBreakdownSelladoBonificado: 'Bonificado',
         tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
         tripContributionBreakdownTotalWithSellado:
@@ -2995,6 +3003,7 @@ const messages = {
         tripReviewSectionSeats: 'Lugares disponibles',
         tripReviewSectionContribution: 'Aporte',
         tripReviewSectionPreferences: 'Preferencias',
+        tripReviewSectionDescription: 'Descripción',
         tripReviewSeatsCount: '{count} lugares',
         tripReviewContributionPerPerson: 'Contribución por persona',
         tripReviewPrefKids: 'Infancias',
@@ -3106,14 +3115,14 @@ const messages = {
             'Podés verificar tu cuenta de dos maneras:',
         identidadModalUnaOpcion:
             'Podés verificar tu cuenta de la siguiente manera:',
-        identidadModalAutoTitulo: 'Verificación automática',
+        identidadModalAutoTitulo: 'Verificación Automática',
         identidadModalAutoCostoEtiqueta: 'gratis',
         identidadModalAutoMp: 'Si tenés cuenta de Mercado Pago',
         identidadModalAutoGratis: 'Sin costo',
         identidadModalAutoInmediata: 'Verificación inmediata',
         identidadModalAutoPuedeEliminarMp:
-            'Luego de verificar, podés eliminar la integración con MP',
-        identidadModalManualTitulo: 'Verificación manual',
+            'Luego de verificar, podés eliminar la integración con MP.',
+        identidadModalManualTitulo: 'Verificación Manual',
         identidadModalManualCostoEtiqueta: 'con costo',
         identidadModalManualEquipo: 'Revisada por el equipo Carpoolear',
         identidadModalManualCosto: 'Tiene costo',
@@ -3140,7 +3149,7 @@ const messages = {
         identityValidationPageIntro:
             'Para una comunidad Carpoolear más segura, tenés que verificar tu cuenta.',
         identityValidationPageSummary:
-            'Una persona, una cuenta. Sin perfiles falsos. ',
+            'Una persona, una cuenta. Sin perfiles falsos.',
         identityValidationPageLearnMoreLink: 'Conocé todos los detalles',
         identityValidationPageTwoOptions: 'Tenés dos opciones para hacerlo:',
         identityValidationPageIntroEstoPermite: 'Esto permite',
@@ -3172,14 +3181,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'El sistema verifica tus datos con RENAPER a través de Mercado Pago. Si la verificación falla por datos incorrectos o un inconveniente técnico, contactá a la Mesa de Ayuda de Carpoolear. Si no podemos resolverlo, vas a tener que realizar la verificación manual.',
         identityValidationManualCardDesc:
-            '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.',
+            'Subí tu documentación y la revisamos.',
         identityValidationAutoBadgeFree: 'Gratis',
-        identityValidationAutoBadgeInstant: 'Al instante',
+        identityValidationAutoBadgeInstant: 'Sin demora',
         identityValidationManualBadgeTime: 'Hasta 48hs.',
         identityValidationCostLine: 'Costo: {cost}',
         identityValidationTimeLine:
             'Tiempo de verificación: hasta 48 hs hábiles',
-        solicitarVerificacionManual: 'Solicitar verificación manual',
+        solicitarVerificacionManual: 'Solicitar Verificación Manual',
         validadoEl: 'Verificado el',
         validarConMercadoPago: 'Verificar con Mercado Pago',
         validarConMercadoPagoDesc:
@@ -3479,6 +3488,7 @@ const messages = {
         quitarSolicitudAmigo: 'Quitar',
         quitarAmigo: 'Quitar amistad',
         invitarAmigos: 'Invitar a amistades',
+        invitar: 'Invitar',
         recibirAlertasViajeAmigo: 'Recibir alertas de viaje de {name}',
         detenerAlertasViajeAmigo:
             'No recibir más alertas de viaje de {name}',
@@ -3494,7 +3504,7 @@ const messages = {
         invitarATodosMisAmigos: 'Invitar a todas mis amistades',
         invitarAmigosAlViaje: 'Invitar amistades al viaje',
         invitarAmigosSelladoPendiente:
-            'Una vez que pagues el sellado vas a poder invitar a tus amistades',
+            'Una vez que pagues Un litro para Carpoolear vas a poder invitar a tus amistades',
         viajesDeMisAmigos: 'Viajes de mis amistades',
         otrosViajes: 'Otros viajes',
         tenesInvitacionesAmigosClickParaVerlas:
@@ -3530,14 +3540,14 @@ const messages = {
         aceptar: 'Aceptar',
         pagoFallo: 'PAGO FALLÓ',
         viajeNoVisiblePagoFallo:
-            'Este viaje aún no es visible para el resto de los usuarios. El pago del Sellado de Viaje falló, intentalo de nuevo.',
+            'Este viaje aún no es visible para el resto de los usuarios. El pago de Un litro para Carpoolear falló, intentalo de nuevo.',
         pagarSelladoViaje:
-            'Hacé click en el botón para pagar el Sellado de Viaje ({amount} en Mercado Pago).',
+            'Hacé click en el botón para pagar Un litro para Carpoolear ({amount} en Mercado Pago).',
         pagoRapiPago: 'PAGO EN RAPI PAGO',
         viajeNoVisibleRapiPago:
-            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje en Rapi Pago, la gente podrá verlo.',
+            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues Un litro para Carpoolear en Rapi Pago, la gente podrá verlo.',
         viajeNoVisible:
-            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues el Sellado de Viaje, la gente podrá verlo.',
+            'Este viaje aún no es visible para el resto de los usuarios. Una vez que pagues Un litro para Carpoolear, la gente podrá verlo.',
         carpoodatosAntesSolicitud:
             'Antes de mandar solicitud de asiento, mandale mensaje a la otra persona para coordinar todo lo vinculado al viaje: punto de encuentro, punto de llegada,tamaño de bolsos, contribución para combustible y peajes, etc.',
         carpoodatosCompromisoViaje:
@@ -3663,7 +3673,7 @@ const messages = {
         calculadoEnBaseNaftaBase:
             'Calculado en base a nafta premium, auto promedio de consumo 8L/100km y peajes incluídos',
         calculadoEnBaseNaftaSelladoSuffix:
-            ' y Sellado de Viaje incluídos (si aplica)',
+            ' y Un litro para Carpoolear incluídos (si aplica)',
         viajesDeConductoresPlataforma: 'Viajes de conductores en la plataforma',
         mes: 'Mes',
         cantidad: 'Cantidad',
@@ -3758,6 +3768,7 @@ const messages = {
             'Su cuenta ya fue verificada; para editar el nombre contacte a la mesa de ayuda.',
         ultimaConexion: 'Última conexión:',
         verMasMensajes: 'Ver más mensajes',
+        messagesRetentionNote: 'Los mensajes de más de {period} son eliminados automáticamente.',
         escribirMensaje: 'Escribir mensaje...',
         enterNuevaLinea: 'Enter = nueva línea',
         ctrlEnterEnviar: 'Ctrl+Enter = enviar',
@@ -3815,8 +3826,8 @@ const messages = {
         noCoincideCampos: 'No coincide los campos',
         emailEnviadoConIndicaciones:
             'Se ha enviado un email a su casilla de correo con las indicaciones para restablecer su contraseña.',
-        selladoViaje: 'Sellado de viaje',
-        faltaPagarSellado: 'Falta pagar Sellado',
+        selladoViaje: 'Un litro para Carpoolear',
+        faltaPagarSellado: 'Falta pagar 1L para Carpoolear',
         horaPlaceholder: 'Hora (12:00)',
         buscarContacto: 'Buscar contacto',
         buscarPersonas: 'Buscar personas',
@@ -3853,7 +3864,7 @@ const messages = {
         noMostrarDeNuevo: 'No mostrar de nuevo',
         descargaLaApp: 'Descargá la app de Carpoolear',
         descargaLaAppTexto:
-            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.',
+            'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano.',
         ahoraNo: 'Ahora no',
         disponibleEnGooglePlay: 'Disponible en Google Play',
         descargarEnAppStore: 'Descargar en App Store',
@@ -4878,6 +4889,8 @@ const messages = {
         unLitroAppliesTitle: 'This trip contributes One liter for Carpoolear',
         unLitroAppliesBody:
             'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
+        unLitroClubMemberPromo:
+            'If you are part of Club Carpoolear, you do not pay 1L for Carpoolear — join us!',
         unLitroBonificadoBadge: 'Waived',
         unLitroBonificadoTitle: 'This trip is waived',
         unLitroBonificadoRemainingSingular:
@@ -4956,7 +4969,7 @@ const messages = {
             'Fuel cost for the route: $ {pricePerLiter} x {liters}L = $ {amount}',
         tripContributionBreakdownTolls:
             'Estimated tolls: $ {amount} ({percent}%)',
-        tripContributionBreakdownSellado: 'Trip seal: $ {amount}',
+        tripContributionBreakdownSellado: 'One liter for Carpoolear: $ {amount}',
         tripContributionBreakdownSelladoBonificado: 'Waived',
         tripContributionBreakdownTotal: 'Total: $ {fuel} + $ {tolls}',
         tripContributionBreakdownTotalWithSellado:
@@ -4994,6 +5007,7 @@ const messages = {
         tripReviewSectionSeats: 'Available seats',
         tripReviewSectionContribution: 'Contribution',
         tripReviewSectionPreferences: 'Preferences',
+        tripReviewSectionDescription: 'Description',
         tripReviewSeatsCount: '{count} seats',
         tripReviewContributionPerPerson: 'Contribution per person',
         tripReviewPrefKids: 'Children',
@@ -5057,6 +5071,7 @@ const messages = {
         cerrarSesion: 'Log out',
         pedidosDeEliminacionDeCuenta: 'Account deletion requests',
         invitarAmigos: 'Invite friends',
+        invitar: 'Invite',
         recibirAlertasViajeAmigo: 'Receive trip alerts from {name}',
         detenerAlertasViajeAmigo: 'Stop receiving trip alerts from {name}',
         alertasViajeAmigoActivadas:
@@ -5072,7 +5087,7 @@ const messages = {
         invitarATodosMisAmigos: 'Invite all my friends',
         invitarAmigosAlViaje: 'Invite friends to the trip',
         invitarAmigosSelladoPendiente:
-            "Once you pay the sellado you'll be able to invite your friends",
+            "Once you pay One liter for Carpoolear you'll be able to invite your friends",
         viajesDeMisAmigos: 'My friends trips',
         otrosViajes: 'Other trips',
         tenesInvitacionesAmigosClickParaVerlas:
@@ -5108,7 +5123,7 @@ const messages = {
             'Verify your account with Mercado Pago (RENAPER).',
         identityValidationPageIntro:
             'For a safer Carpoolear community, you need to verify your account.',
-        identityValidationPageSummary: 'One person, one account. No fake profiles. ',
+        identityValidationPageSummary: 'One person, one account. No fake profiles.',
         identityValidationPageLearnMoreLink: 'See all the details',
         identityValidationPageTwoOptions: 'You have two options:',
         identityValidationPageIntroEstoPermite: 'This allows',
@@ -5120,14 +5135,14 @@ const messages = {
         identityValidationAutoCardDesc:
             'The system checks your data against RENAPER through Mercado Pago. If the verification fails due to incorrect data or a technical issue, contact the Carpoolear Help Desk. If we cannot resolve it, you will have to complete the manual verification.',
         identityValidationManualCardDesc:
-            "Don't have Mercado Pago? Upload your documents and we'll review them.",
+            "Upload your documents and we'll review them.",
         identityValidationAutoBadgeFree: 'Free',
-        identityValidationAutoBadgeInstant: 'Instant',
+        identityValidationAutoBadgeInstant: 'No delay',
         identityValidationManualBadgeTime: 'Up to 48hrs.',
         identityValidationCostLine: 'Cost: {cost}',
         identityValidationTimeLine:
             'Verification time: up to 48 business hours',
-        solicitarVerificacionManual: 'Request manual verification',
+        solicitarVerificacionManual: 'Request Manual Verification',
         validacionManual: 'Manual verification',
         validacionManualDescCorta:
             "If you don't want or can't use Mercado Pago, you can request manual verification (at a cost).",
@@ -5366,14 +5381,14 @@ const messages = {
         identidadModalOpcionesTitulo:
             'You can verify your account in two ways:',
         identidadModalUnaOpcion: 'You can verify your account as follows:',
-        identidadModalAutoTitulo: 'Automatic verification',
+        identidadModalAutoTitulo: 'Automatic Verification',
         identidadModalAutoCostoEtiqueta: 'free',
         identidadModalAutoMp: 'If you have a Mercado Pago account',
         identidadModalAutoGratis: 'No cost',
         identidadModalAutoInmediata: 'Instant verification',
         identidadModalAutoPuedeEliminarMp:
-            'After verifying, you can remove the MP integration',
-        identidadModalManualTitulo: 'Manual verification',
+            'After verifying, you can remove the MP integration.',
+        identidadModalManualTitulo: 'Manual Verification',
         identidadModalManualCostoEtiqueta: 'paid',
         identidadModalManualEquipo: 'Reviewed by the Carpoolear team',
         identidadModalManualCosto: 'There is a cost',
@@ -5634,7 +5649,7 @@ const messages = {
         donationAfterRatingJoinPrefix: 'Join the',
         donationAfterRatingJoinAccent: 'Carpoolear Club',
         donationAfterRatingMonthlyBenefitsIntro:
-            'With your monthly contribution we can keep going and keep improving, and in return you get the following benefits for being part of it:',
+            'With your monthly contribution we can maintain and continue improving Carpoolear, and in return you get the following benefits for being part of it:',
         donationAfterRatingBenefitPrioritySupportTitle: 'Priority support:',
         donationAfterRatingBenefitPrioritySupportText:
             'your Help Desk tickets will have priority.',
@@ -5780,14 +5795,14 @@ const messages = {
         aceptar: 'Accept',
         pagoFallo: 'PAYMENT FAILED',
         viajeNoVisiblePagoFallo:
-            'This trip is not yet visible to other users. The Trip Seal payment failed, please try again.',
+            'This trip is not yet visible to other users. The One liter for Carpoolear payment failed, please try again.',
         pagarSelladoViaje:
-            'Click the button to pay for the Trip Seal ({amount} on Mercado Pago).',
+            'Click the button to pay One liter for Carpoolear ({amount} on Mercado Pago).',
         pagoRapiPago: 'PAYMENT AT RAPI PAGO',
         viajeNoVisibleRapiPago:
-            'This trip is not yet visible to other users. Once you pay the Trip Seal at Rapi Pago, people will be able to see it.',
+            'This trip is not yet visible to other users. Once you pay One liter for Carpoolear at Rapi Pago, people will be able to see it.',
         viajeNoVisible:
-            'This trip is not yet visible to other users. Once you pay the Trip Seal, people will be able to see it.',
+            'This trip is not yet visible to other users. Once you pay One liter for Carpoolear, people will be able to see it.',
         carpoodatosAntesSolicitud:
             'Before sending a seat request, send a message to the other person to coordinate everything related to the trip: meeting point, arrival point, bag size, contribution for fuel and tolls, etc.',
         carpoodatosCompromisoViaje:
@@ -5869,7 +5884,7 @@ const messages = {
         calculadoEnBaseNaftaBase:
             'Calculated based on premium gasoline, average car consumption 8L/100km and tolls included',
         calculadoEnBaseNaftaSelladoSuffix:
-            ' and Trip Seal included (if applicable)',
+            ' and One liter for Carpoolear included (if applicable)',
         viajesDeConductoresPlataforma: 'Driver trips on the platform',
         mes: 'Month',
         cantidad: 'Quantity',
@@ -5880,6 +5895,7 @@ const messages = {
         tripDetailPageTitle: 'Trip detail',
         tripDetailSection: 'Details',
         tripDetailDriverMessage: 'Driver message',
+        tripDetailPassengerMessage: 'Message from the person looking for a trip',
         tripDetailConditions: 'Characteristics',
         tripDetailJoined: 'Already joined',
         tripDetailStatDuration: 'Estimated time',
@@ -5956,6 +5972,7 @@ const messages = {
             'Your account has been verified; to edit your name contact the help desk.',
         ultimaConexion: 'Last connection:',
         verMasMensajes: 'View more messages',
+        messagesRetentionNote: 'Messages older than {period} are automatically deleted.',
         escribirMensaje: 'Write message...',
         enterNuevaLinea: 'Enter = new line',
         ctrlEnterEnviar: 'Ctrl+Enter = send',
@@ -6011,8 +6028,8 @@ const messages = {
         noCoincideCampos: 'Fields do not match',
         emailEnviadoConIndicaciones:
             'An email has been sent to your inbox with instructions to reset your password.',
-        selladoViaje: 'Trip seal',
-        faltaPagarSellado: 'Seal payment pending',
+        selladoViaje: 'One liter for Carpoolear',
+        faltaPagarSellado: 'Need to pay 1L for Carpoolear',
         horaPlaceholder: 'Time (12:00)',
         buscarContacto: 'Search contact',
         buscarPersonas: 'Search people',
@@ -6032,7 +6049,7 @@ const messages = {
         noMostrarDeNuevo: 'Do not show again',
         descargaLaApp: 'Download the Carpoolear app',
         descargaLaAppTexto:
-            "Get message and trip notifications instantly and keep Carpoolear always at hand. It's free.",
+            'Get message and trip notifications instantly and keep Carpoolear always at hand.',
         ahoraNo: 'Not now',
         disponibleEnGooglePlay: 'Get it on Google Play',
         descargarEnAppStore: 'Download on the App Store',
@@ -6307,12 +6324,12 @@ const messages = {
         pendingRequestALas2: 'at',
         pendingRequestNoPuedesAceptarEstaSolicitud2:
             'You cannot accept this request, all seats on the trip are taken.',
-        mensajeContandoSobreSelladoViaje: 'Message about the Trip Seal.',
+        mensajeContandoSobreSelladoViaje: 'Message about One liter for Carpoolear.',
         podesHacerViajesGratis: 'You can make {freeTrips} free trips.',
         yaCreasteViajes:
-            'You have already created {tripsCreated} trips, so you need to pay the Trip Seal.',
+            'You have already created {tripsCreated} trips, so you need to pay One liter for Carpoolear.',
         teQuedaViajesGratis:
-            'You have {remaining} free trip{remaining} left, then you will have to pay the Trip Seal.',
+            'You have {remaining} free trip{remaining} left, then you will have to pay One liter for Carpoolear.',
         pendingPaymentConfirmarTuAsiento: 'Confirm your seat',
         pendingPaymentTeHanAceptadoEnElViajeHacia:
             'You have been accepted on the trip to',
@@ -6355,9 +6372,9 @@ const messages = {
         groupChatNotificationsOff: 'Notifications muted',
         chatCerrado: 'The trip has already ended, so the chat is not available.',
         coordinateTripContributionWarningDriver:
-            'Remember not to exceed the trip contribution{amountPart}, since auto insurance will not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
+            'Remember not to exceed the trip contribution{amountPart}, since auto insurance might not cover it in case of accidents and it is against Carpoolear usage rules, so you may be suspended',
         coordinateTripContributionWarningPassengerPrefix:
-            'Remember that the driver must request the established contribution{amountPart}, because if more is requested auto insurance will not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
+            'Remember that the driver must request the established contribution{amountPart}, because if more is requested auto insurance might not cover you in case of accidents, and it is against Carpoolear usage rules. If it happens, ',
         coordinateTripContributionWarningPassengerReportLink: 'report it',
         coordinateTripContributionWarningPassengerSuffix:
             ' to keep a safer community.',
@@ -6408,7 +6425,7 @@ const messages = {
         precioMaximoExcedido:
             'Maximum contribution{maxContributionPart} exceeded',
         recuerdeReglaContribucionMaximaExcedida:
-            'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance will not cover it in case of an accident, and you will be suspended from the platform',
+            'Remember that exceeding the maximum contribution is against Carpoolear rules, auto insurance might not cover it in case of an accident, and you will be suspended from the platform',
         contribucionPorPersonaRequerida:
             'You must enter the per-person contribution.',
         contribucionPorPersonaNegativa:
@@ -6428,7 +6445,7 @@ const messages = {
         contribucionRecomendadaCardDescripcionSinSellado:
             'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, and tolls.',
         contribucionRecomendadaCardDescripcionConSellado:
-            'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, Trip Seal, and tolls.',
+            'Per-person contribution based on fuel efficiency of a typical vehicle in the Argentine fleet (8 L per 100 km on highways), premium fuel, One liter for Carpoolear, and tolls.',
         comentario: 'Comment',
         kilogramosDioxidoDeCarbonoEquivalente:
             'Kilograms of carbon dioxide equivalent'

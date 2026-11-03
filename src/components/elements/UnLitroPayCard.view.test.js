@@ -26,6 +26,8 @@ describe('UnLitroPayCard.vue', () => {
         expect(componentSource).toContain("$t('escaneáConAppMercadoPago')");
         expect(componentSource).toContain("$t('qrExpiraEn')");
         expect(componentSource).toContain('createSelladoQrOrder');
+        expect(componentSource).toContain('selladoPaidQueryRoute');
+        expect(componentSource).toContain('$router.replace');
         expect(componentSource).toContain("selectedMethod === 'qr'");
     });
 

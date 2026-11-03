@@ -34,6 +34,7 @@ const MOCK_CONFIG = {
   trip_stars: false,
   api_price: false,
   fuel_price: 4.15,
+  messages_retention_years: 1,
   trip_card_design: 'default',
   module_on_boarding_new_user: { enabled: false, cards: 0 },
   allow_rating_reply: true,
@@ -509,6 +510,7 @@ function makeMockConversation(id, overrides = {}) {
     updated_at: '2025-06-10T10:30:00.000Z',
     last_message: { id: id * 10, text: `Message from conv ${id}`, created_at: '2025-06-10T10:30:00.000Z' },
     unread: false,
+    history_pruned: false,
     users: [
       { id: 1, name: 'Juan Pérez', positive_ratings: 10, negative_ratings: 1 },
       {
@@ -608,7 +610,7 @@ function isBackendApiUrl(url) {
   return pathname.startsWith('/api/');
 }
 
-async function setupCatchAllMock(page) {
+async function setupApiOnlyCatchAll(page) {
   await page.route(isBackendApiUrl, (route) => {
     route.fulfill({
       status: 200,
@@ -616,9 +618,13 @@ async function setupCatchAllMock(page) {
       body: JSON.stringify({}),
     });
   });
+}
 
-  // Block OSM raster tiles only (do not abort Leaflet CSS/JS from unpkg or node_modules).
-  await page.route(shouldAbortOsmTileRequest, (route) => {
+async function setupCatchAllMock(page) {
+  await setupApiOnlyCatchAll(page);
+
+  // Block external map tiles (raster OSM + OpenFreeMap vector) for deterministic screenshots.
+  await page.route(shouldAbortExternalMapTileRequest, (route) => {
     route.abort();
   });
 }
@@ -632,6 +638,19 @@ function shouldAbortOsmTileRequest(url) {
     return false;
   }
   return /\/\d+\/\d+\/\d+/.test(u.pathname);
+}
+
+function shouldAbortOpenFreeMapTileRequest(url) {
+  const u = url instanceof URL ? url : new URL(url);
+  const h = u.hostname.toLowerCase();
+  if (h === 'tiles.openfreemap.org' || h.endsWith('.openfreemap.org')) {
+    return true;
+  }
+  return false;
+}
+
+function shouldAbortExternalMapTileRequest(url) {
+  return shouldAbortOsmTileRequest(url) || shouldAbortOpenFreeMapTileRequest(url);
 }
 
 /**
@@ -870,7 +889,12 @@ module.exports = {
   // Utilities
   paginated,
   freezeClock,
+  isBackendApiUrl,
+  setupApiOnlyCatchAll,
   setupCatchAllMock,
+  shouldAbortExternalMapTileRequest,
+  shouldAbortOsmTileRequest,
+  shouldAbortOpenFreeMapTileRequest,
   setupCommonMocks,
   setupGuestState,
   setupAuthState,

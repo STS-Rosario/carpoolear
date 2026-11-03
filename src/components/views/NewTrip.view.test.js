@@ -91,6 +91,19 @@ describe('NewTrip.vue negative contribution validation', () => {
 });
 
 describe('NewTrip.vue max contribution validation timing', () => {
+    it('hides the max contribution warning while typing once the amount is within the cap', () => {
+        expect(viewSource).toContain('resolveLiveContributionPriceError');
+        expect(viewSource).toMatch(
+            /validatePrice\(\)[\s\S]*?resolveLiveContributionPriceError/s
+        );
+        expect(viewSource).toMatch(
+            /validateReturnPrice\(\)[\s\S]*?resolveLiveContributionPriceError/s
+        );
+        expect(viewSource).not.toMatch(
+            /validatePrice\(\)[\s\S]*?this\.priceError\.message ===\s*\n\s*this\.getMaxContributionExceededMessage/s
+        );
+    });
+
     it('defers max contribution checks until trip-info cap is available', () => {
         expect(viewSource).toContain("from '../../utils/tripMaxPriceValidation.js'");
         expect(viewSource).toContain('exceedsMaximumSeatPrice');
@@ -272,6 +285,9 @@ describe('NewTrip.vue trip cars editor modal', () => {
 describe('NewTrip.vue trip creation template snapshot', () => {
     it('passes a creation snapshot to the success screen for template saving', () => {
         expect(viewSource).toContain(':creation-snapshot="creationSnapshot"');
+        expect(viewSource).toContain(
+            ':has-complimentary-sellado="selladoComplimentary"'
+        );
         expect(viewSource).toContain('creationSnapshot: null');
         expect(viewSource).toMatch(
             /createTrip\(trip\)[\s\S]*?this\.creationSnapshot = buildOutboundTripCreationSnapshot\(this\)/s
@@ -384,6 +400,12 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toContain('showUnLitroCard');
         expect(viewSource).not.toContain('alert-sellado-viaje');
         expect(viewSource).not.toContain('mensajeContandoSobreSelladoViaje');
+        expect(viewSource).toMatch(
+            /contribucionRecomendadaCardDescripcionText\(\)[\s\S]*this\.selladoCharged[\s\S]*contribucionRecomendadaCardDescripcionConSellado/
+        );
+        expect(viewSource).toMatch(
+            /contribucionPorPersonaTooltipText\(\)[\s\S]*this\.selladoCharged[\s\S]*contribucionPorPersonaTooltipConSellado/
+        );
     });
 
     it('waives Un litro with complimentary copy when empty-trip credit applies', () => {

@@ -111,7 +111,8 @@ describe('Trip.vue mobile trip-detail stack', () => {
         expect(viewSource).toContain('trip-detail');
         expect(viewSource).toContain('trip-detail__stack');
         expect(viewSource).toContain("$t('tripDetailSection')");
-        expect(viewSource).toContain("$t('tripDetailDriverMessage')");
+        expect(viewSource).toContain('tripDetailDriverMessage');
+        expect(viewSource).toContain('tripDetailPassengerMessage');
         expect(viewSource).toContain("$t('tripDetailConditions')");
         expect(viewSource).toContain("$t('tripDetailJoined')");
     });
@@ -235,6 +236,18 @@ describe('Trip.vue desktop column bands', () => {
         );
     });
 
+    it('uses the passenger message label and hides Características on passenger trips', () => {
+        expect(viewSource).toMatch(
+            /trip\.is_passenger\s*\?\s*'tripDetailPassengerMessage'\s*:\s*'tripDetailDriverMessage'/
+        );
+        expect(viewSource).toMatch(
+            /trip-detail__detalle-aside[\s\S]*v-if="!trip\.is_passenger"[\s\S]*tripDetailConditions[\s\S]*TripData[\s\S]*TripDetailShareButton/
+        );
+        expect(viewSource).toMatch(
+            /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripData v-if="!trip\.is_passenger"|v-if="isMobile"[\s\S]*!trip\.is_passenger[\s\S]*tripDetailConditions/
+        );
+    });
+
     it('keeps mobile condiciones with price; desktop puts TripData in DETALLE aside and TripPrice in the actions grid', () => {
         expect(viewSource).toMatch(
             /v-if="isMobile"[\s\S]*tripDetailConditions[\s\S]*TripPrice[\s\S]*TripData/
@@ -285,6 +298,8 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('startSelladoPaymentPoll');
         expect(viewSource).toContain('5000');
         expect(viewSource).toContain('stopSelladoPaymentPoll');
+        expect(viewSource).toContain('syncSelladoPaymentFromReturn');
+        expect(viewSource).toContain('syncSelladoPayment');
         expect(viewSource).toMatch(
             /if\s*\(\s*this\.showSelladoProcessingBanner\s*\)/
         );
@@ -321,8 +336,13 @@ describe('Trip.vue Un litro payment banners', () => {
         expect(viewSource).toContain('tripDetailUnLitroKind');
         expect(viewSource).toContain(':charged="tripDetailUnLitroKind === \'charged\'"');
         expect(viewSource).toContain(
+            ':complimentary="tripDetailUnLitroKind === \'complimentary\'"'
+        );
+        expect(viewSource).toContain(
             ':bonificado="tripDetailUnLitroKind === \'bonificado\'"'
         );
+        expect(viewSource).toContain('hasComplimentarySellado');
+        expect(viewSource).toContain('selladoViaje');
         const contribucion = viewSource.match(
             /class="trip-detail__contribucion">[\s\S]*?<\/div>/
         )?.[0];

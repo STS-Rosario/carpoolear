@@ -391,7 +391,8 @@ function validateContribution({
     price = '',
     maximumSeatPriceCents = 0,
     maximumTripPriceCents = 0,
-    noCobrarSena = false
+    noCobrarSena = false,
+    noLucrar = false
 }) {
     if (isPassenger || !seatPriceEnabled) {
         return { valid: true, errors: {} };
@@ -431,6 +432,13 @@ function validateContribution({
         };
     }
 
+    if (!noLucrar) {
+        return {
+            valid: false,
+            errors: { noLucrar: 'teComprometesANoLucrar' }
+        };
+    }
+
     return { valid: true, errors: {} };
 }
 
@@ -442,8 +450,12 @@ function validateDescription({ description = '' }) {
     };
 }
 
-function validateLastDetails({ isPassenger = false, noLucrar = false }) {
-    if (isPassenger) {
+function validateLastDetails({
+    isPassenger = false,
+    noLucrar = false,
+    seatPriceEnabled = true
+}) {
+    if (isPassenger || seatPriceEnabled) {
         return { valid: true, errors: {} };
     }
 

@@ -158,7 +158,121 @@ describe('shareContent', () => {
         expect(result).toEqual({
             ok: false,
             cancelled: false,
-            method: 'none'
+            method: 'none',
+            reason: 'no_share_api'
+        });
+    });
+
+    it('preserves canShare_rejected reason when no fallback is available', async () => {
+        const canShare = vi.fn(() => false);
+        vi.stubGlobal('navigator', {
+            share: vi.fn(),
+            canShare
+        });
+        const { shareContent } = await loadShareContent();
+
+        const result = await shareContent({
+            title: 'Compartir viaje',
+            text: 'Viaje a Rosario',
+            url: 'https://carpoolear.com.ar/app/trips/7'
+        });
+
+        expect(result).toEqual({
+            ok: false,
+            cancelled: false,
+            method: 'none',
+            reason: 'canShare_rejected'
+        });
+    });
+
+    it('degrades navigator.share payload when canShare rejects title+text+url', async () => {
+        const navigatorShare = vi.fn().mockResolvedValue(undefined);
+        const canShare = vi.fn(
+            (data) => Object.keys(data).length === 1 && Boolean(data.url)
+        );
+        vi.stubGlobal('navigator', { share: navigatorShare, canShare });
+        const { shareContent } = await loadShareContent();
+
+        const result = await shareContent({
+            title: 'Compartir viaje',
+            text: 'Viaje a Rosario',
+            url: 'https://carpoolear.com.ar/app/trips/7'
+        });
+
+        expect(canShare).toHaveBeenCalled();
+        expect(navigatorShare).toHaveBeenCalledWith({
+            url: 'https://carpoolear.com.ar/app/trips/7'
+        });
+        expect(result).toEqual({ ok: true, method: 'navigator' });
+    });
+
+    it('degrades payload when canShare throws on the first candidate', async () => {
+        const navigatorShare = vi.fn().mockResolvedValue(undefined);
+        const canShare = vi.fn((data) => {
+            if (data.title) {
+                throw new Error('Unsupported share data');
+            }
+            return Boolean(data.url);
+        });
+        vi.stubGlobal('navigator', { share: navigatorShare, canShare });
+        const { shareContent } = await loadShareContent();
+
+        const result = await shareContent({
+            title: 'Compartir viaje',
+            text: 'Viaje a Rosario',
+            url: 'https://carpoolear.com.ar/app/trips/7'
+        });
+
+        expect(navigatorShare).toHaveBeenCalledWith({
+            text: 'Viaje a Rosario',
+            url: 'https://carpoolear.com.ar/app/trips/7'
+        });
+        expect(result).toEqual({ ok: true, method: 'navigator' });
+    });
+});
+
+describe('buildNavigatorSharePayload', () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.resetModules();
+    });
+
+    it('returns no_share_api when navigator.share is missing', async () => {
+        vi.stubGlobal('navigator', {});
+        const { buildNavigatorSharePayload } = await import('./shareContent.js');
+
+        const result = buildNavigatorSharePayload({
+            title: 'T',
+            url: 'https://example.com/trips/1'
+        });
+
+        expect(result.reason).toBe('no_share_api');
+        expect(result.data).toEqual({
+            title: 'T',
+            text: 'T',
+            url: 'https://example.com/trips/1'
+        });
+    });
+
+    it('skips candidates when canShare throws and picks a supported payload', async () => {
+        const canShare = vi.fn((data) => {
+            if (data.title) {
+                throw new Error('Unsupported');
+            }
+            return Boolean(data.url);
+        });
+        vi.stubGlobal('navigator', { share: vi.fn(), canShare });
+        const { buildNavigatorSharePayload } = await import('./shareContent.js');
+
+        const result = buildNavigatorSharePayload({
+            title: 'Compartir viaje',
+            text: 'Viaje a Rosario',
+            url: 'https://example.com/trips/1'
+        });
+
+        expect(result.data).toEqual({
+            text: 'Viaje a Rosario',
+            url: 'https://example.com/trips/1'
         });
     });
 });

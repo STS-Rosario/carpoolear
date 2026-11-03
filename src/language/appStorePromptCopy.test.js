@@ -3,7 +3,7 @@ import messages from './i18n';
 
 const TITLE_ES = 'Descargá la app de Carpoolear';
 const TEXT_ES =
-    'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano. Es gratis.';
+    'Recibí notificaciones de mensajes y viajes al instante y tené Carpoolear siempre a mano.';
 
 describe('app store prompt copy', () => {
     it.each(['arg', 'chl'])('uses the agreed Spanish copy in %s', (locale) => {
@@ -18,7 +18,7 @@ describe('app store prompt copy', () => {
     it('uses the English copy in en', () => {
         expect(messages.en.descargaLaApp).toBe('Download the Carpoolear app');
         expect(messages.en.descargaLaAppTexto).toBe(
-            'Get message and trip notifications instantly and keep Carpoolear always at hand. It\'s free.'
+            'Get message and trip notifications instantly and keep Carpoolear always at hand.'
         );
         expect(messages.en.ahoraNo).toBe('Not now');
         expect(messages.en.disponibleEnGooglePlay).toBe('Get it on Google Play');

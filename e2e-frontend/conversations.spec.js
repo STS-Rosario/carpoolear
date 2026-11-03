@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
+  MOCK_CONFIG,
   MOCK_CONVERSATIONS,
   MOCK_MESSAGES,
   makeMockConversation,
@@ -258,14 +259,17 @@ test.describe('Conversations — edge cases', () => {
     ).toBeVisible();
   });
 
-  test('chat with 0 messages shows empty chat area and no "load more" button', async ({
+  test('empty conversation with purged history shows retention note and no "load more" button', async ({
     page,
   }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
 
-    const conv = makeMockConversation(1, { title: 'Empty Chat' });
+    const conv = makeMockConversation(1, {
+      title: 'Empty Chat',
+      history_pruned: true,
+    });
 
     await page.route(/\/api\/conversations(\?.*)?$/, (route) => {
       route.fulfill({
@@ -302,9 +306,14 @@ test.describe('Conversations — edge cases', () => {
     await expect(
       page.getByRole('button', { name: /ver más mensajes/i })
     ).not.toBeVisible();
+    await expect(
+      page.getByText(
+        'Los mensajes de más de 1 año son eliminados automáticamente.'
+      )
+    ).toBeVisible();
   });
 
-  test('chat with 1 message shows single message and no "load more" button', async ({
+  test('chat with 1 recent message does not claim older history was purged', async ({
     page,
   }) => {
     await freezeClock(page);
@@ -334,7 +343,9 @@ test.describe('Conversations — edge cases', () => {
     });
 
     let firstCall = true;
+    let messageRequestCount = 0;
     await page.route(/\/api\/conversations\/1(\?.*)?$/, (route) => {
+      messageRequestCount += 1;
       if (firstCall) {
         firstCall = false;
         route.fulfill({
@@ -359,8 +370,93 @@ test.describe('Conversations — edge cases', () => {
     await expect(page.getByText('Solo message', { exact: true })).toBeVisible({
       timeout: 10000,
     });
-    // One message is not a full page; load-more stays until a subsequent empty page is fetched.
-    // Assert the single message content instead of pagination chrome.
+    const loadMoreButton = page.getByRole('button', {
+      name: /ver más mensajes/i,
+    });
+    if (await loadMoreButton.isVisible()) {
+      await loadMoreButton.click();
+    }
+    await expect.poll(() => messageRequestCount).toBeGreaterThan(1);
+    await expect(
+      page.getByText(
+        'Los mensajes de más de 1 año son eliminados automáticamente.'
+      )
+    ).not.toBeVisible();
+    await expect(loadMoreButton).not.toBeVisible();
+  });
+
+  test('shows the retention note at the end of a conversation with purged history', async ({
+    page,
+  }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+
+    const conv = makeMockConversation(1, {
+      title: 'Conversation with purged history',
+      history_pruned: true,
+    });
+    const msg = makeMockMessage(1, {
+      text: 'Recent message',
+      conversation_id: 1,
+    });
+
+    await page.route(/\/api\/conversations(\?.*)?$/, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(paginated([conv])),
+      });
+    });
+    await page.route(/\/api\/conversations\/show\/1/, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: conv }),
+      });
+    });
+
+    let firstCall = true;
+    await page.route(/\/api\/conversations\/1(\?.*)?$/, (route) => {
+      const data = firstCall ? [msg] : [];
+      firstCall = false;
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data }),
+      });
+    });
+
+    await setupAuthState(page);
+    const config = {
+      ...MOCK_CONFIG,
+      messages_retention_years: 2,
+    };
+    await page.route('**/api/config', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(config),
+      });
+    });
+    await page.route('**/api/retoken', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          token: 'mock-jwt-token-for-testing',
+          config,
+        }),
+      });
+    });
+    await page.goto('/conversations/1');
+    await waitForPageReady(page);
+    const notice = page.getByText(
+      'Los mensajes de más de 2 años son eliminados automáticamente.'
+    );
+    await expect(notice).not.toBeVisible();
+    await page.getByRole('button', { name: /ver más mensajes/i }).click();
+    await expect(notice).toBeVisible();
   });
 
   test('chat with many messages shows "Ver más mensajes" button', async ({
@@ -370,7 +466,10 @@ test.describe('Conversations — edge cases', () => {
     await setupCatchAllMock(page);
     await setupCommonMocks(page);
 
-    const conv = makeMockConversation(1, { title: 'Busy Chat' });
+    const conv = makeMockConversation(1, {
+      title: 'Busy Chat',
+      history_pruned: true,
+    });
     const messages = generateItems(
       (id) =>
         makeMockMessage(id, { text: `Message ${id}`, conversation_id: 1 }),
@@ -393,11 +492,14 @@ test.describe('Conversations — edge cases', () => {
       });
     });
 
+    let firstCall = true;
     await page.route(/\/api\/conversations\/1(\?.*)?$/, (route) => {
+      const data = firstCall ? messages : [];
+      firstCall = false;
       route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ data: messages }),
+        body: JSON.stringify({ data }),
       });
     });
 
@@ -412,5 +514,109 @@ test.describe('Conversations — edge cases', () => {
     await expect(
       page.getByRole('button', { name: /ver más mensajes/i })
     ).toBeVisible();
+    await page.locator('#messagesWrapper').evaluate((element) => {
+      element.scrollTop = 0;
+    });
+    await page.getByRole('button', { name: /ver más mensajes/i }).click();
+    await expect(
+      page.getByText(
+        'Los mensajes de más de 1 año son eliminados automáticamente.'
+      )
+    ).toBeVisible();
+  });
+
+  test('keeps the visible message in place when loading an older page', async ({
+    page,
+  }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+
+    const conv = makeMockConversation(1, { title: 'Paged Chat' });
+    const recentMessages = Array.from({ length: 20 }, (_, index) =>
+      makeMockMessage(index + 1, {
+        text: `Message ${index + 1}`,
+        conversation_id: 1,
+        created_at: new Date(
+          Date.UTC(2025, 5, 10, 10, index)
+        ).toISOString(),
+      })
+    ).reverse();
+    const olderMessages = Array.from({ length: 20 }, (_, index) =>
+      makeMockMessage(index + 21, {
+        text: `Message ${index + 21}`,
+        conversation_id: 1,
+        created_at: new Date(
+          Date.UTC(2025, 5, 9, 10, index)
+        ).toISOString(),
+      })
+    ).reverse();
+
+    await page.route(/\/api\/conversations(\?.*)?$/, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(paginated([conv])),
+      });
+    });
+
+    await page.route(/\/api\/conversations\/show\/1/, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data: conv }),
+      });
+    });
+
+    let firstCall = true;
+    let releaseOlderPage;
+    const olderPagePromise = new Promise((resolve) => {
+      releaseOlderPage = resolve;
+    });
+    await page.route(/\/api\/conversations\/1(\?.*)?$/, async (route) => {
+      const isFirstCall = firstCall;
+      const data = isFirstCall ? recentMessages : olderMessages;
+      firstCall = false;
+      if (!isFirstCall) {
+        await olderPagePromise;
+      }
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ data }),
+      });
+    });
+
+    await setupAuthState(page);
+    await page.goto('/conversations/1');
+    await waitForPageReady(page);
+    await expect(page.getByText('Message 1', { exact: true })).toBeVisible({
+      timeout: 10000,
+    });
+
+    const wrapper = page.locator('#messagesWrapper');
+    await wrapper.evaluate((element) => {
+      element.scrollTop = 0;
+    });
+    const initialTop = (
+      await page.getByText('Message 1', { exact: true }).boundingBox()
+    ).y;
+
+    const loadMoreButton = page.getByRole('button', {
+      name: /ver más mensajes/i,
+    });
+    await loadMoreButton.click();
+    await expect(loadMoreButton).toBeDisabled();
+    releaseOlderPage();
+
+    await expect(page.getByText('Message 21', { exact: true })).toBeVisible();
+    await expect
+      .poll(async () => {
+        const box = await page
+          .getByText('Message 1', { exact: true })
+          .boundingBox();
+        return box ? Math.abs(Math.round(box.y) - Math.round(initialTop)) : null;
+      })
+      .toBeLessThanOrEqual(2);
   });
 });

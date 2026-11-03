@@ -3,18 +3,17 @@ import messages from './i18n';
 
 const SPANISH_EXPECTED = {
     identityValidationAutoBadgeFree: 'Gratis',
-    identityValidationAutoBadgeInstant: 'Al instante',
+    identityValidationAutoBadgeInstant: 'Sin demora',
     identityValidationManualBadgeTime: 'Hasta 48hs.',
-    identityValidationManualCardDesc:
-        '¿No tenés Mercado Pago? Subí tu documentación y la revisamos.'
+    identityValidationManualCardDesc: 'Subí tu documentación y la revisamos.'
 };
 
 const ENGLISH_EXPECTED = {
     identityValidationAutoBadgeFree: 'Free',
-    identityValidationAutoBadgeInstant: 'Instant',
+    identityValidationAutoBadgeInstant: 'No delay',
     identityValidationManualBadgeTime: 'Up to 48hrs.',
     identityValidationManualCardDesc:
-        "Don't have Mercado Pago? Upload your documents and we'll review them."
+        "Upload your documents and we'll review them."
 };
 
 describe('identityValidationChoiceCardCopy (i18n)', () => {

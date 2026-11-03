@@ -168,21 +168,25 @@ async function fillDriverTripWizard(
     timeout: 10000,
   });
   await setAvailableSeats(page, availableSeats);
+  await clickWizardNext(page);
+
+  await expect(page.getByTestId('trip-creation-wizard-step-8')).toBeVisible();
   const priceField = page.getByLabel(/contribución por persona/i);
   if (await priceField.isVisible().catch(() => false)) {
     await priceField.fill(String(seatPrice));
   }
+  await page.getByTestId('trip-contribution-no-sena').check({ force: true });
+  await page.getByTestId('trip-contribution-no-lucrar').check({ force: true });
   await clickWizardNext(page);
 
-  await expect(page.getByTestId('trip-creation-wizard-step-8')).toBeVisible();
+  await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
   await page
     .getByPlaceholder(/comentario|pasajeros|contanos/i)
     .fill(description);
   await clickWizardNext(page);
 
-  await expect(page.getByTestId('trip-creation-wizard-step-9')).toBeVisible();
-  await page.getByLabel(/me comprometo/i).check({ force: true });
-  await page.getByRole('button', { name: /crear viaje/i }).click();
+  await expect(page.getByTestId('trip-creation-wizard-step-10')).toBeVisible();
+  await page.getByRole('button', { name: /crear viaje|publicar viaje/i }).click();
 }
 
 async function deleteOwnedTripsFromMyTrips(page) {

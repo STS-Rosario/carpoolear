@@ -21,16 +21,14 @@
                 </h4>
                 <UnLitroInfoCard
                     :charged="unLitroKind === 'charged'"
+                    :complimentary="unLitroKind === 'complimentary'"
                     :bonificado="unLitroKind === 'bonificado'"
                     :free-trips-amount="freeTripsAmount"
                 />
             </div>
         </template>
 
-        <div
-            v-if="!showUnLitroPayment"
-            class="trip-creation-success__actions"
-        >
+        <div class="trip-creation-success__actions">
             <AppButton
                 variant="primary"
                 block
@@ -193,6 +191,10 @@ export default {
         creationSnapshot: {
             type: Object,
             default: null
+        },
+        hasComplimentarySellado: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -221,7 +223,8 @@ export default {
         unLitroKind() {
             return unLitroCardKindFromTrip(this.trip, {
                 selladoEnabled:
-                    this.config && this.config.module_trip_creation_payment_enabled
+                    this.config && this.config.module_trip_creation_payment_enabled,
+                hasComplimentarySellado: this.hasComplimentarySellado
             });
         },
         freeTripsAmount() {

@@ -69,7 +69,8 @@ import AppInput from '../ui/AppInput.vue';
 import { useAuthStore } from '../../stores/auth.js';
 import { useRootStore } from '../../stores/root.js';
 import { useTripLiveShareStore } from '../../stores/tripLiveShare.js';
-import toast from '../../cordova/toast.js';
+import dialogs from '../../services/dialogs.js';
+import { copyTextToClipboard } from '../../utils/copyTextToClipboard.js';
 import { shareContent } from '../../utils/shareContent.js';
 import {
     createLiveLocationMap,
@@ -92,7 +93,8 @@ export default {
             errorMessage: '',
             mapInstance: null,
             marker: null,
-            trip: null
+            trip: null,
+            _mapGeneration: 0
         };
     },
     computed: {
@@ -154,13 +156,18 @@ export default {
                 this.syncMap();
             }
         },
-        syncMap() {
+        async syncMap() {
             if (!this.hasCoordinates || !this.$refs.mapEl) {
                 return;
             }
             const { lat, lng } = this.share;
             if (!this.mapInstance) {
-                const created = createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                const gen = ++this._mapGeneration;
+                const created = await createLiveLocationMap(this.$refs.mapEl, lat, lng);
+                if (gen !== this._mapGeneration) {
+                    destroyLiveLocationMap(created.map);
+                    return;
+                }
                 this.mapInstance = created.map;
                 this.marker = created.marker;
             } else {
@@ -183,6 +190,7 @@ export default {
             }
         },
         async stopSharing() {
+            this._mapGeneration += 1;
             destroyLiveLocationMap(this.mapInstance);
             this.mapInstance = null;
             this.marker = null;
@@ -192,11 +200,13 @@ export default {
             if (!this.shareUrl) {
                 return;
             }
-            try {
-                await navigator.clipboard.writeText(this.shareUrl);
-                toast.toast(this.$t('liveLocationCopySuccess'));
-            } catch (err) {
-                console.error('[LiveLocationShare] copy failed:', err);
+            const copied = await copyTextToClipboard(this.shareUrl);
+            if (copied) {
+                dialogs.message(this.$t('liveLocationCopySuccess'), {
+                    estado: 'success'
+                });
+            } else {
+                console.error('[LiveLocationShare] copy failed');
             }
         },
         async shareLiveUrl() {
@@ -218,6 +228,7 @@ export default {
         this.loadStatus();
     },
     beforeUnmount() {
+        this._mapGeneration += 1;
         destroyLiveLocationMap(this.mapInstance);
         this.resetStore();
     },

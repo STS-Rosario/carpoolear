@@ -16,7 +16,7 @@ const ES_COPY = {
     donationAfterRatingJoinAccent:
         'Club Carpoolear',
     donationAfterRatingMonthlyBenefitsIntro:
-        'Con tu aporte mensual podemos mantenernos y seguir mejorando, a cambio obtenés los siguientes beneficios por ser parte:',
+        'Con tu aporte mensual podemos mantener y seguir mejorando Carpoolear, a cambio obtenés los siguientes beneficios por ser parte:',
     donationAfterRatingBenefitPrioritySupportTitle:
         'Soporte prioritario:',
     donationAfterRatingBenefitPrioritySupportText:
@@ -81,7 +81,7 @@ const EN_COPY = {
     donationAfterRatingJoinAccent:
         'Carpoolear Club',
     donationAfterRatingMonthlyBenefitsIntro:
-        'With your monthly contribution we can keep going and keep improving, and in return you get the following benefits for being part of it:',
+        'With your monthly contribution we can maintain and continue improving Carpoolear, and in return you get the following benefits for being part of it:',
     donationAfterRatingBenefitPrioritySupportTitle:
         'Priority support:',
     donationAfterRatingBenefitPrioritySupportText:
