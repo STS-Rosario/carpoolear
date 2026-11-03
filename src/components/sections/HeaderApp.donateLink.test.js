@@ -133,13 +133,17 @@ describe('HeaderApp Aportar button', () => {
         );
     });
 
-    it('keeps the website /aportar link for logged-out visitors on web', async () => {
+    it('on web opens the in-app donation page for logged-out visitors', async () => {
         setPlatform('web');
         const wrapper = await mountLoggedInMobileHeader({ user: null });
 
-        const hrefs = wrapper
-            .findAll('a.app-button--header-donate')
-            .map((link) => link.attributes('href'));
-        expect(hrefs).toEqual(['/aportar']);
+        const donateLinks = wrapper
+            .findAllComponents({ name: 'RouterLink' })
+            .filter((link) => link.classes('app-button--header-donate'));
+        expect(donateLinks).toHaveLength(2);
+        donateLinks.forEach((link) => {
+            expect(link.props('to')).toEqual({ name: 'donate' });
+        });
+        expect(wrapper.find('a[href*="aportar"]').exists()).toBe(false);
     });
 });

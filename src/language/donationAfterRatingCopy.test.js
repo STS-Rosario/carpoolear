@@ -64,7 +64,10 @@ const ES_COPY = {
     donationAfterRatingSignOffTeamName:
         'Equipo Carpoolear',
     donationAfterRatingContinueWithoutContributing:
-        'Continuar sin aportar'
+        'Continuar sin aportar',
+    donationAfterRatingClubLoginRequired:
+        'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
+    donationAfterRatingClubLoginOk: 'Ok'
 };
 
 const EN_COPY = {
@@ -129,7 +132,10 @@ const EN_COPY = {
     donationAfterRatingSignOffTeamName:
         'The Carpoolear Team',
     donationAfterRatingContinueWithoutContributing:
-        'Continue without contributing'
+        'Continue without contributing',
+    donationAfterRatingClubLoginRequired:
+        'To be a Club Carpoolear member you need to be logged in to the app, we will redirect you',
+    donationAfterRatingClubLoginOk: 'Ok'
 };
 
 /** Old copy that is not in the document. */

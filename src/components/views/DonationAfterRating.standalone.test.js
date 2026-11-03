@@ -28,14 +28,14 @@ const donationApi = vi.hoisted(() => ({
 
 vi.mock('../../services/api/Donation.js', () => ({ default: donationApi }));
 
-async function mountPage(props = {}, appConfig = {}) {
+async function mountPage(props = {}, appConfig = {}, { loggedIn = true } = {}) {
     const pinia = createPinia();
     setActivePinia(pinia);
     const { useAuthStore } = await import('../../stores/auth');
     const { useProfileStore } = await import('../../stores/profile');
     useAuthStore().$patch({
-        auth: true,
-        user: { id: 42, name: 'Ana' },
+        auth: loggedIn,
+        user: loggedIn ? { id: 42, name: 'Ana' } : null,
         appConfig: {
             platform_donations_api_enabled: true,
             platform_donations_qr_enabled: true,
@@ -45,6 +45,8 @@ async function mountPage(props = {}, appConfig = {}) {
     const registerDonation = vi.fn(() => Promise.resolve());
     useProfileStore().registerDonation = registerDonation;
     const push = vi.fn();
+    const replace = vi.fn();
+    const router = { push, replace, rememberRoute: null };
 
     const { default: DonationAfterRating } = await import(
         './DonationAfterRating.vue'
@@ -53,12 +55,13 @@ async function mountPage(props = {}, appConfig = {}) {
         props,
         global: {
             plugins: [pinia, i18n],
-            mocks: { $router: { push }, $publicImg: () => '' },
-            stubs: { DonationAfterRatingHero: true }
+            mocks: { $router: router, $publicImg: () => '' },
+            stubs: { DonationAfterRatingHero: true },
+            directives: { clickoutside: {} }
         }
     });
     await flushPromises();
-    return { wrapper, registerDonation, push };
+    return { wrapper, registerDonation, push, replace, router };
 }
 
 function buttonWithText(wrapper, key) {
@@ -255,5 +258,69 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(donationApi.getPaymentStatus).toHaveBeenCalledWith(88);
         expect(push).toHaveBeenCalledWith({ name: 'trips' });
         expect(wrapper.find('.qr-payment-panel').exists()).toBe(false);
+    });
+
+    it('lets guests start a one-time checkout without a user id', async () => {
+        const { wrapper } = await mountPage({}, {}, { loggedIn: false });
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+
+        await buttonWithText(wrapper, 'donationAfterRatingOnceCta').trigger(
+            'click'
+        );
+        await flushPromises();
+
+        expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
+            amount: 5000,
+            source: 'donate_page',
+            trip_id: undefined
+        });
+        expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
+        expect(donationApi.checkoutMonthly).not.toHaveBeenCalled();
+    });
+
+    it('asks guests to log in instead of starting Club Carpoolear checkout', async () => {
+        const { wrapper } = await mountPage({}, {}, { loggedIn: false });
+        await wrapper.find('input#donationAfterRatingMonthly-7500').setValue(true);
+
+        await buttonWithText(
+            wrapper,
+            'donationAfterRatingJoinCommunityMonthly'
+        ).trigger('click');
+        await flushPromises();
+
+        expect(donationApi.checkoutMonthly).not.toHaveBeenCalled();
+        expect(open).not.toHaveBeenCalled();
+        expect(wrapper.text()).toContain(
+            i18n.global.t('donationAfterRatingClubLoginRequired')
+        );
+        expect(wrapper.text()).toContain(
+            i18n.global.t('donationAfterRatingClubLoginOk')
+        );
+    });
+
+    it('redirects guests to login from the Club Carpoolear modal Ok button', async () => {
+        const { wrapper, replace, router } = await mountPage(
+            {},
+            {},
+            { loggedIn: false }
+        );
+
+        await buttonWithText(
+            wrapper,
+            'donationAfterRatingJoinCommunityMonthly'
+        ).trigger('click');
+        await flushPromises();
+
+        const ok = wrapper
+            .findAll('button')
+            .find((button) =>
+                button.text().includes(i18n.global.t('donationAfterRatingClubLoginOk'))
+            );
+        await ok.trigger('click');
+        await flushPromises();
+
+        expect(router.rememberRoute).toEqual({ name: 'donate' });
+        expect(replace).toHaveBeenCalledWith({ name: 'login' });
+        expect(donationApi.checkoutMonthly).not.toHaveBeenCalled();
     });
 });
