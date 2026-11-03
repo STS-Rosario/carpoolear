@@ -25,13 +25,14 @@ function hasCordovaSocialShare() {
 }
 
 function pruneShareFields(fields) {
-    const data = {};
-    for (const [key, value] of Object.entries(fields)) {
+    return Object.entries(fields).reduce((acc, entry) => {
+        const key = entry[0];
+        const value = entry[1];
         if (value != null && String(value).trim() !== '') {
-            data[key] = value;
+            acc[key] = value;
         }
-    }
-    return data;
+        return acc;
+    }, {});
 }
 
 /**
@@ -63,14 +64,17 @@ export function buildNavigatorSharePayload({ title, text, url }) {
         return { data: preferred || null };
     }
 
-    for (const data of candidates) {
+    const supported = candidates.find((payload) => {
         try {
-            if (nav.canShare(data)) {
-                return { data };
-            }
+            return nav.canShare(payload);
         } catch {
             // Some browsers throw on canShare for unsupported shapes.
+            return false;
         }
+    });
+
+    if (supported) {
+        return { data: supported };
     }
 
     return { data: null, reason: 'canShare_rejected' };
