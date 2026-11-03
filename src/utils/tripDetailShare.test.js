@@ -38,9 +38,7 @@ describe('shareTripDetail', () => {
     });
 
     it('shares localized trip text and detail url', async () => {
-        const { buildAbsoluteTripDetailUrl, shareTripDetail } = await import(
-            './tripDetailShare.js'
-        );
+        const { shareTripDetail } = await import('./tripDetailShare.js');
         const shareContent = vi.fn(async () => ({ ok: true, method: 'navigator' }));
         const trip = {
             id: 7,
