@@ -181,6 +181,12 @@ describe('Trip card future owner footer actions', () => {
         );
     });
 
+    it('allows decreasing to zero free seats instead of gating on total_seats < 1', () => {
+        expect(footerExtra).not.toContain('trip.total_seats < 1');
+        expect(footerExtra).toContain('canDecreaseFreeSeats');
+        expect(footerExtra).toContain('seats_available');
+    });
+
     it('removes icon-only eye edit trash controls from footer-extra', () => {
         expect(footerExtra).not.toContain('fa-eye');
         expect(footerExtra).not.toContain('fa-pencil');
