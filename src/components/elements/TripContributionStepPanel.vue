@@ -87,64 +87,64 @@
                 v-html="$t('tripContributionImportantBody')"
             ></div>
 
-            <div class="trip-contribution-step__pledges">
-                <div
-                    class="trip-contribution-step__no-sena"
-                    :class="{ 'has-error': Boolean(noCobrarSenaError) }"
-                >
-                    <label class="trip-contribution-step__no-sena-row">
-                        <input
-                            type="checkbox"
-                            class="trip-contribution-step__no-sena-input"
-                            data-testid="trip-contribution-no-sena"
-                            :checked="noCobrarSena"
-                            @change="
-                                $emit('update:noCobrarSena', $event.target.checked)
-                            "
-                        />
-                        <strong>{{ $t('meComprometoNoCobrarSena') }}</strong>
-                    </label>
-                    <span class="error" v-if="noCobrarSenaError">{{
-                        noCobrarSenaError
-                    }}</span>
-                </div>
-
-                <div
-                    class="trip-contribution-step__no-lucrar"
-                    :class="{ 'has-error': Boolean(noLucrarError) }"
-                >
-                    <label class="trip-contribution-step__no-lucrar-row">
-                        <input
-                            type="checkbox"
-                            class="trip-contribution-step__no-lucrar-input"
-                            data-testid="trip-contribution-no-lucrar"
-                            :aria-label="$t('meComprometo')"
-                            :checked="noLucrar"
-                            @change="$emit('update:noLucrar', $event.target.checked)"
-                        />
-                        <span>
-                            <strong>{{ $t('meComprometo') }}</strong>
-                            <span class="trip-contribution-step__no-lucrar-lead">
-                                {{ $t('tripReviewNoLucrarLead') }}
-                                <button
-                                    type="button"
-                                    class="trip-contribution-step__more-info"
-                                    @click.prevent="showNoLucrarModal = true"
-                                >
-                                    {{ $t('tripReviewMoreInfo') }}
-                                </button>
-                            </span>
-                        </span>
-                    </label>
-                    <span class="error" v-if="noLucrarError">{{
-                        noLucrarError
-                    }}</span>
-                </div>
-            </div>
-
             <p class="trip-contribution-step__important-explainer">
                 {{ $t('tripContributionDivisionExplainerPrefix') }}<router-link :to="{ name: 'division_de_gastos' }" :target="inAppLinkTarget()" rel="noopener noreferrer">{{ $t('tripContributionDivisionExplainerLink') }}</router-link>{{ $t('tripContributionDivisionExplainerSuffix') }}
             </p>
+        </div>
+
+        <div class="trip-contribution-step__pledges">
+            <div
+                class="trip-contribution-step__no-sena"
+                :class="{ 'has-error': Boolean(noCobrarSenaError) }"
+            >
+                <label class="trip-contribution-step__no-sena-row">
+                    <input
+                        type="checkbox"
+                        class="trip-contribution-step__no-sena-input"
+                        data-testid="trip-contribution-no-sena"
+                        :checked="noCobrarSena"
+                        @change="
+                            $emit('update:noCobrarSena', $event.target.checked)
+                        "
+                    />
+                    <strong>{{ $t('meComprometoNoCobrarSena') }}</strong>
+                </label>
+                <span class="error" v-if="noCobrarSenaError">{{
+                    noCobrarSenaError
+                }}</span>
+            </div>
+
+            <div
+                class="trip-contribution-step__no-lucrar"
+                :class="{ 'has-error': Boolean(noLucrarError) }"
+            >
+                <label class="trip-contribution-step__no-lucrar-row">
+                    <input
+                        type="checkbox"
+                        class="trip-contribution-step__no-lucrar-input"
+                        data-testid="trip-contribution-no-lucrar"
+                        :aria-label="$t('meComprometo')"
+                        :checked="noLucrar"
+                        @change="$emit('update:noLucrar', $event.target.checked)"
+                    />
+                    <span>
+                        <strong>{{ $t('meComprometo') }}</strong>
+                        <span class="trip-contribution-step__no-lucrar-lead">
+                            {{ $t('tripReviewNoLucrarLead') }}
+                            <button
+                                type="button"
+                                class="trip-contribution-step__more-info"
+                                @click.prevent="showNoLucrarModal = true"
+                            >
+                                {{ $t('tripReviewMoreInfo') }}
+                            </button>
+                        </span>
+                    </span>
+                </label>
+                <span class="error" v-if="noLucrarError">{{
+                    noLucrarError
+                }}</span>
+            </div>
         </div>
 
         <modal
@@ -417,7 +417,7 @@ export default {
 }
 
 .trip-contribution-step__pledges {
-    margin-top: 1rem;
+    margin-top: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;

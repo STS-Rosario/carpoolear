@@ -4,6 +4,10 @@ import path from 'node:path';
 
 const componentPath = path.resolve(__dirname, 'TripContributionStepPanel.vue');
 const componentSource = fs.readFileSync(componentPath, 'utf8');
+const templateSource = componentSource.slice(
+    0,
+    componentSource.indexOf('</template>') + '</template>'.length
+);
 
 describe('TripContributionStepPanel.vue', () => {
     it('renders amount input with suggested accordion and importante notice', () => {
@@ -57,8 +61,11 @@ describe('TripContributionStepPanel.vue', () => {
             'trip-contribution-step__important-explainer'
         );
         expect(bodyIndex).toBeGreaterThan(-1);
-        expect(pledgesIndex).toBeGreaterThan(bodyIndex);
-        expect(explainerIndex).toBeGreaterThan(pledgesIndex);
+        expect(explainerIndex).toBeGreaterThan(bodyIndex);
+        expect(pledgesIndex).toBeGreaterThan(explainerIndex);
+        expect(templateSource).toMatch(
+            /trip-contribution-step__important-explainer[\s\S]*?<\/div>\s*<div class="trip-contribution-step__pledges">/
+        );
     });
 
     it('does not write the suggested amount into the price input on click', () => {
@@ -110,18 +117,21 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain(
             'data-testid="trip-contribution-no-sena"'
         );
-        const bodyIndex = componentSource.indexOf(
+        const bodyIndex = templateSource.indexOf(
             'trip-contribution-step__important-body'
         );
-        const checkboxIndex = componentSource.indexOf(
+        const checkboxIndex = templateSource.indexOf(
             'trip-contribution-step__no-sena'
         );
-        const explainerIndex = componentSource.indexOf(
+        const explainerIndex = templateSource.indexOf(
             'trip-contribution-step__important-explainer'
         );
         expect(bodyIndex).toBeGreaterThan(-1);
-        expect(checkboxIndex).toBeGreaterThan(bodyIndex);
-        expect(explainerIndex).toBeGreaterThan(checkboxIndex);
+        expect(explainerIndex).toBeGreaterThan(bodyIndex);
+        expect(checkboxIndex).toBeGreaterThan(explainerIndex);
+        expect(templateSource).not.toMatch(
+            /trip-contribution-step__important[\s\S]*trip-contribution-step__pledges[\s\S]*trip-contribution-step__important-explainer/
+        );
     });
 
     it('renders the no-profit commitment checkbox after the no-deposit row', () => {
