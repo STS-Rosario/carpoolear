@@ -1,10 +1,10 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
-const toastMock = vi.fn();
+const messageMock = vi.fn();
 
-vi.mock('../services/toast.js', () => ({
+vi.mock('../services/dialogs.js', () => ({
     default: {
-        toast: toastMock
+        message: messageMock
     }
 }));
 
@@ -30,7 +30,7 @@ describe('buildAbsoluteTripDetailUrl', () => {
 
 describe('shareTripDetail', () => {
     beforeEach(() => {
-        toastMock.mockReset();
+        messageMock.mockReset();
     });
 
     afterEach(() => {
@@ -133,7 +133,9 @@ describe('shareTripDetail', () => {
         expect(writeText).toHaveBeenCalledWith(
             'Viaje a Rosario\n\nhttps://carpoolear.com.ar/app/trips/7'
         );
-        expect(toastMock).toHaveBeenCalledWith('Enlace copiado');
+        expect(messageMock).toHaveBeenCalledWith('Enlace copiado', {
+            estado: 'success'
+        });
         expect(result).toMatchObject({
             ok: true,
             method: 'clipboard',

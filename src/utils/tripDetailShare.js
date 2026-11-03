@@ -1,7 +1,7 @@
 import { shareContent as defaultShareContent } from './shareContent.js';
 import { buildTripShareMessage } from './tripShareMessage.js';
 import { buildWebAppTripDetailUrl } from './supportTicketTripReport.js';
-import toast from '../services/toast.js';
+import dialogs from '../services/dialogs.js';
 
 export function buildAbsoluteTripDetailUrl(tripId, env = import.meta.env) {
     return buildWebAppTripDetailUrl(tripId, env);
@@ -50,7 +50,9 @@ export async function shareTripDetail({
 
     try {
         await copyTripShareToClipboard({ text, url });
-        toast.toast(translate('liveLocationCopySuccess'));
+        dialogs.message(translate('liveLocationCopySuccess'), {
+            estado: 'success'
+        });
         return {
             ...result,
             ok: true,
