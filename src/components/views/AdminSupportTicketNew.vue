@@ -54,17 +54,18 @@
                         @change="syncMessageFromEditor"
                     />
                 </AppField>
-                <div v-if="showSuspendUserOption" class="form-group">
-                    <label class="checkbox-label">
+                <AppField v-if="showSuspendUserOption">
+                    <label class="admin-support-ticket-new__checkbox-option">
                         <input v-model="createForm.suspend_user" type="checkbox" />
                         {{ $t('suspenderUsuario') }}
                     </label>
-                </div>
+                </AppField>
                 <AppField v-if="showExcessUserNoteOption" :label="$t('notaPrivadaSoloAdmins')">
                     <textarea
                         v-model="createForm.private_note"
                         class="form-control"
                         rows="4"
+                        maxlength="255"
                         :placeholder="$t('notaPrivadaSoloAdmins')"
                     ></textarea>
                 </AppField>
@@ -87,6 +88,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { useAuthStore } from '../../stores/auth';
 import dialogs from '../../services/dialogs';
+import UserApi from '../../services/api/User';
 import { ADMIN_PERMISSIONS, can } from '../../utils/adminPermissions';
 
 export default {
@@ -110,8 +112,13 @@ export default {
                 trip_id: null,
                 suspend_user: false,
                 private_note: ''
-            }
+            },
+            privateNoteLoadToken: 0,
+            userApi: null
         };
+    },
+    created() {
+        this.userApi = new UserApi();
     },
     computed: {
         ...mapGetters(useAuthStore, {
@@ -137,9 +144,11 @@ export default {
                 this.createForm.trip_id = null;
             }
             this.syncRouteQuery();
+            this.loadPrivateNoteForSelectedUser();
         },
         'createForm.type'() {
             this.syncRouteQuery();
+            this.loadPrivateNoteForSelectedUser();
         },
         'createForm.subject'() {
             this.syncRouteQuery();
@@ -185,6 +194,29 @@ export default {
                 this.createForm.message_markdown = String(query.message);
             }
         },
+        loadPrivateNoteForSelectedUser() {
+            if (this.createForm.type !== 'excess_contribution') {
+                this.createForm.private_note = '';
+                return;
+            }
+            const userId = this.createForm.user_id;
+            if (!userId) {
+                this.createForm.private_note = '';
+                return;
+            }
+            const token = ++this.privateNoteLoadToken;
+            return this.userApi.show(userId).then((body) => {
+                if (token !== this.privateNoteLoadToken || this.createForm.user_id !== userId) {
+                    return;
+                }
+                const note = body && body.data ? body.data.private_note : '';
+                this.createForm.private_note = note ? String(note) : '';
+            }).catch(() => {
+                if (token === this.privateNoteLoadToken) {
+                    this.createForm.private_note = '';
+                }
+            });
+        },
         syncRouteQuery() {
             const query = {};
             if (this.selectedUser && this.selectedUser.id) {
@@ -207,6 +239,13 @@ export default {
         },
         createTicket() {
             this.createForm.message_markdown = this.messageMarkdownFromEditor();
+            if (
+                this.showSuspendUserOption &&
+                this.createForm.suspend_user &&
+                !confirm(this.$t('confirmarSuspenderUsuarioExcesoContribucion'))
+            ) {
+                return;
+            }
             this.creating = true;
             const payload = { ...this.createForm };
             if (!payload.suspend_user) {
@@ -221,14 +260,16 @@ export default {
             }
             return this.adminCreateTicket(payload)
                 .then((ticket) => {
-                    dialogs.message(this.$t('perfilActualizadoCorrectamente'), { estado: 'success' });
+                    dialogs.message(this.$t('ticketCreadoCorrectamente'), { estado: 'success' });
                     this.$router.push({ name: 'admin-support-ticket-detail', params: { id: ticket.id } });
                 })
                 .catch((error) => {
-                    const messageKey =
-                        error && error.status === 409
-                            ? 'excessContributionTicketAlreadyExists'
-                            : 'errorDatos';
+                    let messageKey = 'errorDatos';
+                    if (error && error.status === 409) {
+                        messageKey = 'excessContributionTicketAlreadyExists';
+                    } else if (error && error.status === 403) {
+                        messageKey = 'excessContributionSuspendForbidden';
+                    }
                     dialogs.message(this.$t(messageKey), { estado: 'error' });
                 })
                 .finally(() => {
@@ -239,6 +280,7 @@ export default {
     mounted() {
         this.applyPrefill();
         this.showMessageEditor = true;
+        this.loadPrivateNoteForSelectedUser();
     },
     components: {
         AdminLayout,
@@ -277,5 +319,13 @@ export default {
 
 .admin-support-ticket-new__editor-field {
     margin-bottom: 16px;
+}
+
+.admin-support-ticket-new__checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    cursor: pointer;
 }
 </style>

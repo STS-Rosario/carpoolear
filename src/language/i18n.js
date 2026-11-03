@@ -115,6 +115,11 @@ const messages = {
         excessContributionTicketAlreadyExists:
             'Este viaje ya tiene un ticket de exceso de contribución',
         excessContributionTicketView: 'Ver ticket de exceso de contribución',
+        confirmarSuspenderUsuarioExcesoContribucion:
+            '¿Estás seguro que querés suspender al usuario? Esto será inmediato y esconderá sus viajes pendientes, si los tiene.',
+        excessContributionSuspendForbidden:
+            'No tenés permiso para suspender usuarios al crear este ticket.',
+        ticketCreadoCorrectamente: 'Ticket creado correctamente.',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -2355,6 +2360,14 @@ const messages = {
         excessContributionTicketTemplateFirst: '1er falta',
         excessContributionTicketTemplateSecond: '2da falta',
         excessContributionTicketTemplateThird: '3er falta',
+        excessContributionTicketAlreadyExists:
+            'Este viaje ya tiene un ticket de exceso de contribución',
+        excessContributionTicketView: 'Ver ticket de exceso de contribución',
+        confirmarSuspenderUsuarioExcesoContribucion:
+            '¿Estás seguro que querés suspender al usuario? Esto será inmediato y esconderá sus viajes pendientes, si los tiene.',
+        excessContributionSuspendForbidden:
+            'No tenés permiso para suspender usuarios al crear este ticket.',
+        ticketCreadoCorrectamente: 'Ticket creado correctamente.',
         adminUsuarioTieneTicketsSoporte: 'Este usuario tiene {count} ticket(s) de soporte asociado(s).',
         adminUsuarioVerTicketsSoporte: 'Ver tickets de soporte ({count})',
         crearNuevoTicketMesaAyuda: 'Crear nuevo ticket de mesa de ayuda',
@@ -4320,6 +4333,11 @@ const messages = {
         excessContributionTicketAlreadyExists:
             'This trip already has an excess contribution ticket',
         excessContributionTicketView: 'View excess contribution ticket',
+        confirmarSuspenderUsuarioExcesoContribucion:
+            'Are you sure you want to suspend this user? It takes effect immediately and will hide their pending trips, if any.',
+        excessContributionSuspendForbidden:
+            'You do not have permission to suspend users when creating this ticket.',
+        ticketCreadoCorrectamente: 'Ticket created successfully.',
         adminUsuarioTieneTicketsSoporte: 'This user has {count} associated support ticket(s).',
         adminUsuarioVerTicketsSoporte: 'View support tickets ({count})',
         crearNuevoTicketMesaAyuda: 'Create new help desk ticket',
