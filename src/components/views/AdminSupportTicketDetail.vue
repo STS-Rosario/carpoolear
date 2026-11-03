@@ -29,7 +29,6 @@
             <AppButton
                 v-if="showAssignTicketButton"
                 variant="secondary"
-                :disabled="isAssignTicketDisabled(ticket, currentAdminId)"
                 @click="assignTicketToMe"
             >
                 {{ $t('asignarmeTicket') }}
@@ -266,9 +265,9 @@ import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
-    isAssignTicketDisabled,
     isReplyBlockedByOtherAdminAssignment,
     isTicketAssignedToAdmin,
+    shouldConfirmReassignBeforeAssign,
     shouldShowAssignTicketButton
 } from '../../utils/adminSupportTicketAssignment';
 import { useAuthStore } from '../../stores/auth';
@@ -396,7 +395,7 @@ export default {
     },
     methods: {
         assignedAdminDisplayName,
-        isAssignTicketDisabled,
+        shouldConfirmReassignBeforeAssign,
         openBlobImageInNewTab,
         markdownToHtml,
         ticketSourceLabelKey,
@@ -700,8 +699,11 @@ export default {
                 });
         },
         assignTicketToMe() {
-            if (isAssignTicketDisabled(this.ticket, this.currentAdminId)) {
-                return;
+            if (shouldConfirmReassignBeforeAssign(this.ticket, this.currentAdminId)) {
+                const assigneeName = assignedAdminDisplayName(this.ticket) || this.$t('equipoCarpoolear');
+                if (!window.confirm(this.$t('confirmarReasignarmeTicket', { name: assigneeName }))) {
+                    return;
+                }
             }
             this.adminAssignMe(this.id)
                 .then(() => this.refresh())

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     assignedAdminDisplayName,
     hasActiveTicketAssignment,
-    isAssignTicketDisabled,
+    shouldConfirmReassignBeforeAssign,
     isReplyBlockedByOtherAdminAssignment,
     isTicketAssignableByAdmin,
     isTicketAssignedToAdmin,
@@ -51,13 +51,38 @@ describe('adminSupportTicketAssignment', () => {
     it('shows assign button for assignable unassigned tickets', () => {
         const ticket = { status: 'Open', unread_for_admin: 0 };
         expect(shouldShowAssignTicketButton(ticket, 3)).toBe(true);
-        expect(isAssignTicketDisabled(ticket, 3)).toBe(false);
     });
 
-    it('shows disabled assign button when ticket is assigned to another admin', () => {
-        const ticket = { status: 'Open', unread_for_admin: 0, assigned_to_user_id: 9 };
+    it('hides assign button for unassigned esperando respuesta tickets', () => {
+        const ticket = { status: 'Esperando respuesta', unread_for_admin: 0 };
+        expect(shouldShowAssignTicketButton(ticket, 3)).toBe(false);
+    });
+
+    it('shows assign button for takeover on esperando respuesta assigned to another admin', () => {
+        const ticket = {
+            status: 'Esperando respuesta',
+            unread_for_admin: 0,
+            assigned_to_user_id: 9,
+            assigned_to: { name: 'Other Admin' }
+        };
         expect(shouldShowAssignTicketButton(ticket, 3)).toBe(true);
-        expect(isAssignTicketDisabled(ticket, 3)).toBe(true);
+        expect(shouldConfirmReassignBeforeAssign(ticket, 3)).toBe(true);
+    });
+
+    it('requires reassign confirmation when ticket is assigned to another admin', () => {
+        const ticket = {
+            status: 'Open',
+            unread_for_admin: 0,
+            assigned_to_user_id: 9,
+            assigned_to: { name: 'Other Admin' }
+        };
+        expect(shouldShowAssignTicketButton(ticket, 3)).toBe(true);
+        expect(shouldConfirmReassignBeforeAssign(ticket, 3)).toBe(true);
+    });
+
+    it('does not require reassign confirmation for unassigned assignable tickets', () => {
+        const ticket = { status: 'Open', unread_for_admin: 0 };
+        expect(shouldConfirmReassignBeforeAssign(ticket, 3)).toBe(false);
     });
 
     it('hides assign button when ticket is assigned to current admin', () => {
