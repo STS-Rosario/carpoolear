@@ -1,5 +1,12 @@
 /* jshint esversion: 6 */
-import { auth, guest, profileComplete, authAdmin, requireIdentityValidation, requireIdentityPendingRatingsAndProfile } from './middleware.js';
+import {
+    auth,
+    guest,
+    profileComplete,
+    authAdmin,
+    requireIdentityPendingRatingsAndProfile,
+    requireProfileThenIdentityValidation
+} from './middleware.js';
 import { useAuthStore } from '../stores/auth';
 import { redirectMyAccountOnDesktop } from '../utils/myAccountRouteGuards.js';
 import { ADMIN_PERMISSIONS } from '../utils/adminPermissions';
@@ -272,9 +279,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireProfileThenIdentityValidation(to, from, next);
         },
         meta: {
             actionbar: {
@@ -398,9 +403,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireProfileThenIdentityValidation(to, from, next);
         },
         props: true,
         meta: {
@@ -419,9 +422,7 @@ export default [
                 auth(to, from, next);
                 return;
             }
-            requireIdentityValidation(to, from, () => {
-                profileComplete(to, from, next);
-            });
+            requireProfileThenIdentityValidation(to, from, next);
         },
         props: true,
         meta: {
@@ -640,6 +641,7 @@ export default [
                 path: 'identity-validation',
                 name: 'identity_validation',
                 component: IdentityValidation,
+                beforeEnter: profileComplete,
                 meta: {
                     tab: 'identity_validation',
                     actionbar: {
@@ -658,6 +660,7 @@ export default [
                 path: 'identity-validation/manual',
                 name: 'identity_validation_manual',
                 component: ManualIdentityValidation,
+                beforeEnter: profileComplete,
                 meta: {
                     tab: 'identity_validation',
                     actionbar: {
