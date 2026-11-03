@@ -1,7 +1,35 @@
+export const DOCUMENT_TYPE_DNI = 'dni';
+export const DOCUMENT_TYPE_PASSPORT = 'passport';
+export const PASSPORT_MIN_LENGTH = 5;
+export const PASSPORT_MAX_LENGTH = 9;
+
 function cleanDocumentIdValue(value) {
     return String(value || '')
         .replace(/[^a-zA-Z0-9]/g, '')
         .toUpperCase();
+}
+
+function isDniPattern(pattern) {
+    return typeof pattern === 'string' && pattern.includes('#') && !pattern.includes('A');
+}
+
+function isValidPassportValue(cleaned) {
+    return (
+        cleaned.length >= PASSPORT_MIN_LENGTH &&
+        cleaned.length <= PASSPORT_MAX_LENGTH
+    );
+}
+
+function dniPatternsFrom(formats) {
+    return resolvePatterns(formats).filter(isDniPattern);
+}
+
+function patternsForType(formats, type) {
+    if (type === DOCUMENT_TYPE_DNI) {
+        return dniPatternsFrom(formats);
+    }
+
+    return resolvePatterns(formats);
 }
 
 function matchDocumentIdPattern(cleaned, pattern) {
@@ -87,54 +115,98 @@ export function resolveProfileIdFormats(config = {}) {
     return [];
 }
 
+export function resolveDniFormats(config = {}) {
+    return resolveProfileIdFormats(config).filter(isDniPattern);
+}
+
+export function inferDocumentType(value, formats) {
+    const cleaned = cleanDocumentIdValue(value);
+    if (!cleaned) {
+        return DOCUMENT_TYPE_DNI;
+    }
+
+    if (
+        isValidDocumentId(value, formats, {
+            type: DOCUMENT_TYPE_DNI
+        })
+    ) {
+        return DOCUMENT_TYPE_DNI;
+    }
+
+    return DOCUMENT_TYPE_PASSPORT;
+}
+
 export function formatDocumentId(value, formats, options = {}) {
-    const { allowPartial = false } = options;
+    const { allowPartial = false, type } = options;
     const cleaned = cleanDocumentIdValue(value);
     if (!cleaned) {
         return '';
     }
 
-    const patterns = resolvePatterns(formats);
+    if (type === DOCUMENT_TYPE_PASSPORT) {
+        return cleaned.slice(0, PASSPORT_MAX_LENGTH);
+    }
+
+    const patterns = patternsForType(formats, type);
     const best = findBestPatternMatch(cleaned, patterns, true);
     if (best) {
         return best.match.formatted;
+    }
+
+    if (type !== DOCUMENT_TYPE_DNI && isValidPassportValue(cleaned)) {
+        return cleaned;
     }
 
     if (!allowPartial) {
         return '';
     }
 
+    if (type !== DOCUMENT_TYPE_DNI) {
+        return cleaned.slice(0, PASSPORT_MAX_LENGTH);
+    }
+
     const partialBest = findBestPatternMatch(cleaned, patterns, false);
     return partialBest ? partialBest.match.formatted : '';
 }
 
-export function cleanDocumentIdForStorage(value, formats) {
+export function cleanDocumentIdForStorage(value, formats, options = {}) {
     const cleaned = cleanDocumentIdValue(value);
-    if (!cleaned) {
-        return '';
-    }
-
-    const patterns = resolvePatterns(formats);
-    const best = findBestPatternMatch(cleaned, patterns, true);
-    if (!best) {
+    if (!cleaned || !isValidDocumentId(value, formats, options)) {
         return '';
     }
 
     return cleaned;
 }
 
-export function isValidDocumentId(value, formats) {
+export function isValidDocumentId(value, formats, options = {}) {
     const cleaned = cleanDocumentIdValue(value);
     if (!cleaned) {
         return false;
     }
 
-    const patterns = resolvePatterns(formats);
-    return Boolean(findBestPatternMatch(cleaned, patterns, true));
+    const { type } = options;
+    if (type === DOCUMENT_TYPE_PASSPORT) {
+        return isValidPassportValue(cleaned);
+    }
+
+    const patterns = patternsForType(formats, type);
+    if (findBestPatternMatch(cleaned, patterns, true)) {
+        return true;
+    }
+
+    if (type === DOCUMENT_TYPE_DNI) {
+        return false;
+    }
+
+    return isValidPassportValue(cleaned);
 }
 
-export function getMaxDocumentIdInputLength(formats) {
-    const patterns = resolvePatterns(formats);
+export function getMaxDocumentIdInputLength(formats, options = {}) {
+    if (options.type === DOCUMENT_TYPE_PASSPORT) {
+        return PASSPORT_MAX_LENGTH;
+    }
+
+    const patterns = patternsForType(formats, options.type);
     if (!patterns.length) {
         return 0;
     }
@@ -149,28 +221,35 @@ export function getProfileIdFormatsFromConfig(config) {
     return resolveProfileIdFormats(config);
 }
 
-export function formatDocumentIdFromConfig(value, config) {
-    return formatDocumentId(value, resolveProfileIdFormats(config));
+export function formatDocumentIdFromConfig(value, config, options = {}) {
+    return formatDocumentId(value, resolveProfileIdFormats(config), options);
 }
 
-export function cleanDocumentIdForStorageFromConfig(value, config) {
-    return cleanDocumentIdForStorage(value, resolveProfileIdFormats(config));
+export function cleanDocumentIdForStorageFromConfig(value, config, options = {}) {
+    return cleanDocumentIdForStorage(
+        value,
+        resolveProfileIdFormats(config),
+        options
+    );
 }
 
-export function isValidDocumentIdForConfig(value, config) {
-    return isValidDocumentId(value, resolveProfileIdFormats(config));
+export function isValidDocumentIdForConfig(value, config, options = {}) {
+    return isValidDocumentId(value, resolveProfileIdFormats(config), options);
 }
 
-export function getMaxDocumentIdInputLengthFromConfig(config) {
-    return getMaxDocumentIdInputLength(resolveProfileIdFormats(config));
+export function getMaxDocumentIdInputLengthFromConfig(config, options = {}) {
+    return getMaxDocumentIdInputLength(resolveProfileIdFormats(config), options);
 }
 
 export function getDocumentIdPlaceholderFromConfig(config) {
     return resolveProfileIdFormats(config).join(' / ');
 }
 
-export function formatDocumentIdInput(value, formats) {
-    return formatDocumentId(value, formats, { allowPartial: true });
+export function formatDocumentIdInput(value, formats, options = {}) {
+    return formatDocumentId(value, formats, {
+        ...options,
+        allowPartial: true
+    });
 }
 
 export { cleanDocumentIdValue };
