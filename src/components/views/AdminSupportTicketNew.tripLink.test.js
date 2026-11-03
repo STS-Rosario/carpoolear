@@ -3,14 +3,21 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { flushPromises, mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import i18n from '../../i18n';
+import { useAuthStore } from '../../stores/auth';
 
 const ticketsApi = vi.hoisted(() => ({ adminCreate: vi.fn() }));
+const userProfileApi = vi.hoisted(() => ({ show: vi.fn() }));
 const dialogs = vi.hoisted(() => ({ message: vi.fn() }));
 
 vi.mock('../../services/api', async (importOriginal) => ({
     ...(await importOriginal()),
     TicketsApi: vi.fn(function TicketsApi() {
         return ticketsApi;
+    })
+}));
+vi.mock('../../services/api/User', () => ({
+    default: vi.fn(function UserApi() {
+        return userProfileApi;
     })
 }));
 vi.mock('../../services/dialogs', () => ({ default: dialogs }));
@@ -24,9 +31,10 @@ const EXCESS_QUERY = {
     tripId: '321'
 };
 
-async function mountForm(query = EXCESS_QUERY) {
+async function mountForm(query = EXCESS_QUERY, authUser = null) {
     const pinia = createPinia();
     setActivePinia(pinia);
+    useAuthStore(pinia).setUser(authUser);
     const router = { replace: vi.fn(), push: vi.fn() };
     const { default: AdminSupportTicketNew } = await import('./AdminSupportTicketNew.vue');
     const wrapper = mount(AdminSupportTicketNew, {
@@ -71,7 +79,10 @@ describe('AdminSupportTicketNew trip link', () => {
 
     beforeEach(() => {
         ticketsApi.adminCreate.mockReset();
+        userProfileApi.show.mockReset();
+        userProfileApi.show.mockResolvedValue({ data: { private_note: '' } });
         dialogs.message.mockReset();
+        vi.stubGlobal('confirm', vi.fn(() => true));
     });
 
     afterEach(() => {
@@ -95,6 +106,18 @@ describe('AdminSupportTicketNew trip link', () => {
             name: 'admin-support-ticket-detail',
             params: { id: 88 }
         });
+        expect(dialogs.message).toHaveBeenCalledWith(i18n.global.t('ticketCreadoCorrectamente'), {
+            estado: 'success'
+        });
+    });
+
+    it('loads the user private note when creating an excess contribution ticket', async () => {
+        userProfileApi.show.mockResolvedValue({ data: { private_note: 'historial previo' } });
+        const { wrapper } = await mountForm();
+
+        expect(userProfileApi.show).toHaveBeenCalledWith(15);
+        await flushPromises();
+        expect(wrapper.vm.createForm.private_note).toBe('historial previo');
     });
 
     it('keeps the trip id in the route query when the form changes', async () => {
@@ -159,5 +182,124 @@ describe('AdminSupportTicketNew trip link', () => {
         expect(dialogs.message).toHaveBeenCalledWith(i18n.global.t('errorDatos'), {
             estado: 'error'
         });
+    });
+
+    it('shows a dedicated snackbar when suspend is forbidden', async () => {
+        ticketsApi.adminCreate.mockRejectedValue({ status: 403, data: {} });
+        const { wrapper } = await mountForm();
+
+        await submit(wrapper);
+
+        expect(dialogs.message).toHaveBeenCalledWith(
+            i18n.global.t('excessContributionSuspendForbidden'),
+            { estado: 'error' }
+        );
+    });
+
+    it('shows suspend checkbox and private note for excess_contribution when user can suspend', async () => {
+        ticketsApi.adminCreate.mockResolvedValue({ data: { id: 78 } });
+        const { wrapper } = await mountForm({}, {
+            id: 1,
+            is_admin: true,
+            admin_permissions: ['admin.users.suspend']
+        });
+
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.type = 'excess_contribution';
+        await flushPromises();
+        wrapper.vm.createForm.subject = 'Exceso';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = true;
+        wrapper.vm.createForm.private_note = 'Nota privada';
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.text()).toContain(i18n.global.t('suspenderUsuario'));
+        expect(wrapper.text()).toContain(i18n.global.t('notaPrivadaSoloAdmins'));
+
+        await wrapper.vm.createTicket();
+        await flushPromises();
+
+        expect(globalThis.confirm).toHaveBeenCalledWith(
+            i18n.global.t('confirmarSuspenderUsuarioExcesoContribucion')
+        );
+        expect(ticketsApi.adminCreate).toHaveBeenCalledWith(
+            expect.objectContaining({
+                type: 'excess_contribution',
+                suspend_user: true,
+                private_note: 'Nota privada'
+            })
+        );
+    });
+
+    it('does not create a ticket when suspend confirmation is cancelled', async () => {
+        vi.stubGlobal('confirm', vi.fn(() => false));
+        ticketsApi.adminCreate.mockResolvedValue({ data: { id: 81 } });
+        const { wrapper } = await mountForm({}, {
+            id: 1,
+            is_admin: true,
+            admin_permissions: ['admin.users.suspend']
+        });
+
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.type = 'excess_contribution';
+        wrapper.vm.createForm.subject = 'Exceso';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = true;
+        await wrapper.vm.$nextTick();
+        await wrapper.vm.createTicket();
+        await flushPromises();
+
+        expect(ticketsApi.adminCreate).not.toHaveBeenCalled();
+    });
+
+    it('does not send empty suspend_user or private_note', async () => {
+        ticketsApi.adminCreate.mockResolvedValue({ data: { id: 79 } });
+        const { wrapper } = await mountForm({}, {
+            id: 1,
+            is_admin: true,
+            admin_permissions: []
+        });
+
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.type = 'excess_contribution';
+        await flushPromises();
+        wrapper.vm.createForm.subject = 'Exceso';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = false;
+        wrapper.vm.createForm.private_note = '   ';
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.text()).not.toContain(i18n.global.t('suspenderUsuario'));
+        await wrapper.vm.createTicket();
+        await Promise.resolve();
+
+        const payload = ticketsApi.adminCreate.mock.calls.at(-1)[0];
+        expect(payload.suspend_user).toBeUndefined();
+        expect(payload.private_note).toBeUndefined();
+    });
+
+    it('does not show suspension checkbox for other ticket types', async () => {
+        ticketsApi.adminCreate.mockResolvedValue({ data: { id: 80 } });
+        const { wrapper } = await mountForm({}, {
+            id: 1,
+            is_admin: true,
+            admin_permissions: ['admin.users.suspend']
+        });
+
+        wrapper.vm.createForm.type = 'contact';
+        wrapper.vm.createForm.user_id = 10;
+        wrapper.vm.createForm.subject = 'Contacto';
+        wrapper.vm.createForm.message_markdown = 'Mensaje';
+        wrapper.vm.createForm.suspend_user = true;
+        wrapper.vm.createForm.private_note = 'Nota privada';
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.text()).not.toContain(i18n.global.t('suspenderUsuario'));
+
+        await wrapper.vm.createTicket();
+
+        const payload = ticketsApi.adminCreate.mock.calls.at(-1)[0];
+        expect(payload.suspend_user).toBeUndefined();
+        expect(payload.private_note).toBeUndefined();
     });
 });
