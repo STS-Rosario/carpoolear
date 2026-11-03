@@ -260,13 +260,40 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         expect(wrapper.find('.qr-payment-panel').exists()).toBe(false);
     });
 
-    it('lets guests start a one-time checkout without a user id', async () => {
+    it('asks guests to log in or continue before a one-time checkout', async () => {
         const { wrapper } = await mountPage({}, {}, { loggedIn: false });
         await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
 
         await buttonWithText(wrapper, 'donationAfterRatingOnceCta').trigger(
             'click'
         );
+        await flushPromises();
+
+        expect(donationApi.checkoutOnce).not.toHaveBeenCalled();
+        expect(open).not.toHaveBeenCalled();
+        expect(wrapper.text()).toContain(
+            i18n.global.t('donationAfterRatingGuestOnceWarning')
+        );
+        expect(wrapper.text()).toContain(
+            i18n.global.t('donationAfterRatingGuestOnceContinue')
+        );
+        expect(wrapper.text()).toContain(
+            i18n.global.t('donationAfterRatingGuestOnceLogin')
+        );
+    });
+
+    it('lets guests continue a one-time checkout from the warning modal', async () => {
+        const { wrapper } = await mountPage({}, {}, { loggedIn: false });
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+
+        await buttonWithText(wrapper, 'donationAfterRatingOnceCta').trigger(
+            'click'
+        );
+        await flushPromises();
+        await buttonWithText(
+            wrapper,
+            'donationAfterRatingGuestOnceContinue'
+        ).trigger('click');
         await flushPromises();
 
         expect(donationApi.checkoutOnce).toHaveBeenCalledWith({
@@ -276,6 +303,29 @@ describe('DonationAfterRating without a trip (Aportar page)', () => {
         });
         expect(open).toHaveBeenCalledWith('https://mp.test/once', '_blank');
         expect(donationApi.checkoutMonthly).not.toHaveBeenCalled();
+    });
+
+    it('redirects guests to login from the regular donation warning', async () => {
+        const { wrapper, replace, router } = await mountPage(
+            {},
+            {},
+            { loggedIn: false }
+        );
+        await wrapper.find('input#donationAfterRatingOnce-5000').setValue(true);
+
+        await buttonWithText(wrapper, 'donationAfterRatingOnceCta').trigger(
+            'click'
+        );
+        await flushPromises();
+        await buttonWithText(
+            wrapper,
+            'donationAfterRatingGuestOnceLogin'
+        ).trigger('click');
+        await flushPromises();
+
+        expect(router.rememberRoute).toEqual({ name: 'donate' });
+        expect(replace).toHaveBeenCalledWith({ name: 'login' });
+        expect(donationApi.checkoutOnce).not.toHaveBeenCalled();
     });
 
     it('asks guests to log in instead of starting Club Carpoolear checkout', async () => {

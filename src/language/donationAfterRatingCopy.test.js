@@ -67,7 +67,11 @@ const ES_COPY = {
         'Continuar sin aportar',
     donationAfterRatingClubLoginRequired:
         'Para ser miembro del Club Carpoolear tenés que estar logueado en la app, te vamos a redirigir',
-    donationAfterRatingClubLoginOk: 'Ok'
+    donationAfterRatingClubLoginOk: 'Ok',
+    donationAfterRatingGuestOnceWarning:
+        'No estás logueado, por lo que tu donación no quedará asociada a tu usuario. Te recomendamos loguearte así podemos identificarte como donante :)',
+    donationAfterRatingGuestOnceContinue: 'Donar sin ingresar',
+    donationAfterRatingGuestOnceLogin: 'Ingresar a Carpoolear'
 };
 
 const EN_COPY = {
@@ -135,7 +139,11 @@ const EN_COPY = {
         'Continue without contributing',
     donationAfterRatingClubLoginRequired:
         'To be a Club Carpoolear member you need to be logged in to the app, we will redirect you',
-    donationAfterRatingClubLoginOk: 'Ok'
+    donationAfterRatingClubLoginOk: 'Ok',
+    donationAfterRatingGuestOnceWarning:
+        "You're not logged in, so your contribution won't be linked to your account. We recommend logging in so we can identify you as a donor :)",
+    donationAfterRatingGuestOnceContinue: 'Contribute without signing in',
+    donationAfterRatingGuestOnceLogin: 'Sign in to Carpoolear'
 };
 
 /** Old copy that is not in the document. */
