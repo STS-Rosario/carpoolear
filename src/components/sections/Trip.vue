@@ -82,6 +82,7 @@
                         <div
                             v-if="!trip.is_passenger"
                             class="trip-seats-control"
+                            @click.stop
                         >
                             <span class="trip-seats-control__label">
                                 {{ $t('lugaresLibres') }}
@@ -91,7 +92,10 @@
                                     type="button"
                                     :aria-label="$t('disminuirCantidadAsientos')"
                                     v-on:click.stop="changeSeatsNumber(-1)"
-                                    :disabled="sending || trip.total_seats < 1"
+                                    :disabled="
+                                        sending ||
+                                        !canDecreaseFreeSeats(seats_available)
+                                    "
                                     class="btn btn-default"
                                 >
                                     -
@@ -150,6 +154,7 @@ import { shouldShowDriverSeatRequestLimitWarning } from '../../utils/tripSeatReq
 import { getTripCardLocationLabels } from '../../utils/tripCardLocationLabels.js';
 import { formatTripCardDate, formatTripCardTime } from '../../utils/tripCardDisplay.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
+import { canDecreaseFreeSeats } from '../../utils/tripFreeSeats.js';
 
 export default {
     name: 'trip',
@@ -186,6 +191,7 @@ export default {
     },
 
     methods: {
+        canDecreaseFreeSeats,
         ...mapActions(useTripsStore, {
             changeSeats: 'changeSeats',
             remove: 'remove'
