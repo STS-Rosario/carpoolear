@@ -47,15 +47,63 @@ export function formatTripValidationDialogMessage(fallback, messages) {
     return `${fallback}\n${unique.map((message) => `• ${message}`).join('\n')}`;
 }
 
+export function isTripFormErrorElementVisible(element) {
+    if (!element || typeof element.getClientRects !== 'function') {
+        return false;
+    }
+
+    const rects = element.getClientRects();
+    if (!rects || rects.length === 0) {
+        return false;
+    }
+
+    if (typeof window !== 'undefined' && typeof window.getComputedStyle === 'function') {
+        const style = window.getComputedStyle(element);
+        if (style.visibility === 'hidden' || style.display === 'none') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 export function findFirstTripFormErrorElement(root = document) {
     for (let i = 0; i < TRIP_FORM_ERROR_SELECTORS.length; i += 1) {
         const selector = TRIP_FORM_ERROR_SELECTORS[i];
         const nodes = root.querySelectorAll(selector);
 
-        if (nodes && nodes.length > 0) {
-            return nodes[0];
+        if (!nodes || nodes.length === 0) {
+            continue;
+        }
+
+        for (let j = 0; j < nodes.length; j += 1) {
+            if (isTripFormErrorElementVisible(nodes[j])) {
+                return nodes[j];
+            }
         }
     }
 
     return null;
+}
+
+export function scrollTripFormErrorElementIntoView(
+    element,
+    { behavior = 'smooth', block = 'center' } = {}
+) {
+    if (!element || typeof element.scrollIntoView !== 'function') {
+        return;
+    }
+
+    element.scrollIntoView({ behavior, block });
+}
+
+export function scrollToFirstTripFormError(root, options = {}) {
+    const element = findFirstTripFormErrorElement(root);
+    if (!element) {
+        return false;
+    }
+
+    const scroll = options.scroll || scrollTripFormErrorElementIntoView;
+    scroll(element, options);
+    return true;
 }

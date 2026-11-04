@@ -377,9 +377,7 @@ describe('NewTrip.vue incomplete car completion', () => {
 describe('NewTrip.vue contribution pricing breakdown', () => {
     it('stores trip-info pricing breakdown and passes occupants into the contribution step', () => {
         expect(viewSource).toContain('pricing_breakdown');
-        expect(viewSource).toMatch(
-            /this\.pricing_breakdown = result\.data\.pricing_breakdown/
-        );
+        expect(viewSource).toContain('applyTripInfoDataForRouteIndex');
         expect(viewSource).toContain('withOccupants');
         expect(viewSource).toContain('contributionPricingBreakdown');
         expect(wizardSource).toContain(':pricing-breakdown=');
@@ -428,11 +426,35 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toMatch(
             /requestId !== this\.tripInfoRequestId/
         );
-        expect(viewSource).toContain(
-            'Boolean(result.data.route_needs_payment)'
-        );
+        expect(viewSource).toContain('applyTripInfoDataForRouteIndex');
         expect(viewSource).toMatch(
             /loadSelladoViaje[\s\S]*selladoQuotaLoaded\s*=\s*true/
+        );
+    });
+});
+
+describe('NewTrip.vue route alternatives', () => {
+    it('requests trip-info with route_index and applies selected option metrics', () => {
+        expect(viewSource).toContain('selectedRouteIndex');
+        expect(viewSource).toContain('routeOptions');
+        expect(viewSource).toContain('selected_route_index');
+        expect(viewSource).toMatch(/data\.route_index = this\.selectedRouteIndex/);
+        expect(viewSource).toContain('applyTripInfoDataForRouteIndex');
+        expect(viewSource).toContain('onRouteIndexSelected');
+    });
+
+    it('resets selected route index when waypoints change', () => {
+        expect(viewSource).toMatch(
+            /getPlace\([\s\S]*this\.selectedRouteIndex = 0/
+        );
+        expect(viewSource).toMatch(
+            /resetPoints\([\s\S]*this\.selectedRouteIndex = 0/
+        );
+    });
+
+    it('restores selected_route_index when editing an existing trip', () => {
+        expect(viewSource).toMatch(
+            /restoreData\([\s\S]*trip\.selected_route_index/
         );
     });
 });

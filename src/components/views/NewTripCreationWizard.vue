@@ -125,6 +125,9 @@
                     :distance-string="form.distanceString"
                     :estimated-time-string="form.estimatedTimeString"
                     :co2-string="form.CO2String"
+                    :selected-route-index="form.selectedRouteIndex"
+                    :has-multiple-route-options="form.hasMultipleRouteOptions"
+                    @route-index-selected="form.onRouteIndexSelected"
                     :center="form.center"
                     :zoom="form.zoom"
                     :url="form.url"
@@ -180,6 +183,9 @@
                     :distance-string="form.distanceString"
                     :estimated-time-string="form.estimatedTimeString"
                     :co2-string="form.CO2String"
+                    :selected-route-index="form.selectedRouteIndex"
+                    :has-multiple-route-options="form.hasMultipleRouteOptions"
+                    @route-index-selected="form.onRouteIndexSelected"
                     :center="form.center"
                     :zoom="form.zoom"
                     :url="form.url"
@@ -232,6 +238,9 @@
                     :distance-string="form.distanceString"
                     :estimated-time-string="form.estimatedTimeString"
                     :co2-string="form.CO2String"
+                    :selected-route-index="form.selectedRouteIndex"
+                    :has-multiple-route-options="form.hasMultipleRouteOptions"
+                    @route-index-selected="form.onRouteIndexSelected"
                     :center="form.center"
                     :zoom="form.zoom"
                     :url="form.url"
@@ -662,6 +671,7 @@ import { shouldDisableTripCreationNext } from '../../utils/tripCreationTripInfo.
 import { getTripCreationWizardMountState } from '../../utils/tripCreationWizardMount.js';
 import { shouldShowContributionExcessWarning } from '../../utils/tripCreationContributionExcessWarning.js';
 import { resolveWizardStepperValidation } from '../../utils/tripCreationStepperValidation.js';
+import { scrollToFirstTripFormError } from '../../utils/tripFormValidationFeedback.js';
 
 export default {
     name: 'new-trip-creation-wizard',
@@ -1190,6 +1200,11 @@ export default {
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
         },
+        scrollToFirstFormError() {
+            this.$nextTick(() => {
+                scrollToFirstTripFormError(this.$el);
+            });
+        },
         syncDescriptionErrors(errors = {}) {
             if (this.currentStep !== STEP.DESCRIPTION) {
                 return;
@@ -1301,6 +1316,7 @@ export default {
         },
         goNext() {
             if (!this.validateCurrentStep()) {
+                this.scrollToFirstFormError();
                 return;
             }
             if (
@@ -1393,6 +1409,7 @@ export default {
         },
         async onSubmit() {
             if (!this.validateCurrentStep()) {
+                this.scrollToFirstFormError();
                 return;
             }
             await this.form.save();
@@ -1404,6 +1421,7 @@ export default {
         handleSaveFailure() {
             if (this.form.carSelectionError?.state) {
                 this.setCurrentStep(STEP.CAR);
+                this.scrollToFirstFormError();
                 return;
             }
             if (this.form.showCompleteCarModal || this.form.showTripCarsModal) {
@@ -1414,6 +1432,7 @@ export default {
             if (firstIncomplete) {
                 this.setCurrentStep(firstIncomplete);
             }
+            this.scrollToFirstFormError();
         },
         setPassengerMode(value) {
             if (Number(this.form.trip.is_passenger) === value) {

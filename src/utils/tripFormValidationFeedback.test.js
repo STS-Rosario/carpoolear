@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
     TRIP_FORM_ERROR_SELECTORS,
     collectActiveValidationMessages,
     findFirstTripFormErrorElement,
     formatTripValidationDialogMessage,
+    scrollToFirstTripFormError,
     shouldShowTripFormValidationSummary
 } from './tripFormValidationFeedback.js';
 
@@ -51,10 +52,14 @@ describe('tripFormValidationFeedback', () => {
     });
 
     it('prioritizes trip-error markers when scrolling to the first invalid field', () => {
+        const visibleMarker = {
+            textContent: 'Origen inválido',
+            getClientRects: () => [{ width: 1, height: 1 }]
+        };
         const root = {
             querySelectorAll(selector) {
                 if (selector === '.trip-error') {
-                    return [{ textContent: 'Origen inválido' }];
+                    return [visibleMarker];
                 }
                 if (selector === '.has-error') {
                     return [{ textContent: 'Fecha' }];
@@ -63,9 +68,55 @@ describe('tripFormValidationFeedback', () => {
             }
         };
 
-        expect(findFirstTripFormErrorElement(root)).toEqual({
-            textContent: 'Origen inválido'
-        });
+        expect(findFirstTripFormErrorElement(root)).toBe(visibleMarker);
         expect(TRIP_FORM_ERROR_SELECTORS[0]).toBe('.trip-error');
+    });
+
+    it('skips hidden error markers and scrolls to the first visible one', () => {
+        const hidden = {
+            getClientRects: () => [],
+            textContent: 'hidden'
+        };
+        const visible = {
+            getClientRects: () => [{ width: 10, height: 10 }],
+            textContent: 'Falta fecha'
+        };
+        const root = {
+            querySelectorAll(selector) {
+                if (selector === '.has-error') {
+                    return [hidden, visible];
+                }
+                return [];
+            }
+        };
+
+        expect(findFirstTripFormErrorElement(root)).toBe(visible);
+    });
+
+    it('scrollToFirstTripFormError invokes scroll on the first visible invalid field', () => {
+        const target = {
+            getClientRects: () => [{ width: 1, height: 1 }]
+        };
+        const root = {
+            querySelectorAll(selector) {
+                if (selector === '.trip-error') {
+                    return [target];
+                }
+                return [];
+            }
+        };
+        const scroll = vi.fn();
+
+        expect(
+            scrollToFirstTripFormError(root, { scroll })
+        ).toBe(true);
+        expect(scroll).toHaveBeenCalledWith(target, expect.any(Object));
+    });
+
+    it('returns false when no visible invalid field exists', () => {
+        const root = { querySelectorAll: () => [] };
+        expect(scrollToFirstTripFormError(root, { scroll: vi.fn() })).toBe(
+            false
+        );
     });
 });
