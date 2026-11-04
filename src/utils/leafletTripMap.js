@@ -20,12 +20,9 @@ export function fitLeafletMapToOsrmRoutes(map, routes, options = {}) {
     if (!map || !Array.isArray(routes) || routes.length === 0) {
         return;
     }
-    const latLngs = [];
-    for (const route of routes) {
-        if (route && Array.isArray(route.coordinates)) {
-            latLngs.push(...route.coordinates);
-        }
-    }
+    const latLngs = routes.flatMap((r) =>
+        r && Array.isArray(r.coordinates) ? r.coordinates : []
+    );
     fitLeafletMapToLatLngs(map, latLngs, options);
 }
 
