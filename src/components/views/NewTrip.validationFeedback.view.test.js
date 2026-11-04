@@ -9,7 +9,6 @@ describe('NewTrip validation feedback', () => {
     it('lists invalid trip fields and scrolls to the first visible error', () => {
         expect(newTripViewSource).toContain('collectActiveValidationMessages');
         expect(newTripViewSource).toContain('formatTripValidationDialogMessage');
-        expect(newTripViewSource).toContain('findFirstTripFormErrorElement');
         expect(newTripViewSource).toContain('scrollToFirstTripFormError');
         expect(newTripViewSource).toContain('getTripValidationErrorFields');
     });

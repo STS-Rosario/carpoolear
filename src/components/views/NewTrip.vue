@@ -141,8 +141,8 @@ import { handleTripCreateApiError } from '../../utils/tripCreateErrors.js';
 import { hasTooManyForeignTripEndpoints } from '../../utils/tripForeignEndpointsValidation.js';
 import {
     collectActiveValidationMessages,
-    findFirstTripFormErrorElement,
     formatTripValidationDialogMessage,
+    scrollToFirstTripFormError,
     shouldShowTripFormValidationSummary
 } from '../../utils/tripFormValidationFeedback.js';
 import { getTripValidationErrorFields } from '../../utils/tripFormValidationFields.js';
@@ -853,16 +853,13 @@ export default {
         },
         jumpToError() {
             const root = this.$refs.tripCreationWizard?.$el || this.$el;
-            const element = findFirstTripFormErrorElement(root);
-            if (element) {
-                this.$scrollToElement(element);
+            if (scrollToFirstTripFormError(root)) {
                 return;
             }
 
-            let hasError = document.getElementsByClassName('has-error');
+            const hasError = document.getElementsByClassName('has-error');
             if (hasError.length) {
-                let fallbackElement = hasError[0];
-                this.$scrollToElement(fallbackElement);
+                this.$scrollToElement(hasError[0]);
             }
         },
         getTripValidationDialogMessage() {

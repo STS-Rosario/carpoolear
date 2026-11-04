@@ -52,10 +52,14 @@ describe('tripFormValidationFeedback', () => {
     });
 
     it('prioritizes trip-error markers when scrolling to the first invalid field', () => {
+        const visibleMarker = {
+            textContent: 'Origen inválido',
+            getClientRects: () => [{ width: 1, height: 1 }]
+        };
         const root = {
             querySelectorAll(selector) {
                 if (selector === '.trip-error') {
-                    return [{ textContent: 'Origen inválido' }];
+                    return [visibleMarker];
                 }
                 if (selector === '.has-error') {
                     return [{ textContent: 'Fecha' }];
@@ -64,9 +68,7 @@ describe('tripFormValidationFeedback', () => {
             }
         };
 
-        expect(findFirstTripFormErrorElement(root)).toEqual({
-            textContent: 'Origen inválido'
-        });
+        expect(findFirstTripFormErrorElement(root)).toBe(visibleMarker);
         expect(TRIP_FORM_ERROR_SELECTORS[0]).toBe('.trip-error');
     });
 
@@ -112,7 +114,8 @@ describe('tripFormValidationFeedback', () => {
     });
 
     it('returns false when no visible invalid field exists', () => {
-        expect(scrollToFirstTripFormError(document, { scroll: vi.fn() })).toBe(
+        const root = { querySelectorAll: () => [] };
+        expect(scrollToFirstTripFormError(root, { scroll: vi.fn() })).toBe(
             false
         );
     });
