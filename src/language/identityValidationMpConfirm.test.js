@@ -5,7 +5,7 @@ const SPANISH_EXPECTED = {
     identityValidationMpConfirmLead:
         'Antes de avanzar con la verificación, tenés que cumplir con las siguientes condiciones:',
     identityValidationMpConfirmConditionSession:
-        'Tener abierta la sesión de tu cuenta de Mercado Pago en el navegador.',
+        'Tener abierta la sesión de tu cuenta de Mercado Pago en el navegador de este dispositivo.',
     identityValidationMpConfirmName:
         'El nombre completo y DNI debe coincidir en Carpoolear y Mercado Pago.',
     identityValidationMpConfirmHelpPrefix:
