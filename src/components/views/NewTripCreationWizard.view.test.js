@@ -229,6 +229,20 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
+    it('scrolls to the first visible field error when step validation fails', () => {
+        expect(wizardSource).toContain('scrollToFirstFormError');
+        expect(wizardSource).toContain('scrollToFirstTripFormError');
+        expect(wizardSource).toMatch(
+            /goNext\(\)\s*\{[\s\S]*validateCurrentStep\(\)[\s\S]*scrollToFirstFormError/
+        );
+        expect(wizardSource).toMatch(
+            /onSubmit\(\)[\s\S]*validateCurrentStep\(\)[\s\S]*scrollToFirstFormError/
+        );
+        expect(wizardSource).toMatch(
+            /handleSaveFailure\(\)[\s\S]*scrollToFirstFormError/
+        );
+    });
+
     it('shows Creando... on the submit button while the trip is saving', () => {
         expect(wizardSource).toMatch(
             /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/

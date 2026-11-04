@@ -10,6 +10,7 @@ describe('NewTrip validation feedback', () => {
         expect(newTripViewSource).toContain('collectActiveValidationMessages');
         expect(newTripViewSource).toContain('formatTripValidationDialogMessage');
         expect(newTripViewSource).toContain('findFirstTripFormErrorElement');
+        expect(newTripViewSource).toContain('scrollToFirstTripFormError');
         expect(newTripViewSource).toContain('getTripValidationErrorFields');
     });
 
