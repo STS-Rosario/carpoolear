@@ -66,9 +66,14 @@
         </p>
         <template v-if="!owner && !isTripGroupConversation(conversation)">
             <AppButton
-                :disabled="sending.trip || expiredTrip"
+                :disabled="sending.trip || expiredTrip || outboundSeatRequestNeedsMessage"
                 :loading="Boolean(sending.trip)"
                 :variant="outboundSeatActionVariant"
+                :title="
+                    outboundSeatRequestNeedsMessage
+                        ? $t('escribeUnMensajeParaSolicitarAsiento')
+                        : null
+                "
                 block
                 class="trip_actions-seat-btn"
                 @click="
@@ -130,9 +135,14 @@
             v-if="conversation.return_trip && !isTripGroupConversation(conversation)"
         >
             <AppButton
-                :disabled="sending.returnTrip || expiredReturnTrip"
+                :disabled="sending.returnTrip || expiredReturnTrip || returnSeatRequestNeedsMessage"
                 :loading="Boolean(sending.returnTrip)"
                 :variant="returnSeatActionVariant"
+                :title="
+                    returnSeatRequestNeedsMessage
+                        ? $t('escribeUnMensajeParaSolicitarAsiento')
+                        : null
+                "
                 block
                 class="trip_actions-seat-btn"
                 @click="
@@ -202,6 +212,10 @@ import {
     resolveWebAppBaseUrl
 } from '../../utils/supportTicketTripReport.js';
 import { isTripGroupConversation } from '../../utils/tripGroupChatTitle.js';
+import {
+    markLatestQualifyingSeatRequestMessageUsed,
+    seatRequestRequiresNewMessage
+} from '../../utils/seatRequestMessage.js';
 
 export default {
     name: 'conversation-chat',
@@ -216,7 +230,8 @@ export default {
     },
     computed: {
         ...mapState(useConversationsStore, {
-            conversation: 'selectedConversation'
+            conversation: 'selectedConversation',
+            messagesList: 'messagesList'
         }),
         ...mapState(useAuthStore, {
             config: 'appConfig',
@@ -303,6 +318,32 @@ export default {
                 return 'danger';
             }
             return 'primary';
+        },
+        outboundSeatRequestNeedsMessage() {
+            return seatRequestRequiresNewMessage({
+                moduleCoordinateByMessage: this.config?.module_coordinate_by_message,
+                alreadyRequested: Boolean(
+                    this.isPassengerTrip || this.conversation.trip?.request === 'send'
+                ),
+                messages: this.messagesList,
+                userId: this.user?.id,
+                tripCreatedAt: this.conversation.trip?.created_at
+            });
+        },
+        returnSeatRequestNeedsMessage() {
+            if (!this.conversation.return_trip) {
+                return false;
+            }
+            return seatRequestRequiresNewMessage({
+                moduleCoordinateByMessage: this.config?.module_coordinate_by_message,
+                alreadyRequested: Boolean(
+                    this.isPassengerReturnTrip ||
+                        this.conversation.return_trip?.request === 'send'
+                ),
+                messages: this.messagesList,
+                userId: this.user?.id,
+                tripCreatedAt: this.conversation.return_trip?.created_at
+            });
         }
     },
     methods: {
@@ -325,6 +366,11 @@ export default {
                 this.make(trip.id)
                     .then((response) => {
                         trip.request = 'send';
+                        markLatestQualifyingSeatRequestMessageUsed({
+                            messages: this.messagesList,
+                            userId: this.user?.id,
+                            tripCreatedAt: trip.created_at
+                        });
                     })
                     .catch((error) => {
                         if (this.$checkError(error, 'identity_validation_required')) {
@@ -332,6 +378,11 @@ export default {
                             dialogs.message(this.$t('debesValidarIdentidadParaAccion'), {
                                 estado: 'error'
                             });
+                        } else if (this.$checkError(error, 'message_required')) {
+                            dialogs.message(
+                                this.$t('escribeUnMensajeParaSolicitarAsiento'),
+                                { estado: 'error' }
+                            );
                         }
                     })
                     .finally(() => {
