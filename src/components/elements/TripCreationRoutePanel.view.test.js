@@ -25,6 +25,13 @@ describe('TripCreationRoutePanel.vue', () => {
         expect(componentSource).toContain('routesfound');
     });
 
+    it('fits the map to the trip route instead of a fixed app zoom', () => {
+        expect(componentSource).toContain('fitSelectedRoutes: true');
+        expect(componentSource).not.toContain("fitSelectedRoutes: 'smart'");
+        expect(componentSource).toContain('fitLeafletMapToLatLngs');
+        expect(componentSource).toContain('bindRoutingMapFitOnRoutesFound');
+    });
+
     it('shows a hint when multiple routes are available', () => {
         expect(componentSource).toContain('hasMultipleRouteOptions');
         expect(componentSource).toContain('tripCreationRouteAlternativesHint');
