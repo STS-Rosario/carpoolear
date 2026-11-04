@@ -837,6 +837,8 @@ const messages = {
         tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
+        tripCreationRouteAlternativesHint:
+            'Tocá otra ruta en el mapa para elegirla.',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
         tripCreationIncompleteTitle: 'Tenés un viaje incompleto',
@@ -3072,6 +3074,8 @@ const messages = {
         tripContributionExcessModalConfirm: 'Entendido',
         tripCreationReplaceTemplateLabel: 'Elegí una plantilla para reemplazarla',
         tripCreationRouteDetails: 'Detalles del recorrido',
+        tripCreationRouteAlternativesHint:
+            'Tocá otra ruta en el mapa para elegirla.',
         tripCreationTotalPeopleLabel:
             'Personas que viajan en total (contándote)',
         tripCreationIncompleteTitle: 'Tenés un viaje incompleto',
@@ -5080,6 +5084,8 @@ const messages = {
         tripContributionExcessModalConfirm: 'Got it',
         tripCreationReplaceTemplateLabel: 'Choose a template to replace',
         tripCreationRouteDetails: 'Route details',
+        tripCreationRouteAlternativesHint:
+            'Tap another route on the map to choose it.',
         tripCreationTotalPeopleLabel:
             'Total people traveling (including you)',
         tripCreationIncompleteTitle: 'You have an incomplete trip',

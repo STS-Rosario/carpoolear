@@ -3,7 +3,10 @@
         <h4 class="trip-creation-route-panel__title">
             {{ $t('tripCreationRouteDetails') }}
         </h4>
-        <div class="trip-creation-route-panel__stats">
+        <div
+            class="trip-creation-route-panel__stats"
+            aria-live="polite"
+        >
             <div class="trip-creation-route-panel__stat">
                 <span class="trip-creation-route-panel__stat-label">{{
                     $t('distanciaARecorrer')
@@ -35,6 +38,12 @@
                 }}</span>
             </div>
         </div>
+        <p
+            v-if="hasMultipleRouteOptions"
+            class="trip-creation-route-panel__hint"
+        >
+            {{ $t('tripCreationRouteAlternativesHint') }}
+        </p>
         <div
             ref="mapEl"
             class="trip-creation-route-panel__map"
@@ -55,6 +64,18 @@ import {
 import 'leaflet-routing-machine';
 import { addVectorTileLayer } from '../../utils/mapTiles';
 import { bindRoutingWaypointFitOnError } from '../../utils/leafletTripMap';
+
+const PRIMARY_ROUTE_STYLES = [
+    { color: 'black', opacity: 0.15, weight: 9 },
+    { color: 'white', opacity: 0.85, weight: 6 },
+    { color: '#c0392b', opacity: 1, weight: 4 }
+];
+
+const ALTERNATE_ROUTE_STYLES = [
+    { color: 'black', opacity: 0.08, weight: 7 },
+    { color: 'white', opacity: 0.55, weight: 4 },
+    { color: '#e57373', opacity: 0.75, weight: 3 }
+];
 
 export default {
     name: 'trip-creation-route-panel',
@@ -80,6 +101,14 @@ export default {
             type: String,
             default: ''
         },
+        selectedRouteIndex: {
+            type: Number,
+            default: 0
+        },
+        hasMultipleRouteOptions: {
+            type: Boolean,
+            default: false
+        },
         center: {
             type: Array,
             required: true
@@ -97,6 +126,8 @@ export default {
             default: ''
         }
     },
+
+    emits: ['route-index-selected'],
 
     data() {
         return {
@@ -142,6 +173,9 @@ export default {
             handler() {
                 this.$nextTick(() => this.syncRouteMap());
             }
+        },
+        selectedRouteIndex() {
+            this.applySelectedRouteOnMap();
         }
     },
 
@@ -172,6 +206,43 @@ export default {
                 }
                 this.map = null;
             }
+        },
+        bindRoutingSelectionEvents() {
+            if (!this.routingControl) {
+                return;
+            }
+            this.routingControl.on('routesfound', (event) => {
+                this.applySelectedRouteOnMap(event.routes);
+            });
+            this.routingControl.on('routeselected', (event) => {
+                const index =
+                    event.route && typeof event.route.routesIndex === 'number'
+                        ? event.route.routesIndex
+                        : 0;
+                this.$emit('route-index-selected', index);
+            });
+        },
+        applySelectedRouteOnMap(routes) {
+            if (!this.routingControl || !this.routingControl._routes) {
+                return;
+            }
+            const available = routes || this.routingControl._routes;
+            if (!Array.isArray(available) || available.length === 0) {
+                return;
+            }
+            const index = Math.max(
+                0,
+                Math.min(this.selectedRouteIndex, available.length - 1)
+            );
+            if (index === 0 || !available[index]) {
+                return;
+            }
+            const alts = available.slice();
+            const selected = alts.splice(index, 1)[0];
+            this.routingControl._routeSelected({
+                route: selected,
+                alternatives: alts
+            });
         },
         async syncRouteMap() {
             const el = this.$refs.mapEl;
@@ -213,6 +284,15 @@ export default {
                 }),
                 waypoints: this.routeLatLngs,
                 language: routingLang,
+                show: false,
+                showAlternatives: true,
+                fitSelectedRoutes: 'smart',
+                lineOptions: {
+                    styles: PRIMARY_ROUTE_STYLES
+                },
+                altLineOptions: {
+                    styles: ALTERNATE_ROUTE_STYLES
+                },
                 draggableWaypoints: false,
                 addWaypoints: false,
                 createMarker(i, wp) {
@@ -223,6 +303,7 @@ export default {
                 }
             });
             this.routingControl.addTo(map);
+            this.bindRoutingSelectionEvents();
             bindRoutingWaypointFitOnError(
                 this.routingControl,
                 map,
@@ -278,6 +359,13 @@ export default {
     color: #bbb;
     font-size: 1rem;
     line-height: 1;
+}
+
+.trip-creation-route-panel__hint {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: var(--ds-text-secondary, #666);
 }
 
 .trip-creation-route-panel__map {
