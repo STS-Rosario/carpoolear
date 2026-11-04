@@ -335,4 +335,11 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
             /wizardValidationContext[\s\S]*refreshIncompleteStepperState/
         );
     });
+
+    it('passes selected route index into the route map panel', () => {
+        expect(wizardSource).toContain(':selected-route-index="form.selectedRouteIndex"');
+        expect(wizardSource).toContain(
+            '@route-index-selected="form.onRouteIndexSelected"'
+        );
+    });
 });

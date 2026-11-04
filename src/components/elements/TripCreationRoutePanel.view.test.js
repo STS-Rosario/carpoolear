@@ -18,6 +18,18 @@ describe('TripCreationRoutePanel.vue', () => {
         expect(componentSource).toContain('L.Routing.control');
     });
 
+    it('enables OSRM route alternatives on the map', () => {
+        expect(componentSource).toContain('showAlternatives: true');
+        expect(componentSource).toContain('selectedRouteIndex');
+        expect(componentSource).toContain('$emit(\'route-index-selected\'');
+        expect(componentSource).toContain('routesfound');
+    });
+
+    it('shows a hint when multiple routes are available', () => {
+        expect(componentSource).toContain('hasMultipleRouteOptions');
+        expect(componentSource).toContain('tripCreationRouteAlternativesHint');
+    });
+
     it('lays out distance, duration and carbon stats on one horizontal row', () => {
         expect(componentSource).toContain('trip-creation-route-panel__stats');
     });
