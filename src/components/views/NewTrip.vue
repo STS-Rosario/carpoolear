@@ -128,6 +128,11 @@ import {
     removeEmptyIntermediatePoints
 } from '../../utils/tripCreationPoints.js';
 import { TRIP_INFO_STATUS } from '../../utils/tripCreationTripInfo.js';
+import {
+    applyRouteOptionToTripForm,
+    applyTripInfoDataForRouteIndex,
+    routeOptionAtIndex
+} from '../../utils/tripRouteOptions.js';
 import { buildTripDateForApi } from '../../utils/tripDateForApi.js';
 import NewTripCreationWizard from './NewTripCreationWizard.vue';
 import TripCreationSuccess from './TripCreationSuccess.vue';
@@ -232,6 +237,8 @@ export default {
             trips_created_by_user_amount: 0,
             selladoQuotaLoaded: false,
             tripInfoRequestId: 0,
+            routeOptions: [],
+            selectedRouteIndex: 0,
             route_needs_payment: false,
             returnPrice: '',
             duration: 0,
@@ -247,6 +254,7 @@ export default {
                 friendship_type_id: 2,
                 estimated_time: '00:00',
                 distance: 0.0,
+                selected_route_index: 0,
                 co2: 0.0,
                 description: '',
                 allow_kids: false,
@@ -462,6 +470,11 @@ export default {
         },
         CO2String() {
             return (Math.floor(this.trip.distance / 1000) * 0.15).toFixed(1)  + ' Kg';
+        },
+        hasMultipleRouteOptions() {
+            return (
+                Array.isArray(this.routeOptions) && this.routeOptions.length > 1
+            );
         },
         otherTripDistanceString() {
             return Math.floor(this.otherTrip.trip.distance / 1000) + ' Km';
@@ -934,6 +947,8 @@ export default {
         }
         
         this.trip.seat_price_cents = trip.seat_price_cents;
+        this.selectedRouteIndex = Number(trip.selected_route_index) || 0;
+        this.trip.selected_route_index = this.selectedRouteIndex;
         const restoredPrice =
             priceInputNumberFromStoredSeatPriceCents(trip.seat_price_cents);
         if (restoredPrice !== null) {
@@ -1594,6 +1609,9 @@ export default {
 
             if (type === 'trip') {
                 this.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
+                this.selectedRouteIndex = 0;
+                this.trip.selected_route_index = 0;
+                this.routeOptions = [];
                 this.addPoint();
                 // Mirror the entire points array
                 this.otherTrip.points = this.points.slice().reverse().map(point => ({
@@ -1737,6 +1755,9 @@ export default {
             }
             // Always recalculate trip info
             this.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
+            this.selectedRouteIndex = 0;
+            this.trip.selected_route_index = 0;
+            this.routeOptions = [];
             this.calcRoute('trip');
         },
 
@@ -1758,6 +1779,9 @@ export default {
             let data = {
                 points: points.map((point) => point.location)
             };
+            if (type === 'trip') {
+                data.route_index = this.selectedRouteIndex;
+            }
 
             if (type === 'trip') {
                 this.tripInfoStatus = TRIP_INFO_STATUS.LOADING;
@@ -1773,21 +1797,12 @@ export default {
                     if (type === 'trip') {
                         this.tripInfoStatus = TRIP_INFO_STATUS.READY;
                     }
-                    trip.trip.distance = result.data.distance;
-                    trip.duration = result.data.duration;
-                    trip.trip.co2 = result.data.co2;
-                    trip.route_needs_payment = Boolean(result.data.route_needs_payment);
-                    
-                    if (type === 'trip') {
-                        this.maximum_trip_price_cents = result.data.maximum_trip_price_cents;
-                        this.recommended_trip_price_cents = result.data.recommended_trip_price_cents;
-                        this.pricing_breakdown = result.data.pricing_breakdown || null;
-                        this.recalculateRecommendedPrice();
-                    } else {
-                        this.maximum_return_trip_price_cents = result.data.maximum_trip_price_cents;
-                        this.recommended_return_trip_price_cents = result.data.recommended_trip_price_cents;
-                        this.recalculateRecommendedReturnPrice();
-                    }
+                    applyTripInfoDataForRouteIndex(
+                        this,
+                        result.data,
+                        type === 'trip' ? this.selectedRouteIndex : 0,
+                        type
+                    );
                 } else if (result.error_code === 'routing_service_unavailable') {
                     if (type === 'trip') {
                         this.tripInfoStatus = TRIP_INFO_STATUS.ERROR;
@@ -1807,6 +1822,20 @@ export default {
                 }
             });
 
+        },
+        onRouteIndexSelected(routeIndex) {
+            const index = Number(routeIndex) || 0;
+            this.selectedRouteIndex = index;
+            this.trip.selected_route_index = index;
+            const option = routeOptionAtIndex(
+                { route_options: this.routeOptions },
+                index
+            );
+            if (option) {
+                applyRouteOptionToTripForm(this, option, index, 'trip');
+                return;
+            }
+            this.calcRoute('trip');
         },
         validatePrice() {
             const p = parseSeatPriceInput(this.price);

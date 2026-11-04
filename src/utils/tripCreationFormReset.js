@@ -30,6 +30,7 @@ export function createInitialTripCreationTrip() {
         friendship_type_id: 2,
         estimated_time: '00:00',
         distance: 0.0,
+        selected_route_index: 0,
         co2: 0.0,
         description: '',
         allow_kids: false,
@@ -108,6 +109,8 @@ export function applyTripCreationFormReset(form, options = {}) {
     form.maximum_return_seat_price_cents = 0;
     form.recommended_return_seat_price_cents = 0;
     form.tripInfoStatus = TRIP_INFO_STATUS.IDLE;
+    form.routeOptions = [];
+    form.selectedRouteIndex = 0;
     form.parentTripId = null;
     form.showReturnTrip = false;
 
