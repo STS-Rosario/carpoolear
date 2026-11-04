@@ -63,7 +63,11 @@ import {
 } from '../../utils/leafletIcons';
 import 'leaflet-routing-machine';
 import { addVectorTileLayer } from '../../utils/mapTiles';
-import { bindRoutingWaypointFitOnError } from '../../utils/leafletTripMap';
+import {
+    bindRoutingMapFitOnRoutesFound,
+    bindRoutingWaypointFitOnError,
+    fitLeafletMapToLatLngs
+} from '../../utils/leafletTripMap';
 
 const PRIMARY_ROUTE_STYLES = [
     { color: 'black', opacity: 0.15, weight: 9 },
@@ -254,11 +258,7 @@ export default {
             this.destroyRouteMap();
 
             const gen = this._routeMapGeneration;
-            const mapCenter = this.center || [
-                this.routeLatLngs[0].lat,
-                this.routeLatLngs[0].lng
-            ];
-            const map = L.map(el).setView(mapCenter, this.zoom);
+            const map = L.map(el);
             await addVectorTileLayer(map);
             if (gen !== this._routeMapGeneration) {
                 try {
@@ -269,6 +269,7 @@ export default {
                 return;
             }
             this.map = map;
+            fitLeafletMapToLatLngs(map, this.routeLatLngs);
 
             const routingLang =
                 appLocaleToRoutingLanguage[this.$i18n.locale] || 'es';
@@ -286,7 +287,7 @@ export default {
                 language: routingLang,
                 show: false,
                 showAlternatives: true,
-                fitSelectedRoutes: 'smart',
+                fitSelectedRoutes: true,
                 lineOptions: {
                     styles: PRIMARY_ROUTE_STYLES
                 },
@@ -304,6 +305,11 @@ export default {
             });
             this.routingControl.addTo(map);
             this.bindRoutingSelectionEvents();
+            bindRoutingMapFitOnRoutesFound(
+                this.routingControl,
+                map,
+                this.routeLatLngs
+            );
             bindRoutingWaypointFitOnError(
                 this.routingControl,
                 map,
