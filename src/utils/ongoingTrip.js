@@ -1,4 +1,5 @@
 import dayjs from '../dayjs';
+import { getIntermediatePoints } from './tripCreationPoints.js';
 
 export const ONGOING_TRIP_LEAD_MINUTES = 60;
 export const ONGOING_TRIP_GRACE_MINUTES = 30;
@@ -148,6 +149,65 @@ export function getTripLocationLabels(trip) {
         toRegion: to.region,
         toPoint
     };
+}
+
+/**
+ * Rows for the trip detail route timeline: origin, intermediate stops, destination.
+ * Intermediate rows use the same city/region fields as endpoints; `point` is only set
+ * for origin/destination (punto_partida / punto_llegada).
+ */
+export function getTripRouteStopRows(trip) {
+    const fromPoint = (trip && trip.punto_partida) || '';
+    const toPoint = (trip && trip.punto_llegada) || '';
+
+    if (trip && trip.points && trip.points.length >= 2) {
+        const pts = trip.points;
+        const rows = [];
+
+        rows.push({
+            city: getLocationName(pts[0]),
+            region: getStateName(pts[0]),
+            point: fromPoint,
+            kind: 'origin'
+        });
+
+        const intermediateRows = getIntermediatePoints(pts)
+            .map((point) => ({
+                city: getLocationName(point),
+                region: getStateName(point),
+                point: '',
+                kind: 'stop'
+            }))
+            .filter((row) => row.city);
+
+        rows.push(...intermediateRows);
+
+        const last = pts[pts.length - 1];
+        rows.push({
+            city: getLocationName(last),
+            region: getStateName(last),
+            point: toPoint,
+            kind: 'dest'
+        });
+
+        return rows;
+    }
+
+    const labels = getTripLocationLabels(trip);
+    return [
+        {
+            city: labels.fromCity,
+            region: labels.fromRegion,
+            point: labels.fromPoint,
+            kind: 'origin'
+        },
+        {
+            city: labels.toCity,
+            region: labels.toRegion,
+            point: labels.toPoint,
+            kind: 'dest'
+        }
+    ];
 }
 
 export function getTripDestinationCity(trip) {

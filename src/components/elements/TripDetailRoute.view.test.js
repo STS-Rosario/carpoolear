@@ -10,7 +10,10 @@ const src = fs.readFileSync(
 describe('TripDetailRoute.vue', () => {
     it('renders trip-card style route timeline and date/time chips', () => {
         expect(src).toContain('trip-detail__route');
-        expect(src).toContain('getTripLocationLabels');
+        expect(src).toContain('getTripRouteStopRows');
+        expect(src).toContain('routeRows');
+        expect(src).toContain('trip-detail__route-segment');
+        expect(src).toContain('trip-detail__route-marker--stop');
         expect(src).toContain('formatTripCardDate');
         expect(src).toContain('formatTripCardTime');
         expect(src).toContain('trip-detail__chip');
