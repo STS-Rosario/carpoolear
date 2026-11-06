@@ -2179,6 +2179,8 @@ const messages = {
         coordinateTripYVueltaElDia: 'y vuelta el día',
         coordinateTripALas2: 'a las',
         coordinateTripMostrarDescripcionViaje: 'Mostrar descripción de viaje',
+        coordinateTripMessageBeforeSeatHint:
+            'Antes de cada viaje, enviá un mensaje a quien conduce para solicitar un\u00A0asiento en ese viaje.',
         groupChatTripTitle: 'Viaje {date} {hour}',
         groupChatButton: 'Chat grupal',
         groupChatViewParticipants: 'Ver participantes',
@@ -4199,6 +4201,8 @@ const messages = {
         coordinateTripYVueltaElDia: 'y vuelta el día',
         coordinateTripALas2: 'a las',
         coordinateTripMostrarDescripcionViaje: 'Mostrar descripción de viaje',
+        coordinateTripMessageBeforeSeatHint:
+            'Antes de cada viaje, enviá un mensaje a quien conduce para solicitar un\u00A0asiento en ese viaje.',
         groupChatTripTitle: 'Viaje {date} {hour}',
         groupChatButton: 'Chat grupal',
         groupChatViewParticipants: 'Ver participantes',
@@ -6407,6 +6411,8 @@ const messages = {
         coordinateTripYVueltaElDia: 'and return on',
         coordinateTripALas2: 'at',
         coordinateTripMostrarDescripcionViaje: 'Show trip description',
+        coordinateTripMessageBeforeSeatHint:
+            'Before each trip, send a message to the driver to request a\u00A0seat on that trip.',
         groupChatTripTitle: 'Trip {date} {hour}',
         groupChatButton: 'Group chat',
         groupChatViewParticipants: 'View participants',

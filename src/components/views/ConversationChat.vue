@@ -49,17 +49,28 @@
                             {{ conversation.title }}
                         </router-link>
                     </h2>
-                    <UserRatingsCounts :ratings="otherUserRatings" />
+                    <div class="conversation_user_header_meta">
+                        <UserRatingsCounts :ratings="otherUserRatings" />
+                        <p
+                            v-if="lastConnectionFormatted"
+                            class="chat_last_connection"
+                        >
+                            <strong>{{ $t('ultimaConexion') }}</strong>
+                            <span> {{ lastConnectionFormatted }}</span>
+                        </p>
+                    </div>
                 </div>
-                <h2 v-else>{{ conversation.title }}</h2>
+                <div v-else class="conversation_user_header_title_row">
+                    <h2>{{ conversation.title }}</h2>
+                    <p
+                        v-if="lastConnectionFormatted"
+                        class="chat_last_connection conversation_user_header_meta_only_connection"
+                    >
+                        <strong>{{ $t('ultimaConexion') }}</strong>
+                        <span> {{ lastConnectionFormatted }}</span>
+                    </p>
+                </div>
                 <CoordinateTrip></CoordinateTrip>
-                <p
-                    v-if="lastConnectionFormatted"
-                    class="chat_last_connection"
-                >
-                    <strong>{{ $t('ultimaConexion') }}</strong>
-                    <span> {{ lastConnectionFormatted }}</span>
-                </p>
                 </template>
             </div>
             <div
@@ -524,6 +535,26 @@ export default {
 }
 .conversation_user_header_title_row h2 {
     margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.conversation_user_header_meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+.conversation_user_header_meta .chat_last_connection {
+    margin: 0;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.conversation_user_header_meta_only_connection {
+    margin: 0;
+    margin-left: auto;
+    font-size: 13px;
+    white-space: nowrap;
 }
 #btn-more {
     padding: 1em 0;

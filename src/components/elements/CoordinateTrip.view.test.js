@@ -79,4 +79,21 @@ describe('CoordinateTrip.vue', () => {
         expect(outboundDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
         expect(returnDate).toMatch(/\{\{\s*' '\s*\}\}[\s\S]*?\(\{\{/);
     });
+
+    it('shows a centered info card below outbound seat button when coordinate-by-message is on', () => {
+        expect(viewSource).toContain("$t('coordinateTripMessageBeforeSeatHint')");
+        expect(viewSource).toContain('trip_actions-seat-message-hint');
+        expect(viewSource).toMatch(
+            /class="trip_actions-seat-btn"[\s\S]*?<\/AppButton>\s*<div[\s\S]*?class="trip_actions-seat-message-hint"/
+        );
+    });
+
+    it('shows the same hint below return seat button when return leg exists', () => {
+        const idxFirst = viewSource.indexOf('coordinateTripMessageBeforeSeatHint');
+        const idxSecond = viewSource.indexOf(
+            'coordinateTripMessageBeforeSeatHint',
+            idxFirst + 1
+        );
+        expect(idxSecond).toBeGreaterThan(idxFirst);
+    });
 });

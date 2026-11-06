@@ -64,7 +64,10 @@
                 {{ $t('coordinateTripContributionWarningPassengerSuffix') }}
             </template>
         </p>
-        <template v-if="!owner && !isTripGroupConversation(conversation)">
+        <div
+            v-if="!owner && !isTripGroupConversation(conversation)"
+            class="trip_actions-seat-col"
+        >
             <AppButton
                 :disabled="sending.trip || expiredTrip || outboundSeatRequestNeedsMessage"
                 :loading="Boolean(sending.trip)"
@@ -130,9 +133,17 @@
                     <spinner class="blue"></spinner>
                 </template>
             </AppButton>
-        </template>
-        <template
+            <div
+                v-if="showSeatMessageHint"
+                class="trip_actions-seat-message-hint"
+                role="note"
+            >
+                {{ $t('coordinateTripMessageBeforeSeatHint') }}
+            </div>
+        </div>
+        <div
             v-if="conversation.return_trip && !isTripGroupConversation(conversation)"
+            class="trip_actions-seat-col"
         >
             <AppButton
                 :disabled="sending.returnTrip || expiredReturnTrip || returnSeatRequestNeedsMessage"
@@ -191,7 +202,14 @@
                     <spinner class="blue"></spinner>
                 </template>
             </AppButton>
-        </template>
+            <div
+                v-if="showSeatMessageHint"
+                class="trip_actions-seat-message-hint"
+                role="note"
+            >
+                {{ $t('coordinateTripMessageBeforeSeatHint') }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -344,6 +362,9 @@ export default {
                 userId: this.user?.id,
                 tripCreatedAt: this.conversation.return_trip?.created_at
             });
+        },
+        showSeatMessageHint() {
+            return Boolean(this.config?.module_coordinate_by_message);
         }
     },
     methods: {
@@ -499,6 +520,26 @@ export default {
     border: 1px solid #ececec;
     border-radius: 4px;
 }
+
+.trip_actions-seat-col {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trip_actions-seat-message-hint {
+    margin: 0.5em auto 0;
+    max-width: 100%;
+    padding: 0.55em 0.75em;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.45;
+    color: #2d5a27;
+    background-color: #dff0d8;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 @media only screen and (max-width: 768px) {
     .trip_actions {
         padding: 0.4em 0.8em;
@@ -522,15 +563,9 @@ export default {
         padding-left: 0.4em;
     }
 }
-@media only screen and (min-width: 1100px) {
-    .trip_actions .app-button {
-        float: left;
-        width: 50%;
-    }
-    .trip_actions .app-button.trip_actions-seat-btn:only-of-type,
-    .trip_actions .app-button:only-child {
-        float: none;
-        width: 100%;
+@media only screen and (min-width: 768px) {
+    .trip_actions-seat-col + .trip_actions-seat-col {
+        margin-top: 0.5em;
     }
 }
 </style>
