@@ -6,6 +6,12 @@
     --trip-detail-divider: #e6e6e6;
     --trip-detail-label: #888;
     --trip-detail-chip-bg: #f3f3f3;
+    /* Match trip-detail__city (1.05rem × 1.2) so route markers align with the city line */
+    --trip-detail-route-marker-size: 0.7rem;
+    --trip-detail-route-place-row-height: calc(1.05rem * 1.2);
+    --trip-detail-route-marker-offset: calc(
+        (var(--trip-detail-route-place-row-height) - var(--trip-detail-route-marker-size)) / 2
+    );
     font-family: var(--ds-font-family);
     font-weight: var(--ds-font-weight-normal, 400);
     color: var(--ds-text-primary, #333);
@@ -74,12 +80,6 @@
     width: 100%;
     min-width: 0;
 }
-.trip-detail--mobile .trip-detail__route-segment:first-child .trip-detail__route-graphic-col, .trip-detail--desktop .trip-detail__route-segment:first-child .trip-detail__route-graphic-col {
-    padding-top: 0.35rem;
-}
-.trip-detail--mobile .trip-detail__route-segment:last-child .trip-detail__route-graphic-col, .trip-detail--desktop .trip-detail__route-segment:last-child .trip-detail__route-graphic-col {
-    padding-bottom: 0.15rem;
-}
 .trip-detail--mobile .trip-detail__route-graphic-col, .trip-detail--desktop .trip-detail__route-graphic-col {
     position: relative;
     flex: 0 0 0.75rem;
@@ -88,11 +88,16 @@
     flex-direction: column;
     align-items: center;
     min-height: 0;
+    /* Align marker with city row; segment line extends with negative bottom into next row (see .trip-detail__route-segment-line) */
+    padding-top: var(--trip-detail-route-marker-offset);
 }
 .trip-detail--mobile .trip-detail__route-marker, .trip-detail--desktop .trip-detail__route-marker {
+    position: relative;
+    z-index: 1;
     flex-shrink: 0;
-    width: 0.7rem;
-    height: 0.7rem;
+    align-self: center;
+    width: var(--trip-detail-route-marker-size);
+    height: var(--trip-detail-route-marker-size);
     border-radius: 50%;
     box-sizing: border-box;
     background: var(--trip-detail-canvas);
@@ -107,10 +112,16 @@
     border-color: var(--ds-action, #016587);
 }
 .trip-detail--mobile .trip-detail__route-segment-line, .trip-detail--desktop .trip-detail__route-segment-line {
-    flex: 1 1 auto;
+    position: absolute;
+    left: 50%;
+    z-index: 0;
     width: 2px;
-    min-height: 0.85rem;
-    margin-top: 0;
+    transform: translateX(-50%);
+    top: calc(
+        var(--trip-detail-route-marker-offset) + var(--trip-detail-route-marker-size)
+    );
+    /* Bridge the gap into the next segment (same offset as this column's padding-top) */
+    bottom: calc(-1 * var(--trip-detail-route-marker-offset));
     background: var(--ds-action, #016587);
 }
 .trip-detail--mobile .trip-detail__route-text-col, .trip-detail--desktop .trip-detail__route-text-col {
