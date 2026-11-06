@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
     hasUnusedQualifyingSeatRequestMessage,
     markLatestQualifyingSeatRequestMessageUsed,
-    seatRequestRequiresNewMessage
+    seatRequestRequiresNewMessage,
+    shouldShowSeatMessageHint
 } from './seatRequestMessage.js';
 
 const tripCreatedAt = '2026-11-01 12:00:00';
@@ -131,6 +132,56 @@ describe('seatRequestRequiresNewMessage', () => {
     it('does not require a message when a qualifying one exists', () => {
         expect(
             seatRequestRequiresNewMessage({
+                moduleCoordinateByMessage: true,
+                alreadyRequested: false,
+                messages: [message()],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowSeatMessageHint', () => {
+    it('is false when coordinate-by-message is off', () => {
+        expect(
+            shouldShowSeatMessageHint({
+                moduleCoordinateByMessage: false,
+                alreadyRequested: false,
+                messages: [],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBe(false);
+    });
+
+    it('is false when the seat was already requested or the user is a passenger', () => {
+        expect(
+            shouldShowSeatMessageHint({
+                moduleCoordinateByMessage: true,
+                alreadyRequested: true,
+                messages: [],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBe(false);
+    });
+
+    it('is true when no qualifying message exists yet', () => {
+        expect(
+            shouldShowSeatMessageHint({
+                moduleCoordinateByMessage: true,
+                alreadyRequested: false,
+                messages: [],
+                userId: 10,
+                tripCreatedAt
+            })
+        ).toBe(true);
+    });
+
+    it('is false after the passenger sent a qualifying message for this trip', () => {
+        expect(
+            shouldShowSeatMessageHint({
                 moduleCoordinateByMessage: true,
                 alreadyRequested: false,
                 messages: [message()],
