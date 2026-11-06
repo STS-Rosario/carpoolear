@@ -134,7 +134,7 @@
                 </template>
             </AppButton>
             <div
-                v-if="showSeatMessageHint"
+                v-if="outboundShowSeatMessageHint"
                 class="trip_actions-seat-message-hint"
                 role="note"
             >
@@ -203,7 +203,7 @@
                 </template>
             </AppButton>
             <div
-                v-if="showSeatMessageHint"
+                v-if="returnShowSeatMessageHint"
                 class="trip_actions-seat-message-hint"
                 role="note"
             >
@@ -232,7 +232,8 @@ import {
 import { isTripGroupConversation } from '../../utils/tripGroupChatTitle.js';
 import {
     markLatestQualifyingSeatRequestMessageUsed,
-    seatRequestRequiresNewMessage
+    seatRequestRequiresNewMessage,
+    shouldShowSeatMessageHint
 } from '../../utils/seatRequestMessage.js';
 
 export default {
@@ -363,8 +364,35 @@ export default {
                 tripCreatedAt: this.conversation.return_trip?.created_at
             });
         },
-        showSeatMessageHint() {
-            return Boolean(this.config?.module_coordinate_by_message);
+        outboundShowSeatMessageHint() {
+            if (!this.conversation.trip) {
+                return false;
+            }
+            return shouldShowSeatMessageHint({
+                moduleCoordinateByMessage: this.config?.module_coordinate_by_message,
+                alreadyRequested: Boolean(
+                    this.isPassengerTrip ||
+                        this.conversation.trip?.request === 'send'
+                ),
+                messages: this.messagesList,
+                userId: this.user?.id,
+                tripCreatedAt: this.conversation.trip?.created_at
+            });
+        },
+        returnShowSeatMessageHint() {
+            if (!this.conversation.return_trip) {
+                return false;
+            }
+            return shouldShowSeatMessageHint({
+                moduleCoordinateByMessage: this.config?.module_coordinate_by_message,
+                alreadyRequested: Boolean(
+                    this.isPassengerReturnTrip ||
+                        this.conversation.return_trip.request === 'send'
+                ),
+                messages: this.messagesList,
+                userId: this.user?.id,
+                tripCreatedAt: this.conversation.return_trip?.created_at
+            });
         }
     },
     methods: {
