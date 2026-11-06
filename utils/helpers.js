@@ -46,26 +46,46 @@ export function cssvar (name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name);
 }
 
+/**
+ * Laravel validation payloads often use `errors.error` as either a string or string[].
+ * Older code assumed an array only; iterating a string matched character-by-character and broke detection.
+ */
+function normalizeValidationErrorCodes (error) {
+    if (error.status !== 422 || !error.data || !error.data.errors) {
+        return [];
+    }
+    const raw = error.data.errors.error;
+    if (raw == null) {
+        return [];
+    }
+    if (Array.isArray(raw)) {
+        return raw;
+    }
+    if (typeof raw === 'string') {
+        return raw.length ? [raw] : [];
+    }
+    return [];
+}
+
 export function checkError (error, message) {
-    if (error.status === 422) {
-        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
-            for (let i = 0; i < error.data.errors.error.length; i++) {
-                const errorMessage = error.data.errors.error[i];
-                if (errorMessage === message) {
-                    return true;
-                }
-            }
+    if (!error || error.status !== 422) {
+        return false;
+    }
+    const codes = normalizeValidationErrorCodes(error);
+    for (let i = 0; i < codes.length; i++) {
+        if (codes[i] === message) {
+            return true;
         }
     }
     return false;
 }
 
 export function getErrors (error) {
-    if (error.status === 422) {
-        if (error.data && error.data.errors && error.data.errors.error && error.data.errors.error.length) {
-            return error.data.errors.error;
-        }
+    if (!error || error.status !== 422) {
+        return undefined;
     }
+    const codes = normalizeValidationErrorCodes(error);
+    return codes.length ? codes : undefined;
 }
 
 export function scrollToElement (element, offset) {
