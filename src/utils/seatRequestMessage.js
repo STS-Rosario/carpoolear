@@ -53,6 +53,29 @@ export function seatRequestRequiresNewMessage({
     });
 }
 
+/**
+ * Green “message before seat” hint in trip chat: show only while the passenger
+ * still needs to send a qualifying message before requesting a seat.
+ */
+export function shouldShowSeatMessageHint({
+    moduleCoordinateByMessage,
+    alreadyRequested,
+    messages,
+    userId,
+    tripCreatedAt
+}) {
+    if (!moduleCoordinateByMessage || alreadyRequested) {
+        return false;
+    }
+    return seatRequestRequiresNewMessage({
+        moduleCoordinateByMessage: true,
+        alreadyRequested: false,
+        messages,
+        userId,
+        tripCreatedAt
+    });
+}
+
 export function markLatestQualifyingSeatRequestMessageUsed({
     messages,
     userId,

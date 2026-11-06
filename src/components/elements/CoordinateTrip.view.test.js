@@ -57,6 +57,7 @@ describe('CoordinateTrip.vue', () => {
     it('disables seat request until a new qualifying chat message exists', () => {
         expect(viewSource).toContain("from '../../utils/seatRequestMessage.js'");
         expect(viewSource).toContain('seatRequestRequiresNewMessage');
+        expect(viewSource).toContain('shouldShowSeatMessageHint');
         expect(viewSource).toContain('messagesList');
         expect(viewSource).toMatch(
             /:disabled="sending\.trip \|\| expiredTrip \|\| outboundSeatRequestNeedsMessage"/
@@ -83,17 +84,18 @@ describe('CoordinateTrip.vue', () => {
     it('shows a centered info card below outbound seat button when coordinate-by-message is on', () => {
         expect(viewSource).toContain("$t('coordinateTripMessageBeforeSeatHint')");
         expect(viewSource).toContain('trip_actions-seat-message-hint');
+        expect(viewSource).toContain('outboundShowSeatMessageHint');
         expect(viewSource).toMatch(
-            /class="trip_actions-seat-btn"[\s\S]*?<\/AppButton>\s*<div[\s\S]*?class="trip_actions-seat-message-hint"/
+            /v-if="outboundShowSeatMessageHint"[\s\S]*class="trip_actions-seat-message-hint"/
         );
     });
 
     it('shows the same hint below return seat button when return leg exists', () => {
-        const idxFirst = viewSource.indexOf('coordinateTripMessageBeforeSeatHint');
-        const idxSecond = viewSource.indexOf(
-            'coordinateTripMessageBeforeSeatHint',
-            idxFirst + 1
+        expect(viewSource).toContain('returnShowSeatMessageHint');
+        const idxFirst = viewSource.indexOf(
+            'v-if="outboundShowSeatMessageHint"'
         );
+        const idxSecond = viewSource.indexOf('v-if="returnShowSeatMessageHint"');
         expect(idxSecond).toBeGreaterThan(idxFirst);
     });
 });
