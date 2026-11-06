@@ -15,6 +15,16 @@ describe('ConversationChat.vue user ratings', () => {
         );
     });
 
+    it('keeps última conexión in the header row beside ratings on desktop', () => {
+        expect(viewSource).toContain('conversation_user_header_meta');
+        expect(viewSource).toMatch(
+            /conversation_user_header_meta[\s\S]*UserRatingsCounts[\s\S]*chat_last_connection/s
+        );
+        expect(viewSource).not.toMatch(
+            /<CoordinateTrip>[\s\S]*?<p[^>]*class="chat_last_connection"/s
+        );
+    });
+
     it('resolves other participant ratings from conversation users via shared helper', () => {
         expect(viewSource).toContain('getOtherParticipantRatings');
         expect(viewSource).toContain('setHeaderRatings');
