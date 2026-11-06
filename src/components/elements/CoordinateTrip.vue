@@ -531,11 +531,12 @@ export default {
     max-width: 100%;
     padding: 0.55em 0.75em;
     text-align: center;
-    font-size: 12px;
-    line-height: 1.35;
-    color: #31708f;
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.45;
+    color: #2d5a27;
+    background-color: #dff0d8;
+    border: 1px solid #c3e6cb;
     border-radius: 4px;
     box-sizing: border-box;
 }
@@ -562,27 +563,9 @@ export default {
         padding-left: 0.4em;
     }
 }
-@media only screen and (min-width: 1100px) {
-    .trip_actions::after {
-        content: '';
-        display: table;
-        clear: both;
-    }
-    .trip_actions-seat-col {
-        float: left;
-        width: 50%;
-        padding: 0 0.25em;
-        box-sizing: border-box;
-    }
-    .trip_actions-seat-col .trip_actions-seat-btn,
-    .trip_actions-seat-col .app-button {
-        float: none;
-        width: 100%;
-    }
-    .trip_actions-seat-col:only-of-type {
-        float: none;
-        width: 100%;
-        padding: 0;
+@media only screen and (min-width: 768px) {
+    .trip_actions-seat-col + .trip_actions-seat-col {
+        margin-top: 0.5em;
     }
 }
 </style>
