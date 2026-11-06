@@ -5,6 +5,7 @@ import {
     getRatingAvailableAt,
     getTripDestinationCity,
     getTripLocationLabels,
+    getTripRouteStopRows,
     isRatingAvailable,
     isWithinOngoingTripWindow,
     canStartSharing,
@@ -212,6 +213,163 @@ describe('getTripLocationLabels', () => {
             toRegion: 'CABA',
             toPoint: 'Plaza Principal'
         });
+    });
+});
+
+describe('getTripRouteStopRows', () => {
+    it('returns origin and destination only when there are two points', () => {
+        const trip = {
+            points: [
+                {
+                    json_address: { ciudad: 'Malargüe', provincia: 'Mendoza' }
+                },
+                {
+                    json_address: {
+                        ciudad: 'San Carlos de Bariloche',
+                        provincia: 'Rio Negro'
+                    }
+                }
+            ],
+            punto_partida: 'YPF',
+            punto_llegada: 'ruta 40'
+        };
+
+        expect(getTripRouteStopRows(trip)).toEqual([
+            {
+                city: 'Malargüe',
+                region: 'Mendoza',
+                point: 'YPF',
+                kind: 'origin'
+            },
+            {
+                city: 'San Carlos de Bariloche',
+                region: 'Rio Negro',
+                point: 'ruta 40',
+                kind: 'dest'
+            }
+        ]);
+    });
+
+    it('includes intermediate stops between origin and destination', () => {
+        const trip = {
+            points: [
+                {
+                    json_address: { ciudad: 'A', provincia: 'P1' }
+                },
+                {
+                    json_address: { ciudad: 'B', provincia: 'P2' }
+                },
+                {
+                    json_address: { ciudad: 'C', provincia: 'P3' }
+                },
+                {
+                    json_address: { ciudad: 'D', provincia: 'P4' }
+                }
+            ],
+            punto_partida: 'start detail',
+            punto_llegada: 'end detail'
+        };
+
+        expect(getTripRouteStopRows(trip)).toEqual([
+            {
+                city: 'A',
+                region: 'P1',
+                point: 'start detail',
+                kind: 'origin'
+            },
+            {
+                city: 'B',
+                region: 'P2',
+                point: '',
+                kind: 'stop'
+            },
+            {
+                city: 'C',
+                region: 'P3',
+                point: '',
+                kind: 'stop'
+            },
+            {
+                city: 'D',
+                region: 'P4',
+                point: 'end detail',
+                kind: 'dest'
+            }
+        ]);
+    });
+
+    it('matches getTripLocationLabels for endpoints when using points', () => {
+        const trip = {
+            points: [
+                {
+                    json_address: { ciudad: 'Rosario', provincia: 'Santa Fe' }
+                },
+                {
+                    json_address: { ciudad: 'Córdoba', provincia: 'Córdoba' }
+                },
+                {
+                    json_address: { ciudad: 'Mendoza', provincia: 'Mendoza' }
+                }
+            ],
+            from_town: 'ignored',
+            to_town: 'ignored'
+        };
+
+        const labels = getTripLocationLabels(trip);
+        const rows = getTripRouteStopRows(trip);
+        expect(rows[0].city).toBe(labels.fromCity);
+        expect(rows[0].region).toBe(labels.fromRegion);
+        expect(rows[rows.length - 1].city).toBe(labels.toCity);
+        expect(rows[rows.length - 1].region).toBe(labels.toRegion);
+        expect(rows.filter((r) => r.kind === 'stop')).toHaveLength(1);
+        expect(rows[1].city).toBe('Córdoba');
+    });
+
+    it('falls back to from_town and to_town when points are missing', () => {
+        const trip = {
+            from_town: 'Rosario, Santa Fe, Argentina',
+            to_town: 'Mendoza, Mendoza, Argentina'
+        };
+
+        expect(getTripRouteStopRows(trip)).toEqual([
+            {
+                city: 'Rosario',
+                region: 'Santa Fe',
+                point: '',
+                kind: 'origin'
+            },
+            {
+                city: 'Mendoza',
+                region: 'Mendoza',
+                point: '',
+                kind: 'dest'
+            }
+        ]);
+    });
+
+    it('skips intermediate points with no resolved city name', () => {
+        const trip = {
+            points: [
+                { json_address: { ciudad: 'Origen', provincia: 'P1' } },
+                { address: '' },
+                { json_address: { ciudad: 'Destino', provincia: 'P2' } }
+            ]
+        };
+
+        expect(getTripRouteStopRows(trip)).toEqual([
+            {
+                city: 'Origen',
+                region: 'P1',
+                point: '',
+                kind: 'origin'
+            },
+            {
+                city: 'Destino',
+                region: 'P2',
+                point: '',
+                kind: 'dest'
+            }
+        ]);
     });
 });
 
