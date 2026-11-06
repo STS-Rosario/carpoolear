@@ -1,31 +1,32 @@
 <template>
     <div class="trip-detail__detalle" v-if="trip && hasRoute">
         <div class="trip-detail__route">
-            <div class="trip-detail__route-graphic" aria-hidden="true">
-                <span class="trip-detail__route-marker trip-detail__route-marker--origin"></span>
-                <span class="trip-detail__route-marker trip-detail__route-marker--dest"></span>
-            </div>
-            <div class="trip-detail__route-content">
-                <div class="trip-detail__endpoint">
-                    <div class="trip-detail__place">
-                        <span class="trip-detail__city">{{ labels.fromCity }}</span>
-                        <span v-if="labels.fromRegion" class="trip-detail__region">{{
-                            labels.fromRegion
-                        }}</span>
-                    </div>
-                    <div v-if="labels.fromPoint" class="trip-detail__point">
-                        {{ labels.fromPoint }}
-                    </div>
+            <div
+                v-for="(row, index) in routeRows"
+                :key="index"
+                class="trip-detail__route-segment"
+            >
+                <div class="trip-detail__route-graphic-col" aria-hidden="true">
+                    <span
+                        class="trip-detail__route-marker"
+                        :class="markerClassFor(row.kind)"
+                    ></span>
+                    <div
+                        v-if="index < routeRows.length - 1"
+                        class="trip-detail__route-segment-line"
+                    ></div>
                 </div>
-                <div class="trip-detail__endpoint">
-                    <div class="trip-detail__place">
-                        <span class="trip-detail__city">{{ labels.toCity }}</span>
-                        <span v-if="labels.toRegion" class="trip-detail__region">{{
-                            labels.toRegion
-                        }}</span>
-                    </div>
-                    <div v-if="labels.toPoint" class="trip-detail__point">
-                        {{ labels.toPoint }}
+                <div class="trip-detail__route-text-col">
+                    <div class="trip-detail__endpoint">
+                        <div class="trip-detail__place">
+                            <span class="trip-detail__city">{{ row.city }}</span>
+                            <span v-if="row.region" class="trip-detail__region">{{
+                                row.region
+                            }}</span>
+                        </div>
+                        <div v-if="row.point" class="trip-detail__point">
+                            {{ row.point }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,7 +48,7 @@
 import { mapState } from 'pinia';
 import { useTripsStore } from '../../stores/trips';
 import dayjs from '../../dayjs';
-import { getTripLocationLabels } from '../../utils/ongoingTrip.js';
+import { getTripRouteStopRows } from '../../utils/ongoingTrip.js';
 import {
     formatTripCardDate,
     formatTripCardTime
@@ -55,15 +56,24 @@ import {
 
 export default {
     name: 'TripDetailRoute',
+    methods: {
+        markerClassFor(kind) {
+            return {
+                'trip-detail__route-marker--origin': kind === 'origin',
+                'trip-detail__route-marker--stop': kind === 'stop',
+                'trip-detail__route-marker--dest': kind === 'dest'
+            };
+        }
+    },
     computed: {
         ...mapState(useTripsStore, {
             trip: 'currentTrip'
         }),
-        labels() {
-            return getTripLocationLabels(this.trip);
+        routeRows() {
+            return getTripRouteStopRows(this.trip);
         },
         hasRoute() {
-            return Boolean(this.labels.fromCity || this.labels.toCity);
+            return this.routeRows.some((row) => row.city);
         },
         dateLabel() {
             return formatTripCardDate(this.trip?.trip_date, dayjs);
