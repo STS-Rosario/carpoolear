@@ -19,7 +19,7 @@
                     <strong>{{ replyAuthorLabel(reply) }}</strong>
                     <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
                 </p>
-                <div v-html="markdownToHtml(reply.message_markdown)"></div>
+                <div v-html="renderMarkdownPreview(reply.message_markdown)"></div>
                 <div v-if="reply.attachments && reply.attachments.length" class="reply-attachments">
                     <img
                         v-for="attachment in reply.attachments"
@@ -69,7 +69,7 @@ import ToastUiEditor from '../elements/ToastUiEditor.vue';
 import AppButton from '../ui/AppButton.vue';
 import { useTicketsStore } from '../../stores/tickets';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
-import { markdownToHtml } from '../../services/markdown';
+import { renderMarkdownPreview } from '../../services/markdown';
 import {
     fetchSupportTicketAttachmentBlob,
     openBlobImageInNewTab
@@ -125,7 +125,7 @@ export default {
     },
     methods: {
         openBlobImageInNewTab,
-        markdownToHtml,
+        renderMarkdownPreview,
         ...mapActions(useTicketsStore, {
             fetchOne: 'fetchOne',
             replyTicket: 'replyTicket'

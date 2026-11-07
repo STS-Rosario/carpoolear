@@ -11,7 +11,7 @@
             <span v-if="row.creator"> · {{ row.creator.name }}</span>
         </p>
         <hr />
-        <div class="template-body-html" v-html="markdownToHtml(row.body_markdown || '')"></div>
+        <div class="template-body-html" v-html="renderMarkdownPreview(row.body_markdown || '')"></div>
         <p class="mtop-10">
             <AppButton
                 variant="secondary"
@@ -34,7 +34,7 @@
 import { mapActions } from 'pinia';
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AppButton from '../ui/AppButton.vue';
-import { markdownToHtml } from '../../services/markdown';
+import { renderMarkdownPreview } from '../../services/markdown';
 import { useReplyTemplatesStore } from '../../stores/replyTemplates';
 import dayjs from '../../dayjs';
 
@@ -53,7 +53,7 @@ export default {
         };
     },
     methods: {
-        markdownToHtml,
+        renderMarkdownPreview,
         ...mapActions(useReplyTemplatesStore, {
             fetchAdminOne: 'fetchAdminOne'
         }),

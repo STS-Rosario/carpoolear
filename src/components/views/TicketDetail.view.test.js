@@ -130,4 +130,9 @@ describe('TicketDetail user view', () => {
         expect(viewSource).toContain(':class="supportTicketReplyEditorClass"');
         expect(viewSource).not.toContain('height="140px"');
     });
+
+    it('renders reply bodies through renderMarkdownPreview for mixed html and markdown', () => {
+        expect(viewSource).toContain('renderMarkdownPreview(reply.message_markdown)');
+        expect(viewSource).not.toContain('markdownToHtml(reply.message_markdown)');
+    });
 });
