@@ -10,9 +10,35 @@ const SANITIZE_OPTIONS = {
 };
 
 const HTML_CONTENT_PATTERN = /<(?:p|h[1-6]|ul|ol|li|br|strong|em|del|blockquote|pre|code)\b/i;
+const MARKDOWN_LINK_PATTERN = /\[[^\]]+\]\([^)]+\)/;
 
 export function looksLikeHtmlContent(text) {
     return HTML_CONTENT_PATTERN.test(text);
+}
+
+function containsRawMarkdownSyntax(text) {
+    return MARKDOWN_LINK_PATTERN.test(text) || /\*\*[^*]+\*\*/.test(text) || /\*[^*<\n]+\*/.test(text);
+}
+
+function decodeBasicHtmlEntities(text) {
+    return text
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+}
+
+function htmlToPlainMarkdownSource(html) {
+    const withBreaks = html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>\s*<p[^>]*>/gi, '\n\n')
+        .replace(/<\/(?:p|div|h[1-6]|li|blockquote)>/gi, '\n')
+        .replace(/<(?:p|div|h[1-6]|li|blockquote)[^>]*>/gi, '')
+        .replace(/<[^>]+>/g, '');
+
+    return decodeBasicHtmlEntities(withBreaks).replace(/\n{3,}/g, '\n\n').trim();
 }
 
 function sanitizeHtml(html) {
@@ -43,6 +69,9 @@ export function renderMarkdownPreview(text) {
     if (!text || typeof text !== 'string') return '';
     const trimmed = text.trim();
     if (looksLikeHtmlContent(trimmed)) {
+        if (containsRawMarkdownSyntax(trimmed)) {
+            return markdownToHtml(htmlToPlainMarkdownSource(trimmed));
+        }
         return sanitizeHtml(trimmed);
     }
     return markdownToHtml(trimmed);

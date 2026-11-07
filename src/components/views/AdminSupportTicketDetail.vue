@@ -86,7 +86,7 @@
                     </strong>
                     <small class="reply-meta-date" :title="fullDate(reply.created_at)">{{ relativeDate(reply.created_at) }}</small>
                 </p>
-                <div v-html="markdownToHtml(reply.message_markdown)"></div>
+                <div v-html="renderMarkdownPreview(reply.message_markdown)"></div>
                 <div v-if="reply.attachments && reply.attachments.length" class="reply-attachments">
                     <img
                         v-for="attachment in reply.attachments"
@@ -235,7 +235,7 @@ import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
-import { markdownToHtml } from '../../services/markdown';
+import { renderMarkdownPreview } from '../../services/markdown';
 import { interpolateSupportTemplateVariables } from '../../utils/supportTemplateInterpolation';
 import { ticketReplyBodyAlreadyUsed, isDuplicateReplyApiError } from '../../utils/supportTicketReplyDuplicate';
 import {
@@ -397,7 +397,7 @@ export default {
         assignedAdminDisplayName,
         shouldConfirmReassignBeforeAssign,
         openBlobImageInNewTab,
-        markdownToHtml,
+        renderMarkdownPreview,
         ticketSourceLabelKey,
         ...mapActions(useTicketsStore, {
             fetchAdminOne: 'fetchAdminOne',

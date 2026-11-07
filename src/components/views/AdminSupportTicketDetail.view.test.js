@@ -218,4 +218,10 @@ describe('AdminSupportTicketDetail view', () => {
         expect(viewSource).toContain('shouldShowAssignTicketButton');
         expect(viewSource).not.toContain('ticket-assigned-to-other text-muted');
     });
+
+    it('renders reply bodies through renderMarkdownPreview for mixed html and markdown', () => {
+        expect(viewSource).toContain('renderMarkdownPreview(reply.message_markdown)');
+        expect(viewSource).toContain("from '../../services/markdown'");
+        expect(viewSource).not.toContain('markdownToHtml(reply.message_markdown)');
+    });
 });
