@@ -11,6 +11,9 @@ describe('bindStaticPageLinks', () => {
         expect(utilSource).toContain(
             "'/verificacion-cuenta': 'verificacion_cuenta'"
         );
+        expect(utilSource).toContain(
+            "'/un-litro-para-carpoolear': 'un_litro_para_carpoolear'"
+        );
         expect(utilSource).toContain('event.preventDefault()');
         expect(utilSource).toContain('router.push({ name: routeName })');
     });
