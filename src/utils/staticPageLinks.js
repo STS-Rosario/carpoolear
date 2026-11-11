@@ -2,7 +2,8 @@ import { resolveExternalUrl } from './externalLink.js';
 
 const INTERNAL_STATIC_PAGE_ROUTES = {
     '/division-de-gastos': 'division_de_gastos',
-    '/verificacion-cuenta': 'verificacion_cuenta'
+    '/verificacion-cuenta': 'verificacion_cuenta',
+    '/un-litro-para-carpoolear': 'un_litro_para_carpoolear'
 };
 
 export function bindStaticPageLinks(container, router) {
