@@ -302,11 +302,6 @@ export default {
     color: var(--ul-blue);
     font-size: 14px;
 }
-.un-litro__icon--red {
-    background: var(--ul-red-soft);
-    color: var(--ul-red);
-}
-
 /* Peaje */
 .un-litro__peaje {
     display: flex;
@@ -485,7 +480,7 @@ export default {
     text-transform: lowercase;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .un-litro {
         padding: 1.5em 1em 3em;
     }
