@@ -32,6 +32,12 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         expect(viewSource).toContain('Así funciona');
         expect(viewSource).toContain('M50.06,47.98');
         expect(viewSource).toContain('viewBox="0 0 64 80"');
+        expect(viewSource).toMatch(
+            /\.un-litro__icon\s+\.un-litro__fuel-pump\s*\{[^}]*width:\s*20px/
+        );
+        expect(viewSource).toMatch(
+            /\.un-litro__trip-icon\s+\.un-litro__fuel-pump\s*\{[^}]*width:\s*14px/
+        );
         expect(viewSource).toContain('Un peaje más, para la comunidad');
         expect(viewSource).toContain(
             'Mantener en funcionamiento el sitio y la app para que sigas encontrando y compartiendo viajes.'
