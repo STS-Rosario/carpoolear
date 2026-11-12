@@ -71,5 +71,8 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         expect(viewSource).toContain(
             'Si nadie se sube a tu viaje, se aplica para el siguiente'
         );
+        expect(viewSource).toContain(
+            'Si nadie reservó un lugar, no tenés que volver a pagarlo: el litro se traslada directo a tu siguiente viaje publicado.'
+        );
     });
 });
