@@ -32,6 +32,16 @@ describe('UnLitroParaCarpoolear page wiring', () => {
             'Se divide entre todas las personas que viajan'
         );
         expect(viewSource).toContain('Tus 2 primeros viajes son sin cargo');
+        expect(viewSource).toContain('Para probar la plataforma.');
+        expect(viewSource).toContain(
+            'Es el valor de 1 litro de nafta, dentro de los gastos compartidos del viaje.'
+        );
+        expect(viewSource).toContain(
+            'Quien maneja lo paga al publicar y lo comparte con las demás personas.'
+        );
+        expect(viewSource).toContain(
+            'Se cobra en los trayectos más viajados y compartidos.'
+        );
         expect(viewSource).toContain('1/4 L');
         expect(viewSource).toContain(
             'Si nadie se sube a tu viaje, se aplica para el siguiente'
