@@ -467,14 +467,14 @@ export default {
     min-height: 96px;
     padding: 1.1em 1.2em;
     border-radius: 14px;
-    border: 1.5px solid #93B3D0;
+    border: 2px solid #1e609d;
     background: #E7F1FB;
     color: #2D5C88;
     font-weight: 700;
 }
 .un-litro__seat--driver {
     border-color: transparent;
-    background: #F4F3F1;
+    background: #f4f3f1;
     color: var(--ul-text);
 }
 .un-litro__seat-meta {
