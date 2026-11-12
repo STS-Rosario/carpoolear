@@ -117,20 +117,20 @@
                 <div class="un-litro__seats-wrap">
                     <div class="un-litro__seats">
                         <div class="un-litro__seat un-litro__seat--driver">
-                            <span><i class="fa fa-car" aria-hidden="true"></i> Conductor</span>
-                            <span class="un-litro__seat-amount">1/4 L</span>
+                            <span class="un-litro__seat-label"><i class="fa fa-car" aria-hidden="true"></i> Conductor</span>
+                            <span class="un-litro__seat-amount">¼ L</span>
                         </div>
                         <div class="un-litro__seat">
-                            <span><i class="fa fa-user" aria-hidden="true"></i> Acompañante</span>
-                            <span class="un-litro__seat-amount">1/4 L</span>
+                            <span class="un-litro__seat-label"><i class="fa fa-user" aria-hidden="true"></i> Acompañante</span>
+                            <span class="un-litro__seat-amount">¼ L</span>
                         </div>
                         <div class="un-litro__seat">
-                            <span><i class="fa fa-user" aria-hidden="true"></i> Trasero 1</span>
-                            <span class="un-litro__seat-amount">1/4 L</span>
+                            <span class="un-litro__seat-label"><i class="fa fa-user" aria-hidden="true"></i> Trasero 1</span>
+                            <span class="un-litro__seat-amount">¼ L</span>
                         </div>
                         <div class="un-litro__seat">
-                            <span><i class="fa fa-user" aria-hidden="true"></i> Trasero 2</span>
-                            <span class="un-litro__seat-amount">1/4 L</span>
+                            <span class="un-litro__seat-label"><i class="fa fa-user" aria-hidden="true"></i> Trasero 2</span>
+                            <span class="un-litro__seat-amount">¼ L</span>
                         </div>
                     </div>
                     <div class="un-litro__card un-litro__seats-explainer">
@@ -440,26 +440,40 @@ export default {
 }
 .un-litro__seat {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
-    gap: 0.5em;
-    min-height: 92px;
-    padding: 1em 1.1em;
-    border-radius: 12px;
+    align-items: center;
+    gap: 0.75em;
+    min-height: 72px;
+    padding: 1em 1.15em;
+    border-radius: 14px;
     border: 1.5px solid var(--ul-blue);
     background: var(--ul-blue-soft);
-    font-weight: 600;
+    color: var(--ul-blue);
+    font-weight: 700;
 }
 .un-litro__seat--driver {
-    border-color: #E0E0E0;
+    border-color: transparent;
     background: var(--ul-grey);
+    color: var(--ul-text);
+}
+.un-litro__seat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    min-width: 0;
+    color: inherit;
+}
+.un-litro__seat-label i {
+    color: inherit;
 }
 .un-litro__seat-amount {
-    align-self: flex-end;
+    flex: 0 0 auto;
     color: var(--ul-red);
-    font-size: 1.9em;
+    font-size: 1.85em;
     font-weight: 700;
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 .un-litro__seats-explainer {
     flex: 1 1 40%;
