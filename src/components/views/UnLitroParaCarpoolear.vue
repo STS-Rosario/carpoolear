@@ -30,7 +30,7 @@
                         </li>
                         <li class="un-litro__how-item">
                             <span class="un-litro__icon" aria-hidden="true">
-                                <svg class="un-litro__fuel-pump" viewBox="0 0 64 80" width="14" height="18" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <svg class="un-litro__fuel-pump" viewBox="0 0 64 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M34.5,15h-14c-1.1,0-2,.9-2,2v12c0,1.1.9,2,2,2h14c1.1,0,2-.9,2-2v-12c0-1.1-.9-2-2-2ZM32.5,27h-10v-8h10v8Z"/>
                                     <path d="M50.06,47.98c3,0,5.44-2.44,5.44-5.44v-20.53c0-.53-.21-1.04-.59-1.41l-5-5c-.78-.78-2.05-.78-2.83,0-.78.78-.78,2.05,0,2.83l2.91,2.91c-.39.45-.63,1.03-.63,1.67,0,1.27.92,2.32,2.13,2.52v17.02c0,.8-.65,1.44-1.44,1.44s-1.44-.65-1.44-1.44v-6.25c0-3-2.44-5.44-5.44-5.44h-.67v-14.84c0-4.41-3.59-8-8-8h-14c-4.41,0-8,3.59-8,8v36h-2c-1.1,0-2,.9-2,2s.9,2,2,2h35c1.1,0,2-.9,2-2s-.9-2-2-2h-3v-17.16h.67c.8,0,1.44.65,1.44,1.44v6.25c0,3,2.44,5.44,5.44,5.44ZM16.5,52V16c0-2.21,1.79-4,4-4h14c2.21,0,4,1.79,4,4v36h-22Z"/>
                                 </svg>
@@ -184,7 +184,7 @@
                         </div>
                         <div class="un-litro__trip un-litro__trip--paid">
                             <span class="un-litro__trip-icon" aria-hidden="true">
-                                <svg class="un-litro__fuel-pump" viewBox="0 0 64 80" width="11" height="14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <svg class="un-litro__fuel-pump" viewBox="0 0 64 80" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M34.5,15h-14c-1.1,0-2,.9-2,2v12c0,1.1.9,2,2,2h14c1.1,0,2-.9,2-2v-12c0-1.1-.9-2-2-2ZM32.5,27h-10v-8h10v8Z"/>
                                     <path d="M50.06,47.98c3,0,5.44-2.44,5.44-5.44v-20.53c0-.53-.21-1.04-.59-1.41l-5-5c-.78-.78-2.05-.78-2.83,0-.78.78-.78,2.05,0,2.83l2.91,2.91c-.39.45-.63,1.03-.63,1.67,0,1.27.92,2.32,2.13,2.52v17.02c0,.8-.65,1.44-1.44,1.44s-1.44-.65-1.44-1.44v-6.25c0-3-2.44-5.44-5.44-5.44h-.67v-14.84c0-4.41-3.59-8-8-8h-14c-4.41,0-8,3.59-8,8v36h-2c-1.1,0-2,.9-2,2s.9,2,2,2h35c1.1,0,2-.9,2-2s-.9-2-2-2h-3v-17.16h.67c.8,0,1.44.65,1.44,1.44v6.25c0,3,2.44,5.44,5.44,5.44ZM16.5,52V16c0-2.21,1.79-4,4-4h14c2.21,0,4,1.79,4,4v36h-22Z"/>
                                 </svg>
@@ -393,6 +393,10 @@ export default {
 .un-litro__icon .un-litro__fuel-pump path {
     fill: currentColor;
 }
+.un-litro__icon .un-litro__fuel-pump {
+    width: 20px;
+    height: 25px;
+}
 /* Peaje */
 .un-litro__peaje {
     display: flex;
@@ -591,6 +595,10 @@ export default {
     color: #fff;
     fill: #fff;
 }
+.un-litro__trip-icon .un-litro__fuel-pump {
+    width: 14px;
+    height: 18px;
+}
 .un-litro__trip-kicker {
     display: block;
     font-size: 0.75em;
@@ -646,6 +654,7 @@ export default {
 }
 .un-litro__fuel-pump {
     display: block;
+    flex: 0 0 auto;
 }
 
 @media (max-width: 991px) {
