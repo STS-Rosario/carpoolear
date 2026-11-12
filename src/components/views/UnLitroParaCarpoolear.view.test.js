@@ -74,5 +74,13 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         expect(viewSource).toContain(
             'Si nadie reservó un lugar, no tenés que volver a pagarlo: el litro se traslada directo a tu siguiente viaje publicado.'
         );
+        expect(viewSource).toContain('No se suma ningún litro.');
+        expect(viewSource).toContain('Tampoco se suma ningún litro.');
+        expect(viewSource).toContain(
+            'Desde acá se suma el equivalente a 1 litro de nafta.'
+        );
+        expect(viewSource).toMatch(
+            /\.un-litro__trip--paid\s+\.un-litro__trip-value\s*\{[^}]*color:\s*#8B2129/
+        );
     });
 });
