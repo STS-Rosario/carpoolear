@@ -148,7 +148,11 @@
                             <span class="un-litro__trip-value">Sin cargo</span>
                         </div>
                         <div class="un-litro__trip un-litro__trip--paid">
-                            <span class="un-litro__trip-icon"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            <span class="un-litro__trip-icon" aria-hidden="true">
+                                <svg class="un-litro__fuel-pump" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 3h8a1 1 0 0 1 1 1v14h1v-6.17A3 3 0 0 1 16 9h1.5A2.5 2.5 0 0 1 20 11.5V16a1 1 0 1 0 2 0v-4.76a1 1 0 0 0-.29-.7l-2.5-2.5a1 1 0 0 0-1.42 1.42L18.59 10H17a1 1 0 0 0-1 1v6h2a1 1 0 0 1 1 1v1H3v-1a1 1 0 0 1 1-1h1V4a1 1 0 0 1 1-1zm2 2v12h4V5H6z"/>
+                                </svg>
+                            </span>
                             <span class="un-litro__trip-kicker">Tercer viaje</span>
                             <span class="un-litro__trip-value">Suma 1 litro</span>
                         </div>
