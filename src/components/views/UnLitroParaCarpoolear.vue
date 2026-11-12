@@ -5,13 +5,13 @@
             <section class="un-litro__hero">
                 <div class="un-litro__hero-main">
                     <div class="un-litro__hero-head">
-                        <svg class="un-litro__can" viewBox="0 0 96 110" role="img" aria-label="1L para carpoolear" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 22 L30 4 H56 L62 12 H82 Q92 12 92 22 V96 Q92 106 82 106 H18 Q8 106 8 96 V30 Z" fill="#C62828"/>
-                            <rect x="24" y="16" width="40" height="8" rx="3" fill="#8E1B1B"/>
-                            <text x="50" y="68" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="40" font-weight="700" fill="#fff">1L</text>
-                            <text x="50" y="86" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="8" font-weight="600" fill="#fff">para</text>
-                            <text x="50" y="97" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="8" font-weight="700" fill="#fff">carpoolear</text>
-                        </svg>
+                        <img
+                            class="un-litro__can"
+                            :src="$publicImg('bidon.png')"
+                            alt="1L para carpoolear"
+                            width="96"
+                            height="96"
+                        />
                         <h1 class="un-litro__title">¿Qué es 1 litro para Carpoolear?</h1>
                     </div>
                     <p class="un-litro__lead">Es el valor de 1 litro de nafta que se suma a los gastos compartidos del viaje, para sostener la comunidad.</p>
@@ -51,7 +51,17 @@
                         <ul>
                             <li class="un-litro__row"><i class="fa fa-tint" aria-hidden="true"></i><span>Nafta</span></li>
                             <li class="un-litro__row"><i class="fa fa-ticket" aria-hidden="true"></i><span>Peajes</span></li>
-                            <li class="un-litro__row un-litro__row--highlight"><i class="fa fa-plus" aria-hidden="true"></i><span>+ 1 litro para Carpoolear</span></li>
+                            <li class="un-litro__row un-litro__row--highlight">
+                                <img
+                                    class="un-litro__bidon-icon"
+                                    :src="$publicImg('bidon.png')"
+                                    alt=""
+                                    width="28"
+                                    height="28"
+                                    aria-hidden="true"
+                                />
+                                <span>+ 1 litro para Carpoolear</span>
+                            </li>
                             <li class="un-litro__row"><i class="fa fa-user" aria-hidden="true"></i><span>Todo se divide entre quienes viajan</span></li>
                         </ul>
                     </div>
@@ -256,7 +266,16 @@ export default {
 .un-litro__can {
     flex: 0 0 auto;
     width: 96px;
-    height: 110px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+.un-litro__bidon-icon {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
 }
 .un-litro__title {
     font-size: 2.5em;
@@ -333,6 +352,10 @@ export default {
 }
 .un-litro__row--highlight .fa {
     color: var(--ul-red);
+}
+.un-litro__row--highlight .un-litro__bidon-icon {
+    width: 28px;
+    height: 28px;
 }
 .un-litro__use {
     display: flex;
@@ -508,7 +531,7 @@ export default {
     }
     .un-litro__can {
         width: 72px;
-        height: 83px;
+        height: auto;
     }
     .un-litro__seats {
         grid-template-columns: repeat(2, 1fr);
