@@ -48,7 +48,7 @@
         </ul>
 
         <p>
-            Para lograr esto, hemos desarrollado una plataforma gratuita,
+            Para lograr esto, hemos desarrollado una plataforma
             colaborativa y sin fines de lucro donde las personas pueden
             compartir con otras sus viajes en auto.
         </p>
