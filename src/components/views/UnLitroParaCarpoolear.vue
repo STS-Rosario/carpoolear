@@ -328,17 +328,20 @@ export default {
     display: block;
 }
 .un-litro__title {
-    font-size: 2.5em;
+    font-size: 2.85em;
     font-weight: 600;
     line-height: 1.1;
 }
 .un-litro__lead {
-    font-size: 1.15em;
+    font-size: 1.4em;
     font-weight: 500;
+    line-height: 1.35;
     margin-bottom: 0.9em;
 }
 .un-litro__body {
-    color: var(--ul-muted);
+    font-size: 1.125em;
+    line-height: 1.45;
+    color: var(--ul-text);
 }
 .un-litro__how {
     flex: 0 1 38%;
