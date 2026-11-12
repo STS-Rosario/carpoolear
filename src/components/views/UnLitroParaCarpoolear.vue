@@ -23,7 +23,10 @@
                     <ul>
                         <li class="un-litro__how-item">
                             <span class="un-litro__icon"><i class="fa fa-check" aria-hidden="true"></i></span>
-                            <span>Tus 2 primeros viajes son sin cargo</span>
+                            <span class="un-litro__how-copy">
+                                <span class="un-litro__how-label">Tus 2 primeros viajes son sin cargo</span>
+                                <span class="un-litro__how-desc">Para probar la plataforma.</span>
+                            </span>
                         </li>
                         <li class="un-litro__how-item">
                             <span class="un-litro__icon" aria-hidden="true">
@@ -31,15 +34,24 @@
                                     <path d="M3 3h8v2H5v8h6v2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m14 0a2 2 0 0 1 2 2v9.5a1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5V10h-2V7h2V5a2 2 0 0 0-2-2h-3m-4 4h4v6h-4V7m0 8h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-2h8v-2z"/>
                                 </svg>
                             </span>
-                            <span>Desde el tercero se suma 1 litro</span>
+                            <span class="un-litro__how-copy">
+                                <span class="un-litro__how-label">Desde el tercero se suma 1 litro</span>
+                                <span class="un-litro__how-desc">Es el valor de 1 litro de nafta, dentro de los gastos compartidos del viaje.</span>
+                            </span>
                         </li>
                         <li class="un-litro__how-item">
                             <span class="un-litro__icon"><i class="fa fa-user" aria-hidden="true"></i></span>
-                            <span>Se divide entre quienes viajan</span>
+                            <span class="un-litro__how-copy">
+                                <span class="un-litro__how-label">Se divide entre quienes viajan</span>
+                                <span class="un-litro__how-desc">Quien maneja lo paga al publicar y lo comparte con las demás personas.</span>
+                            </span>
                         </li>
                         <li class="un-litro__how-item">
                             <span class="un-litro__icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-                            <span>Sólo en algunos trayectos</span>
+                            <span class="un-litro__how-copy">
+                                <span class="un-litro__how-label">Sólo en algunos trayectos</span>
+                                <span class="un-litro__how-desc">Se cobra en los trayectos más viajados y compartidos.</span>
+                            </span>
                         </li>
                     </ul>
                 </aside>
@@ -315,10 +327,28 @@ export default {
 }
 .un-litro__how-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.85em;
+    padding: 0.65em 0;
+}
+.un-litro__how-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+    min-width: 0;
+}
+.un-litro__how-label {
     font-weight: 600;
-    padding: 0.55em 0;
+    color: var(--ul-text);
+}
+.un-litro__how-desc {
+    font-weight: 400;
+    font-size: 0.9em;
+    line-height: 1.35;
+    color: var(--ul-muted);
+}
+.un-litro__how-item .un-litro__icon {
+    margin-top: 0.1em;
 }
 
 /* Icon bubbles */
