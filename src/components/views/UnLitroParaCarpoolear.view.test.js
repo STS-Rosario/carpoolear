@@ -30,6 +30,8 @@ describe('UnLitroParaCarpoolear page wiring', () => {
             'Carpoolear es un proyecto colaborativo <strong>sin fines de lucro</strong> de la asociación civil STS Rosario. Ese litro ayuda a mantener la plataforma, la mesa de ayuda y las mejoras.'
         );
         expect(viewSource).toContain('Así funciona');
+        expect(viewSource).toContain('M50.06,47.98');
+        expect(viewSource).toContain('viewBox="0 0 64 80"');
         expect(viewSource).toContain('Un peaje más, para la comunidad');
         expect(viewSource).toContain(
             'Mantener en funcionamiento el sitio y la app para que sigas encontrando y compartiendo viajes.'
