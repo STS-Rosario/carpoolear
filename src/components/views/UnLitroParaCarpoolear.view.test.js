@@ -27,6 +27,9 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
         expect(viewSource).toContain('¿Qué es 1 litro para Carpoolear?');
         expect(viewSource).toContain('--ul-text: #22211f');
+        expect(viewSource).toMatch(/\.un-litro__title\s*\{[^}]*font-size:\s*2\.85em/);
+        expect(viewSource).toMatch(/\.un-litro__lead\s*\{[^}]*font-size:\s*1\.4em/);
+        expect(viewSource).toMatch(/\.un-litro__body\s*\{[^}]*font-size:\s*1\.125em/);
         expect(viewSource).toContain(
             'Carpoolear es un proyecto colaborativo <strong>sin fines de lucro</strong> de la asociación civil STS Rosario. Ese litro ayuda a mantener la plataforma, la mesa de ayuda y las mejoras.'
         );
