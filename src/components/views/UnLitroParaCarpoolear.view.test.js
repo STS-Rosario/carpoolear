@@ -65,7 +65,9 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         expect(viewSource).toContain(
             'Se cobra en los trayectos más viajados y compartidos.'
         );
-        expect(viewSource).toContain('1/4 L');
+        expect(viewSource).toContain('¼ L');
+        expect(viewSource).toContain('un-litro__seat--driver');
+        expect(viewSource).toContain('un-litro__seat-label');
         expect(viewSource).toContain(
             'Si nadie se sube a tu viaje, se aplica para el siguiente'
         );
