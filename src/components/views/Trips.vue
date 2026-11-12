@@ -1197,7 +1197,7 @@ export default {
         },
         showAppBanner() {
             const banner = this.appConfig && this.appConfig.banner;
-            return shouldShowAppBanner(banner, this.user);
+            return shouldShowAppBanner(banner);
         },
         appBannerAsset() {
             const banner = this.appConfig && this.appConfig.banner;
