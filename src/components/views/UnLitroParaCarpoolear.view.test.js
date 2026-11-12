@@ -32,6 +32,15 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         expect(viewSource).toContain('Así funciona');
         expect(viewSource).toContain('Un peaje más, para la comunidad');
         expect(viewSource).toContain(
+            'Mantener en funcionamiento el sitio y la app para que sigas encontrando y compartiendo viajes.'
+        );
+        expect(viewSource).toContain(
+            'Responder las consultas y resolver los problemas de quienes usan Carpoolear.'
+        );
+        expect(viewSource).toContain(
+            'Desarrollar nuevas funcionalidades y mejorar las que ya existen.'
+        );
+        expect(viewSource).toContain(
             'Se divide entre todas las personas que viajan'
         );
         expect(viewSource).toContain('Tus 2 primeros viajes son sin cargo');
