@@ -67,7 +67,14 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         );
         expect(viewSource).toContain('¼ L');
         expect(viewSource).toContain('un-litro__seat--driver');
+        expect(viewSource).toContain('un-litro__seat-meta');
         expect(viewSource).toContain('un-litro__seat-label');
+        expect(viewSource).toMatch(
+            /\.un-litro__seat-meta\s*\{[^}]*flex-direction:\s*column/
+        );
+        expect(viewSource).toContain('background: #F4F3F1');
+        expect(viewSource).toContain('background: #E7F1FB');
+        expect(viewSource).toContain('border: 1.5px solid #93B3D0');
         expect(viewSource).toContain(
             'Si nadie se sube a tu viaje, se aplica para el siguiente'
         );
