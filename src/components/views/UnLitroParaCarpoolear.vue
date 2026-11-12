@@ -241,7 +241,7 @@ export default {
     --ul-blue-soft: #E8F1FB;
     --ul-banner: #1565C0;
     --ul-green: #2E7D32;
-    --ul-text: #22211F;
+    --ul-text: #22211f;
     --ul-muted: #5f6368;
     --ul-card-bg: #ffffff;
     --ul-grey: #F1F1F1;
@@ -260,7 +260,7 @@ export default {
 .un-litro *::after {
     box-sizing: border-box;
 }
-.un-litro :where(h1, h2, h3, p, ul, li) {
+.un-litro :where(h1, h2, h3, p, ul, li, strong, b) {
     margin: 0;
     padding: 0;
     font-family: inherit;
