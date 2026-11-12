@@ -26,6 +26,9 @@ describe('UnLitroParaCarpoolear page wiring', () => {
     it('renders the informational sections from the Un litro mockup', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
         expect(viewSource).toContain('¿Qué es 1 litro para Carpoolear?');
+        expect(viewSource).toContain(
+            'Carpoolear es un proyecto colaborativo <strong>sin fines de lucro</strong> de la asociación civil STS Rosario. Ese litro ayuda a mantener la plataforma, la mesa de ayuda y las mejoras.'
+        );
         expect(viewSource).toContain('Así funciona');
         expect(viewSource).toContain('Un peaje más, para la comunidad');
         expect(viewSource).toContain(
