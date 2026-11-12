@@ -92,6 +92,19 @@ describe('getMyAccountDesktopExpandedSection', () => {
         expect(getMyAccountDesktopExpandedSection('acerca_de')).toBe('ayuda');
         expect(getMyAccountDesktopExpandedSection('terms')).toBe('ayuda');
     });
+
+    it('expands ayuda for FAQ and FAQ-linked article routes', () => {
+        expect(getMyAccountDesktopExpandedSection('faq')).toBe('ayuda');
+        expect(getMyAccountDesktopExpandedSection('division_de_gastos')).toBe(
+            'ayuda'
+        );
+        expect(getMyAccountDesktopExpandedSection('verificacion_cuenta')).toBe(
+            'ayuda'
+        );
+        expect(
+            getMyAccountDesktopExpandedSection('un_litro_para_carpoolear')
+        ).toBe('ayuda');
+    });
 });
 
 describe('isMyAccountDesktopItemActive', () => {
@@ -116,5 +129,21 @@ describe('isMyAccountDesktopItemActive', () => {
         const support = sections[2].items.find((i) => i.id === 'support');
         expect(isMyAccountDesktopItemActive(support, 'tickets')).toBe(true);
         expect(isMyAccountDesktopItemActive(support, 'ticket-detail')).toBe(true);
+    });
+
+    it('highlights preguntas frecuentes on FAQ and FAQ-linked article routes', () => {
+        const sections = getMyAccountDesktopSections({}, 'arg');
+        const faq = sections[2].items.find((i) => i.id === 'faq');
+        expect(isMyAccountDesktopItemActive(faq, 'faq')).toBe(true);
+        expect(isMyAccountDesktopItemActive(faq, 'division_de_gastos')).toBe(
+            true
+        );
+        expect(isMyAccountDesktopItemActive(faq, 'verificacion_cuenta')).toBe(
+            true
+        );
+        expect(
+            isMyAccountDesktopItemActive(faq, 'un_litro_para_carpoolear')
+        ).toBe(true);
+        expect(isMyAccountDesktopItemActive(faq, 'tickets')).toBe(false);
     });
 });

@@ -38,6 +38,8 @@ const About = () => import('../components/views/About.vue');
 const Transactions = () => import('../components/views/transactions.vue');
 const TermsAndConditions = () => import('../components/views/TermsAndConditions.vue');
 const StaticHtmlPage = () => import('../components/views/StaticHtmlPage.vue');
+const UnLitroParaCarpoolear = () =>
+    import('../components/views/UnLitroParaCarpoolear.vue');
 const AdminDashboard = () => import('../components/views/AdminDashboard.vue');
 const AdminPage = () => import('../components/views/AdminPage.vue');
 const AdminMaintenance = () => import('../components/views/AdminMaintenance.vue');
@@ -829,6 +831,19 @@ export default [
             actionbar: {
                 header: {
                     titleKey: 'validarIdentidad',
+                    buttons: ['back']
+                }
+            }
+        }
+    },
+    {
+        path: '/un-litro-para-carpoolear',
+        name: 'un_litro_para_carpoolear',
+        component: UnLitroParaCarpoolear,
+        meta: {
+            actionbar: {
+                header: {
+                    titleKey: 'unLitroParaCarpoolear',
                     buttons: ['back']
                 }
             }
