@@ -134,7 +134,12 @@
                         </div>
                     </div>
                     <div class="un-litro__card un-litro__seats-explainer">
-                        <p>Quien conduce lo paga al publicar el viaje y después lo comparte, igual que la nafta y los peajes.</p>
+                        <span class="un-litro__icon" aria-hidden="true">
+                            <i class="fa fa-user-plus"></i>
+                        </span>
+                        <p class="un-litro__seats-explainer-title">Quien maneja lo paga al publicar y lo comparte, como la nafta y los peajes.</p>
+                        <p class="un-litro__seats-explainer-body">Es decir: el litro se adelanta al crear el viaje y después se divide entre todas las personas que viajan, conductor incluido.</p>
+                        <p class="un-litro__seats-explainer-footnote">* Ejemplo con 4 personas viajando.</p>
                     </div>
                 </div>
                 <div class="un-litro__card un-litro__note">
@@ -459,10 +464,31 @@ export default {
 .un-litro__seats-explainer {
     flex: 1 1 40%;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65em;
 }
-.un-litro__seats-explainer p {
-    font-size: 1.1em;
-    font-weight: 600;
+.un-litro__seats-explainer-title {
+    font-size: 1.05em;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--ul-text);
+    margin: 0;
+}
+.un-litro__seats-explainer-body {
+    font-size: 0.95em;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--ul-muted);
+    margin: 0;
+}
+.un-litro__seats-explainer-footnote {
+    font-size: 0.85em;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ul-muted);
+    margin: 0.35em 0 0;
 }
 .un-litro__note {
     display: flex;
