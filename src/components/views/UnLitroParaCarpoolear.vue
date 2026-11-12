@@ -161,11 +161,13 @@
                             <span class="un-litro__trip-icon"><i class="fa fa-check" aria-hidden="true"></i></span>
                             <span class="un-litro__trip-kicker">Primer viaje</span>
                             <span class="un-litro__trip-value">Sin cargo</span>
+                            <span class="un-litro__trip-desc">No se suma ningún litro.</span>
                         </div>
                         <div class="un-litro__trip">
                             <span class="un-litro__trip-icon"><i class="fa fa-check" aria-hidden="true"></i></span>
                             <span class="un-litro__trip-kicker">Segundo viaje</span>
                             <span class="un-litro__trip-value">Sin cargo</span>
+                            <span class="un-litro__trip-desc">Tampoco se suma ningún litro.</span>
                         </div>
                         <div class="un-litro__trip un-litro__trip--paid">
                             <span class="un-litro__trip-icon" aria-hidden="true">
@@ -175,6 +177,7 @@
                             </span>
                             <span class="un-litro__trip-kicker">Tercer viaje</span>
                             <span class="un-litro__trip-value">Suma 1 litro</span>
+                            <span class="un-litro__trip-desc">Desde acá se suma el equivalente a 1 litro de nafta.</span>
                         </div>
                     </div>
                 </div>
@@ -583,8 +586,20 @@ export default {
 .un-litro__trip-value {
     display: block;
     font-size: 1.6em;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
+    color: var(--ul-text);
+}
+.un-litro__trip--paid .un-litro__trip-value {
+    color: #8B2129;
+}
+.un-litro__trip-desc {
+    display: block;
+    margin-top: 0.25em;
+    font-size: 0.95em;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ul-muted);
 }
 
 /* Banner */
