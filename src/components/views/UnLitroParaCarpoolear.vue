@@ -1,5 +1,5 @@
 <template>
-    <AccountSettingsLayout page-title-key="unLitroParaCarpoolear">
+    <AccountSettingsLayout>
         <div class="un-litro">
             <!-- 1. Hero -->
             <section class="un-litro__hero">

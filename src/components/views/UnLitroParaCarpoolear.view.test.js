@@ -16,10 +16,11 @@ describe('UnLitroParaCarpoolear page wiring', () => {
         );
     });
 
-    it('wraps content with AccountSettingsLayout and the page title key', () => {
+    it('wraps content with AccountSettingsLayout without a duplicate page title', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
         expect(viewSource).toContain('AccountSettingsLayout');
-        expect(viewSource).toContain('unLitroParaCarpoolear');
+        expect(viewSource).not.toContain('page-title-key');
+        expect(viewSource).not.toContain('pageTitleKey');
     });
 
     it('renders the informational sections from the Un litro mockup', () => {
