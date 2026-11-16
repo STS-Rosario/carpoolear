@@ -27,6 +27,7 @@ const MENU_LABELS = {
         idioma: 'Idioma',
         preguntasFrecuentes: 'Preguntas frecuentes',
         divisionDeGastos: 'División de gastos',
+        unLitroParaCarpoolear: 'Un litro para Carpoolear',
         menu: 'Menú',
         modoDebug: 'Modo debug',
         legales: 'Legales'
@@ -55,6 +56,7 @@ const MENU_LABELS = {
         idioma: 'Language',
         preguntasFrecuentes: 'Frequently asked questions',
         divisionDeGastos: 'Trip cost sharing',
+        unLitroParaCarpoolear: 'One liter for Carpoolear',
         menu: 'Menu',
         modoDebug: 'Debug mode',
         legales: 'Legal'

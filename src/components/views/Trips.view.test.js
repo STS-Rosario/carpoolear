@@ -6,10 +6,13 @@ const viewPath = path.resolve(__dirname, 'Trips.vue');
 const viewSource = fs.readFileSync(viewPath, 'utf8');
 
 describe('Trips.vue app banner', () => {
-    it('uses shouldShowAppBanner for verification-aware banner visibility', () => {
+    it('uses shouldShowAppBanner for env-configured banner visibility', () => {
         expect(viewSource).toContain('shouldShowAppBanner');
         expect(viewSource).toContain('showAppBanner');
         expect(viewSource).toContain('v-if="showAppBanner"');
+        expect(viewSource).toMatch(
+            /shouldShowAppBanner\(\s*banner\s*\)/
+        );
     });
 
     it('does not pull the account verification banner under the fixed header', () => {

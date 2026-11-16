@@ -19,7 +19,8 @@ const ROUTE_SECTION = {
     terms: 'ayuda',
     faq: 'ayuda',
     division_de_gastos: 'ayuda',
-    verificacion_cuenta: 'ayuda'
+    verificacion_cuenta: 'ayuda',
+    un_litro_para_carpoolear: 'ayuda'
 };
 
 const ROUTE_ACTIVE_ITEM_ID = {
@@ -37,7 +38,8 @@ const ROUTE_ACTIVE_ITEM_ID = {
     terms: 'legal',
     faq: 'faq',
     division_de_gastos: 'faq',
-    verificacion_cuenta: 'faq'
+    verificacion_cuenta: 'faq',
+    un_litro_para_carpoolear: 'faq'
 };
 
 function buildDesktopSections(config) {

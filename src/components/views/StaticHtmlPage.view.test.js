@@ -33,5 +33,7 @@ describe('static help page routes', () => {
         expect(routesSource).toContain("pageSlug: 'faq'");
         expect(routesSource).toContain("pageSlug: 'division-de-gastos'");
         expect(routesSource).toContain("pageSlug: 'verificacion-cuenta'");
+        expect(routesSource).toContain("name: 'un_litro_para_carpoolear'");
+        expect(routesSource).toContain("path: '/un-litro-para-carpoolear'");
     });
 });
