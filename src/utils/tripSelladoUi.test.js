@@ -6,6 +6,7 @@ import {
     selladoCheckoutUrl,
     selladoDetailBannerKind,
     shouldChargeSellado,
+    shouldShowClubMemberExemptCard,
     shouldShowSelladoBonificadoCard,
     shouldShowSelladoComplimentaryCard,
     shouldShowSelladoEmptyTripCreditCard,
@@ -80,6 +81,39 @@ describe('shouldChargeSellado', () => {
                 routeNeedsPayment: true,
                 userOverFreeLimit: true,
                 hasComplimentarySellado: true
+            })
+        ).toBe(false);
+    });
+
+    it('does not charge when the driver is a Club Carpoolear member', () => {
+        expect(
+            shouldChargeSellado({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                userOverFreeLimit: true,
+                clubMemberExempt: true
+            })
+        ).toBe(false);
+    });
+});
+
+describe('shouldShowClubMemberExemptCard', () => {
+    it('shows when sellado is enabled, the route needs payment, and the driver is a Club member', () => {
+        expect(
+            shouldShowClubMemberExemptCard({
+                selladoEnabled: true,
+                routeNeedsPayment: true,
+                clubMemberExempt: true
+            })
+        ).toBe(true);
+    });
+
+    it('does not show when the route does not need payment', () => {
+        expect(
+            shouldShowClubMemberExemptCard({
+                selladoEnabled: true,
+                routeNeedsPayment: false,
+                clubMemberExempt: true
             })
         ).toBe(false);
     });
