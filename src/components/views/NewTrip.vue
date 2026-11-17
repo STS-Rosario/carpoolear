@@ -84,10 +84,12 @@ import {
     isOverSelladoFreeLimit,
     remainingSelladoFreeTrips,
     shouldChargeSellado,
+    shouldShowClubMemberExemptCard,
     shouldShowSelladoBonificadoCard,
     shouldShowSelladoComplimentaryCard,
     shouldShowUnLitroCard
 } from '../../utils/tripSelladoUi.js';
+import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import {
     exceedsMaximumSeatPrice,
     resolveLiveContributionPriceError
@@ -224,6 +226,7 @@ export default {
             price: '',
             needs_to_pay_for_next_trip: false,
             has_complimentary_sellado: false,
+            club_member_exempt: false,
             maximum_trip_price_cents: 0,
             recommended_trip_price_cents: 0,
             maximum_seat_price_cents: 0,
@@ -517,12 +520,27 @@ export default {
                 userOverFreeLimit: this.needs_to_pay_for_next_trip
             });
         },
+        clubMemberExempt() {
+            return (
+                Boolean(this.club_member_exempt) ||
+                isActiveClubCarpoolearMember(this.user)
+            );
+        },
+        selladoClubExempt() {
+            return shouldShowClubMemberExemptCard({
+                selladoEnabled:
+                    this.config && this.config.module_trip_creation_payment_enabled,
+                routeNeedsPayment: this.route_needs_payment,
+                clubMemberExempt: this.clubMemberExempt
+            });
+        },
         selladoCharged() {
             return shouldChargeSellado({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
                 userOverFreeLimit: this.selladoUserOverFreeLimit,
-                hasComplimentarySellado: this.has_complimentary_sellado
+                hasComplimentarySellado: this.has_complimentary_sellado,
+                clubMemberExempt: this.clubMemberExempt
             });
         },
         selladoComplimentary() {
@@ -530,10 +548,14 @@ export default {
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
                 userOverFreeLimit: this.selladoUserOverFreeLimit,
-                hasComplimentarySellado: this.has_complimentary_sellado
+                hasComplimentarySellado: this.has_complimentary_sellado,
+                clubMemberExempt: this.clubMemberExempt
             });
         },
         selladoBonificado() {
+            if (this.selladoClubExempt) {
+                return false;
+            }
             return shouldShowSelladoBonificadoCard({
                 selladoEnabled: this.config && this.config.module_trip_creation_payment_enabled,
                 routeNeedsPayment: this.route_needs_payment,
@@ -1680,6 +1702,9 @@ export default {
                     result.data.trips_created_by_user_amount;
                 this.has_complimentary_sellado = Boolean(
                     result.data.has_complimentary_sellado
+                );
+                this.club_member_exempt = Boolean(
+                    result.data.club_member_exempt
                 );
                 this.selladoQuotaLoaded = true;
             });
