@@ -13,10 +13,16 @@ function mountCard(props = {}) {
         },
         global: {
             plugins: [i18n],
+            mocks: {
+                $publicImg: (name) => `/img/${name}`
+            },
             stubs: {
                 RouterLink: {
                     template: '<a><slot /></a>'
                 }
+            },
+            directives: {
+                clickoutside: {}
             }
         }
     });

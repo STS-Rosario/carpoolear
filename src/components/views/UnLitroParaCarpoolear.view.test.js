@@ -3,6 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'UnLitroParaCarpoolear.vue');
+const contentPath = path.resolve(
+    __dirname,
+    '../elements/UnLitroParaCarpoolearContent.vue'
+);
 const routesPath = path.resolve(__dirname, '../../router/routes.js');
 
 describe('UnLitroParaCarpoolear page wiring', () => {
@@ -19,12 +23,13 @@ describe('UnLitroParaCarpoolear page wiring', () => {
     it('wraps content with AccountSettingsLayout without a duplicate page title', () => {
         const viewSource = fs.readFileSync(viewPath, 'utf8');
         expect(viewSource).toContain('AccountSettingsLayout');
+        expect(viewSource).toContain('UnLitroParaCarpoolearContent');
         expect(viewSource).not.toContain('page-title-key');
         expect(viewSource).not.toContain('pageTitleKey');
     });
 
     it('renders the informational sections from the Un litro mockup', () => {
-        const viewSource = fs.readFileSync(viewPath, 'utf8');
+        const viewSource = fs.readFileSync(contentPath, 'utf8');
         expect(viewSource).toContain('¿Qué es 1 litro para Carpoolear?');
         expect(viewSource).toContain('--ul-text: #22211f');
         expect(viewSource).toMatch(/\.un-litro__title\s*\{[^}]*font-size:\s*2\.85em/);

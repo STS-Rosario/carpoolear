@@ -4,6 +4,7 @@
             <div class="modal-wrapper">
                 <div
                     class="modal-container"
+                    :class="{ 'modal-container--large': size === 'large' }"
                     v-clickoutside="onModalClickOutside"
                     :id="name"
                 >
@@ -92,6 +93,11 @@ export default {
         name: {
             required: false
         },
+        size: {
+            type: String,
+            default: 'default',
+            validator: (value) => ['default', 'large'].includes(value)
+        },
         // Absorb legacy unused attrs so they do not fall through as HTML title/body.
         title: {
             type: String,
@@ -146,6 +152,12 @@ export default {
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
+}
+
+.modal-container--large {
+    width: min(64rem, calc(100vw - 2rem));
+    max-width: min(64rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
 }
 
 .modal-mask .modal-wrapper .modal-container {
