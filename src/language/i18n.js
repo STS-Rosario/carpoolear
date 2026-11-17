@@ -673,6 +673,9 @@ const messages = {
             'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
         unLitroClubMemberPromo:
             'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
+        unLitroClubExemptTitle:
+            'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear',
+        unLitroClubExemptThanks: '¡Gracias por ser parte del Club Carpoolear!',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -2915,6 +2918,9 @@ const messages = {
             'Es el equivalente a 1 litro de nafta que ayuda a mantener la plataforma, la mesa de ayuda y las mejoras. Lo pagás vos al publicar y se reparte entre todos los que viajan.',
         unLitroClubMemberPromo:
             'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!',
+        unLitroClubExemptTitle:
+            'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear',
+        unLitroClubExemptThanks: '¡Gracias por ser parte del Club Carpoolear!',
         unLitroBonificadoBadge: 'Bonificado',
         unLitroBonificadoTitle: 'Este viaje es bonificado',
         unLitroBonificadoRemainingSingular:
@@ -4930,6 +4936,9 @@ const messages = {
             'It is the equivalent of 1 liter of fuel that helps keep the platform, the help desk and improvements running. You pay it when publishing and it is split among everyone traveling.',
         unLitroClubMemberPromo:
             'If you are part of Club Carpoolear, you do not pay 1L for Carpoolear — join us!',
+        unLitroClubExemptTitle:
+            'As a Club Carpoolear member you do not pay One liter for Carpoolear',
+        unLitroClubExemptThanks: 'Thanks for being part of Club Carpoolear!',
         unLitroBonificadoBadge: 'Waived',
         unLitroBonificadoTitle: 'This trip is waived',
         unLitroBonificadoRemainingSingular:

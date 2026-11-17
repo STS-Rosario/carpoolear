@@ -8,7 +8,13 @@
             <i class="fa fa-tint"></i>
         </div>
         <div class="un-litro-card__content">
-            <template v-if="!linkOnly && charged">
+            <template v-if="!linkOnly && clubMemberExempt">
+                <h4 class="un-litro-card__title">
+                    {{ $t('unLitroClubExemptTitle') }}
+                </h4>
+                <p class="un-litro-card__body">{{ $t('unLitroAppliesBody') }}</p>
+            </template>
+            <template v-else-if="!linkOnly && charged">
                 <h4 class="un-litro-card__title">
                     {{ $t('unLitroAppliesTitle') }}
                 </h4>
@@ -51,8 +57,22 @@
                 >
                     {{ $t('unLitroWhatIsThis') }}
                 </button>
+                <div
+                    v-if="clubMemberExempt && !linkOnly"
+                    class="un-litro-card__club-promo"
+                    data-testid="un-litro-club-thanks"
+                >
+                    <img
+                        :src="clubBadgeUrl"
+                        :alt="$t('miembroClubCarpoolearTitulo')"
+                        class="un-litro-card__club-badge"
+                        width="20"
+                        height="20"
+                    />
+                    <span>{{ $t('unLitroClubExemptThanks') }}</span>
+                </div>
                 <router-link
-                    v-if="charged && !linkOnly"
+                    v-else-if="charged && !linkOnly"
                     :to="{ name: 'donate' }"
                     class="un-litro-card__club-promo"
                     data-testid="un-litro-club-promo"
@@ -109,6 +129,10 @@ export default {
 
     props: {
         charged: {
+            type: Boolean,
+            default: false
+        },
+        clubMemberExempt: {
             type: Boolean,
             default: false
         },

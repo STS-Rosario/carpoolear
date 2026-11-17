@@ -139,6 +139,7 @@
                 v-else
                 class="trip-review-step__un-litro-card"
                 :charged="selladoCharged"
+                :club-member-exempt="selladoClubExempt"
                 :complimentary="selladoComplimentary"
                 :bonificado="selladoBonificado"
                 :remaining-free-trips="remainingFreeTrips"
@@ -282,6 +283,7 @@ export default {
         price: { type: [Number, String], default: '' },
         showUnLitroCard: { type: Boolean, default: false },
         selladoCharged: { type: Boolean, default: false },
+        selladoClubExempt: { type: Boolean, default: false },
         selladoComplimentary: { type: Boolean, default: false },
         selladoBonificado: { type: Boolean, default: false },
         selladoAmountCents: { type: Number, default: 0 },

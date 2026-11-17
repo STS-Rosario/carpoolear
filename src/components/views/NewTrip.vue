@@ -10,6 +10,7 @@
                 :trip="createdTrip"
                 :creation-snapshot="creationSnapshot"
                 :has-complimentary-sellado="selladoComplimentary"
+                :club-member-exempt="clubMemberExempt"
                 @start-return-trip="startReturnTripCreation"
                 @paid="onCreatedTripPaid"
             />
