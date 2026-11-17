@@ -13,10 +13,16 @@ function mountCard(props = {}) {
         },
         global: {
             plugins: [i18n],
+            mocks: {
+                $publicImg: (name) => `/img/${name}`
+            },
             stubs: {
                 RouterLink: {
                     template: '<a><slot /></a>'
                 }
+            },
+            directives: {
+                clickoutside: {}
             }
         }
     });
@@ -127,10 +133,11 @@ describe('UnLitroInfoCard', () => {
         await wrapper.get('[data-testid="un-litro-what-is-this"]').trigger('click');
 
         expect(wrapper.find('[data-testid="un-litro-modal"]').exists()).toBe(true);
-        expect(wrapper.text()).toContain('¿Qué es Un litro para Carpoolear?');
-        expect(wrapper.text()).toContain(
-            'Tenés 2 viajes bonificados para probar la plataforma'
-        );
+        expect(wrapper.text()).toContain('¿Qué es 1 litro para Carpoolear?');
+        expect(wrapper.text()).toContain('Así funciona');
+        expect(wrapper.text()).toContain('Un peaje más, para la comunidad');
+        expect(wrapper.text()).toContain('Cerrar');
+        expect(wrapper.find('.modal-container--large').exists()).toBe(true);
     });
 
     it('can show only Qué es esto for trip detail banners', () => {

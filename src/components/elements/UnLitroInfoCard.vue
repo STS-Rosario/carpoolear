@@ -88,23 +88,17 @@
                 </router-link>
             </div>
         </div>
-        <modal v-if="showModal" name="un-litro-what-is" @close="showModal = false">
+        <modal
+            v-if="showModal"
+            name="un-litro-what-is"
+            size="large"
+            @close="showModal = false"
+        >
             <template #header>
                 <h3 data-testid="un-litro-modal">{{ $t('unLitroModalTitle') }}</h3>
             </template>
             <template #body>
-                <div class="un-litro-card__modal text-left color-black">
-                    <p>{{ $t('unLitroModalBody1') }}</p>
-                    <p>{{ $t('unLitroModalBody2') }}</p>
-                    <p>{{ $t('unLitroModalBody3') }}</p>
-                    <p>
-                        {{
-                            $t('unLitroModalBody4', {
-                                freeTrips: freeTripsAmount
-                            })
-                        }}
-                    </p>
-                </div>
+                <UnLitroParaCarpoolearContent />
             </template>
             <template #footer>
                 <AppButton variant="secondary" @click="showModal = false">
@@ -118,13 +112,15 @@
 <script>
 import modal from '../Modal';
 import AppButton from '../ui/AppButton.vue';
+import UnLitroParaCarpoolearContent from './UnLitroParaCarpoolearContent.vue';
 
 export default {
     name: 'un-litro-info-card',
 
     components: {
         modal,
-        AppButton
+        AppButton,
+        UnLitroParaCarpoolearContent
     },
 
     props: {
@@ -277,11 +273,6 @@ export default {
 .un-litro-card__club-badge {
     display: block;
     flex-shrink: 0;
-}
-
-.un-litro-card__modal p {
-    margin: 0 0 0.85rem;
-    line-height: 1.45;
 }
 
 .un-litro-card--link-only {
