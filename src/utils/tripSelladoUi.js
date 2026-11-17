@@ -65,8 +65,12 @@ export function shouldChargeSellado({
     selladoEnabled,
     routeNeedsPayment,
     userOverFreeLimit,
-    hasComplimentarySellado
+    hasComplimentarySellado,
+    clubMemberExempt
 } = {}) {
+    if (clubMemberExempt) {
+        return false;
+    }
     return (
         wouldOtherwiseChargeSellado({
             selladoEnabled,
@@ -76,12 +80,24 @@ export function shouldChargeSellado({
     );
 }
 
+export function shouldShowClubMemberExemptCard({
+    selladoEnabled,
+    routeNeedsPayment,
+    clubMemberExempt
+} = {}) {
+    return Boolean(selladoEnabled && routeNeedsPayment && clubMemberExempt);
+}
+
 export function shouldShowSelladoComplimentaryCard({
     selladoEnabled,
     routeNeedsPayment,
     userOverFreeLimit,
-    hasComplimentarySellado
+    hasComplimentarySellado,
+    clubMemberExempt
 } = {}) {
+    if (clubMemberExempt) {
+        return false;
+    }
     return (
         wouldOtherwiseChargeSellado({
             selladoEnabled,

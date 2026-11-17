@@ -21,6 +21,7 @@
                 </h4>
                 <UnLitroInfoCard
                     :charged="unLitroKind === 'charged'"
+                    :club-member-exempt="clubMemberExempt"
                     :complimentary="unLitroKind === 'complimentary'"
                     :bonificado="unLitroKind === 'bonificado'"
                     :free-trips-amount="freeTripsAmount"
@@ -193,6 +194,10 @@ export default {
             default: null
         },
         hasComplimentarySellado: {
+            type: Boolean,
+            default: false
+        },
+        clubMemberExempt: {
             type: Boolean,
             default: false
         }

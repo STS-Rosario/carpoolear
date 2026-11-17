@@ -46,6 +46,30 @@ describe('UnLitroInfoCard', () => {
         );
     });
 
+    it('thanks Club members instead of charging Un litro', () => {
+        const wrapper = mountCard({
+            charged: false,
+            clubMemberExempt: true
+        });
+
+        expect(wrapper.text()).toContain(
+            'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear'
+        );
+        expect(wrapper.text()).toContain(
+            '¡Gracias por ser parte del Club Carpoolear!'
+        );
+        expect(wrapper.text()).not.toContain(
+            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!'
+        );
+        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
+            false
+        );
+        const thanks = wrapper.get('[data-testid="un-litro-club-thanks"]');
+        expect(thanks.find('img').attributes('src')).toContain(
+            'badges/club-carpoolear.png'
+        );
+    });
+
     it('does not show the Club Carpoolear promo on bonificado cards', () => {
         const wrapper = mountCard({
             charged: false,

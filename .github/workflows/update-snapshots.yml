@@ -8,7 +8,8 @@ permissions:
 
 jobs:
   update-snapshots:
-    runs-on: ubuntu-latest
+    # Playwright 1.58 does not support chromium on ubuntu26.04 (ubuntu-latest).
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 

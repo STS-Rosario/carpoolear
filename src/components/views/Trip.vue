@@ -441,8 +441,9 @@
                             <div class="trip-detail__contribucion">
                                 <TripPrice />
                                 <UnLitroInfoCard
-                                    v-if="tripDetailUnLitroKind"
+                                    v-if="tripDetailUnLitroKind || tripDetailClubExempt"
                                     :charged="tripDetailUnLitroKind === 'charged'"
+                                    :club-member-exempt="tripDetailClubExempt"
                                     :complimentary="tripDetailUnLitroKind === 'complimentary'"
                                     :bonificado="tripDetailUnLitroKind === 'bonificado'"
                                     :free-trips-amount="freeTripsAmount"
@@ -524,6 +525,7 @@ import {
     shouldShowSelladoPublishedBanner,
     unLitroCardKindFromTrip
 } from '../../utils/tripSelladoUi.js';
+import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import {
     shouldShowUnLitroAdminNeedsPaymentCard,
     shouldShowUnLitroOwnerPaymentBanner
@@ -1231,6 +1233,15 @@ export default {
                     this.has_complimentary_sellado &&
                     routeIncludesSellado
             });
+        },
+        tripDetailClubExempt() {
+            return Boolean(
+                this.owner &&
+                    this.config &&
+                    this.config.module_trip_creation_payment_enabled &&
+                    isActiveClubCarpoolearMember(this.user) &&
+                    this.tripDetailUnLitroKind
+            );
         },
         qrEnabled() {
             return isTripCreationPaymentQrEnabled(this.config);

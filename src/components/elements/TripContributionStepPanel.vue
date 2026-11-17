@@ -10,6 +10,7 @@
         <UnLitroInfoCard
             v-if="showUnLitroCard"
             :charged="selladoCharged"
+            :club-member-exempt="selladoClubExempt"
             :complimentary="selladoComplimentary"
             :bonificado="selladoBonificado"
             :remaining-free-trips="remainingFreeTrips"
@@ -218,6 +219,10 @@ export default {
             default: false
         },
         selladoCharged: {
+            type: Boolean,
+            default: false
+        },
+        selladoClubExempt: {
             type: Boolean,
             default: false
         },
