@@ -3,6 +3,12 @@
         <h5 v-if="showSubtitle" class="car-fuel-fields__subtitle">
             {{ $t('fuelInfoSubtitle') }}
         </h5>
+        <p v-if="showExplainer" class="car-fuel-fields__explainer">
+            {{ $t('fuelFormExplainerIntro') }}
+            <strong class="car-fuel-fields__explainer-warning">{{
+                $t('fuelFormExplainerWarning')
+            }}</strong>
+        </p>
         <AppField :label="$t('fuelType')" label-for="car-form-fuel-type">
             <select
                 id="car-form-fuel-type"
@@ -35,12 +41,6 @@
                 </option>
             </select>
         </AppField>
-        <p v-if="showExplainer" class="car-fuel-fields__explainer">
-            {{ $t('fuelFormExplainerIntro') }}
-            <strong class="car-fuel-fields__explainer-warning">{{
-                $t('fuelFormExplainerWarning')
-            }}</strong>
-        </p>
     </div>
 </template>
 
@@ -113,7 +113,7 @@ export default {
 }
 
 .car-fuel-fields__explainer {
-    margin: 0.5rem 0 0;
+    margin: 0.5rem 0 1rem;
     font-size: 0.95em;
 }
 
