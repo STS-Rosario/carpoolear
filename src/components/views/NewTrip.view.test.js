@@ -412,6 +412,10 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toContain('contributionPricingBreakdown');
         expect(wizardSource).toContain(':pricing-breakdown=');
         expect(wizardSource).toContain('form.contributionPricingBreakdown');
+        expect(viewSource).toContain('selectedCarFuelProfile');
+        expect(wizardSource).toContain(
+            ':fuel-profile="form.selectedCarFuelProfile"'
+        );
         expect(wizardSource).toContain(':config="form.config"');
         expect(wizardSource).toContain(':show-un-litro-card="form.showUnLitroCard"');
         expect(wizardSource).toContain(':sellado-charged="form.selladoCharged"');

@@ -34,7 +34,10 @@ const FUEL_DISPLAY_KEYS = [
     'ticketTypeFuelAbuse',
     'fuelAbuseReportLink',
     'fuelAbuseReportTooltip',
-    'tripContributionBreakdownFuelProfile'
+    'tripContributionBreakdownFuelTyped',
+    'tripContributionBreakdownFuelUnitLiters',
+    'tripContributionBreakdownFuelUnitM3',
+    'tripContributionBreakdownConsumptionTooltipTyped'
 ];
 
 const EXPLAINER_INTRO_ES =
@@ -72,12 +75,21 @@ describe('fuel i18n', () => {
             expect(messages[locale].fuelAbuseReportTooltip).toBe(
                 '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.'
             );
-            expect(messages[locale].tripContributionBreakdownFuelProfile).toContain(
-                '{type}'
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '{quantity}'
             );
-            expect(messages[locale].tripContributionBreakdownFuelProfile).toContain(
-                '{consumption}'
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '{unit}'
             );
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '{fuelType}'
+            );
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '{rate}'
+            );
+            expect(
+                messages[locale].tripContributionBreakdownFuelUnitM3
+            ).toBe('m³');
         });
         expect(messages.en.fuelAbuseReportLink).not.toBe('Denunciar abuso');
         expect(messages.en.ticketTypeFuelAbuse).not.toBe(

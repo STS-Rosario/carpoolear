@@ -41,10 +41,11 @@ describe('TripContributionBreakdown.vue', () => {
         );
     });
 
-    it('shows the liter count on the fuel table row', () => {
-        expect(componentSource).toMatch(
-            /\$t\(\s*'tripContributionBreakdownFuel'\s*,\s*\{\s*liters:\s*lines\.liters/
-        );
+    it('shows typed or legacy fuel quantity on the fuel table row', () => {
+        expect(componentSource).toContain('resolveContributionFuelDisplay');
+        expect(componentSource).toContain('fuelLineLabel');
+        expect(componentSource).toContain('tripContributionBreakdownFuelTyped');
+        expect(componentSource).toContain('tripContributionBreakdownFuel');
     });
 
     it('shows the toll percentage on the peajes table row', () => {
@@ -87,13 +88,12 @@ describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
         expect(source).toMatch(/fuelAbuseRoute:\s*\{[\s\S]*?default: null/);
     });
 
-    it('shows fuel type and consumption near the fuel line', () => {
-        expect(source).toContain('tripContributionBreakdownFuelProfile');
-        expect(source).toContain('fuelTypeI18nKey');
-        expect(source).toContain('fuelConsumptionI18nKey');
-        expect(source).toContain('fuelConsumptionRateLabel');
-        expect(source).toMatch(
-            /v-if="fuelProfileLabel"[\s\S]*?trip-contribution-breakdown__fuel-profile/
+    it('folds fuel type and consumption into the main fuel line', () => {
+        expect(source).toContain('tripContributionBreakdownFuelTyped');
+        expect(source).toContain('tripContributionBreakdownFuelUnitLiters');
+        expect(source).toContain('tripContributionBreakdownFuelUnitM3');
+        expect(source).not.toContain(
+            'trip-contribution-breakdown__fuel-profile'
         );
     });
 

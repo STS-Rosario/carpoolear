@@ -93,12 +93,26 @@ describe('TripContributionStepPanel.vue', () => {
         expect(componentSource).toContain('TripContributionBreakdown');
     });
 
+    it('passes fuel profile into the contribution breakdown', () => {
+        expect(componentSource).toMatch(/fuelProfile:\s*\{/);
+        expect(componentSource).toMatch(
+            /<TripContributionBreakdown[\s\S]*?:fuel-profile="fuelProfile"/
+        );
+    });
+
     it('gates pricing breakdown on the show-breakdown config flag', () => {
         expect(componentSource).toContain('shouldShowContributionBreakdown');
         expect(componentSource).toContain('showContributionBreakdown');
         expect(componentSource).toContain('config:');
         expect(componentSource).toMatch(
             /v-if="showContributionBreakdown && pricingBreakdown"/
+        );
+    });
+
+    it('passes fuel profile into the contribution breakdown', () => {
+        expect(componentSource).toMatch(/fuelProfile:\s*\{/);
+        expect(componentSource).toMatch(
+            /<TripContributionBreakdown[\s\S]*?:fuel-profile="fuelProfile"/
         );
     });
 
