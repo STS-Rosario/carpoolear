@@ -108,6 +108,7 @@ const messages = {
         ticketTypeContact: 'Contacto',
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
+        ticketTypeFuelAbuse: 'Denuncia de abuso de combustible',
         ticketTypeAccountVerification: 'Verificación de cuenta',
         ticketTypeAccountRecovery: 'Recuperación de cuenta/Cuenta duplicada',
         ticketTypeExcessContribution: 'Exceso de contribución',
@@ -444,9 +445,9 @@ const messages = {
         autosSinRegistros: 'Todavía no cargaste ningún auto.',
         autosIncompleto: 'Incompleto',
         autosCompletarPendientes:
-            'Tenés autos con datos incompletos. Completá marca, modelo, año y color de cada uno.',
+            'Tenés autos con datos incompletos. Completá marca, modelo, año, color y combustible de cada uno.',
         autosDatosIncompletos:
-            'Completá marca, modelo, año y color del auto ({fields}).',
+            'Completá marca, modelo, año, color y combustible del auto ({fields}).',
         autosGestionarEnConfiguracion:
             'Gestioná tus autos (marca, modelo, año, color y patente) en la sección Autos.',
         agregarOtroAuto: 'Agregar otro auto',
@@ -468,6 +469,39 @@ const messages = {
         seleccionarMarca: 'Seleccionar marca',
         seleccionarModelo: 'Seleccionar modelo',
         seleccionarColor: 'Seleccionar color',
+        fuelInfoSubtitle: 'Información del combustible',
+        fuelType: 'Tipo de combustible',
+        fuelConsumption: 'Consumo',
+        combustible: 'Combustible',
+        consumo: 'Consumo',
+        seleccionarCombustible: 'Seleccionar combustible',
+        seleccionarConsumo: 'Seleccionar consumo',
+        fuelTypeGnc: 'GNC',
+        fuelTypeDiesel: 'Diésel',
+        fuelTypeDieselPremium: 'Diésel premium',
+        fuelTypeNaftaSuper: 'Nafta súper',
+        fuelTypeNaftaPremium: 'Nafta premium',
+        fuelConsumptionLow: 'Bajo',
+        fuelConsumptionMedium: 'Medio',
+        fuelConsumptionHigh: 'Alto',
+        fuelFormExplainerIntro:
+            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene.',
+        fuelFormExplainerWarning:
+            'Elegir un consumo mayor al debido resultará en una suspensión.',
+        fuelConsumptionRateHint: 'Consumo estimado: {rate}',
+        fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
+        tripCarFuelRequired:
+            'Completá el tipo de combustible y el consumo del auto para continuar.',
+        tripCarFuelCompleteLink: 'Completar información',
+        fuelAbuseReportLink: 'Denunciar abuso',
+        fuelAbuseReportTooltip:
+            '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} de {fuelType} (consumo {consumption} — {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'litros',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'Usamos un consumo de {rate} para el cálculo.',
         marcaOtro: 'Otro',
         modeloOtro: 'Otro',
         marcaOtroPlaceholder: 'Ingresá la marca',
@@ -2385,6 +2419,7 @@ const messages = {
         ticketTypeContact: 'Contacto',
         ticketTypeSuggestion: 'Sugerencia',
         ticketTypeReport: 'Denuncia',
+        ticketTypeFuelAbuse: 'Denuncia de abuso de combustible',
         ticketTypeAccountVerification: 'Verificación de cuenta',
         ticketTypeAccountRecovery: 'Recuperación de cuenta/Cuenta duplicada',
         ticketTypeExcessContribution: 'Exceso de contribución',
@@ -2504,9 +2539,9 @@ const messages = {
         autosSinRegistros: 'Todavía no cargaste ningún auto.',
         autosIncompleto: 'Incompleto',
         autosCompletarPendientes:
-            'Tenés autos con datos incompletos. Completá marca, modelo, año y color de cada uno.',
+            'Tenés autos con datos incompletos. Completá marca, modelo, año, color y combustible de cada uno.',
         autosDatosIncompletos:
-            'Completá marca, modelo, año y color del auto ({fields}).',
+            'Completá marca, modelo, año, color y combustible del auto ({fields}).',
         autosGestionarEnConfiguracion:
             'Gestioná tus autos (marca, modelo, año, color y patente) en la sección Autos.',
         agregarOtroAuto: 'Agregar otro auto',
@@ -2528,6 +2563,39 @@ const messages = {
         seleccionarMarca: 'Seleccionar marca',
         seleccionarModelo: 'Seleccionar modelo',
         seleccionarColor: 'Seleccionar color',
+        fuelInfoSubtitle: 'Información del combustible',
+        fuelType: 'Tipo de combustible',
+        fuelConsumption: 'Consumo',
+        combustible: 'Combustible',
+        consumo: 'Consumo',
+        seleccionarCombustible: 'Seleccionar combustible',
+        seleccionarConsumo: 'Seleccionar consumo',
+        fuelTypeGnc: 'GNC',
+        fuelTypeDiesel: 'Diésel',
+        fuelTypeDieselPremium: 'Diésel premium',
+        fuelTypeNaftaSuper: 'Nafta súper',
+        fuelTypeNaftaPremium: 'Nafta premium',
+        fuelConsumptionLow: 'Bajo',
+        fuelConsumptionMedium: 'Medio',
+        fuelConsumptionHigh: 'Alto',
+        fuelFormExplainerIntro:
+            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene.',
+        fuelFormExplainerWarning:
+            'Elegir un consumo mayor al debido resultará en una suspensión.',
+        fuelConsumptionRateHint: 'Consumo estimado: {rate}',
+        fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
+        tripCarFuelRequired:
+            'Completá el tipo de combustible y el consumo del auto para continuar.',
+        tripCarFuelCompleteLink: 'Completar información',
+        fuelAbuseReportLink: 'Denunciar abuso',
+        fuelAbuseReportTooltip:
+            '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} de {fuelType} (consumo {consumption} — {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'litros',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'Usamos un consumo de {rate} para el cálculo.',
         marcaOtro: 'Otro',
         modeloOtro: 'Otro',
         marcaOtroPlaceholder: 'Ingresá la marca',
@@ -4382,6 +4450,7 @@ const messages = {
         ticketTypeContact: 'Contact',
         ticketTypeSuggestion: 'Suggestion',
         ticketTypeReport: 'Report',
+        ticketTypeFuelAbuse: 'Fuel abuse report',
         ticketTypeAccountVerification: 'Account verification',
         ticketTypeAccountRecovery: 'Account recovery/Duplicate account',
         ticketTypeExcessContribution: 'Excess contribution',
@@ -4712,9 +4781,9 @@ const messages = {
         autosSinRegistros: 'You have not added any vehicles yet.',
         autosIncompleto: 'Incomplete',
         autosCompletarPendientes:
-            'Some vehicles are missing details. Complete make, model, year, and color for each one.',
+            'Some vehicles are missing details. Complete make, model, year, color, and fuel for each one.',
         autosDatosIncompletos:
-            'Enter make, model, year, and color for the vehicle ({fields}).',
+            'Enter make, model, year, color, and fuel for the vehicle ({fields}).',
         autosGestionarEnConfiguracion:
             'Manage your vehicles (make, model, year, color, and plate) in the Vehicles section.',
         seleccionarAuto: 'Select vehicle',
@@ -4733,6 +4802,39 @@ const messages = {
         seleccionarMarca: 'Select make',
         seleccionarModelo: 'Select model',
         seleccionarColor: 'Select color',
+        fuelInfoSubtitle: 'Fuel information',
+        fuelType: 'Fuel type',
+        fuelConsumption: 'Consumption',
+        combustible: 'Fuel type',
+        consumo: 'Consumption',
+        seleccionarCombustible: 'Select fuel type',
+        seleccionarConsumo: 'Select consumption',
+        fuelTypeGnc: 'CNG',
+        fuelTypeDiesel: 'Diesel',
+        fuelTypeDieselPremium: 'Premium diesel',
+        fuelTypeNaftaSuper: 'Regular gasoline',
+        fuelTypeNaftaPremium: 'Premium gasoline',
+        fuelConsumptionLow: 'Low',
+        fuelConsumptionMedium: 'Medium',
+        fuelConsumptionHigh: 'High',
+        fuelFormExplainerIntro:
+            'To make the calculation fairer, you now need to tell us what type of fuel your vehicle uses and its consumption.',
+        fuelFormExplainerWarning:
+            'Choosing a higher consumption than the real one will result in a suspension.',
+        fuelConsumptionRateHint: 'Estimated consumption: {rate}',
+        fuelGateTitle: 'We need a few more details about your vehicle',
+        tripCarFuelRequired:
+            'Add the car fuel type and consumption to continue.',
+        tripCarFuelCompleteLink: 'Complete information',
+        fuelAbuseReportLink: 'Report abuse',
+        fuelAbuseReportTooltip:
+            'Are the fuel consumption and fuel type exaggerated? Let us know to make the community fairer.',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} of {fuelType} (consumption {consumption} — {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'liters',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'We use a consumption of {rate} for the calculation.',
         marcaOtro: 'Other',
         modeloOtro: 'Other',
         marcaOtroPlaceholder: 'Enter make',

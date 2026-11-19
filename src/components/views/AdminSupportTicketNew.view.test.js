@@ -29,4 +29,9 @@ describe('AdminSupportTicketNew view', () => {
         expect(source).toContain("invoke('getMarkdown')");
         expect(source).not.toContain('AppTextarea');
     });
+
+    it('includes fuel_abuse among admin ticket type options', () => {
+        expect(source).toContain('value="fuel_abuse"');
+        expect(source).toContain("$t('ticketTypeFuelAbuse')");
+    });
 });

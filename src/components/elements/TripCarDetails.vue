@@ -16,7 +16,10 @@
 </template>
 
 <script>
-import { carDetailRows } from '../../utils/carFields.js';
+import {
+    carDetailRows,
+    resolveTripFuelProfile
+} from '../../utils/carFields.js';
 
 export default {
     name: 'trip-car-details',
@@ -24,14 +27,33 @@ export default {
         car: {
             type: Object,
             required: true
+        },
+        trip: {
+            type: Object,
+            default: null
         }
     },
     computed: {
         rows() {
-            return carDetailRows(this.car).map((row) => ({
+            const fuelProfile = resolveTripFuelProfile(
+                this.trip ? { ...this.trip, car: this.car } : { car: this.car }
+            );
+            const car = fuelProfile ? { ...this.car, ...fuelProfile } : this.car;
+
+            return carDetailRows(car).map((row) => ({
                 ...row,
-                displayValue: row.value || '—'
+                displayValue: this.rowDisplayValue(row)
             }));
+        }
+    },
+    methods: {
+        rowDisplayValue(row) {
+            if (row.valueKey) {
+                const label = this.$t(row.valueKey);
+                return row.rateLabel ? `${label} (${row.rateLabel})` : label;
+            }
+
+            return row.value || '—';
         }
     }
 };

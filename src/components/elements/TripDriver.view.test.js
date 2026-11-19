@@ -153,4 +153,8 @@ describe('TripDriver trip-detail redesign header', () => {
             /\.trip-driver__car\s*\{[^}]*display:\s*block|\.trip-car-details\)?\s*\{[^}]*display:\s*block/
         );
     });
+
+    it('passes the trip to car details so trip fuel snapshot is shown', () => {
+        expect(source).toMatch(/<TripCarDetails[\s\S]*?:trip="trip"/);
+    });
 });

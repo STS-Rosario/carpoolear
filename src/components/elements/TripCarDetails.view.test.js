@@ -12,4 +12,12 @@ describe('TripCarDetails', () => {
         expect(viewSource).toContain('carDetailRows');
         expect(viewSource).toContain('<strong>');
     });
+
+    it('shows fuel type and consumption from the trip snapshot with car fallback', () => {
+        expect(viewSource).toContain('resolveTripFuelProfile');
+        expect(viewSource).toMatch(/trip:\s*\{[\s\S]*?default: null/);
+        expect(viewSource).toContain('row.valueKey');
+        expect(viewSource).toContain('$t(row.valueKey)');
+        expect(viewSource).toContain('row.rateLabel');
+    });
 });

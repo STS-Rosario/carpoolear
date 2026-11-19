@@ -40,6 +40,12 @@
             @close="showCompleteCarModal = false"
             @saved="onCarCompletionSaved"
         />
+        <CompleteCarFuelModal
+            :visible="showCompleteCarFuelModal"
+            :car="carToComplete"
+            @close="showCompleteCarFuelModal = false"
+            @saved="onCarFuelSaved"
+        />
         <TripCarsModal
             :visible="showTripCarsModal"
             @close="onTripCarsModalClose"
@@ -67,6 +73,7 @@ import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
+import CompleteCarFuelModal from '../elements/CompleteCarFuelModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
@@ -111,6 +118,10 @@ import {
     restoreTripPointDetailsFromTrip,
     syncReturnTripPointDetailsFromOutbound
 } from '../../utils/tripPointDetailPrefill.js';
+import {
+    carNeedsFuelProfile,
+    hasCarFuelProfile
+} from '../../utils/carFields.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -178,6 +189,7 @@ export default {
         spinner,
         modal,
         CompleteCarModal,
+        CompleteCarFuelModal,
         TripCarsModal,
         NewTripCreationWizard,
         TripCreationSuccess,
@@ -277,6 +289,8 @@ export default {
             passengerSeatAvailability: [],
             carSelectionError: new Error(),
             showCompleteCarModal: false,
+            showCompleteCarFuelModal: false,
+            pendingSaveAfterFuel: false,
             showTripCarsModal: false,
             carToComplete: null,
             puntoPartidaError: new Error(),
@@ -590,6 +604,16 @@ export default {
                 this.trip.rear_max_two_passengers
             );
         },
+        selectedCarFuelProfile() {
+            const car = this.resolveDriverCarForTrip();
+            if (!hasCarFuelProfile(car)) {
+                return null;
+            }
+            return {
+                fuel_type: car.fuel_type,
+                fuel_consumption: car.fuel_consumption
+            };
+        },
         recommendedSeatPriceCentsForDisplay() {
             const breakdown = this.contributionPricingBreakdown;
             if (breakdown && breakdown.per_person_cents != null) {
@@ -626,6 +650,12 @@ export default {
     watch: {
         cars() {
             this.preselectDriverCar();
+        },
+        selectedCarId() {
+            const namedPoints = (this.points || []).filter((point) => point.name);
+            if (namedPoints.length >= 2) {
+                this.calcRoute('trip');
+            }
         },
         no_lucrar() {
             this.lucrarError.state = false;
@@ -795,6 +825,23 @@ export default {
             await this.carIndex();
             this.save();
         },
+        async onCarFuelSaved() {
+            this.showCompleteCarFuelModal = false;
+            await this.carIndex();
+            this.calcRoute('trip');
+            if (this.pendingSaveAfterFuel) {
+                this.pendingSaveAfterFuel = false;
+                this.save();
+            }
+        },
+        openCompleteCarFuelModal() {
+            const tripCar = this.resolveDriverCarForTrip();
+            if (!tripCar || hasCarFuelProfile(tripCar)) {
+                return;
+            }
+            this.carToComplete = tripCar;
+            this.showCompleteCarFuelModal = true;
+        },
         openTripCarsModal() {
             this.showTripCarsModal = true;
         },
@@ -820,6 +867,7 @@ export default {
         async onTripCarsUpdated() {
             await this.carIndex();
             this.preselectDriverCar();
+            this.calcRoute('trip');
         },
         markMaxContributionExceededWarningAsShown() {
             this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
@@ -1522,6 +1570,12 @@ export default {
             this.carSelectionError.state = false;
             if (requiresDriverPlate(this.trip)) {
                 const tripCar = this.resolveDriverCarForTrip();
+                if (tripCar && carNeedsFuelProfile(tripCar)) {
+                    this.carToComplete = tripCar;
+                    this.pendingSaveAfterFuel = true;
+                    this.showCompleteCarFuelModal = true;
+                    return;
+                }
                 if (tripCar && !isCarComplete(tripCar)) {
                     this.carToComplete = tripCar;
                     this.showCompleteCarModal = true;
@@ -1804,6 +1858,10 @@ export default {
             };
             if (type === 'trip') {
                 data.route_index = this.selectedRouteIndex;
+                const carId = resolveTripCarId(this.cars, this.selectedCarId);
+                if (carId != null) {
+                    data.car_id = carId;
+                }
             }
 
             if (type === 'trip') {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     formatBreakdownLines,
     litersPer100KmFromKmPerLiter,
+    resolveContributionFuelDisplay,
     shouldShowContributionBreakdown,
     withOccupants
 } from './tripContributionBreakdown.js';
@@ -138,5 +139,72 @@ describe('tripContributionBreakdown', () => {
                 module_max_price_show_breakdown: 'false'
             })
         ).toBe(false);
+    });
+
+    it('builds typed fuel display for nafta with litros and rate', () => {
+        const display = resolveContributionFuelDisplay({
+            breakdown: {
+                ...baseBreakdown,
+                liters: 34.94,
+                fuel_type: 'nafta_super',
+                fuel_unit: 'liter',
+                fuel_consumption_per_100: 12
+            },
+            fuelProfile: {
+                fuel_type: 'nafta_super',
+                fuel_consumption: 'high'
+            }
+        });
+
+        expect(display).toEqual({
+            mode: 'typed',
+            quantity: '34,94',
+            unitWordKey: 'tripContributionBreakdownFuelUnitLiters',
+            fuelTypeKey: 'fuelTypeNaftaSuper',
+            consumptionKey: 'fuelConsumptionHigh',
+            rateLabel: '12 L/100km'
+        });
+    });
+
+    it('builds typed fuel display for GNC with real cubic meters', () => {
+        const display = resolveContributionFuelDisplay({
+            breakdown: {
+                ...baseBreakdown,
+                liters: 29.5,
+                fuel_quantity: 29.5,
+                fuel_type: 'gnc',
+                fuel_unit: 'm3',
+                fuel_consumption_per_100: 9
+            },
+            fuelProfile: {
+                fuel_type: 'gnc',
+                fuel_consumption: 'medium'
+            }
+        });
+
+        expect(display.mode).toBe('typed');
+        expect(display.quantity).toBe('29,5');
+        expect(display.unitWordKey).toBe(
+            'tripContributionBreakdownFuelUnitM3'
+        );
+        expect(display.fuelTypeKey).toBe('fuelTypeGnc');
+        expect(display.consumptionKey).toBe('fuelConsumptionMedium');
+        expect(display.rateLabel).toBe('9 m³/100km');
+        expect(display.rateLabel).toContain('m³');
+        expect(display.rateLabel).not.toContain('m3');
+    });
+
+    it('falls back to legacy premium fuel label when no fuel profile exists', () => {
+        const display = resolveContributionFuelDisplay({
+            breakdown: baseBreakdown,
+            fuelProfile: null
+        });
+
+        expect(display).toEqual({
+            mode: 'legacy',
+            quantity: '0,1',
+            kmPerLiter: 10,
+            litersPer100Km: 10
+        });
     });
 });

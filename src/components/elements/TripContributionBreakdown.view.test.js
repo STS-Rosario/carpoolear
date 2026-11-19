@@ -41,10 +41,11 @@ describe('TripContributionBreakdown.vue', () => {
         );
     });
 
-    it('shows the liter count on the fuel table row', () => {
-        expect(componentSource).toMatch(
-            /\$t\(\s*'tripContributionBreakdownFuel'\s*,\s*\{\s*liters:\s*lines\.liters/
-        );
+    it('shows typed or legacy fuel quantity on the fuel table row', () => {
+        expect(componentSource).toContain('resolveContributionFuelDisplay');
+        expect(componentSource).toContain('fuelLineLabel');
+        expect(componentSource).toContain('tripContributionBreakdownFuelTyped');
+        expect(componentSource).toContain('tripContributionBreakdownFuel');
     });
 
     it('shows the toll percentage on the peajes table row', () => {
@@ -54,19 +55,21 @@ describe('TripContributionBreakdown.vue', () => {
     });
 
     it('keeps the consumption tooltip on the fuel row', () => {
-        const fuelIndex = componentSource.indexOf(
-            'tripContributionBreakdownFuel'
-        );
-        const tooltipIndex = componentSource.indexOf(
-            "$t('tripContributionBreakdownConsumptionTooltip'"
-        );
+        const fuelIndex = componentSource.indexOf('fuelLineLabel');
+        const tooltipIndex = componentSource.indexOf(':data-tooltip="fuelTooltip"');
         const tollsIndex = componentSource.indexOf(
             'tripContributionBreakdownTollsLabel'
         );
 
         expect(fuelIndex).toBeGreaterThan(-1);
-        expect(tooltipIndex).toBeGreaterThan(fuelIndex);
+        expect(tooltipIndex).toBeGreaterThan(-1);
         expect(tooltipIndex).toBeLessThan(tollsIndex);
+        expect(componentSource).toContain(
+            'tripContributionBreakdownConsumptionTooltip'
+        );
+        expect(componentSource).toContain(
+            'tripContributionBreakdownConsumptionTooltipTyped'
+        );
         expect(componentSource).not.toMatch(/<button[^>]*tooltip-bottom/);
         expect(componentSource).toContain('@click.stop');
     });
@@ -75,5 +78,34 @@ describe('TripContributionBreakdown.vue', () => {
         expect(componentSource).toMatch(
             /\.trip-contribution-breakdown\s*\{[^}]*color:\s*var\(--ds-text-primary/s
         );
+    });
+});
+
+describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
+    const source = componentSource.replace(/\r\n/g, '\n');
+
+    it('accepts fuel profile, visibility flag and report route props', () => {
+        expect(source).toMatch(/fuelProfile:\s*\{[\s\S]*?default: null/);
+        expect(source).toMatch(/showFuelAbuseReport:\s*\{[\s\S]*?default: false/);
+        expect(source).toMatch(/fuelAbuseRoute:\s*\{[\s\S]*?default: null/);
+    });
+
+    it('folds fuel type and consumption into the main fuel line', () => {
+        expect(source).toContain('tripContributionBreakdownFuelTyped');
+        expect(source).toContain('unitWordKey');
+        expect(source).toContain('fuelTypeKey');
+        expect(source).toContain('consumptionKey');
+        expect(source).not.toContain(
+            'trip-contribution-breakdown__fuel-profile'
+        );
+    });
+
+    it('renders Denunciar abuso link with info tooltip only when allowed', () => {
+        expect(source).toMatch(
+            /v-if="showFuelAbuseReport && fuelAbuseRoute"[\s\S]*?<router-link[\s\S]*?:to="fuelAbuseRoute"/
+        );
+        expect(source).toContain("$t('fuelAbuseReportLink')");
+        expect(source).toContain("$t('fuelAbuseReportTooltip')");
+        expect(source).toContain('fa-info-circle');
     });
 });

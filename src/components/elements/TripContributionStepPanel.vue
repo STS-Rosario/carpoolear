@@ -73,6 +73,7 @@
                 <TripContributionBreakdown
                     v-if="showContributionBreakdown && pricingBreakdown"
                     :breakdown="pricingBreakdown"
+                    :fuel-profile="fuelProfile"
                 />
                 <p v-else>{{ suggestedDescription }}</p>
             </div>
@@ -203,6 +204,10 @@ export default {
             default: ''
         },
         pricingBreakdown: {
+            type: Object,
+            default: null
+        },
+        fuelProfile: {
             type: Object,
             default: null
         },
