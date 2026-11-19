@@ -23,7 +23,7 @@ const CAR_FORM_KEYS = [
     'fuelConsumptionRateHint'
 ];
 
-const FUEL_GATE_KEYS = ['fuelGateTitle'];
+const FUEL_GATE_KEYS = ['fuelGateTitle', 'tripCarFuelRequired'];
 
 const FUEL_DISPLAY_KEYS = [
     'ticketTypeFuelAbuse',

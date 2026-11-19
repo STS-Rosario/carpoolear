@@ -243,6 +243,13 @@ describe('NewTripCreationWizard.vue redesign styling', () => {
         );
     });
 
+    it('opens the fuel modal from the car step when fuel info is missing', () => {
+        expect(wizardSource).toMatch(
+            /goNext\(\)\s*\{[\s\S]*!this\.validateCurrentStep\(\)[\s\S]*tripCarFuelRequired[\s\S]*openCompleteCarFuelModal|maybeOpenCarFuelModalFromStepError/
+        );
+        expect(wizardSource).toContain('tripCarFuelRequired');
+    });
+
     it('shows Creando... on the submit button while the trip is saving', () => {
         expect(wizardSource).toMatch(
             /submitLabel\(\)\s*\{[\s\S]*?form\.saving[\s\S]*?\$t\('creando'\)/

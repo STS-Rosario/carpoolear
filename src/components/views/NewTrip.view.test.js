@@ -354,9 +354,21 @@ describe('NewTrip.vue incomplete car completion', () => {
         );
     });
 
-    it('resumes saving after the fuel modal saves', () => {
+    it('recalculates contribution after fuel modal saves and resumes pending save', () => {
         expect(viewSource).toMatch(
-            /async onCarFuelSaved\(\)[\s\S]*?showCompleteCarFuelModal = false[\s\S]*?await this\.carIndex\(\)[\s\S]*?this\.save\(\)/s
+            /async onCarFuelSaved\(\)[\s\S]*?showCompleteCarFuelModal = false[\s\S]*?await this\.carIndex\(\)[\s\S]*?this\.calcRoute\('trip'\)[\s\S]*?pendingSaveAfterFuel[\s\S]*?this\.save\(\)/s
+        );
+        expect(viewSource).toMatch(
+            /carNeedsFuelProfile\(tripCar\)[\s\S]*?pendingSaveAfterFuel = true[\s\S]*?showCompleteCarFuelModal = true/s
+        );
+    });
+
+    it('sends selected car_id on trip-info so contribution uses fuel profile', () => {
+        expect(viewSource).toMatch(
+            /calcRoute\(type\)[\s\S]*?let data = \{[\s\S]*?points:[\s\S]*?\}[\s\S]*?car_id/s
+        );
+        expect(viewSource).toMatch(
+            /selectedCarId[\s\S]*?handler[\s\S]*?calcRoute\('trip'\)|selectedCarId\(\)[\s\S]*?calcRoute\('trip'\)/
         );
     });
 
