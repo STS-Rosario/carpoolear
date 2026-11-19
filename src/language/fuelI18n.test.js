@@ -25,6 +25,13 @@ const CAR_FORM_KEYS = [
 
 const FUEL_GATE_KEYS = ['fuelGateTitle'];
 
+const FUEL_DISPLAY_KEYS = [
+    'ticketTypeFuelAbuse',
+    'fuelAbuseReportLink',
+    'fuelAbuseReportTooltip',
+    'tripContributionBreakdownFuelProfile'
+];
+
 const EXPLAINER_ES =
     'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene. Elegir un consumo mayor al debido resultará en una suspensión.';
 
@@ -41,6 +48,34 @@ describe('fuel i18n', () => {
             expect(typeof messages[locale][key]).toBe('string');
             expect(messages[locale][key].length).toBeGreaterThan(0);
         });
+    });
+
+    describe.each(LOCALES)('%s fuel display keys', (locale) => {
+        it.each(FUEL_DISPLAY_KEYS)('defines %s', (key) => {
+            expect(typeof messages[locale][key]).toBe('string');
+            expect(messages[locale][key].length).toBeGreaterThan(0);
+        });
+    });
+
+    it('uses the approved Spanish fuel abuse copy', () => {
+        for (const locale of ['arg', 'chl']) {
+            expect(messages[locale].fuelAbuseReportLink).toBe(
+                'Denunciar abuso'
+            );
+            expect(messages[locale].fuelAbuseReportTooltip).toBe(
+                '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.'
+            );
+            expect(messages[locale].tripContributionBreakdownFuelProfile).toContain(
+                '{type}'
+            );
+            expect(messages[locale].tripContributionBreakdownFuelProfile).toContain(
+                '{consumption}'
+            );
+        }
+        expect(messages.en.fuelAbuseReportLink).not.toBe('Denunciar abuso');
+        expect(messages.en.ticketTypeFuelAbuse).not.toBe(
+            messages.arg.ticketTypeFuelAbuse
+        );
     });
 
     it('uses the approved Spanish fuel gate title', () => {

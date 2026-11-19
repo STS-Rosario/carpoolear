@@ -23,4 +23,8 @@ describe('TripDisplay car details', () => {
         expect(source).toContain('TripCarDetails');
         expect(source).toContain(':car="trip.car"');
     });
+
+    it('passes the trip to car details so trip fuel snapshot is shown', () => {
+        expect(source).toMatch(/<TripCarDetails[^>]*:trip="trip"/);
+    });
 });

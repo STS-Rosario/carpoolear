@@ -77,3 +77,33 @@ describe('TripContributionBreakdown.vue', () => {
         );
     });
 });
+
+describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
+    const source = componentSource.replace(/\r\n/g, '\n');
+
+    it('accepts fuel profile, visibility flag and report route props', () => {
+        expect(source).toMatch(/fuelProfile:\s*\{[\s\S]*?default: null/);
+        expect(source).toMatch(/showFuelAbuseReport:\s*\{[\s\S]*?default: false/);
+        expect(source).toMatch(/fuelAbuseRoute:\s*\{[\s\S]*?default: null/);
+    });
+
+    it('shows fuel type and consumption near the fuel line', () => {
+        expect(source).toContain('tripContributionBreakdownFuelProfile');
+        expect(source).toContain('fuelTypeI18nKey');
+        expect(source).toContain('fuelConsumptionI18nKey');
+        expect(source).toContain('fuelConsumptionRateLabel');
+        expect(source).toMatch(
+            /v-if="fuelProfileLabel"[\s\S]*?trip-contribution-breakdown__fuel-profile/
+        );
+    });
+
+    it('renders Denunciar abuso link with info tooltip only when allowed', () => {
+        expect(source).toMatch(
+            /v-if="showFuelAbuseReport && fuelAbuseRoute"[\s\S]*?<router-link[\s\S]*?:to="fuelAbuseRoute"/
+        );
+        expect(source).toContain("$t('fuelAbuseReportLink')");
+        expect(source).toContain("$t('fuelAbuseReportTooltip')");
+        expect(source).toContain('fa-info-circle');
+    });
+});
+
