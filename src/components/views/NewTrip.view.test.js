@@ -342,6 +342,24 @@ describe('NewTrip.vue incomplete car completion', () => {
         );
     });
 
+    it('shows the fuel-only modal when the car is complete except for fuel', () => {
+        expect(viewSource).toContain('CompleteCarFuelModal');
+        expect(viewSource).toContain('carNeedsFuelProfile');
+        expect(viewSource).toContain('showCompleteCarFuelModal');
+        expect(viewSource).toMatch(
+            /<CompleteCarFuelModal[\s\S]*?:visible="showCompleteCarFuelModal"[\s\S]*?:car="carToComplete"[\s\S]*?@saved="onCarFuelSaved"/s
+        );
+        expect(viewSource).toMatch(
+            /if \(requiresDriverPlate\(this\.trip\)\) \{[\s\S]*?const tripCar = this\.resolveDriverCarForTrip\(\);[\s\S]*?carNeedsFuelProfile\(tripCar\)[\s\S]*?this\.showCompleteCarFuelModal = true;[\s\S]*?return;[\s\S]*?!isCarComplete\(tripCar\)[\s\S]*?this\.showCompleteCarModal = true;/s
+        );
+    });
+
+    it('resumes saving after the fuel modal saves', () => {
+        expect(viewSource).toMatch(
+            /async onCarFuelSaved\(\)[\s\S]*?showCompleteCarFuelModal = false[\s\S]*?await this\.carIndex\(\)[\s\S]*?this\.save\(\)/s
+        );
+    });
+
     it('renders CompleteCarModal with catalog comboboxes for legacy cars', () => {
         expect(viewSource).toMatch(
             /<CompleteCarModal[\s\S]*?:visible="showCompleteCarModal"/s
