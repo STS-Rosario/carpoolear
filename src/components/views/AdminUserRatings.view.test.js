@@ -32,6 +32,8 @@ describe('AdminRatingCard', () => {
         expect(cardSource).toContain('admin-rating-pill--positive');
         expect(cardSource).toContain('admin-rating-pill--neutral');
         expect(cardSource).toContain('admin-rating-pill--negative');
+        expect(cardSource).toContain('admin-rating-pill--pending');
+        expect(cardSource).toContain('getAdminRatingStatus');
         expect(cardSource).toContain('rateItemNeutral');
         expect(cardSource).toContain('rate.comment');
     });

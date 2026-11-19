@@ -158,11 +158,14 @@ export default {
         getAdminUserProfileRoute
     },
     computed: {
+        adminRatingStatus() {
+            return getAdminRatingStatus(this.rate);
+        },
         pillClass() {
-            return getAdminRatingStatus(this.rate).pillClass;
+            return this.adminRatingStatus.pillClass;
         },
         pillLabel() {
-            return this.$t(getAdminRatingStatus(this.rate).labelKey);
+            return this.$t(this.adminRatingStatus.labelKey);
         }
     }
 };
