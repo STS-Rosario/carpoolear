@@ -85,7 +85,13 @@ describe('fuel i18n', () => {
                 '{fuelType}'
             );
             expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '{consumption}'
+            );
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
                 '{rate}'
+            );
+            expect(messages[locale].tripContributionBreakdownFuelTyped).toContain(
+                '—'
             );
             expect(
                 messages[locale].tripContributionBreakdownFuelUnitM3

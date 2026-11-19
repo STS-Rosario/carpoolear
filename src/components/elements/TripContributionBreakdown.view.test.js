@@ -94,6 +94,7 @@ describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
         expect(source).toContain('tripContributionBreakdownFuelTyped');
         expect(source).toContain('unitWordKey');
         expect(source).toContain('fuelTypeKey');
+        expect(source).toContain('consumptionKey');
         expect(source).not.toContain(
             'trip-contribution-breakdown__fuel-profile'
         );

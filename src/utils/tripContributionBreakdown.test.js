@@ -161,6 +161,7 @@ describe('tripContributionBreakdown', () => {
             quantity: '34,94',
             unitWordKey: 'tripContributionBreakdownFuelUnitLiters',
             fuelTypeKey: 'fuelTypeNaftaSuper',
+            consumptionKey: 'fuelConsumptionHigh',
             rateLabel: '12 L/100km'
         });
     });
@@ -187,6 +188,7 @@ describe('tripContributionBreakdown', () => {
             'tripContributionBreakdownFuelUnitM3'
         );
         expect(display.fuelTypeKey).toBe('fuelTypeGnc');
+        expect(display.consumptionKey).toBe('fuelConsumptionMedium');
         expect(display.rateLabel).toBe('9 m³/100km');
         expect(display.rateLabel).toContain('m³');
         expect(display.rateLabel).not.toContain('m3');
