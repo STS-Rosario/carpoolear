@@ -58,7 +58,7 @@ describe('fuel i18n', () => {
     });
 
     it('uses the approved Spanish fuel abuse copy', () => {
-        for (const locale of ['arg', 'chl']) {
+        ['arg', 'chl'].forEach((locale) => {
             expect(messages[locale].fuelAbuseReportLink).toBe(
                 'Denunciar abuso'
             );
@@ -71,7 +71,7 @@ describe('fuel i18n', () => {
             expect(messages[locale].tripContributionBreakdownFuelProfile).toContain(
                 '{consumption}'
             );
-        }
+        });
         expect(messages.en.fuelAbuseReportLink).not.toBe('Denunciar abuso');
         expect(messages.en.ticketTypeFuelAbuse).not.toBe(
             messages.arg.ticketTypeFuelAbuse
@@ -89,7 +89,7 @@ describe('fuel i18n', () => {
     });
 
     it('uses the approved Spanish copy', () => {
-        for (const locale of ['arg', 'chl']) {
+        ['arg', 'chl'].forEach((locale) => {
             expect(messages[locale].fuelInfoSubtitle).toBe(
                 'Información del combustible'
             );
@@ -97,7 +97,7 @@ describe('fuel i18n', () => {
             expect(messages[locale].fuelConsumptionRateHint).toContain(
                 '{rate}'
             );
-        }
+        });
     });
 
     it('mentions fuel in incomplete car messages', () => {
