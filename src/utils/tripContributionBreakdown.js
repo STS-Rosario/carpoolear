@@ -1,5 +1,7 @@
 import {
+    FUEL_CONSUMPTION_LEVELS,
     FUEL_TYPES,
+    fuelConsumptionI18nKey,
     fuelConsumptionRateLabel,
     fuelTypeI18nKey,
     hasCarFuelProfile
@@ -124,6 +126,9 @@ export function resolveContributionFuelDisplay({
                 ? 'tripContributionBreakdownFuelUnitM3'
                 : 'tripContributionBreakdownFuelUnitLiters',
         fuelTypeKey: fuelTypeI18nKey(type),
+        consumptionKey: FUEL_CONSUMPTION_LEVELS.includes(level)
+            ? fuelConsumptionI18nKey(level)
+            : null,
         rateLabel: rateLabelFromBreakdown(breakdown, type, level)
     };
 }

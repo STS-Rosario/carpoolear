@@ -143,10 +143,14 @@ export default {
                 return '';
             }
             if (display.mode === 'typed') {
+                const consumption = display.consumptionKey
+                    ? this.$t(display.consumptionKey).toLocaleLowerCase()
+                    : '';
                 return this.$t('tripContributionBreakdownFuelTyped', {
                     quantity: display.quantity,
                     unit: this.$t(display.unitWordKey),
                     fuelType: this.$t(display.fuelTypeKey),
+                    consumption,
                     rate: display.rateLabel
                 });
             }

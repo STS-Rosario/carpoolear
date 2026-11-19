@@ -497,7 +497,7 @@ const messages = {
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
         tripContributionBreakdownFuelTyped:
-            '{quantity} {unit} de {fuelType} (consumo {rate})',
+            '{quantity} {unit} de {fuelType} (consumo {consumption} — {rate})',
         tripContributionBreakdownFuelUnitLiters: 'litros',
         tripContributionBreakdownFuelUnitM3: 'm³',
         tripContributionBreakdownConsumptionTooltipTyped:
@@ -2590,7 +2590,7 @@ const messages = {
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
         tripContributionBreakdownFuelTyped:
-            '{quantity} {unit} de {fuelType} (consumo {rate})',
+            '{quantity} {unit} de {fuelType} (consumo {consumption} — {rate})',
         tripContributionBreakdownFuelUnitLiters: 'litros',
         tripContributionBreakdownFuelUnitM3: 'm³',
         tripContributionBreakdownConsumptionTooltipTyped:
@@ -4828,7 +4828,7 @@ const messages = {
         fuelAbuseReportTooltip:
             'Are the fuel consumption and fuel type exaggerated? Let us know to make the community fairer.',
         tripContributionBreakdownFuelTyped:
-            '{quantity} {unit} of {fuelType} (consumption {rate})',
+            '{quantity} {unit} of {fuelType} (consumption {consumption} — {rate})',
         tripContributionBreakdownFuelUnitLiters: 'liters',
         tripContributionBreakdownFuelUnitM3: 'm³',
         tripContributionBreakdownConsumptionTooltipTyped:
