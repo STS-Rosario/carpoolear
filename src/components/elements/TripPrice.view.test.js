@@ -68,4 +68,3 @@ describe('TripPrice.vue fuel abuse report', () => {
         );
     });
 });
-

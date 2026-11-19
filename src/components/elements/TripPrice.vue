@@ -48,6 +48,9 @@
                         <TripContributionBreakdown
                             v-if="showContributionBreakdown && pricingBreakdown"
                             :breakdown="pricingBreakdown"
+                            :fuel-profile="fuelProfile"
+                            :show-fuel-abuse-report="showFuelAbuseReport"
+                            :fuel-abuse-route="fuelAbuseRoute"
                         />
                         <template v-else>
                             {{ calculadoEnBaseNaftaDescription }}
@@ -89,6 +92,12 @@ import {
     withOccupants
 } from '../../utils/tripContributionBreakdown.js';
 import { applySelladoChargeToBreakdown } from '../../utils/tripSelladoUi.js';
+import { resolveTripFuelProfile } from '../../utils/carFields.js';
+import {
+    buildFuelAbuseSupportTicketRoute,
+    shouldShowFuelAbuseReport
+} from '../../utils/supportTicketFuelAbuse.js';
+import { resolveWebAppBaseUrl } from '../../utils/supportTicketTripReport.js';
 import SvgItem from '../SvgItem';
 import TripContributionBreakdown from './TripContributionBreakdown.vue';
 export default {
@@ -128,6 +137,24 @@ export default {
                 return base + this.$t('calculadoEnBaseNaftaSelladoSuffix');
             }
             return base;
+        },
+        fuelProfile() {
+            return resolveTripFuelProfile(this.trip);
+        },
+        showFuelAbuseReport() {
+            return shouldShowFuelAbuseReport({
+                trip: this.trip,
+                user: this.user
+            });
+        },
+        fuelAbuseRoute() {
+            if (!this.showFuelAbuseReport) {
+                return null;
+            }
+            return buildFuelAbuseSupportTicketRoute({
+                trip: this.trip,
+                webAppBaseUrl: resolveWebAppBaseUrl()
+            });
         },
         showContributionBreakdown() {
             return shouldShowContributionBreakdown(this.config);

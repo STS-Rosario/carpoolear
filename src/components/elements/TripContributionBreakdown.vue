@@ -23,6 +23,29 @@
                 </dt>
                 <dd>${{ lines.fuelCostInteger }}</dd>
             </div>
+            <div
+                v-if="fuelProfileLabel"
+                class="trip-contribution-breakdown__row trip-contribution-breakdown__fuel-profile"
+            >
+                <dt>{{ fuelProfileLabel }}</dt>
+            </div>
+            <div
+                v-if="showFuelAbuseReport && fuelAbuseRoute"
+                class="trip-contribution-breakdown__row trip-contribution-breakdown__fuel-abuse"
+            >
+                <dt>
+                    <router-link :to="fuelAbuseRoute">
+                        {{ $t('fuelAbuseReportLink') }}
+                    </router-link>
+                    <span
+                        class="trip-contribution-breakdown__info tooltip-bottom"
+                        :data-tooltip="$t('fuelAbuseReportTooltip')"
+                        @click.stop
+                    >
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
+                </dt>
+            </div>
             <div class="trip-contribution-breakdown__row">
                 <dt>
                     {{
@@ -87,12 +110,30 @@
 
 <script>
 import { formatBreakdownLines } from '../../utils/tripContributionBreakdown.js';
+import {
+    fuelConsumptionI18nKey,
+    fuelConsumptionRateLabel,
+    fuelTypeI18nKey,
+    hasCarFuelProfile
+} from '../../utils/carFields.js';
 
 export default {
     name: 'trip-contribution-breakdown',
 
     props: {
         breakdown: {
+            type: Object,
+            default: null
+        },
+        fuelProfile: {
+            type: Object,
+            default: null
+        },
+        showFuelAbuseReport: {
+            type: Boolean,
+            default: false
+        },
+        fuelAbuseRoute: {
             type: Object,
             default: null
         }
@@ -104,6 +145,20 @@ export default {
                 return null;
             }
             return formatBreakdownLines(this.breakdown);
+        },
+        fuelProfileLabel() {
+            if (!hasCarFuelProfile(this.fuelProfile)) {
+                return '';
+            }
+
+            const { fuel_type: type, fuel_consumption: level } =
+                this.fuelProfile;
+
+            return this.$t('tripContributionBreakdownFuelProfile', {
+                type: this.$t(fuelTypeI18nKey(type)),
+                consumption: this.$t(fuelConsumptionI18nKey(level)),
+                rate: fuelConsumptionRateLabel(type, level)
+            });
         }
     }
 };

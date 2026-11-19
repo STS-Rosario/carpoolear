@@ -106,4 +106,3 @@ describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
         expect(source).toContain('fa-info-circle');
     });
 });
-
