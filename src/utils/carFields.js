@@ -78,6 +78,28 @@ export function hasCarFuelProfile(carOrForm) {
     );
 }
 
+export function resolveTripFuelProfile(trip) {
+    if (!trip) {
+        return null;
+    }
+
+    if (hasCarFuelProfile(trip)) {
+        return {
+            fuel_type: trip.fuel_type,
+            fuel_consumption: trip.fuel_consumption
+        };
+    }
+
+    if (hasCarFuelProfile(trip.car)) {
+        return {
+            fuel_type: trip.car.fuel_type,
+            fuel_consumption: trip.car.fuel_consumption
+        };
+    }
+
+    return null;
+}
+
 export function getCarYearMax() {
     return new Date().getFullYear();
 }
