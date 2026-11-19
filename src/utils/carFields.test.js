@@ -21,7 +21,8 @@ import {
     hasCarFuelProfile,
     carNeedsFuelProfile,
     emptyCarForm,
-    buildCarFormFromCar
+    buildCarFormFromCar,
+    resolveTripFuelProfile
 } from './carFields.js';
 
 describe('carFields', () => {
@@ -491,6 +492,33 @@ describe('carFields', () => {
                     rateLabel: '9 m³/100km'
                 }
             ]);
+        });
+    });
+
+    describe('resolveTripFuelProfile', () => {
+        it('prefers the trip snapshot over the car', () => {
+            expect(
+                resolveTripFuelProfile({
+                    fuel_type: 'diesel',
+                    fuel_consumption: 'high',
+                    car: { fuel_type: 'gnc', fuel_consumption: 'low' }
+                })
+            ).toEqual({ fuel_type: 'diesel', fuel_consumption: 'high' });
+        });
+
+        it('falls back to the car when the trip has no snapshot', () => {
+            expect(
+                resolveTripFuelProfile({
+                    fuel_type: null,
+                    fuel_consumption: null,
+                    car: { fuel_type: 'gnc', fuel_consumption: 'low' }
+                })
+            ).toEqual({ fuel_type: 'gnc', fuel_consumption: 'low' });
+        });
+
+        it('returns null when neither trip nor car has a fuel profile', () => {
+            expect(resolveTripFuelProfile({ car: {} })).toBe(null);
+            expect(resolveTripFuelProfile(null)).toBe(null);
         });
     });
 });

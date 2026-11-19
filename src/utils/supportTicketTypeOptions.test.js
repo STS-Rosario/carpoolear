@@ -14,4 +14,12 @@ describe('supportTicketTypeOptions', () => {
         });
         expect(USER_TICKET_TYPE_VALUES).toContain('account_recovery');
     });
+
+    it('offers fuel_abuse as a user ticket category', () => {
+        expect(USER_TICKET_TYPE_OPTIONS).toContainEqual({
+            value: 'fuel_abuse',
+            labelKey: 'ticketTypeFuelAbuse'
+        });
+        expect(USER_TICKET_TYPE_VALUES).toContain('fuel_abuse');
+    });
 });
