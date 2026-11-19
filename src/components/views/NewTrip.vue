@@ -118,7 +118,10 @@ import {
     restoreTripPointDetailsFromTrip,
     syncReturnTripPointDetailsFromOutbound
 } from '../../utils/tripPointDetailPrefill.js';
-import { carNeedsFuelProfile } from '../../utils/carFields.js';
+import {
+    carNeedsFuelProfile,
+    hasCarFuelProfile
+} from '../../utils/carFields.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -287,6 +290,7 @@ export default {
             carSelectionError: new Error(),
             showCompleteCarModal: false,
             showCompleteCarFuelModal: false,
+            pendingSaveAfterFuel: false,
             showTripCarsModal: false,
             carToComplete: null,
             puntoPartidaError: new Error(),
@@ -637,6 +641,12 @@ export default {
         cars() {
             this.preselectDriverCar();
         },
+        selectedCarId() {
+            const namedPoints = (this.points || []).filter((point) => point.name);
+            if (namedPoints.length >= 2) {
+                this.calcRoute('trip');
+            }
+        },
         no_lucrar() {
             this.lucrarError.state = false;
         },
@@ -808,7 +818,19 @@ export default {
         async onCarFuelSaved() {
             this.showCompleteCarFuelModal = false;
             await this.carIndex();
-            this.save();
+            this.calcRoute('trip');
+            if (this.pendingSaveAfterFuel) {
+                this.pendingSaveAfterFuel = false;
+                this.save();
+            }
+        },
+        openCompleteCarFuelModal() {
+            const tripCar = this.resolveDriverCarForTrip();
+            if (!tripCar || hasCarFuelProfile(tripCar)) {
+                return;
+            }
+            this.carToComplete = tripCar;
+            this.showCompleteCarFuelModal = true;
         },
         openTripCarsModal() {
             this.showTripCarsModal = true;
@@ -835,6 +857,7 @@ export default {
         async onTripCarsUpdated() {
             await this.carIndex();
             this.preselectDriverCar();
+            this.calcRoute('trip');
         },
         markMaxContributionExceededWarningAsShown() {
             this.hasShownMaxContributionExceededWarning = rememberMaxContributionWarning(
@@ -1539,6 +1562,7 @@ export default {
                 const tripCar = this.resolveDriverCarForTrip();
                 if (tripCar && carNeedsFuelProfile(tripCar)) {
                     this.carToComplete = tripCar;
+                    this.pendingSaveAfterFuel = true;
                     this.showCompleteCarFuelModal = true;
                     return;
                 }
@@ -1824,6 +1848,10 @@ export default {
             };
             if (type === 'trip') {
                 data.route_index = this.selectedRouteIndex;
+                const carId = resolveTripCarId(this.cars, this.selectedCarId);
+                if (carId != null) {
+                    data.car_id = carId;
+                }
             }
 
             if (type === 'trip') {

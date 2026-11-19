@@ -1202,6 +1202,17 @@ export default {
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
         },
+        maybeOpenCarFuelModalFromStepError() {
+            if (
+                this.currentStep !== STEP.CAR ||
+                this.stepErrors.car !== 'tripCarFuelRequired'
+            ) {
+                return;
+            }
+            if (typeof this.form.openCompleteCarFuelModal === 'function') {
+                this.form.openCompleteCarFuelModal();
+            }
+        },
         scrollToFirstFormError() {
             this.$nextTick(() => {
                 scrollToFirstTripFormError(this.$el);
@@ -1318,6 +1329,7 @@ export default {
         },
         goNext() {
             if (!this.validateCurrentStep()) {
+                this.maybeOpenCarFuelModalFromStepError();
                 this.scrollToFirstFormError();
                 return;
             }
