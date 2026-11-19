@@ -17,6 +17,17 @@
 - fuel_abuse tickets; logged-in non-drivers only; no auto-suspend
 - Legacy apps only
 
+### Fuel price env vars
+
+| Env var | Unit | Notes |
+| --- | --- | --- |
+| `MODULE_MAX_PRICE_FUEL_PRICE` | $/L | Legacy fallback (esp. nafta premium) |
+| `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_SUPER` | $/L | |
+| `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_PREMIUM` | $/L | Optional; falls back to `MODULE_MAX_PRICE_FUEL_PRICE` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL` | $/L | |
+| `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL_PREMIUM` | $/L | |
+| `MODULE_MAX_PRICE_FUEL_PRICE_GNC` | $/m³ | Default `500` |
+
 See design: `docs/superpowers/specs/2026-11-19-vehicle-fuel-type-consumption-design.md`
 
 ---

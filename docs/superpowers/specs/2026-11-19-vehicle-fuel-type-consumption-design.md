@@ -35,12 +35,27 @@ Drivers must choose fuel type and consumption level on each car. New trips snaps
 
 **Trip snapshot columns:** `fuel_type`, `fuel_consumption`, `fuel_price_per_unit`, `fuel_consumption_per_100`, `fuel_unit` (`liter` \| `m3`).
 
-**Config prices (env):**
-- `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_SUPER`
-- `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_PREMIUM` (legacy `MODULE_MAX_PRICE_FUEL_PRICE` aliases this)
-- `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL`
-- `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL_PREMIUM`
-- `MODULE_MAX_PRICE_FUEL_PRICE_GNC`
+**Config prices (env)** — currency units as stored today ($/L or $/m³), not cents:
+
+| Env var | Fuel | Unit | Default |
+| --- | --- | --- | --- |
+| `MODULE_MAX_PRICE_FUEL_PRICE` | Legacy / fallback for nafta premium (and defaults for other liquid fuels when their specific var is unset) | $/L | `1500` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_SUPER` | Nafta Super | $/L | falls back to `MODULE_MAX_PRICE_FUEL_PRICE` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_PREMIUM` | Nafta Premium | $/L | optional; if unset, uses `MODULE_MAX_PRICE_FUEL_PRICE` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL` | Diesel | $/L | falls back to `MODULE_MAX_PRICE_FUEL_PRICE` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_DIESEL_PREMIUM` | Diesel Premium | $/L | falls back to `MODULE_MAX_PRICE_FUEL_PRICE` |
+| `MODULE_MAX_PRICE_FUEL_PRICE_GNC` | GNC | $/m³ | `500` |
+
+Example `.env` block:
+
+```env
+MODULE_MAX_PRICE_FUEL_PRICE=1500
+MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_SUPER=1500
+MODULE_MAX_PRICE_FUEL_PRICE_NAFTA_PREMIUM=1600
+MODULE_MAX_PRICE_FUEL_PRICE_DIESEL=1500
+MODULE_MAX_PRICE_FUEL_PRICE_DIESEL_PREMIUM=1500
+MODULE_MAX_PRICE_FUEL_PRICE_GNC=500
+```
 
 **TripPricingBreakdown / trip-info / create:** use resolved or snapshotted price + rate. `forTrip()` prefers trip snapshot when present.
 
