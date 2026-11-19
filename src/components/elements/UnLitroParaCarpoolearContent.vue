@@ -15,6 +15,7 @@
                 </div>
                 <p class="un-litro__lead">Es el valor de 1 litro de nafta que se suma a los gastos compartidos del viaje, para sostener la comunidad.</p>
                 <p class="un-litro__body">Carpoolear es un proyecto colaborativo <strong>sin fines de lucro</strong> de la asociación civil STS Rosario. Ese litro ayuda a mantener la plataforma, la mesa de ayuda y las mejoras.</p>
+                <UnLitroInfoCard :page-club-promo="true" size="large" />
             </div>
 
             <aside class="un-litro__card un-litro__how">
@@ -210,8 +211,14 @@
 </template>
 
 <script>
+import UnLitroInfoCard from './UnLitroInfoCard.vue';
+
 export default {
-    name: 'UnLitroParaCarpoolearContent'
+    name: 'UnLitroParaCarpoolearContent',
+
+    components: {
+        UnLitroInfoCard
+    }
 };
 </script>
 

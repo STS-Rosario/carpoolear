@@ -1,14 +1,22 @@
 <template>
     <div
         class="un-litro-card"
-        :class="{ 'un-litro-card--link-only': linkOnly }"
+        :class="{
+            'un-litro-card--link-only': linkOnly,
+            'un-litro-card--large': size === 'large'
+        }"
         data-testid="un-litro-info-card"
     >
         <div v-if="!linkOnly" class="un-litro-card__icon" aria-hidden="true">
             <i class="fa fa-tint"></i>
         </div>
         <div class="un-litro-card__content">
-            <template v-if="!linkOnly && clubMemberExempt">
+            <template v-if="!linkOnly && pageClubPromo">
+                <h4 class="un-litro-card__title">
+                    {{ $t('unLitroClubExemptTitle') }}
+                </h4>
+            </template>
+            <template v-else-if="!linkOnly && clubMemberExempt">
                 <h4 class="un-litro-card__title">
                     {{ $t('unLitroClubExemptTitle') }}
                 </h4>
@@ -50,6 +58,7 @@
             </template>
             <div class="un-litro-card__actions">
                 <button
+                    v-if="!pageClubPromo"
                     type="button"
                     class="un-litro-card__link"
                     data-testid="un-litro-what-is-this"
@@ -57,8 +66,23 @@
                 >
                     {{ $t('unLitroWhatIsThis') }}
                 </button>
+                <router-link
+                    v-if="pageClubPromo && !linkOnly"
+                    :to="{ name: 'donate' }"
+                    class="un-litro-card__club-promo"
+                    data-testid="un-litro-club-promo"
+                >
+                    <img
+                        :src="clubBadgeUrl"
+                        :alt="$t('miembroClubCarpoolearTitulo')"
+                        class="un-litro-card__club-badge"
+                        width="20"
+                        height="20"
+                    />
+                    <span>{{ $t('unLitroClubMemberPromo') }}</span>
+                </router-link>
                 <div
-                    v-if="clubMemberExempt && !linkOnly"
+                    v-else-if="clubMemberExempt && !linkOnly"
                     class="un-litro-card__club-promo"
                     data-testid="un-litro-club-thanks"
                 >
@@ -155,6 +179,15 @@ export default {
         linkOnly: {
             type: Boolean,
             default: false
+        },
+        pageClubPromo: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'default',
+            validator: (value) => ['default', 'large'].includes(value)
         }
     },
 
@@ -288,6 +321,32 @@ export default {
 
 .un-litro-card--link-only .un-litro-card__actions {
     display: inline;
+}
+
+.un-litro-card--large {
+    margin-top: 1.25rem;
+    padding: 1.35rem 1.5rem;
+    gap: 1rem;
+}
+
+.un-litro-card--large .un-litro-card__icon {
+    font-size: 1.45rem;
+}
+
+.un-litro-card--large .un-litro-card__title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.un-litro-card--large .un-litro-card__club-promo {
+    margin-top: 0.25rem;
+    padding: 0.55rem 1rem;
+    font-size: 1rem;
+}
+
+.un-litro-card--large .un-litro-card__club-badge {
+    width: 24px;
+    height: 24px;
 }
 
 @media (min-width: 768px) {

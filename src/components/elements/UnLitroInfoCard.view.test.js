@@ -178,7 +178,7 @@ describe('UnLitroInfoCard', () => {
     });
 
     it('shows a large Club exemption promo on the Un litro info page', () => {
-        const wrapper = mountCard({ pageClubPromo: true });
+        const wrapper = mountCard({ pageClubPromo: true, size: 'large' });
 
         expect(wrapper.find('.un-litro-card--large').exists()).toBe(true);
         expect(wrapper.text()).toContain(
