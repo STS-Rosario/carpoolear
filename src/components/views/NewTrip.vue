@@ -604,6 +604,16 @@ export default {
                 this.trip.rear_max_two_passengers
             );
         },
+        selectedCarFuelProfile() {
+            const car = this.resolveDriverCarForTrip();
+            if (!hasCarFuelProfile(car)) {
+                return null;
+            }
+            return {
+                fuel_type: car.fuel_type,
+                fuel_consumption: car.fuel_consumption
+            };
+        },
         recommendedSeatPriceCentsForDisplay() {
             const breakdown = this.contributionPricingBreakdown;
             if (breakdown && breakdown.per_person_cents != null) {

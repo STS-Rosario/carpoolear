@@ -1,4 +1,10 @@
 import {
+    FUEL_TYPES,
+    fuelConsumptionRateLabel,
+    fuelTypeI18nKey,
+    hasCarFuelProfile
+} from './carFields.js';
+import {
     formatContributionDisplayAmount,
     formatPesoIntegerFromCents
 } from './tripContributionDisplay.js';
@@ -50,6 +56,76 @@ function formatQuantity(value) {
         return '0';
     }
     return String(Number(amount.toFixed(2))).replace('.', ',');
+}
+
+function rateLabelFromBreakdown(breakdown, fuelType, level) {
+    const fromProfile = fuelConsumptionRateLabel(fuelType, level);
+    if (fromProfile) {
+        return fromProfile;
+    }
+
+    const per100 = Number(breakdown && breakdown.fuel_consumption_per_100);
+    if (!Number.isFinite(per100) || per100 <= 0) {
+        return '';
+    }
+
+    const unit = breakdown.fuel_unit === 'm3' ? 'm³' : 'L';
+    return `${per100} ${unit}/100km`;
+}
+
+export function resolveContributionFuelDisplay({
+    breakdown,
+    fuelProfile = null
+} = {}) {
+    const quantitySource =
+        breakdown && breakdown.fuel_quantity != null
+            ? breakdown.fuel_quantity
+            : breakdown && breakdown.liters;
+    const quantity = formatQuantity(quantitySource);
+
+    const typeFromProfile =
+        fuelProfile && hasCarFuelProfile(fuelProfile)
+            ? fuelProfile.fuel_type
+            : null;
+    const levelFromProfile =
+        fuelProfile && hasCarFuelProfile(fuelProfile)
+            ? fuelProfile.fuel_consumption
+            : null;
+    const type =
+        typeFromProfile ||
+        (breakdown && FUEL_TYPES.includes(breakdown.fuel_type)
+            ? breakdown.fuel_type
+            : null);
+    const level =
+        levelFromProfile ||
+        (breakdown && breakdown.fuel_consumption) ||
+        null;
+
+    if (!type) {
+        const kilometersPerLiter =
+            breakdown && breakdown.kilometers_per_liter;
+        return {
+            mode: 'legacy',
+            quantity,
+            kmPerLiter: kilometersPerLiter,
+            litersPer100Km: litersPer100KmFromKmPerLiter(kilometersPerLiter)
+        };
+    }
+
+    const unit =
+        (breakdown && breakdown.fuel_unit) ||
+        (type === 'gnc' ? 'm3' : 'liter');
+
+    return {
+        mode: 'typed',
+        quantity,
+        unitWordKey:
+            unit === 'm3'
+                ? 'tripContributionBreakdownFuelUnitM3'
+                : 'tripContributionBreakdownFuelUnitLiters',
+        fuelTypeKey: fuelTypeI18nKey(type),
+        rateLabel: rateLabelFromBreakdown(breakdown, type, level)
+    };
 }
 
 export function formatBreakdownLines(breakdown) {

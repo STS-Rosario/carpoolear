@@ -413,6 +413,7 @@
                         form.contribucionRecomendadaCardDescripcionText
                     "
                     :pricing-breakdown="form.contributionPricingBreakdown"
+                    :fuel-profile="form.selectedCarFuelProfile"
                     :config="form.config"
                     :show-un-litro-card="form.showUnLitroCard"
                     :sellado-charged="form.selladoCharged"

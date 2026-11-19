@@ -55,19 +55,21 @@ describe('TripContributionBreakdown.vue', () => {
     });
 
     it('keeps the consumption tooltip on the fuel row', () => {
-        const fuelIndex = componentSource.indexOf(
-            'tripContributionBreakdownFuel'
-        );
-        const tooltipIndex = componentSource.indexOf(
-            "$t('tripContributionBreakdownConsumptionTooltip'"
-        );
+        const fuelIndex = componentSource.indexOf('fuelLineLabel');
+        const tooltipIndex = componentSource.indexOf(':data-tooltip="fuelTooltip"');
         const tollsIndex = componentSource.indexOf(
             'tripContributionBreakdownTollsLabel'
         );
 
         expect(fuelIndex).toBeGreaterThan(-1);
-        expect(tooltipIndex).toBeGreaterThan(fuelIndex);
+        expect(tooltipIndex).toBeGreaterThan(-1);
         expect(tooltipIndex).toBeLessThan(tollsIndex);
+        expect(componentSource).toContain(
+            'tripContributionBreakdownConsumptionTooltip'
+        );
+        expect(componentSource).toContain(
+            'tripContributionBreakdownConsumptionTooltipTyped'
+        );
         expect(componentSource).not.toMatch(/<button[^>]*tooltip-bottom/);
         expect(componentSource).toContain('@click.stop');
     });
@@ -90,8 +92,8 @@ describe('TripContributionBreakdown.vue fuel profile and abuse report', () => {
 
     it('folds fuel type and consumption into the main fuel line', () => {
         expect(source).toContain('tripContributionBreakdownFuelTyped');
-        expect(source).toContain('tripContributionBreakdownFuelUnitLiters');
-        expect(source).toContain('tripContributionBreakdownFuelUnitM3');
+        expect(source).toContain('unitWordKey');
+        expect(source).toContain('fuelTypeKey');
         expect(source).not.toContain(
             'trip-contribution-breakdown__fuel-profile'
         );

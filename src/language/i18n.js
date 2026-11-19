@@ -496,8 +496,12 @@ const messages = {
         fuelAbuseReportLink: 'Denunciar abuso',
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
-        tripContributionBreakdownFuelProfile:
-            'Combustible: {type} · Consumo: {consumption} ({rate})',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} de {fuelType} (consumo {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'litros',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'Usamos un consumo de {rate} para el cálculo.',
         marcaOtro: 'Otro',
         modeloOtro: 'Otro',
         marcaOtroPlaceholder: 'Ingresá la marca',
@@ -2585,8 +2589,12 @@ const messages = {
         fuelAbuseReportLink: 'Denunciar abuso',
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
-        tripContributionBreakdownFuelProfile:
-            'Combustible: {type} · Consumo: {consumption} ({rate})',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} de {fuelType} (consumo {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'litros',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'Usamos un consumo de {rate} para el cálculo.',
         marcaOtro: 'Otro',
         modeloOtro: 'Otro',
         marcaOtroPlaceholder: 'Ingresá la marca',
@@ -4819,8 +4827,12 @@ const messages = {
         fuelAbuseReportLink: 'Report abuse',
         fuelAbuseReportTooltip:
             'Are the fuel consumption and fuel type exaggerated? Let us know to make the community fairer.',
-        tripContributionBreakdownFuelProfile:
-            'Fuel: {type} · Consumption: {consumption} ({rate})',
+        tripContributionBreakdownFuelTyped:
+            '{quantity} {unit} of {fuelType} (consumption {rate})',
+        tripContributionBreakdownFuelUnitLiters: 'liters',
+        tripContributionBreakdownFuelUnitM3: 'm³',
+        tripContributionBreakdownConsumptionTooltipTyped:
+            'We use a consumption of {rate} for the calculation.',
         marcaOtro: 'Other',
         modeloOtro: 'Other',
         marcaOtroPlaceholder: 'Enter make',

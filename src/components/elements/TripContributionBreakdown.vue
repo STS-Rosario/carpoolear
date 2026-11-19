@@ -3,31 +3,16 @@
         <dl class="trip-contribution-breakdown__table">
             <div class="trip-contribution-breakdown__row">
                 <dt>
-                    {{
-                        $t('tripContributionBreakdownFuel', {
-                            liters: lines.liters
-                        })
-                    }}
+                    {{ fuelLineLabel }}
                     <span
                         class="trip-contribution-breakdown__info tooltip-bottom"
-                        :data-tooltip="
-                            $t('tripContributionBreakdownConsumptionTooltip', {
-                                kmPerLiter: lines.kmPerLiter,
-                                litersPer100km: lines.litersPer100Km
-                            })
-                        "
+                        :data-tooltip="fuelTooltip"
                         @click.stop
                     >
                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                     </span>
                 </dt>
                 <dd>${{ lines.fuelCostInteger }}</dd>
-            </div>
-            <div
-                v-if="fuelProfileLabel"
-                class="trip-contribution-breakdown__row trip-contribution-breakdown__fuel-profile"
-            >
-                <dt>{{ fuelProfileLabel }}</dt>
             </div>
             <div
                 v-if="showFuelAbuseReport && fuelAbuseRoute"
@@ -109,13 +94,10 @@
 </template>
 
 <script>
-import { formatBreakdownLines } from '../../utils/tripContributionBreakdown.js';
 import {
-    fuelConsumptionI18nKey,
-    fuelConsumptionRateLabel,
-    fuelTypeI18nKey,
-    hasCarFuelProfile
-} from '../../utils/carFields.js';
+    formatBreakdownLines,
+    resolveContributionFuelDisplay
+} from '../../utils/tripContributionBreakdown.js';
 
 export default {
     name: 'trip-contribution-breakdown',
@@ -146,18 +128,46 @@ export default {
             }
             return formatBreakdownLines(this.breakdown);
         },
-        fuelProfileLabel() {
-            if (!hasCarFuelProfile(this.fuelProfile)) {
+        fuelDisplay() {
+            if (!this.breakdown) {
+                return null;
+            }
+            return resolveContributionFuelDisplay({
+                breakdown: this.breakdown,
+                fuelProfile: this.fuelProfile
+            });
+        },
+        fuelLineLabel() {
+            const display = this.fuelDisplay;
+            if (!display) {
                 return '';
             }
-
-            const { fuel_type: type, fuel_consumption: level } =
-                this.fuelProfile;
-
-            return this.$t('tripContributionBreakdownFuelProfile', {
-                type: this.$t(fuelTypeI18nKey(type)),
-                consumption: this.$t(fuelConsumptionI18nKey(level)),
-                rate: fuelConsumptionRateLabel(type, level)
+            if (display.mode === 'typed') {
+                return this.$t('tripContributionBreakdownFuelTyped', {
+                    quantity: display.quantity,
+                    unit: this.$t(display.unitWordKey),
+                    fuelType: this.$t(display.fuelTypeKey),
+                    rate: display.rateLabel
+                });
+            }
+            return this.$t('tripContributionBreakdownFuel', {
+                liters: display.quantity
+            });
+        },
+        fuelTooltip() {
+            const display = this.fuelDisplay;
+            if (!display) {
+                return '';
+            }
+            if (display.mode === 'typed' && display.rateLabel) {
+                return this.$t(
+                    'tripContributionBreakdownConsumptionTooltipTyped',
+                    { rate: display.rateLabel }
+                );
+            }
+            return this.$t('tripContributionBreakdownConsumptionTooltip', {
+                kmPerLiter: display.kmPerLiter,
+                litersPer100km: display.litersPer100Km
             });
         }
     }
