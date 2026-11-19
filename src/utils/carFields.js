@@ -52,6 +52,16 @@ export function fuelConsumptionRateLabel(fuelType, level) {
     return `${rate.per100} ${FUEL_UNIT_LABELS[rate.unit]}/100km`;
 }
 
+export function formatFuelConsumptionOptionLabel(levelName, fuelType, level) {
+    const rateLabel = fuelConsumptionRateLabel(fuelType || 'nafta_super', level);
+
+    if (!rateLabel) {
+        return levelName;
+    }
+
+    return `${levelName} (${rateLabel})`;
+}
+
 function upperFirstCamel(value) {
     return String(value)
         .split('_')

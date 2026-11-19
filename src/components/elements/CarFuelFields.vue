@@ -31,7 +31,7 @@
                     :key="level"
                     :value="level"
                 >
-                    {{ $t(fuelConsumptionKey(level)) }}
+                    {{ consumptionOptionLabel(level) }}
                 </option>
             </select>
         </AppField>
@@ -46,6 +46,7 @@ import AppField from '../ui/AppField.vue';
 import {
     FUEL_CONSUMPTION_LEVELS,
     FUEL_TYPES,
+    formatFuelConsumptionOptionLabel,
     fuelConsumptionI18nKey,
     fuelConsumptionRateLabel,
     fuelTypeI18nKey
@@ -89,7 +90,14 @@ export default {
     },
     methods: {
         fuelTypeKey: fuelTypeI18nKey,
-        fuelConsumptionKey: fuelConsumptionI18nKey
+        fuelConsumptionKey: fuelConsumptionI18nKey,
+        consumptionOptionLabel(level) {
+            return formatFuelConsumptionOptionLabel(
+                this.$t(fuelConsumptionI18nKey(level)),
+                this.entry.fuel_type,
+                level
+            );
+        }
     }
 };
 </script>
