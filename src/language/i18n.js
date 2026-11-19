@@ -490,6 +490,7 @@ const messages = {
         fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
         tripCarFuelRequired:
             'Completá el tipo de combustible y el consumo del auto para continuar.',
+        tripCarFuelCompleteLink: 'Completar información',
         fuelAbuseReportLink: 'Denunciar abuso',
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
@@ -2576,6 +2577,7 @@ const messages = {
         fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
         tripCarFuelRequired:
             'Completá el tipo de combustible y el consumo del auto para continuar.',
+        tripCarFuelCompleteLink: 'Completar información',
         fuelAbuseReportLink: 'Denunciar abuso',
         fuelAbuseReportTooltip:
             '¿El consumo y tipo de combustible están exagerados? Avisanos para hacer la comunidad más justa.',
@@ -4807,6 +4809,7 @@ const messages = {
         fuelGateTitle: 'We need a few more details about your vehicle',
         tripCarFuelRequired:
             'Add the car fuel type and consumption to continue.',
+        tripCarFuelCompleteLink: 'Complete information',
         fuelAbuseReportLink: 'Report abuse',
         fuelAbuseReportTooltip:
             'Are the fuel consumption and fuel type exaggerated? Let us know to make the community fairer.',
