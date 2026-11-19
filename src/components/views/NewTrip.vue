@@ -40,6 +40,12 @@
             @close="showCompleteCarModal = false"
             @saved="onCarCompletionSaved"
         />
+        <CompleteCarFuelModal
+            :visible="showCompleteCarFuelModal"
+            :car="carToComplete"
+            @close="showCompleteCarFuelModal = false"
+            @saved="onCarFuelSaved"
+        />
         <TripCarsModal
             :visible="showTripCarsModal"
             @close="onTripCarsModalClose"
@@ -67,6 +73,7 @@ import autocomplete from '../Autocomplete';
 import SvgItem from '../SvgItem';
 import WeeklySchedule from '../elements/WeeklySchedule';
 import CompleteCarModal from '../elements/CompleteCarModal.vue';
+import CompleteCarFuelModal from '../elements/CompleteCarFuelModal.vue';
 import TripCarsModal from '../elements/TripCarsModal.vue';
 import TripPointDetailFields from '../elements/TripPointDetailFields';
 import bus from '../../services/bus-event.js';
@@ -111,6 +118,7 @@ import {
     restoreTripPointDetailsFromTrip,
     syncReturnTripPointDetailsFromOutbound
 } from '../../utils/tripPointDetailPrefill.js';
+import { carNeedsFuelProfile } from '../../utils/carFields.js';
 import {
     activeCarsWithPlate,
     hasDriverPlate,
@@ -178,6 +186,7 @@ export default {
         spinner,
         modal,
         CompleteCarModal,
+        CompleteCarFuelModal,
         TripCarsModal,
         NewTripCreationWizard,
         TripCreationSuccess,
@@ -277,6 +286,7 @@ export default {
             passengerSeatAvailability: [],
             carSelectionError: new Error(),
             showCompleteCarModal: false,
+            showCompleteCarFuelModal: false,
             showTripCarsModal: false,
             carToComplete: null,
             puntoPartidaError: new Error(),
@@ -792,6 +802,11 @@ export default {
         },
         async onCarCompletionSaved() {
             this.showCompleteCarModal = false;
+            await this.carIndex();
+            this.save();
+        },
+        async onCarFuelSaved() {
+            this.showCompleteCarFuelModal = false;
             await this.carIndex();
             this.save();
         },
@@ -1522,6 +1537,11 @@ export default {
             this.carSelectionError.state = false;
             if (requiresDriverPlate(this.trip)) {
                 const tripCar = this.resolveDriverCarForTrip();
+                if (tripCar && carNeedsFuelProfile(tripCar)) {
+                    this.carToComplete = tripCar;
+                    this.showCompleteCarFuelModal = true;
+                    return;
+                }
                 if (tripCar && !isCarComplete(tripCar)) {
                     this.carToComplete = tripCar;
                     this.showCompleteCarModal = true;
