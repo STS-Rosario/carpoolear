@@ -46,6 +46,13 @@ describe('CarForm fuel section', () => {
         expect(fuelFieldsSource).toContain('rateLabel');
     });
 
+    it('includes rate units in each consumption dropdown option', () => {
+        expect(fuelFieldsSource).toContain('formatFuelConsumptionOptionLabel');
+        expect(fuelFieldsSource).toMatch(
+            /v-for="level in consumptionLevels"[\s\S]*formatFuelConsumptionOptionLabel|consumptionOptionLabel\(level\)/
+        );
+    });
+
     it('lets the fuel-only modal hide the subtitle and explainer', () => {
         expect(fuelFieldsSource).toContain('showSubtitle');
         expect(fuelFieldsSource).toContain('showExplainer');

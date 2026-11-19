@@ -18,6 +18,7 @@ import {
     fuelFamilyForType,
     fuelConsumptionRate,
     fuelConsumptionRateLabel,
+    formatFuelConsumptionOptionLabel,
     hasCarFuelProfile,
     carNeedsFuelProfile,
     emptyCarForm,
@@ -356,6 +357,21 @@ describe('carFields', () => {
                 '9 m³/100km'
             );
             expect(fuelConsumptionRateLabel('gnc', null)).toBe('');
+        });
+
+        it('formats consumption dropdown options with rate units', () => {
+            expect(
+                formatFuelConsumptionOptionLabel('Bajo', 'nafta_super', 'low')
+            ).toBe('Bajo (7 L/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Medio', 'diesel', 'medium')
+            ).toBe('Medio (8 L/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Alto', 'gnc', 'high')
+            ).toBe('Alto (11 m³/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Bajo', null, 'low')
+            ).toBe('Bajo (7 L/100km)');
         });
 
         it('detects fuel profile on car or form', () => {
