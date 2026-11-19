@@ -26,7 +26,9 @@ describe('CarForm fuel section', () => {
 
     it('shows the fuel subtitle and explainer', () => {
         expect(fuelFieldsSource).toContain("$t('fuelInfoSubtitle')");
-        expect(fuelFieldsSource).toContain("$t('fuelFormExplainer')");
+        expect(fuelFieldsSource).toContain("$t('fuelFormExplainerIntro')");
+        expect(fuelFieldsSource).toContain("$t('fuelFormExplainerWarning')");
+        expect(fuelFieldsSource).toContain('car-fuel-fields__explainer-warning');
     });
 
     it('offers required fuel type and consumption selects', () => {

@@ -19,7 +19,8 @@ const CAR_FORM_KEYS = [
     'fuelConsumptionLow',
     'fuelConsumptionMedium',
     'fuelConsumptionHigh',
-    'fuelFormExplainer',
+    'fuelFormExplainerIntro',
+    'fuelFormExplainerWarning',
     'fuelConsumptionRateHint'
 ];
 
@@ -36,8 +37,10 @@ const FUEL_DISPLAY_KEYS = [
     'tripContributionBreakdownFuelProfile'
 ];
 
-const EXPLAINER_ES =
-    'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene. Elegir un consumo mayor al debido resultará en una suspensión.';
+const EXPLAINER_INTRO_ES =
+    'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene.';
+const EXPLAINER_WARNING_ES =
+    'Elegir un consumo mayor al debido resultará en una suspensión.';
 
 describe('fuel i18n', () => {
     describe.each(LOCALES)('%s car form keys', (locale) => {
@@ -97,7 +100,12 @@ describe('fuel i18n', () => {
             expect(messages[locale].fuelInfoSubtitle).toBe(
                 'Información del combustible'
             );
-            expect(messages[locale].fuelFormExplainer).toBe(EXPLAINER_ES);
+            expect(messages[locale].fuelFormExplainerIntro).toBe(
+                EXPLAINER_INTRO_ES
+            );
+            expect(messages[locale].fuelFormExplainerWarning).toBe(
+                EXPLAINER_WARNING_ES
+            );
             expect(messages[locale].fuelConsumptionRateHint).toContain(
                 '{rate}'
             );
@@ -116,7 +124,10 @@ describe('fuel i18n', () => {
         expect(messages.en.fuelInfoSubtitle).not.toBe(
             messages.arg.fuelInfoSubtitle
         );
-        expect(messages.en.fuelFormExplainer).not.toBe(EXPLAINER_ES);
+        expect(messages.en.fuelFormExplainerIntro).not.toBe(EXPLAINER_INTRO_ES);
+        expect(messages.en.fuelFormExplainerWarning).not.toBe(
+            EXPLAINER_WARNING_ES
+        );
         expect(messages.en.fuelConsumptionRateHint).toContain('{rate}');
     });
 });

@@ -6,16 +6,14 @@ const modalPath = path.resolve(__dirname, 'CompleteCarFuelModal.vue');
 const source = fs.readFileSync(modalPath, 'utf8').replace(/\r\n/g, '\n');
 
 describe('CompleteCarFuelModal', () => {
-    it('shows the fuel gate title and explainer paragraph', () => {
+    it('shows the fuel gate title and styled explainer via CarFuelFields', () => {
         expect(source).toContain("$t('fuelGateTitle')");
-        expect(source).toContain("$t('fuelFormExplainer')");
-    });
-
-    it('renders only the fuel fields without duplicating subtitle or explainer', () => {
         expect(source).toContain('CarFuelFields');
         expect(source).toMatch(
-            /<CarFuelFields[\s\S]*?:entry="form"[\s\S]*?:show-subtitle="false"[\s\S]*?:show-explainer="false"/
+            /<CarFuelFields[\s\S]*?:entry="form"[\s\S]*?:show-subtitle="false"/
         );
+        expect(source).not.toMatch(/:show-explainer="false"/);
+        expect(source).not.toContain("$t('fuelFormExplainer')");
         expect(source).not.toContain('<CarForm');
     });
 
