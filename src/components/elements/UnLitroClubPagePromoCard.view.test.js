@@ -19,16 +19,14 @@ function mountCard(props = {}) {
 }
 
 describe('UnLitroClubPagePromoCard', () => {
-    it('shows only the large join pill for guests', () => {
+    it('shows a large join card for guests without the blue shell', () => {
         const wrapper = mountCard({ clubMemberExempt: false });
 
         expect(wrapper.find('[data-testid="un-litro-page-club-join"]').exists()).toBe(
             true
         );
-        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
-            true
-        );
-        expect(wrapper.find('.un-litro-card--large').exists()).toBe(false);
+        expect(wrapper.find('.un-litro-page-club-card').exists()).toBe(true);
+        expect(wrapper.find('.un-litro-card').exists()).toBe(false);
         expect(wrapper.text()).toContain(
             'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!'
         );
@@ -37,20 +35,21 @@ describe('UnLitroClubPagePromoCard', () => {
         );
     });
 
-    it('shows the large blue thank-you card for Club members', () => {
+    it('shows a large thank-you card for Club members without the blue shell', () => {
         const wrapper = mountCard({ clubMemberExempt: true });
 
-        expect(wrapper.find('.un-litro-card--large').exists()).toBe(true);
-        expect(wrapper.find('[data-testid="un-litro-club-thanks"]').exists()).toBe(
+        expect(wrapper.find('[data-testid="un-litro-page-club-member"]').exists()).toBe(
             true
         );
+        expect(wrapper.find('.un-litro-page-club-card').exists()).toBe(true);
+        expect(wrapper.find('.un-litro-card').exists()).toBe(false);
         expect(wrapper.text()).toContain(
             'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear'
         );
         expect(wrapper.text()).toContain(
             '¡Gracias por ser parte del Club Carpoolear!'
         );
-        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
+        expect(wrapper.find('[data-testid="un-litro-page-club-join"]').exists()).toBe(
             false
         );
     });
