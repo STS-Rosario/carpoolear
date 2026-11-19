@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { createPinia } from 'pinia';
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
 import i18n from '../../i18n';
@@ -12,7 +13,7 @@ function mountCard(props = {}) {
             ...props
         },
         global: {
-            plugins: [i18n],
+            plugins: [i18n, createPinia()],
             mocks: {
                 $publicImg: (name) => `/img/${name}`
             },
@@ -177,22 +178,13 @@ describe('UnLitroInfoCard', () => {
         expect(wrapper.text()).not.toContain('Esta vez invita Carpoolear.');
     });
 
-    it('shows a large Club exemption promo on the Un litro info page', () => {
-        const wrapper = mountCard({ pageClubPromo: true, size: 'large' });
+    it('includes the page Club promo inside the explanation modal', async () => {
+        const wrapper = mountCard({ charged: true });
+        await wrapper.get('[data-testid="un-litro-what-is-this"]').trigger('click');
 
-        expect(wrapper.find('.un-litro-card--large').exists()).toBe(true);
-        expect(wrapper.text()).toContain(
-            'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear'
-        );
-        expect(wrapper.text()).toContain(
-            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!'
-        );
-        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
+        expect(wrapper.text()).toContain('¿Qué es 1 litro para Carpoolear?');
+        expect(wrapper.find('[data-testid="un-litro-page-club-join"]').exists()).toBe(
             true
         );
-        expect(wrapper.find('[data-testid="un-litro-what-is-this"]').exists()).toBe(
-            false
-        );
-        expect(wrapper.text()).not.toContain('Este viaje aporta Un litro para Carpoolear');
     });
 });
