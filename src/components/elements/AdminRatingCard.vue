@@ -114,11 +114,7 @@ import AppButton from '../ui/AppButton.vue';
 import AppField from '../ui/AppField.vue';
 import AppTextarea from '../ui/AppTextarea.vue';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
-import {
-    isNegativeRating,
-    isNeutralRating,
-    isPositiveRating
-} from '../../utils/tripRating';
+import { getAdminRatingStatus } from '../../utils/adminRatingStatus';
 
 export default {
     name: 'admin-rating-card',
@@ -163,22 +159,10 @@ export default {
     },
     computed: {
         pillClass() {
-            if (isPositiveRating(this.rate.rating)) {
-                return 'admin-rating-pill--positive';
-            }
-            if (isNeutralRating(this.rate.rating)) {
-                return 'admin-rating-pill--neutral';
-            }
-            return 'admin-rating-pill--negative';
+            return getAdminRatingStatus(this.rate).pillClass;
         },
         pillLabel() {
-            if (isPositiveRating(this.rate.rating)) {
-                return this.$t('rateItemPositiva');
-            }
-            if (isNeutralRating(this.rate.rating)) {
-                return this.$t('rateItemNeutral');
-            }
-            return this.$t('rateItemNegativa');
+            return this.$t(getAdminRatingStatus(this.rate).labelKey);
         }
     }
 };
@@ -272,5 +256,10 @@ export default {
 .admin-rating-pill--negative {
     background-color: #d9534f;
     color: #fff;
+}
+
+.admin-rating-pill--pending {
+    background-color: #e8e8e8;
+    color: #555;
 }
 </style>
