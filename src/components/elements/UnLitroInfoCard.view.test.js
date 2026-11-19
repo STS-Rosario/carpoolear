@@ -176,4 +176,23 @@ describe('UnLitroInfoCard', () => {
         );
         expect(wrapper.text()).not.toContain('Esta vez invita Carpoolear.');
     });
+
+    it('shows a large Club exemption promo on the Un litro info page', () => {
+        const wrapper = mountCard({ pageClubPromo: true });
+
+        expect(wrapper.find('.un-litro-card--large').exists()).toBe(true);
+        expect(wrapper.text()).toContain(
+            'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear'
+        );
+        expect(wrapper.text()).toContain(
+            'Si sos parte del Club Carpoolear, no pagás 1L para Carpoolear, ¡sumate!'
+        );
+        expect(wrapper.find('[data-testid="un-litro-club-promo"]').exists()).toBe(
+            true
+        );
+        expect(wrapper.find('[data-testid="un-litro-what-is-this"]').exists()).toBe(
+            false
+        );
+        expect(wrapper.text()).not.toContain('Este viaje aporta Un litro para Carpoolear');
+    });
 });
