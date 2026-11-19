@@ -195,19 +195,27 @@ import spinner from '../Spinner.vue';
 import AppButton from '../ui/AppButton.vue';
 import Transactions from '../views/transactions.vue';
 import { isVoluntaryContributionSeatPrice } from '../../utils/tripSeatPrice.js';
-import { shouldShowLiveLocationShare } from '../../utils/ongoingTrip.js';
+import { shouldShowLiveLocationShareWithGps } from '../../utils/ongoingTrip.js';
 import { shouldShowPassengerSeatRequestLimitMessage } from '../../utils/tripSeatRequestsWarning.js';
+import { deviceHasGpsCapability } from '../../utils/deviceGps.js';
 
 export default {
     name: 'TripButtons',
     data() {
-        return {};
+        return {
+            deviceHasGps: false,
+            gpsCapabilityResolved: false
+        };
     },
     props: ['sending'],
     components: {
         spinner,
         AppButton,
         Transactions
+    },
+    async created() {
+        this.deviceHasGps = await deviceHasGpsCapability();
+        this.gpsCapabilityResolved = true;
     },
     computed: {
         ...mapState(useTripsStore, {
@@ -262,10 +270,19 @@ export default {
             );
         },
         showLiveLocationShare() {
-            if (!this.trip || !this.user) {
+            if (
+                !this.gpsCapabilityResolved ||
+                !this.trip ||
+                !this.user
+            ) {
                 return false;
             }
-            return shouldShowLiveLocationShare(this.trip, this.user.id, dayjs());
+            return shouldShowLiveLocationShareWithGps(
+                this.trip,
+                this.user.id,
+                dayjs(),
+                this.deviceHasGps
+            );
         },
         showGroupChatButton() {
             return (
