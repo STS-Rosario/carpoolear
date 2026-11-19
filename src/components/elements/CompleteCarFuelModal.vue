@@ -5,11 +5,9 @@
         </template>
         <template #body>
             <div class="complete-car-fuel-modal">
-                <p>{{ $t('fuelFormExplainer') }}</p>
                 <CarFuelFields
                     :entry="form"
                     :show-subtitle="false"
-                    :show-explainer="false"
                 />
                 <p v-if="error" class="error">{{ error }}</p>
             </div>

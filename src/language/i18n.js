@@ -484,8 +484,10 @@ const messages = {
         fuelConsumptionLow: 'Bajo',
         fuelConsumptionMedium: 'Medio',
         fuelConsumptionHigh: 'Alto',
-        fuelFormExplainer:
-            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene. Elegir un consumo mayor al debido resultará en una suspensión.',
+        fuelFormExplainerIntro:
+            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene.',
+        fuelFormExplainerWarning:
+            'Elegir un consumo mayor al debido resultará en una suspensión.',
         fuelConsumptionRateHint: 'Consumo estimado: {rate}',
         fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
         tripCarFuelRequired:
@@ -2571,8 +2573,10 @@ const messages = {
         fuelConsumptionLow: 'Bajo',
         fuelConsumptionMedium: 'Medio',
         fuelConsumptionHigh: 'Alto',
-        fuelFormExplainer:
-            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene. Elegir un consumo mayor al debido resultará en una suspensión.',
+        fuelFormExplainerIntro:
+            'Para hacer más justo el cálculo ahora tenés que decirnos qué tipo de combustible usa tu vehículo y qué consumo tiene.',
+        fuelFormExplainerWarning:
+            'Elegir un consumo mayor al debido resultará en una suspensión.',
         fuelConsumptionRateHint: 'Consumo estimado: {rate}',
         fuelGateTitle: 'Necesitamos unos datos más de tu vehículo',
         tripCarFuelRequired:
@@ -4803,8 +4807,10 @@ const messages = {
         fuelConsumptionLow: 'Low',
         fuelConsumptionMedium: 'Medium',
         fuelConsumptionHigh: 'High',
-        fuelFormExplainer:
-            'To make the calculation fairer, you now need to tell us what type of fuel your vehicle uses and its consumption. Choosing a higher consumption than the real one will result in a suspension.',
+        fuelFormExplainerIntro:
+            'To make the calculation fairer, you now need to tell us what type of fuel your vehicle uses and its consumption.',
+        fuelFormExplainerWarning:
+            'Choosing a higher consumption than the real one will result in a suspension.',
         fuelConsumptionRateHint: 'Estimated consumption: {rate}',
         fuelGateTitle: 'We need a few more details about your vehicle',
         tripCarFuelRequired:

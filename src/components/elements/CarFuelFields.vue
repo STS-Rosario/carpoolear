@@ -36,7 +36,10 @@
             </select>
         </AppField>
         <p v-if="showExplainer" class="car-fuel-fields__explainer">
-            {{ $t('fuelFormExplainer') }}
+            {{ $t('fuelFormExplainerIntro') }}
+            <strong class="car-fuel-fields__explainer-warning">{{
+                $t('fuelFormExplainerWarning')
+            }}</strong>
         </p>
     </div>
 </template>
@@ -112,6 +115,13 @@ export default {
 .car-fuel-fields__explainer {
     margin: 0.5rem 0 0;
     font-size: 0.95em;
+}
+
+.car-fuel-fields__explainer-warning {
+    display: inline;
+    margin-left: 0.25rem;
+    color: var(--main-error, #d72521);
+    font-weight: 700;
 }
 
 .car-fuel-fields__select {
