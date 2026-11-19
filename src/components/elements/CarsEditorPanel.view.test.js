@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import {
+    carFormMissingFieldKeys,
+    isCarFormComplete
+} from '../../utils/carFields.js';
 
 const componentPath = path.join(__dirname, 'CarsEditorPanel.vue');
 const source = fs.readFileSync(componentPath, 'utf8');
@@ -40,6 +44,28 @@ describe('CarsEditorPanel', () => {
         expect(source).toContain('isCarFormComplete');
         expect(source).toContain('carFormMissingFieldKeys');
         expect(source).toContain('autosDatosIncompletos');
+    });
+
+    it('blocks saving until fuel type and consumption are chosen', () => {
+        expect(source).toMatch(
+            /if \(!isCarFormComplete\(this\.formEntry\)\) \{[\s\S]*?carFormMissingFieldKeys[\s\S]*?return;/
+        );
+        expect(
+            isCarFormComplete({
+                brandSelection: 1,
+                modelSelection: 2,
+                car_color_id: 3,
+                year: 2020
+            })
+        ).toBe(false);
+        expect(
+            carFormMissingFieldKeys({
+                brandSelection: 1,
+                modelSelection: 2,
+                car_color_id: 3,
+                year: 2020
+            })
+        ).toEqual(['combustible', 'consumo']);
     });
 
     it('prompts user to complete each incomplete saved car when enabled', () => {
