@@ -1,4 +1,5 @@
 import dayjs from '../dayjs';
+import { hasCarFuelProfile } from './carFields.js';
 import { activeCarsWithPlate, resolveTripCarId } from './userCars.js';
 import { getIntermediatePoints } from './tripCreationPoints.js';
 import { isTripPointDetailEmpty } from './tripPointDetailValidation.js';
@@ -356,6 +357,13 @@ function validateCar({
     const resolved = resolveTripCarId(cars, selectedCarId);
     if (resolved == null || resolved === undefined) {
         return { valid: false, errors: { car: 'elegiPatente' } };
+    }
+
+    const selectedCar = withPlate.find(
+        (car) => String(car.id) === String(resolved)
+    );
+    if (selectedCar && !hasCarFuelProfile(selectedCar)) {
+        return { valid: false, errors: { car: 'tripCarFuelRequired' } };
     }
 
     if (
