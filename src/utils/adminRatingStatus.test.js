@@ -4,7 +4,12 @@ import {
     RATING_NEUTRAL,
     RATING_POSITIVE
 } from './tripRating';
-import { getAdminRatingStatus } from './adminRatingStatus';
+import {
+    filterAdminGivenRatings,
+    filterAdminReceivedRatings,
+    getAdminRatingStatus,
+    isAdminRatingSubmitted
+} from './adminRatingStatus';
 
 describe('getAdminRatingStatus', () => {
     it.each([
@@ -42,5 +47,46 @@ describe('getAdminRatingStatus', () => {
         expect(getAdminRatingStatus({ rating: null }).pillClass).toBe(
             'admin-rating-pill--pending'
         );
+    });
+});
+
+describe('isAdminRatingSubmitted', () => {
+    it.each([
+        [null, false],
+        [undefined, false],
+        [RATING_NEGATIVE, true],
+        [RATING_POSITIVE, true],
+        [RATING_NEUTRAL, true]
+    ])('rating %p → submitted %p', (rating, expected) => {
+        expect(isAdminRatingSubmitted({ rating })).toBe(expected);
+    });
+});
+
+describe('filterAdminReceivedRatings', () => {
+    it('drops unvoted rows and keeps submitted ratings like the public profile', () => {
+        const list = [
+            { id: 1, rating: null, rate_at: null },
+            { id: 2, rating: RATING_POSITIVE, rate_at: '2024-01-01', available: 1 },
+            { id: 3, rating: RATING_NEGATIVE, rate_at: '2024-01-02', available: 0 }
+        ];
+        expect(filterAdminReceivedRatings(list).map((r) => r.id)).toEqual([2]);
+    });
+
+    it('keeps submitted rows when available is omitted from the API payload', () => {
+        const list = [
+            { id: 10, rating: RATING_NEUTRAL, rate_at: '2024-01-01' },
+            { id: 11, rating: null, rate_at: null }
+        ];
+        expect(filterAdminReceivedRatings(list).map((r) => r.id)).toEqual([10]);
+    });
+});
+
+describe('filterAdminGivenRatings', () => {
+    it('drops unvoted rows regardless of availability', () => {
+        const list = [
+            { id: 1, rating: null },
+            { id: 2, rating: RATING_NEGATIVE, available: 0 }
+        ];
+        expect(filterAdminGivenRatings(list).map((r) => r.id)).toEqual([2]);
     });
 });
