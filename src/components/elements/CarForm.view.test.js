@@ -31,6 +31,12 @@ describe('CarForm fuel section', () => {
         expect(fuelFieldsSource).toContain('car-fuel-fields__explainer-warning');
     });
 
+    it('places the explainer after the subtitle and before the fuel selects', () => {
+        expect(fuelFieldsSource).toMatch(
+            /fuelInfoSubtitle[\s\S]*car-fuel-fields__explainer[\s\S]*fuelFormExplainerIntro[\s\S]*fuelFormExplainerWarning[\s\S]*fuelType[\s\S]*entry\.fuel_type[\s\S]*fuelConsumption[\s\S]*entry\.fuel_consumption/
+        );
+    });
+
     it('offers required fuel type and consumption selects', () => {
         expect(fuelFieldsSource).toContain('v-model="entry.fuel_type"');
         expect(fuelFieldsSource).toContain('v-model="entry.fuel_consumption"');
