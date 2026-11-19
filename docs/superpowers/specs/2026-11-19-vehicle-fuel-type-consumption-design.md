@@ -20,7 +20,7 @@ Drivers must choose fuel type and consumption level on each car. New trips snaps
 | Pricing snapshot | Full snapshot on trip create: type, level, price/unit, consumption/100, unit |
 | Trip edit | Never rewrite fuel snapshot; recalc distance/tolls using existing snapshot |
 | Legacy trips | Null snapshot → nafta premium + medium (10 L/100km) via existing defaults |
-| Missing fuel on create | Gate with modal; save onto car; block continue until set |
+| Missing fuel on create/edit/draft | Car wizard step shows `tripCarFuelRequired` and blocks Next; opens fuel modal; after save, trip-info re-fetches with `car_id` to recalc contribución |
 | Suspension copy | Deterrent only; no auto-suspend |
 | Denuncia | New ticket type `fuel_abuse`; logged-in non-drivers only |
 | Delivery | Two coordinated PRs (backend + frontend), TDD red/green/refactor commits |
