@@ -61,11 +61,13 @@
                 </option>
             </select>
         </AppField>
+        <CarFuelFields :entry="entry" />
     </div>
 </template>
 
 <script>
 import CatalogCombobox from './CatalogCombobox.vue';
+import CarFuelFields from './CarFuelFields.vue';
 import AppField from '../ui/AppField.vue';
 import AppInput from '../ui/AppInput.vue';
 import {
@@ -78,6 +80,7 @@ export default {
     name: 'car-form',
     components: {
         CatalogCombobox,
+        CarFuelFields,
         AppField,
         AppInput
     },
