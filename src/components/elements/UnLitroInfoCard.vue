@@ -66,23 +66,8 @@
                 >
                     {{ $t('unLitroWhatIsThis') }}
                 </button>
-                <router-link
-                    v-if="pageClubPromo && !linkOnly"
-                    :to="{ name: 'donate' }"
-                    class="un-litro-card__club-promo"
-                    data-testid="un-litro-club-promo"
-                >
-                    <img
-                        :src="clubBadgeUrl"
-                        :alt="$t('miembroClubCarpoolearTitulo')"
-                        class="un-litro-card__club-badge"
-                        width="20"
-                        height="20"
-                    />
-                    <span>{{ $t('unLitroClubMemberPromo') }}</span>
-                </router-link>
                 <div
-                    v-else-if="clubMemberExempt && !linkOnly"
+                    v-if="clubMemberExempt && !linkOnly"
                     class="un-litro-card__club-promo"
                     data-testid="un-litro-club-thanks"
                 >
@@ -96,7 +81,7 @@
                     <span>{{ $t('unLitroClubExemptThanks') }}</span>
                 </div>
                 <router-link
-                    v-else-if="charged && !linkOnly"
+                    v-else-if="(pageClubPromo || charged) && !linkOnly"
                     :to="{ name: 'donate' }"
                     class="un-litro-card__club-promo"
                     data-testid="un-litro-club-promo"
@@ -105,8 +90,8 @@
                         :src="clubBadgeUrl"
                         :alt="$t('miembroClubCarpoolearTitulo')"
                         class="un-litro-card__club-badge"
-                        width="20"
-                        height="20"
+                        :width="size === 'large' ? 24 : 20"
+                        :height="size === 'large' ? 24 : 20"
                     />
                     <span>{{ $t('unLitroClubMemberPromo') }}</span>
                 </router-link>
