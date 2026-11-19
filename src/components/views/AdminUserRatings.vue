@@ -78,6 +78,10 @@ import dialogs from '../../services/dialogs.js';
 import { mapState } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
 import { can, ADMIN_PERMISSIONS } from '../../utils/adminPermissions';
+import {
+    filterAdminGivenRatings,
+    filterAdminReceivedRatings
+} from '../../utils/adminRatingStatus';
 
 export default {
     name: 'admin-user-ratings',
@@ -136,8 +140,10 @@ export default {
                 })
                 .then((response) => {
                     const payload = response.data || {};
-                    this.receivedRatings = payload.received || [];
-                    this.givenRatings = payload.given || [];
+                    this.receivedRatings = filterAdminReceivedRatings(
+                        payload.received
+                    );
+                    this.givenRatings = filterAdminGivenRatings(payload.given);
                 })
                 .catch(() => {
                     dialogs.message(this.$t('noSeEncontroNingunUsuario'), {
