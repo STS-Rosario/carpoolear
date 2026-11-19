@@ -16,7 +16,7 @@
                 {{ $t('unLitroClubExemptTitle') }}
             </p>
             <p class="un-litro-page-club-card__thanks">
-                {{ $t('unLitroClubExemptThanks') }}
+                {{ $t('unLitroPageClubMemberThanks') }}
             </p>
         </div>
     </div>

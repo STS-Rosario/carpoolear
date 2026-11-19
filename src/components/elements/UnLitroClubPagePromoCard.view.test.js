@@ -47,7 +47,7 @@ describe('UnLitroClubPagePromoCard', () => {
             'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear'
         );
         expect(wrapper.text()).toContain(
-            '¡Gracias por ser parte del Club Carpoolear!'
+            '¡Gracias por aportar!'
         );
         expect(wrapper.find('[data-testid="un-litro-page-club-join"]').exists()).toBe(
             false

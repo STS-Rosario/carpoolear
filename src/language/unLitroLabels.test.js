@@ -12,6 +12,7 @@ const KEYS = {
     unLitroClubExemptTitle:
         'Por ser parte del Club Carpoolear no pagás Un litro para Carpoolear',
     unLitroClubExemptThanks: '¡Gracias por ser parte del Club Carpoolear!',
+    unLitroPageClubMemberThanks: '¡Gracias por aportar!',
     unLitroBonificadoBadge: 'Bonificado',
     unLitroBonificadoTitle: 'Este viaje es bonificado',
     unLitroBonificadoRemainingSingular:
@@ -99,6 +100,7 @@ const EN_KEYS = {
     unLitroClubExemptTitle:
         'As a Club Carpoolear member you do not pay One liter for Carpoolear',
     unLitroClubExemptThanks: 'Thanks for being part of Club Carpoolear!',
+    unLitroPageClubMemberThanks: 'Thanks for contributing!',
     unLitroBonificadoBadge: 'Waived',
     unLitroBonificadoTitle: 'This trip is waived',
     unLitroBonificadoRemainingSingular:
