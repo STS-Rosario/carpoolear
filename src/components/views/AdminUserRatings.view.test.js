@@ -11,6 +11,8 @@ describe('AdminUserRatings view', () => {
     it('loads received and given ratings via AdminApi.getUserRatings', () => {
         expect(viewSource).toContain('AdminLayout');
         expect(viewSource).toContain('getUserRatings');
+        expect(viewSource).toContain('filterAdminReceivedRatings');
+        expect(viewSource).toContain('filterAdminGivenRatings');
         expect(viewSource).toContain('receivedRatings');
         expect(viewSource).toContain('givenRatings');
         expect(viewSource).toContain("$t('adminUsuariosCalificacionesRecibidas')");
