@@ -39,22 +39,30 @@
                 </AppButton>
             </div>
             <div v-else class="live-location-share__inactive">
-                <p v-if="shareIntroKey" class="live-location-share__intro">
-                    {{ $t(shareIntroKey) }}
-                </p>
-                <AppButton
-                    variant="primary"
-                    @click="startSharing"
+                <p
+                    v-if="gpsCapabilityResolved && !deviceHasGps"
+                    class="alert alert-info"
                 >
-                    <template #iconLeft>
-                        <i
-                            class="fa fa-wifi live-location-share__share-icon"
-                            aria-hidden="true"
-                        ></i>
-                    </template>
-                    {{ $t('compartirUbicacionTiempoReal') }}
-                </AppButton>
-                <p v-if="errorMessage" class="alert alert-warning">{{ errorMessage }}</p>
+                    {{ $t('liveLocationGpsUnavailable') }}
+                </p>
+                <template v-else-if="deviceHasGps">
+                    <p v-if="shareIntroKey" class="live-location-share__intro">
+                        {{ $t(shareIntroKey) }}
+                    </p>
+                    <AppButton
+                        variant="primary"
+                        @click="startSharing"
+                    >
+                        <template #iconLeft>
+                            <i
+                                class="fa fa-wifi live-location-share__share-icon"
+                                aria-hidden="true"
+                            ></i>
+                        </template>
+                        {{ $t('compartirUbicacionTiempoReal') }}
+                    </AppButton>
+                    <p v-if="errorMessage" class="alert alert-warning">{{ errorMessage }}</p>
+                </template>
             </div>
         </Loading>
     </div>
@@ -78,6 +86,7 @@ import {
     destroyLiveLocationMap
 } from '../../utils/liveLocationMap.js';
 import { getLiveLocationShareIntroKey } from '../../utils/liveLocationShareIntro.js';
+import { deviceHasGpsCapability } from '../../utils/deviceGps.js';
 
 export default {
     name: 'LiveLocationShare',
@@ -94,8 +103,14 @@ export default {
             mapInstance: null,
             marker: null,
             trip: null,
-            _mapGeneration: 0
+            _mapGeneration: 0,
+            deviceHasGps: false,
+            gpsCapabilityResolved: false
         };
+    },
+    async created() {
+        this.deviceHasGps = await deviceHasGpsCapability();
+        this.gpsCapabilityResolved = true;
     },
     computed: {
         ...mapState(useTripLiveShareStore, {

@@ -48,11 +48,12 @@
 import dayjs from '../../dayjs';
 import {
     getTripLocationLabels,
-    shouldShowLiveLocationShare
+    shouldShowLiveLocationShareWithGps
 } from '../../utils/ongoingTrip.js';
 import { normalizeTripsCount } from '../../utils/profileMemberStats.js';
 import { formatTripCardDate, formatTripCardTime } from '../../utils/tripCardDisplay.js';
 import { useAuthStore } from '../../stores/auth.js';
+import { deviceHasGpsCapability } from '../../utils/deviceGps.js';
 import TripLiveShareApi from '../../services/api/TripLiveShare.js';
 import TripCardShell from './TripCardShell.vue';
 import AppButton from '../ui/AppButton.vue';
@@ -69,8 +70,14 @@ export default {
     },
     data() {
         return {
-            isSharingLiveLocation: false
+            isSharingLiveLocation: false,
+            deviceHasGps: false,
+            gpsCapabilityResolved: false
         };
+    },
+    async created() {
+        this.deviceHasGps = await deviceHasGpsCapability();
+        this.gpsCapabilityResolved = true;
     },
     watch: {
         'trip.id': {
@@ -115,12 +122,20 @@ export default {
             return formatTripCardTime(this.trip.trip_date, dayjs);
         },
         showShareLocationLink() {
+            if (!this.gpsCapabilityResolved) {
+                return false;
+            }
             const authStore = useAuthStore();
             const user = authStore.user;
             if (!user) {
                 return false;
             }
-            return shouldShowLiveLocationShare(this.trip, user.id, dayjs());
+            return shouldShowLiveLocationShareWithGps(
+                this.trip,
+                user.id,
+                dayjs(),
+                this.deviceHasGps
+            );
         }
     },
     methods: {

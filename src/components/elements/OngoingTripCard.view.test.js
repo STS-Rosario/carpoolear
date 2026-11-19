@@ -19,7 +19,8 @@ describe('OngoingTripCard.vue', () => {
         expect(viewSource).toContain('isSharingLiveLocation');
         expect(viewSource).toContain('loadLiveShareStatus');
         expect(viewSource).toContain("name: 'trip_live_share'");
-        expect(viewSource).toContain('shouldShowLiveLocationShare');
+        expect(viewSource).toContain('shouldShowLiveLocationShareWithGps');
+        expect(viewSource).toContain('deviceHasGpsCapability');
         expect(viewSource).toContain('showShareLocationLink');
         expect(viewSource).toContain('#footer-extra');
         expect(viewSource).not.toContain('#actions-extra');

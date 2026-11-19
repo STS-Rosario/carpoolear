@@ -35,4 +35,10 @@ describe('LiveLocationShare.vue', () => {
         expect(viewSource).toContain('$t(shareIntroKey)');
         expect(viewSource).toContain('getTrip');
     });
+
+    it('hides start sharing without GPS and shows unavailable copy', () => {
+        expect(viewSource).toContain('deviceHasGpsCapability');
+        expect(viewSource).toContain('liveLocationGpsUnavailable');
+        expect(viewSource).toContain('deviceHasGps');
+    });
 });

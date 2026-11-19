@@ -10,7 +10,8 @@ import {
     isWithinOngoingTripWindow,
     canStartSharing,
     isLiveLocationParticipant,
-    shouldShowLiveLocationShare
+    shouldShowLiveLocationShare,
+    shouldShowLiveLocationShareWithGps
 } from './ongoingTrip.js';
 
 describe('ongoingTrip estimatedTimeToMinutes', () => {
@@ -151,6 +152,38 @@ describe('shouldShowLiveLocationShare', () => {
         expect(
             shouldShowLiveLocationShare(driverTrip, 7, start.add(121, 'minute'))
         ).toBe(false);
+    });
+});
+
+describe('shouldShowLiveLocationShareWithGps', () => {
+    const start = dayjs('2026-06-02 16:00:00');
+    const driverTrip = {
+        trip_date: start.format('YYYY-MM-DD HH:mm:ss'),
+        estimated_time: '01:00',
+        user: { id: 7 },
+        passenger: []
+    };
+
+    it('hides share when device has no GPS even in share window', () => {
+        expect(
+            shouldShowLiveLocationShareWithGps(
+                driverTrip,
+                7,
+                start.subtract(30, 'minute'),
+                false
+            )
+        ).toBe(false);
+    });
+
+    it('keeps share when GPS available and window allows', () => {
+        expect(
+            shouldShowLiveLocationShareWithGps(
+                driverTrip,
+                7,
+                start.subtract(30, 'minute'),
+                true
+            )
+        ).toBe(true);
     });
 });
 

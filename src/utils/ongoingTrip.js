@@ -80,6 +80,10 @@ export function shouldShowLiveLocationShare(trip, userId, now) {
     return canStartSharing(current, dayjs(trip.trip_date), trip.estimated_time);
 }
 
+export function shouldShowLiveLocationShareWithGps(trip, userId, now, hasGps) {
+    return Boolean(hasGps) && shouldShowLiveLocationShare(trip, userId, now);
+}
+
 function getLocationName(point) {
     if (!point) {
         return '';

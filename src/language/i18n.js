@@ -270,6 +270,8 @@ const messages = {
         liveLocationCopySuccess: 'Enlace copiado',
         liveLocationStopSharing: 'Detener ubicación en tiempo real',
         liveLocationPermissionDenied: 'No pudimos acceder a tu ubicación. Revisá los permisos del dispositivo.',
+        liveLocationGpsUnavailable:
+            'No disponible en este dispositivo por falta de GPS',
         liveLocationBackgroundTitle: 'Carpoolear',
         liveLocationBackgroundMessage: 'Compartiendo tu ubicación en tiempo real.',
         liveLocationWaitingForPosition: 'Esperando la ubicación...',
@@ -2603,6 +2605,8 @@ const messages = {
         liveLocationCopySuccess: 'Enlace copiado',
         liveLocationStopSharing: 'Detener ubicación en tiempo real',
         liveLocationPermissionDenied: 'No pudimos acceder a tu ubicación. Revisá los permisos del dispositivo.',
+        liveLocationGpsUnavailable:
+            'No disponible en este dispositivo por falta de GPS',
         liveLocationBackgroundTitle: 'Carpoolear',
         liveLocationBackgroundMessage: 'Compartiendo tu ubicación en tiempo real.',
         liveLocationWaitingForPosition: 'Esperando la ubicación...',
@@ -4542,6 +4546,8 @@ const messages = {
         liveLocationCopySuccess: 'Link copied',
         liveLocationStopSharing: 'Stop live location sharing',
         liveLocationPermissionDenied: 'We could not access your location. Check your device permissions.',
+        liveLocationGpsUnavailable:
+            'Not available on this device because GPS is missing',
         liveLocationBackgroundTitle: 'Carpoolear',
         liveLocationBackgroundMessage: 'Sharing your live location.',
         liveLocationWaitingForPosition: 'Waiting for location...',

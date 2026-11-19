@@ -63,6 +63,13 @@ describe('TripButtons.vue seat request limit', () => {
     });
 });
 
+describe('TripButtons.vue live location GPS gate', () => {
+    it('gates share button on device GPS capability', () => {
+        expect(viewSource).toContain('deviceHasGpsCapability');
+        expect(viewSource).toContain('shouldShowLiveLocationShareWithGps');
+    });
+});
+
 describe('TripButtons.vue owner actions', () => {
     it('does not render the red Viaje carpooleado status CTA', () => {
         expect(viewSource).not.toContain('carpooled-trip');
