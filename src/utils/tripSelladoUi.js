@@ -35,6 +35,32 @@ export function unLitroCardKindFromTrip(
     return 'bonificado';
 }
 
+export function unLitroCardKindForTripDetail(
+    trip,
+    { selladoEnabled, hasComplimentarySellado, isOwner } = {}
+) {
+    const kind = unLitroCardKindFromTrip(trip, {
+        selladoEnabled,
+        hasComplimentarySellado
+    });
+
+    if (!kind || isOwner) {
+        return kind;
+    }
+
+    const routeIncludesSellado = Boolean(
+        trip &&
+            trip.pricing_breakdown &&
+            trip.pricing_breakdown.includes_sellado
+    );
+
+    if (kind === 'bonificado' || kind === 'complimentary') {
+        return routeIncludesSellado ? 'charged' : null;
+    }
+
+    return kind;
+}
+
 export function isOverSelladoFreeLimit({
     quotaLoaded,
     remainingFreeTrips,

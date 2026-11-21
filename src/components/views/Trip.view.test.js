@@ -332,7 +332,7 @@ describe('Trip.vue Un litro payment banners', () => {
     });
 
     it('shows Este viaje aporta or Bonificado below contribución when sellado is enabled', () => {
-        expect(viewSource).toContain('unLitroCardKindFromTrip');
+        expect(viewSource).toContain('unLitroCardKindForTripDetail');
         expect(viewSource).toContain('tripDetailUnLitroKind');
         expect(viewSource).toContain(':charged="tripDetailUnLitroKind === \'charged\'"');
         expect(viewSource).toContain(
