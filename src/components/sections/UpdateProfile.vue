@@ -506,11 +506,6 @@
                                     </span>
                                 </li>
                             </ul>
-                            <p
-                                class="incomplete-profile-welcome-modal__outro"
-                            >
-                                {{ $t('comenzarViajar') }}
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -1464,6 +1459,7 @@ export default {
     font-size: 1.5rem;
     color: var(--ds-action, #2c5f8a);
     margin-top: 0.1rem;
+    margin-right: 0.5rem;
 }
 
 .incomplete-profile-welcome-modal__panel-copy {
@@ -1497,12 +1493,6 @@ export default {
 
 .incomplete-profile-welcome-modal__checklist strong {
     color: var(--ds-action, #2c5f8a);
-}
-
-.incomplete-profile-welcome-modal__outro {
-    margin: 0.85rem 0 0;
-    padding-left: calc(1rem + 0.5rem);
-    font-size: 0.95rem;
 }
 
 .update-profile-page__heading {

@@ -115,6 +115,10 @@ describe('UpdateProfile incomplete welcome modal', () => {
         expect(viewSource).not.toMatch(
             /incompleteProfileWelcomeModal[\s\S]*\$t\('editarPerfil'\)/
         );
+        expect(viewSource).not.toContain('incomplete-profile-welcome-modal__outro');
+        expect(viewSource).not.toMatch(
+            /incompleteProfileWelcomeModal[\s\S]*\$t\('comenzarViajar'\)/
+        );
     });
 });
 
