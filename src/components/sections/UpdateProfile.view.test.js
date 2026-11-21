@@ -86,6 +86,38 @@ describe('UpdateProfile desktop identity layout', () => {
     });
 });
 
+describe('UpdateProfile incomplete welcome modal', () => {
+    it('shows welcome copy in a modal instead of the top info banner', () => {
+        expect(viewSource).toContain('incompleteProfileWelcomeModal');
+        expect(viewSource).toContain('maybeOpenIncompleteProfileWelcomeModal');
+        expect(viewSource).toContain('isProfileIncompleteForWelcome');
+        expect(viewSource).toContain("{{ $t('bienvenidoACarpoolear') }}");
+        expect(viewSource).not.toMatch(
+            /update-profile-page__heading[\s\S]*alert-icon[\s\S]*bienvenidoACarpoolear/
+        );
+    });
+
+    it('uses foto real de perfil copy key in the welcome modal', () => {
+        expect(viewSource).toContain("$t('imagenPerfil')");
+        expect(i18nSource).toContain("imagenPerfil: 'foto real de perfil'");
+    });
+
+    it('structures the welcome modal with title, panel checklist and primary CTA', () => {
+        expect(viewSource).toContain("{{ $t('completaPerfilModalTitulo') }}");
+        expect(viewSource).toContain('incomplete-profile-welcome-modal__panel');
+        expect(viewSource).toContain(
+            'incomplete-profile-welcome-modal__checklist'
+        );
+        expect(viewSource).toContain('profileWelcomeMissingImage');
+        expect(viewSource).toContain('profileWelcomeMissingDescription');
+        expect(viewSource).toContain("{{ $t('completaPerfilModalCta') }}");
+        expect(viewSource).toContain('variant="primary"');
+        expect(viewSource).not.toMatch(
+            /incompleteProfileWelcomeModal[\s\S]*\$t\('editarPerfil'\)/
+        );
+    });
+});
+
 describe('UpdateProfile page card', () => {
     it('wraps content in a card with the page title inside', () => {
         expect(viewSource).toContain('update-profile-page__card');

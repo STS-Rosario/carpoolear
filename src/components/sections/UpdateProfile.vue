@@ -2,56 +2,6 @@
     <div class="update-profile-component" v-if="user">
         <div class="update-profile-page__card">
             <h1 class="update-profile-page__heading">{{ $t('editarPerfil') }}</h1>
-        <div
-            class="alert alert-info"
-            v-if="
-                !user.image ||
-                user.image.length === 0 ||
-                !user.description ||
-                user.description.length === 0
-            "
-        >
-            <div class="alert-icon">
-                <i class="fa fa-exclamation" aria-hidden="true"></i>
-            </div>
-            <div class="alert-message">
-                {{ $t('hola') }}
-                <strong>{{ user.name }}</strong>
-                {{ $t('bienvenidoACarpoolear') }}
-                <span
-                    v-if="
-                        (!user.image || user.image.length === 0) &&
-                        (!user.description || user.description.length === 0)
-                    "
-                >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('imagenPerfil') }}</strong>
-                    {{ $t('yTu') }}
-                    <strong>{{ $t('descripcion') }}</strong>
-                    {{ $t('comenzarViajar') }}
-                </span>
-                <span
-                    v-if="
-                        (!user.image || user.image.length === 0) &&
-                        !(!user.description || user.description.length === 0)
-                    "
-                >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('imagenPerfil') }}</strong>
-                    {{ $t('comenzarViajar') }}
-                </span>
-                <span
-                    v-if="
-                        !(!user.image || user.image.length === 0) &&
-                        (!user.description || user.description.length === 0)
-                    "
-                >
-                    {{ $t('completaTu') }}
-                    <strong>{{ $t('descripcion') }}</strong>
-                    {{ $t('comenzarViajar') }}
-                </span>
-            </div>
-        </div>
         <div class="form">
             <div class="profile-top-row">
                 <div class="profile-top-content">
@@ -495,6 +445,88 @@
         </div>
 
         <modal
+            name="incompleteProfileWelcomeModal"
+            v-if="showIncompleteProfileWelcomeModal"
+            @close="closeIncompleteProfileWelcomeModal"
+        >
+            <template #header>
+                <h3>{{ $t('completaPerfilModalTitulo') }}</h3>
+            </template>
+            <template #body>
+                <div
+                    class="text-left color-black incomplete-profile-welcome-modal"
+                >
+                    <p class="incomplete-profile-welcome-modal__greeting">
+                        {{ $t('hola') }}
+                        <strong>{{ user.name }}</strong>
+                    </p>
+                    <p class="incomplete-profile-welcome-modal__intro">
+                        {{ $t('bienvenidoACarpoolear') }}
+                    </p>
+                    <div
+                        class="incomplete-profile-welcome-modal__panel"
+                        role="note"
+                    >
+                        <i
+                            class="fa fa-info-circle incomplete-profile-welcome-modal__icon"
+                            aria-hidden="true"
+                        ></i>
+                        <div class="incomplete-profile-welcome-modal__panel-copy">
+                            <ul
+                                class="incomplete-profile-welcome-modal__checklist"
+                            >
+                                <li
+                                    v-if="profileWelcomeMissingImage"
+                                    class="incomplete-profile-welcome-modal__checklist-item"
+                                >
+                                    <i
+                                        class="fa fa-user"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>
+                                        {{ $t('completaTu') }}
+                                        <strong>{{
+                                            $t('imagenPerfil')
+                                        }}</strong>
+                                    </span>
+                                </li>
+                                <li
+                                    v-if="profileWelcomeMissingDescription"
+                                    class="incomplete-profile-welcome-modal__checklist-item"
+                                >
+                                    <i
+                                        class="fa fa-pencil"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>
+                                        {{ $t('completaTu') }}
+                                        <strong>{{
+                                            $t('descripcion')
+                                        }}</strong>
+                                    </span>
+                                </li>
+                            </ul>
+                            <p
+                                class="incomplete-profile-welcome-modal__outro"
+                            >
+                                {{ $t('comenzarViajar') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <AppButton
+                    variant="primary"
+                    block
+                    @click="closeIncompleteProfileWelcomeModal"
+                >
+                    {{ $t('completaPerfilModalCta') }}
+                </AppButton>
+            </template>
+        </modal>
+
+        <modal
             :name="'modal-delete-account'"
             v-if="showModalDeleteAccount"
             @close="toggleModalDeleteAccount"
@@ -713,6 +745,7 @@ export default {
             showBannedDniModal: false,
             showNegativeRatingsInModal: false,
             showMesaAyudaModal: false,
+            showIncompleteProfileWelcomeModal: false,
             userApi: null,
             documentType: DOCUMENT_TYPE_DNI
         };
@@ -752,6 +785,27 @@ export default {
             return this.documentType === DOCUMENT_TYPE_PASSPORT
                 ? 'app-input--document-id-passport'
                 : '';
+        },
+        isProfileIncompleteForWelcome() {
+            if (!this.user) {
+                return false;
+            }
+            return (
+                this.profileWelcomeMissingImage ||
+                this.profileWelcomeMissingDescription
+            );
+        },
+        profileWelcomeMissingImage() {
+            if (!this.user) {
+                return false;
+            }
+            return !this.user.image || this.user.image.length === 0;
+        },
+        profileWelcomeMissingDescription() {
+            if (!this.user) {
+                return false;
+            }
+            return !this.user.description || this.user.description.length === 0;
         },
         iptUser() {
             if (this.user) {
@@ -831,6 +885,14 @@ export default {
             if (normalized) {
                 this.user.facebook_profile_url = normalized;
             }
+        },
+        maybeOpenIncompleteProfileWelcomeModal() {
+            if (this.isProfileIncompleteForWelcome) {
+                this.showIncompleteProfileWelcomeModal = true;
+            }
+        },
+        closeIncompleteProfileWelcomeModal() {
+            this.showIncompleteProfileWelcomeModal = false;
         },
         syncProfileDraftFromStore() {
             this.user = cloneProfileUser(this.userData);
@@ -1350,6 +1412,7 @@ export default {
         } catch (ex) {
             console.log('exception', ex);
         }
+        this.maybeOpenIncompleteProfileWelcomeModal();
     },
     beforeUnmount() {
         bus.off('date-change', this.dateChange);
@@ -1371,6 +1434,77 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.incomplete-profile-welcome-modal {
+    line-height: 1.55;
+    max-width: 28rem;
+}
+
+.incomplete-profile-welcome-modal__greeting {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.incomplete-profile-welcome-modal__intro {
+    margin: 0 0 1rem;
+}
+
+.incomplete-profile-welcome-modal__panel {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem 1.1rem;
+    border-radius: 12px;
+    border: 1px solid #b8d4ee;
+    background: #e8f4fc;
+}
+
+.incomplete-profile-welcome-modal__icon {
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    color: var(--ds-action, #2c5f8a);
+    margin-top: 0.1rem;
+}
+
+.incomplete-profile-welcome-modal__panel-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.incomplete-profile-welcome-modal__checklist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.incomplete-profile-welcome-modal__checklist-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 0.65rem;
+}
+
+.incomplete-profile-welcome-modal__checklist-item:last-child {
+    margin-bottom: 0;
+}
+
+.incomplete-profile-welcome-modal__checklist-item .fa {
+    color: var(--ds-action, #2c5f8a);
+    margin-top: 0.2rem;
+    width: 1rem;
+    text-align: center;
+}
+
+.incomplete-profile-welcome-modal__checklist strong {
+    color: var(--ds-action, #2c5f8a);
+}
+
+.incomplete-profile-welcome-modal__outro {
+    margin: 0.85rem 0 0;
+    padding-left: calc(1rem + 0.5rem);
+    font-size: 0.95rem;
+}
+
 .update-profile-page__heading {
     font-size: 1.5rem;
     font-weight: 700;
