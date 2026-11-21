@@ -53,7 +53,7 @@
                     </div>
 
                     <div
-                        class="alert alert-warning trip-seat-request-limit-warning"
+                        class="alert alert-warning trip-seat-request-limit-warning trip-card-shell__interactive"
                         role="alert"
                         v-if="showSeatRequestLimitWarning"
                         @click.stop
@@ -72,7 +72,9 @@
                 </template>
 
                 <template v-if="enableChangeSeats" #footer-extra>
-                    <div class="trip-card-owner-actions">
+                    <div
+                        class="trip-card-owner-actions trip-card-shell__interactive"
+                    >
                         <AppButton
                             variant="secondary"
                             block
@@ -231,10 +233,10 @@ export default {
             });
         },
         onShellDetailClick: function (event) {
-            if (event && event.stopPropagation) {
-                event.stopPropagation();
-            }
             if (this.clickModal) {
+                if (event && event.stopPropagation) {
+                    event.stopPropagation();
+                }
                 this.openModal();
                 if (event && event.preventDefault) {
                     event.preventDefault();
@@ -242,7 +244,11 @@ export default {
                 return;
             }
             if (this.tripDetailRoute) {
+                // Let TripCardShell router-link navigate (incl. middle/Cmd+click, open in new tab).
                 return;
+            }
+            if (event && event.stopPropagation) {
+                event.stopPropagation();
             }
             this.goToDetail(false);
         },

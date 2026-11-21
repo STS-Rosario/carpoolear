@@ -1,7 +1,10 @@
 <template>
     <div
         class="trip-card-shell"
-        :class="{ 'trip-card-shell--no-driver': !user }"
+        :class="{
+            'trip-card-shell--no-driver': !user,
+            'trip-card-shell--linkable': !!detailTo
+        }"
         @click="onRootClick"
     >
         <router-link
@@ -229,6 +232,7 @@ export default {
             }
             this.$emit('detail-click', event);
         },
+        // Emit for analytics / clickModal (Trip.vue preventDefault only when modal mode).
         onDetailLinkClick(event) {
             if (this.detailTo) {
                 this.$emit('detail-click', event);

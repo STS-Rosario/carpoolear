@@ -38,6 +38,28 @@
     z-index: 1;
 }
 
+.trip-card-shell--linkable .trip-card-shell__header,
+.trip-card-shell--linkable .trip-card-shell__body,
+.trip-card-shell--linkable .trip-card-shell__footer,
+.trip-card-shell--linkable .trip-card-shell__divider {
+    pointer-events: none;
+}
+
+/* Descendants default to auto; mute decorative content so hits reach __hit-area */
+.trip-card-shell--linkable .trip-card-shell__header *,
+.trip-card-shell--linkable .trip-card-shell__body *,
+.trip-card-shell--linkable .trip-card-shell__footer * {
+    pointer-events: none;
+}
+
+.trip-card-shell--linkable .trip-card-shell__driver,
+.trip-card-shell--linkable .trip-card-shell__driver *,
+.trip-card-shell--linkable .trip-card-shell__detail,
+.trip-card-shell--linkable .trip-card-shell__interactive,
+.trip-card-shell--linkable .trip-card-shell__interactive * {
+    pointer-events: auto;
+}
+
 .trip-card-shell__header {
     display: flex;
     flex-direction: column;

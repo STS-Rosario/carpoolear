@@ -20,7 +20,7 @@
             <template #footer-extra>
                 <AppButton
                     v-if="showShareLocationLink"
-                    class="ongoing-trip__share-btn"
+                    class="ongoing-trip__share-btn trip-card-shell__interactive"
                     :class="{
                         'ongoing-trip__share-btn--active': isSharingLiveLocation
                     }"

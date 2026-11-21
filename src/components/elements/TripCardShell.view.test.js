@@ -3,7 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const viewPath = path.resolve(__dirname, 'TripCardShell.vue');
+const cssPath = path.resolve(
+    __dirname,
+    '../../styles/components/trip-card.css'
+);
 const viewSource = fs.readFileSync(viewPath, 'utf8');
+const cssSource = fs.readFileSync(cssPath, 'utf8');
 
 describe('TripCardShell.vue', () => {
     it('shows driver name, ratings, route points, seats and detail CTA', () => {
@@ -60,5 +65,15 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toContain('name="actions-extra"');
         expect(viewSource).toContain('name="body-extra"');
         expect(viewSource).toContain('name="footer-extra"');
+    });
+
+    it('marks linkable cards when detailTo is set and passes clicks through to hit area', () => {
+        expect(viewSource).toContain('trip-card-shell--linkable');
+        expect(viewSource).toMatch(/'trip-card-shell--linkable':\s*!!detailTo/);
+        expect(cssSource).toContain('.trip-card-shell--linkable .trip-card-shell__body');
+        expect(cssSource).toContain('.trip-card-shell--linkable .trip-card-shell__body *');
+        expect(cssSource).toContain('.trip-card-shell--linkable .trip-card-shell__interactive *');
+        expect(cssSource).toContain('pointer-events: none');
+        expect(cssSource).toContain('pointer-events: auto');
     });
 });
