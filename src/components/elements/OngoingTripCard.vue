@@ -14,8 +14,8 @@
             :to-point="locations.toPoint"
             :date-label="dateLabel"
             :time-label="timeLabel"
+            :detail-to="tripDetailRoute"
             @profile-click="onProfileClick"
-            @detail-click="onDetailClick"
         >
             <template #footer-extra>
                 <AppButton
@@ -136,6 +136,16 @@ export default {
                 dayjs(),
                 this.deviceHasGps
             );
+        },
+        tripDetailRoute() {
+            if (!this.trip?.id) {
+                return null;
+            }
+
+            return {
+                name: 'detail_trip',
+                params: { id: this.trip.id }
+            };
         }
     },
     methods: {
@@ -164,12 +174,6 @@ export default {
                 }
             });
         },
-        onDetailClick() {
-            if (!this.trip) {
-                return;
-            }
-            this.$router.push({ name: 'detail_trip', params: { id: this.trip.id } });
-        }
     },
     components: {
         TripCardShell,

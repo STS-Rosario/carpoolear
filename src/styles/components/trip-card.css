@@ -5,6 +5,7 @@
 }
 
 .trip-card-shell {
+    position: relative;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -18,6 +19,23 @@
     color: var(--ds-text-primary);
     font-family: var(--ds-font-family);
     cursor: pointer;
+}
+
+.trip-card-shell__hit-area {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    color: transparent;
+    text-decoration: none;
+}
+
+.trip-card-shell__header,
+.trip-card-shell__body,
+.trip-card-shell__footer,
+.trip-card-shell__divider {
+    position: relative;
+    z-index: 1;
 }
 
 .trip-card-shell__header {
@@ -322,6 +340,7 @@
     font-weight: var(--ds-button-font-weight);
     line-height: 1.25;
     text-align: center;
+    text-decoration: none;
     cursor: pointer;
     transition:
         background-color 0.15s ease,

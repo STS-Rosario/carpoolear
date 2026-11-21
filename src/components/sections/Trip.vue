@@ -32,6 +32,7 @@
                 :to-point="locationLabels.toPoint"
                 :date-label="cardDateLabel"
                 :time-label="cardTimeLabel"
+                :detail-to="tripDetailRoute"
                 @profile-click="goToProfile"
                 @detail-click="onShellDetailClick"
             >
@@ -235,9 +236,15 @@ export default {
             }
             if (this.clickModal) {
                 this.openModal();
-            } else {
-                this.goToDetail(false);
+                if (event && event.preventDefault) {
+                    event.preventDefault();
+                }
+                return;
             }
+            if (this.tripDetailRoute) {
+                return;
+            }
+            this.goToDetail(false);
         },
         changeSeatsNumber: function (increment) {
             this.sending = true;
@@ -420,6 +427,16 @@ export default {
                 return '';
             }
             return formatTripCardTime(this.trip.trip_date, dayjs);
+        },
+        tripDetailRoute() {
+            if (this.clickModal || !this.trip?.id) {
+                return null;
+            }
+
+            return {
+                name: 'detail_trip',
+                params: { id: this.trip.id }
+            };
         },
         showWeeklyScheduleOnly() {
             return Boolean(

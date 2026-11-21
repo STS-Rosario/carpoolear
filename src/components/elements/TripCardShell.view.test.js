@@ -19,7 +19,10 @@ describe('TripCardShell.vue', () => {
         expect(viewSource).toContain('toPoint');
         expect(viewSource).toContain('getSeatsPillLabel');
         expect(viewSource).toContain('data-testid="trip-card-detail"');
+        expect(viewSource).toContain('data-testid="trip-card-hit-area"');
         expect(viewSource).toContain("$t('verDetalle')");
+        expect(viewSource).toContain('detailTo');
+        expect(viewSource).toContain('<router-link');
         expect(viewSource).not.toContain("$t('puntoDePartida')");
         expect(viewSource).not.toContain("$t('puntoDeLlegada')");
     });

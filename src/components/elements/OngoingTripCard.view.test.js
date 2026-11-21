@@ -28,7 +28,7 @@ describe('OngoingTripCard.vue', () => {
 
     it('routes profile and detail clicks through the shell', () => {
         expect(viewSource).toContain('@profile-click="onProfileClick"');
-        expect(viewSource).toContain('@detail-click="onDetailClick"');
+        expect(viewSource).toContain(':detail-to="tripDetailRoute"');
         expect(viewSource).toContain("name: 'profile'");
         expect(viewSource).toContain("name: 'detail_trip'");
     });
