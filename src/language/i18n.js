@@ -206,12 +206,14 @@ const messages = {
         registrarme: 'Registrarme',
         hola: 'Hola',
         bienvenidoACarpoolear:
-            '!! Bienvenido a Carpoolear, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.',
+            'Bienvenido a Carpoolear, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.',
         completaTu: 'Completa tu',
-        imagenPerfil: 'imagen de perfil',
+        imagenPerfil: 'foto real de perfil',
         yTu: 'y tu',
         descripcion: 'descripción',
         comenzarViajar: 'para comenzar a viajar.',
+        completaPerfilModalTitulo: '¡Bienvenido a Carpoolear!',
+        completaPerfilModalCta: 'Entendido',
         incentivoFoto:
             'Generá confianza con el resto de la comunidad carpoolear, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje con vos... es verdad, llevar torta para compartir también ayuda mucho :D',
         nombreYapellido: 'Nombre y apellido',
@@ -430,7 +432,7 @@ const messages = {
         passwordNoCoincide: 'Password no coincide',
         passwordActualizadaCorrectamente: 'Contraseña actualizada correctamente',
         perfilActualizadoCorrectamente: 'Perfil actualizado correctamente.',
-        debesImagenPerfil: 'Debes cargar una imagen de perfil.',
+        debesImagenPerfil: 'Debes cargar una foto real de perfil.',
         errorDatos: 'No se pudo grabar los datos. Intente de nuevo',
         nroDocYaRegistrado:
             'Ya existe un usuario registrado con este número de documento.',
@@ -2481,12 +2483,14 @@ const messages = {
         registrarme: 'Registrarme',
         hola: 'Hola',
         bienvenidoACarpoolear:
-            '!! Bienvenido a APALAN-CAR, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.',
+            'Bienvenido a APALAN-CAR, para comenzar a subirte a viajes y crear tus propios viajes, debes terminar de completar tu perfil.',
         completaTu: 'Completa tu',
-        imagenPerfil: 'Imagen de perfil',
+        imagenPerfil: 'foto real de perfil',
         yTu: 'y tu',
         descripcion: 'Descripción',
         comenzarViajar: 'para comenzar a viajar.',
+        completaPerfilModalTitulo: '¡Bienvenido a APALAN-CAR!',
+        completaPerfilModalCta: 'Entendido',
         incentivoFoto:
             'Generá confianza con el resto de la comunidad Apalan-car, usá una foto tuya y contales un poco acerca de vos. Con eso aumentás tus chances de que alguien quiera compartir viaje.',
         nombreYapellido: 'Nombre y apellido',
@@ -4485,10 +4489,12 @@ const messages = {
         bienvenidoACarpoolear:
             'Welcome to Carpoolear! To join rides and create your own trips, you need to complete your profile.',
         completaTu: 'Complete your',
-        imagenPerfil: 'profile picture',
+        imagenPerfil: 'real profile photo',
         yTu: 'and your',
         descripcion: 'description',
         comenzarViajar: 'to start traveling.',
+        completaPerfilModalTitulo: 'Welcome to Carpoolear!',
+        completaPerfilModalCta: 'Got it',
         incentivoFoto:
             'Build trust with the rest of the Carpoolear community, use a photo of yourself and tell them a little about you. This increases your chances of someone wanting to share a ride with you.',
         nombreYapellido: 'Full name',
@@ -4702,7 +4708,7 @@ const messages = {
         passwordNoCoincide: 'Password does not match',
         passwordActualizadaCorrectamente: 'Password updated successfully',
         perfilActualizadoCorrectamente: 'Profile updated successfully.',
-        debesImagenPerfil: 'You must upload a profile picture.',
+        debesImagenPerfil: 'You must upload a real profile photo.',
         errorDatos: 'Could not save data. Please try again.',
         nroDocYaRegistrado:
             'A user with this document number is already registered.',
