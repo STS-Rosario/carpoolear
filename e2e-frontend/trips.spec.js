@@ -69,6 +69,41 @@ test.describe('Trips search page', () => {
     await expect(page.getByText(/cargando más resultados/i)).not.toBeVisible();
   });
 
+  test('navigates to trip detail when clicking card surface (not Ver detalle CTA)', async ({ page }) => {
+    await freezeClock(page);
+    await setupCatchAllMock(page);
+    await setupCommonMocks(page);
+    await setupAuthState(page);
+
+    const tripId = 42;
+    const singleTrip = makeMockTrip(tripId, {
+      from_town: 'Rosario, Santa Fe',
+      to_town: 'Buenos Aires',
+      user: { id: 101, name: 'Test Driver', image: null, positive_ratings: 5, negative_ratings: 0 },
+      seats_available: 3,
+    });
+    await overrideTrips(page, [singleTrip]);
+    await page.route(`**/api/trips/${tripId}`, (route) => {
+      if (route.request().url().endsWith(`/api/trips/${tripId}`)) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ data: singleTrip }),
+        });
+      } else {
+        route.continue();
+      }
+    });
+
+    await page.goto('/trips');
+    await waitForPageReady(page);
+
+    await Promise.all([
+      page.waitForURL(new RegExp(`/trips/${tripId}(?:\\?|#|$)`)),
+      page.getByTestId('trip-card-hit-area').first().click(),
+    ]);
+  });
+
   test('renders many trips when paginated (total_pages > 1)', async ({ page }) => {
     await freezeClock(page);
     await setupCatchAllMock(page);

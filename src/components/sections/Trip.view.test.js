@@ -54,8 +54,9 @@ describe('Trip clickModal', () => {
 
         expect(source).toContain('@detail-click="onShellDetailClick"');
         expect(source).toMatch(
-            /onShellDetailClick[\s\S]*?\{[\s\S]*?this\.clickModal[\s\S]*?openModal\(\)[\s\S]*?else[\s\S]*?goToDetail\(false\)/
+            /onShellDetailClick[\s\S]*?this\.clickModal[\s\S]*?openModal\(\)/
         );
+        expect(source).toMatch(/tripDetailRoute/);
     });
 
     it('stops click propagation on trip display so dismiss does not reopen', () => {
@@ -98,6 +99,7 @@ describe('Trip card redesign shell', () => {
     it('routes profile clicks and detail clicks through the shell events', () => {
         expect(source).toContain('@profile-click="goToProfile"');
         expect(source).toContain('@detail-click="onShellDetailClick"');
+        expect(source).toContain(':detail-to="tripDetailRoute"');
     });
 
     it('guards goToProfile against being called without a native event', () => {

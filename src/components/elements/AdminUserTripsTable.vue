@@ -39,7 +39,8 @@
                         <AppButton
                             variant="secondary"
                             size="sm"
-                            @click="openDetail(trip)"
+                            :href="tripDetailHref(trip)"
+                            @click.prevent="openDetail(trip)"
                         >
                             {{ $t('verDetalleViaje') }}
                         </AppButton>
@@ -91,6 +92,12 @@ export default {
     emits: ['cancel', 'open-detail'],
     methods: {
         inAppLinkTarget,
+        tripDetailHref(trip) {
+            return this.$router.resolve({
+                name: 'detail_trip',
+                params: { id: trip.id }
+            }).href;
+        },
         openDetail(trip) {
             this.$emit('open-detail', trip);
         },

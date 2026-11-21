@@ -21,7 +21,8 @@ describe('AdminUserTripsTable', () => {
 
     it('opens trip detail popup from ver detalle action', () => {
         expect(source).toContain("{{ $t('verDetalleViaje') }}");
-        expect(source).toContain('openDetail');
+        expect(source).toContain('tripDetailHref');
+        expect(source).toContain('@click.prevent="openDetail(trip)"');
         expect(source).toContain("'open-detail'");
     });
 

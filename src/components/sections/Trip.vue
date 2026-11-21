@@ -32,6 +32,7 @@
                 :to-point="locationLabels.toPoint"
                 :date-label="cardDateLabel"
                 :time-label="cardTimeLabel"
+                :detail-to="tripDetailRoute"
                 @profile-click="goToProfile"
                 @detail-click="onShellDetailClick"
             >
@@ -52,7 +53,7 @@
                     </div>
 
                     <div
-                        class="alert alert-warning trip-seat-request-limit-warning"
+                        class="alert alert-warning trip-seat-request-limit-warning trip-card-shell__interactive"
                         role="alert"
                         v-if="showSeatRequestLimitWarning"
                         @click.stop
@@ -71,7 +72,9 @@
                 </template>
 
                 <template v-if="enableChangeSeats" #footer-extra>
-                    <div class="trip-card-owner-actions">
+                    <div
+                        class="trip-card-owner-actions trip-card-shell__interactive"
+                    >
                         <AppButton
                             variant="secondary"
                             block
@@ -230,14 +233,24 @@ export default {
             });
         },
         onShellDetailClick: function (event) {
+            if (this.clickModal) {
+                if (event && event.stopPropagation) {
+                    event.stopPropagation();
+                }
+                this.openModal();
+                if (event && event.preventDefault) {
+                    event.preventDefault();
+                }
+                return;
+            }
+            if (this.tripDetailRoute) {
+                // Let TripCardShell router-link navigate (incl. middle/Cmd+click, open in new tab).
+                return;
+            }
             if (event && event.stopPropagation) {
                 event.stopPropagation();
             }
-            if (this.clickModal) {
-                this.openModal();
-            } else {
-                this.goToDetail(false);
-            }
+            this.goToDetail(false);
         },
         changeSeatsNumber: function (increment) {
             this.sending = true;
@@ -420,6 +433,16 @@ export default {
                 return '';
             }
             return formatTripCardTime(this.trip.trip_date, dayjs);
+        },
+        tripDetailRoute() {
+            if (this.clickModal || !this.trip?.id) {
+                return null;
+            }
+
+            return {
+                name: 'detail_trip',
+                params: { id: this.trip.id }
+            };
         },
         showWeeklyScheduleOnly() {
             return Boolean(

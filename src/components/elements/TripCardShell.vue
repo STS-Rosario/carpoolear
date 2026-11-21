@@ -1,9 +1,22 @@
 <template>
     <div
         class="trip-card-shell"
-        :class="{ 'trip-card-shell--no-driver': !user }"
+        :class="{
+            'trip-card-shell--no-driver': !user,
+            'trip-card-shell--linkable': !!detailTo
+        }"
         @click="onRootClick"
-    >        <div class="trip-card-shell__header">
+    >
+        <router-link
+            v-if="detailTo"
+            :to="detailTo"
+            class="trip-card-shell__hit-area"
+            data-testid="trip-card-hit-area"
+            :aria-label="$t('verDetalle')"
+            tabindex="-1"
+            @click="onDetailLinkClick"
+        />
+        <div class="trip-card-shell__header">
             <div
                 v-if="user"
                 class="trip-card-shell__driver"
@@ -107,7 +120,17 @@
 
         <div class="trip-card-shell__footer">
             <slot name="actions-extra" />
+            <router-link
+                v-if="detailTo"
+                :to="detailTo"
+                class="trip-card-shell__detail"
+                data-testid="trip-card-detail"
+                @click="onDetailLinkClick"
+            >
+                {{ $t('verDetalle') }}
+            </router-link>
             <button
+                v-else
                 type="button"
                 class="trip-card-shell__detail"
                 data-testid="trip-card-detail"
@@ -178,6 +201,10 @@ export default {
         showSeatsPill: {
             type: Boolean,
             default: true
+        },
+        detailTo: {
+            type: [Object, String],
+            default: null
         }
     },
     emits: ['profile-click', 'detail-click'],
@@ -200,7 +227,16 @@ export default {
     },
     methods: {
         onRootClick(event) {
+            if (this.detailTo) {
+                return;
+            }
             this.$emit('detail-click', event);
+        },
+        // Emit for analytics / clickModal (Trip.vue preventDefault only when modal mode).
+        onDetailLinkClick(event) {
+            if (this.detailTo) {
+                this.$emit('detail-click', event);
+            }
         },
         onProfileClick(event) {
             this.$emit('profile-click', event);
