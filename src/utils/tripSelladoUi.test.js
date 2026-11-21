@@ -14,6 +14,7 @@ import {
     shouldShowSelladoProcessingBanner,
     shouldShowUnLitroCard,
     unLitroCardKindFromTrip,
+    unLitroCardKindForTripDetail,
     isTripCreationPaymentQrEnabled,
     selladoPaidQueryRoute,
     withSelladoPaidQuery
@@ -413,6 +414,66 @@ describe('unLitroCardKindFromTrip', () => {
                 },
                 selladoEnabled
             )
+        ).toBe('charged');
+    });
+});
+
+describe('unLitroCardKindForTripDetail', () => {
+    const waivedTripOnSelladoRoute = {
+        needs_sellado: false,
+        state: 'ready',
+        pricing_breakdown: { includes_sellado: true, sellado_cents: 0 }
+    };
+    const selladoEnabled = { selladoEnabled: true };
+
+    it('shows Bonificado to the driver when this trip did not collect Un litro', () => {
+        expect(
+            unLitroCardKindForTripDetail(waivedTripOnSelladoRoute, {
+                ...selladoEnabled,
+                isOwner: true
+            })
+        ).toBe('bonificado');
+    });
+
+    it('shows charged to passengers instead of Bonificado on the same trip', () => {
+        expect(
+            unLitroCardKindForTripDetail(waivedTripOnSelladoRoute, {
+                ...selladoEnabled,
+                isOwner: false
+            })
+        ).toBe('charged');
+    });
+
+    it('hides driver-only Bonificado messaging from passengers when the route has no sellado', () => {
+        expect(
+            unLitroCardKindForTripDetail(
+                {
+                    needs_sellado: false,
+                    state: 'ready',
+                    pricing_breakdown: { includes_sellado: false }
+                },
+                { ...selladoEnabled, isOwner: false }
+            )
+        ).toBeNull();
+    });
+
+    it('shows complimentary only to the driver when empty-trip credit waived Un litro', () => {
+        expect(
+            unLitroCardKindForTripDetail(waivedTripOnSelladoRoute, {
+                selladoEnabled: true,
+                hasComplimentarySellado: true,
+                isOwner: true
+            })
+        ).toBe('complimentary');
+    });
+
+    it('shows charged to passengers when the trip includes Un litro but was complimentary for the driver', () => {
+        expect(
+            unLitroCardKindForTripDetail(waivedTripOnSelladoRoute, {
+                selladoEnabled: true,
+                hasComplimentarySellado: true,
+                isOwner: false
+            })
         ).toBe('charged');
     });
 });
