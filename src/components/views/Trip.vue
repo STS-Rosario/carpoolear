@@ -523,7 +523,8 @@ import {
     shouldShowSelladoEmptyTripCreditCard,
     shouldShowSelladoProcessingBanner,
     shouldShowSelladoPublishedBanner,
-    unLitroCardKindFromTrip
+    tripPricingIncludesSellado,
+    unLitroCardKindForTripDetail
 } from '../../utils/tripSelladoUi.js';
 import { isActiveClubCarpoolearMember } from '../../utils/clubCarpoolearMember.js';
 import {
@@ -1220,18 +1221,15 @@ export default {
             });
         },
         tripDetailUnLitroKind() {
-            const routeIncludesSellado = Boolean(
-                this.trip &&
-                    this.trip.pricing_breakdown &&
-                    this.trip.pricing_breakdown.includes_sellado
-            );
-            return unLitroCardKindFromTrip(this.trip, {
+            const routeIncludesSellado = tripPricingIncludesSellado(this.trip);
+            return unLitroCardKindForTripDetail(this.trip, {
                 selladoEnabled:
                     this.config && this.config.module_trip_creation_payment_enabled,
                 hasComplimentarySellado:
                     this.owner &&
                     this.has_complimentary_sellado &&
-                    routeIncludesSellado
+                    routeIncludesSellado,
+                isOwner: this.owner
             });
         },
         tripDetailClubExempt() {

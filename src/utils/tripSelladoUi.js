@@ -12,6 +12,12 @@ export function isTripCreationPaymentQrEnabled(config) {
     return Boolean(config && config.module_trip_creation_payment_qr_enabled);
 }
 
+export function tripPricingIncludesSellado(trip) {
+    return Boolean(
+        trip && trip.pricing_breakdown && trip.pricing_breakdown.includes_sellado
+    );
+}
+
 export function unLitroCardKindFromTrip(
     trip,
     { selladoEnabled, hasComplimentarySellado } = {}
@@ -25,14 +31,30 @@ export function unLitroCardKindFromTrip(
     if (trip.sellado_complimentary) {
         return 'complimentary';
     }
-    if (
-        hasComplimentarySellado &&
-        trip.pricing_breakdown &&
-        trip.pricing_breakdown.includes_sellado
-    ) {
+    if (hasComplimentarySellado && tripPricingIncludesSellado(trip)) {
         return 'complimentary';
     }
     return 'bonificado';
+}
+
+export function unLitroCardKindForTripDetail(
+    trip,
+    { selladoEnabled, hasComplimentarySellado, isOwner } = {}
+) {
+    const kind = unLitroCardKindFromTrip(trip, {
+        selladoEnabled,
+        hasComplimentarySellado
+    });
+
+    if (!kind || isOwner) {
+        return kind;
+    }
+
+    if (kind === 'bonificado' || kind === 'complimentary') {
+        return tripPricingIncludesSellado(trip) ? 'charged' : null;
+    }
+
+    return kind;
 }
 
 export function isOverSelladoFreeLimit({
