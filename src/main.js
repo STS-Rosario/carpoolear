@@ -41,7 +41,7 @@ import { installPrototypes } from './prototypes';
 // Capacitor plugins
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App as CapacitorApp } from '@capacitor/app';
+import { registerNativeDeepLinks } from './cordova/registerNativeDeepLinks';
 
 // Re-export locale maps so existing imports from '../../main' still work
 export { appLocaleToBCP47, appLocaleToRoutingLanguage };
@@ -156,4 +156,6 @@ bus.on('system-ready', () => {
     vm.$watch('$i18n.locale', (newLocale) => {
         dayjs.locale(dayjsLocaleMap[newLocale] || 'es');
     });
+
+    registerNativeDeepLinks();
 });
