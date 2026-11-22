@@ -26,10 +26,10 @@ describe('Android GPS optional packaging', () => {
         expect(xml).toContain('tools:replace="android:required"');
     });
 
-    it('bumps version to 4.0.36 / 4003600', () => {
+    it('bumps version to 4.0.37 / 4003700', () => {
         const gradle = fs.readFileSync(gradlePath, 'utf8');
-        expect(gradle).toContain('versionCode 4003600');
-        expect(gradle).toContain('versionName "4.0.36"');
+        expect(gradle).toContain('versionCode 4003700');
+        expect(gradle).toContain('versionName "4.0.37"');
     });
 
     it('registers DeviceGps plugin for FEATURE_LOCATION_GPS', () => {
