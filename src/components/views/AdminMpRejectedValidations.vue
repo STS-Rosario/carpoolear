@@ -212,12 +212,13 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 0.75rem 1rem;
+    gap: 12px;
     margin-bottom: 1.25rem;
 }
 
 .admin-mp-rejected-filters :deep(.app-input) {
     min-width: min(100%, 22rem);
     flex: 1 1 18rem;
+    margin-bottom: 0;
 }
 </style>
