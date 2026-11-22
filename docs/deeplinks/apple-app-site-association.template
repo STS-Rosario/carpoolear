@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TEAM_ID.com.sts.carpoolear",
+        "paths": [
+          "/app/setting/identity-validation",
+          "/app/setting/identity-validation/*"
+        ]
+      }
+    ]
+  }
+}
