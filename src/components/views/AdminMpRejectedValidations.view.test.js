@@ -15,4 +15,11 @@ describe('AdminMpRejectedValidations view', () => {
         expect(viewSource).toContain('getAdminUserProfileRoute');
         expect(viewSource).not.toContain("name: 'profile'");
     });
+
+    it('exposes MP rejection list search by user fields', () => {
+        expect(viewSource).toContain('admin-mp-rejected-filters');
+        expect(viewSource).toContain('applyFilters');
+        expect(viewSource).toContain('buscarMpRechazoPlaceholder');
+        expect(viewSource).toContain('params.q');
+    });
 });
