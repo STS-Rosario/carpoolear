@@ -119,6 +119,7 @@
                 :class="supportTicketReplyEditorClass"
             />
             <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
+            <p class="help-block">{{ $t('maximoImagenesTicket', { count: maxTicketAttachments }) }}</p>
             <div class="reply-actions">
                 <div class="reply-actions-left">
                     <AppButton
@@ -271,6 +272,7 @@ import {
     shouldShowAssignTicketButton
 } from '../../utils/adminSupportTicketAssignment';
 import { useAuthStore } from '../../stores/auth';
+import { getSupportTicketMaxAttachments } from '../../utils/supportTicketAttachments';
 
 const PRIORITY_LABEL_KEYS = {
     low: 'prioridadBaja',
@@ -391,6 +393,9 @@ export default {
             return this.ticket
                 && hasActiveTicketAssignment(this.ticket)
                 && !isTicketAssignedToAdmin(this.ticket, this.currentAdminId);
+        },
+        maxTicketAttachments() {
+            return getSupportTicketMaxAttachments(useAuthStore().appConfig);
         }
     },
     methods: {
@@ -472,7 +477,7 @@ export default {
                 event,
                 event.target.files,
                 {
-                    limit: 3,
+                    limit: this.maxTicketAttachments,
                     config: useAuthStore().appConfig
                 }
             );

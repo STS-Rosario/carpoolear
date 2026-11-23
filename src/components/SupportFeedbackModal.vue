@@ -40,7 +40,7 @@
 
                 <AppField
                     :label="$t('adjuntosTicket')"
-                    :hint="$t('maximo3Imagenes')"
+                    :hint="$t('maximoImagenesTicket', { count: maxTicketAttachments })"
                 >
                     <input
                         type="file"
@@ -93,6 +93,7 @@ import {
 } from '../utils/supportInfo';
 import { handleGenericApiError } from '../utils/genericApiErrorHandling.js';
 import { isEnabledAsync } from '../services/debug';
+import { getSupportTicketMaxAttachments } from '../utils/supportTicketAttachments';
 
 export default {
     name: 'support-feedback-modal',
@@ -122,6 +123,11 @@ export default {
             ticketTypeOptions: USER_TICKET_TYPE_OPTIONS,
             isSubmitting: false
         };
+    },
+    computed: {
+        maxTicketAttachments() {
+            return getSupportTicketMaxAttachments(useAuthStore().appConfig);
+        }
     },
     watch: {
         visible(open) {
@@ -153,7 +159,7 @@ export default {
                 event,
                 event.target.files,
                 {
-                    limit: 3,
+                    limit: this.maxTicketAttachments,
                     config: useAuthStore().appConfig
                 }
             );

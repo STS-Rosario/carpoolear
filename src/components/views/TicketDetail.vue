@@ -49,7 +49,7 @@
                 />
                 <label class="control-label mtop-10">{{ $t('adjuntarImagenes') }}</label>
                 <input ref="attachmentInput" class="mtop-10" type="file" :accept="imageUploadAccept" multiple @change="onAttachments" />
-                <p class="help-block">{{ $t('maximo3Imagenes') }}</p>
+                <p class="help-block">{{ $t('maximoImagenesTicket', { count: maxTicketAttachments }) }}</p>
                 <AppButton
                     variant="primary"
                     :loading="replySubmitting"
@@ -90,6 +90,7 @@ import {
 import { applyImageUploadSelection } from '../../utils/imageUploadSelection';
 import { compressImageFilesForUpload } from '../../utils/imageUploadCompress';
 import { useAuthStore } from '../../stores/auth';
+import { getSupportTicketMaxAttachments } from '../../utils/supportTicketAttachments';
 
 const SUCCESS_TOAST_OPTIONS = { estado: 'success', duration: 2 };
 const ERROR_TOAST_OPTIONS = { estado: 'error', duration: 3 };
@@ -121,6 +122,9 @@ export default {
         showReplyForm() {
             return this.ticket
                 && !['Resuelto', 'Cerrado'].includes(this.ticket.status);
+        },
+        maxTicketAttachments() {
+            return getSupportTicketMaxAttachments(useAuthStore().appConfig);
         }
     },
     methods: {
@@ -159,7 +163,7 @@ export default {
                 event,
                 event.target.files,
                 {
-                    limit: 3,
+                    limit: this.maxTicketAttachments,
                     config: useAuthStore().appConfig
                 }
             );

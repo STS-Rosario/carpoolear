@@ -103,6 +103,7 @@ const messages = {
         confirmarReasignarmeTicket:
             'Este ticket está asignado a {name}, ¿seguro que querés sacarle la asignación y asignártelo a vos mismo?',
         maximo3Imagenes: 'Máximo 3 imágenes por ticket o respuesta',
+        maximoImagenesTicket: 'Máximo {count} imágenes por ticket o respuesta',
         adjuntarImagenes: 'Adjuntar imágenes',
         ticketTypeBug: 'Reporte de error',
         ticketTypeContact: 'Contacto',
@@ -2385,6 +2386,7 @@ const messages = {
         confirmarReasignarmeTicket:
             'Este ticket está asignado a {name}, ¿seguro que querés sacarle la asignación y asignártelo a vos mismo?',
         maximo3Imagenes: 'Máximo 3 imágenes por ticket o respuesta',
+        maximoImagenesTicket: 'Máximo {count} imágenes por ticket o respuesta',
         adjuntarImagenes: 'Adjuntar imágenes',
         ticketTypeBug: 'Reporte de error',
         ticketTypeContact: 'Contacto',
@@ -4387,6 +4389,7 @@ const messages = {
         confirmarReasignarmeTicket:
             'This ticket is assigned to {name}. Are you sure you want to remove their assignment and assign it to yourself?',
         maximo3Imagenes: 'Up to 3 images per ticket or reply',
+        maximoImagenesTicket: 'Up to {count} images per ticket or reply',
         adjuntarImagenes: 'Attach images',
         ticketTypeBug: 'Bug report',
         ticketTypeContact: 'Contact',
