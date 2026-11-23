@@ -24,18 +24,75 @@ export function getRoute(value, subRoute = '') {
     }
 }
 
+export function getClipboardPlainText(event) {
+    if (event.clipboardData && event.clipboardData.getData) {
+        return (
+            event.clipboardData.getData('text/plain') ||
+            event.clipboardData.getData('Text') ||
+            ''
+        );
+    }
+    if (typeof window !== 'undefined' && window.clipboardData && window.clipboardData.getData) {
+        return window.clipboardData.getData('Text') || '';
+    }
+    return '';
+}
+
+export function extractDigits(text) {
+    return String(text || '').replace(/\D/g, '');
+}
+
+/**
+ * Paste handler for tel fields: keep digits only and respect maxlength.
+ * @returns {boolean} false when nothing was inserted
+ */
+export function handleDigitsOnlyPaste(event) {
+    const input = event.target;
+    if (!input || input.tagName !== 'INPUT') {
+        return false;
+    }
+
+    event.preventDefault();
+
+    const digits = extractDigits(getClipboardPlainText(event));
+    if (!digits) {
+        return false;
+    }
+
+    const maxLength = parseInt(input.maxLength, 10);
+    const limit = Number.isFinite(maxLength) && maxLength > 0 ? maxLength : 999;
+
+    const start =
+        typeof input.selectionStart === 'number' ? input.selectionStart : input.value.length;
+    const end = typeof input.selectionEnd === 'number' ? input.selectionEnd : input.value.length;
+    const valueDigits = extractDigits(input.value);
+    const before = valueDigits.slice(0, Math.min(start, valueDigits.length));
+    const after = valueDigits.slice(Math.min(end, valueDigits.length));
+
+    let next = before + digits + after;
+    if (next.length > limit) {
+        next = next.slice(0, limit);
+    }
+
+    input.value = next;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    if (typeof input.setSelectionRange === 'function') {
+        const pos = Math.min(before.length + digits.length, next.length);
+        setTimeout(() => input.setSelectionRange(pos, pos), 0);
+    }
+
+    return true;
+}
+
 export function inputIsNumber(event) {
-    console.log(event.type);
     if (event.type.toUpperCase() === 'KEYDOWN') {
         if (!eventNumberKeyInput(event)) {
             event.preventDefault();
             return event;
         }
     } else if (event.type.toUpperCase() === 'PASTE') {
-        if (!eventNumberPaste(event)) {
-            event.preventDefault();
-            return false;
-        }
+        handleDigitsOnlyPaste(event);
     }
 }
 
