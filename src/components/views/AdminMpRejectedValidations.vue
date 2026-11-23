@@ -3,6 +3,27 @@
         <div class="row">
             <div class="col-md-22 col-md-offset-1">
                 <h2>{{ $t('rechazosMercadoPago') }}</h2>
+                <form class="admin-mp-rejected-filters" @submit.prevent="applyFilters">
+                    <AppInput
+                        id="admin-mp-rejected-search"
+                        v-model="q"
+                        type="search"
+                        :label="$t('buscar')"
+                        :placeholder="$t('buscarMpRechazoPlaceholder')"
+                    />
+                    <AppButton variant="secondary" size="sm" type="submit">
+                        {{ $t('buscar') }}
+                    </AppButton>
+                    <AppButton
+                        v-if="hasActiveFilters"
+                        variant="tertiary"
+                        size="sm"
+                        type="button"
+                        @click="clearFilters"
+                    >
+                        {{ $t('limpiarFiltros') }}
+                    </AppButton>
+                </form>
                 <Loading :data="list">
                     <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -77,6 +98,8 @@ import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminPaginationBar from '../AdminPaginationBar.vue';
 import Loading from '../Loading';
 import AppPrimaryLink from '../ui/AppPrimaryLink.vue';
+import AppInput from '../ui/AppInput.vue';
+import AppButton from '../ui/AppButton.vue';
 import { useAuthStore } from '../../stores/auth';
 import { AdminApi } from '../../services/api';
 import { getAdminUserProfileRoute } from '../../utils/adminProfileRoute';
@@ -88,14 +111,18 @@ export default {
     computed: {
         ...mapState(useAuthStore, {
             config: 'appConfig'
-        })
+        }),
+        hasActiveFilters() {
+            return Boolean(String(this.q || '').trim());
+        }
     },
     data() {
         return {
             list: null,
             listMeta: null,
             listPage: 1,
-            listPerPage: DEFAULT_ADMIN_PER_PAGE
+            listPerPage: DEFAULT_ADMIN_PER_PAGE,
+            q: ''
         };
     },
     methods: {
@@ -117,12 +144,26 @@ export default {
             if (reason === 'both_mismatch') return this.$t('both_mismatch');
             return reason || '-';
         },
+        applyFilters() {
+            this.listPage = 1;
+            this.fetchList();
+        },
+        clearFilters() {
+            this.q = '';
+            this.listPage = 1;
+            this.fetchList();
+        },
         fetchList() {
             const api = new AdminApi();
-            return api.getMercadoPagoRejectedValidations({
+            const trimmedQ = String(this.q || '').trim();
+            const params = {
                 page: this.listPage,
                 per_page: this.listPerPage
-            }).then((res) => {
+            };
+            if (trimmedQ) {
+                params.q = trimmedQ;
+            }
+            return api.getMercadoPagoRejectedValidations(params).then((res) => {
                 this.list = res.data || [];
                 this.listMeta = res.meta || null;
             }).catch(() => {
@@ -159,7 +200,25 @@ export default {
         AdminLayout,
         AdminPaginationBar,
         Loading,
-        AppPrimaryLink
+        AppPrimaryLink,
+        AppInput,
+        AppButton
     }
 };
 </script>
+
+<style scoped>
+.admin-mp-rejected-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+}
+
+.admin-mp-rejected-filters :deep(.app-input) {
+    min-width: min(100%, 22rem);
+    flex: 1 1 18rem;
+    margin-bottom: 0;
+}
+</style>
