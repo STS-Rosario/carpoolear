@@ -46,7 +46,7 @@
                 <AppField
                     class="ticket-new-page__attachments-field"
                     :label="$t('adjuntosTicket')"
-                    :hint="$t('maximo3Imagenes')"
+                    :hint="$t('maximoImagenesTicket', { count: maxTicketAttachments })"
                 >
                     <input
                         type="file"
@@ -97,6 +97,7 @@ import {
 import { handleGenericApiError } from '../../utils/genericApiErrorHandling.js';
 import { TICKET_SOURCE_WEB_FORM } from '../../utils/supportTicketSources';
 import { isEnabledAsync } from '../../services/debug';
+import { getSupportTicketMaxAttachments } from '../../utils/supportTicketAttachments';
 
 export default {
     name: 'ticket-new',
@@ -131,6 +132,9 @@ export default {
                 ...this.editorOptions,
                 placeholder: this.$t('mensajeTicketPlaceholder')
             };
+        },
+        maxTicketAttachments() {
+            return getSupportTicketMaxAttachments(useAuthStore().appConfig);
         }
     },
     methods: {
@@ -143,7 +147,7 @@ export default {
                 event,
                 event.target.files,
                 {
-                    limit: 3,
+                    limit: this.maxTicketAttachments,
                     config: useAuthStore().appConfig
                 }
             );

@@ -81,13 +81,16 @@ describe('TicketsApi.toFormData', () => {
         networkMock.post.mockClear();
     });
 
-    it('limits attachments to three files', () => {
+    it('limits attachments to six files', () => {
         const api = new TicketsApi();
         const files = [
             new File(['a'], 'a.png', { type: 'image/png' }),
             new File(['b'], 'b.png', { type: 'image/png' }),
             new File(['c'], 'c.png', { type: 'image/png' }),
-            new File(['d'], 'd.png', { type: 'image/png' })
+            new File(['d'], 'd.png', { type: 'image/png' }),
+            new File(['e'], 'e.png', { type: 'image/png' }),
+            new File(['f'], 'f.png', { type: 'image/png' }),
+            new File(['g'], 'g.png', { type: 'image/png' })
         ];
 
         const form = api.toFormData({
@@ -96,7 +99,7 @@ describe('TicketsApi.toFormData', () => {
         });
 
         expect(form.get('subject')).toBe('hello');
-        expect(form.getAll('attachments[]')).toHaveLength(3);
+        expect(form.getAll('attachments[]')).toHaveLength(6);
     });
 
     it('POSTs multipart form data when creating a ticket', async () => {

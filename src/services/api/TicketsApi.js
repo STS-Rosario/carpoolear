@@ -1,4 +1,5 @@
 import TaggedApi from '../../classes/TaggedApi';
+import { DEFAULT_SUPPORT_TICKET_MAX_ATTACHMENTS } from '../../utils/supportTicketAttachments';
 
 class TicketsApi extends TaggedApi {
     list() {
@@ -112,7 +113,7 @@ class TicketsApi extends TaggedApi {
             const value = data[key];
             if (value == null) return;
             if (key === 'attachments' && Array.isArray(value)) {
-                value.slice(0, 3).forEach((file) => {
+                value.slice(0, DEFAULT_SUPPORT_TICKET_MAX_ATTACHMENTS).forEach((file) => {
                     form.append('attachments[]', file);
                 });
                 return;

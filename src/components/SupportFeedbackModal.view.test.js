@@ -41,10 +41,11 @@ describe('SupportFeedbackModal view', () => {
         expect(source).toMatch(/source:\s*TICKET_SOURCE_FEEDBACK_TAB/);
     });
 
-    it('limits image attachments to three files', () => {
+    it('limits image attachments to configured max', () => {
         expect(source).toContain('applyImageUploadSelection');
         expect(source).toContain('compressImageFilesForUpload');
-        expect(source).toContain("$t('maximo3Imagenes')");
+        expect(source).toContain('getSupportTicketMaxAttachments');
+        expect(source).toContain("$t('maximoImagenesTicket'");
     });
 
     it('shows a success snackbar and closes the modal when a ticket is created', () => {
