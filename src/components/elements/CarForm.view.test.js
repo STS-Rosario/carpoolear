@@ -3,7 +3,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const formPath = path.resolve(__dirname, 'CarForm.vue');
-const formSource = fs.readFileSync(formPath, 'utf8');
+const formSource = fs.readFileSync(formPath, 'utf8').replace(/\r\n/g, '\n');
+const fuelFieldsPath = path.resolve(__dirname, 'CarFuelFields.vue');
+const fuelFieldsSource = fs
+    .readFileSync(fuelFieldsPath, 'utf8')
+    .replace(/\r\n/g, '\n');
 
 describe('CarForm DS inputs', () => {
     it('supports disabling the patente field for complete-car modal', () => {
@@ -11,5 +15,54 @@ describe('CarForm DS inputs', () => {
         expect(formSource).toMatch(
             /<AppInput[\s\S]*?patente[\s\S]*?:disabled="patenteDisabled"/
         );
+    });
+});
+
+describe('CarForm fuel section', () => {
+    it('renders the shared fuel fields inside the car form', () => {
+        expect(formSource).toContain("import CarFuelFields from './CarFuelFields.vue'");
+        expect(formSource).toMatch(/<CarFuelFields[\s\S]*?:entry="entry"/);
+    });
+
+    it('shows the fuel subtitle and explainer', () => {
+        expect(fuelFieldsSource).toContain("$t('fuelInfoSubtitle')");
+        expect(fuelFieldsSource).toContain("$t('fuelFormExplainerIntro')");
+        expect(fuelFieldsSource).toContain("$t('fuelFormExplainerWarning')");
+        expect(fuelFieldsSource).toContain('car-fuel-fields__explainer-warning');
+    });
+
+    it('places the explainer after the subtitle and before the fuel selects', () => {
+        expect(fuelFieldsSource).toMatch(
+            /fuelInfoSubtitle[\s\S]*car-fuel-fields__explainer[\s\S]*fuelFormExplainerIntro[\s\S]*fuelFormExplainerWarning[\s\S]*fuelType[\s\S]*entry\.fuel_type[\s\S]*fuelConsumption[\s\S]*entry\.fuel_consumption/
+        );
+    });
+
+    it('offers required fuel type and consumption selects', () => {
+        expect(fuelFieldsSource).toContain('v-model="entry.fuel_type"');
+        expect(fuelFieldsSource).toContain('v-model="entry.fuel_consumption"');
+        expect(fuelFieldsSource).toContain("$t('fuelType')");
+        expect(fuelFieldsSource).toContain("$t('fuelConsumption')");
+        expect(fuelFieldsSource).toContain('v-for="type in fuelTypes"');
+        expect(fuelFieldsSource).toContain('v-for="level in consumptionLevels"');
+        expect(fuelFieldsSource).toContain('fuelTypeI18nKey');
+        expect(fuelFieldsSource).toContain('fuelConsumptionI18nKey');
+    });
+
+    it('shows the resolved rate and unit for the selection', () => {
+        expect(fuelFieldsSource).toContain('fuelConsumptionRateLabel');
+        expect(fuelFieldsSource).toContain("$t('fuelConsumptionRateHint'");
+        expect(fuelFieldsSource).toContain('rateLabel');
+    });
+
+    it('includes rate units in each consumption dropdown option', () => {
+        expect(fuelFieldsSource).toContain('formatFuelConsumptionOptionLabel');
+        expect(fuelFieldsSource).toMatch(
+            /v-for="level in consumptionLevels"[\s\S]*formatFuelConsumptionOptionLabel|consumptionOptionLabel\(level\)/
+        );
+    });
+
+    it('lets the fuel-only modal hide the subtitle and explainer', () => {
+        expect(fuelFieldsSource).toContain('showSubtitle');
+        expect(fuelFieldsSource).toContain('showExplainer');
     });
 });

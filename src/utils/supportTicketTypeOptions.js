@@ -5,7 +5,8 @@ export const USER_TICKET_TYPE_OPTIONS = [
     { value: 'contact', labelKey: 'ticketTypeContact' },
     { value: 'feedback', labelKey: 'ticketTypeSuggestion' },
     { value: 'report', labelKey: 'ticketTypeReport' },
-    { value: 'account_verification', labelKey: 'ticketTypeAccountVerification' }
+    { value: 'account_verification', labelKey: 'ticketTypeAccountVerification' },
+    { value: 'fuel_abuse', labelKey: 'ticketTypeFuelAbuse' }
 ];
 
 export const DEFAULT_USER_TICKET_TYPE = 'account_recovery';

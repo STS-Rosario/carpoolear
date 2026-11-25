@@ -313,6 +313,13 @@ describe('tripCreationSteps validateStep', () => {
     });
 
     it('validates car step for drivers only', () => {
+        const fueledCar = {
+            id: 1,
+            patente: 'ABC123',
+            fuel_type: 'nafta_premium',
+            fuel_consumption: 'medium'
+        };
+
         expect(
             validateStep(STEP.CAR, {
                 isPassenger: true,
@@ -324,7 +331,7 @@ describe('tripCreationSteps validateStep', () => {
         expect(
             validateStep(STEP.CAR, {
                 isPassenger: false,
-                cars: [{ id: 1, patente: 'ABC123' }],
+                cars: [fueledCar],
                 selectedCarId: 1,
                 seatLayoutCapacity: 4
             }).valid
@@ -333,7 +340,7 @@ describe('tripCreationSteps validateStep', () => {
         expect(
             validateStep(STEP.CAR, {
                 isPassenger: false,
-                cars: [{ id: 1, patente: 'ABC123' }],
+                cars: [fueledCar],
                 selectedCarId: 1,
                 seatLayoutCapacity: null
             }).valid
@@ -343,13 +350,30 @@ describe('tripCreationSteps validateStep', () => {
             validateStep(STEP.CAR, {
                 isPassenger: false,
                 cars: [
-                    { id: 1, patente: 'ABC123' },
-                    { id: 2, patente: 'XYZ789' }
+                    fueledCar,
+                    {
+                        id: 2,
+                        patente: 'XYZ789',
+                        fuel_type: 'diesel',
+                        fuel_consumption: 'low'
+                    }
                 ],
                 selectedCarId: null,
                 seatLayoutCapacity: 5
             }).valid
         ).toBe(false);
+    });
+
+    it('blocks the car step when the selected car is missing fuel info', () => {
+        const result = validateStep(STEP.CAR, {
+            isPassenger: false,
+            cars: [{ id: 1, patente: 'ABC123' }],
+            selectedCarId: 1,
+            seatLayoutCapacity: 4
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors.car).toBe('tripCarFuelRequired');
     });
 
     it('validates description step for drivers and passengers', () => {

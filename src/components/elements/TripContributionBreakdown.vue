@@ -3,25 +3,33 @@
         <dl class="trip-contribution-breakdown__table">
             <div class="trip-contribution-breakdown__row">
                 <dt>
-                    {{
-                        $t('tripContributionBreakdownFuel', {
-                            liters: lines.liters
-                        })
-                    }}
+                    {{ fuelLineLabel }}
                     <span
                         class="trip-contribution-breakdown__info tooltip-bottom"
-                        :data-tooltip="
-                            $t('tripContributionBreakdownConsumptionTooltip', {
-                                kmPerLiter: lines.kmPerLiter,
-                                litersPer100km: lines.litersPer100Km
-                            })
-                        "
+                        :data-tooltip="fuelTooltip"
                         @click.stop
                     >
                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                     </span>
                 </dt>
                 <dd>${{ lines.fuelCostInteger }}</dd>
+            </div>
+            <div
+                v-if="showFuelAbuseReport && fuelAbuseRoute"
+                class="trip-contribution-breakdown__row trip-contribution-breakdown__fuel-abuse"
+            >
+                <dt>
+                    <router-link :to="fuelAbuseRoute">
+                        {{ $t('fuelAbuseReportLink') }}
+                    </router-link>
+                    <span
+                        class="trip-contribution-breakdown__info tooltip-bottom"
+                        :data-tooltip="$t('fuelAbuseReportTooltip')"
+                        @click.stop
+                    >
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </span>
+                </dt>
             </div>
             <div class="trip-contribution-breakdown__row">
                 <dt>
@@ -86,13 +94,28 @@
 </template>
 
 <script>
-import { formatBreakdownLines } from '../../utils/tripContributionBreakdown.js';
+import {
+    formatBreakdownLines,
+    resolveContributionFuelDisplay
+} from '../../utils/tripContributionBreakdown.js';
 
 export default {
     name: 'trip-contribution-breakdown',
 
     props: {
         breakdown: {
+            type: Object,
+            default: null
+        },
+        fuelProfile: {
+            type: Object,
+            default: null
+        },
+        showFuelAbuseReport: {
+            type: Boolean,
+            default: false
+        },
+        fuelAbuseRoute: {
             type: Object,
             default: null
         }
@@ -104,6 +127,52 @@ export default {
                 return null;
             }
             return formatBreakdownLines(this.breakdown);
+        },
+        fuelDisplay() {
+            if (!this.breakdown) {
+                return null;
+            }
+            return resolveContributionFuelDisplay({
+                breakdown: this.breakdown,
+                fuelProfile: this.fuelProfile
+            });
+        },
+        fuelLineLabel() {
+            const display = this.fuelDisplay;
+            if (!display) {
+                return '';
+            }
+            if (display.mode === 'typed') {
+                const consumption = display.consumptionKey
+                    ? this.$t(display.consumptionKey).toLocaleLowerCase()
+                    : '';
+                return this.$t('tripContributionBreakdownFuelTyped', {
+                    quantity: display.quantity,
+                    unit: this.$t(display.unitWordKey),
+                    fuelType: this.$t(display.fuelTypeKey),
+                    consumption,
+                    rate: display.rateLabel
+                });
+            }
+            return this.$t('tripContributionBreakdownFuel', {
+                liters: display.quantity
+            });
+        },
+        fuelTooltip() {
+            const display = this.fuelDisplay;
+            if (!display) {
+                return '';
+            }
+            if (display.mode === 'typed' && display.rateLabel) {
+                return this.$t(
+                    'tripContributionBreakdownConsumptionTooltipTyped',
+                    { rate: display.rateLabel }
+                );
+            }
+            return this.$t('tripContributionBreakdownConsumptionTooltip', {
+                kmPerLiter: display.kmPerLiter,
+                litersPer100km: display.litersPer100Km
+            });
         }
     }
 };

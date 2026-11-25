@@ -12,7 +12,18 @@ import {
     carPayloadFromForm,
     CATALOG_OTHER_VALUE,
     CAR_YEAR_MIN,
-    getCarYearMax
+    getCarYearMax,
+    FUEL_TYPES,
+    FUEL_CONSUMPTION_LEVELS,
+    fuelFamilyForType,
+    fuelConsumptionRate,
+    fuelConsumptionRateLabel,
+    formatFuelConsumptionOptionLabel,
+    hasCarFuelProfile,
+    carNeedsFuelProfile,
+    emptyCarForm,
+    buildCarFormFromCar,
+    resolveTripFuelProfile
 } from './carFields.js';
 
 describe('carFields', () => {
@@ -24,7 +35,9 @@ describe('carFields', () => {
                 brand_name: 'FORD',
                 model_other: 'MiModelo',
                 car_color_id: 3,
-                year: 2011
+                year: 2011,
+                fuel_type: 'nafta_super',
+                fuel_consumption: 'medium'
             })
         ).toBe(true);
     });
@@ -36,7 +49,9 @@ describe('carFields', () => {
                 car_brand_id: 1,
                 car_model_id: 2,
                 car_color_id: 3,
-                year: 2020
+                year: 2020,
+                fuel_type: 'gnc',
+                fuel_consumption: 'low'
             })
         ).toBe(true);
     });
@@ -58,7 +73,9 @@ describe('carFields', () => {
                 brandSelection: 1,
                 modelSelection: 2,
                 car_color_id: 3,
-                year: 2020
+                year: 2020,
+                fuel_type: 'gnc',
+                fuel_consumption: 'low'
             })
         ).toBe(true);
     });
@@ -71,7 +88,14 @@ describe('carFields', () => {
                 year: null,
                 car_color_id: null
             })
-        ).toEqual(['marca', 'modelo', 'anio', 'color']);
+        ).toEqual([
+            'marca',
+            'modelo',
+            'anio',
+            'color',
+            'combustible',
+            'consumo'
+        ]);
     });
 
     it('detects incomplete patente-only car', () => {
@@ -104,7 +128,9 @@ describe('carFields', () => {
                 car_brand_id: 1,
                 car_model_id: 2,
                 car_color_id: 3,
-                year: 2020
+                year: 2020,
+                fuel_type: 'nafta_super',
+                fuel_consumption: 'medium'
             },
             { id: 2, patente: 'B' }
         ];
@@ -121,7 +147,9 @@ describe('carFields', () => {
                 brand_name: 'FORD',
                 model_other: 'MiModelo',
                 car_color_id: 3,
-                year: 2011
+                year: 2011,
+                fuel_type: 'nafta_super',
+                fuel_consumption: 'medium'
             },
             { id: 2, patente: 'B' }
         ];
@@ -234,7 +262,9 @@ describe('carFields', () => {
             car_color_id: 3,
             year: 2011,
             car_brand_id: 21,
-            model_other: 'MiModelo'
+            model_other: 'MiModelo',
+            fuel_type: null,
+            fuel_consumption: null
         });
     });
 
@@ -253,7 +283,258 @@ describe('carFields', () => {
             car_color_id: 3,
             year: 2018,
             brand_other: 'Custom',
-            model_other: 'Wagon'
+            model_other: 'Wagon',
+            fuel_type: null,
+            fuel_consumption: null
+        });
+    });
+
+    describe('fuel profile', () => {
+        const completeWithoutFuel = {
+            patente: 'AB123CD',
+            car_brand_id: 1,
+            car_model_id: 2,
+            car_color_id: 3,
+            year: 2020
+        };
+
+        it('exposes fuel types and consumption levels', () => {
+            expect(FUEL_TYPES).toEqual([
+                'gnc',
+                'diesel',
+                'diesel_premium',
+                'nafta_super',
+                'nafta_premium'
+            ]);
+            expect(FUEL_CONSUMPTION_LEVELS).toEqual(['low', 'medium', 'high']);
+        });
+
+        it('maps fuel types to rate families', () => {
+            expect(fuelFamilyForType('nafta_super')).toBe('nafta');
+            expect(fuelFamilyForType('nafta_premium')).toBe('nafta');
+            expect(fuelFamilyForType('diesel')).toBe('diesel');
+            expect(fuelFamilyForType('diesel_premium')).toBe('diesel');
+            expect(fuelFamilyForType('gnc')).toBe('gnc');
+            expect(fuelFamilyForType('unknown')).toBe(null);
+        });
+
+        it('resolves consumption rate and unit per family', () => {
+            expect(fuelConsumptionRate('nafta_super', 'low')).toEqual({
+                per100: 7,
+                unit: 'liter'
+            });
+            expect(fuelConsumptionRate('nafta_premium', 'medium')).toEqual({
+                per100: 10,
+                unit: 'liter'
+            });
+            expect(fuelConsumptionRate('nafta_premium', 'high')).toEqual({
+                per100: 12,
+                unit: 'liter'
+            });
+            expect(fuelConsumptionRate('diesel', 'low').per100).toBe(6);
+            expect(fuelConsumptionRate('diesel_premium', 'medium').per100).toBe(
+                8
+            );
+            expect(fuelConsumptionRate('diesel', 'high')).toEqual({
+                per100: 10,
+                unit: 'liter'
+            });
+            expect(fuelConsumptionRate('gnc', 'low')).toEqual({
+                per100: 7,
+                unit: 'm3'
+            });
+            expect(fuelConsumptionRate('gnc', 'medium').per100).toBe(9);
+            expect(fuelConsumptionRate('gnc', 'high').per100).toBe(11);
+            expect(fuelConsumptionRate('gnc', 'bogus')).toBe(null);
+            expect(fuelConsumptionRate(null, 'low')).toBe(null);
+        });
+
+        it('formats rate label with unit', () => {
+            expect(fuelConsumptionRateLabel('nafta_super', 'medium')).toBe(
+                '10 L/100km'
+            );
+            expect(fuelConsumptionRateLabel('gnc', 'medium')).toBe(
+                '9 m³/100km'
+            );
+            expect(fuelConsumptionRateLabel('gnc', null)).toBe('');
+        });
+
+        it('formats consumption dropdown options with rate units', () => {
+            expect(
+                formatFuelConsumptionOptionLabel('Bajo', 'nafta_super', 'low')
+            ).toBe('Bajo (7 L/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Medio', 'diesel', 'medium')
+            ).toBe('Medio (8 L/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Alto', 'gnc', 'high')
+            ).toBe('Alto (11 m³/100km)');
+            expect(
+                formatFuelConsumptionOptionLabel('Bajo', null, 'low')
+            ).toBe('Bajo (7 L/100km)');
+        });
+
+        it('detects fuel profile on car or form', () => {
+            expect(
+                hasCarFuelProfile({
+                    fuel_type: 'gnc',
+                    fuel_consumption: 'low'
+                })
+            ).toBe(true);
+            expect(hasCarFuelProfile({ fuel_type: 'gnc' })).toBe(false);
+            expect(hasCarFuelProfile({ fuel_consumption: 'low' })).toBe(false);
+            expect(
+                hasCarFuelProfile({ fuel_type: 'x', fuel_consumption: 'low' })
+            ).toBe(false);
+            expect(hasCarFuelProfile(null)).toBe(false);
+        });
+
+        it('requires fuel profile for car and form completeness', () => {
+            expect(isCarComplete(completeWithoutFuel)).toBe(false);
+            expect(
+                isCarComplete({
+                    ...completeWithoutFuel,
+                    fuel_type: 'diesel',
+                    fuel_consumption: 'medium'
+                })
+            ).toBe(true);
+            expect(
+                isCarFormComplete({
+                    brandSelection: 1,
+                    modelSelection: 2,
+                    car_color_id: 3,
+                    year: 2020
+                })
+            ).toBe(false);
+        });
+
+        it('reports missing fuel keys individually', () => {
+            const base = {
+                brandSelection: 1,
+                modelSelection: 2,
+                car_color_id: 3,
+                year: 2020
+            };
+            expect(carFormMissingFieldKeys(base)).toEqual([
+                'combustible',
+                'consumo'
+            ]);
+            expect(
+                carFormMissingFieldKeys({ ...base, fuel_type: 'gnc' })
+            ).toEqual(['consumo']);
+            expect(
+                carFormMissingFieldKeys({ ...base, fuel_consumption: 'low' })
+            ).toEqual(['combustible']);
+        });
+
+        it('flags cars missing only fuel as needing completion', () => {
+            const cars = [{ id: 1, ...completeWithoutFuel }];
+            expect(carsNeedingCompletion(cars)).toEqual(cars);
+        });
+
+        it('detects cars that are complete except for fuel', () => {
+            expect(carNeedsFuelProfile(completeWithoutFuel)).toBe(true);
+            expect(
+                carNeedsFuelProfile({
+                    ...completeWithoutFuel,
+                    fuel_type: 'gnc',
+                    fuel_consumption: 'low'
+                })
+            ).toBe(false);
+            expect(carNeedsFuelProfile({ patente: 'AB123CD' })).toBe(false);
+            expect(carNeedsFuelProfile(null)).toBe(false);
+        });
+
+        it('includes fuel in empty form and build from car', () => {
+            expect(emptyCarForm()).toMatchObject({
+                fuel_type: null,
+                fuel_consumption: null
+            });
+            expect(
+                buildCarFormFromCar({
+                    id: 1,
+                    patente: 'A',
+                    fuel_type: 'gnc',
+                    fuel_consumption: 'high'
+                })
+            ).toMatchObject({ fuel_type: 'gnc', fuel_consumption: 'high' });
+            expect(buildCarFormFromCar({ id: 1 })).toMatchObject({
+                fuel_type: null,
+                fuel_consumption: null
+            });
+        });
+
+        it('includes fuel in payload', () => {
+            expect(
+                carPayloadFromForm({
+                    patente: 'AB123CD',
+                    car_color_id: 3,
+                    year: 2018,
+                    brandSelection: CATALOG_OTHER_VALUE,
+                    brand_other: 'Custom',
+                    model_other: 'Wagon',
+                    fuel_type: 'diesel_premium',
+                    fuel_consumption: 'low'
+                })
+            ).toMatchObject({
+                fuel_type: 'diesel_premium',
+                fuel_consumption: 'low'
+            });
+        });
+
+        it('adds fuel rows to detail rows when present', () => {
+            expect(
+                carDetailRows({
+                    brand_name: 'Toyota',
+                    model_name: 'Corolla',
+                    year: 2020,
+                    patente: 'AB123CD',
+                    fuel_type: 'gnc',
+                    fuel_consumption: 'medium'
+                })
+            ).toEqual([
+                { labelKey: 'marca', value: 'Toyota' },
+                { labelKey: 'modelo', value: 'Corolla 2020' },
+                { labelKey: 'patente', value: 'AB123CD' },
+                {
+                    labelKey: 'fuelType',
+                    value: 'gnc',
+                    valueKey: 'fuelTypeGnc'
+                },
+                {
+                    labelKey: 'fuelConsumption',
+                    value: 'medium',
+                    valueKey: 'fuelConsumptionMedium',
+                    rateLabel: '9 m³/100km'
+                }
+            ]);
+        });
+    });
+
+    describe('resolveTripFuelProfile', () => {
+        it('prefers the trip snapshot over the car', () => {
+            expect(
+                resolveTripFuelProfile({
+                    fuel_type: 'diesel',
+                    fuel_consumption: 'high',
+                    car: { fuel_type: 'gnc', fuel_consumption: 'low' }
+                })
+            ).toEqual({ fuel_type: 'diesel', fuel_consumption: 'high' });
+        });
+
+        it('falls back to the car when the trip has no snapshot', () => {
+            expect(
+                resolveTripFuelProfile({
+                    fuel_type: null,
+                    fuel_consumption: null,
+                    car: { fuel_type: 'gnc', fuel_consumption: 'low' }
+                })
+            ).toEqual({ fuel_type: 'gnc', fuel_consumption: 'low' });
+        });
+
+        it('returns null when neither trip nor car has a fuel profile', () => {
+            expect(resolveTripFuelProfile({ car: {} })).toBe(null);
+            expect(resolveTripFuelProfile(null)).toBe(null);
         });
     });
 });

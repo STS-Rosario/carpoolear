@@ -91,7 +91,7 @@
                             </span>
                         </div>
                         <div class="col-md-6" v-if="trip.car">
-                            <TripCarDetails :car="trip.car" />
+                            <TripCarDetails :car="trip.car" :trip="trip" />
                         </div>
                     </div>
                     <div class="row">

@@ -332,7 +332,23 @@
                     @cars-updated="form.preselectDriverCar"
                     @edit-cars="form.openTripCarsModal"
                 />
-                <span class="error" v-if="stepErrors.car">{{ $t(stepErrors.car) }}</span>
+                <p
+                    v-if="stepErrors.car === 'tripCarFuelRequired'"
+                    class="error new-trip-wizard__car-fuel-error"
+                >
+                    {{ $t('tripCarFuelRequired') }}
+                    <button
+                        type="button"
+                        class="btn btn-link new-trip-wizard__car-fuel-error-link"
+                        @click="form.openCompleteCarFuelModal"
+                    >
+                        {{ $t('tripCarFuelCompleteLink') }}
+                    </button>
+                </p>
+                <span
+                    class="error"
+                    v-else-if="stepErrors.car"
+                >{{ $t(stepErrors.car) }}</span>
                 <span class="error" v-if="stepErrors.seatLayout">{{
                     $t(stepErrors.seatLayout)
                 }}</span>
@@ -397,6 +413,7 @@
                         form.contribucionRecomendadaCardDescripcionText
                     "
                     :pricing-breakdown="form.contributionPricingBreakdown"
+                    :fuel-profile="form.selectedCarFuelProfile"
                     :config="form.config"
                     :show-un-litro-card="form.showUnLitroCard"
                     :sellado-charged="form.selladoCharged"
@@ -1202,6 +1219,17 @@ export default {
             this.updateIncompleteSteps(this.currentStep, result.valid);
             return result.valid;
         },
+        maybeOpenCarFuelModalFromStepError() {
+            if (
+                this.currentStep !== STEP.CAR ||
+                this.stepErrors.car !== 'tripCarFuelRequired'
+            ) {
+                return;
+            }
+            if (typeof this.form.openCompleteCarFuelModal === 'function') {
+                this.form.openCompleteCarFuelModal();
+            }
+        },
         scrollToFirstFormError() {
             this.$nextTick(() => {
                 scrollToFirstTripFormError(this.$el);
@@ -1318,6 +1346,7 @@ export default {
         },
         goNext() {
             if (!this.validateCurrentStep()) {
+                this.maybeOpenCarFuelModalFromStepError();
                 this.scrollToFirstFormError();
                 return;
             }
@@ -1513,6 +1542,24 @@ export default {
     color: var(--main-error, #d72521);
     font-size: 0.875rem;
     font-weight: bold;
+}
+
+.new-trip-wizard__car-fuel-error {
+    display: block;
+    margin: 1.25rem 0 0;
+    color: var(--main-error, #d72521);
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.new-trip-wizard__car-fuel-error-link {
+    display: inline;
+    margin-left: 0.35rem;
+    padding: 0;
+    font-weight: 600;
+    color: var(--ds-action, #1e5f9e);
+    text-decoration: underline;
+    vertical-align: baseline;
 }
 
 .new-trip-wizard__allow-foreign label {

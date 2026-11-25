@@ -79,6 +79,7 @@
                     v-if="showDriverCarDetails"
                     class="trip-driver__car"
                     :car="trip.car"
+                    :trip="trip"
                 />
             </div>
         </div>

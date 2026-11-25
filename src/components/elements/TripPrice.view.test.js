@@ -51,3 +51,20 @@ describe('TripPrice.vue voluntary contribution display', () => {
         );
     });
 });
+
+describe('TripPrice.vue fuel abuse report', () => {
+    it('computes report visibility from auth user and trip driver', () => {
+        expect(viewSource).toContain('shouldShowFuelAbuseReport');
+        expect(viewSource).toContain('buildFuelAbuseSupportTicketRoute');
+        expect(viewSource).toContain('resolveTripFuelProfile');
+        expect(viewSource).toMatch(
+            /showFuelAbuseReport\(\)[\s\S]*?shouldShowFuelAbuseReport\(\{[\s\S]*?trip: this\.trip[\s\S]*?user: this\.user/
+        );
+    });
+
+    it('passes fuel profile and report props to the breakdown', () => {
+        expect(viewSource).toMatch(
+            /<TripContributionBreakdown[\s\S]*?:fuel-profile="fuelProfile"[\s\S]*?:show-fuel-abuse-report="showFuelAbuseReport"[\s\S]*?:fuel-abuse-route="fuelAbuseRoute"/
+        );
+    });
+});

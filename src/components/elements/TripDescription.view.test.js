@@ -11,4 +11,8 @@ describe('TripDescription trip car display', () => {
         expect(viewSource).toContain('showTripCar');
         expect(viewSource).toContain('!this.trip.is_passenger');
     });
+
+    it('passes the trip to car details so trip fuel snapshot is shown', () => {
+        expect(viewSource).toMatch(/<TripCarDetails[^>]*:trip="trip"/);
+    });
 });

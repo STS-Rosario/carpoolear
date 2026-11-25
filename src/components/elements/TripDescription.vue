@@ -1,6 +1,6 @@
 <template>
     <div v-if="showTripCar || hasDescription" class="trip-description-block">
-        <TripCarDetails v-if="showTripCar" :car="trip.car" />
+        <TripCarDetails v-if="showTripCar" :car="trip.car" :trip="trip" />
         <div
             v-if="hasDescription"
             class="row italic quote"

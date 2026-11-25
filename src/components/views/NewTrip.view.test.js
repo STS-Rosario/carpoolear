@@ -342,6 +342,36 @@ describe('NewTrip.vue incomplete car completion', () => {
         );
     });
 
+    it('shows the fuel-only modal when the car is complete except for fuel', () => {
+        expect(viewSource).toContain('CompleteCarFuelModal');
+        expect(viewSource).toContain('carNeedsFuelProfile');
+        expect(viewSource).toContain('showCompleteCarFuelModal');
+        expect(viewSource).toMatch(
+            /<CompleteCarFuelModal[\s\S]*?:visible="showCompleteCarFuelModal"[\s\S]*?:car="carToComplete"[\s\S]*?@saved="onCarFuelSaved"/s
+        );
+        expect(viewSource).toMatch(
+            /if \(requiresDriverPlate\(this\.trip\)\) \{[\s\S]*?const tripCar = this\.resolveDriverCarForTrip\(\);[\s\S]*?carNeedsFuelProfile\(tripCar\)[\s\S]*?this\.showCompleteCarFuelModal = true;[\s\S]*?return;[\s\S]*?!isCarComplete\(tripCar\)[\s\S]*?this\.showCompleteCarModal = true;/s
+        );
+    });
+
+    it('recalculates contribution after fuel modal saves and resumes pending save', () => {
+        expect(viewSource).toMatch(
+            /async onCarFuelSaved\(\)[\s\S]*?showCompleteCarFuelModal = false[\s\S]*?await this\.carIndex\(\)[\s\S]*?this\.calcRoute\('trip'\)[\s\S]*?pendingSaveAfterFuel[\s\S]*?this\.save\(\)/s
+        );
+        expect(viewSource).toMatch(
+            /carNeedsFuelProfile\(tripCar\)[\s\S]*?pendingSaveAfterFuel = true[\s\S]*?showCompleteCarFuelModal = true/s
+        );
+    });
+
+    it('sends selected car_id on trip-info so contribution uses fuel profile', () => {
+        expect(viewSource).toMatch(
+            /calcRoute\(type\)[\s\S]*?let data = \{[\s\S]*?points:[\s\S]*?\}[\s\S]*?car_id/s
+        );
+        expect(viewSource).toMatch(
+            /selectedCarId[\s\S]*?handler[\s\S]*?calcRoute\('trip'\)|selectedCarId\(\)[\s\S]*?calcRoute\('trip'\)/
+        );
+    });
+
     it('renders CompleteCarModal with catalog comboboxes for legacy cars', () => {
         expect(viewSource).toMatch(
             /<CompleteCarModal[\s\S]*?:visible="showCompleteCarModal"/s
@@ -382,6 +412,10 @@ describe('NewTrip.vue contribution pricing breakdown', () => {
         expect(viewSource).toContain('contributionPricingBreakdown');
         expect(wizardSource).toContain(':pricing-breakdown=');
         expect(wizardSource).toContain('form.contributionPricingBreakdown');
+        expect(viewSource).toContain('selectedCarFuelProfile');
+        expect(wizardSource).toContain(
+            ':fuel-profile="form.selectedCarFuelProfile"'
+        );
         expect(wizardSource).toContain(':config="form.config"');
         expect(wizardSource).toContain(':show-un-litro-card="form.showUnLitroCard"');
         expect(wizardSource).toContain(':sellado-charged="form.selladoCharged"');

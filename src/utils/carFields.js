@@ -1,6 +1,115 @@
 export const CATALOG_OTHER_VALUE = 'other';
 export const CAR_YEAR_MIN = 1900;
 
+export const FUEL_TYPES = [
+    'gnc',
+    'diesel',
+    'diesel_premium',
+    'nafta_super',
+    'nafta_premium'
+];
+export const FUEL_CONSUMPTION_LEVELS = ['low', 'medium', 'high'];
+
+const FUEL_FAMILY_BY_TYPE = {
+    gnc: 'gnc',
+    diesel: 'diesel',
+    diesel_premium: 'diesel',
+    nafta_super: 'nafta',
+    nafta_premium: 'nafta'
+};
+
+const FUEL_CONSUMPTION_TABLES = {
+    nafta: { unit: 'liter', low: 7, medium: 10, high: 12 },
+    diesel: { unit: 'liter', low: 6, medium: 8, high: 10 },
+    gnc: { unit: 'm3', low: 7, medium: 9, high: 11 }
+};
+
+const FUEL_UNIT_LABELS = { liter: 'L', m3: 'm³' };
+
+export function fuelFamilyForType(fuelType) {
+    return FUEL_FAMILY_BY_TYPE[fuelType] || null;
+}
+
+export function fuelConsumptionRate(fuelType, level) {
+    const family = fuelFamilyForType(fuelType);
+
+    if (!family || !FUEL_CONSUMPTION_LEVELS.includes(level)) {
+        return null;
+    }
+
+    const table = FUEL_CONSUMPTION_TABLES[family];
+
+    return { per100: table[level], unit: table.unit };
+}
+
+export function fuelConsumptionRateLabel(fuelType, level) {
+    const rate = fuelConsumptionRate(fuelType, level);
+
+    if (!rate) {
+        return '';
+    }
+
+    return `${rate.per100} ${FUEL_UNIT_LABELS[rate.unit]}/100km`;
+}
+
+export function formatFuelConsumptionOptionLabel(levelName, fuelType, level) {
+    const rateLabel = fuelConsumptionRateLabel(fuelType || 'nafta_super', level);
+
+    if (!rateLabel) {
+        return levelName;
+    }
+
+    return `${levelName} (${rateLabel})`;
+}
+
+function upperFirstCamel(value) {
+    return String(value)
+        .split('_')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
+}
+
+export function fuelTypeI18nKey(fuelType) {
+    return `fuelType${upperFirstCamel(fuelType)}`;
+}
+
+export function fuelConsumptionI18nKey(level) {
+    return `fuelConsumption${upperFirstCamel(level)}`;
+}
+
+export function hasCarFuelProfile(carOrForm) {
+    if (!carOrForm) {
+        return false;
+    }
+
+    return (
+        FUEL_TYPES.includes(carOrForm.fuel_type) &&
+        FUEL_CONSUMPTION_LEVELS.includes(carOrForm.fuel_consumption)
+    );
+}
+
+export function resolveTripFuelProfile(trip) {
+    if (!trip) {
+        return null;
+    }
+
+    if (hasCarFuelProfile(trip)) {
+        return {
+            fuel_type: trip.fuel_type,
+            fuel_consumption: trip.fuel_consumption
+        };
+    }
+
+    if (hasCarFuelProfile(trip.car)) {
+        return {
+            fuel_type: trip.car.fuel_type,
+            fuel_consumption: trip.car.fuel_consumption
+        };
+    }
+
+    return null;
+}
+
 export function getCarYearMax() {
     return new Date().getFullYear();
 }
@@ -64,13 +173,14 @@ export function isCarFormComplete(entry) {
     return (
         hasCarBrandAndModel(entry) &&
         isValidCarYear(entry.year) &&
-        hasCarColor(entry)
+        hasCarColor(entry) &&
+        hasCarFuelProfile(entry)
     );
 }
 
 export function carFormMissingFieldKeys(entry) {
     if (!entry) {
-        return ['marca', 'modelo', 'anio', 'color'];
+        return ['marca', 'modelo', 'anio', 'color', 'combustible', 'consumo'];
     }
 
     const missing = [];
@@ -89,6 +199,14 @@ export function carFormMissingFieldKeys(entry) {
 
     if (!hasCarColor(entry)) {
         missing.push('color');
+    }
+
+    if (!FUEL_TYPES.includes(entry.fuel_type)) {
+        missing.push('combustible');
+    }
+
+    if (!FUEL_CONSUMPTION_LEVELS.includes(entry.fuel_consumption)) {
+        missing.push('consumo');
     }
 
     return missing;
@@ -114,7 +232,7 @@ function hasCarModel(entry) {
     return Boolean(entry.car_model_id || entry.modelSelection);
 }
 
-export function isCarComplete(car) {
+function isCarCompleteWithoutFuel(car) {
     if (!car || !hasValue(car.patente)) {
         return false;
     }
@@ -128,6 +246,14 @@ export function isCarComplete(car) {
     }
 
     return hasCarBrandAndModel(car);
+}
+
+export function isCarComplete(car) {
+    return isCarCompleteWithoutFuel(car) && hasCarFuelProfile(car);
+}
+
+export function carNeedsFuelProfile(car) {
+    return isCarCompleteWithoutFuel(car) && !hasCarFuelProfile(car);
 }
 
 export function carsNeedingCompletion(cars) {
@@ -150,7 +276,7 @@ export function carDetailRows(car) {
             : '';
     const modelWithYear = [model, year].filter(hasValue).join(' ');
 
-    return [
+    const rows = [
         {
             labelKey: 'marca',
             value: car.brand_name || car.brand_other || ''
@@ -164,6 +290,27 @@ export function carDetailRows(car) {
             value: car.patente || ''
         }
     ];
+
+    if (hasCarFuelProfile(car)) {
+        rows.push(
+            {
+                labelKey: 'fuelType',
+                value: car.fuel_type,
+                valueKey: fuelTypeI18nKey(car.fuel_type)
+            },
+            {
+                labelKey: 'fuelConsumption',
+                value: car.fuel_consumption,
+                valueKey: fuelConsumptionI18nKey(car.fuel_consumption),
+                rateLabel: fuelConsumptionRateLabel(
+                    car.fuel_type,
+                    car.fuel_consumption
+                )
+            }
+        );
+    }
+
+    return rows;
 }
 
 export function carMakeName(car) {
@@ -259,7 +406,9 @@ export function buildCarFormFromCar(car) {
             : car.car_brand_id || null,
         modelSelection: car.model_other
             ? CATALOG_OTHER_VALUE
-            : car.car_model_id || null
+            : car.car_model_id || null,
+        fuel_type: car.fuel_type || null,
+        fuel_consumption: car.fuel_consumption || null
     };
 }
 
@@ -274,7 +423,9 @@ export function emptyCarForm() {
         car_color_id: null,
         year: null,
         brandSelection: null,
-        modelSelection: null
+        modelSelection: null,
+        fuel_type: null,
+        fuel_consumption: null
     };
 }
 
@@ -282,7 +433,9 @@ export function carPayloadFromForm(entry) {
     const payload = {
         patente: (entry.patente || '').trim(),
         car_color_id: entry.car_color_id || null,
-        year: entry.year === null || entry.year === '' ? null : Number(entry.year)
+        year: entry.year === null || entry.year === '' ? null : Number(entry.year),
+        fuel_type: entry.fuel_type || null,
+        fuel_consumption: entry.fuel_consumption || null
     };
 
     if (entry.brandSelection === CATALOG_OTHER_VALUE) {
